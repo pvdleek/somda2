@@ -16,3 +16,4 @@
 ###< symfony/phpunit-bridge ###
 
 /_current/
+/.idea/
