@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="nl" xml:lang="nl" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <link rel="stylesheet" href="{{ asset('css/common.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('css/bootstrap-pagination-3.0.3.css') }}" type="text/css" />
+
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="robots" content="index, follow" />
+    <meta name="keywords" content="Somda" />
+    <meta name="description" content="', BLOCK_NAME, '" />
+    <meta name="author" content="Peter van der Leek" />
+    <meta name="generator" content="Peter van der Leek" />
+
+    <script src="{{asset('js/jquery-1.9.1.js')}}" type="text/javascript"></script>
+    <script src="{{asset('js/jquery-ui-1.10.3.js')}}" type="text/javascript"></script>
+    <script src="{{asset('js/jquery-defaults.js')}}" type="text/javascript"></script>
+    <script src="{{asset('js/jquery-tablesorter.js')}}" type="text/javascript"></script>
+    <script src="{{asset('js/functions002.js')}}" type="text/javascript"></script>
+
+    <title>', BLOCK_NAME, ' - ', SITE_TITLE, '</title>
+
+    <link href="{{ asset('images/design/favicon.ico') }}" rel="shortcut icon" type="image/x-icon" />
+</head>
+<body onload="getDynamicContent('{{ app.request.host }}');">
+<script src="{{asset('js/wz_tooltip.js')}}" type="text/javascript"></script>
+<a name="top"></a>
+<form method="post" name="MasterForm" id="MasterForm" action="{{ app.request.host }}/', (defined('BLOCK_SHORT') ? BLOCK_SHORT.'/' : 'index.php'), '" enctype="multipart/form-data">
+    <input type="hidden" name="blokid" value="', $blokid, '" />
+    <div id="wrap">
+        {% include('header.html.twig') %}
+        {% block content %}{% endblock %}
+        {% include('footer.html.twig') %}
+        </div>
+</form>
+
+<script type="text/javascript">
+    $(function() { $(document).tooltip(); });
+    if (document.getElementById('plaatsInput'))  { plaatsKlaar('{{ app.request.host }}', document.getElementById('plaatsInput').value, 'plaats'); }
+    if (document.getElementById('plaats1Input')) { plaatsKlaar('{{ app.request.host }}', document.getElementById('plaats1Input').value, 'plaats1'); }
+    if (document.getElementById('plaats2Input')) { plaatsKlaar('{{ app.request.host }}', document.getElementById('plaats2Input').value, 'plaats2'); }
+    if (document.getElementById('plaats3Input')) { plaatsKlaar('{{ app.request.host }}', document.getElementById('plaats3Input').value, 'plaats3'); }
+</script>
+
+include(geefConfig('site_location').'/include/validation.php');
+
+// Doe de forum-jump als die van toepassing is
+if (isset($forum_jump) && strlen($forum_jump)>0) { echo '<script type="text/javascript">window.scrollTo(0, (getElementTop(\'', $forum_jump, '\')-15));</script>'; }
+
+{% if cookieChoice == 'ok' %}
+    <script src="{{asset('js/google_ga.js')}}" type="text/javascript"></script>
+    <script type="text/javascript">try { var pageTracker = _gat._getTracker('UA-2723197-1'); pageTracker._trackPageview(); } catch(err) {}</script>
+{% endif %}
+</body></html>
+
+$ip = getUserIP();
+$query = 'INSERT DELAYED INTO `'.DB_PREFIX.'_logging` (`uid`, `datumtijd`, `blokid`, `ip`)
+VALUES ('.$session->uid.', UNIX_TIMESTAMP(NOW()), '.$blokid.', ' . (strpos($ip, ':') === false ? 'INET_ATON(\''.getUserIP().'\')' : '0') . ')';
+$db->queryF($query);
+$db_manager->closeConnection($db_conn);
+$db->close();

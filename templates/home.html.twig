@@ -1,0 +1,79 @@
+{% extends('base.html.twig') %}
+
+{% block content %}
+    <div class="mainbody">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td class="leftcol">
+                    <?php geefHomeKolomLinks(); ?>
+                </td><td class="maincol">
+                    <div class="inside">
+                        <div class="banner">
+                            <script type="text/javascript">
+                                google_ad_client = "pub-9032135516454843";
+                                /* 728x15, gemaakt 2-8-09 */
+                                google_ad_slot = "8555796169";
+                                google_ad_width = 728;
+                                google_ad_height = 15;
+                            </script>
+                            <script type="text/javascript" src="http://pagead2.googlesyndication.com/pagead/show_ads.js"></script>
+                        </div>
+                        <!-- INTRODUCTIE -->
+                        Somda staat voor <b>S</b>pots en <b>OM</b>lopen <b>DA</b>tabase.
+                        <br />Een spot is de vastlegging van treinmaterieel op een bepaald tijdstip op een bepaalde plek. De meeste <a href="/spots_home/">spots</a> bestaan slechts uit een <a href="/materieel_home/">materieelnummer</a>, een <a href="/treinnummers/">treinnummer</a>, een <a href="/verkortingen/">locatie</a> en eventueel een positie.
+                        <br />Een omloop is de vastlegging van de verschillende diensten die treinmaterieel volgt.
+                        <br /><br />Somda kan spots opslaan en aan de hand hiervan worden omlopen berekend. Het grote voordeel van Somda is dat spots online ingevoerd kunnen worden, het programma is voor vele gebruikers bereikbaar en door iedereen te raadplegen en voor iedereen gratis!
+                        <br /><p class="info"><a href="/over/">Klik hier voor meer informatie</a></p>
+                        <!-- SPOORNIEUWS -->
+                        <?php
+					$query = Doctrine_Query::create()
+							->from('SomdaSnsSpoorNieuws')
+                        ->where('actief = ? AND gekeurd = ?', array('1', '1'))
+                        ->orderBy('datumtijd DESC')
+                        ->limit(5);
+                        $nieuws_items = $query->execute();
+                        $nieuws_item = $nieuws_items[0];
+                        ?>
+                        <br /><table class="blog" cellpadding="0" cellspacing="0">
+                            <tr>
+                                <td valign="top">
+                                    <div>
+                                        <table class="contentpaneopen"><tr><td class="contentheading" width="100%"><?php echo $nieuws_item->geefLogo();?> <a href="<?php echo htmlentities($nieuws_item->url);?>" target="_blank" class="contentpagetitle"><?php echo $nieuws_item->titel;?></a></td></tr></table>
+                                        <table class="contentpaneopen">
+                                            <tr><td valign="top" colspan="2" class="createdate"><?php echo geefDatumWeergave(date('Y-m-d', $nieuws_item->datumtijd)).' '.date('H:i', $nieuws_item->datumtijd);?></td></tr>
+                                            <tr>
+                                                <td valign="top" colspan="2">
+                                                    <?php echo $nieuws_item->introductie;?>
+                                                    <br /><a href="<?php echo htmlentities($nieuws_item->url);?>" target="_blank">Lees verder...</a>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        <span class="article_separator">&nbsp;</span>
+                                    </div>
+                                </td>
+                            </tr><tr>
+                                <td valign="top">
+                                    <div class="blog_more">
+                                        <div>
+                                            <strong><a href="/nieuws_home/">Meer spoornieuws...</a></strong>
+                                        </div>
+                                        <ul>
+                                            <?php
+										foreach($nieuws_items as $nieuws_item) {
+											?>
+                                            <li><a class="blogsection" href="<?php echo htmlentities($nieuws_item->url);?>" target="_blank"><?php echo $nieuws_item->titel;?></a></li>
+                                            <?php
+										}
+										?>
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+{% endblock %}

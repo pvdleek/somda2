@@ -1,0 +1,47 @@
+<div id="header">
+	<div id="logo-graphic">
+		<h1><a href="/" title="Somda - Voor en door treinspotters" style="background: url('{{ asset('images/logos-somda/logo_' ~ imageNumber ~ '.png') }}') no-repeat;">Somda</a></h1>
+		<h2>Voor en door treinspotters</h2>
+	</div>
+	<div id="newsflash">
+		{% if headerType == 'banner' %}
+			<a href="/click_out.php?banner_id={{ headerContent.id }}" target="_blank">
+				<img alt="'.$headerbanner_customer.' {{ headerContent.description }}" height="100" src="/images/banners/{{ headerContent.image }}" />
+			</a>
+		{% else %}
+			<table class="moduletable"><tr><td>
+				<table class="contentpaneopen"><tr><td class="contentheading" width="100%"><a href="'.SITE_URL.'/nieuws_home/" class="contentpagetitle">{{ headerContent.title }}</a></td></tr></table>
+				<table class="contentpaneopen"><tr>
+					<td valign="top"><p>{{ headerContent.introduction }}</p></td>
+				</tr><tr>
+					<td valign="top"><a href="/nieuws_home/">Lees verder...</a></td>
+				</tr></table>
+			</td></tr></table>
+		{% endif %}
+	</div>
+</div>
+<div id="mbar"><div id="nav">
+	<div class="menuleft">&nbsp;</div><div class="menuright">&nbsp;</div>
+	<ul class="menu">
+{#		<li data-ng-class="{current: blok.id==0}"><a href="', SITE_URL, '/index.php?force=home"><span>Home</span></a></li>#}
+{#		<li class="haschild" data-ng-class="{current: blok.id==parent.id}" data-ng-repeat="parent in menuStructure | plOrderObjectBy:\'volgorde\'">#}
+{#			<a href="', SITE_URL, '{{parent.url}}" class="haschild">#}
+{#				<span data-ng-show="!parent.alerts">{{parent.name}}</span>#}
+{#				<span data-ng-show="parent.alerts">{{parent.name}} ({{parent.alerts}})</span>#}
+{#				<span data-ng-show="parent.alerts==0">{{parent.name}} (0)</span>#}
+{#			</a>#}
+{#			<ul>#}
+{#				<li data-ng-class="{seperator: child.followed_by_seperator}" data-ng-repeat="child in parent.children | plOrderObjectBy:\'volgorde\'"><a href="', SITE_URL, '{{child.url}}">#}
+{#					<span data-ng-show="!child.alerts">{{child.name}}</span>#}
+{#					<span data-ng-show="child.alerts">{{child.name}} ({{child.alerts}})</span>#}
+{#					<span data-ng-show="child.alerts==0">{{child.name}}</span>#}
+{#				</a></li>#}
+{#			</ul>#}
+{#		</li>#}
+	</ul>
+</div></div>
+<div class="clear">&nbsp;</div>';
+
+if ($blokid > 0 && substr(BLOCK_SHORT, -4) != 'home') {
+	echo '<div class="breadcrumb">Je bent hier: ', BLOCK_PATH, '</div>';
+}

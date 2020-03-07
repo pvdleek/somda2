@@ -1,0 +1,24 @@
+$(function() {
+	$('input.datepicker').datepicker();
+	$('input.datepicker').datepicker('option', 'closeText', 'Sluiten');
+	$('input.datepicker').datepicker('option', 'constrainInput', true);
+	$('input.datepicker').datepicker('option', 'currentText', 'Vandaag');
+	$('input.datepicker').datepicker('option', 'dateFormat', 'dd-mm-yy');
+	$('input.datepicker').datepicker('option', 'dayNames', ['Zondag', 'Maandag', 'Dinsdag', 'Woensdag', 'Donderdag', 'Vrijdag', 'Zaterdag']);
+	$('input.datepicker').datepicker('option', 'dayNamesMin', ['zo', 'ma', 'di', 'wo', 'do', 'vr', 'za']);
+	$('input.datepicker').datepicker('option', 'dayNamesShort', ['Zon', 'Maa', 'Din', 'Woe', 'Don', 'Vri', 'Zat']);
+	$('input.datepicker').datepicker('option', 'firstDay', 1);
+	$('input.datepicker').datepicker('option', 'maxDate', '+0');
+	$('input.datepicker').datepicker('option', 'monthNames', ['januari', 'februari', 'maart', 'april', 'mei', 'juni', 'juli', 'augustus', 'september', 'oktober', 'november', 'december']);
+	$('input.datepicker').datepicker('option', 'monthNamesShort', ['jan', 'feb', 'mar', 'apr', 'mei', 'jun', 'jul', 'aug', 'sep', 'okt', 'nov', 'dec']);
+	$('input.datepicker').datepicker('option', 'nextText', 'Volgende maand');
+	$('input.datepicker').datepicker('option', 'numberOfMonths', [1, 2]);
+	$('input.datepicker').datepicker('option', 'prevText', 'Vorige maand');
+	$('input.datepicker').datepicker('option', 'showButtonPanel', true);
+	$('input.datepicker').datepicker('option', 'stepMonths', 2);
+	$('#gebdatum').datepicker('option', 'changeMonth', true);
+	$('#gebdatum').datepicker('option', 'changeYear', true);
+	$('#gebdatum').datepicker('option', 'yearRange', '1930:2012');
+	$('#gebdatum').datepicker('option', 'numberOfMonths', [1, 1]);
+	$('#gebdatum').datepicker('option', 'stepMonths', 1);
+});

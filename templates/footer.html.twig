@@ -1,0 +1,14 @@
+if ($blokid > 0 && substr(BLOCK_SHORT, -4) != 'home') {
+	echo '<div class="breadcrumb">Je bent hier: ', BLOCK_PATH, '</div>';
+}
+
+<div id="footer">
+	<div class="ftr-center">
+		Copyright (C) 2003-{{ "now" | date('Y') }} Peter van der Leek, Houten
+		<br /><br /><a href="', SITE_URL, '/over/">Over Somda</a>
+		- <a href="', SITE_URL, '/statistieken/">Somda statistieken</a>
+		- <a href="http://', geefConfig('site_url_mobiel'), '">Somda mobiel</a>
+	 	- <a href="', SITE_URL, '/feed/">Somda feeds</a>
+	</div>
+	<div class="ftr-right"><a href="#top">Naar boven</a></div>
+</div>
