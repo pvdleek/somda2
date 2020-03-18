@@ -1,0 +1,5 @@
+{% if errorMessages is defined and errorMessages | length %}
+    {% for message in errorMessages %}
+        <p class="warn">{{ message | raw }}</p>
+    {% endfor %}
+{% endif %}

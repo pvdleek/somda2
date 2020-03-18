@@ -1,0 +1,10 @@
+{% extends('base.html.twig') %}
+
+{% block content %}
+    <table class="design">
+        <tr><th>Term</th><th>Omschrijving</th></tr>
+        {% for jargon in jargons %}
+            <tr><td>{{ jargon.term }}</td><td>{{ jargon.description }}</td></tr>
+        {% endfor %}
+    </table>
+{% endblock %}

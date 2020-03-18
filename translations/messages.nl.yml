@@ -1,0 +1,138 @@
+general:
+  button:
+    calculate: 'Bereken'
+    search: 'Zoek'
+  navigation:
+    home: 'Home'
+    information:
+      home: 'Informatie'
+      locations: 'Verkortingen'
+      jargon: 'Jargon'
+      uic: 'UIC berekenen'
+    trainTable:
+      home: 'Dienstregelingen'
+      index: 'Dienstregeling van een trein'
+      passingRoutes: 'Doorkomststaat'
+      specialRoutes: 'Bijzondere ritten'
+      specialRoute: 'Rit'
+    forum:
+      index: 'Forum overzicht'
+    somda:
+      home: 'Somda'
+      profile: 'Profiel'
+  date:
+    days:
+      0: 'Maandag'
+      1: 'Dinsdag'
+      2: 'Woensdag'
+      3: 'Donderdag'
+      4: 'Vrijdag'
+      5: 'Zaterdag'
+      6: 'Zondag'
+    months:
+      1: 'januari'
+      2: 'februari'
+      3: 'maart'
+      4: 'april'
+      5: 'mei'
+      6: 'juni'
+      7: 'juli'
+      8: 'augustus'
+      9: 'september'
+      10: 'oktober'
+      11: 'november'
+      12: 'december'
+    till: 't/m'
+  input:
+    index: 'Kies de dienstregeling'
+    route: 'Geef het treinnummer'
+    dayNumber: 'Kies de dag'
+    location: 'Geef de locatie'
+  output:
+    date: 'Datum'
+    time: 'Tijd'
+    title: 'Titel'
+    route: 'Treinnummer'
+    characteristic: 'Type'
+    startLocation: 'Van'
+    endLocation: 'Bestemming'
+    action: 'Actie'
+  action:
+    '-': 'Doorkomst'
+    '+': 'Haltering'
+    a: 'Aankomst'
+    v: 'Vertrek'
+  error:
+    unknown: 'Onbekend'
+    trainTableIndex: 'De door jou gekozen dienstregeling is niet gevonden'
+    route: 'Het door jou ingegeven treinnummer is niet gevonden in onze dienstregelings-database'
+    location: 'De door jou ingegeven locatie is niet gevonden'
+location:
+  search:
+    character: 'Zoek naar verkortingen<br />die starten met'
+    characterAll: 'Alles'
+    single: 'Zoek naar een specifieke verkorting'
+    name: 'Zoek in de verkortingen'
+    description: 'Zoek in de omschrijvingen'
+    noResults: 'Je zoekopdracht heeft helaas geen verkortingen opgeleverd'
+  name: 'Verkorting'
+  description: 'Omschrijving'
+  category: 'Categorie'
+  credits: 'De co&ouml;rdinaten voor de verkortingen op de Google kaart komen van <a href="http://www.spoornieuws.nl/" target="_blank">Dennis</a>'
+  additions: 'Aanvullingen of verbeteringen kunnen in <a href="%s">dit topic in het forum</a> worden doorgegeven.'
+jargon:
+uic:
+  explanation:
+    1: 'Voer het UIC-nummer in het bovenste vak in'
+    2: 'Vervang het ontbrekende of te bepalen cijfer door een vraagteken [<font color="red">?</font>]'
+    3: 'Druk op de Bereken-knop'
+    4: 'Het resultaat verschijnt in de onderste vakken'
+  input:
+    uic: 'Voer het UIC nummer in'
+  output:
+    uic: 'UIC nummer'
+    missingDigit: 'Ontbrekende cijfer'
+  credits: 'De techniek van deze UIC-berekening is afgekeken van <a href="http://www.diesel-trein.nl/uic.html" target="_blank">Niels Karsdorp</a>'
+trainTable:
+  input:
+    button: 'Zoek in de dienstregelingen'
+  output:
+    title: 'Dienstregeling van trein %s'
+    planned:
+      title: 'Gepland'
+      base: 'Gebaseerd op %s spot(s)'
+    notFound: 'Het door jou opgegeven treinnummer is niet gevonden in onze dienstregelings-database'
+    freightTrainsInfo: 'Voor dienstregelingen van goederen- of speciale treinen kan je ook terecht op de site van <a href="http://www.rolandrail.net/" target="_blank">Roland Korving</a>'
+passingRoutes:
+  input:
+    timeRange: 'Geef de begin- en eindtijd<br />(uu / uu:mm / uu.mm / uumm)'
+    button: 'Zoek in de dienstregelingen'
+  error:
+    dayBorderCrossed: 'Het is niet mogelijk om de nachtgrens van 02.00 te overschrijden, bijvoorbeeld 1.30 tot 2.30 is dus niet mogelijk'
+forum:
+  author: 'Auteur'
+  lastPost: 'Laatste bericht'
+  search: 'Zoeken in het forum'
+  newDiscussion: 'Start een nieuwe discussie'
+  mark:
+    all: 'Markeer alle discussies als gelezen'
+  unread: 'Alle ongelezen forumberichten'
+  category: 'Forumcategorie'
+  discussion:
+    subject: 'Onderwerp'
+  number:
+    discussions: 'Aantal discussies'
+    posts: 'Reacties'
+    viewed: 'Bekeken'
+profile:
+  view:
+    title: 'Bekijk het profiel van %s'
+  username: 'Gebruikersnaam'
+  name: 'Echte naam'
+  city: 'Woonplaats'
+  gender: 'Geslacht'
+  birthDate: 'Geboortedatum'
+  registrationDate: 'Geregistreerd op'
+  lastVisit: 'Laatste bezoek'
+  website: 'Website'
+  info: 'Commentaar'

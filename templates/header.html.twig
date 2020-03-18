@@ -10,7 +10,7 @@
 			</a>
 		{% else %}
 			<table class="moduletable"><tr><td>
-				<table class="contentpaneopen"><tr><td class="contentheading" width="100%"><a href="'.SITE_URL.'/nieuws_home/" class="contentpagetitle">{{ headerContent.title }}</a></td></tr></table>
+				<table class="contentpaneopen"><tr><td class="contentheading" width="100%"><a href="/nieuws_home/" class="contentpagetitle">{{ headerContent.title }}</a></td></tr></table>
 				<table class="contentpaneopen"><tr>
 					<td valign="top"><p>{{ headerContent.introduction }}</p></td>
 				</tr><tr>
@@ -23,24 +23,42 @@
 <div id="mbar"><div id="nav">
 	<div class="menuleft">&nbsp;</div><div class="menuright">&nbsp;</div>
 	<ul class="menu">
-{#		<li data-ng-class="{current: blok.id==0}"><a href="', SITE_URL, '/index.php?force=home"><span>Home</span></a></li>#}
-{#		<li class="haschild" data-ng-class="{current: blok.id==parent.id}" data-ng-repeat="parent in menuStructure | plOrderObjectBy:\'volgorde\'">#}
-{#			<a href="', SITE_URL, '{{parent.url}}" class="haschild">#}
-{#				<span data-ng-show="!parent.alerts">{{parent.name}}</span>#}
-{#				<span data-ng-show="parent.alerts">{{parent.name}} ({{parent.alerts}})</span>#}
-{#				<span data-ng-show="parent.alerts==0">{{parent.name}} (0)</span>#}
-{#			</a>#}
-{#			<ul>#}
-{#				<li data-ng-class="{seperator: child.followed_by_seperator}" data-ng-repeat="child in parent.children | plOrderObjectBy:\'volgorde\'"><a href="', SITE_URL, '{{child.url}}">#}
-{#					<span data-ng-show="!child.alerts">{{child.name}}</span>#}
-{#					<span data-ng-show="child.alerts">{{child.name}} ({{child.alerts}})</span>#}
-{#					<span data-ng-show="child.alerts==0">{{child.name}}</span>#}
-{#				</a></li>#}
-{#			</ul>#}
-{#		</li>#}
+		<li><a href="/index.php?force=home"><span>Home</span></a></li>
+		{% set lastParentId = 0 %}
+		{% for block in menuStructure %}
+			{% if block['parent_id'] != lastParentId %}
+				{% if lastParentId > 0 %}</ul></li>{% endif %}
+				<li class="haschild">
+				<a href="/{{ block['parent_url'] ? block['parent_url'] : ("index.php?blokid=" ~ block['parent_id']) }}" class="haschild"><span>{{ block['parent_name'] }}</span></a>
+				<ul>
+				{% set lastParentId = block['parent_id'] %}
+			{% endif %}
+			<li><a href="/{{ block['url'] ? block['url'] : ("index.php?blokid=" ~ block['id']) }}"><span>{{ block['name'] }}</span></a></li>
+		{% endfor %}
 	</ul>
+</li>
+</ul>
 </div></div>
-<div class="clear">&nbsp;</div>';
+
+{#<div id="mbar"><div id="nav">#}
+{#	<div class="menuleft">&nbsp;</div><div class="menuright">&nbsp;</div>#}
+{#	<ul class="menu">#}
+{#		<li><a href="', SITE_URL, '/index.php?force=home"><span>Home</span></a></li>#}
+{#		{% for menuParent in menuStructure %}#}
+{#			<li class="haschild">#}
+{#				<a href="{{ path(menuParent['path']) }}" class="haschild">{{ menuParent['name'] }}</a>#}
+{#				<ul>#}
+{#					{% for menuChild in menuParent['children'] %}#}
+{#						<li{{ menuChild['followed_by_separator'] ? ' class="seperator"' : '' }}>#}
+{#							<a href="{{ path(menuChild['path']) }}">{{ menuChild['name'] }}</a>#}
+{#						</li>#}
+{#					{% endfor %}#}
+{#				</ul>#}
+{#			</li>#}
+{#		{% endfor %}#}
+{#	</ul>#}
+{#</div></div>#}
+<div class="clear">&nbsp;</div>
 
 if ($blokid > 0 && substr(BLOCK_SHORT, -4) != 'home') {
 	echo '<div class="breadcrumb">Je bent hier: ', BLOCK_PATH, '</div>';

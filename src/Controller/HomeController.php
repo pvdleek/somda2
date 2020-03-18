@@ -2,40 +2,118 @@
 
 namespace App\Controller;
 
-use App\Entity\Banner;
-use App\Entity\BannerView;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
+use App\Entity\Block;
+use App\Entity\RailNews;
+use Symfony\Component\HttpFoundation\Response;
 
-class HomeController extends AbstractController
+class HomeController extends BaseController
 {
-    public function HomeAction(Request $request)
+    /**
+     * @return Response
+     */
+    public function indexAction() : Response
     {
-        // Check if there is an active banner for the header
-        $activeBanners = $this->getDoctrine()->getRepository('App:Banner')->findBy(
-            ['location' => Banner::LOCATION_HEADER, 'active' => true]
-        );
-        if (count($activeBanners) > 0) {
-            $headerType = 'banner';
-            $headerContent = $activeBanners[rand(0, count($activeBanners) - 1)];
-
-            // Create a view for this banner
-            $bannerView = new BannerView();
-            $bannerView->setBanner($headerContent)->setTimestamp(time())->setIp(inet_pton($request->getClientIp()));
-            $this->getDoctrine()->getManager()->persist($bannerView);
-            $this->getDoctrine()->getManager()->flush();
-        } else {
-            $headerType = 'news';
-            $headerContent = $this->getDoctrine()
-                ->getRepository('App:RailNews')
-                ->findBy(['active' => true, 'approved' => true], ['timestamp' => 'DESC'], 3)[rand(0, 2)];
-        }
+        $railNews = $this->doctrine
+            ->getRepository(RailNews::class)
+            ->findBy(['active' => true, 'approved' => true], ['dateTime' => 'DESC'], 5);
 
         return $this->render('home.html.twig', [
-            'cookieChoice' => 1,
-            'headerType' =>  $headerType,
-            'headerContent' => $headerContent,
-            'imageNumber' => rand(1, 11),
+            'columnLeft' => $this->getHomeColumnLeft(),
+            'railNews' => $railNews,
         ]);
+    }
+
+    /**
+     * @param Block|null $parentBlock
+     * @return string
+     */
+    private function getHomeColumnLeft(?Block $parentBlock = null): string
+    {
+        $return = '';
+
+        $blocks = $this->doctrine->getRepository(Block::class)->findBy(['parent' => $parentBlock]);
+        if (count($blocks) > 0) {
+            $return .= '<div class="moduleS1"><div><h3>Maak je keuze:</h3><table border="0" cellpadding="0" cellspacing="0" width="100%">';
+            foreach ($blocks as $block) {
+                if ($this->shouldDoBlock($block)) {
+                    if ($block->getId() === 54) {
+                        $menuLink = '/index.php?nav=_nav99&amp;op=logout';
+                    } elseif (strlen($block->getUrlShort()) < 1) {
+                        $menuLink = '/index.php?blokid=' . $block->getId();
+                    } else {
+                        $menuLink = '/' . $block->getUrlShort() . '/';
+                    }
+                    $return .= '<tr><td><a href="' . $menuLink . '" class="mainlevel-sidenav">' . $block->getName() . '</a></td></tr>';
+                }
+            }
+            $return .= '</table></div></div>';
+        }
+
+        $return .= '<div class="moduleS1"><div>
+            <h3>Direct naar:</h3>
+            <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                <tr><td><a href="/forum_home/" class="mainlevel-sidenav">Forum</a></td></tr>
+                <tr><td><a href="/spots/" class="mainlevel-sidenav">Recente spots</a></td></tr>
+                <tr><td><a href="/drgls/" class="mainlevel-sidenav">Bijzondere ritten</a></td></tr>
+                <tr><td><a href="/dienstregeling/" class="mainlevel-sidenav">Dienstregeling v/e trein</a></td></tr>
+                <tr><td><a href="/doorkomststaat/" class="mainlevel-sidenav">Doorkomststaat</a></td></tr>
+                <tr><td><a href="/invoer/" class="mainlevel-sidenav">Spots invoeren</a></td></tr>
+                <tr><td><a href="/matsms/" class="mainlevel-sidenav">Materieelsamenstellingen</a></td></tr>
+            </table>
+        </div></div><div class="moduleS1"><div>
+            <h3>Hulp nodig?</h3>
+            <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                <tr><td><a href="/help/" class="mainlevel-sidenav">Wat is Somda</a></td></tr>
+                <tr><td><a href="/help/100000/" class="mainlevel-sidenav">Algemene hulp</a></td></tr>
+                <tr><td><a href="/nieuws/25/" class="mainlevel-sidenav">Spot invoer richtlijnen</a></td></tr>
+            </table>
+        </div></div>';
+
+        $return .= '<div class="moduleS3"><div>';
+        if ($this->userIsLoggedIn()) {
+            $return .= '<h3><strong>Welkom terug</strong></h3>' . $this->getUser()->getName() . ' 
+                <br /><br /><a href="/mijnspots/">Mijn spots</a>
+                <br /><a href="/instellingen/">Mijn instellingen</a>
+                <br /><a href="/instellingen/profiel/">Mijn profiel</a>
+                <br /><a href="/mijnsomda_home/">Mijn Somda</a>
+                <br /><br /><a href="/forum/ongelezen/">Ongelezen forumberichten</a>';
+//			$query = 'SELECT COUNT(*)
+//					FROM '.DB_PREFIX.'_forum_favorites
+//					WHERE uid = '.$session->uid;
+//			$dbset_fav = $db->query($query);
+//			list($fav_count) = $db->fetchRow($dbset_fav);
+//			if ($fav_count>0) {
+//				echo '<br /><a href="'.SITE_URL.'/favorieten/">Favoriete discussies ('.$fav_count.')</a>';
+//			}
+            echo '<br /><br /><a href="/index.php?nav=_nav99&amp;op=logout">Uitloggen</a>';
+        } else {
+            $return .= '<h3><strong>Direct inloggen</strong></h3>
+                <?php echo $form->geefAlleMeldingen(); ?>
+                <fieldset class="input">
+                    <p id="form-login-username">
+                        <label for="login_username">Gebruikersnaam</label>
+                        <br /><input id="login_username" type="text" name="login_username" class="inputbox" alt="Gebruikersnaam" maxlength="10" size="18" />
+                    </p><p id="form-login-password">
+                        <label for="login_password">Wachtwoord</label>
+                        <br /><input id="login_password" type="password" name="login_password" class="inputbox" maxlength="15" size="18" alt="Wachtwoord" />
+                    </p><p id="form-login-remember">
+                        <label for="login_remember">Blijf ingelogd</label>
+                        <input id="login_remember" type="checkbox" name="login_remember" class="inputbox" alt="Blijf ingelogd" /> <img alt="" height="16" src="vraagteken.gif" width="16" <?php echo giveMouseOver("Hiermee blijf je op deze computer onbeperkt ingelogd totdat je zelf uitlogt .<br />Zonder dit aan te vinken wordt je na 15 minuten inactiviteit automatisch uitgelogd"); ?> />
+                    </p>
+                    <input type="submit" name="Submit" class="button" value="Inloggen" />
+                </fieldset>
+                <ul>
+                    <li><a class="regusr" href="/registreren/">Nieuw account maken?</a></li>
+                    <li>&nbsp;</li>
+                    <li><a class="forgotpass" href="/nieuw_wachtwoord/">Wachtwoord vergeten?</a></li>
+                </ul>';
+			if (strpos($_SERVER['REQUEST_URI'], 'inloggen') || strpos($_SERVER['REQUEST_URI'], 'login')) {
+                echo '<input type="hidden" name="return_url" value="', SITE_URL, '" />';
+            } else {
+                echo '<input type="hidden" name="return_url" value="', $_SERVER['REQUEST_URI'], '" />';
+            }
+			echo '<input type="hidden" name="nav" value="_nav99" /><input type="hidden" name="op" value="login" />';
+		}
+        return $return . '</div></div>';
     }
 }

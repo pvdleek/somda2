@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -16,7 +17,6 @@ class Banner
 
     /**
      * @var int
-     *
      * @ORM\Column(name="bannerid", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -25,115 +25,121 @@ class Banner
 
     /**
      * @var string|null
-     *
      * @ORM\Column(name="code", type="string", length=6, nullable=true)
      */
     private $code;
 
     /**
-     * @var int
-     *
+     * @var bool
      * @ORM\Column(name="active", type="bigint", nullable=false)
      */
-    private $active = '0';
+    private $active = false;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="location", type="string", length=6, nullable=false, options={"default"="header"})
      */
     private $location = self::LOCATION_HEADER;
 
     /**
      * @var string|null
-     *
      * @ORM\Column(name="description", type="text", length=0, nullable=true)
      */
     private $description;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="link", type="string", length=100, nullable=false)
      */
     private $link = '';
 
     /**
      * @var string|null
-     *
      * @ORM\Column(name="image", type="string", length=100, nullable=true)
      */
     private $image;
 
     /**
-     * @var int|null
-     *
-     * @ORM\Column(name="customerid", type="bigint", nullable=true)
-     */
-    private $customerid;
-
-    /**
      * @var string
-     *
      * @ORM\Column(name="email", type="string", length=50, nullable=false)
      */
     private $email = '';
 
     /**
-     * @var int|null
-     *
+     * @var int
      * @ORM\Column(name="max_views", type="bigint", nullable=true)
      */
-    private $maxViews;
+    private $maxViews = 0;
 
     /**
      * @var int
-     *
      * @ORM\Column(name="views", type="bigint", nullable=false)
      */
-    private $views = '0';
-
-    /**
-     * @var int|null
-     *
-     * @ORM\Column(name="max_hits", type="bigint", nullable=true)
-     */
-    private $maxHits;
+    private $views = 0;
 
     /**
      * @var int
-     *
+     * @ORM\Column(name="max_hits", type="bigint", nullable=true)
+     */
+    private $maxHits = 0;
+
+    /**
+     * @var int
      * @ORM\Column(name="hits", type="bigint", nullable=false)
      */
-    private $hits = '0';
+    private $hits = 0;
 
     /**
      * @var DateTime|null
-     *
      * @ORM\Column(name="start_date", type="date", nullable=true)
      */
     private $startDate;
 
     /**
      * @var DateTime|null
-     *
      * @ORM\Column(name="start_time", type="time", nullable=true)
      */
     private $startTime;
 
     /**
      * @var DateTime|null
-     *
      * @ORM\Column(name="end_date", type="date", nullable=true)
      */
     private $endDate;
 
     /**
      * @var DateTime|null
-     *
      * @ORM\Column(name="end_time", type="time", nullable=true)
      */
     private $endTime;
+
+    /**
+     * @var BannerHit[]
+     * @ORM\OneToMany(targetEntity="App\Entity\BannerHit", mappedBy="banner")
+     */
+    private $bannerHits;
+
+    /**
+     * @var BannerView[]
+     * @ORM\OneToMany(targetEntity="App\Entity\BannerView", mappedBy="banner")
+     */
+    private $bannerViews;
+
+    /**
+     * @var BannerCustomer
+     * @ORM\ManyToOne(targetEntity="App\Entity\BannerCustomer", inversedBy="banners")
+     * @ORM\JoinColumn(name="customerid", referencedColumnName="id")
+     */
+    private $customer;
+
+    /**
+     *
+     */
+    public function __construct()
+    {
+        $this->bannerHits = new ArrayCollection();
+        $this->bannerViews = new ArrayCollection();
+    }
 
     /**
      * @return int
@@ -172,18 +178,18 @@ class Banner
     }
 
     /**
-     * @return int
+     * @return bool
      */
-    public function getActive(): int
+    public function isActive(): bool
     {
         return $this->active;
     }
 
     /**
-     * @param int $active
+     * @param bool $active
      * @return Banner
      */
-    public function setActive(int $active): Banner
+    public function setActive(bool $active): Banner
     {
         $this->active = $active;
         return $this;
@@ -262,24 +268,6 @@ class Banner
     }
 
     /**
-     * @return int|null
-     */
-    public function getCustomerid(): ?int
-    {
-        return $this->customerid;
-    }
-
-    /**
-     * @param int|null $customerid
-     * @return Banner
-     */
-    public function setCustomerid(?int $customerid): Banner
-    {
-        $this->customerid = $customerid;
-        return $this;
-    }
-
-    /**
      * @return string
      */
     public function getEmail(): string
@@ -298,18 +286,18 @@ class Banner
     }
 
     /**
-     * @return int|null
+     * @return int
      */
-    public function getMaxViews(): ?int
+    public function getMaxViews(): int
     {
         return $this->maxViews;
     }
 
     /**
-     * @param int|null $maxViews
+     * @param int $maxViews
      * @return Banner
      */
-    public function setMaxViews(?int $maxViews): Banner
+    public function setMaxViews(int $maxViews): Banner
     {
         $this->maxViews = $maxViews;
         return $this;
@@ -334,18 +322,18 @@ class Banner
     }
 
     /**
-     * @return int|null
+     * @return int
      */
-    public function getMaxHits(): ?int
+    public function getMaxHits(): int
     {
         return $this->maxHits;
     }
 
     /**
-     * @param int|null $maxHits
+     * @param int $maxHits
      * @return Banner
      */
-    public function setMaxHits(?int $maxHits): Banner
+    public function setMaxHits(int $maxHits): Banner
     {
         $this->maxHits = $maxHits;
         return $this;
@@ -438,6 +426,60 @@ class Banner
     public function setEndTime(?DateTime $endTime): Banner
     {
         $this->endTime = $endTime;
+        return $this;
+    }
+
+    /**
+     * @param BannerHit $bannerHit
+     * @return Banner
+     */
+    public function addBannerHit(BannerHit $bannerHit): Banner
+    {
+        $this->bannerHits[] = $bannerHit;
+        return $this;
+    }
+
+    /**
+     * @return BannerHit[]
+     */
+    public function getBannerHits(): array
+    {
+        return $this->bannerHits->toArray();
+    }
+
+    /**
+     * @param BannerView $bannerView
+     * @return Banner
+     */
+    public function addBannerView(BannerView $bannerView): Banner
+    {
+        $this->bannerViews[] = $bannerView;
+        return $this;
+    }
+
+    /**
+     * @return BannerView[]
+     */
+    public function getBannerViews(): array
+    {
+        return $this->bannerViews->toArray();
+    }
+
+    /**
+     * @return BannerCustomer
+     */
+    public function getCustomer(): BannerCustomer
+    {
+        return $this->customer;
+    }
+
+    /**
+     * @param BannerCustomer $customer
+     * @return Banner
+     */
+    public function setCustomer(BannerCustomer $customer): Banner
+    {
+        $this->customer = $customer;
         return $this;
     }
 }

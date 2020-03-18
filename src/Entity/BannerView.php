@@ -12,7 +12,6 @@ class BannerView
 {
     /**
      * @var int
-     *
      * @ORM\Column(name="id", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -20,24 +19,22 @@ class BannerView
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Banner")
-     * @ORM\Column(name="bannerid", type="bigint", nullable=false)
-     */
-    private $banner;
-
-    /**
      * @var int
-     *
      * @ORM\Column(name="datumtijd", type="bigint", nullable=false)
      */
     private $timestamp;
 
     /**
      * @var int
-     *
      * @ORM\Column(name="ip", type="bigint", nullable=false)
      */
     private $ip;
+
+    /**
+     * @var Banner
+     * @ORM\ManyToOne(targetEntity="App\Entity\Banner", inversedBy="bannerViews")
+     */
+    private $banner;
 
     /**
      * @return int
@@ -54,24 +51,6 @@ class BannerView
     public function setId(int $id): BannerView
     {
         $this->id = $id;
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getBanner()
-    {
-        return $this->banner;
-    }
-
-    /**
-     * @param mixed $banner
-     * @return BannerView
-     */
-    public function setBanner($banner)
-    {
-        $this->banner = $banner;
         return $this;
     }
 
@@ -108,6 +87,24 @@ class BannerView
     public function setIp(int $ip): BannerView
     {
         $this->ip = $ip;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getBanner()
+    {
+        return $this->banner;
+    }
+
+    /**
+     * @param mixed $banner
+     * @return BannerView
+     */
+    public function setBanner($banner)
+    {
+        $this->banner = $banner;
         return $this;
     }
 }

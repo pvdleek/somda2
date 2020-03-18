@@ -1,0 +1,81 @@
+{% extends('base.html.twig') %}
+
+{% block content %}
+    <div align="center">
+        <table class="design">
+            <tr>
+                <th><label for="trainTableIndex">{{ 'general.input.index' | trans }}</label></th>
+                <td>
+                    <select id="trainTableIndex" name="trainTableIndex">
+                        {% for trainTableIndex in trainTableIndices %}
+                            <option {{ trainTableIndexNumber == trainTableIndex.id ? 'selected="selected"' : '' }} value="{{ trainTableIndex.id }}">{{ trainTableIndex.name }}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th><label for="routeNumber">{{ 'general.input.route' | trans }}</label></th>
+                <td><input id="routeNumber" maxlength="8" name="routeNumber" size="10" type="text" value="{{ routeNumber }}" /></td>
+            </tr>
+            <tr>
+                <th>&nbsp;</th>
+                <td>
+                    <div class="button_clear"><div class="somda-button-left"><div class="blank_home">
+                        <a href="#" id="searchTrainTable" onclick="searchTrainTable(); return false;" title="{{ 'trainTable.input.button' | trans }}"><span>{{ 'general.button.search' | trans }}</span></a>
+                    </div></div></div>
+                </td>
+            </tr>
+        </table>
+        <br />
+
+        {% include 'partials/errorMessages.html.twig' %}
+
+        {% if trainTableLines | length %}
+            <table class="design">
+                <tr><th colspan="7">{{ 'trainTable.output.title' | trans | format(routeNumber) }}</th></tr>
+                <tr>
+                    {% for dayNumber in 0..6 %}
+                        <th>{{ ('general.date.days.' ~ dayNumber) | trans }}</th>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    {% for dayNumber in 0..6 %}
+                        <td>
+                            {% for routeTrain in routePredictions %}
+                                {% if routeTrain.dayNumber == dayNumber %}
+                                    {{ 'trainTable.output.planned.title' | trans }}:
+                                    <a title="{{ 'trainTable.output.planned.base' | trans | format(routeTrain.numberOfSpots) }}">{{ routeTrain.trainNameRange.name }}{% if routeTrain.position.id > 0 %} ({{ routeTrain.position.name }}){% endif %}</a><br />
+                                {% endif %}
+                            {% endfor %}
+                            <table class="design">
+                                {% for trainTable in trainTableLines %}
+                                    {% if trainTable.routeOperationDays.day(dayNumber) %}
+                                        <tr>
+                                            <td><span class="tooltip" title="{{ trainTable.location.description }}">{{ trainTable.location.name }}</span></td>
+                                            <td>{{ trainTable.action }}</td>
+                                            <td>{{ trainTable.time | displayTime }}</td>
+                                        </tr>
+                                    {% endif %}
+                                {% endfor %}
+                            </table>
+                        </td>
+                    {% endfor %}
+                </tr>
+            </table>
+        {% elseif routeNumber is not null %}
+            <p class="warn">{{ 'trainTable.output.notFound' | trans }}</p>
+        {% endif %}
+        <p class="info">{{ 'trainTable.output.freightTrainsInfo' | trans | raw }}</p>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript">
+        function searchTrainTable() {
+            let location = '{{ path('train_table_search', { 'trainTableIndexNumber': 9999, 'routeNumber': 'routeNumber' }) }}';
+            location = location.replace('9999', document.getElementById('trainTableIndex').value);
+            location = location.replace('routeNumber', document.getElementById('routeNumber').value);
+            document.location = location;
+        }
+    </script>
+{% endblock %}

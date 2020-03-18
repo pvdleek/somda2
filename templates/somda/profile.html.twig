@@ -1,0 +1,41 @@
+{% extends('@App/base.html.twig') %}
+
+{% block content %}
+    <table class="design">
+        <tr>
+            <td rowspan="12" valign="top"><img src="{{ asset('bundles/app/images/avatar/' ~ user.info.avatar) }}" /></td>
+            <th align="right">{{ 'profile.username' | trans }}</th>
+            <td align="left">{{ user.username }}</td>
+        </tr><tr>
+            <th align="right">{{ 'profile.name' | trans }}</th>
+            <td align="left">{{ user.name }}</td>
+        </tr><tr>
+            <th align="right">{{ 'profile.city' | trans }}</th>
+            <td align="left">{{ user.info.city }}</td>
+        </tr><tr>
+            <th align="right">{{ 'profile.gender' | trans }}</th>
+            <td align="left">{{ user.info.gender }}</td>
+        </tr><tr>
+            <th align="right">{{ 'profile.birthDate' | trans }}</th>
+            <td align="left">{{ user.info.birthDate | displayDateTime | default('Onbekend') }}</td>
+        </tr><tr>
+            <th>&nbsp;</th>
+            <td align="left"><a href="#">Stuur deze gebruiker een e-mail</a></td>
+        </tr><tr>
+            <th align="right">{{ 'profile.registrationDate' | trans }}</th>
+            <td align="left">{{ user.registrationDate | displayDateTime }}</td>
+        </tr><tr>
+            <th align="right">{{ 'profile.lastVisit' | trans }}</th>
+            <td align="left">{{ user.lastVisit.lastVisit | displayDateTime(true) }}</td>
+        </tr><tr>
+            <th align="right">{{ 'profile.website' | trans }}</th>
+            <td align="left">{{ user.info.website }}</td>
+        </tr><tr>
+            <th align="right">{{ 'profile.info' | trans }}</th>
+            <td align="left">{{ user.info.info }}</td>
+        </tr><tr>
+            <th align="right">Forumbijdrages</th>
+            <td align="left"><a href="#">Klik hier voor de forumbijdrages van deze gebruiker</a></td>
+        </tr>
+    </table>
+{% endblock %}

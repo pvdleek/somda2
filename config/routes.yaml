@@ -1,3 +1,262 @@
-index:
+home:
   path: /
-  controller: App\Controller\HomeController::HomeAction
+  methods: [GET]
+  defaults: { _controller: App\Controller\HomeController::indexAction }
+
+information_home:
+  path: /informatie/
+  methods: [GET]
+  defaults: { _controller: App\Controller\HomeController::indexAction }
+train_table_home:
+  path: /dienstregelingen/
+  methods: [GET]
+  defaults: { _controller: App\Controller\HomeController::indexAction }
+somda_home:
+  path: /somda/
+  methods: [GET]
+  defaults: { _controller: App\Controller\HomeController::indexAction }
+
+###############
+# Information #
+###############
+jargon:
+  path: /jargon/
+  methods: [GET]
+  defaults: { _controller: App\Controller\InformationController::jargonAction }
+location:
+  path: /verkortingen/
+  methods: [GET]
+  defaults: { _controller: App\Controller\InformationController:locationsAction }
+location_search:
+  path: /verkortingen/{searchMethod}/{search}/
+  methods: [GET]
+  defaults: { _controller: App\Controller\InformationController:locationsAction }
+uic:
+  path: /uic/
+  methods: [GET]
+  defaults: { _controller: App\Controller\InformationController:uicAction }
+
+###############
+# Train table #
+###############
+train_table:
+  path: /dienstregeling/
+  methods: [GET]
+  defaults: { _controller: App\Controller\TrainTableController:indexAction }
+train_table_search:
+  path: /dienstregeling/{trainTableIndexNumber}/{routeNumber}/
+  methods: [GET]
+  requirements: { trainTableIndexNumber: \d+ }
+  defaults: { _controller: App\Controller\TrainTableController:indexAction }
+passing_routes:
+  path: /doorkomststaat/
+  methods: [GET]
+  defaults: { _controller: App\Controller\TrainTableController:passingRoutesAction }
+passing_routes_search:
+  path: /doorkomststaat/{trainTableIndexNumber}/{locationName}/{dayNumber}/{startTime}/{endTime}/
+  methods: [GET]
+  requirements: { trainTableIndexNumber: \d+, dayNumber: \d+ }
+  defaults: { _controller: App\Controller\TrainTableController:passingRoutesAction }
+special_routes:
+  path: /drgl/
+  methods: [GET]
+  defaults: { _controller: App\Controller\TrainTableController:specialRoutesAction }
+special_route:
+  path: /drgl/{id}/
+  methods: [GET]
+  requirements: { id: \d+ }
+  defaults: { _controller: App\Controller\TrainTableController:specialRoutesAction }
+
+#########
+# Forum #
+#########
+forum:
+  path: /forum/
+  methods: [GET]
+  defaults: { _controller: App\Controller\ForumController:indexAction }
+forum_forum:
+  path: /forum/c{id}/{name}/
+  methods: [GET]
+  requirements: { id: \d+ }
+  defaults: { _controller: App\Controller\ForumController:forumAction }
+forum_forum_new_discussion:
+  path: /forum/c{id}/nieuwe_discussie/
+  methods: [GET]
+  requirements: { id: \d+ }
+  defaults: { _controller: App\Controller\ForumController:discussionAction }
+forum_discussion:
+  path: /forum/{id}/{name}/
+  methods: [GET]
+  requirements: { id: \d+ }
+  defaults: { _controller: App\Controller\ForumController:discussionAction }
+forum_search:
+  path: /forum/zoeken/
+  methods: [GET]
+  defaults: { _controller: App\Controller\ForumController:searchAction }
+forum_unread:
+  path: /forum/ongelezen/
+  methods: [GET]
+  defaults: { _controller: App\Controller\ForumController:unreadAction }
+forum_mark_read:
+  path: /forum/markeer-als-gelezen/
+  methods: [GET]
+  defaults: { _controller: App\Controller\ForumController:markAsReadAction }
+
+#########
+# Somda #
+#########
+profile_view:
+  path: /profiel/{id}
+  methods: [GET]
+  requirements: { id: \d+ }
+  defaults: { _controller: App\Controller\SomdaController:profileAction }
+
+
+inloggen:
+  path: /
+  controller: App\Controller\HomeController::homeAction
+links:
+  path: /
+  controller: App\Controller\HomeController::homeAction
+verkortingen:
+  path: /
+  controller: App\Controller\HomeController::homeAction
+
+gespotmat:
+  path: /
+  controller: App\Controller\HomeController::homeAction
+doorkomststaat:
+  path: /doorkomststaat/
+  controller: App\Controller\TrainTableController::passingRoutesAction
+weer:
+  path: /
+  controller: App\Controller\HomeController::homeAction
+matsms:
+  path: /
+  controller: App\Controller\HomeController::homeAction
+adverteren:
+  path: /
+  controller: App\Controller\HomeController::homeAction
+invoer:
+  path: /
+  controller: App\Controller\HomeController::homeAction
+help:
+  path: /
+  controller: App\Controller\HomeController::homeAction
+nieuws:
+  path: /
+  controller: App\Controller\HomeController::homeAction
+spots:
+  path: /
+  controller: App\Controller\HomeController::homeAction
+feedback:
+  path: /
+  controller: App\Controller\HomeController::homeAction
+wachtwoord:
+  path: /
+  controller: App\Controller\HomeController::homeAction
+nieuw_wachtwoord:
+  path: /
+  controller: App\Controller\HomeController::homeAction
+activeren:
+  path: /
+  controller: App\Controller\HomeController::homeAction
+registreren:
+  path: /
+  controller: App\Controller\HomeController::homeAction
+doneren:
+  path: /
+  controller: App\Controller\HomeController::homeAction
+ongelezen:
+  path: /
+  controller: App\Controller\HomeController::homeAction
+gebruikerslijst:
+  path: /
+  controller: App\Controller\HomeController::homeAction
+instellingen:
+  path: /
+  controller: App\Controller\HomeController::homeAction
+nieuws/126:
+  path: /
+  controller: App\Controller\HomeController::homeAction
+polls:
+  path: /
+  controller: App\Controller\HomeController::homeAction
+mijnspots:
+  path: /
+  controller: App\Controller\HomeController::homeAction
+spotpunten:
+  path: /spotpunten/
+  controller: App\Controller\InformationController::locationsAction
+verstoringen:
+  path: /
+  controller: App\Controller\HomeController::homeAction
+reisplanner:
+  path: /
+  controller: App\Controller\HomeController::homeAction
+ongelezen_forum:
+  path: /
+  controller: App\Controller\HomeController::homeAction
+ddar:
+  path: /
+  controller: App\Controller\HomeController::homeAction
+vertrektijden:
+  path: /
+  controller: App\Controller\HomeController::homeAction
+treinnummers:
+  path: /
+  controller: App\Controller\HomeController::homeAction
+disclaimer:
+  path: /
+  controller: App\Controller\HomeController::homeAction
+statistieken:
+  path: /
+  controller: App\Controller\HomeController::homeAction
+spoornieuws:
+  path: /
+  controller: App\Controller\HomeController::homeAction
+over:
+  path: /
+  controller: App\Controller\HomeController::homeAction
+materieelnamen:
+  path: /
+  controller: App\Controller\HomeController::homeAction
+favorieten:
+  path: /
+  controller: App\Controller\HomeController::homeAction
+feeds:
+  path: /
+  controller: App\Controller\HomeController::homeAction
+forum/zoeken:
+  path: /
+  controller: App\Controller\HomeController::homeAction
+shout_archief:
+  path: /
+  controller: App\Controller\HomeController::homeAction
+grafisch:
+  path: /
+  controller: App\Controller\HomeController::homeAction
+forum/meldingen:
+  path: /
+  controller: App\Controller\HomeController::homeAction
+nieuws_home:
+  path: /
+  controller: App\Controller\HomeController::homeAction
+informatie_home:
+  path: /
+  controller: App\Controller\HomeController::homeAction
+dienstregeling_home:
+  path: /
+  controller: App\Controller\HomeController::homeAction
+spots_home:
+  path: /
+  controller: App\Controller\HomeController::homeAction
+materieel_home:
+  path: /
+  controller: App\Controller\HomeController::homeAction
+forum_home:
+  path: /
+  controller: App\Controller\HomeController::homeAction
+mijnsomda_home:
+  path: /
+  controller: App\Controller\HomeController::homeAction

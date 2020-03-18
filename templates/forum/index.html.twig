@@ -1,0 +1,31 @@
+{% extends('base.html.twig') %}
+
+{% block content %}
+    <div class="button_clear"><div class="somda-button-left"><div class="blank_home">
+        <a href="{{ path('forum_search') }}" title="{{ 'forum.search' | trans }}"><span>{{ 'forum.search' | trans }}</span></a>
+    </div></div></div>
+    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+        <div class="button_clear"><div class="somda-button-left"><div class="blank_home">
+            <a href="{{ path('forum_mark_read') }}" title="{{ 'forum.mark.all' | trans }}"><span>{{ 'forum.mark.all' | trans }}</span></a>
+        </div></div></div>
+        <div class="button_clear"><div class="somda-button-left"><div class="blank_home">
+            <a href="{{ path('forum_unread') }}" title="{{ 'forum.unread' | trans }}"><span>{{ 'forum.unread' | trans }}</span></a>
+        </div></div></div>
+    {% endif %}
+
+    <br /><br />
+
+    <table class="design">
+        <tr><th colspan="2">{{ 'forum.category' | trans }}</th><th>{{ 'forum.number.discussions' | trans }}</th></tr>
+        {% for category in categories %}
+            <tr><th colspan="3">{{ category['category'].name }}</th></tr>
+            {% for forum in category['forums'] %}
+                <tr>
+                    <td><img src="{{ asset('bundles/app/images/forum/folder_ubr.gif') }}" /></td>
+                    <td><a href="{{ path('forum_forum', { 'id': forum['id'], 'name': forum['name'] }) }}">{{ forum['name'] }}</a></td>
+                    <td>{{ forum['numberOfDiscussions'] }}</td>
+                </tr>
+            {% endfor %}
+        {% endfor %}
+    </table>
+{% endblock %}

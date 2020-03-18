@@ -1,0 +1,87 @@
+{% extends('base.html.twig') %}
+
+{% block content %}
+    <div align="center">
+        <table class="design">
+            <tr>
+                <th><label for="trainTableIndex">{{ 'general.input.index' | trans }}</label></th>
+                <td>
+                    <select id="trainTableIndex" name="trainTableIndex">
+                        {% for trainTableIndex in trainTableIndices %}
+                            <option {{ trainTableIndexNumber == trainTableIndex.id ? "selected=\"selected\"" : '' }} value="{{ trainTableIndex.id }}">{{ trainTableIndex.name }}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th><label for="dayNumber">{{ 'general.input.dayNumber' | trans }}</label></th>
+                <td>
+                    <select id="dayNumber" name="dayNumber">
+                        {% for dayNumberSelect in 0..6 %}
+                            <option {{ dayNumber == dayNumberSelect ? "selected=\"selected\" " }}value="{{ dayNumberSelect }}">{{ ('general.date.days.' ~ dayNumberSelect) | trans }}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th><label for="location">{{ 'general.input.location' | trans }}</label></th>
+                <td><input id="location" maxlength="8" name="location" size="10" type="text" value="{{ locationName }}" /></td>
+            </tr>
+            <tr>
+                <th><label for="startTime">{{ 'passingRoutes.input.timeRange' | trans | raw }}</label></th>
+                <td>
+                    <input id="startTime" maxlength="5" name="startTime" size="8" type="text" value="{{ startTime }}" />
+                    <input id="endTime" maxlength="5" name="endTime" size="8" type="text" value="{{ endTime }}" />
+                </td>
+            </tr>
+            <tr>
+                <th>&nbsp;</th>
+                <td>
+                    <div class="button_clear"><div class="somda-button-left"><div class="blank_home">
+                        <a href="#" id="searchPassingRoutes" onclick="searchPassingRoutes(); return false;" title="{{ 'passingRoutes.input.button' | trans }}"><span>{{ 'general.button.search' | trans }}</span></a>
+                    </div></div></div>
+                </td>
+            </tr>
+        </table>
+        <br />
+
+        {% include 'partials/errorMessages.html.twig' %}
+
+        {% if passingRoutes | length %}
+            <table class="design">
+                <tr>
+                    <th>{{ 'general.output.time' | trans }}</th>
+                    <th>{{ 'general.output.route' | trans }}</th>
+                    <th>{{ 'general.output.characteristic' | trans }}</th>
+                    <th>{{ 'general.output.startLocation' | trans }}</th>
+                    <th>{{ 'general.output.action' | trans }}</th>
+                    <th>{{ 'general.output.endLocation' | trans }}</th>
+                </tr>
+                {% for trainTable in passingRoutes %}
+                    <tr>
+                        <td>{{ trainTable['time'] | displayTime }}</td>
+                        <td><a href="{{ path('train_table_search', {'trainTableIndexNumber': trainTableIndexNumber, 'routeNumber': trainTable['route_number'] }) }}">{{ trainTable['route_number'] }}</a></td>
+                        <td>{{ trainTable['transporter_name'] }} - {{ trainTable['characteristic_description'] }}</td>
+                        <td><a title="{{ trainTable['fl_first_description'] }}">{{ trainTable['fl_first_name'] }}</a></td>
+                        <td>{{ ("general.action." ~ trainTable['action']) | trans }}</td>
+                        <td><a title="{{ trainTable['fl_last_description'] }}">{{ trainTable['fl_last_name'] }}</a></td>
+                    {% endfor %}
+                </tr>
+            </table>
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript">
+        function searchPassingRoutes() {
+            let location = '{{ path('passing_routes_search', { 'trainTableIndexNumber': 9999, 'locationName': 'locationName', 'dayNumber': 1234, 'startTime': 'startTime', 'endTime': 'endTime' }) }}';
+            location = location.replace('9999', document.getElementById('trainTableIndex').value);
+            location = location.replace('locationName', document.getElementById('location').value);
+            location = location.replace('1234', document.getElementById('dayNumber').value);
+            location = location.replace('startTime', document.getElementById('startTime').value);
+            location = location.replace('endTime', document.getElementById('endTime').value);
+            document.location = location;
+        }
+    </script>
+{% endblock %}

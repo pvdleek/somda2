@@ -21,59 +21,52 @@ class RailNews
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="sns_bron", type="string", length=7, nullable=false)
-     */
-    private $source;
-
-    /**
-     * @var string
-     *
      * @ORM\Column(name="sns_titel", type="string", length=100, nullable=false)
      */
     private $title;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="sns_url", type="string", length=255, nullable=false)
      */
     private $url;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="sns_introductie", type="text", length=0, nullable=false)
      */
     private $introduction;
 
     /**
      * @var int
-     *
      * @ORM\Column(name="sns_datumtijd", type="bigint", nullable=false)
      */
-    private $timestamp;
+    private $dateTime;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="sns_gekeurd", type="bigint", nullable=false)
+     * @var boolean
+     * @ORM\Column(name="sns_gekeurd", type="boolean", nullable=false)
      */
-    private $approved = '0';
+    private $approved = false;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="sns_actief", type="bigint", nullable=false, options={"default"="1"})
+     * @var boolean
+     * @ORM\Column(name="sns_actief", type="boolean", nullable=false, options={"default"="1"})
      */
-    private $active = '1';
+    private $active = true;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="sns_bijwerken_ok", type="bigint", nullable=false, options={"default"="1"})
+     * @var boolean
+     * @ORM\Column(name="sns_bijwerken_ok", type="boolean", nullable=false, options={"default"="1"})
      */
-    private $automaticUpdates = '1';
+    private $automaticUpdates = true;
+
+    /**
+     * @var RailNewsSource
+     * @ORM\ManyToOne(targetEntity="App\Entity\RailNewsSource", inversedBy="news")
+     * @ORM\JoinColumn(name="sns_snb_id", referencedColumnName="snb_id")
+     */
+    private $source;
 
     /**
      * @return int
@@ -90,24 +83,6 @@ class RailNews
     public function setId(int $id): RailNews
     {
         $this->id = $id;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getSource(): string
-    {
-        return $this->source;
-    }
-
-    /**
-     * @param string $source
-     * @return RailNews
-     */
-    public function setSource(string $source): RailNews
-    {
-        $this->source = $source;
         return $this;
     }
 
@@ -168,72 +143,124 @@ class RailNews
     /**
      * @return int
      */
-    public function getTimestamp(): int
+    public function getDateTime(): int
     {
-        return $this->timestamp;
+        return $this->dateTime;
     }
 
     /**
-     * @param int $timestamp
+     * @param int $dateTime
      * @return RailNews
      */
-    public function setTimestamp(int $timestamp): RailNews
+    public function setDateTime(int $dateTime): RailNews
     {
-        $this->timestamp = $timestamp;
+        $this->dateTime = $dateTime;
         return $this;
     }
 
     /**
-     * @return int
+     * @return bool
      */
-    public function getApproved(): int
+    public function isApproved(): bool
     {
         return $this->approved;
     }
 
     /**
-     * @param int $approved
+     * @param bool $approved
      * @return RailNews
      */
-    public function setApproved(int $approved): RailNews
+    public function setApproved(bool $approved): RailNews
     {
         $this->approved = $approved;
         return $this;
     }
 
     /**
-     * @return int
+     * @return bool
      */
-    public function getActive(): int
+    public function isActive(): bool
     {
         return $this->active;
     }
 
     /**
-     * @param int $active
+     * @param bool $active
      * @return RailNews
      */
-    public function setActive(int $active): RailNews
+    public function setActive(bool $active): RailNews
     {
         $this->active = $active;
         return $this;
     }
 
     /**
-     * @return int
+     * @return bool
      */
-    public function getAutomaticUpdates(): int
+    public function isAutomaticUpdates(): bool
     {
         return $this->automaticUpdates;
     }
 
     /**
-     * @param int $automaticUpdates
+     * @param bool $automaticUpdates
      * @return RailNews
      */
-    public function setAutomaticUpdates(int $automaticUpdates): RailNews
+    public function setAutomaticUpdates(bool $automaticUpdates): RailNews
     {
         $this->automaticUpdates = $automaticUpdates;
+        return $this;
+    }
+
+    /**
+     * @return RailNewsSource
+     */
+    public function getSource(): RailNewsSource
+    {
+        return $this->source;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLogo(): string
+    {
+        list($width, $height) = $this->resizeImage(
+            getimagesize(__DIR__ . '/../../public/images/news-logos/' . $this->getSource()->getLogo()),
+            [500, 25]
+        );
+        return '<a href="http://' . $this->getSource()->getUrl() . '/" target="_blank"><img alt="' .
+            $this->getSource()->getDescription() . '" src="/images/news-logos/' .
+            $this->getSource()->getLogo() . '" height="' . $height . '" width="' . $width . '"  /></a>';
+    }
+
+    /**
+     * This function calculates thumbnail width and height for an image
+     * @param array $currentSizes - an array with 2 values: 0 = width, 1 = height
+     * @param array $maxSizes - an array with 2 values: 0 = width, 1 = height
+     * @return array - an array with 2 values: 0 = width, 1 = height
+     */
+    private function resizeImage(array $currentSizes, array $maxSizes): array {
+        if (($currentSizes[0] <= $maxSizes[0]) && ($currentSizes[1] <= $maxSizes[1])) {
+            return [$currentSizes[0], $currentSizes[1]];
+        }
+
+        $xRatio = $maxSizes[0] / $currentSizes[0];
+        if (($xRatio * $currentSizes[1]) < $maxSizes[1]) {
+            return [$maxSizes[0], ceil($xRatio * $currentSizes[1])];
+        }
+
+        $yRatio = $maxSizes[1] / $currentSizes[1];
+        return [ceil($yRatio * $currentSizes[0]), $maxSizes[1]];
+    }
+
+    /**
+     * @param RailNewsSource $source
+     * @return RailNews
+     */
+    public function setSource(RailNewsSource $source): RailNews
+    {
+        $this->source = $source;
         return $this;
     }
 }

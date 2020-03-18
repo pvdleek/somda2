@@ -1,0 +1,34 @@
+{% extends('base.html.twig') %}
+
+{% block content %}
+    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+        <div class="button_clear"><div class="somda-button-left"><div class="blank_home">
+            <a href="{{ path('forum_forum_new_discussion', { 'id': forum.id }) }}" title="{{ 'forum.newDiscussion' | trans }}"><span>{{ 'forum.newDiscussion' | trans }}</span></a>
+        </div></div></div>
+        <div class="button_clear"><div class="somda-button-left"><div class="blank_home">
+            <a href="{{ path('forum_mark_read') }}" title="{{ 'forum.mark.all' | trans }}"><span>{{ 'forum.mark.all' | trans }}</span></a>
+        </div></div></div>
+
+        <br /><br />
+    {% endif %}
+
+    <table class="design">
+        <tr>
+            <th colspan="2">{{ 'forum.discussion.subject' | trans }}</th>
+            <th>{{ 'forum.number.posts' | trans }}</th>
+            <th>{{ 'forum.author' | trans }}</th>
+            <th>{{ 'forum.number.viewed' | trans }}</th>
+            <th>{{ 'forum.lastPost' | trans }}</th>
+        </tr>
+        {% for discussion in discussions %}
+            <tr>
+                <td><img src="{{ asset('bundles/app/images/forum/folder_ubr.gif') }}" /></td>
+                <td><a href="{{ path('forum_discussion', { 'id': discussion['id'], 'name': (discussion['title'] | url_encode) }) }}">{{ discussion['title'] }}</a></td>
+                <td>{{ discussion['posts'] }}</td>
+                <td>{{ discussion['author_id'] | displayUser(discussion['author_username']) | raw }}</td>
+                <td>{{ discussion['viewed'] }}</td>
+                <td>{{ discussion['max_post_timestamp'] | displayDateTime(true) }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
