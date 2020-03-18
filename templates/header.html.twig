@@ -40,26 +40,6 @@
 </ul>
 </div></div>
 
-{#<div id="mbar"><div id="nav">#}
-{#	<div class="menuleft">&nbsp;</div><div class="menuright">&nbsp;</div>#}
-{#	<ul class="menu">#}
-{#		<li><a href="', SITE_URL, '/index.php?force=home"><span>Home</span></a></li>#}
-{#		{% for menuParent in menuStructure %}#}
-{#			<li class="haschild">#}
-{#				<a href="{{ path(menuParent['path']) }}" class="haschild">{{ menuParent['name'] }}</a>#}
-{#				<ul>#}
-{#					{% for menuChild in menuParent['children'] %}#}
-{#						<li{{ menuChild['followed_by_separator'] ? ' class="seperator"' : '' }}>#}
-{#							<a href="{{ path(menuChild['path']) }}">{{ menuChild['name'] }}</a>#}
-{#						</li>#}
-{#					{% endfor %}#}
-{#				</ul>#}
-{#			</li>#}
-{#		{% endfor %}#}
-{#	</ul>#}
-{#</div></div>#}
 <div class="clear">&nbsp;</div>
 
-if ($blokid > 0 && substr(BLOCK_SHORT, -4) != 'home') {
-	echo '<div class="breadcrumb">Je bent hier: ', BLOCK_PATH, '</div>';
-}
+<div class="breadcrumb">Je bent hier: {{ breadcrumb | raw }}</div>

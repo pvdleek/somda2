@@ -34,6 +34,9 @@ class ForumController extends BaseController
      */
     public function forumAction(int $id) : Response
     {
+        /**
+         * @var ForumForum $forum
+         */
         $forum = $this->doctrine->getRepository(ForumForum::class)->find($id);
         if (is_null($forum)) {
             return $this->redirectToRoute('forum');
@@ -41,7 +44,7 @@ class ForumController extends BaseController
 
         $this->breadcrumbHelper->addPart('general.navigation.forum.index', 'forum');
         $this->breadcrumbHelper->addPart(
-            'general.navigation.forum.forum',
+            $forum->getCategory()->getName() . ' == ' . $forum->getName(),
             'forum_forum',
             ['id' => $id, 'name' => $forum->getName()],
             true

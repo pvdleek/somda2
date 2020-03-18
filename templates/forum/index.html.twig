@@ -21,7 +21,7 @@
             <tr><th colspan="3">{{ category['category'].name }}</th></tr>
             {% for forum in category['forums'] %}
                 <tr>
-                    <td><img src="{{ asset('bundles/app/images/forum/folder_ubr.gif') }}" /></td>
+                    <td><img alt="{{ forum['name'] }}" src="{{ asset('images/forum/folder_ubr.gif') }}" /></td>
                     <td><a href="{{ path('forum_forum', { 'id': forum['id'], 'name': forum['name'] }) }}">{{ forum['name'] }}</a></td>
                     <td>{{ forum['numberOfDiscussions'] }}</td>
                 </tr>

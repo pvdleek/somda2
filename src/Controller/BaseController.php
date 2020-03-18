@@ -5,12 +5,11 @@ namespace App\Controller;
 use App\Entity\Banner;
 use App\Entity\BannerView;
 use App\Entity\Block;
-use App\Entity\BlockRight;
-use App\Entity\Group;
 use App\Entity\RailNews;
 use App\Entity\User;
 use App\Helpers\BreadcrumbHelper;
 use App\Helpers\Controller\TrainTableHelper;
+use App\Helpers\MenuHelper;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 use Monolog\Logger;
@@ -63,6 +62,11 @@ abstract class BaseController
     protected $breadcrumbHelper;
 
     /**
+     * @var MenuHelper
+     */
+    private $menuHelper;
+
+    /**
      * @var TrainTableHelper
      */
     protected $trainTableHelper;
@@ -75,6 +79,7 @@ abstract class BaseController
      * @param Environment $environment
      * @param RouterInterface $router
      * @param BreadcrumbHelper $breadcrumbHelper
+     * @param MenuHelper $menuHelper
      * @param TrainTableHelper $trainTableHelper
      */
     public function __construct(
@@ -85,6 +90,7 @@ abstract class BaseController
         Environment $environment,
         RouterInterface $router,
         BreadcrumbHelper $breadcrumbHelper,
+        MenuHelper $menuHelper,
         TrainTableHelper $trainTableHelper
     ) {
         $this->requestStack = $requestStack;
@@ -94,6 +100,7 @@ abstract class BaseController
         $this->twig = $environment;
         $this->router = $router;
         $this->breadcrumbHelper = $breadcrumbHelper;
+        $this->menuHelper = $menuHelper;
         $this->trainTableHelper = $trainTableHelper;
     }
 
@@ -141,12 +148,12 @@ abstract class BaseController
     private function getParameters(array $viewParameters): array
     {
         // Check if there is an active banner for the header
-        $activeBanners = $this->doctrine->getRepository(Banner::class)->findBy(
+        $banners = $this->doctrine->getRepository(Banner::class)->findBy(
             ['location' => Banner::LOCATION_HEADER, 'active' => true]
         );
-        if (count($activeBanners) > 0) {
+        if (count($banners) > 0) {
             $headerType = 'banner';
-            $headerContent = $activeBanners[rand(0, count($activeBanners) - 1)];
+            $headerContent = $banners[rand(0, count($banners) - 1)];
 
             // Create a view for this banner
             $bannerView = new BannerView();
@@ -163,117 +170,15 @@ abstract class BaseController
                 ->findBy(['active' => true, 'approved' => true], ['dateTime' => 'DESC'], 3)[rand(0, 2)];
         }
 
-//        if ($session->logged_in) {
-//            $query = 'SELECT u.value
-//    FROM '.DB_PREFIX.'_users_prefs u
-//    JOIN '.DB_PREFIX.'_prefs p ON p.prefid=u.prefid
-//    WHERE u.uid='.$session->uid.' AND p.sleutel=\'tdr_tabel\'';
-//            $dbset_pref = $db->query($query);
-//            list($tdrtabel) = $db->fetchRow($dbset_pref);
-//            $db->freeResult($dbset_pref);
-//        } else {
-//            $tdrtabel = '1';
-//        }
-
         return array_merge($viewParameters, [
             'cookieChoice' => $this->getUser()->getCookieOk(),
             'headerType' =>  $headerType,
             'headerContent' => $headerContent,
             'imageNumber' => rand(1, 11),
-            'menuStructure' => $this->getMenuStructure(),
+            'breadcrumb' => $this->breadcrumbHelper->getBreadcrumb(),
+            'menuStructure' => $this->menuHelper->getMenuStructure(),
+            'nrOfOpenForumAlerts' => $this->menuHelper->getNumberOfOpenForumAlerts(),
         ]);
-    }
-
-    /**
-     * @return array
-     */
-    private function getMenuStructure(): array
-    {
-        $blocks = $this->doctrine->getRepository(Block::class)->getMenuStructure();
-        $allowedBlocks = [];
-
-        foreach ($blocks as $block) {
-            if (is_null($block['role'])
-                || ($this->getUser()->hasRole($block['role']) || $this->getUser()->hasRole('ROLE_SUPER_ADMIN'))
-            ) {
-                $allowedBlocks[] = $block;
-            }
-        }
-
-        return $allowedBlocks;
-
-
-        // Haal eventueel alvast het aantal openstaande alerts op
-//        if ($session->allowed(70)) {
-//            $query = 'SELECT COUNT(*) FROM ' . DB_PREFIX . '_forum_alerts WHERE closed=\'0\'';
-//            $dbset_alerts = $db->query($query);
-//            list($nr_of_alerts) = $db->fetchRow($dbset_alerts);
-//            $db->freeResult($dbset_alerts);
-//        } else {
-//            $nr_of_alerts = 0;
-//        }
-
-        $menuStructure = [];
-
-        $menuParents = $this->doctrine->getRepository(Block::class)->findBy(
-            ['parentBlock' => null, 'type' => Block::BLOCK_TYPE_PUBLIC]
-        );
-        foreach ($menuParents as $menuParent) {
-            $menuStructure[$menuParent->getId()] = [
-                'id' => $menuParent->getId(),
-                'volgorde' => $menuParent->getMenuOrder(),
-                'name' => $menuParent->getName(),
-                //TODO
-                'path' => strlen($menuParent->getShortUrl()) > 0 ? $menuParent->getShortUrl() : 'home',
-            ];
-            // TODO
-//            if ($menuParent->getShortUrl() == 'forum_home' && $session->allowed(70)) {
-//                $menuStructure[$menuParent->getId()]['alerts'] = $nr_of_alerts;
-//            }
-            if (strlen($menuParent->getShortUrl()) > 0) {
-                $menuStructure[$menuParent->getId()]['children'][0] = [
-                    'id' => 0,
-                    'volgorde' => 0,
-                    'name' => 'Homepagina ' . strtolower($menuParent->getName()),
-                    'path' => $menuParent->getShortUrl(),
-                    'followed_by_separator' => true
-                ];
-            }
-
-            $menuChildren = $this->doctrine->getRepository(Block::class)->findBy(['parentBlock' => $menuParent]);
-            $childFound = false;
-            foreach ($menuChildren as $menuChild) {
-                if ($this->shouldDoBlock($menuChild)) {
-                    $childFound = true;
-
-                    if ($menuChild->getId() === 54) {
-                        $path = 'logout';
-                    } elseif (strlen($menuChild->getShortUrl()) < 1) {
-                        //TODO
-                        $path = 'home';
-                    } else {
-                        $path = $menuChild->getShortUrl();
-                    }
-
-                    $menuStructure[$menuParent->getId()]['children'][$menuChild->getId()] = [
-                        'id' => $menuChild->getId(),
-                        'volgorde' => $menuChild->getMenuOrder(),
-                        'name' => $menuChild->getName(),
-                        'path' => $path,
-                        'followed_by_separator' => $menuChild->getDoSeparator() === '1',
-                    ];
-                    // TODO
-//                    if ($url_short == 'forum/meldingen' && $session->allowed(70)) {
-//                        $menuStructure[$parent_id]['children'][$menuChild->getId()]['alerts'] = $nr_of_alerts;
-//                    }
-                }
-            }
-            if (!$childFound) {
-                unset($menuStructure[$menuParent->getId()]);
-            }
-        }
-
-        return $menuStructure;
     }
 
     /**

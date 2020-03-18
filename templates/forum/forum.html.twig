@@ -22,7 +22,7 @@
         </tr>
         {% for discussion in discussions %}
             <tr>
-                <td><img src="{{ asset('bundles/app/images/forum/folder_ubr.gif') }}" /></td>
+                <td><img src="{{ asset('images/forum/folder_ubr.gif') }}" /></td>
                 <td><a href="{{ path('forum_discussion', { 'id': discussion['id'], 'name': (discussion['title'] | url_encode) }) }}">{{ discussion['title'] }}</a></td>
                 <td>{{ discussion['posts'] }}</td>
                 <td>{{ discussion['author_id'] | displayUser(discussion['author_username']) | raw }}</td>

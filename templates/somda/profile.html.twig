@@ -1,9 +1,9 @@
-{% extends('@App/base.html.twig') %}
+{% extends('base.html.twig') %}
 
 {% block content %}
     <table class="design">
         <tr>
-            <td rowspan="12" valign="top"><img src="{{ asset('bundles/app/images/avatar/' ~ user.info.avatar) }}" /></td>
+            <td rowspan="12" valign="top"><img src="{{ asset('images/avatar/' ~ user.info.avatar) }}" /></td>
             <th align="right">{{ 'profile.username' | trans }}</th>
             <td align="left">{{ user.username }}</td>
         </tr><tr>

@@ -13,7 +13,7 @@
                             {{ specialRoute.title }}
                         </h3>
                         {% if specialRoute.image | length %}
-                            <span class="drgl_right"><img alt="{{ specialRoute.title }}" src="{{ asset('bundles/app/images/materieel/' ~ specialRoute.image) }}" /></span>
+                            <span class="drgl_right"><img alt="{{ specialRoute.title }}" src="{{ asset('images/materieel/' ~ specialRoute.image) }}" /></span>
                         {% endif %}
                         <div class="drgl_text">{{ specialRoute.text | raw }}</div>
                     </td>
