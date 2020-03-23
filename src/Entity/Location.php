@@ -39,15 +39,15 @@ class Location
 
     /**
      * @var int
-     * @ORM\Column(name="hafas_code", type="bigint", nullable=false)
+     * @ORM\Column(name="hafas_code", type="bigint", nullable=true)
      */
     private $hafasCode;
 
     /**
-     * @var string
-     * @ORM\Column(name="hafas_desc", type="string", length=50, nullable=false)
+     * @var string|null
+     * @ORM\Column(name="hafas_desc", type="string", length=50, nullable=true)
      */
-    private $hafasDescription = '';
+    private $hafasDescription;
 
     /**
      * @var string
@@ -56,16 +56,16 @@ class Location
     private $description;
 
     /**
-     * @var string
-     * @ORM\Column(name="traject", type="string", length=15, nullable=false)
+     * @var string|null
+     * @ORM\Column(name="traject", type="string", length=15, nullable=true)
      */
-    private $routeDescription = '';
+    private $routeDescription;
 
     /**
-     * @var int
-     * @ORM\Column(name="spot_allowed", type="bigint", nullable=false)
+     * @var boolean
+     * @ORM\Column(name="spot_allowed", type="boolean", nullable=false)
      */
-    private $spotAllowed;
+    private $spotAllowed = true;
 
     /**
      * @var int|null
@@ -87,11 +87,18 @@ class Location
     private $trainTables;
 
     /**
+     * @var Spot[]
+     * @ORM\OneToMany(targetEntity="App\Entity\Spot", mappedBy="location")
+     */
+    private $spots;
+
+    /**
      *
      */
     public function __construct()
     {
         $this->trainTables = new ArrayCollection();
+        $this->spots = new ArrayCollection();
     }
 
     /**
@@ -185,18 +192,18 @@ class Location
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getHafasDescription(): string
+    public function getHafasDescription(): ?string
     {
         return $this->hafasDescription;
     }
 
     /**
-     * @param string $hafasDescription
+     * @param string|null $hafasDescription
      * @return Location
      */
-    public function setHafasDescription(string $hafasDescription): Location
+    public function setHafasDescription(?string $hafasDescription): Location
     {
         $this->hafasDescription = $hafasDescription;
         return $this;
@@ -221,36 +228,36 @@ class Location
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getRouteDescription(): string
+    public function getRouteDescription(): ?string
     {
         return $this->routeDescription;
     }
 
     /**
-     * @param string $routeDescription
+     * @param string|null $routeDescription
      * @return Location
      */
-    public function setRouteDescription(string $routeDescription): Location
+    public function setRouteDescription(?string $routeDescription): Location
     {
         $this->routeDescription = $routeDescription;
         return $this;
     }
 
     /**
-     * @return int
+     * @return bool
      */
-    public function getSpotAllowed(): int
+    public function isSpotAllowed(): bool
     {
         return $this->spotAllowed;
     }
 
     /**
-     * @param int $spotAllowed
+     * @param bool $spotAllowed
      * @return Location
      */
-    public function setSpotAllowed(int $spotAllowed): Location
+    public function setSpotAllowed(bool $spotAllowed): Location
     {
         $this->spotAllowed = $spotAllowed;
         return $this;
@@ -308,5 +315,23 @@ class Location
     public function getTrainTables(): array
     {
         return $this->trainTables->toArray();
+    }
+
+    /**
+     * @param Spot $spot
+     * @return Location
+     */
+    public function addSpot(Spot $spot): Location
+    {
+        $this->spots[] = $spot;
+        return $this;
+    }
+
+    /**
+     * @return Spot[]
+     */
+    public function getSpots(): array
+    {
+        return $this->spots->toArray();
     }
 }

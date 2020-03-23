@@ -31,7 +31,7 @@ class Banner
 
     /**
      * @var bool
-     * @ORM\Column(name="active", type="bigint", nullable=false)
+     * @ORM\Column(name="active", type="boolean", nullable=false, options={"default"=false})
      */
     private $active = false;
 

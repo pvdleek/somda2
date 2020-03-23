@@ -208,7 +208,7 @@ class RouteOperationDays
      * @param int $dayNumber
      * @return bool
      */
-    public function getDay(int $dayNumber) : bool
+    public function getDay(int $dayNumber): bool
     {
         switch ($dayNumber) {
             case 0:

@@ -63,7 +63,7 @@ class BaseControllerHelper
     /**
      * @return TrainTableYear|null
      */
-    public function getTrainTableYear() : ?TrainTableYear
+    public function getTrainTableYear(): ?TrainTableYear
     {
         return $this->trainTableYear;
     }
@@ -72,7 +72,7 @@ class BaseControllerHelper
      * @return TrainTableYear
      * @throws Exception
      */
-    public function getDefaultTrainTableYear() : TrainTableYear
+    public function getDefaultTrainTableYear(): TrainTableYear
     {
         $trainTableYears = $this->doctrine->getRepository(TrainTableYear::class)->findAll();
         foreach ($trainTableYears as $trainTableYear) {
@@ -86,7 +86,7 @@ class BaseControllerHelper
     /**
      * @param string $routeNumber
      */
-    public function setRoute(string $routeNumber)
+    public function setRoute(string $routeNumber): void
     {
         $this->route = $this->doctrine->getRepository(Route::class)->findOneBy(['number' => $routeNumber]);
     }
@@ -94,7 +94,7 @@ class BaseControllerHelper
     /**
      * @return Route|null
      */
-    public function getRoute() : ?Route
+    public function getRoute(): ?Route
     {
         return $this->route;
     }
@@ -102,7 +102,7 @@ class BaseControllerHelper
     /**
      * @param string $locationName
      */
-    public function setLocation(string $locationName)
+    public function setLocation(string $locationName): void
     {
         $this->location = $this->doctrine->getRepository(Location::class)->findOneByName($locationName);
     }
@@ -110,7 +110,7 @@ class BaseControllerHelper
     /**
      * @return Location|null
      */
-    public function getLocation() : ?Location
+    public function getLocation(): ?Location
     {
         return $this->location;
     }
@@ -118,7 +118,7 @@ class BaseControllerHelper
     /**
      * @param string $message
      */
-    protected function addErrorMessage(string $message)
+    protected function addErrorMessage(string $message): void
     {
         if (!in_array($message, $this->errorMessages)) {
             $this->errorMessages[] = $message;

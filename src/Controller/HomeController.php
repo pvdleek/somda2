@@ -11,7 +11,7 @@ class HomeController extends BaseController
     /**
      * @return Response
      */
-    public function indexAction() : Response
+    public function indexAction(): Response
     {
         $railNews = $this->doctrine
             ->getRepository(RailNews::class)

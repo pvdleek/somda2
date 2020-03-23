@@ -30,7 +30,7 @@ class TrainTableHelper extends BaseControllerHelper
     /**
      * @return TrainTable[]
      */
-    public function getTrainTableLines() : array
+    public function getTrainTableLines(): array
     {
         $this->clearErrorMessages();
         if (is_null($this->getTrainTableYear())) {
@@ -51,7 +51,7 @@ class TrainTableHelper extends BaseControllerHelper
     /**
      * @return RouteTrain[]
      */
-    public function getRoutePredictions() : array
+    public function getRoutePredictions(): array
     {
         $this->clearErrorMessages();
         if (is_null($this->getTrainTableYear())) {
@@ -75,7 +75,7 @@ class TrainTableHelper extends BaseControllerHelper
      * @param string $endTime
      * @return array
      */
-    public function getPassingRoutes(int $dayNumber = null, string $startTime = null, string $endTime = null) : array
+    public function getPassingRoutes(int $dayNumber = null, string $startTime = null, string $endTime = null): array
     {
         $this->clearErrorMessages();
         if (is_null($this->getTrainTableYear())) {

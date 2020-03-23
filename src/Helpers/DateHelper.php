@@ -4,7 +4,6 @@ namespace App\Helpers;
 
 use DateTime;
 use Exception;
-use Symfony\Bundle\FrameworkBundle\Translation\Translator;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Extension\RuntimeExtensionInterface;
 
@@ -49,7 +48,7 @@ class DateHelper implements RuntimeExtensionInterface
      * @param int $dayNumber
      * @return string
      */
-    public function getDayName(int $dayNumber) : string
+    public function getDayName(int $dayNumber): string
     {
         switch ($dayNumber) {
             case 0:
@@ -73,7 +72,7 @@ class DateHelper implements RuntimeExtensionInterface
      * @param string $time
      * @return int
      */
-    function timeDisplayToDatabase(string $time) : int
+    function timeDisplayToDatabase(string $time): int
     {
         // Convert the given display time (hh or hh:mm or hh.mm) to a database time (minutes after 2.00)
         $time = str_replace(':', '.', $time);
@@ -96,7 +95,7 @@ class DateHelper implements RuntimeExtensionInterface
      * @param int $databaseTime
      * @return string
      */
-    public function timeDatabaseToDisplay(int $databaseTime) : string
+    public function timeDatabaseToDisplay(int $databaseTime): string
     {
         // Convert the given database time (minutes after 2.00) to a display time
         $databaseTime += 120;

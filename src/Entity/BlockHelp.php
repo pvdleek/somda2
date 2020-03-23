@@ -14,6 +14,7 @@ class BlockHelp
      * @var Block
      * @ORM\OneToOne(targetEntity="App\Entity\Block")
      * @ORM\JoinColumn(name="blokid", referencedColumnName="blokid")
+     * @ORM\Id
      */
     private $block;
 

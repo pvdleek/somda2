@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -54,6 +55,25 @@ class ForumForum
      * @ORM\OneToMany(targetEntity="App\Entity\ForumDiscussion", mappedBy="forum")
      */
     private $discussions;
+
+    /**
+     * @var User[]
+     * @ORM\ManyToMany(targetEntity="User", inversedBy="moderatedForums")
+     * @ORM\JoinTable(name="somda_forum_mods",
+     *      joinColumns={@ORM\JoinColumn(name="forumid", referencedColumnName="forumid")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="uid", referencedColumnName="uid")}
+     * )
+     */
+    private $moderators;
+
+    /**
+     *
+     */
+    public function __construct()
+    {
+        $this->discussions = new ArrayCollection();
+        $this->moderators = new ArrayCollection();
+    }
 
     /**
      * @return int
@@ -179,5 +199,23 @@ class ForumForum
     public function getDiscussions(): array
     {
         return $this->discussions->toArray();
+    }
+
+    /**
+     * @param User $user
+     * @return ForumForum
+     */
+    public function addModerator(User $user): ForumForum
+    {
+        $this->moderators[] = $user;
+        return $this;
+    }
+
+    /**
+     * @return User[]
+     */
+    public function getModerators(): array
+    {
+        return $this->moderators->toArray();
     }
 }

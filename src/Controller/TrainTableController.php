@@ -15,7 +15,7 @@ class TrainTableController extends BaseController
      * @return Response
      * @throws Exception
      */
-    public function indexAction(int $trainTableIndexNumber = null, string $routeNumber = null) : Response
+    public function indexAction(int $trainTableIndexNumber = null, string $routeNumber = null): Response
     {
         $this->breadcrumbHelper->addPart('general.navigation.trainTable.home', 'train_table_home');
         $this->breadcrumbHelper->addPart('general.navigation.trainTable.index', 'train_table', [], true);
@@ -54,8 +54,7 @@ class TrainTableController extends BaseController
         int $dayNumber = null,
         string $startTime = null,
         string $endTime = null
-    ) : Response
-    {
+    ): Response {
         $this->breadcrumbHelper->addPart('general.navigation.trainTable.home', 'train_table_home');
         $this->breadcrumbHelper->addPart('general.navigation.trainTable.passingRoutes', 'passing_routes', [], true);
 
@@ -85,7 +84,7 @@ class TrainTableController extends BaseController
      * @param int|null $id
      * @return Response
      */
-    public function specialRoutesAction(int $id = null) : Response
+    public function specialRoutesAction(int $id = null): Response
     {
         $specialRoute = null;
         if (!is_null($id)) {

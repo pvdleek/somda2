@@ -44,6 +44,12 @@ class Route
     private $routeLists;
 
     /**
+     * @var Spot[]
+     * @ORM\OneToMany(targetEntity="App\Entity\Spot", mappedBy="route")
+     */
+    private $spots;
+
+    /**
      *
      */
     public function __construct()
@@ -51,6 +57,7 @@ class Route
         $this->trainTables = new ArrayCollection();
         $this->trainTableFirstLasts = new ArrayCollection();
         $this->routeLists = new ArrayCollection();
+        $this->spots = new ArrayCollection();
     }
 
     /**
@@ -141,5 +148,23 @@ class Route
     public function getRouteLists(): array
     {
         return $this->routeLists->toArray();
+    }
+
+    /**
+     * @param Spot $spot
+     * @return Route
+     */
+    public function addSpot(Spot $spot): Route
+    {
+        $this->spots[] = $spot;
+        return $this;
+    }
+
+    /**
+     * @return Spot[]
+     */
+    public function getSpots(): array
+    {
+        return $this->spots->toArray();
     }
 }

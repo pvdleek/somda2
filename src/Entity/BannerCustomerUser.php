@@ -12,31 +12,31 @@ class BannerCustomerUser
 {
     /**
      * @var bool
-     * @ORM\Column(name="allowed_new", type="boolean", nullable=false)
+     * @ORM\Column(name="allowed_new", type="boolean", nullable=false, options={"default"="false"})
      */
     private $allowedNew = false;
 
     /**
      * @var bool
-     * @ORM\Column(name="allowed_max_views", type="boolean", nullable=false)
+     * @ORM\Column(name="allowed_max_views", type="boolean", nullable=false, options={"default"="false"})
      */
     private $allowedMaxViews = false;
 
     /**
      * @var bool
-     * @ORM\Column(name="allowed_max_hits", type="boolean", nullable=false)
+     * @ORM\Column(name="allowed_max_hits", type="boolean", nullable=false, options={"default"="false"})
      */
     private $allowedMaxHits = false;
 
     /**
      * @var bool
-     * @ORM\Column(name="allowed_max_date", type="boolean", nullable=false)
+     * @ORM\Column(name="allowed_max_date", type="boolean", nullable=false, options={"default"="false"})
      */
     private $allowedMaxDate = false;
 
     /**
      * @var bool
-     * @ORM\Column(name="allowed_deactivate", type="boolean", nullable=false)
+     * @ORM\Column(name="allowed_deactivate", type="boolean", nullable=false, options={"default"="false"})
      */
     private $allowedDeactivate = false;
 
@@ -60,7 +60,7 @@ class BannerCustomerUser
      * @param bool $allowedNew
      * @return BannerCustomerUser
      */
-    public function setAllowedNew(bool $allowedNew) : BannerCustomerUser
+    public function setAllowedNew(bool $allowedNew): BannerCustomerUser
     {
         $this->allowedNew = $allowedNew;
         return $this;
@@ -69,7 +69,7 @@ class BannerCustomerUser
     /**
      * @return bool
      */
-    public function getAllowedNew() : bool
+    public function isAllowedNew(): bool
     {
         return $this->allowedNew;
     }
@@ -78,7 +78,7 @@ class BannerCustomerUser
      * @param bool $allowedMaxViews
      * @return BannerCustomerUser
      */
-    public function setAllowedMaxViews(bool $allowedMaxViews) : BannerCustomerUser
+    public function setAllowedMaxViews(bool $allowedMaxViews): BannerCustomerUser
     {
         $this->allowedMaxViews = $allowedMaxViews;
         return $this;
@@ -87,7 +87,7 @@ class BannerCustomerUser
     /**
      * @return bool
      */
-    public function getAllowedMaxViews() : bool
+    public function isAllowedMaxViews(): bool
     {
         return $this->allowedMaxViews;
     }
@@ -96,7 +96,7 @@ class BannerCustomerUser
      * @param bool $allowedMaxHits
      * @return BannerCustomerUser
      */
-    public function setAllowedMaxHits(bool $allowedMaxHits) : BannerCustomerUser
+    public function setAllowedMaxHits(bool $allowedMaxHits): BannerCustomerUser
     {
         $this->allowedMaxHits = $allowedMaxHits;
         return $this;
@@ -105,7 +105,7 @@ class BannerCustomerUser
     /**
      * @return bool
      */
-    public function getAllowedMaxHits() : bool
+    public function isAllowedMaxHits(): bool
     {
         return $this->allowedMaxHits;
     }
@@ -114,7 +114,7 @@ class BannerCustomerUser
      * @param bool $allowedMaxDate
      * @return BannerCustomerUser
      */
-    public function setAllowedMaxDate(bool $allowedMaxDate) : BannerCustomerUser
+    public function setAllowedMaxDate(bool $allowedMaxDate): BannerCustomerUser
     {
         $this->allowedMaxDate = $allowedMaxDate;
         return $this;
@@ -123,7 +123,7 @@ class BannerCustomerUser
     /**
      * @return bool
      */
-    public function getAllowedMaxDate() : BannerCustomerUser
+    public function isAllowedMaxDate(): bool
     {
         return $this->allowedMaxDate;
     }
@@ -132,7 +132,7 @@ class BannerCustomerUser
      * @param bool $allowedDeactivate
      * @return BannerCustomerUser
      */
-    public function setAllowedDeactivate(bool $allowedDeactivate) : BannerCustomerUser
+    public function setAllowedDeactivate(bool $allowedDeactivate): BannerCustomerUser
     {
         $this->allowedDeactivate = $allowedDeactivate;
         return $this;
@@ -141,7 +141,7 @@ class BannerCustomerUser
     /**
      * @return bool
      */
-    public function getAllowedDeactivate() : bool
+    public function isAllowedDeactivate(): bool
     {
         return $this->allowedDeactivate;
     }
@@ -150,7 +150,7 @@ class BannerCustomerUser
      * @param BannerCustomer $customer
      * @return BannerCustomerUser
      */
-    public function setCustomer(BannerCustomer $customer = null) : BannerCustomerUser
+    public function setCustomer(BannerCustomer $customer = null): BannerCustomerUser
     {
         $this->customer = $customer;
         return $this;
@@ -159,7 +159,7 @@ class BannerCustomerUser
     /**
      * @return BannerCustomer
      */
-    public function getCustomer() : BannerCustomer
+    public function getCustomer(): BannerCustomer
     {
         return $this->customer;
     }
@@ -168,7 +168,7 @@ class BannerCustomerUser
      * @param User $user
      * @return BannerCustomerUser
      */
-    public function setUser(User $user = null) : BannerCustomerUser
+    public function setUser(User $user = null): BannerCustomerUser
     {
         $this->user = $user;
         return $this;
@@ -177,7 +177,7 @@ class BannerCustomerUser
     /**
      * @return User
      */
-    public function getUser() : User
+    public function getUser(): User
     {
         return $this->user;
     }

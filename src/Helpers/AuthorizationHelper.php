@@ -95,7 +95,7 @@ class AuthorizationHelper
      * @param FormInterface|null $form
      * @return bool
      */
-    private function isRequestParameterAllowedInForm(string $parameter, FormInterface $form = null) : bool
+    private function isRequestParameterAllowedInForm(string $parameter, FormInterface $form = null): bool
     {
         return !is_null($form) && ($form->has($parameter) || $form->getName() === $parameter);
     }
@@ -103,7 +103,7 @@ class AuthorizationHelper
     /**
      * @return User|null
      */
-    public function getUser()
+    public function getUser(): ?User
     {
         if (null === $token = $this->tokenStorage->getToken()) {
             return null;

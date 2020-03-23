@@ -10,7 +10,7 @@ class Block extends EntityRepository
     /**
      * @return array
      */
-    public function getMenuStructure() : array
+    public function getMenuStructure(): array
     {
         $queryBuilder = $this->getEntityManager()
             ->createQueryBuilder()

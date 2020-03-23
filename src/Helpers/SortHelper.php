@@ -36,7 +36,7 @@ class SortHelper implements RuntimeExtensionInterface
      * @param string $sortBy
      * @return string
      */
-    private function getSortValue(array $array, string $sortBy) : string
+    private function getSortValue(array $array, string $sortBy): string
     {
         if (is_array($array)) {
             return $array[$sortBy];

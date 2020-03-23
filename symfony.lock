@@ -96,6 +96,25 @@
     "monolog/monolog": {
         "version": "2.0.2"
     },
+    "msgphp/domain": {
+        "version": "v0.15.1"
+    },
+    "msgphp/user": {
+        "version": "v0.15.1"
+    },
+    "msgphp/user-bundle": {
+        "version": "0.10",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "0.10",
+            "ref": "4067ee796789a8828ec72f82c76508a76875bcf8"
+        },
+        "files": [
+            "config/packages/msgphp_user.php",
+            "src/Entity/User.php"
+        ]
+    },
     "nikic/php-parser": {
         "version": "v4.3.0"
     },

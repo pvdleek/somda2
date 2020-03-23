@@ -75,11 +75,22 @@ class SpecialRoute
     private $logs;
 
     /**
+     * @var User[]
+     * @ORM\ManyToMany(targetEntity="User")
+     * @ORM\JoinTable(name="somda_drgl_read",
+     *      joinColumns={@ORM\JoinColumn(name="drglid", referencedColumnName="drglid")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="uid", referencedColumnName="uid")}
+     * )
+     */
+    private $userReads;
+
+    /**
      *
      */
     public function __construct()
     {
         $this->logs = new ArrayCollection();
+        $this->userReads = new ArrayCollection();
     }
 
     /**
@@ -260,5 +271,23 @@ class SpecialRoute
     public function getLogs(): array
     {
         return $this->logs->toArray();
+    }
+
+    /**
+     * @param User $user
+     * @return SpecialRoute
+     */
+    public function addUserRead(User $user): SpecialRoute
+    {
+        $this->userReads[] = $user;
+        return $this;
+    }
+
+    /**
+     * @return User[]
+     */
+    public function getUserReads(): array
+    {
+        return $this->userReads->toArray();
     }
 }

@@ -20,8 +20,8 @@ class BannerCustomer
     private $id;
 
     /**
-     * @var string|null
-     * @ORM\Column(name="name", type="string", length=6, nullable=true)
+     * @var string
+     * @ORM\Column(name="name", type="string", length=6, nullable=false)
      */
     private $name;
 
@@ -83,18 +83,18 @@ class BannerCustomer
     }
 
     /**
-     * @return string|null
+     * @return string
      */
-    public function getName(): ?string
+    public function getName(): string
     {
         return $this->name;
     }
 
     /**
-     * @param string|null $name
+     * @param string $name
      * @return BannerCustomer
      */
-    public function setName(?string $name): BannerCustomer
+    public function setName(string $name): BannerCustomer
     {
         $this->name = $name;
         return $this;

@@ -3,18 +3,21 @@
 namespace App\Entity;
 
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use MsgPhp\User\User as BaseUser;
+use MsgPhp\User\UserId;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Table(name="somda_users", indexes={@ORM\Index(name="idx_49053_uname", columns={"username"})})
  * @ORM\Entity
  */
-class User implements UserInterface
+class User extends BaseUser implements UserInterface
 {
     /**
      * @var int
-     * @ORM\Column(name="uid", type="bigint", nullable=false)
+     * @ORM\Column(name="uid", type="msgphp_user_id", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -28,9 +31,9 @@ class User implements UserInterface
 
     /**
      * @var int
-     * @ORM\Column(name="spots_ok", type="bigint", nullable=false)
+     * @ORM\Column(name="spots_ok", type="integer", nullable=false)
      */
-    private $spotsOk = '0';
+    private $spotsOk = 0;
 
     /**
      * @var string
@@ -76,8 +79,21 @@ class User implements UserInterface
 
     /**
      * @var array
+     * @ORM\Column(name="roles", type="array", nullable=false)
      */
     private $roles = [];
+
+    /**
+     * @var UserInfo
+     * @ORM\OneToOne(targetEntity="App\Entity\UserInfo", mappedBy="user")
+     */
+    private $info;
+
+    /**
+     * @var UserLastVisit
+     * @ORM\OneToOne(targetEntity="App\Entity\UserLastVisit", mappedBy="user")
+     */
+    private $lastVisit;
 
     /**
      * @var Group
@@ -86,9 +102,46 @@ class User implements UserInterface
     private $groups;
 
     /**
-     * @return int
+     * @var ForumFavorite[]
+     * @ORM\OneToMany(targetEntity="App\Entity\ForumFavorite", mappedBy="user")
      */
-    public function getId(): int
+    private $forumFavorites;
+
+    /**
+     * @var ForumForum
+     * @ORM\ManyToMany(targetEntity="App\Entity\ForumForum", mappedBy="moderators")
+     */
+    private $moderatedForums;
+
+    /**
+     * @var Spot[]
+     * @ORM\OneToMany(targetEntity="App\Entity\Spot", mappedBy="user")
+     */
+    private $spots;
+
+    /**
+     * @var UserPreferenceValue[]
+     * @ORM\OneToMany(targetEntity="App\Entity\UserPreferenceValue", mappedBy="user")
+     */
+    private $preferences;
+
+    /**
+     * @param UserId $id
+     */
+    public function __construct(UserId $id)
+    {
+        $this->id = $id;
+
+        $this->forumFavorites = new ArrayCollection();
+        $this->moderatedForums = new ArrayCollection();
+        $this->spots = new ArrayCollection();
+        $this->preferences = new ArrayCollection();
+    }
+
+    /**
+     * @return UserId
+     */
+    public function getId(): UserId
     {
         return $this->id;
     }
@@ -283,7 +336,10 @@ class User implements UserInterface
         return $this;
     }
 
-    public function eraseCredentials()
+    /**
+     *
+     */
+    public function eraseCredentials(): void
     {
         // TODO: Implement eraseCredentials() method.
     }
@@ -305,8 +361,133 @@ class User implements UserInterface
         return in_array($role, $this->getRoles());
     }
 
-    public function getSalt()
+    /**
+     * @return UserInfo
+     */
+    public function getInfo(): UserInfo
     {
-        // TODO: Implement getSalt() method.
+        return $this->info;
+    }
+
+    /**
+     * @param UserInfo $info
+     * @return User
+     */
+    public function setInfo(UserInfo $info): User
+    {
+        $this->info = $info;
+        return $this;
+    }
+
+    /**
+     * @return UserLastVisit
+     */
+    public function getLastVisit(): UserLastVisit
+    {
+        return $this->lastVisit;
+    }
+
+    /**
+     * @param UserLastVisit $lastVisit
+     * @return User
+     */
+    public function setLastVisit(UserLastVisit $lastVisit): User
+    {
+        $this->lastVisit = $lastVisit;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getSalt(): ?string
+    {
+        return null;
+    }
+
+    /**
+     * @param ForumFavorite $forumFavorite
+     * @return User
+     */
+    public function addForumFavorite(ForumFavorite $forumFavorite): User
+    {
+        $this->forumFavorites[] = $forumFavorite;
+        return $this;
+    }
+
+    /**
+     * @return ForumFavorite[]
+     */
+    public function getForumFavorites(): array
+    {
+        return $this->forumFavorites->toArray();
+    }
+
+    /**
+     * @param ForumDiscussion $discussion
+     * @return bool
+     */
+    public function isForumFavorite(ForumDiscussion $discussion): bool
+    {
+        foreach ($this->getForumFavorites() as $forumFavorite) {
+            if ($forumFavorite->getDiscussion() === $discussion) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * @param ForumForum $forumForum
+     * @return User
+     */
+    public function addModeratedForum(ForumForum $forumForum): User
+    {
+        $this->moderatedForums[] = $forumForum;
+        return $this;
+    }
+
+    /**
+     * @return ForumForum[]
+     */
+    public function getModeratedForums(): array
+    {
+        return $this->moderatedForums->toArray();
+    }
+
+    /**
+     * @param Spot $spot
+     * @return User
+     */
+    public function addSpot(Spot $spot): User
+    {
+        $this->spots[] = $spot;
+        return $this;
+    }
+
+    /**
+     * @return Spot[]
+     */
+    public function getSpots(): array
+    {
+        return $this->spots->toArray();
+    }
+
+    /**
+     * @param UserPreferenceValue $userPreferenceValue
+     * @return User
+     */
+    public function addPreference(UserPreferenceValue $userPreferenceValue): User
+    {
+        $this->preferences[] = $userPreferenceValue;
+        return $this;
+    }
+
+    /**
+     * @return UserPreferenceValue[]
+     */
+    public function getPreferences(): array
+    {
+        return $this->preferences->toArray();
     }
 }

@@ -7,7 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table(name="somda_forum_posts", indexes={@ORM\Index(name="idx_47961_date", columns={"date"}), @ORM\Index(name="idx_47961_authorid", columns={"authorid"}), @ORM\Index(name="idx_47961_discussionid", columns={"discussionid"})})
+ * @ORM\Table(name="somda_forum_posts", indexes={@ORM\Index(name="idx_47961_timestamp", columns={"timestamp"}), @ORM\Index(name="idx_47961_authorid", columns={"authorid"}), @ORM\Index(name="idx_47961_discussionid", columns={"discussionid"})})
  * @ORM\Entity
  */
 class ForumPost
@@ -29,7 +29,7 @@ class ForumPost
 
     /**
      * @var ForumDiscussion
-     * @ORM\ManyToOne(targetEntity="App\Entity\ForumDiscussion")
+     * @ORM\ManyToOne(targetEntity="App\Entity\ForumDiscussion", inversedBy="posts")
      * @ORM\JoinColumn(name="discussionid", referencedColumnName="discussionid")
      */
     private $discussion;
@@ -39,6 +39,12 @@ class ForumPost
      * @ORM\Column(name="timestamp", type="date", nullable=false)
      */
     private $timestamp;
+
+    /**
+     * @var ForumPostText
+     * @ORM\OneToOne(targetEntity="App\Entity\ForumPostText", mappedBy="post")
+     */
+    private $text;
 
     /**
      * @var DateTime|null
@@ -85,11 +91,18 @@ class ForumPost
     private $alerts;
 
     /**
+     * @var ForumPostLog[]
+     * @ORM\OneToMany(targetEntity="App\Entity\ForumPostLog", mappedBy="post")
+     */
+    private $logs;
+
+    /**
      *
      */
     public function __construct()
     {
         $this->alerts = new ArrayCollection();
+        $this->logs = new ArrayCollection();
     }
 
     /**
@@ -161,6 +174,24 @@ class ForumPost
     public function setTimestamp(DateTime $timestamp): ForumPost
     {
         $this->timestamp = $timestamp;
+        return $this;
+    }
+
+    /**
+     * @return ForumPostText
+     */
+    public function getText(): ForumPostText
+    {
+        return $this->text;
+    }
+
+    /**
+     * @param ForumPostText $text
+     * @return ForumPost
+     */
+    public function setText(ForumPostText $text): ForumPost
+    {
+        $this->text = $text;
         return $this;
     }
 
@@ -288,5 +319,23 @@ class ForumPost
     public function getAlerts(): array
     {
         return $this->alerts->toArray();
+    }
+
+    /**
+     * @param ForumPostLog $forumPostLog
+     * @return ForumPost
+     */
+    public function addLog(ForumPostLog $forumPostLog): ForumPost
+    {
+        $this->logs[] = $forumPostLog;
+        return $this;
+    }
+
+    /**
+     * @return ForumPostLog[]
+     */
+    public function getLogs(): array
+    {
+        return $this->logs->toArray();
     }
 }

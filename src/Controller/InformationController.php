@@ -18,7 +18,7 @@ class InformationController extends BaseController
      * @param string|null $search
      * @return Response
      */
-    public function locationsAction(string $searchMethod = null, string $search = null) : Response
+    public function locationsAction(string $searchMethod = null, string $search = null): Response
     {
         $this->breadcrumbHelper->addPart('general.navigation.information.home', 'information_home');
         $this->breadcrumbHelper->addPart('general.navigation.information.locations', 'location', [], true);
@@ -50,7 +50,7 @@ class InformationController extends BaseController
     /**
      * @return Response
      */
-    public function jargonAction() : Response
+    public function jargonAction(): Response
     {
         $this->breadcrumbHelper->addPart('general.navigation.information.home', 'information_home');
         $this->breadcrumbHelper->addPart('general.navigation.information.jargon', 'jargon', [], true);
@@ -63,7 +63,7 @@ class InformationController extends BaseController
     /**
      * @return Response
      */
-    public function uicAction() : Response
+    public function uicAction(): Response
     {
         $this->breadcrumbHelper->addPart('general.navigation.information.home', 'information_home');
         $this->breadcrumbHelper->addPart('general.navigation.information.uic', 'uic', [], true);

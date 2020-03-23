@@ -25,8 +25,7 @@ class TrainTable extends EntityRepository
         string $dayName,
         int $startTime,
         int $endTime
-    ) : array
-    {
+    ): array {
         $queryBuilder = $this->getEntityManager()
             ->createQueryBuilder()
             ->addSelect('t.time AS time')

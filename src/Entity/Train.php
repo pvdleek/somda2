@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -36,6 +37,20 @@ class Train
      * @ORM\JoinColumn(name="vervoerder_id", referencedColumnName="vervoerder_id")
      */
     private $transporter;
+
+    /**
+     * @var Spot[]
+     * @ORM\OneToMany(targetEntity="App\Entity\Spot", mappedBy="train")
+     */
+    private $spots;
+
+    /**
+     *
+     */
+    public function __construct()
+    {
+        $this->spots = new ArrayCollection();
+    }
 
     /**
      * @return int
@@ -107,5 +122,23 @@ class Train
     {
         $this->transporter = $transporter;
         return $this;
+    }
+
+    /**
+     * @param Spot $spot
+     * @return Train
+     */
+    public function addSpot(Spot $spot): Train
+    {
+        $this->spots[] = $spot;
+        return $this;
+    }
+
+    /**
+     * @return Spot[]
+     */
+    public function getSpots(): array
+    {
+        return $this->spots->toArray();
     }
 }

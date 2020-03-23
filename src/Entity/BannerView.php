@@ -33,6 +33,7 @@ class BannerView
     /**
      * @var Banner
      * @ORM\ManyToOne(targetEntity="App\Entity\Banner", inversedBy="bannerViews")
+     * @ORM\JoinColumn(name="bannerid", referencedColumnName="bannerid")
      */
     private $banner;
 

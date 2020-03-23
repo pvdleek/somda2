@@ -107,12 +107,12 @@ abstract class BaseController
     /**
      * @return User
      */
-    protected function getUser(): User
+    protected function getUser(): ?User
     {
         if ($this->userIsLoggedIn()) {
             return $this->security->getUser();
         }
-        return new User();
+        return null;
     }
 
     /**
@@ -171,7 +171,7 @@ abstract class BaseController
         }
 
         return array_merge($viewParameters, [
-            'cookieChoice' => $this->getUser()->getCookieOk(),
+            'cookieChoice' => $this->getUser() ? $this->getUser()->getCookieOk() : 0,
             'headerType' =>  $headerType,
             'headerContent' => $headerContent,
             'imageNumber' => rand(1, 11),
@@ -187,8 +187,13 @@ abstract class BaseController
      */
     protected function shouldDoBlock(Block $block): bool
     {
-        return is_null($block->getRole())
-            || ($this->getUser()->hasRole($block->getRole()) || $this->getUser()->hasRole('ROLE_SUPER_ADMIN'));
+        if (is_null($block->getRole())) {
+            return true;
+        }
+        if (is_null($this->getUser())) {
+            return false;
+        }
+        return $this->getUser()->hasRole($block->getRole()) || $this->getUser()->hasRole('ROLE_SUPER_ADMIN');
     }
 
     /**

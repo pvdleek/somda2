@@ -2,8 +2,6 @@
 
 namespace App\Helpers;
 
-use Symfony\Bundle\FrameworkBundle\Routing\Router;
-use Symfony\Bundle\FrameworkBundle\Translation\Translator;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -52,7 +50,7 @@ class BreadcrumbHelper
     /**
      * @return string
      */
-    public function getBreadcrumb() : string
+    public function getBreadcrumb(): string
     {
         if (count($this->parts) < 1) {
             return '';

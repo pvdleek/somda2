@@ -33,6 +33,7 @@ class BannerHit
     /**
      * @var Banner
      * @ORM\ManyToOne(targetEntity="App\Entity\Banner", inversedBy="bannerHits")
+     * @ORM\JoinColumn(name="bannerid", referencedColumnName="bannerid")
      */
     private $banner;
 

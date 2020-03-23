@@ -6,7 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table(name="somda_vervoerder", uniqueConstraints={@ORM\UniqueConstraint(name="idx_49122_prorail_desc", columns={"prorail_desc"}), @ORM\UniqueConstraint(name="idx_49122_omschrijving", columns={"omschrijving"})})
+ * @ORM\Table(name="somda_vervoerder", uniqueConstraints={@ORM\UniqueConstraint(name="idx_49122_omschrijving", columns={"omschrijving"})})
  * @ORM\Entity
  */
 class Transporter
@@ -24,6 +24,12 @@ class Transporter
      * @ORM\Column(name="omschrijving", type="string", length=35, nullable=false)
      */
     private $name = '';
+
+    /**
+     * @var string|null
+     * @ORM\Column(name="prorail_desc", type="string", length=35, nullable=true)
+     */
+    private $proRailDescription = '';
 
     /**
      * @var Train[]
@@ -77,6 +83,24 @@ class Transporter
     public function setName(string $name): Transporter
     {
         $this->name = $name;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getProRailDescription(): ?string
+    {
+        return $this->proRailDescription;
+    }
+
+    /**
+     * @param string|null $proRailDescription
+     * @return Transporter
+     */
+    public function setProRailDescription(?string $proRailDescription): Transporter
+    {
+        $this->proRailDescription = $proRailDescription;
         return $this;
     }
 

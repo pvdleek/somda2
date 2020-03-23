@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -25,6 +26,12 @@ class Group
     private $name = '';
 
     /**
+     * @var array
+     * @ORM\Column(name="roles", type="array", nullable=false)
+     */
+    private $roles = [];
+
+    /**
      * @var User
      * @ORM\ManyToMany(targetEntity="User", inversedBy="groups")
      * @ORM\JoinTable(name="somda_users_groups",
@@ -33,6 +40,14 @@ class Group
      * )
      */
     private $users;
+
+    /**
+     *
+     */
+    public function __construct()
+    {
+        $this->users = new ArrayCollection();
+    }
 
     /**
      * @return int
@@ -68,5 +83,41 @@ class Group
     {
         $this->name = $name;
         return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getRoles(): array
+    {
+        return $this->roles;
+    }
+
+    /**
+     * @param array $roles
+     * @return Group
+     */
+    public function setRoles(array $roles): Group
+    {
+        $this->roles = $roles;
+        return $this;
+    }
+
+    /**
+     * @param User $user
+     * @return Group
+     */
+    public function addUser(User $user): Group
+    {
+        $this->users[] = $user;
+        return $this;
+    }
+
+    /**
+     * @return User[]
+     */
+    public function getUsers(): array
+    {
+        return $this->users->toArray();
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -48,6 +49,24 @@ class News
      * @ORM\Column(name="timestamp", type="datetime", nullable=false, options={"default"="CURRENT_TIMESTAMP"})
      */
     private $timestamp = 'CURRENT_TIMESTAMP';
+
+    /**
+     * @var User[]
+     * @ORM\ManyToMany(targetEntity="User")
+     * @ORM\JoinTable(name="somda_news_read",
+     *      joinColumns={@ORM\JoinColumn(name="newsid", referencedColumnName="newsid")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="uid", referencedColumnName="uid")}
+     * )
+     */
+    private $userReads;
+
+    /**
+     *
+     */
+    public function __construct()
+    {
+        $this->userReads = new ArrayCollection();
+    }
 
     /**
      * @return int
@@ -155,5 +174,23 @@ class News
     {
         $this->timestamp = $timestamp;
         return $this;
+    }
+
+    /**
+     * @param User $user
+     * @return News
+     */
+    public function addUserRead(User $user): News
+    {
+        $this->userReads[] = $user;
+        return $this;
+    }
+
+    /**
+     * @return User[]
+     */
+    public function getUserReads(): array
+    {
+        return $this->userReads->toArray();
     }
 }

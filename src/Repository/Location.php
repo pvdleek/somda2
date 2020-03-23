@@ -13,7 +13,7 @@ class Location extends EntityRepository
      * @param string $search
      * @return LocationEntity|null
      */
-    public function findOneByName(string $search) : ?LocationEntity
+    public function findOneByName(string $search): ?LocationEntity
     {
         $queryBuilder = $this->getEntityManager()
             ->createQueryBuilder()
@@ -34,7 +34,7 @@ class Location extends EntityRepository
      * @param string $search
      * @return LocationEntity[]
      */
-    public function findByName(string $search) : array
+    public function findByName(string $search): array
     {
         $queryBuilder = $this->getEntityManager()
             ->createQueryBuilder()
@@ -49,7 +49,7 @@ class Location extends EntityRepository
      * @param string $search
      * @return LocationEntity[]
      */
-    public function findByDescription(string $search) : array
+    public function findByDescription(string $search): array
     {
         $queryBuilder = $this->getEntityManager()
             ->createQueryBuilder()

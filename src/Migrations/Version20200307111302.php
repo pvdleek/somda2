@@ -12,7 +12,7 @@ final class Version20200307111302 extends AbstractMigration
     /**
      * @return string
      */
-    public function getDescription() : string
+    public function getDescription(): string
     {
         return 'Cleanup users';
     }

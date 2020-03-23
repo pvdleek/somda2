@@ -3,7 +3,6 @@
 namespace App\Helpers;
 
 use App\Entity\Block;
-use Doctrine\Bundle\DoctrineBundle\Registry;
 use Doctrine\Persistence\ManagerRegistry;
 use Twig\Extension\RuntimeExtensionInterface;
 
@@ -32,7 +31,7 @@ class MenuHelper implements RuntimeExtensionInterface
     /**
      * @return int
      */
-    public function getNumberOfOpenForumAlerts() : int
+    public function getNumberOfOpenForumAlerts(): int
     {
         if ($this->authorizationHelper->getUser() && $this->authorizationHelper->getUser()->hasRole('ROLE_ADMIN')) {
             $openAlerts = $this->doctrine->getRepository('AppBundle:ForumPostAlert')->findBy(['closed' => false]);
@@ -44,7 +43,7 @@ class MenuHelper implements RuntimeExtensionInterface
     /**
      * @return array
      */
-    public function getMenuStructure() : array
+    public function getMenuStructure(): array
     {
         $user = $this->authorizationHelper->getUser();
         $blocks = $this->doctrine->getRepository(Block::class)->getMenuStructure();
