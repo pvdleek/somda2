@@ -2,23 +2,34 @@
 
 namespace App\Controller;
 
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class SecurityController extends BaseController
 {
     /**
-     * @param Request $request
-     * @return RedirectResponse|Response
+     * @param AuthenticationUtils $authenticationUtils
+     * @return Response
      */
-    public function loginAction(Request $request)
+    public function loginAction(AuthenticationUtils $authenticationUtils): Response
     {
-        if (is_null($this->getUser())) {
-            return parent::loginAction($request);
-        } else {
-            // Don't show the login page to already logged in users
-            return new RedirectResponse($this->get('router')->generate('home'));
-        }
+         if ($this->userIsLoggedIn()) {
+             return $this->redirectToRoute('home');
+         }
+
+        // get the login error if there is one
+        $error = $authenticationUtils->getLastAuthenticationError();
+        // last username entered by the user
+        $lastUsername = $authenticationUtils->getLastUsername();
+
+        return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
+    }
+
+    /**
+     *
+     */
+    public function logoutAction()
+    {
+        throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
     }
 }

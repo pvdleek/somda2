@@ -2,219 +2,163 @@
 
 {% block content %}
 
-{% if discussion.wikis | length > 0 %}
-    <div class="wiki_block"><table border="0" width="100%"><tr><td align="center">Deze forumdiscussie is gekoppeld aan de <a href="http://www.railwiki.nl/" target="_blank">RailWiki.nl</a> pagina('s):<br />
-    {% for wiki in discussion.wikis %}
-        <a href="http://www.railwiki.nl/index.php/{{ wiki.wiki }}" target="_blank">{{ wiki.title }}</a>
-        {% if not loop.last %} - {% endif %}
-    {% endfor %}
-    </td>
-    <td><a href="http://www.railwiki.nl/" target="_blank"><img alt="RailWiki.nl" height="110" src="{{ asset('images/railwiki-logo.png') }}" width="296" /></a></td></tr></table></div>
-{% endif %}
-
-<div class="moduleS1" style="margin-bottom:0;"><div>
-    {% if userIsModerator %}
-        <span id="mod_icons">
-            <a href="/index.php?blokid=40&amp;op=lockdisc&amp;forum_discussionid={{ discussion.id }}"><img alt="Sluit/open discussie"src="{{ asset('images/forum/disc_' ~ (discussion.locked ? 'unlock' : 'lock') ~ '.gif') }}" /></a>
-            <a href="/index.php?blokid=40&amp;op=movedisc&amp;forum_discussionid={{ discussion.id }}"><img alt="Verplaats discussie" src="{{ asset('images/forum/disc_move.gif') }}" /></a>
-            <a href="/index.php?blokid=40&amp;op=combinedisc&amp;forum_discussionid={{ discussion.id }}"><img alt="Combineer met andere discussie" src="{{ asset('images/forum/disc_combine.gif') }}" /></a>
-        </span>
-     {% endif %}
-    <span id="favorite_box"><span id="favorite">
-        {% if app.user and app.user.forumFavorite(discussion) %}
-            <a href="#" onclick="fav_del(); return false;">Verwijder discussie</a> uit je <a href="/favorieten/">favorieten</a>
-        {% else %}
-            <a href="#" onclick="fav_add(); return false;">Voeg discussie toe</a> aan je <a href="/favorieten/">favorieten</a>
-        {% endif %}
-    </span></span>
-    <h3 id="disc_title">
-        <img alt="" border="0" src="{{ asset('images/forum/folder_' ~ (discussion.locked ? 'l' : 'u') ~ 'br.gif') }}" />
-        {% if discussion.type == 1 %}<img height="16" src="{{ asset('images/forum/sticky.gif') }}" width="16" />{% endif %}
-        {% if discussion.type == 1 %}<img height="24" src="{{ asset('images/forum/announcement.png') }}" width="28" /> Mededeling: {% endif %}
-        {{ discussion.title }}
-    </h3>
-</div></div>
-
-<div data-pl-paginator data-baseurl="/forum/', $forum_discussionid, '/%s/', urlencode(str_replace('/', '', $discussion_title)), '/" data-nrofpages="', $aantal_paginas, '" data-currentpage="', $pagina_todo, '"></div>
-<p style="margin-left:10px;">
-    {% if userIsModerator %}
-        <input name="op" type="hidden" value="" /><input name="forum_discussionid" type="hidden" value="', $forum_discussionid, '" />
-        Met geselecteerd: <a href="#" onclick="document.MasterForm.op.value='sel_new'; document.MasterForm.submit(); return false;"><img src="{{ asset('images/forum/folder_usr.gif') }}" title="Splits af naar een nieuwe discussie" /></a>
-        <a style="float:right; margin-right:5px" href="#" onclick="document.MasterForm.op.value='sel_del'; document.MasterForm.submit(); return false;"><img src="{{ asset('images/forum/disc_delete.gif') }}" title="Verwijder direct" /></a>
-    {% endif %}
-    {% if is_granted('ROLE_ADMIN_WIKI') %}
-        <a href="#" onclick="getElementById('wiki_add').style.visibility = 'visible'; return false;"><img src="{{ asset('images/plus.png') }}" /> Voeg een RailWiki link toe</a>
-        <span id="wiki_add" style="visibility:hidden;">
-            <br />Plak de gehele URL van de wiki pagina: <input id="wiki_page_add" name="wiki_page_add" size="50" type="text" />
-            <br />Titel van de wiki pagina: <input id="wiki_page_title" name="wiki_page_title" size="50" type="text" />&nbsp;<a href="#" onclick="wikiadd();">Voeg verwijzing toe</a>
-        </span>
-    {% endif %}
-    {% if userIsModerator or is_granted('ROLE_ADMIN_WIKI') %}<br />{% endif %}
-</p>
-
-$query = 'SELECT p.postid, fa.id, u.uid, u.username, u.name, m.uid, i.avatar, i.city, i.twitter_account, i.facebook_account, i.flickr_account, i.youtube_account, b.naam, concat(p.date, \' \', p.time), concat(p.edit_date, \' \', p.edit_time), p.edit_uid, ue.username, p.edit_reason, pt.text, p.sign_on, up.value, ' . ($forum_type < 4 ? 'if(r.uid=' . $session->uid . ', 1, 0)' : '1') . ', p.wiki_check, p.wiki_uid
-FROM ' . DB_PREFIX . '_forum_posts p
-JOIN ' . DB_PREFIX . '_forum_posts_text pt ON pt.postid=p.postid
-JOIN ' . DB_PREFIX . '_users u ON u.uid=p.authorid
-JOIN ' . DB_PREFIX . '_users_info i ON i.uid=u.uid
-JOIN ' . DB_PREFIX . '_forum_discussion d ON d.discussionid=p.discussionid
-LEFT JOIN ' . DB_PREFIX . '_users uw ON uw.uid=p.wiki_uid
-LEFT JOIN ' . DB_PREFIX . '_forum_alerts fa ON fa.postid=p.postid
-LEFT JOIN ' . DB_PREFIX . '_users ue ON ue.uid=p.edit_uid
-LEFT JOIN ' . DB_PREFIX . '_users_companies b ON b.bedrijf_id=i.bedrijf_id
-LEFT JOIN ' . DB_PREFIX . '_users_prefs up ON up.uid=p.authorid AND up.prefid=11
-LEFT JOIN ' . DB_PREFIX . '_forum_mods m ON m.forumid=d.forumid AND m.uid=p.authorid
-' . ($forum_type < 4 ? 'LEFT JOIN ' . DB_PREFIX . '_forum_read_' . substr($session->uid, -1) . ' r ON r.postid=p.postid AND r.uid=' . $session->uid : '') . '
-WHERE p.discussionid=' . $forum_discussionid . '
-GROUP BY p.postid
-ORDER BY p.date ' . ($params['forum_new_old'] == 1 ? 'DESC' : 'ASC') . ', p.time ' . ($params['forum_new_old'] == 1 ? 'DESC' : 'ASC') . '
-LIMIT ' . ($max_posts_per_page * ($pagina_todo - 1)) . ', ' . $max_posts_per_page;
-$dbset_posts = $db->query($query);
-if (($params['forum_new_old'] == 1 && $pagina_todo == $aantal_paginas) || ($params['forum_new_old'] == 0 && $pagina_todo == 1)) {
-$firstpost = true;
-} else {
-$firstpost = false;
-}
-$postid_list = '';
-
-$post_count = 0;
-while (list($postid, $forum_alert_id, $authorid, $uname, $name, $mod_uid, $avatar, $city, $twitter_account, $facebook_account,
-$flickr_account, $youtube_account, $bedrijf_naam, $date_time, $edit_date_time, $edit_uid, $edit_uname, $edit_reason,
-$text, $sign_on, $signature, $read, $wiki_check, $wiki_uid) = $db->fetchRow($dbset_posts)) {
-++$post_count;
-if ($post_count == 5 || $post_count == 55) {
-
-
-if (strlen($postid_list) > 0) {
-echo '<br />';
-}
-$postid_list .= '(' . $session->uid . ',' . $postid . '),';
-
-
-{% for post in discussion.posts %}
-    {% if loop.index == 5 or loop.index == 55 %}
-        {% if forumBanner is not null %}
-            <br /><table align="center" class="design" width="98%"><tr>
-                <td><a href="' . SITE_URL . '/click_out.php?banner_id={{ forumBanner.id }}" target="_blank">
-                    <img alt="{{ forumBanner.customer.name }} {{ forumBanner.description }}" height="150" src="{{ asset('images/banners/' ~ forumBanner.image) }}" />
-                </a></td>
-                <td><a href="/adverteren/">advertentie</a></td>
-            </tr></table>
-        {% else %}
-            <br /><table align="center" class="design" width="98%"><tr>
-                <td><p class="warn">Tevreden over Somda? Overweeg dan eens een <a href="/doneren/">vrijwillige donatie</a>, alvast bedankt!</p></td>
-            </tr></table>
-        {% endif %}
-    {% endif %}
-
-    <table align="center" class="design" width="98%">
-        <tr>
-            <th colspan="2" style="text-align:left;">
-                {% if userIsModerator %}<input name="sel{{ post.id }}" type="checkbox" />{% endif %}
-                <a id="p{{ post.id }}" name="p{{ post.id }}"></a>
-                ', ($postid == $ongelezen_postid ? '<a id="nieuw" name="nieuw"></a>' : ''), '
-                <a href="/forum/{{ discussion.id }}/p{{ post.id }}/{{ discussion.title | url_encode }}/">', forumImage($discussion_locked, false, ($forum_type < 4 && ($session->logged_in && !($read)))), '</a> ', geefDatumWeergave(substr($date_time, 0, 10), false), ' - ', substr($date_time, 11, 8), '
-            </th>
-            {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                <th>
-                    <a href="/forum/meld/p{{ post.id }}/" rel="nofollow" title="Klik hier om dit bericht aan de beheerders te melden. Gebruik dit voor bijvoorbeeld overtredingen van forumregels"><font color="#FFFFFF">Meld bericht</font></a>
-                    ($moderator && $forum_alert_id > 0 ? '<br /><a href="' . SITE_URL . '/forum/meldingen/p' . $postid . '/" rel="nofollow" title="Er zijn meldingen gedaan over dit bericht, klik om ze te bekijken"><font color="#DD1111">Meldingen</font></a>' : ''), '
-                </th>
-            {% endif %}
-        </tr><tr>
-            <td class="info" nowrap="nowrap">
-                {{ post.author.id.toString | displayUser(post.author.username) | raw }}
-                {% if userIsModerator %}
-                    <br /><strong>Moderator</strong>
-                {% endif %}
-                {% if userIsModerator and post.author.info.company is not null %}
-                    <br /><strong>-- {{ post.author.info.company.name }} --</strong>
-                {% endif %}
-                {% if post.author.info.avatar | length > 0 %}
-                    <br /><img alt="{{ post.author.username }}" src="{{ asset('images/avatar/' ~  post.author.info.avatar) }}" />
-                {% endif %}
-                {% if post.author.info.city | length > 0 and is_granted('IS_AUTHENTICATED_FULLY') %}
-                    <br />{{ post.author.info.city }}
-                {% endif %}
-                <br />
-                {% if post.author.info.twitterAccount | length > 0 %}
-                    <a href="https://twitter.com/#!/{{ post.author.info.twitterAccount }}" target="_blank"><img alt="Twitter {{ post.author.info.twitterAccount }}" height="16" src="{{ asset('images/social-media/twitter.png') }}" width="16" /></a>
-                {% endif %}
-                {% if post.author.info.facebookAccount | length > 0 %}
-                    <a href="https://www.facebook.com/{{ post.author.info.facebookAccount }}" target="_blank"><img alt="Facebook {{ post.author.info.facebookAccount }}" height="16" src="{{ asset('images/social-media/facebook.png') }}" width="16" /></a>
-                {% endif %}
-                {% if post.author.info.youtubeAccount | length > 0 %}
-                    <a href="https://www.youtube.com/user/{{ post.author.info.youtubeAccount }}" target="_blank"><img alt="Youtube {{ post.author.info.youtubeAccount }}" height="16" src="{{ asset('images/social-media/youtube.png') }}" width="16" /></a>
-                {% endif %}
-                {% if post.author.info.flickrAccount | length > 0 %}
-                    <a href="https://www.flickr.com/photos/{{ post.author.info.flickrAccount }}" target="_blank"><img alt="Flickr {{ post.author.info.flickrAccount }}" height="16" src="{{ asset('images/social-media/flickr.png') }}" width="37" /></a>
-                {% endif %}
+    {% block wiki %}
+        {% if discussion.wikis | length > 0 %}
+            <div class="wiki_block"><table border="0" width="100%"><tr><td align="center">Deze forumdiscussie is gekoppeld aan de <a href="http://www.railwiki.nl/" target="_blank">RailWiki.nl</a> pagina('s):<br />
+            {% for wiki in discussion.wikis %}
+                <a href="http://www.railwiki.nl/index.php/{{ wiki.wiki }}" target="_blank">{{ wiki.title }}</a>
+                {% if not loop.last %} - {% endif %}
+            {% endfor %}
             </td>
-            <td class="text">{{ post | displayForumPost | raw }}</td>
+            <td><a href="http://www.railwiki.nl/" target="_blank"><img alt="RailWiki.nl" height="110" src="{{ asset('images/railwiki-logo.png') }}" width="296" /></a></td></tr></table></div>
+        {% endif %}
+    {% endblock %}
 
-            {% set buttons = '' %}
-            {% if mayPost and not discussion.locked %}
-                {% set buttons = '<tr><td style="border:none;"><div class="button_clear"><div class="somda-button-left"><div class="blank_home"><a href="/reageren"><span>Reageer</span></a></div></div></div></td></tr>' %}
-            {% endif %}
-            {% if userIsModerator or (mayPost and not discussion.locked and post.author == app.user) %}
-                {% set buttons = buttons ~ '<tr><td style="border:none;"><div class="button_clear"><div class="somda-button-left"><div class="blank_home"><a href="/bewerken"><span>Bewerk</span></a></div></div></div>' %}
-            {% endif %}
-            <td class="buttons"><table>{{ buttons }}</table></td>
-        </tr>
+    <div class="moduleS1" style="margin-bottom:0;"><div>
+        {% if userIsModerator %}
+            <span id="mod_icons">
+                <a href="/index.php?blokid=40&amp;op=lockdisc&amp;forum_discussionid={{ discussion.id }}"><img alt="Sluit/open discussie"src="{{ asset('images/forum/disc_' ~ (discussion.locked ? 'unlock' : 'lock') ~ '.gif') }}" /></a>
+                <a href="/index.php?blokid=40&amp;op=movedisc&amp;forum_discussionid={{ discussion.id }}"><img alt="Verplaats discussie" src="{{ asset('images/forum/disc_move.gif') }}" /></a>
+                <a href="/index.php?blokid=40&amp;op=combinedisc&amp;forum_discussionid={{ discussion.id }}"><img alt="Combineer met andere discussie" src="{{ asset('images/forum/disc_combine.gif') }}" /></a>
+            </span>
+         {% endif %}
+        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+            <span id="favorite_box"><span id="favorite">
+                {% if app.user and app.user.forumFavorite(discussion) %}
+                    <a href="#" onclick="fav_del(); return false;">Verwijder discussie</a> uit je <a href="/favorieten/">favorieten</a>
+                {% else %}
+                    <a href="#" onclick="fav_add(); return false;">Voeg discussie toe</a> aan je <a href="/favorieten/">favorieten</a>
+                {% endif %}
+            </span></span>
+        {% endif %}
+        <h3 id="disc_title">
+            <img alt="" border="0" src="{{ asset('images/forum/folder_' ~ (discussion.locked ? 'l' : 'u') ~ 'br.gif') }}" />
+            {% if discussion.type == 1 %}<img height="16" src="{{ asset('images/forum/sticky.gif') }}" width="16" />{% endif %}
+            {% if discussion.type == 1 %}<img height="24" src="{{ asset('images/forum/announcement.png') }}" width="28" /> Mededeling: {% endif %}
+            {{ discussion.title }}
+        </h3>
+    </div></div>
+
+    {% block paginator %}
+        {% if numberOfPages > 1 %}
+            <ul class="pagination">
+                {% if pageNumber > 1 %}<li><a href="{{ path('forum_discussion_page', { 'id': discussion.id, 'name': (discussion.title | url_encode), 'pageNumber': (pageNumber - 1) }) }}">«</a></li>{% endif %}
+                {% for page in 1..numberOfPages %}
+                    <li><span>
+                        {% if page != pageNumber %}<a href="{{ path('forum_discussion_page', { 'id': discussion.id, 'name': (discussion.title | url_encode), 'pageNumber': page }) }}">{{ page }}</a>{% else %}{{ page }}{% endif %}
+                    </span></li>
+                {% endfor %}
+                {% if pageNumber < numberOfPages %}<li><a href="{{ path('forum_discussion_page', { 'id': discussion.id, 'name': (discussion.title | url_encode), 'pageNumber': (pageNumber + 1) }) }}">»</a></li>{% endif %}
+            </ul>
+        {% endif %}
+    {% endblock %}
+
+    <p style="margin-left:10px;">
+        {% if userIsModerator %}
+            <input name="op" type="hidden" value="" /><input name="forum_discussionid" type="hidden" value="', $forum_discussionid, '" />
+            Met geselecteerd: <a href="#" onclick="document.MasterForm.op.value='sel_new'; document.MasterForm.submit(); return false;"><img src="{{ asset('images/forum/folder_usr.gif') }}" title="Splits af naar een nieuwe discussie" /></a>
+            <a style="float:right; margin-right:5px" href="#" onclick="document.MasterForm.op.value='sel_del'; document.MasterForm.submit(); return false;"><img src="{{ asset('images/forum/disc_delete.gif') }}" title="Verwijder direct" /></a>
+        {% endif %}
         {% if is_granted('ROLE_ADMIN_WIKI') %}
-        $wiki_out = '';
-        if ($wiki_moderator && strlen($wiki_string) > 0) {
-        if ($wiki_check == 0) {
-        $wiki_out = '<span id="wiki_' . $postid . '" style="background-color:orange">Nog te controleren - <a href="#" onclick="wikicheck(' . $postid . ', \'ok\'); return false;">Markeer als gecontroleerd</a> - <a href="#" onclick="wikicheck(' . $postid . ', \'na\'); return false;">Markeer als niet relevante inhoud</a></span>';
-        } elseif ($wiki_check == 1) {
-        $wiki_out = 'Verwerkt in de wiki door ' . giveUserClick($wiki_uid);
-        } else {
-        $wiki_out = 'Geen relevante inhoud, gecontroleerd door ' . giveUserClick($wiki_uid);
-        }
-        }
+            <a href="#" onclick="getElementById('wiki_add').style.visibility = 'visible'; return false;"><img src="{{ asset('images/plus.png') }}" /> Voeg een RailWiki link toe</a>
+            <span id="wiki_add" style="visibility:hidden;">
+                <br />Plak de gehele URL van de wiki pagina: <input id="wiki_page_add" name="wiki_page_add" size="50" type="text" />
+                <br />Titel van de wiki pagina: <input id="wiki_page_title" name="wiki_page_title" size="50" type="text" />&nbsp;<a href="#" onclick="wikiadd();">Voeg verwijzing toe</a>
+            </span>
+        {% endif %}
+        {% if userIsModerator or is_granted('ROLE_ADMIN_WIKI') %}<br />{% endif %}
+    </p>
+
+    {% for post in posts %}
+        {% if loop.index == 5 or loop.index == 55 %}
+            {% if forumBanner is not null %}
+                <br /><table align="center" class="design" width="98%"><tr>
+                    <td><a href="/click_out.php?banner_id={{ forumBanner.id }}" target="_blank">
+                        <img alt="{{ forumBanner.customer.name }} {{ forumBanner.description }}" height="150" src="{{ asset('images/banners/' ~ forumBanner.image) }}" />
+                    </a></td>
+                    <td><a href="/adverteren/">advertentie</a></td>
+                </tr></table>
+            {% else %}
+                <br /><table align="center" class="design" width="98%"><tr>
+                    <td><p class="warn">Tevreden over Somda? Overweeg dan eens een <a href="/doneren/">vrijwillige donatie</a>, alvast bedankt!</p></td>
+                </tr></table>
+            {% endif %}
         {% endif %}
 
-        ', (strlen($wiki_out) > 0 ? '<tr><td colspan="3">Railwiki.nl: ' . $wiki_out . '</td></tr>' : ''), '
-    </table>
-{% endfor %}
+        <table align="center" class="design" width="98%">
+            <tr>
+                <th colspan="3" style="text-align:left;">
+                    {% if userIsModerator %}<input name="sel{{ post.id }}" type="checkbox" />{% endif %}
+                    <a id="p{{ post.id }}" name="p{{ post.id }}"></a>
+                    {% if unreadPostId == post.id %}<a id="nieuw" name="nieuw"></a>{% endif %}
+                    <a href="{{ path('forum_discussion_post', { 'id': discussion.id, 'name': (discussion.title | url_encode), 'postId': post.id }) }}">
+                        <img src="{{ asset('images/forum/folder_' ~ (discussion.locked ? 'l' : 'u') ~ 's' ~ (unreadPostId > 0 and post.id >= unreadPostId ? 'n' : 'r') ~ '.gif') }}" />
+                    </a>{{ post.timestamp | date('d-m-Y H:i:s') }}
+                </th>
+                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                    <th>
+                        <a href="/forum/meld/p{{ post.id }}/" rel="nofollow" title="Klik hier om dit bericht aan de beheerders te melden. Gebruik dit voor bijvoorbeeld overtredingen van forumregels"><font color="#FFFFFF">Meld bericht</font></a>
+                        ($moderator && $forum_alert_id > 0 ? '<br /><a href="' . SITE_URL . '/forum/meldingen/p' . $postid . '/" rel="nofollow" title="Er zijn meldingen gedaan over dit bericht, klik om ze te bekijken"><font color="#DD1111">Meldingen</font></a>' : ''), '
+                    </th>
+                {% endif %}
+            </tr><tr>
+                <td class="info" nowrap="nowrap">
+                    {{ post.author.id.toString | displayUser(post.author.username) | raw }}
+                    {% if userIsModerator %}
+                        <br /><strong>Moderator</strong>
+                    {% endif %}
+                    {% if userIsModerator and post.author.info.company is not null %}
+                        <br /><strong>-- {{ post.author.info.company.name }} --</strong>
+                    {% endif %}
+                    {% if post.author.info.avatar | length > 0 %}
+                        <br /><img alt="{{ post.author.username }}" src="{{ asset('images/avatar/' ~  post.author.info.avatar) }}" />
+                    {% endif %}
+                    {% if post.author.info.city | length > 0 and is_granted('IS_AUTHENTICATED_FULLY') %}
+                        <br />{{ post.author.info.city }}
+                    {% endif %}
+                    <br />
+                    {% if post.author.info.twitterAccount | length > 0 %}
+                        <a href="https://twitter.com/#!/{{ post.author.info.twitterAccount }}" target="_blank"><img alt="Twitter {{ post.author.info.twitterAccount }}" height="16" src="{{ asset('images/social-media/twitter.png') }}" width="16" /></a>
+                    {% endif %}
+                    {% if post.author.info.facebookAccount | length > 0 %}
+                        <a href="https://www.facebook.com/{{ post.author.info.facebookAccount }}" target="_blank"><img alt="Facebook {{ post.author.info.facebookAccount }}" height="16" src="{{ asset('images/social-media/facebook.png') }}" width="16" /></a>
+                    {% endif %}
+                    {% if post.author.info.youtubeAccount | length > 0 %}
+                        <a href="https://www.youtube.com/user/{{ post.author.info.youtubeAccount }}" target="_blank"><img alt="Youtube {{ post.author.info.youtubeAccount }}" height="16" src="{{ asset('images/social-media/youtube.png') }}" width="16" /></a>
+                    {% endif %}
+                    {% if post.author.info.flickrAccount | length > 0 %}
+                        <a href="https://www.flickr.com/photos/{{ post.author.info.flickrAccount }}" target="_blank"><img alt="Flickr {{ post.author.info.flickrAccount }}" height="16" src="{{ asset('images/social-media/flickr.png') }}" width="37" /></a>
+                    {% endif %}
+                </td>
+                <td class="text">{{ post | displayForumPost | raw }}</td>
+                <td class="buttons"><table>
+                    {% if mayPost and not discussion.locked %}
+                        <tr><td style="border:none;"><div class="button_clear"><div class="somda-button-left"><div class="blank_home"><a href="/reageren"><span>Reageer</span></a></div></div></div></td></tr>
+                    {% endif %}
+                    {% if userIsModerator or (mayPost and not discussion.locked and post.author == app.user) %}
+                        <tr><td style="border:none;"><div class="button_clear"><div class="somda-button-left"><div class="blank_home"><a href="/bewerken"><span>Bewerk</span></a></div></div></div>
+                    {% endif %}
+                </table></td>
+            </tr>
+            {% if is_granted('ROLE_ADMIN_WIKI') and discussion.wikis | length > 0 %}
+                <tr><td colspan="3">Railwiki.nl:
+                    {% if post.wikiCheck == 0 %}
+                        <span id="wiki_{{ post.id }}" style="background-color:orange">Nog te controleren - <a href="#" onclick="wikicheck({{ post.id }}, 'ok'); return false;">Markeer als gecontroleerd</a> - <a href="#" onclick="wikicheck({{ post.id }}, 'na'); return false;">Markeer als niet relevante inhoud</a></span>
+                    {% elseif post.wikiCheck == 1 %}
+                        Verwerkt in de wiki door {{ post.wikiChecker | displayUser }}
+                    {% else %}
+                        Geen relevante inhoud, gecontroleerd door {{ post.wikiChecker | displayUser }}
+                    {% endif %}
+                </td></tr>
+            {% endif %}
+        </table>
+        <br />
+    {% endfor %}
 
+    {{ block('wiki') }}
 
-if (strlen($wiki_string) > 0) {
-echo $wiki_string;
-}
+    {{ block('paginator') }}
 
-echo '<div data-pl-paginator data-baseurl="/forum/', $forum_discussionid, '/%s/', urlencode(str_replace('/', '', $discussion_title)), '/" data-nrofpages="', $aantal_paginas, '" data-currentpage="', $pagina_todo, '"></div>';
-
-if ($ongelezen_postid == 0 && $params['forum_new_old'] == 0) {
-echo '<a id="nieuw" name="nieuw"></a>';
-}
-if ($session->logged_in && $forum_type < 4) {
-// Markeer alle posts op de gevraagde pagina als gelezen
-$postid_list = substr($postid_list, 0, strlen($postid_list) - 1);
-$query = 'INSERT IGNORE INTO ' . DB_PREFIX . '_forum_read_' . substr($session->uid, -1) . ' (uid, postid) VALUES ' . $postid_list;
-$db->queryF($query);
-}
-if ($session->logged_in && $fav_alerting == '2') {
-$query = 'UPDATE ' . DB_PREFIX . '_forum_favorites
-SET alerting=\'1\'
-WHERE discussionid=' . $forum_discussionid . ' AND uid=' . $session->uid;
-$db->queryF($query);
-}
-} else {
-if (!$session->logged_in) {
-// Redirect naar de login-pagina
-echo '<script language="JavaScript" type="text/javascript">
-    document.location.replace(\'', SITE_URL, '/index.php?blokid=4\');
-</script>';
-exit();
-} else {
-// Geen toegang
-echo '<script language="JavaScript" type="text/javascript">
-    document.location.replace(\'', SITE_URL, '/index.php?blokid=1\');
-</script>';
-exit();
-}
-}
 {% endblock %}
 
 {% block javascript %}

@@ -193,7 +193,8 @@ final class Version20200307111308 extends AbstractMigration
             CHANGE password password VARCHAR(32) NOT NULL,
             CHANGE email email VARCHAR(60) NOT NULL,
             CHANGE cookie_ok cookie_ok VARCHAR(3) NOT NULL,
-            CHANGE actkey actkey VARCHAR(32) NOT NULL
+            CHANGE actkey actkey VARCHAR(32) NOT NULL,
+            CHANGE regdate regdate DATETIME NOT NULL
         ');
 
         $this->addSql('ALTER TABLE somda_help_text CHANGE google_channel google_channel VARCHAR(10) NOT NULL');
@@ -664,7 +665,8 @@ final class Version20200307111308 extends AbstractMigration
             ALTER TABLE somda_mat_sms
             CHANGE typeid typeid BIGINT DEFAULT NULL,
             CHANGE extra extra VARCHAR(255) NOT NULL,
-            CHANGE index_regel index_regel TINYINT(1) NOT NULL
+            CHANGE index_regel index_regel TINYINT(1) NOT NULL,
+            CHANGE last_update last_update DATETIME DEFAULT NULL
         ');
 
         $this->addSql('ALTER TABLE somda_tdr_s_e DROP PRIMARY KEY');
@@ -750,8 +752,8 @@ final class Version20200307111308 extends AbstractMigration
             CHANGE discussionid discussionid BIGINT DEFAULT NULL,
             CHANGE wiki_check wiki_check TINYINT(1) NOT NULL,
             CHANGE sign_on sign_on TINYINT(1) NOT NULL,
-            CHANGE `timestamp` `timestamp` DATE NOT NULL,
-            CHANGE edit_timestamp edit_timestamp DATE DEFAULT NULL
+            CHANGE `timestamp` `timestamp` DATETIME NOT NULL,
+            CHANGE edit_timestamp edit_timestamp DATETIME DEFAULT NULL
         ');
         $this->addSql('
             ALTER TABLE somda_forum_posts ADD CONSTRAINT FK_40FD24D3412DD5F

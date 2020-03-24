@@ -5,19 +5,17 @@ namespace App\Entity;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use MsgPhp\User\User as BaseUser;
-use MsgPhp\User\UserId;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Table(name="somda_users", indexes={@ORM\Index(name="idx_49053_uname", columns={"username"})})
  * @ORM\Entity
  */
-class User extends BaseUser implements UserInterface
+class User implements UserInterface
 {
     /**
      * @var int
-     * @ORM\Column(name="uid", type="msgphp_user_id", nullable=false)
+     * @ORM\Column(name="uid", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -73,7 +71,7 @@ class User extends BaseUser implements UserInterface
 
     /**
      * @var DateTime
-     * @ORM\Column(name="regdate", type="date", nullable=false)
+     * @ORM\Column(name="regdate", type="datetime", nullable=false)
      */
     private $registrationDate;
 
@@ -126,12 +124,10 @@ class User extends BaseUser implements UserInterface
     private $preferences;
 
     /**
-     * @param UserId $id
+     *
      */
-    public function __construct(UserId $id)
+    public function __construct()
     {
-        $this->id = $id;
-
         $this->forumFavorites = new ArrayCollection();
         $this->moderatedForums = new ArrayCollection();
         $this->spots = new ArrayCollection();
@@ -139,9 +135,9 @@ class User extends BaseUser implements UserInterface
     }
 
     /**
-     * @return UserId
+     * @return int
      */
-    public function getId(): UserId
+    public function getId(): int
     {
         return $this->id;
     }

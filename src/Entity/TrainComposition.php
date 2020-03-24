@@ -106,7 +106,7 @@ class TrainComposition
 
     /**
      * @var DateTime|null
-     * @ORM\Column(name="last_update", type="date", nullable=true)
+     * @ORM\Column(name="last_update", type="datetime", nullable=true)
      */
     private $lastUpdate;
 

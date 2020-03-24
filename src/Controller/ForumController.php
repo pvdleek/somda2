@@ -7,6 +7,7 @@ use App\Entity\BannerView;
 use App\Entity\ForumCategory;
 use App\Entity\ForumDiscussion;
 use App\Entity\ForumForum;
+use App\Entity\ForumPost;
 use App\Entity\RailNews;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -68,15 +69,15 @@ class ForumController extends BaseController
     /**
      * @param Request $request
      * @param int $id
+     * @param int|null $pageNumber
+     * @param int|null $postId
      * @return Response|RedirectResponse
      */
-    public function discussionAction(Request $request, int $id): Response
+    public function discussionAction(Request $request, int $id, int $pageNumber = null, int $postId = null): Response
     {
         //TODO
         $highlight = '';
-        $page_start = null;
         $forum_jump = '';
-        $params = ['forum_new_old' => false];
 
 
 
@@ -126,6 +127,44 @@ class ForumController extends BaseController
 
         $discussion->setViewed($discussion->getViewed() + 1);
         $this->doctrine->getManager()->flush();
+
+        $numberOfPosts = $this->doctrine->getRepository(ForumDiscussion::class)->getNumberOfPosts($discussion);
+        $numberOfPages = floor(($numberOfPosts - 1) / self::MAX_POSTS_PER_PAGE) + 1;
+
+
+// postId afhandelen!!
+
+
+        $unreadPostId = 0;
+        if ($this->userIsLoggedIn()) {
+//             Uitzoeken naar welke pagina we gaan
+//             Posts op die pagina als gelezen markeren
+            if ($discussion->getForum()->getType() < 4) {
+                $unreadPostId = $this->doctrine->getRepository(ForumDiscussion::class)->getUnreadPostId($discussion, $this->getUser());
+            }
+        } else {
+            if (is_null($pageNumber)) {
+                $pageNumber = 1;
+            }
+            $posts = $this->doctrine->getRepository(ForumPost::class)->findBy(
+                ['discussion' => $discussion],
+                ['timestamp' => 'ASC'],
+                self::MAX_POSTS_PER_PAGE,
+                ($pageNumber - 1) * self::MAX_POSTS_PER_PAGE
+            );
+        }
+
+        return $this->render('forum/discussion.html.twig', [
+            'userIsModerator' => in_array($this->getUser(), $discussion->getForum()->getModerators()),
+            'discussion' => $discussion,
+            'numberOfPages' => $numberOfPages,
+            'pageNumber' => $pageNumber,
+            'posts' => $posts,
+            'mayPost' => $this->mayPost($discussion->getForum()->getId(), $discussion->getForum()->getType()),
+            'unreadPostId' => $unreadPostId,
+            'forumBanner' => $forumBanner,
+        ]);
+
 
         if ($discussion->getForum()->getType() < 4 && $this->userIsLoggedIn()) {
             $ongelezen_postid = $this->doctrine->getRepository(ForumDiscussion::class)->getUnreadPostId($discussion, $this->getUser());

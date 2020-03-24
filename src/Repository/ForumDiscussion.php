@@ -48,6 +48,26 @@ class ForumDiscussion extends EntityRepository
 
     /**
      * @param ForumDiscussionEntity $discussion
+     * @return int
+     */
+    public function getNumberOfPosts(ForumDiscussionEntity $discussion): int
+    {
+        $queryBuilder = $this->getEntityManager()
+            ->createQueryBuilder()
+            ->select('COUNT(p.id)')
+            ->from(ForumPost::class, 'p')
+            ->andWhere('p.discussion = :discussion')
+            ->setParameter('discussion', $discussion)
+            ->setMaxResults(1);
+        try {
+            return $queryBuilder->getQuery()->getSingleScalarResult();
+        } catch (Exception $exception) {
+            return 0;
+        }
+    }
+
+    /**
+     * @param ForumDiscussionEntity $discussion
      * @param User $user
      * @return int
      */

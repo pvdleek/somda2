@@ -3,6 +3,13 @@ home:
   methods: [GET]
   defaults: { _controller: App\Controller\HomeController::indexAction }
 
+login:
+  path: /inloggen/
+  controller: App\Controller\SecurityController::loginAction
+logout:
+  path: /uitloggen/
+  controller: App\Controller\SecurityController::logoutAction
+
 information_home:
   path: /informatie/
   methods: [GET]
@@ -89,6 +96,16 @@ forum_discussion:
   methods: [GET]
   requirements: { id: \d+ }
   defaults: { _controller: App\Controller\ForumController:discussionAction }
+forum_discussion_page:
+  path: /forum/{id}/{pageNumber}/{name}/
+  methods: [GET]
+  requirements: { id: \d+, pageNumber: \d+ }
+  defaults: { _controller: App\Controller\ForumController:discussionAction }
+forum_discussion_post:
+  path: /forum/{id}/p{postId}/{name}/
+  methods: [GET]
+  requirements: { id: \d+, postId: \d+ }
+  defaults: { _controller: App\Controller\ForumController:discussionAction }
 forum_search:
   path: /forum/zoeken/
   methods: [GET]
@@ -112,9 +129,6 @@ profile_view:
   defaults: { _controller: App\Controller\SomdaController:profileAction }
 
 
-inloggen:
-  path: /
-  controller: App\Controller\HomeController::homeAction
 links:
   path: /
   controller: App\Controller\HomeController::homeAction

@@ -36,7 +36,7 @@ class ForumPost
 
     /**
      * @var DateTime
-     * @ORM\Column(name="timestamp", type="date", nullable=false)
+     * @ORM\Column(name="timestamp", type="datetime", nullable=false)
      */
     private $timestamp;
 
@@ -48,7 +48,7 @@ class ForumPost
 
     /**
      * @var DateTime|null
-     * @ORM\Column(name="edit_timestamp", type="date", nullable=true)
+     * @ORM\Column(name="edit_timestamp", type="datetime", nullable=true)
      */
     private $editTimestamp;
 
