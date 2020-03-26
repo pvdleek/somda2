@@ -175,19 +175,8 @@ final class Version20200307111308 extends AbstractMigration
         ');
         $this->addSql('CREATE INDEX IDX_8393E3DC539B0606 ON somda_users_onlineid (uid)');
 
-        $this->addSql('DROP INDEX UNIQ_D79EBDD6A0D96FBF ON somda_users');
-        $this->addSql('DROP INDEX UNIQ_D79EBDD692FC23A8 ON somda_users');
-        $this->addSql('DROP INDEX UNIQ_D79EBDD6C05FB297 ON somda_users');
         $this->addSql('
             ALTER TABLE somda_users
-            ADD active BIGINT NOT NULL,
-            DROP username_canonical,
-            DROP email_canonical,
-            DROP enabled,
-            DROP salt,
-            DROP last_login,
-            DROP confirmation_token,
-            DROP password_requested_at,
             CHANGE spots_ok spots_ok INT(11) NOT NULL DEFAULT 0,
             CHANGE username username VARCHAR(10) NOT NULL,
             CHANGE password password VARCHAR(32) NOT NULL,

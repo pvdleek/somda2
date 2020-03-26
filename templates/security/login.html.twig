@@ -1,30 +1,22 @@
 {% extends 'base.html.twig' %}
 
 {% block content %}
+    <br />
     <center>
         {% if error %}
-            <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+            <p class="alert">{{ error.messageKey|trans(error.messageData, 'security') }}</p>
         {% endif %}
         <form method="post">
             <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}" />
             <table class="design">
-                <tr><th><label for="username">Geef je gebruikersnaam</label></th><td><input id="username" maxlength="10" name="username" size="20" type="text" value="{{ last_username }}" /></td></tr>
+                <tr><th><label for="username">Geef je gebruikersnaam</label></th><td><input id="username" maxlength="10" name="username" size="20" type="text" value="{{ lastUsername }}" /></td></tr>
                 <tr><th><label for="password">Geef je wachtwoord</label></th><td><input id="password" name="password" size="20" type="password" /></td></tr>
-                <tr><td colspan="2"><div class="button_clear"><div class="somda-button-left"><div class="blank_home"><input type="submit" value="Inloggen bij Somda "/></div></div></div></td></tr>
+                <tr><th>&nbsp;</th><td><label for="remember_me"><input id="remember_me" name="_remember_me" type="checkbox" /> Blijf ingelogd</label></td></tr>
+                <tr><th colspan="2"><div class="button_clear"><div class="somda-button-left"><div class="blank_home"><input type="submit" value="Inloggen bij Somda "/></div></div></div></th></tr>
             </table>
         </form>
-        <br /><p class="warn" style="width:500px;">Let op: zowel je gebruikersnaam als wachtwoord zijn hoofdletter-gevoelig! Neem <a href="/feedback/">contact op</a> als je jouw exacte gebruikersnaam niet meer weet.</p>
-        <br /><p class="info" style="width:500px;">Nog geen gebruikersnaam en wachtwoord? <a href="', SITE_URL, '/registreren/">Registreer je gratis en vrijblijvend</a><br />Wachtwoord vergeten? <a href="', SITE_URL, '/nieuw_wachtwoord/">Vraag een nieuw wachtwoord aan</a></p>
+        <br /><p class="info" style="width:500px;">Neem <a href="/feedback/">contact op</a> als je jouw gebruikersnaam niet meer weet.</p>
+        <br /><p class="info" style="width:500px;">Nog geen gebruikersnaam en wachtwoord? <a href="{{ path('registrer') }}">Registreer je gratis en vrijblijvend</a><br />Wachtwoord vergeten? <a href="', SITE_URL, '/nieuw_wachtwoord/">Vraag een nieuw wachtwoord aan</a></p>
     </center>
-
-    {#
-        Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
-        See https://symfony.com/doc/current/security/remember_me.html
-
-        <div class="checkbox mb-3">
-            <label>
-                <input type="checkbox" name="_remember_me"> Remember me
-            </label>
-        </div>
-    #}
+    <br />
 {% endblock %}

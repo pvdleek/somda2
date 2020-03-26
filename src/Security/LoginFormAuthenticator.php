@@ -95,10 +95,9 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
         }
 
         $user = $this->entityManager->getRepository(User::class)->findOneBy(['username' => $credentials['username']]);
-
         if (!$user) {
-            // fail authentication with a custom error
-            throw new CustomUserMessageAuthenticationException('Username could not be found.');
+            // Fail authentication with a custom error
+            throw new CustomUserMessageAuthenticationException('login.userNotFound');
         }
 
         return $user;
@@ -106,13 +105,13 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
 
     /**
      * @param mixed $credentials
-     * @param UserInterface $user
+     * @param User $user
      * @return bool
      * @throws Exception
      */
     public function checkCredentials($credentials, UserInterface $user): bool
     {
-        return md5(md5(md5($credentials['password']))) === $user->getPassword();
+        return $user->isActive() && md5(md5(md5($credentials['password']))) === $user->getPassword();
     }
 
     /**

@@ -1,4 +1,4 @@
-<div class="breadcrumb">Je bent hier: {{ breadcrumb | raw }}</div>
+{% if breadcrumb | length > 0 %}<div class="breadcrumb">Je bent hier: {{ breadcrumb | raw }}</div>{% endif %}
 
 <div id="footer">
 	<div class="ftr-center">
@@ -8,5 +8,4 @@
 		- <a href="http://', geefConfig('site_url_mobiel'), '">Somda mobiel</a>
 	 	- <a href="', SITE_URL, '/feed/">Somda feeds</a>
 	</div>
-	<div class="ftr-right"><a href="#top">Naar boven</a></div>
 </div>

@@ -39,7 +39,7 @@ class ForumDiscussion
 
     /**
      * @var boolean
-     * @ORM\Column(name="locked", type="boolean", nullable=false, options={"default"="false"})
+     * @ORM\Column(name="locked", type="boolean", nullable=false, options={"default"=false})
      */
     private $locked = false;
 

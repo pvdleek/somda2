@@ -14,9 +14,14 @@ use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 use Monolog\Logger;
 use Psr\Log\LoggerInterface;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Security;
@@ -57,6 +62,16 @@ abstract class BaseController
     private $router;
 
     /**
+     * @var FormFactoryInterface
+     */
+    protected $formFactory;
+
+    /**
+     * @var MailerInterface
+     */
+    private $mailer;
+
+    /**
      * @var BreadcrumbHelper
      */
     protected $breadcrumbHelper;
@@ -78,6 +93,8 @@ abstract class BaseController
      * @param LoggerInterface $logger
      * @param Environment $environment
      * @param RouterInterface $router
+     * @param FormFactoryInterface $formFactory
+     * @param MailerInterface $mailer
      * @param BreadcrumbHelper $breadcrumbHelper
      * @param MenuHelper $menuHelper
      * @param TrainTableHelper $trainTableHelper
@@ -89,6 +106,8 @@ abstract class BaseController
         LoggerInterface $logger,
         Environment $environment,
         RouterInterface $router,
+        FormFactoryInterface $formFactory,
+        MailerInterface $mailer,
         BreadcrumbHelper $breadcrumbHelper,
         MenuHelper $menuHelper,
         TrainTableHelper $trainTableHelper
@@ -99,6 +118,8 @@ abstract class BaseController
         $this->logger = $logger;
         $this->twig = $environment;
         $this->router = $router;
+        $this->formFactory = $formFactory;
+        $this->mailer = $mailer;
         $this->breadcrumbHelper = $breadcrumbHelper;
         $this->menuHelper = $menuHelper;
         $this->trainTableHelper = $trainTableHelper;
@@ -182,6 +203,15 @@ abstract class BaseController
     }
 
     /**
+     * @param string $type
+     * @param string $message
+     */
+    protected function addFlash(string $type, string $message): void
+    {
+        $this->requestStack->getCurrentRequest()->getSession()->getFlashBag()->add($type, $message);
+    }
+
+    /**
      * @param Block $block
      * @return bool
      */
@@ -225,5 +255,32 @@ abstract class BaseController
             $this->router->generate($route, $parameters, UrlGeneratorInterface::ABSOLUTE_PATH),
             self::REDIRECT_STATUS
         );
+    }
+
+    /**
+     * @param User $user
+     * @param string $subject
+     * @param string $template
+     * @param array $parameters
+     * @return bool
+     */
+    protected function sendEmail(User $user, string $subject, string $template, array $parameters = []): bool
+    {
+        $message = (new TemplatedEmail())
+            ->from(new Address('webmaster@somda.nl', 'Somda'))
+            ->to(new Address($user->getEmail(), $user->getUsername()))
+            ->subject($subject)
+            ->htmlTemplate('emails/' . $template . '.html.twig')
+            ->textTemplate('emails/' . $template . '.text.twig')
+            ->context($parameters);
+        try {
+            $this->mailer->send($message);
+            return true;
+        } catch (TransportExceptionInterface $exception) {
+            $this->logger->critical(
+                'Failed to send email with subject "' . $subject . '" to user with id ' . $user->getId()
+            );
+        }
+        return false;
     }
 }

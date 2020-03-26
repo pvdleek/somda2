@@ -3,13 +3,30 @@ home:
   methods: [GET]
   defaults: { _controller: App\Controller\HomeController::indexAction }
 
+###################
+# User management #
+###################
 login:
   path: /inloggen/
+  methods: [GET, POST]
   controller: App\Controller\SecurityController::loginAction
 logout:
   path: /uitloggen/
+  methods: [GET]
   controller: App\Controller\SecurityController::logoutAction
+registrer:
+  path: /registreren/
+  methods: [GET, POST]
+  controller: App\Controller\SecurityController::registerAction
+activate:
+  path: /activeren/{id}/{key}/
+  methods: [GET]
+  requirements: { id: \d+ }
+  controller: App\Controller\HomeController::homeAction
 
+################
+# Home-screens #
+################
 information_home:
   path: /informatie/
   methods: [GET]
@@ -170,12 +187,6 @@ wachtwoord:
   path: /
   controller: App\Controller\HomeController::homeAction
 nieuw_wachtwoord:
-  path: /
-  controller: App\Controller\HomeController::homeAction
-activeren:
-  path: /
-  controller: App\Controller\HomeController::homeAction
-registreren:
   path: /
   controller: App\Controller\HomeController::homeAction
 doneren:

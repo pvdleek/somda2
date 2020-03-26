@@ -42,4 +42,4 @@
 
 <div class="clear">&nbsp;</div>
 
-<div class="breadcrumb">Je bent hier: {{ breadcrumb | raw }}</div>
+{% if breadcrumb | length > 0 %}<div class="breadcrumb">Je bent hier: {{ breadcrumb | raw }}</div>{% endif %}

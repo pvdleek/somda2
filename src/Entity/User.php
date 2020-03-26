@@ -6,6 +6,7 @@ use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Table(name="somda_users", indexes={@ORM\Index(name="idx_49053_uname", columns={"username"})})
@@ -22,10 +23,10 @@ class User implements UserInterface
     private $id;
 
     /**
-     * @var int
-     * @ORM\Column(name="active", type="bigint", nullable=false)
+     * @var boolean
+     * @ORM\Column(name="active", type="boolean", nullable=false)
      */
-    private $active;
+    private $active = false;
 
     /**
      * @var int
@@ -36,6 +37,13 @@ class User implements UserInterface
     /**
      * @var string
      * @ORM\Column(name="username", type="string", length=10, nullable=false)
+     * @Assert\NotBlank()
+     * @Assert\Length(
+     *     min = 2,
+     *     max = 10,
+     *     minMessage = "De gebruikersnaam moet minimaal 2 karakters lang zijn",
+     *     maxMessage = "De gebruikersnaam mag maximaal 10 karakters lang zijn"
+     * )
      */
     private $username = '';
 
@@ -54,6 +62,8 @@ class User implements UserInterface
     /**
      * @var string
      * @ORM\Column(name="email", type="string", length=60, nullable=false)
+     * @Assert\NotBlank()
+     * @Assert\Email(message="Dit is geen geldig e-mailadres")
      */
     private $email = '';
 
@@ -153,18 +163,18 @@ class User implements UserInterface
     }
 
     /**
-     * @return int
+     * @return bool
      */
-    public function getActive(): int
+    public function isActive(): bool
     {
         return $this->active;
     }
 
     /**
-     * @param int $active
+     * @param bool $active
      * @return User
      */
-    public function setActive(int $active): User
+    public function setActive(bool $active): User
     {
         $this->active = $active;
         return $this;

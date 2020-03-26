@@ -156,43 +156,13 @@ final class Version20200307111302 extends AbstractMigration
             $this->addSql('DELETE FROM somda_users WHERE uid = ' . $oldId);
         }
 
-        $this->addSql('ALTER TABLE somda_users ADD username_canonical VARCHAR(180) DEFAULT NULL');
-        $this->addSql('ALTER TABLE somda_users ADD email_canonical VARCHAR(180) DEFAULT NULL');
-        $this->addSql('ALTER TABLE somda_users ADD enabled BOOLEAN DEFAULT NULL');
-        $this->addSql('ALTER TABLE somda_users ADD salt VARCHAR(255) DEFAULT NULL');
-        $this->addSql('ALTER TABLE somda_users ADD last_login TIMESTAMP NULL DEFAULT NULL');
-        $this->addSql('ALTER TABLE somda_users ADD confirmation_token VARCHAR(180) DEFAULT NULL');
-        $this->addSql('ALTER TABLE somda_users ADD password_requested_at TIMESTAMP NULL DEFAULT NULL');
-        $this->addSql('ALTER TABLE somda_users ADD roles TEXT DEFAULT NULL');
-        $this->addSql('ALTER TABLE somda_users CHANGE COLUMN username username VARCHAR(180)');
-        $this->addSql('ALTER TABLE somda_users CHANGE COLUMN password password VARCHAR(255)');
-        $this->addSql('ALTER TABLE somda_users CHANGE COLUMN email email VARCHAR(180)');
-
-        $this->addSql('UPDATE somda_users SET enabled = active');
-        $this->addSql('
-            UPDATE somda_users SET enabled = FALSE, email = CONCAT(\'onbekend_\', uid, \'@somda.nl\')
-            WHERE email = \'\'
-        ');
-
-        $this->addSql('UPDATE somda_users SET username_canonical = LOWER(username)');
-        $this->addSql('UPDATE somda_users SET email_canonical = LOWER(email)');
-        $this->addSql('UPDATE somda_users SET password = \'\'');
-        $this->addSql('UPDATE somda_users SET roles = \'a:1:{i:0;s:9:"ROLE_USER";}\'');
-
-        $this->addSql('CREATE UNIQUE INDEX UNIQ_D79EBDD692FC23A8 ON somda_users (username_canonical)');
-        $this->addSql('CREATE UNIQUE INDEX UNIQ_D79EBDD6A0D96FBF ON somda_users (email_canonical)');
-        $this->addSql('CREATE UNIQUE INDEX UNIQ_D79EBDD6C05FB297 ON somda_users (confirmation_token)');
-
-        $this->addSql('
-            ALTER TABLE somda_users
-            CHANGE COLUMN username_canonical username_canonical VARCHAR(180) DEFAULT \'\' NOT NULL
-        ');
         $this->addSql(
-            'ALTER TABLE somda_users CHANGE COLUMN email_canonical email_canonical VARCHAR(180) DEFAULT \'\' NOT NULL'
+            'UPDATE somda_users SET active = 0, email = CONCAT(\'onbekend_\', uid, \'@somda.nl\') WHERE email = \'\''
         );
-        $this->addSql('ALTER TABLE somda_users CHANGE COLUMN enabled enabled BOOLEAN DEFAULT FALSE NOT NULL');
+
+        $this->addSql('ALTER TABLE somda_users ADD roles TEXT DEFAULT NULL');
+        $this->addSql('UPDATE somda_users SET roles = \'a:1:{i:0;s:9:"ROLE_USER";}\'');
         $this->addSql('ALTER TABLE somda_users CHANGE COLUMN roles roles TEXT NOT NULL');
-        $this->addSql('ALTER TABLE somda_users DROP COLUMN active');
 
         $this->addSql('ALTER TABLE somda_groups ADD roles TEXT DEFAULT NULL;');
         $this->addSql('ALTER TABLE somda_groups CHANGE COLUMN `name` `name` VARCHAR(180);');

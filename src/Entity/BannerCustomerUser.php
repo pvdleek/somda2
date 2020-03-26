@@ -12,31 +12,31 @@ class BannerCustomerUser
 {
     /**
      * @var bool
-     * @ORM\Column(name="allowed_new", type="boolean", nullable=false, options={"default"="false"})
+     * @ORM\Column(name="allowed_new", type="boolean", nullable=false, options={"default"=false})
      */
     private $allowedNew = false;
 
     /**
      * @var bool
-     * @ORM\Column(name="allowed_max_views", type="boolean", nullable=false, options={"default"="false"})
+     * @ORM\Column(name="allowed_max_views", type="boolean", nullable=false, options={"default"=false})
      */
     private $allowedMaxViews = false;
 
     /**
      * @var bool
-     * @ORM\Column(name="allowed_max_hits", type="boolean", nullable=false, options={"default"="false"})
+     * @ORM\Column(name="allowed_max_hits", type="boolean", nullable=false, options={"default"=false})
      */
     private $allowedMaxHits = false;
 
     /**
      * @var bool
-     * @ORM\Column(name="allowed_max_date", type="boolean", nullable=false, options={"default"="false"})
+     * @ORM\Column(name="allowed_max_date", type="boolean", nullable=false, options={"default"=false})
      */
     private $allowedMaxDate = false;
 
     /**
      * @var bool
-     * @ORM\Column(name="allowed_deactivate", type="boolean", nullable=false, options={"default"="false"})
+     * @ORM\Column(name="allowed_deactivate", type="boolean", nullable=false, options={"default"=false})
      */
     private $allowedDeactivate = false;
 
