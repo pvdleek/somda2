@@ -71,59 +71,41 @@ class ForumDiscussion extends EntityRepository
      * @param User $user
      * @return int
      */
-    public function getUnreadPostId(ForumDiscussionEntity $discussion, User $user): int
+    public function getNumberOfReadPosts(ForumDiscussionEntity $discussion, User $user): int
     {
         $queryBuilder = $this->getEntityManager()
             ->createQueryBuilder()
-            ->select('p.id')
-            ->from(get_class('App\Entity\ForumRead' . substr($user->getId(), -1)), 'r')
+            ->select('COUNT(p.id)')
+            ->from('App\Entity\ForumRead' . substr($user->getId(), -1), 'r')
             ->join('r.post', 'p')
+            ->andWhere('p.discussion = :discussion')
+            ->setParameter('discussion', $discussion)
             ->andWhere('r.user = :user')
             ->setParameter('user', $user);
-        $readPosts = $queryBuilder->getQuery()->getArrayResult();
-
-        $queryBuilder = $this->getEntityManager()
-            ->createQueryBuilder()
-            ->select('p.id AS id')
-            ->from(ForumPost::class, 'p')
-            ->andWhere('p.discussion = :discussion')
-            ->setParameter('discussion', $discussion)
-            ->andWhere('p.id NOT IN (' . $readPosts . ')')
-            ->addOrderBy('p.id', 'ASC')
-            ->setMaxResults(1);
-        try {
-            return $queryBuilder->getQuery()->getSingleResult();
-        } catch (Exception $exception) {
-            return 0;
-        }
-//        $query = 'SELECT `p`.`postid`
-//                    FROM `somda_forum_posts` `p`
-//                    WHERE `p`.`postid` NOT IN
-//                        (SELECT `postid` FROM `somda_forum_read_' . substr($this->getUser()->getId(), -1) . '`
-//                        WHERE `uid` = ' . $this->getUser()->getId() . ')
-//                    AND `p`.`discussionid` = ' . $discussion->getId() . '
-//                    ORDER BY `p`.`postid` ASC
-//                    LIMIT 1';
-    }
-
-    /**
-     * @param ForumDiscussionEntity $discussion
-     * @return int
-     */
-    public function getMaxPostId(ForumDiscussionEntity $discussion): int
-    {
-        $queryBuilder = $this->getEntityManager()
-            ->createQueryBuilder()
-            ->select('MAX(p.id) AS id')
-            ->from(ForumPost::class, 'p')
-            ->andWhere('p.discussion = :discussion')
-            ->setParameter('discussion', $discussion)
-            ->setMaxResults(1);
         try {
             return $queryBuilder->getQuery()->getSingleScalarResult();
         } catch (Exception $exception) {
             return 0;
         }
-//        $query = 'SELECT MAX(`postid`) FROM `somda_forum_posts` WHERE `discussionid` = ' . $discussion->getId();
+    }
+
+    /**
+     * @param User $user
+     * @param ForumPost[] $posts
+     */
+    public function markPostsAsRead(User $user, array $posts): void
+    {
+        $query = 'INSERT IGNORE INTO `somda_forum_read_'  . substr($user->getId(), -1) . '` (postid, uid) VALUES ';
+        foreach ($posts as $post) {
+            $query .= '(' . $post->getId() . ',' . $user->getId() . '),';
+        }
+
+        $connection = $this->getEntityManager()->getConnection();
+        try {
+            $statement = $connection->prepare(substr($query, 0, -1));
+            $statement->execute();
+        } catch (DBALException $exception) {
+            return;
+        }
     }
 }

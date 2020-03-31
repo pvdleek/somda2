@@ -231,7 +231,7 @@ abstract class BaseController
      */
     protected function userIsLoggedIn(): bool
     {
-        return $this->security->isGranted('IS_AUTHENTICATED_FULLY');
+        return $this->security->isGranted('IS_AUTHENTICATED_REMEMBERED');
     }
 
     /**
@@ -280,6 +280,7 @@ abstract class BaseController
             $this->logger->critical(
                 'Failed to send email with subject "' . $subject . '" to user with id ' . $user->getId()
             );
+            $this->logger->critical($exception->getMessage());
         }
         return false;
     }

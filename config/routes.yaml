@@ -10,19 +10,28 @@ login:
   path: /inloggen/
   methods: [GET, POST]
   controller: App\Controller\SecurityController::loginAction
+login_with_username:
+  path: /inloggen/{username}/
+  methods: [GET, POST]
+  controller: App\Controller\SecurityController::loginAction
 logout:
   path: /uitloggen/
   methods: [GET]
   controller: App\Controller\SecurityController::logoutAction
-registrer:
+register:
   path: /registreren/
   methods: [GET, POST]
   controller: App\Controller\SecurityController::registerAction
 activate:
+  path: /activeren/{id}/
+  methods: [GET, POST]
+  requirements: { id: \d+ }
+  controller: App\Controller\SecurityController::activateAction
+activate_with_key:
   path: /activeren/{id}/{key}/
   methods: [GET]
   requirements: { id: \d+ }
-  controller: App\Controller\HomeController::homeAction
+  controller: App\Controller\SecurityController::activateAction
 
 ################
 # Home-screens #
@@ -174,8 +183,14 @@ invoer:
 help:
   path: /
   controller: App\Controller\HomeController::homeAction
-nieuws:
+help_text:
+  path: /{id}/
+  controller: App\Controller\HomeController::homeAction
+news:
   path: /
+  controller: App\Controller\HomeController::homeAction
+news_text:
+  path: /{id}/
   controller: App\Controller\HomeController::homeAction
 spots:
   path: /

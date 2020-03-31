@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\User as UserForm;
+use App\Form\UserActivate;
 use DateTime;
 use Exception;
 use LogicException;
@@ -12,32 +13,34 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class SecurityController extends BaseController
 {
     /**
      * @param AuthenticationUtils $authenticationUtils
+     * @param string|null $username
      * @return Response
      */
-    public function loginAction(AuthenticationUtils $authenticationUtils): Response
+    public function loginAction(AuthenticationUtils $authenticationUtils, string $username = null): Response
     {
          if ($this->userIsLoggedIn()) {
              return $this->redirectToRoute('home');
          }
 
         return $this->render('security/login.html.twig', [
-            'lastUsername' => $authenticationUtils->getLastUsername(),
+            'lastUsername' => is_null($username) ? $authenticationUtils->getLastUsername() : $username,
             'error' => $authenticationUtils->getLastAuthenticationError()
         ]);
     }
 
     /**
-     *
+     * @return RedirectResponse
      */
-    public function logoutAction(): void
+    public function logoutAction(): RedirectResponse
     {
-        throw new LogicException('This method can be blank, it will be intercepted by the logout key on your firewall');
+        return $this->redirectToRoute('home');
     }
 
     /**
@@ -79,7 +82,7 @@ class SecurityController extends BaseController
                         'om jouw account direct actief te maken.'
                     );
 
-                    return $this->redirectToRoute('activate');
+                    return $this->redirectToRoute('activate', ['id' => $user->getId()]);
                 } else {
                     $this->doctrine->getManager()->remove($user);
                     $this->doctrine->getManager()->flush();
@@ -159,5 +162,53 @@ class SecurityController extends BaseController
                 )
             );
         }
+    }
+
+    /**
+     * @param Request $request
+     * @param int $id
+     * @param string|null $key
+     * @return RedirectResponse|Response
+     */
+    public function activateAction(Request $request, int $id, string $key = null)
+    {
+        /**
+         * @var User $user
+         */
+        $user = $this->doctrine->getRepository(User::class)->find($id);
+        if (is_null($user)) {
+            throw new AccessDeniedHttpException();
+        }
+
+        $form = $this->formFactory->create(UserActivate::class, $user);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            if ($form->get('key')->getData() === $user->getActivationKey()) {
+                $user->setActive(true)->setActivationKey('0')->addRole('ROLE_USER');
+                $this->doctrine->getManager()->flush();
+
+                $this->sendEmail($user, 'Welkom op Somda -- Belangrijke informatie', 'new-account');
+
+                // Send the email to the admin account
+                $samePasswordUsers = $this->doctrine->getRepository(User::class)->findBy(
+                    ['password' => $user->getPassword()]
+                );
+                $this->sendEmail(
+                    $this->doctrine->getRepository(User::class)->find(1),
+                    'Nieuwe registratie bij Somda',
+                    'new-account-admin',
+                    ['user' => $user, 'samePasswordUsers' => $samePasswordUsers]
+                );
+
+
+                $this->addFlash('success', 'Jouw account is geactiveerd, je kunt hieronder inloggen');
+
+                return $this->redirectToRoute('login_with_username', ['username' => $user->getUsername()]);
+            }
+            $form->get('key')->addError(new FormError('De activatie-sleutel is niet correct, probeer het opnieuw'));
+        }
+
+        return $this->render('security/activate.html.twig', ['form' => $form->createView()]);
     }
 }

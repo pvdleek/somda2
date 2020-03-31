@@ -29,10 +29,10 @@ class User extends AbstractType
                 'attr' => ['maxlength' => 10],
                 'constraints' => [
                     new Length([
-                        'min' => 3,
                         'max' => 10,
-                        'minMessage' => 'De gebruikersnaam moet minimaal 3 karakters lang zijn',
                         'maxMessage' => 'De gebruikersnaam mag maximaal 10 karakters lang zijn',
+                        'min' => 3,
+                        'minMessage' => 'De gebruikersnaam moet minimaal 3 karakters lang zijn',
                     ]),
                     new Regex([
                         'pattern' => '/^[a-z0-9-]+$/i',

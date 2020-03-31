@@ -324,6 +324,8 @@ class User implements UserInterface
         return $this;
     }
 
+
+
     /**
      * @return Group
      */
@@ -365,6 +367,18 @@ class User implements UserInterface
     public function hasRole(string $role): bool
     {
         return in_array($role, $this->getRoles());
+    }
+
+    /**
+     * @param string $role
+     * @return User
+     */
+    public function addRole(string $role): User
+    {
+        if (!$this->hasRole($role)) {
+            $this->roles[] = $role;
+        }
+        return $this;
     }
 
     /**

@@ -22,7 +22,7 @@
                 <a href="/index.php?blokid=40&amp;op=combinedisc&amp;forum_discussionid={{ discussion.id }}"><img alt="Combineer met andere discussie" src="{{ asset('images/forum/disc_combine.gif') }}" /></a>
             </span>
          {% endif %}
-        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+        {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
             <span id="favorite_box"><span id="favorite">
                 {% if app.user and app.user.forumFavorite(discussion) %}
                     <a href="#" onclick="fav_del(); return false;">Verwijder discussie</a> uit je <a href="/favorieten/">favorieten</a>
@@ -56,11 +56,11 @@
     <p style="margin-left:10px;">
         {% if userIsModerator %}
             <input name="op" type="hidden" value="" /><input name="forum_discussionid" type="hidden" value="', $forum_discussionid, '" />
-            Met geselecteerd: <a href="#" onclick="document.MasterForm.op.value='sel_new'; document.MasterForm.submit(); return false;"><img src="{{ asset('images/forum/folder_usr.gif') }}" title="Splits af naar een nieuwe discussie" /></a>
-            <a style="float:right; margin-right:5px" href="#" onclick="document.MasterForm.op.value='sel_del'; document.MasterForm.submit(); return false;"><img src="{{ asset('images/forum/disc_delete.gif') }}" title="Verwijder direct" /></a>
+            Met geselecteerd: <a href="#" onclick="document.MasterForm.op.value='sel_new'; document.MasterForm.submit(); return false;"><img alt="Splits af naar een nieuwe discussie" src="{{ asset('images/forum/folder_usr.gif') }}" title="Splits af naar een nieuwe discussie" /></a>
+            <a style="float:right; margin-right:5px" href="#" onclick="document.MasterForm.op.value='sel_del'; document.MasterForm.submit(); return false;"><img alt="Verwijder direct" src="{{ asset('images/forum/disc_delete.gif') }}" title="Verwijder direct" /></a>
         {% endif %}
         {% if is_granted('ROLE_ADMIN_WIKI') %}
-            <a href="#" onclick="getElementById('wiki_add').style.visibility = 'visible'; return false;"><img src="{{ asset('images/plus.png') }}" /> Voeg een RailWiki link toe</a>
+            <a href="#" onclick="getElementById('wiki_add').style.visibility = 'visible'; return false;"><img alt="Voeg een RailWiki link toe" src="{{ asset('images/plus.png') }}" /> Voeg een RailWiki link toe</a>
             <span id="wiki_add" style="visibility:hidden;">
                 <br />Plak de gehele URL van de wiki pagina: <input id="wiki_page_add" name="wiki_page_add" size="50" type="text" />
                 <br />Titel van de wiki pagina: <input id="wiki_page_title" name="wiki_page_title" size="50" type="text" />&nbsp;<a href="#" onclick="wikiadd();">Voeg verwijzing toe</a>
@@ -69,7 +69,9 @@
         {% if userIsModerator or is_granted('ROLE_ADMIN_WIKI') %}<br />{% endif %}
     </p>
 
+    {% set firstUnreadAnchorDone = false %}
     {% for post in posts %}
+        {% set postIsUnread = loop.index > (constant('App\\Controller\\ForumController::MAX_POSTS_PER_PAGE') * (pageNumber - 1) + numberOfReadPosts) %}
         {% if loop.index == 5 or loop.index == 55 %}
             {% if forumBanner is not null %}
                 <br /><table align="center" class="design" width="98%"><tr>
@@ -77,33 +79,38 @@
                         <img alt="{{ forumBanner.customer.name }} {{ forumBanner.description }}" height="150" src="{{ asset('images/banners/' ~ forumBanner.image) }}" />
                     </a></td>
                     <td><a href="/adverteren/">advertentie</a></td>
-                </tr></table>
+                </tr></table><br />
             {% else %}
                 <br /><table align="center" class="design" width="98%"><tr>
                     <td><p class="warn">Tevreden over Somda? Overweeg dan eens een <a href="/doneren/">vrijwillige donatie</a>, alvast bedankt!</p></td>
-                </tr></table>
+                </tr></table><br />
             {% endif %}
         {% endif %}
 
         <table align="center" class="design" width="98%">
             <tr>
-                <th colspan="3" style="text-align:left;">
+                <th colspan="{{ is_granted('IS_AUTHENTICATED_REMEMBERED') ? 2 : 3 }}" style="text-align:left;">
                     {% if userIsModerator %}<input name="sel{{ post.id }}" type="checkbox" />{% endif %}
                     <a id="p{{ post.id }}" name="p{{ post.id }}"></a>
-                    {% if unreadPostId == post.id %}<a id="nieuw" name="nieuw"></a>{% endif %}
+                    {% if postIsUnread and not firstUnreadAnchorDone %}
+                        <a id="nieuw" name="nieuw"></a>
+                        {% set firstUnreadAnchorDone = true %}
+                    {% endif %}
                     <a href="{{ path('forum_discussion_post', { 'id': discussion.id, 'name': (discussion.title | url_encode), 'postId': post.id }) }}">
-                        <img src="{{ asset('images/forum/folder_' ~ (discussion.locked ? 'l' : 'u') ~ 's' ~ (unreadPostId > 0 and post.id >= unreadPostId ? 'n' : 'r') ~ '.gif') }}" />
+                        <img src="{{ asset('images/forum/folder_' ~ (discussion.locked ? 'l' : 'u') ~ 's' ~ (postIsUnread ? 'n' : 'r') ~ '.gif') }}" />
                     </a>{{ post.timestamp | date('d-m-Y H:i:s') }}
                 </th>
-                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
                     <th>
                         <a href="/forum/meld/p{{ post.id }}/" rel="nofollow" title="Klik hier om dit bericht aan de beheerders te melden. Gebruik dit voor bijvoorbeeld overtredingen van forumregels"><font color="#FFFFFF">Meld bericht</font></a>
-                        ($moderator && $forum_alert_id > 0 ? '<br /><a href="' . SITE_URL . '/forum/meldingen/p' . $postid . '/" rel="nofollow" title="Er zijn meldingen gedaan over dit bericht, klik om ze te bekijken"><font color="#DD1111">Meldingen</font></a>' : ''), '
+                        {% if userIsModerator and (post.alerts | length) > 0 %}
+                            <br /><a href="/forum/meldingen/p{{ post.id }}/" rel="nofollow" title="Er zijn meldingen gedaan over dit bericht, klik om ze te bekijken"><font color="#DD1111">Meldingen</font></a>
+                        {% endif %}
                     </th>
                 {% endif %}
             </tr><tr>
                 <td class="info" nowrap="nowrap">
-                    {{ post.author.id.toString | displayUser(post.author.username) | raw }}
+                    {{ post.author.id | displayUser(post.author.username) | raw }}
                     {% if userIsModerator %}
                         <br /><strong>Moderator</strong>
                     {% endif %}
@@ -113,7 +120,7 @@
                     {% if post.author.info.avatar | length > 0 %}
                         <br /><img alt="{{ post.author.username }}" src="{{ asset('images/avatar/' ~  post.author.info.avatar) }}" />
                     {% endif %}
-                    {% if post.author.info.city | length > 0 and is_granted('IS_AUTHENTICATED_FULLY') %}
+                    {% if post.author.info.city | length > 0 and is_granted('IS_AUTHENTICATED_REMEMBERED') %}
                         <br />{{ post.author.info.city }}
                     {% endif %}
                     <br />

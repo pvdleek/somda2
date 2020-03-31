@@ -31,24 +31,6 @@ class HomeController extends BaseController
     {
         $return = '';
 
-        $blocks = $this->doctrine->getRepository(Block::class)->findBy(['parent' => $parentBlock]);
-        if (count($blocks) > 0) {
-            $return .= '<div class="moduleS1"><div><h3>Maak je keuze:</h3><table border="0" cellpadding="0" cellspacing="0" width="100%">';
-            foreach ($blocks as $block) {
-                if ($this->shouldDoBlock($block)) {
-                    if ($block->getId() === 54) {
-                        $menuLink = '/index.php?nav=_nav99&amp;op=logout';
-                    } elseif (strlen($block->getUrlShort()) < 1) {
-                        $menuLink = '/index.php?blokid=' . $block->getId();
-                    } else {
-                        $menuLink = '/' . $block->getUrlShort() . '/';
-                    }
-                    $return .= '<tr><td><a href="' . $menuLink . '" class="mainlevel-sidenav">' . $block->getName() . '</a></td></tr>';
-                }
-            }
-            $return .= '</table></div></div>';
-        }
-
         $return .= '<div class="moduleS1"><div>
             <h3>Direct naar:</h3>
             <table width="100%" border="0" cellpadding="0" cellspacing="0">
@@ -85,7 +67,7 @@ class HomeController extends BaseController
 //			if ($fav_count>0) {
 //				echo '<br /><a href="'.SITE_URL.'/favorieten/">Favoriete discussies ('.$fav_count.')</a>';
 //			}
-            echo '<br /><br /><a href="/index.php?nav=_nav99&amp;op=logout">Uitloggen</a>';
+            $return .= '<br /><br /><a href="/index.php?nav=_nav99&amp;op=logout">Uitloggen</a>';
         } else {
             $return .= '<h3><strong>Direct inloggen</strong></h3>
                 <?php echo $form->geefAlleMeldingen(); ?>
