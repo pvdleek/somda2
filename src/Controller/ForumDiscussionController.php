@@ -2,69 +2,15 @@
 
 namespace App\Controller;
 
-use App\Entity\Banner;
-use App\Entity\BannerView;
-use App\Entity\ForumCategory;
 use App\Entity\ForumDiscussion;
-use App\Entity\ForumForum;
 use App\Entity\ForumPost;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
-class ForumController extends BaseController
+class ForumDiscussionController extends ForumBaseController
 {
-    public const MAX_POSTS_PER_PAGE = 100;
-
-    /**
-     * @return Response
-     */
-    public function indexAction(): Response
-    {
-        $this->breadcrumbHelper->addPart('general.navigation.forum.index', 'forum', [], true);
-
-        $forumCategories = $this->doctrine->getRepository(ForumCategory::class)->findBy([], ['order' => 'ASC']);
-        $categories = [];
-        foreach ($forumCategories as $category) {
-            $categories[] = [
-                'category' => $category,
-                'forums' => $this->doctrine->getRepository(ForumForum::class)->findByCategory($category),
-            ];
-        }
-
-        return $this->render('forum/index.html.twig', ['categories' => $categories]);
-    }
-
-    /**
-     * @param int $id
-     * @return Response|RedirectResponse
-     */
-    public function forumAction(int $id): Response
-    {
-        /**
-         * @var ForumForum $forum
-         */
-        $forum = $this->doctrine->getRepository(ForumForum::class)->find($id);
-        if (is_null($forum)) {
-            return $this->redirectToRoute('forum');
-        }
-
-        $this->breadcrumbHelper->addPart('general.navigation.forum.index', 'forum');
-        $this->breadcrumbHelper->addPart(
-            $forum->getCategory()->getName() . ' == ' . $forum->getName(),
-            'forum_forum',
-            ['id' => $id, 'name' => $forum->getName()],
-            true
-        );
-
-        $discussions = $this->doctrine->getRepository(ForumDiscussion::class)->findByForum($forum);
-        return $this->render('forum/forum.html.twig', [
-            'forum' => $forum,
-            'discussions' => $discussions
-        ]);
-    }
-
     /**
      * @param Request $request
      * @param int $id
@@ -148,61 +94,5 @@ class ForumController extends BaseController
             'numberOfReadPosts' => $numberOfReadPosts,
             'forumBanner' => $this->getForumBanner($request),
         ]);
-    }
-
-    /**
-     * @param Request $request
-     * @return Banner|null
-     */
-    private function getForumBanner(Request $request): ?Banner
-    {
-        $banners = $this->doctrine->getRepository(Banner::class)->findBy(
-            ['location' => Banner::LOCATION_FORUM, 'active' => true]
-        );
-        if (count($banners) < 1) {
-            return null;
-        }
-        $forumBanner = $banners[rand(0, count($banners) - 1)];
-
-        // Create a view for this banner
-        $bannerView = new BannerView();
-        $bannerView
-            ->setBanner($forumBanner)
-            ->setTimestamp(time())
-            ->setIp(inet_pton($request->getClientIp()));
-        $this->doctrine->getManager()->persist($bannerView);
-        $this->doctrine->getManager()->flush();
-
-        return $forumBanner;
-    }
-
-    /**
-     * @param ForumForum $forum
-     * @return bool
-     */
-    private function mayView(ForumForum $forum): bool
-    {
-        if ($forum->getType() === 0) {
-            return true;
-        }
-        if (in_array($forum->getType(), [1, 2, 4])) {
-            return $this->userIsLoggedIn();
-        }
-        return in_array($this->getUser(), $forum->getModerators());
-    }
-
-    /**
-     * @param ForumForum $forum
-     * @return bool
-     */
-    private function mayPost(ForumForum $forum): bool
-    {
-        if ($forum->getType() === 4) {
-            return false;
-        }
-        if (in_array($forum->getType(), [0, 1])) {
-            return $this->userIsLoggedIn();
-        }
-        return in_array($this->getUser(), $forum->getModerators());
     }
 }

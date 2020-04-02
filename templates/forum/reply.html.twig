@@ -1,0 +1,108 @@
+{% extends('base.html.twig') %}
+
+{% block content %}
+    <br />
+    <center>
+        {{ form_start(form, { 'attr': { 'id': 'reply_form' } }) }}
+        <table class="design">
+            {{ form_row(form.text) }}
+            {{ form_row(form.signatureOn) }}
+            <tr>
+                <td>&nbsp;</td>
+                <td><div class="button_clear"><div class="somda-button-left"><div class="blank_home"><a href="#" onclick="$('#reply_form').submit(); return false;"><span>Reageer</span></a></div></div></div></td>
+            </tr>
+        </table>
+        {{ form_end(form) }}
+    </center>
+    <br />
+
+
+
+    $query = Doctrine_Query::create()
+    ->from('SomdaForumPosts')
+    ->where('discussionid = ?', $forum_discussionid)
+    ->orderBy('id DESC')
+    ->limit(10);
+    $posts = $query->execute();
+    $query = 'select m.uid
+    from ' . DB_PREFIX . '_forum_discussion d
+    join ' . DB_PREFIX . '_forum_mods m on m.forumid=d.forumid
+    where m.uid=' . $session->uid . ' and d.discussionid=' . $posts[0]->Discussion->id;
+    $dbset_auth_data = $db->query($query);
+    $moderator = ($db->numRows($dbset_auth_data) > 0);
+
+    // Zet parameters voor validation
+    $required_nr = 1;
+    $required_text[1] = FORUM_POST_ERROR_NOMESSAGE;
+
+    $query = 'select p.date, p.time, pt.text, u.username
+    from ' . DB_PREFIX . '_forum_posts p
+    join ' . DB_PREFIX . '_forum_posts_text pt on pt.postid=p.postid
+    join ' . DB_PREFIX . '_users u on u.uid=p.authorid
+    where p.postid=' . $forum_postid;
+    $dbset_post_data = $db->query($query);
+    list($message_date, $message_time, $message_text, $message_uname) = $db->fetchRow($dbset_post_data);
+    echo '<input name="forum_discussionid" type="hidden" value="', $discussion->id, '" /><input name="forum_postid" type="hidden" value="', $forum_postid, '" />
+    <input name="forum_last_postid" type="hidden" value="', $max_postid, '" /><input name="op" type="hidden" value="newreply" /><input name="confirm" type="hidden" value="" />
+    <script language="javascript" type="text/javascript">
+        var vet_bezig = false;
+        var cursief_bezig = false;
+    </script>';
+    // Geef een waarschuwing als er tijdens het lezen nieuwe reacties zijn geplaatst
+    if ($confirm != '2' && $max_postid > $forum_last_postid) {
+    echo '<p class="warn">Terwijl jij aan het lezen was zijn er in deze discussie 1 of meer reacties geplaatst.<br />Deze nieuwe reacties staan hieronder weergegeven.</p>';
+    }
+    echo '<table class="design">
+    <tr><td colspan="2">', get_rules_summary(), '</td></tr>
+    <tr><th>Onderwerp</th><td>', $discussion->title, '</td></tr>
+    <tr><th>Bericht waar je op reageert</th><td><textarea cols="80" id="reply_text" rows="5" tabindex="', giveTabIndex(), '">', $message_text, '</textarea></td></tr>
+    <tr><th>&nbsp;</th><td><a href="#" onclick="insertAtCursor(document.MasterForm.post_message, \'%quote%', $message_uname, ' (', geefDatumWeergave($message_date, true), ' ', $message_time, ' ', SITE_URL, '/forum/', $discussion->id, '/p', $forum_postid, '/): \'+document.getElementById(\'reply_text\').value+\'%unquote%\'); return false;">Citeer het bovenstaande bericht</a> (Citeer alleen het laatste bericht of het deel van het bericht waarop je reageert!)</td></tr>
+    <tr><th>Jouw bericht</th><td rowspan="3"><textarea cols="80" id="required1" name="post_message" rows="15" tabindex="', giveTabIndex(), '">', (isset($post_message) ? $post_message : ''), '</textarea><br />
+    <tr><th>Smileys<br />';
+            $smile_counter = 0;
+            $path = geefConfig('images_location') . '/smileys/';
+            $handle = @opendir($path);
+            while ($file = @readdir($handle)) {
+            if (is_file($path . $file) && $file != '.' && $file != '..') {
+            if (substr($path . $file, -4) == '.gif') {
+            if ((integer)($smile_counter / 6) == $smile_counter / 6 && $smile_counter != 0) {
+            echo '<br />';
+            }
+            $size = getimagesize($path . $file);
+            echo '<a href="#" onclick="insertAtCursor(document.MasterForm.post_message, \'%', substr($file, 0, 2), '%\'); return false;"><img alt="%', substr($file, 0, 2), '%" src="', IMAGES_URL, '/smileys/', $file, '" ', $size[3], ' /></a>';
+            ++$smile_counter;
+            }
+            }
+            }
+            echo '</th></tr><tr><th>
+            <a href="#" onclick="if (vet_bezig) { vet_bezig = false; insertAtCursor(document.MasterForm.post_message, \'%/b%\'); this.innerHTML=\'Start vette tekst\'; } else { vet_bezig = true; insertAtCursor(document.MasterForm.post_message, \'%b%\'); this.innerHTML=\'Stop vette tekst\';} return false;">Start vette tekst</a>
+            <br /><a href="#" onclick="if (cursief_bezig) { cursief_bezig = false; insertAtCursor(document.MasterForm.post_message, \'%/i%\'); this.innerHTML=\'Start cursieve tekst\'; } else { cursief_bezig = true; insertAtCursor(document.MasterForm.post_message, \'%i%\'); this.innerHTML=\'Stop cursieve tekst\';} return false;">Start cursieve tekst</a>
+        </th></tr><tr><th colspan="2">LET OP: Alle HTML-tags worden bij opslaan uit de berichten verwijderd!</td></tr>
+    ', (strlen($params['forum_signature']) > 0 ? '<tr><th>Handtekening</th><td><input checked="checked" name="do_signature" tabindex="' . giveTabIndex() . '" type="checkbox" /> ' . $params['forum_signature'] . '</td></tr>' : ''), '
+    ', ($moderator ? '<tr><th>Moderator</th><td><input name="do_moderator" tabindex="' . giveTabIndex() . '" type="checkbox" /> Plaats bericht als moderator (je eigen handtekening wordt genegeerd)</td></tr>' : ''), '
+    <tr><th>&nbsp;</th><td>', geefButton('if (CheckFormFields()) { document.MasterForm.confirm.value=\'1\'; document.MasterForm.submit(); }', 'Forumbericht opslaan', '', '', true, true, '', '', true), geefButton('if (CheckFormFields()) { document.MasterForm.confirm.value=\'2\'; document.MasterForm.submit(); }', 'Toon een voorbeeld van mijn forumbericht', '', '', true, true, '', '', true), '</td></tr>
+</table>';
+
+    $postid_list = '';
+    foreach ($posts as $post) {
+    $postid_list .= '(' . $session->uid . ',' . $post->id . '),';
+
+    $out = giveUserClick($post->Author->id, '', $post->Author->username, $post->Author->name);
+    $size = getimagesize(geefConfig('images_location') . '/avatar/' . $post->Author->Info->avatar);
+    if (strlen($post->Author->Info->avatar) > 0) {
+    $out .= '<br /><img src="' . IMAGES_URL . '/avatar/' . $post->Author->Info->avatar . '" ' . $size[3] . ' alt="' . $post->Author->username . '" />';
+    }
+    if (strlen($post->Author->Info->city) > 0 && $session->logged_in) {
+    $out .= '<br />' . htmlentities($post->Author->Info->city);
+    }
+    echo '<br /><table align="center" class="design" width="98%">
+    <tr><th colspan="2" style="text-align:left;">', forumImage($discussion->locked, false, false), ' ', geefDatumWeergave($post->date, false), ' - ', $post->time, '</th></tr>
+    <tr><td class="info">', $out, '</td>
+        <td class="text">', nl2br(doVerkortingenEnUsernames(doSpecialText($post->Text->text))), ($post->sign_on == '1' ? '<br /><hr align="left" width="15%" />' . $post->Author->getPrefValue(11) : ''), '</td>
+    </tr>
+</table>';
+    }
+    doFocus(array('required1'), $base_indent);
+    }
+    }
+{% endblock %}

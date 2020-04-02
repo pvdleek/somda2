@@ -71,7 +71,7 @@
 
     {% set firstUnreadAnchorDone = false %}
     {% for post in posts %}
-        {% set postIsUnread = loop.index > (constant('App\\Controller\\ForumController::MAX_POSTS_PER_PAGE') * (pageNumber - 1) + numberOfReadPosts) %}
+        {% set postIsUnread = loop.index > (constant('App\\Controller\\ForumBaseController::MAX_POSTS_PER_PAGE') * (pageNumber - 1) + numberOfReadPosts) %}
         {% if loop.index == 5 or loop.index == 55 %}
             {% if forumBanner is not null %}
                 <br /><table align="center" class="design" width="98%"><tr>
@@ -140,7 +140,7 @@
                 <td class="text">{{ post | displayForumPost | raw }}</td>
                 <td class="buttons"><table>
                     {% if mayPost and not discussion.locked %}
-                        <tr><td style="border:none;"><div class="button_clear"><div class="somda-button-left"><div class="blank_home"><a href="/reageren"><span>Reageer</span></a></div></div></div></td></tr>
+                        <tr><td style="border:none;"><div class="button_clear"><div class="somda-button-left"><div class="blank_home"><a href="{{ path('forum_discussion_post_reply', { 'id': post.id }) }}"><span>Reageer</span></a></div></div></div></td></tr>
                     {% endif %}
                     {% if userIsModerator or (mayPost and not discussion.locked and post.author == app.user) %}
                         <tr><td style="border:none;"><div class="button_clear"><div class="somda-button-left"><div class="blank_home"><a href="/bewerken"><span>Bewerk</span></a></div></div></div>
