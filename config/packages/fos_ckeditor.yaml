@@ -12,9 +12,9 @@ fos_ck_editor:
       language: 'nl'
   toolbars:
     configs:
-      forum_post_reply_toolbar: [ "@styles", "@links", "@paragraph", "/", "@clipboard", "@tools"]
+      forum_post_reply_toolbar: [ "@styles", "@links", "@paragraph", "@clipboard", "@tools"]
     items:
-      styles: ['Bold', 'Italic', 'Strike', '-', 'RemoveFormat']
+      styles: ['Bold', 'Italic', 'Strike', 'HorizontalRule', '-', 'RemoveFormat']
       links: ['Link', 'Unlink']
       clipboard: ['Cut', 'Copy', 'Paste', 'PasteText', '-', 'Undo', 'Redo']
       paragraph: ['NumberedList', 'BulletedList', 'Blockquote']

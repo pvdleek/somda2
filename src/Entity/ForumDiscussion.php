@@ -70,12 +70,19 @@ class ForumDiscussion
     private $wikis;
 
     /**
+     * @var ForumFavorite[]
+     * @ORM\OneToMany(targetEntity="App\Entity\ForumFavorite", mappedBy="discussion")
+     */
+    private $favorites;
+
+    /**
      *
      */
     public function __construct()
     {
         $this->posts = new ArrayCollection();
         $this->wikis = new ArrayCollection();
+        $this->favorites = new ArrayCollection();
     }
 
     /**
@@ -238,5 +245,23 @@ class ForumDiscussion
     public function getWikis(): array
     {
         return $this->wikis->toArray();
+    }
+
+    /**
+     * @param ForumFavorite $forumFavorite
+     * @return ForumDiscussion
+     */
+    public function addFavorite(ForumFavorite $forumFavorite): ForumDiscussion
+    {
+        $this->favorites[] = $forumFavorite;
+        return $this;
+    }
+
+    /**
+     * @return ForumFavorite[]
+     */
+    public function getFavorites(): array
+    {
+        return $this->favorites->toArray();
     }
 }

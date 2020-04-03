@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Banner;
 use App\Entity\BannerView;
+use App\Entity\ForumDiscussion;
 use App\Entity\ForumForum;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -65,5 +66,14 @@ abstract class ForumBaseController extends BaseController
             return $this->userIsLoggedIn();
         }
         return in_array($this->getUser(), $forum->getModerators());
+    }
+
+    /**
+     * @param ForumDiscussion $discussion
+     * @return bool
+     */
+    protected function userIsModerator(ForumDiscussion $discussion): bool
+    {
+        return in_array($this->getUser(), $discussion->getForum()->getModerators());
     }
 }

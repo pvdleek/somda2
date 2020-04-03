@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Entity\UserInfo;
 use App\Form\User as UserForm;
 use App\Form\UserActivate;
 use DateTime;
@@ -65,8 +66,14 @@ class SecurityController extends BaseController
                     ->setPassword(md5(md5(md5($form->get('plainPassword')->getData()))))
                     ->setActivationKey(md5(md5(rand())))
                     ->setRegistrationDate(new DateTime());
-
                 $this->doctrine->getManager()->persist($user);
+
+                $userInfo = new UserInfo();
+                $userInfo->setUser($user);
+                $this->doctrine->getManager()->persist($userInfo);
+
+                $user->setInfo($userInfo);
+
                 $this->doctrine->getManager()->flush();
 
                 if ($this->sendEmail(

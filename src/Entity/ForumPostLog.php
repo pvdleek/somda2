@@ -10,6 +10,10 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class ForumPostLog
 {
+    public const ACTION_POST_NEW = 0;
+    public const ACTION_POST_EDIT = 1;
+    public const ACTION_POST_DELETE = 2;
+
     /**
      * @var int
      * @ORM\Column(name="id", type="bigint", nullable=false)
@@ -29,7 +33,7 @@ class ForumPostLog
      * @var int
      * @ORM\Column(name="actie", type="bigint", nullable=false)
      */
-    private $action = 0;
+    private $action = self::ACTION_POST_NEW;
 
     /**
      * @return int

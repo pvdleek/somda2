@@ -2,27 +2,52 @@
 
 namespace App\Form;
 
-use App\Entity\ForumPost as ForumPostEntity;
 use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ForumPost extends AbstractType
 {
+    private const QUOTE_HTML = '<blockquote><strong>Quote</strong><hr />%s (%s): %s<hr /></blockquote><br />';
+
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $data = '';
+        if (!is_null($options['quotedPost'])) {
+            $data = sprintf(
+                self::QUOTE_HTML,
+                $options['quotedPost']->getAuthor()->getUsername(),
+                $options['quotedPost']->getTimestamp()->format('d-m-Y H:i:s'),
+                $options['quotedPost']->getText()->getText()
+            );
+        } elseif (!is_null($options['editedPost'])) {
+            $data = $options['editedPost']->getText()->getText();
+        }
+
         $builder
             ->add('text', CKEditorType::class, [
                 'attr' => ['rows' => 10, 'cols' => 80],
+                'data' => $data,
                 'label' => 'Jouw reactie',
                 'required' => true,
             ])
-            ->add('signatureOn');
+            ->add('signatureOn', CheckboxType::class, [
+                'label' => 'Handtekening gebruiken',
+            ]);
+
+        if (!is_null($options['editedPost'])) {
+            $builder->add('editReason', TextType::class, [
+                'label' => 'Reden voor bewerking (optioneel)',
+                'required' => false,
+            ]);
+        }
     }
 
     /**
@@ -30,8 +55,6 @@ class ForumPost extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefaults([
-            'data_class' => ForumPostEntity::class,
-        ]);
+        $resolver->setDefaults(['quotedPost' => null, 'editedPost' => null]);
     }
 }

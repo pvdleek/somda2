@@ -328,6 +328,7 @@ class ForumPost
     public function addLog(ForumPostLog $forumPostLog): ForumPost
     {
         $this->logs[] = $forumPostLog;
+        $forumPostLog->setPost($this);
         return $this;
     }
 

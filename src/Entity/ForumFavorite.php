@@ -10,9 +10,13 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class ForumFavorite
 {
+    public const ALERTING_OFF = 0;
+    public const ALERTING_ON = 1;
+    public const ALERTING_SENT = 2;
+
     /**
      * @var ForumDiscussion
-     * @ORM\ManyToOne(targetEntity="App\Entity\ForumDiscussion")
+     * @ORM\ManyToOne(targetEntity="App\Entity\ForumDiscussion", inversedBy="favorites")
      * @ORM\JoinColumn(name="discussionid", referencedColumnName="discussionid")
      * @ORM\Id
      */
@@ -30,7 +34,7 @@ class ForumFavorite
      * @var int
      * @ORM\Column(name="alerting", type="bigint", nullable=false)
      */
-    private $alerting = 0;
+    private $alerting = self::ALERTING_OFF;
 
     /**
      * @return ForumDiscussion

@@ -135,9 +135,14 @@ forum_discussion_post:
   defaults: { _controller: App\Controller\ForumDiscussionController:discussionAction }
 forum_discussion_post_reply:
   path: /forum/p{id}/reageren/
-  methods: [GET]
+  methods: [GET, POST]
   requirements: { id: \d+ }
   defaults: { _controller: App\Controller\ForumPostController:replyAction }
+forum_discussion_post_edit:
+  path: /forum/p{id}/bewerken/
+  methods: [GET, POST]
+  requirements: { id: \d+ }
+  defaults: { _controller: App\Controller\ForumPostController:editAction }
 forum_search:
   path: /forum/zoeken/
   methods: [GET]

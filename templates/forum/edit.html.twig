@@ -10,14 +10,15 @@
         </h3>
     </div></div>
     <center>
-        {{ form_start(form, { 'attr': { 'id': 'reply_form' } }) }}
+        {{ form_start(form, { 'attr': { 'id': 'edit_form' } }) }}
         <table class="design">
             {{ form_row(form.text) }}
             {{ form_row(form.signatureOn) }}
+            {{ form_row(form.editReason) }}
             <tr>
                 <td>&nbsp;</td>
                 <td>
-                    <div class="button_clear"><div class="somda-button-left"><div class="blank_home"><a href="#" onclick="$('#reply_form').submit(); return false;"><span>Reageer</span></a></div></div></div>
+                    <div class="button_clear"><div class="somda-button-left"><div class="blank_home"><a href="#" onclick="$('#edit_form').submit(); return false;"><span>Bewerken</span></a></div></div></div>
                     <div class="button_clear"><div class="somda-button-left"><div class="blank_home"><a href="{{ path('forum_discussion', { 'id': post.discussion.id, 'name': post.discussion.title }) }}"><span>Terug naar de discussie</span></a></div></div></div>
                 </td>
             </tr>
@@ -25,10 +26,4 @@
         {{ form_end(form) }}
     </center>
     <br />
-    {% for post in lastPosts %}
-        <table align="center" class="design" width="98%">
-            {% include 'forum/post.html.twig' with { 'mayPost': false, 'userIsModerator': false, 'postIsUnread': false } %}
-        </table>
-        <br />
-    {% endfor %}
 {% endblock %}

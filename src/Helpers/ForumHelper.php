@@ -34,7 +34,7 @@ class ForumHelper implements RuntimeExtensionInterface
                 ' op ' . $post->getEditTimestamp()->format('d-m-Y H:i').
                 (strlen($post->getEditReason()) > 0 ? ', reden: ' . $post->getEditReason() : '') . '</span></i>';
         }
-        if ($post->isSignatureOn()) {
+        if ($post->isSignatureOn() && strlen($post->getAuthor()->getInfo()->getInfo()) > 0) {
             $text .= '<br /><hr align="left" width="15%" />' . $post->getAuthor()->getInfo()->getInfo();
         }
 //        if (isset($highlight) && strlen($highlight) > 0) {

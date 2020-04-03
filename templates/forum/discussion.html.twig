@@ -88,65 +88,7 @@
         {% endif %}
 
         <table align="center" class="design" width="98%">
-            <tr>
-                <th colspan="{{ is_granted('IS_AUTHENTICATED_REMEMBERED') ? 2 : 3 }}" style="text-align:left;">
-                    {% if userIsModerator %}<input name="sel{{ post.id }}" type="checkbox" />{% endif %}
-                    <a id="p{{ post.id }}" name="p{{ post.id }}"></a>
-                    {% if postIsUnread and not firstUnreadAnchorDone %}
-                        <a id="nieuw" name="nieuw"></a>
-                        {% set firstUnreadAnchorDone = true %}
-                    {% endif %}
-                    <a href="{{ path('forum_discussion_post', { 'id': discussion.id, 'name': (discussion.title | url_encode), 'postId': post.id }) }}">
-                        <img src="{{ asset('images/forum/folder_' ~ (discussion.locked ? 'l' : 'u') ~ 's' ~ (postIsUnread ? 'n' : 'r') ~ '.gif') }}" />
-                    </a>{{ post.timestamp | date('d-m-Y H:i:s') }}
-                </th>
-                {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-                    <th>
-                        <a href="/forum/meld/p{{ post.id }}/" rel="nofollow" title="Klik hier om dit bericht aan de beheerders te melden. Gebruik dit voor bijvoorbeeld overtredingen van forumregels"><font color="#FFFFFF">Meld bericht</font></a>
-                        {% if userIsModerator and (post.alerts | length) > 0 %}
-                            <br /><a href="/forum/meldingen/p{{ post.id }}/" rel="nofollow" title="Er zijn meldingen gedaan over dit bericht, klik om ze te bekijken"><font color="#DD1111">Meldingen</font></a>
-                        {% endif %}
-                    </th>
-                {% endif %}
-            </tr><tr>
-                <td class="info" nowrap="nowrap">
-                    {{ post.author.id | displayUser(post.author.username) | raw }}
-                    {% if userIsModerator %}
-                        <br /><strong>Moderator</strong>
-                    {% endif %}
-                    {% if userIsModerator and post.author.info.company is not null %}
-                        <br /><strong>-- {{ post.author.info.company.name }} --</strong>
-                    {% endif %}
-                    {% if post.author.info.avatar | length > 0 %}
-                        <br /><img alt="{{ post.author.username }}" src="{{ asset('images/avatar/' ~  post.author.info.avatar) }}" />
-                    {% endif %}
-                    {% if post.author.info.city | length > 0 and is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-                        <br />{{ post.author.info.city }}
-                    {% endif %}
-                    <br />
-                    {% if post.author.info.twitterAccount | length > 0 %}
-                        <a href="https://twitter.com/#!/{{ post.author.info.twitterAccount }}" target="_blank"><img alt="Twitter {{ post.author.info.twitterAccount }}" height="16" src="{{ asset('images/social-media/twitter.png') }}" width="16" /></a>
-                    {% endif %}
-                    {% if post.author.info.facebookAccount | length > 0 %}
-                        <a href="https://www.facebook.com/{{ post.author.info.facebookAccount }}" target="_blank"><img alt="Facebook {{ post.author.info.facebookAccount }}" height="16" src="{{ asset('images/social-media/facebook.png') }}" width="16" /></a>
-                    {% endif %}
-                    {% if post.author.info.youtubeAccount | length > 0 %}
-                        <a href="https://www.youtube.com/user/{{ post.author.info.youtubeAccount }}" target="_blank"><img alt="Youtube {{ post.author.info.youtubeAccount }}" height="16" src="{{ asset('images/social-media/youtube.png') }}" width="16" /></a>
-                    {% endif %}
-                    {% if post.author.info.flickrAccount | length > 0 %}
-                        <a href="https://www.flickr.com/photos/{{ post.author.info.flickrAccount }}" target="_blank"><img alt="Flickr {{ post.author.info.flickrAccount }}" height="16" src="{{ asset('images/social-media/flickr.png') }}" width="37" /></a>
-                    {% endif %}
-                </td>
-                <td class="text">{{ post | displayForumPost | raw }}</td>
-                <td class="buttons"><table>
-                    {% if mayPost and not discussion.locked %}
-                        <tr><td style="border:none;"><div class="button_clear"><div class="somda-button-left"><div class="blank_home"><a href="{{ path('forum_discussion_post_reply', { 'id': post.id }) }}"><span>Reageer</span></a></div></div></div></td></tr>
-                    {% endif %}
-                    {% if userIsModerator or (mayPost and not discussion.locked and post.author == app.user) %}
-                        <tr><td style="border:none;"><div class="button_clear"><div class="somda-button-left"><div class="blank_home"><a href="/bewerken"><span>Bewerk</span></a></div></div></div>
-                    {% endif %}
-                </table></td>
-            </tr>
+            {% include('forum/post.html.twig') %}
             {% if is_granted('ROLE_ADMIN_WIKI') and discussion.wikis | length > 0 %}
                 <tr><td colspan="3">Railwiki.nl:
                     {% if post.wikiCheck == 0 %}

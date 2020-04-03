@@ -1,0 +1,5 @@
+<img alt="Somda" src="{{ asset('images/logos-somda/logo_1.png') }}" />
+<br />
+<br />Op het forum van <a href="{{ path('home') }}">Somda</a> is een reactie geplaatst in de discussie "{{ discussion.title }}".
+<br />
+<br /><a href="{{ path('forum_discussion', { 'id': discussion.id, 'name': (discussion.title | url_encode) }) }}">Ga direct naar de forumdiscussie</a>.

@@ -85,7 +85,7 @@ class ForumDiscussionController extends ForumBaseController
         }
 
         return $this->render('forum/discussion.html.twig', [
-            'userIsModerator' => in_array($this->getUser(), $discussion->getForum()->getModerators()),
+            'userIsModerator' => $this->userIsModerator($discussion),
             'discussion' => $discussion,
             'numberOfPages' => $numberOfPages,
             'pageNumber' => $pageNumber,
