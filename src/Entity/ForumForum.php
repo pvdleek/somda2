@@ -11,6 +11,11 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class ForumForum
 {
+    public const TYPE_PUBLIC = 0;
+    public const TYPE_LOGGED_IN = 1;
+    public const TYPE_MODERATORS_ONLY = 3;
+    public const TYPE_ARCHIVE = 4;
+
     /**
      * @var int
      * @ORM\Column(name="forumid", type="bigint", nullable=false)
@@ -48,7 +53,7 @@ class ForumForum
      * @var int
      * @ORM\Column(name="type", type="bigint", nullable=false)
      */
-    private $type = 1;
+    private $type = self::TYPE_LOGGED_IN;
 
     /**
      * @var ForumDiscussion[]

@@ -12,16 +12,16 @@
     </th>
     {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
         <th>
-            <a href="/forum/meld/p{{ post.id }}/" rel="nofollow" title="Klik hier om dit bericht aan de beheerders te melden. Gebruik dit voor bijvoorbeeld overtredingen van forumregels"><font color="#FFFFFF">Meld bericht</font></a>
+            <a href="{{ path('forum_discussion_post_alert', { 'id': post.id }) }}" rel="nofollow" title="Klik hier om dit bericht aan de beheerders te melden. Gebruik dit voor bijvoorbeeld overtredingen van forumregels"><font color="#FFFFFF">Meld bericht</font></a>
             {% if userIsModerator and (post.alerts | length) > 0 %}
-                <br /><a href="/forum/meldingen/p{{ post.id }}/" rel="nofollow" title="Er zijn meldingen gedaan over dit bericht, klik om ze te bekijken"><font color="#DD1111">Meldingen</font></a>
+                <br /><a href="{{ path('forum_discussion_post_alerts', { 'id': post.id }) }}" title="Er zijn meldingen gedaan over dit bericht, klik om ze te bekijken"><font color="#DD1111">Meldingen</font></a>
             {% endif %}
         </th>
     {% endif %}
 </tr><tr>
     <td class="info" nowrap="nowrap">
         {{ post.author.id | displayUser(post.author.username) | raw }}
-        {% if userIsModerator %}
+        {% if post.author in post.discussion.forum.moderators %}
             <br /><strong>Moderator</strong>
         {% endif %}
         {% if userIsModerator and post.author.info.company is not null %}

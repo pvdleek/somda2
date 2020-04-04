@@ -1,0 +1,41 @@
+{% extends('base.html.twig') %}
+
+{% block content %}
+    <br />
+    {% for alert in post.alerts %}
+        <p class="info">Commentaar van melder <a target="_blank" href="/gebruikerslijst/{{ alert.sender.id }}/">{{ alert.sender.username }}</a> op {{ alert.date | date('d-m-Y') }} om {{ alert.time | date('H:i:s') }}: <strong>{{ alert.comment }}</strong></p>
+    {% endfor %}
+    <table align="center" class="design" width="98%">
+        <tr><th colspan="3">{{ post.discussion.title }}</th></tr>
+        {% include 'forum/post.html.twig' with { 'mayPost': false, 'userIsModerator': false, 'postIsUnread': false } %}
+    </table>
+    <br />
+    <table class="design">
+        <tr><th colspan="4">Commentaar door moderators bij deze melding</th></tr>
+        {% for alert in post.alerts %}
+            {% for note in alert.notes %}
+                <tr>
+                    <td>{{ note.author.id | displayUser(note.author.username) | raw }}</td>
+                    <td>{{ note.date | date('d-m-Y') }} {{ note.time | date('H:i:s') }}</td>
+                    <td>{{ note.text }}</td>
+                    <td>{{ note.sentToReporter ? 'Ja' : 'Nee' }}</td>
+                </tr>
+            {% endfor %}
+        {% endfor %}
+    </table>
+    <br />
+    {{ form_start(form, { 'attr': { 'id': 'alert_note_form' } }) }}
+        <table class="design">
+            {{ form_row(form.text) }}
+            {{ form_row(form.sentToReporter) }}
+            <tr>
+                <td>&nbsp;</td>
+                <td>
+                    <div class="button_clear"><div class="somda-button-left"><div class="blank_home"><a href="#" onclick="$('#alert_note_form').submit(); return false;"><span>Voeg toe</span></a></div></div></div>
+                    <div class="button_clear"><div class="somda-button-left"><div class="blank_home"><a href="{{ path('forum_discussion_post', { 'id': post.discussion.id, 'postId': post.id, 'name': (post.discussion.title | url_encode )}) }}"><span>Terug naar het bericht</span></a></div></div></div>
+                </td>
+            </tr>
+        </table>
+    {{ form_end(form) }}
+    <br />
+{% endblock %}

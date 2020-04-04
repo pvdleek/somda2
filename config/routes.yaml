@@ -143,6 +143,16 @@ forum_discussion_post_edit:
   methods: [GET, POST]
   requirements: { id: \d+ }
   defaults: { _controller: App\Controller\ForumPostController:editAction }
+forum_discussion_post_alert:
+  path: /forum/p{id}/melden/
+  methods: [GET, POST]
+  requirements: { id: \d+ }
+  defaults: { _controller: App\Controller\ForumPostController:alertAction }
+forum_discussion_post_alerts:
+  path: /forum/p{id}/meldingen/
+  methods: [GET, POST]
+  requirements: { id: \d+ }
+  defaults: { _controller: App\Controller\ForumPostController:alertsAction }
 forum_search:
   path: /forum/zoeken/
   methods: [GET]

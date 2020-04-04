@@ -1,0 +1,40 @@
+{% extends('base.html.twig') %}
+
+{% block content %}
+    <div class="moduleS1" style="margin-bottom:0;"><div>
+        <h3 id="disc_title">
+            <img alt="" border="0" src="{{ asset('images/forum/folder_' ~ (post.discussion.locked ? 'l' : 'u') ~ 'br.gif') }}" />
+            {% if post.discussion.type == 1 %}<img height="16" src="{{ asset('images/forum/sticky.gif') }}" width="16" />{% endif %}
+            {% if post.discussion.type == 1 %}<img height="24" src="{{ asset('images/forum/announcement.png') }}" width="28" />{% endif %}
+            Bericht bij de beheerders melden uit de discussie "{{ post.discussion.title }}"
+        </h3>
+    </div></div>
+    <center>
+        {{ form_start(form, { 'attr': { 'id': 'alert_form' } }) }}
+        <table class="design">
+            <tr>
+                <td colspan="2">
+                    Gebruik deze functie om de moderators en administrators op de hoogte te stellen van berichten die verkeerd geplaatst zijn of in overtreding zijn met de regels van het forum.
+                    <br />
+                    <br />LET OP: Dit is niet bedoeld om vragen te stellen, gebruik hiervoor het forum of de feedback functie.
+                    <br />
+                    <br />Houd er rekening mee dat je e-mailadres zal worden getoond aan de moderators bij het gebruik van deze functie.
+                </td>
+            </tr>
+            {{ form_row(form.comment) }}
+            <tr>
+                <td>&nbsp;</td>
+                <td>
+                    <div class="button_clear"><div class="somda-button-left"><div class="blank_home"><a href="#" onclick="$('#alert_form').submit(); return false;"><span>Meld bericht</span></a></div></div></div>
+                    <div class="button_clear"><div class="somda-button-left"><div class="blank_home"><a href="{{ path('forum_discussion_post', { 'id': post.discussion.id, 'postId': post.id, 'name': (post.discussion.title | url_encode )}) }}"><span>Terug naar het bericht</span></a></div></div></div>
+                </td>
+            </tr>
+        </table>
+        {{ form_end(form) }}
+    </center>
+    <br />
+    <table align="center" class="design" width="98%">
+        {% include 'forum/post.html.twig' with { 'mayPost': false, 'userIsModerator': false, 'postIsUnread': false } %}
+    </table>
+    <br />
+{% endblock %}

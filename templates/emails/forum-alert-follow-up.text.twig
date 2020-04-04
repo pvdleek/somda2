@@ -1,0 +1,8 @@
+Beste {{ user.username }},
+
+Recent heb je een melding gedaan bij de moderators over dit bericht in de discussie "{{ post.discussion.title }}": {{ path('forum_discussion_post', { 'id': post.discussion.id, 'postId': post.id, 'name': (post.discussion.title | url_encode) }) }}
+
+Een moderator heeft hier naar gekeken en jou deze reactie gestuurd:
+{{ note.text }}
+
+Nogmaals hartelijk dank voor je melding!
