@@ -1,0 +1,21 @@
+{% extends('base.html.twig') %}
+
+{% block content %}
+    <div class="moduleS1" style="margin-bottom:0;"><div>
+        <h3 id="disc_title"><img alt="" border="0" src="{{ asset('images/forum/folder_' ~ (discussion.locked ? 'l' : 'u') ~ 'br.gif') }}" />{{ discussion.title }}</h3>
+    </div></div>
+
+    {{ form_start(form, { 'attr': { 'id': 'move_form' } }) }}
+        <table class="design">
+            {{ form_row(form.forum) }}
+            <tr>
+                <td>&nbsp;</td>
+                <td>
+                    <div class="button_clear"><div class="somda-button-left"><div class="blank_home"><a href="#" onclick="$('#move_form').submit(); return false;"><span>Verplaatsen</span></a></div></div></div>
+                    <div class="button_clear"><div class="somda-button-left"><div class="blank_home"><a href="{{ path('forum_discussion', { 'id': discussion.id, 'name': (discussion.title | url_encode )}) }}"><span>Terug naar de discussie</span></a></div></div></div>
+                </td>
+            </tr>
+        </table>
+    {{ form_end(form) }}
+    <br />
+{% endblock %}

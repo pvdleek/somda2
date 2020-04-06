@@ -20,12 +20,6 @@ class ForumDiscussion
     private $id;
 
     /**
-     * @var int
-     * @ORM\Column(name="disc_type", type="bigint", nullable=false)
-     */
-    private $type = 0;
-
-    /**
      * @var string
      * @ORM\Column(name="title", type="string", length=50, nullable=false)
      */
@@ -100,24 +94,6 @@ class ForumDiscussion
     public function setId(int $id): ForumDiscussion
     {
         $this->id = $id;
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getType(): int
-    {
-        return $this->type;
-    }
-
-    /**
-     * @param int $type
-     * @return ForumDiscussion
-     */
-    public function setType(int $type): ForumDiscussion
-    {
-        $this->type = $type;
         return $this;
     }
 

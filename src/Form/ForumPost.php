@@ -29,6 +29,7 @@ class ForumPost extends AbstractType
             );
         } elseif (!is_null($options['editedPost'])) {
             $data = $options['editedPost']->getText()->getText();
+
         }
 
         $builder

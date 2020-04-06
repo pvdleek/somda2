@@ -4,17 +4,14 @@ namespace App\Controller;
 
 use App\Entity\ForumDiscussion;
 use App\Entity\ForumFavorite;
-use App\Entity\ForumForum;
 use App\Entity\ForumPost;
-use App\Entity\ForumPostAlert;
-use App\Entity\ForumPostAlertNote;
 use App\Entity\ForumPostLog;
 use App\Entity\ForumPostText;
+use App\Entity\User;
 use App\Form\ForumPost as ForumPostForm;
-use App\Form\ForumPostAlert as ForumPostAlertForm;
-use App\Form\ForumPostAlertNote as ForumPostAlertNoteForm;
 use DateTime;
 use Exception;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -129,6 +126,9 @@ class ForumPostController extends ForumBaseController
         }
 
         $form = $this->formFactory->create(ForumPostForm::class, null, ['editedPost' => $post]);
+        if ($this->userIsModerator($post->getDiscussion())) {
+            $form->add('editAsModerator', CheckboxType::class, ['label' => 'Bewerken als moderator']);
+        }
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $this->editPost($form, $post);
@@ -153,9 +153,15 @@ class ForumPostController extends ForumBaseController
      */
     private function editPost(FormInterface $form, ForumPost $post): void
     {
+        if ($form->has('editAsModerator') && $form->get('editAsModerator')->getData()) {
+            $editor = $this->doctrine->getRepository(User::class)->find(self::MODERATOR_UID);
+        } else {
+            $editor = $this->getUser();
+        }
+
         $post
             ->setEditTimestamp(new DateTime())
-            ->setEditor($this->getUser())
+            ->setEditor($editor)
             ->setEditReason($form->get('editReason')->getData())
             ->setSignatureOn($form->get('signatureOn')->getData())
             ->getText()->setText($form->get('text')->getData());
@@ -165,119 +171,5 @@ class ForumPostController extends ForumBaseController
         $this->doctrine->getManager()->persist($postLog);
 
         $post->addLog($postLog);
-    }
-
-    /**
-     * @param Request $request
-     * @param int $id
-     * @return Response|RedirectResponse
-     * @throws Exception
-     */
-    public function alertAction(Request $request, int $id)
-    {
-        if (!$this->userIsLoggedIn()) {
-            throw new AccessDeniedHttpException();
-        }
-
-        /**
-         * @var ForumPost $post
-         */
-        $post = $this->doctrine->getRepository(ForumPost::class)->find($id);
-        $form = $this->formFactory->create(ForumPostAlertForm::class);
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $forumPostAlert = new ForumPostAlert();
-            $forumPostAlert
-                ->setPost($post)
-                ->setSender($this->getUser())
-                ->setDate(new DateTime())
-                ->setTime(new DateTime())
-                ->setComment($form->get('comment')->getData());
-            $this->doctrine->getManager()->persist($forumPostAlert);
-            $post->addAlert($forumPostAlert);
-            $this->doctrine->getManager()->flush();
-
-            // Send this alert to the forum-moderators
-            foreach ($post->getDiscussion()->getForum()->getModerators() as $moderator) {
-                $this->sendEmail(
-                    $moderator,
-                    '[Somda-Forum] Een gebruiker heeft een forumbericht gemeld!',
-                    'forum-new-alert',
-                    ['post' => $post, 'user' => $this->getUser(), 'comment' => $form->get('comment')->getData()]
-                );
-            }
-
-            return $this->redirectToRoute('forum_discussion_post', [
-                'id' => $post->getDiscussion()->getId(),
-                'postId' => $post->getId(),
-                'name' => urlencode($post->getDiscussion()->getTitle())
-            ]);
-        }
-
-        return $this->render('forum/alert.html.twig', [
-            'form' => $form->createView(),
-            'post' => $post,
-        ]);
-    }
-
-    public function alertsAction(Request $request, int $id)
-    {
-        /**
-         * @var ForumPost $post
-         */
-        $post = $this->doctrine->getRepository(ForumPost::class)->find($id);
-        if (!$this->userIsModerator($post->getDiscussion())) {
-            throw new AccessDeniedHttpException();
-        }
-
-        $form = $this->formFactory->create(ForumPostAlertNoteForm::class);
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $forumPostAlertNote = new ForumPostAlertNote();
-            $forumPostAlertNote
-                ->setAlert($post->getAlerts()[0])
-                ->setAuthor($this->getUser())
-                ->setDate(new DateTime())
-                ->setTime(new DateTime())
-                ->setText($form->get('text')->getData())
-                ->setSentToReporter($form->get('sentToReporter')->getData());
-
-            $this->doctrine->getManager()->persist($forumPostAlertNote);
-            $post->getAlerts()[0]->addNote($forumPostAlertNote);
-            $this->doctrine->getManager()->flush();
-
-            // Send this alert-note to the forum-moderators
-            foreach ($post->getDiscussion()->getForum()->getModerators() as $moderator) {
-                $this->sendEmail(
-                    $moderator,
-                    '[Somda-Forum] Notitie geplaatst bij gemeld forumbericht!',
-                    'forum-new-alert-note',
-                    ['post' => $post, 'note' => $forumPostAlertNote]
-                );
-            }
-
-            if ($form->get('sentToReporter')->getData()) {
-                // We need to inform the reporter(s)
-                foreach ($post->getAlerts() as $alert) {
-                    if (!$alert->isClosed()) {
-                        $template = $post->getDiscussion()->getForum()->getType() === ForumForum::TYPE_MODERATORS_ONLY ?
-                            'forum-alert-follow-up-deleted' : 'forum-alert-follow-up';
-                        $this->sendEmail(
-                            $alert->getSender(),
-                            '[Somda] Reactie op jouw melding van een forumbericht',
-                            $template,
-                            ['user' => $alert->getSender(), 'post' => $post, 'note' => $forumPostAlertNote]
-                        );
-                    }
-                }
-            }
-
-            return $this->redirectToRoute('forum_discussion_post_alerts', ['id' => $post->getId()]);
-        }
-
-        return $this->render('forum/alerts.html.twig', [
-            'form' => $form->createView(),
-            'post' => $post,
-        ]);
     }
 }

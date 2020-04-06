@@ -1,10 +1,23 @@
 {% extends('base.html.twig') %}
 
 {% block content %}
+    {% set alertIsClosed = true %}
+    {% for alert in post.alerts %}
+        {% if not alert.closed %}{% set alertIsClosed = false %}{% endif %}
+    {% endfor %}
     <br />
+
+    {% if alertIsClosed %}
+        <p class="alert">Deze melding is gesloten</p>
+    {% else %}
+        <div class="button_clear"><div class="somda-button-left"><div class="blank_home"><a href="{{ path('forum_discussion_post_alerts_close', { 'id': post.id }) }}"><span>Sluit melding</span></a></div></div></div>
+        <br /><br />
+    {% endif %}
+
     {% for alert in post.alerts %}
         <p class="info">Commentaar van melder <a target="_blank" href="/gebruikerslijst/{{ alert.sender.id }}/">{{ alert.sender.username }}</a> op {{ alert.date | date('d-m-Y') }} om {{ alert.time | date('H:i:s') }}: <strong>{{ alert.comment }}</strong></p>
     {% endfor %}
+
     <table align="center" class="design" width="98%">
         <tr><th colspan="3">{{ post.discussion.title }}</th></tr>
         {% include 'forum/post.html.twig' with { 'mayPost': false, 'userIsModerator': false, 'postIsUnread': false } %}

@@ -292,8 +292,8 @@ final class Version20200307111308 extends AbstractMigration
 
         $this->addSql('
             ALTER TABLE somda_forum_discussion
+            DROP disc_type,
             CHANGE forumid forumid BIGINT DEFAULT NULL,
-            CHANGE disc_type disc_type BIGINT NOT NULL,
             CHANGE title title VARCHAR(50) NOT NULL,
             CHANGE authorid authorid BIGINT DEFAULT NULL,
             CHANGE viewed viewed BIGINT NOT NULL,

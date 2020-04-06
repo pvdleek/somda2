@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 abstract class ForumBaseController extends BaseController
 {
     public const MAX_POSTS_PER_PAGE = 100;
+    public const MODERATOR_UID = 2;
 
     /**
      * @param Request $request
@@ -44,10 +45,10 @@ abstract class ForumBaseController extends BaseController
      */
     protected function mayView(ForumForum $forum): bool
     {
-        if ($forum->getType() === 0) {
+        if ($forum->getType() === ForumForum::TYPE_PUBLIC) {
             return true;
         }
-        if (in_array($forum->getType(), [1, 2, 4])) {
+        if (in_array($forum->getType(), [ForumForum::TYPE_LOGGED_IN, ForumForum::TYPE_ARCHIVE])) {
             return $this->userIsLoggedIn();
         }
         return in_array($this->getUser(), $forum->getModerators());
@@ -59,10 +60,10 @@ abstract class ForumBaseController extends BaseController
      */
     protected function mayPost(ForumForum $forum): bool
     {
-        if (!$this->mayView($forum) || $forum->getType() === 4) {
+        if (!$this->mayView($forum) || $forum->getType() === ForumForum::TYPE_ARCHIVE) {
             return false;
         }
-        if (in_array($forum->getType(), [0, 1])) {
+        if (in_array($forum->getType(), [ForumForum::TYPE_PUBLIC, ForumForum::TYPE_LOGGED_IN])) {
             return $this->userIsLoggedIn();
         }
         return in_array($this->getUser(), $forum->getModerators());

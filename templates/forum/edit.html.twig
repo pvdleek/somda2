@@ -15,6 +15,7 @@
             {{ form_row(form.text) }}
             {{ form_row(form.signatureOn) }}
             {{ form_row(form.editReason) }}
+            {% if form.editAsModerator is defined %}{{ form_row(form.editAsModerator) }}{% endif %}
             <tr>
                 <td>&nbsp;</td>
                 <td>

@@ -17,8 +17,12 @@
     <div class="moduleS1" style="margin-bottom:0;"><div>
         {% if userIsModerator %}
             <span id="mod_icons">
-                <a href="/index.php?blokid=40&amp;op=lockdisc&amp;forum_discussionid={{ discussion.id }}"><img alt="Sluit/open discussie"src="{{ asset('images/forum/disc_' ~ (discussion.locked ? 'unlock' : 'lock') ~ '.gif') }}" /></a>
-                <a href="/index.php?blokid=40&amp;op=movedisc&amp;forum_discussionid={{ discussion.id }}"><img alt="Verplaats discussie" src="{{ asset('images/forum/disc_move.gif') }}" /></a>
+                {% if discussion.locked %}
+                    <a href="{{ path('forum_discussion_moderate', { 'id': discussion.id, 'action': 'open' }) }}"><img alt="Open discussie" src="{{ asset('images/forum/disc_unlock.gif') }}" /></a>
+                {% else %}
+                    <a href="{{ path('forum_discussion_moderate', { 'id': discussion.id, 'action': 'close' }) }}"><img alt="Sluit discussie" src="{{ asset('images/forum/disc_lock.gif') }}" /></a>
+                {% endif %}
+                <a href="{{ path('forum_discussion_moderate', { 'id': discussion.id, 'action': 'move' }) }}"><img alt="Verplaats discussie" src="{{ asset('images/forum/disc_move.gif') }}" /></a>
                 <a href="/index.php?blokid=40&amp;op=combinedisc&amp;forum_discussionid={{ discussion.id }}"><img alt="Combineer met andere discussie" src="{{ asset('images/forum/disc_combine.gif') }}" /></a>
             </span>
          {% endif %}
@@ -31,12 +35,7 @@
                 {% endif %}
             </span></span>
         {% endif %}
-        <h3 id="disc_title">
-            <img alt="" border="0" src="{{ asset('images/forum/folder_' ~ (discussion.locked ? 'l' : 'u') ~ 'br.gif') }}" />
-            {% if discussion.type == 1 %}<img height="16" src="{{ asset('images/forum/sticky.gif') }}" width="16" />{% endif %}
-            {% if discussion.type == 1 %}<img height="24" src="{{ asset('images/forum/announcement.png') }}" width="28" /> Mededeling: {% endif %}
-            {{ discussion.title }}
-        </h3>
+        <h3 id="disc_title"><img alt="" border="0" src="{{ asset('images/forum/folder_' ~ (discussion.locked ? 'l' : 'u') ~ 'br.gif') }}" />{{ discussion.title }}</h3>
     </div></div>
 
     {% block paginator %}

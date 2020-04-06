@@ -3,11 +3,12 @@
 namespace App\Controller;
 
 use App\Entity\ForumDiscussion;
+use App\Entity\ForumForum;
 use App\Entity\ForumPost;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class ForumDiscussionController extends ForumBaseController
 {
@@ -28,7 +29,7 @@ class ForumDiscussionController extends ForumBaseController
             return $this->redirectToRoute('forum');
         }
         if (!$this->mayView($discussion->getForum())) {
-            throw new AccessDeniedException();
+            throw new AccessDeniedHttpException();
         }
 
         $this->breadcrumbHelper->addPart('general.navigation.forum.index', 'forum');
@@ -61,7 +62,7 @@ class ForumDiscussionController extends ForumBaseController
          */
         $numberOfReadPosts = 0;
         if ($this->userIsLoggedIn()) {
-            if ($discussion->getForum()->getType() < 4) {
+            if ($discussion->getForum()->getType() !== ForumForum::TYPE_ARCHIVE) {
                 $numberOfReadPosts = $this->doctrine->getRepository(ForumDiscussion::class)->getNumberOfReadPosts(
                     $discussion,
                     $this->getUser()

@@ -102,7 +102,6 @@ trainTable:
       title: 'Gepland'
       base: 'Gebaseerd op %s spot(s)'
     notFound: 'Het door jou opgegeven treinnummer is niet gevonden in onze dienstregelings-database'
-    freightTrainsInfo: 'Voor dienstregelingen van goederen- of speciale treinen kan je ook terecht op de site van <a href="http://www.rolandrail.net/" target="_blank">Roland Korving</a>'
 passingRoutes:
   input:
     timeRange: 'Geef de begin- en eindtijd<br />(uu / uu:mm / uu.mm / uumm)'
