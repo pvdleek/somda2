@@ -1,0 +1,33 @@
+{% extends('base.html.twig') %}
+
+{% block content %}
+    <div class="moduleS1" style="margin-bottom:0;"><div>
+        <h3 id="disc_title"><img alt="" border="0" src="{{ asset('images/forum/folder_' ~ (discussion1.locked ? 'l' : 'u') ~ 'br.gif') }}" />{{ discussion1.title }}</h3>
+    </div></div>
+    <div class="moduleS1" style="margin-bottom:0;"><div>
+        <h3 id="disc_title"><img alt="" border="0" src="{{ asset('images/forum/folder_' ~ (discussion2.locked ? 'l' : 'u') ~ 'br.gif') }}" />{{ discussion2.title }}</h3>
+    </div></div>
+
+    {{ form_start(form, { 'attr': { 'id': 'combine_form' } }) }}
+        <table class="design">
+            {{ form_row(form.title) }}
+            <tr>
+                <td>&nbsp;</td>
+                <td>
+                    <a href="#" onclick="document.getElementById('forum_discussion_combine_title').value='{{ discussion1.title }}'; return false;">Zet titel op "{{ discussion1.title }}"</a>
+                    <br /><a href="#" onclick="document.getElementById('forum_discussion_combine_title').value='{{ discussion2.title }}'; return false;">Zet titel op "{{ discussion2.title }}"</a>
+                </td>
+            </tr>
+            <tr>
+                <td>&nbsp;</td>
+                <td>
+                    <div class="button_clear"><div class="somda-button-left"><div class="blank_home"><a href="#" onclick="$('#combine_form').submit(); return false;"><span>Combineer discussies</span></a></div></div></div>
+                    <br /><br />
+                    <div class="button_clear"><div class="somda-button-left"><div class="blank_home"><a href="{{ path('forum_discussion', { 'id': discussion1.id, 'name': (discussion1.title | url_encode )}) }}"><span>Terug naar de discussie "{{ discussion1.title }}"</span></a></div></div></div>
+                    <div class="button_clear"><div class="somda-button-left"><div class="blank_home"><a href="{{ path('forum_discussion', { 'id': discussion2.id, 'name': (discussion2.title | url_encode )}) }}"><span>Terug naar de discussie "{{ discussion2.title }}"</span></a></div></div></div>
+                </td>
+            </tr>
+        </table>
+    {{ form_end(form) }}
+    <br />
+{% endblock %}

@@ -14,6 +14,7 @@
 
     <table class="design">
         <tr>
+            {% if userIsModerator %}<th><a href="#" onclick="moderateCombine(); return false;"><img alt="Combineer discussies" src="{{ asset('images/forum/disc_combine.gif') }}" /></a></th>{% endif %}
             <th colspan="2">{{ 'forum.discussion.subject' | trans }}</th>
             <th>{{ 'forum.number.posts' | trans }}</th>
             <th>{{ 'forum.author' | trans }}</th>
@@ -22,6 +23,7 @@
         </tr>
         {% for discussion in discussions %}
             <tr>
+                {% if userIsModerator %}<td><input name="sel{{ discussion.id }}" type="checkbox" /></td>{% endif %}
                 <td><img src="{{ asset('images/forum/folder_ubr.gif') }}" /></td>
                 <td><a href="{{ path('forum_discussion', { 'id': discussion['id'], 'name': (discussion['title'] | url_encode) }) }}">{{ discussion['title'] }}</a></td>
                 <td>{{ discussion['posts'] }}</td>
@@ -31,4 +33,30 @@
             </tr>
         {% endfor %}
     </table>
+{% endblock %}
+
+{% block javascripts %}
+    {% if userIsModerator %}
+        <script type="text/javascript">
+            function moderateCombine() {
+                let discussionId1 = 0;
+                let discussionId2 = 0;
+                let checkboxes = document.getElementsByTagName('input');
+                for (let box = 0; box < checkboxes.length; box++)  {
+                    if (checkboxes[box].type === 'checkbox' && checkboxes[box].checked) {
+                        if (discussionId1 > 0) {
+                            discussionId2 = parseInt(checkboxes[box].name.substr(3));
+                            break;
+                        }
+                        discussionId1 = parseInt(checkboxes[box].name.substr(3));
+                    }
+                }
+                if (discussionId1 > 0 && discussionId2 > 0) {
+                    document.location = '{{ path('forum_discussion_moderate_combine', { 'id1': 1234, 'id2': 5678 }) }}'.replace('/1234/', '/' + discussionId1 + '/').replace('/5678/', '/' + discussionId2 + '/');
+                } else {
+                    alert('Selecteer 2 discussies om te combineren');
+                }
+            }
+        </script>
+    {% endif %}
 {% endblock %}

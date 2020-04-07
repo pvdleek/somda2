@@ -18,12 +18,11 @@
         {% if userIsModerator %}
             <span id="mod_icons">
                 {% if discussion.locked %}
-                    <a href="{{ path('forum_discussion_moderate', { 'id': discussion.id, 'action': 'open' }) }}"><img alt="Open discussie" src="{{ asset('images/forum/disc_unlock.gif') }}" /></a>
+                    <a href="{{ path('forum_discussion_moderate', { 'id': discussion.id, 'action': constant('App\\Controller\\ForumModerateController::ACTION_OPEN') }) }}"><img alt="Open discussie" src="{{ asset('images/forum/disc_unlock.gif') }}" /></a>
                 {% else %}
-                    <a href="{{ path('forum_discussion_moderate', { 'id': discussion.id, 'action': 'close' }) }}"><img alt="Sluit discussie" src="{{ asset('images/forum/disc_lock.gif') }}" /></a>
+                    <a href="{{ path('forum_discussion_moderate', { 'id': discussion.id, 'action': constant('App\\Controller\\ForumModerateController::ACTION_CLOSE') }) }}"><img alt="Sluit discussie" src="{{ asset('images/forum/disc_lock.gif') }}" /></a>
                 {% endif %}
-                <a href="{{ path('forum_discussion_moderate', { 'id': discussion.id, 'action': 'move' }) }}"><img alt="Verplaats discussie" src="{{ asset('images/forum/disc_move.gif') }}" /></a>
-                <a href="/index.php?blokid=40&amp;op=combinedisc&amp;forum_discussionid={{ discussion.id }}"><img alt="Combineer met andere discussie" src="{{ asset('images/forum/disc_combine.gif') }}" /></a>
+                <a href="{{ path('forum_discussion_moderate', { 'id': discussion.id, 'action': constant('App\\Controller\\ForumModerateController::ACTION_MOVE') }) }}"><img alt="Verplaats discussie" src="{{ asset('images/forum/disc_move.gif') }}" /></a>
             </span>
          {% endif %}
         {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
@@ -54,9 +53,7 @@
 
     <p style="margin-left:10px;">
         {% if userIsModerator %}
-            <input name="op" type="hidden" value="" /><input name="forum_discussionid" type="hidden" value="', $forum_discussionid, '" />
-            Met geselecteerd: <a href="#" onclick="document.MasterForm.op.value='sel_new'; document.MasterForm.submit(); return false;"><img alt="Splits af naar een nieuwe discussie" src="{{ asset('images/forum/folder_usr.gif') }}" title="Splits af naar een nieuwe discussie" /></a>
-            <a style="float:right; margin-right:5px" href="#" onclick="document.MasterForm.op.value='sel_del'; document.MasterForm.submit(); return false;"><img alt="Verwijder direct" src="{{ asset('images/forum/disc_delete.gif') }}" title="Verwijder direct" /></a>
+            Met geselecteerd: <a href="#" onclick="moderateNew(); return false;"><img alt="Splits af naar een nieuwe discussie" src="{{ asset('images/forum/folder_usr.gif') }}" title="Splits af naar een nieuwe discussie" /></a>
         {% endif %}
         {% if is_granted('ROLE_ADMIN_WIKI') %}
             <a href="#" onclick="getElementById('wiki_add').style.visibility = 'visible'; return false;"><img alt="Voeg een RailWiki link toe" src="{{ asset('images/plus.png') }}" /> Voeg een RailWiki link toe</a>
@@ -109,7 +106,7 @@
 
 {% endblock %}
 
-{% block javascript %}
+{% block javascripts %}
     {% if is_granted('ROLE_ADMIN_WIKI') %}
         <script type="text/javascript">
             function wikiadd() {
@@ -119,6 +116,25 @@
             function wikicheck(postid, op) {
                 makeRequest('/blocks/ajax/forum_wiki.php?op=' + op + '&postid=' + postid);
                 document.getElementById('wiki_' + postid).innerHTML = '<img alt="" border="0" height="15" src="/vinkje.jpg" width="15" /></a>';
+            }
+        </script>
+    {% endif %}
+
+    {% if userIsModerator %}
+        <script type="text/javascript">
+            function moderateNew() {
+                let postIdList = '';
+                let checkboxes = document.getElementsByTagName('input');
+                for (let box = 0; box < checkboxes.length; box++)  {
+                    if (checkboxes[box].type === 'checkbox' && checkboxes[box].checked) {
+                        postIdList += checkboxes[box].name.substr(3) + ',';
+                    }
+                }
+                if (postIdList.length > 0) {
+                    document.location = '{{ path('forum_discussion_moderate_split', { 'id': discussion.id, 'postIds': 'abc' }) }}'.replace('/abc/', '/' + postIdList + '/');
+                } else {
+                    alert('Selecteer 1 of meer berichten om af te splitsen');
+                }
             }
         </script>
     {% endif %}

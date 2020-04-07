@@ -135,10 +135,20 @@ forum_discussion_post:
   defaults: { _controller: App\Controller\ForumDiscussionController:discussionAction }
 
 forum_discussion_moderate:
-  path: /forum/{id}/modereer/{action}/
+  path: /forum/{id}/moderate/{action}/
   methods: [GET, POST]
   requirements: { id: \d+, action: 'close|open|move' }
   defaults: { _controller: App\Controller\ForumModerateController:indexAction }
+forum_discussion_moderate_combine:
+  path: /forum/{id1}/moderate/combine/{id2}/
+  methods: [GET, POST]
+  requirements: { id1: \d+, id2: \d+ }
+  defaults: { _controller: App\Controller\ForumModerateController:combineAction }
+forum_discussion_moderate_split:
+  path: /forum/{id}/moderate/split/{postIds}/
+  methods: [GET, POST]
+  requirements: { id: \d+ }
+  defaults: { _controller: App\Controller\ForumModerateController:splitAction }
 
 forum_discussion_post_reply:
   path: /forum/p{id}/reageren/
