@@ -28,8 +28,6 @@
         </table>
         <br />
 
-        {% include 'partials/errorMessages.html.twig' %}
-
         {% if trainTableLines | length %}
             <table class="design">
                 <tr><th colspan="7">{{ 'trainTable.output.title' | trans | format(routeNumber) }}</th></tr>

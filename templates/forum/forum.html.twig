@@ -14,7 +14,7 @@
 
     <table class="design">
         <tr>
-            {% if userIsModerator %}<th><a href="#" onclick="moderateCombine(); return false;"><img alt="Combineer discussies" src="{{ asset('images/forum/disc_combine.gif') }}" /></a></th>{% endif %}
+            {% if userIsModerator %}<th><a href="#" onclick="moderateCombine(); return false;"><i class="fas fa-compress-alt" title="Combineer discussies"></i></a></th>{% endif %}
             <th colspan="2">{{ 'forum.discussion.subject' | trans }}</th>
             <th>{{ 'forum.number.posts' | trans }}</th>
             <th>{{ 'forum.author' | trans }}</th>
@@ -24,8 +24,19 @@
         {% for discussion in discussions %}
             <tr>
                 {% if userIsModerator %}<td><input name="sel{{ discussion.id }}" type="checkbox" /></td>{% endif %}
-                <td><img src="{{ asset('images/forum/folder_ubr.gif') }}" /></td>
-                <td><a href="{{ path('forum_discussion', { 'id': discussion['id'], 'name': (discussion['title'] | url_encode) }) }}">{{ discussion['title'] }}</a></td>
+                <td>
+                    {% if discussion['locked'] %}
+                        <i class="fas fa-lock"></i>
+                    {% elseif discussion['posts'] > 1 %}
+                        <i class="fas fa-comments"></i>
+                    {% else %}
+                        <i class="fas fa-comment"></i>
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="{{ path('forum_discussion', { 'id': discussion['id'], 'name': (discussion['title'] | url_encode) }) }}">{{ discussion['title'] }}</a>
+                    {% if not discussion['discussion_read'] %} <i class="fas fa-comment-dots"></i>{% endif %}
+                </td>
                 <td>{{ discussion['posts'] }}</td>
                 <td>{{ discussion['author_id'] | displayUser(discussion['author_username']) | raw }}</td>
                 <td>{{ discussion['viewed'] }}</td>

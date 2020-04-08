@@ -1,9 +1,7 @@
 {% extends('base.html.twig') %}
 
 {% block content %}
-    <div class="moduleS1" style="margin-bottom:0;"><div>
-        <h3 id="disc_title"><img alt="" border="0" src="{{ asset('images/forum/folder_' ~ (discussion.locked ? 'l' : 'u') ~ 'br.gif') }}" />{{ discussion.title }}</h3>
-    </div></div>
+    <div class="moduleS1" style="margin-bottom:0;"><div><h3 id="disc_title"><i class="fas fa-comments"></i> {{ discussion.title }}</h3></div></div>
 
     {{ form_start(form, { 'attr': { 'id': 'move_form' } }) }}
         <table class="design">

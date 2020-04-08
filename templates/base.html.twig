@@ -11,15 +11,26 @@
     <meta name="author" content="Peter van der Leek" />
     <meta name="generator" content="Peter van der Leek" />
 
+    <script src="{{asset('js/modernizr-webp.js')}}" type="text/javascript"></script>
     <script src="{{asset('js/jquery-1.9.1.js')}}" type="text/javascript"></script>
     <script src="{{asset('js/jquery-ui-1.10.3.js')}}" type="text/javascript"></script>
     <script src="{{asset('js/jquery-defaults.js')}}" type="text/javascript"></script>
     <script src="{{asset('js/jquery-tablesorter.js')}}" type="text/javascript"></script>
     <script src="{{asset('js/functions002.js')}}" type="text/javascript"></script>
+    <script src="https://kit.fontawesome.com/be43109115.js" crossorigin="anonymous"></script>
 
     <title>', BLOCK_NAME, ' - ', SITE_TITLE, '</title>
 
     <link href="{{ asset('images/design/favicon.ico') }}" rel="shortcut icon" type="image/x-icon" />
+
+    <style type="text/css">
+        .webp #header_image {
+            background: url('{{ asset('images/logos-somda/logo-' ~ imageNumber ~ '.webp') }}') no-repeat;
+        }
+        .no-webp #header_image {
+            background: url('{{ asset('images/logos-somda/logo-' ~ imageNumber ~ '.png') }}') no-repeat;
+        }
+    </style>
 </head>
 <body onload="getDynamicContent('{{ app.request.host }}');">
 
@@ -27,6 +38,7 @@
 
     <div id="wrap">
         {% include('header.html.twig') %}
+        {% include 'partials/errorMessages.html.twig' %}
         {% block content %}{% endblock %}
         {% include('footer.html.twig') %}
     </div>

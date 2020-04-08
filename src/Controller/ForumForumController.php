@@ -51,7 +51,7 @@ class ForumForumController extends ForumBaseController
             true
         );
 
-        $discussions = $this->doctrine->getRepository(ForumDiscussion::class)->findByForum($forum);
+        $discussions = $this->doctrine->getRepository(ForumDiscussion::class)->findByForum($forum, $this->getUser());
         return $this->render('forum/forum.html.twig', [
             'forum' => $forum,
             'userIsModerator' => $this->userIsModerator($forum->getDiscussions()[0]),

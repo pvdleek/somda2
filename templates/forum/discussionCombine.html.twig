@@ -1,12 +1,8 @@
 {% extends('base.html.twig') %}
 
 {% block content %}
-    <div class="moduleS1" style="margin-bottom:0;"><div>
-        <h3 id="disc_title"><img alt="" border="0" src="{{ asset('images/forum/folder_' ~ (discussion1.locked ? 'l' : 'u') ~ 'br.gif') }}" />{{ discussion1.title }}</h3>
-    </div></div>
-    <div class="moduleS1" style="margin-bottom:0;"><div>
-        <h3 id="disc_title"><img alt="" border="0" src="{{ asset('images/forum/folder_' ~ (discussion2.locked ? 'l' : 'u') ~ 'br.gif') }}" />{{ discussion2.title }}</h3>
-    </div></div>
+    <div class="moduleS1" style="margin-bottom:0;"><div><h3 id="disc_title"><i class="fas fa-comments"></i> {{ discussion1.title }}</h3></div></div>
+    <div class="moduleS1" style="margin-bottom:0;"><div><h3 id="disc_title"><i class="fas fa-comments"></i> {{ discussion2.title }}</h3></div></div>
 
     {{ form_start(form, { 'attr': { 'id': 'combine_form' } }) }}
         <table class="design">

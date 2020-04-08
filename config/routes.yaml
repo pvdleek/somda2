@@ -200,10 +200,11 @@ profile_view:
   defaults: { _controller: App\Controller\SomdaController:profileAction }
 
 
+
+
+
+
 links:
-  path: /
-  controller: App\Controller\HomeController::homeAction
-verkortingen:
   path: /
   controller: App\Controller\HomeController::homeAction
 

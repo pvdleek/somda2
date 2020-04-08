@@ -94,7 +94,7 @@ class TrainTableController extends BaseController
         $this->breadcrumbHelper->addPart('general.navigation.trainTable.home', 'dienstregeling_home');
         $this->breadcrumbHelper->addPart(
             'general.navigation.trainTable.specialRoutes',
-            'drgl',
+            'special_routes',
             [],
             is_null($specialRoute)
         );

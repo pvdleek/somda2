@@ -7,8 +7,8 @@
             {% set firstUnreadAnchorDone = true %}
         {% endif %}
         <a href="{{ path('forum_discussion_post', { 'id': post.discussion.id, 'name': (post.discussion.title | url_encode), 'postId': post.id }) }}">
-            <img src="{{ asset('images/forum/folder_' ~ (post.discussion.locked ? 'l' : 'u') ~ 's' ~ (postIsUnread ? 'n' : 'r') ~ '.gif') }}" />
-        </a>{{ post.timestamp | date('d-m-Y H:i:s') }}
+            {% if postIsUnread %}<i class="fas fa-comment-dots"></i>{% else %}<i class="fas fa-comment"></i>{% endif %}
+        </a> {{ post.timestamp | date('d-m-Y H:i:s') }}
     </th>
     {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
         <th>
@@ -35,16 +35,16 @@
         {% endif %}
         <br />
         {% if post.author.info.twitterAccount | length > 0 %}
-            <a href="https://twitter.com/#!/{{ post.author.info.twitterAccount }}" target="_blank"><img alt="Twitter {{ post.author.info.twitterAccount }}" height="16" src="{{ asset('images/social-media/twitter.png') }}" width="16" /></a>
+            <a href="https://twitter.com/#!/{{ post.author.info.twitterAccount }}" target="_blank"><i class="fab fa-twitter" title="Twitter {{ post.author.info.twitterAccount }}"></i></a>
         {% endif %}
         {% if post.author.info.facebookAccount | length > 0 %}
-            <a href="https://www.facebook.com/{{ post.author.info.facebookAccount }}" target="_blank"><img alt="Facebook {{ post.author.info.facebookAccount }}" height="16" src="{{ asset('images/social-media/facebook.png') }}" width="16" /></a>
+            <a href="https://www.facebook.com/{{ post.author.info.facebookAccount }}" target="_blank"><i class="fab fa-facebook" title="Facebook {{ post.author.info.facebookAccount }}"></i></a>
         {% endif %}
         {% if post.author.info.youtubeAccount | length > 0 %}
-            <a href="https://www.youtube.com/user/{{ post.author.info.youtubeAccount }}" target="_blank"><img alt="Youtube {{ post.author.info.youtubeAccount }}" height="16" src="{{ asset('images/social-media/youtube.png') }}" width="16" /></a>
+            <a href="https://www.youtube.com/user/{{ post.author.info.youtubeAccount }}" target="_blank"><i class="fab fa-youtube" title="Youtube {{ post.author.info.youtubeAccount }}"></i></a>
         {% endif %}
         {% if post.author.info.flickrAccount | length > 0 %}
-            <a href="https://www.flickr.com/photos/{{ post.author.info.flickrAccount }}" target="_blank"><img alt="Flickr {{ post.author.info.flickrAccount }}" height="16" src="{{ asset('images/social-media/flickr.png') }}" width="37" /></a>
+            <a href="https://www.flickr.com/photos/{{ post.author.info.flickrAccount }}" target="_blank"><i class="fab fa-flickr" title="Flickr {{ post.author.info.flickrAccount }}"></i></a>
         {% endif %}
     </td>
     <td class="text">{{ post | displayForumPost | raw }}</td>

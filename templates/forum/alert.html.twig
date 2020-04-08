@@ -1,14 +1,7 @@
 {% extends('base.html.twig') %}
 
 {% block content %}
-    <div class="moduleS1" style="margin-bottom:0;"><div>
-        <h3 id="disc_title">
-            <img alt="" border="0" src="{{ asset('images/forum/folder_' ~ (post.discussion.locked ? 'l' : 'u') ~ 'br.gif') }}" />
-            {% if post.discussion.type == 1 %}<img height="16" src="{{ asset('images/forum/sticky.gif') }}" width="16" />{% endif %}
-            {% if post.discussion.type == 1 %}<img height="24" src="{{ asset('images/forum/announcement.png') }}" width="28" />{% endif %}
-            Bericht bij de beheerders melden uit de discussie "{{ post.discussion.title }}"
-        </h3>
-    </div></div>
+    <div class="moduleS1" style="margin-bottom:0;"><div><h3 id="disc_title"><i class="fas fa-comments"></i> Bericht bij de beheerders melden uit de discussie "{{ post.discussion.title }}"</h3></div></div>
     <center>
         {{ form_start(form, { 'attr': { 'id': 'alert_form' } }) }}
         <table class="design">
