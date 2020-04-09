@@ -8,6 +8,22 @@ use Symfony\Component\HttpFoundation\Response;
 class SomdaController extends BaseController
 {
     /**
+     * @return Response
+     */
+    public function aboutAction(): Response
+    {
+        return $this->render('somda/about.html.twig');
+    }
+
+    /**
+     * @return Response
+     */
+    public function advertiseAction(): Response
+    {
+        return $this->render('somda/advertise.html.twig');
+    }
+
+    /**
      * @param int|null $id
      * @return Response
      */

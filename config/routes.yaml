@@ -193,6 +193,14 @@ forum_mark_read:
 #########
 # Somda #
 #########
+about:
+  path: /over/
+  methods: [GET]
+  defaults: { _controller: App\Controller\SomdaController:aboutAction }
+advertise:
+  path: /adverteren/
+  methods: [GET]
+  defaults: { _controller: App\Controller\SomdaController:advertiseAction }
 profile_view:
   path: /profiel/{id}
   methods: [GET]
@@ -218,9 +226,6 @@ weer:
   path: /
   controller: App\Controller\HomeController::homeAction
 matsms:
-  path: /
-  controller: App\Controller\HomeController::homeAction
-adverteren:
   path: /
   controller: App\Controller\HomeController::homeAction
 invoer:
@@ -299,9 +304,6 @@ statistieken:
   path: /
   controller: App\Controller\HomeController::homeAction
 spoornieuws:
-  path: /
-  controller: App\Controller\HomeController::homeAction
-over:
   path: /
   controller: App\Controller\HomeController::homeAction
 materieelnamen:
