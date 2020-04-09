@@ -1,7 +1,7 @@
 home:
   path: /
   methods: [GET]
-  defaults: { _controller: App\Controller\HomeController::indexAction }
+  controller: App\Controller\HomeController::indexAction
 
 ###################
 # User management #
@@ -39,15 +39,15 @@ activate_with_key:
 information_home:
   path: /informatie/
   methods: [GET]
-  defaults: { _controller: App\Controller\HomeController::indexAction }
+  controller: App\Controller\HomeController::indexAction
 train_table_home:
   path: /dienstregelingen/
   methods: [GET]
-  defaults: { _controller: App\Controller\HomeController::indexAction }
+  controller: App\Controller\HomeController::indexAction
 somda_home:
   path: /somda/
   methods: [GET]
-  defaults: { _controller: App\Controller\HomeController::indexAction }
+  controller: App\Controller\HomeController::indexAction
 
 ###############
 # Information #
@@ -55,19 +55,19 @@ somda_home:
 jargon:
   path: /jargon/
   methods: [GET]
-  defaults: { _controller: App\Controller\InformationController::jargonAction }
+  controller: App\Controller\InformationController::jargonAction
 location:
   path: /verkortingen/
   methods: [GET]
-  defaults: { _controller: App\Controller\InformationController:locationsAction }
+  controller: App\Controller\InformationController:locationsAction
 location_search:
   path: /verkortingen/{searchMethod}/{search}/
   methods: [GET]
-  defaults: { _controller: App\Controller\InformationController:locationsAction }
+  controller: App\Controller\InformationController:locationsAction
 uic:
   path: /uic/
   methods: [GET]
-  defaults: { _controller: App\Controller\InformationController:uicAction }
+  controller: App\Controller\InformationController:uicAction
 
 ###############
 # Train table #
@@ -75,30 +75,30 @@ uic:
 train_table:
   path: /dienstregeling/
   methods: [GET]
-  defaults: { _controller: App\Controller\TrainTableController:indexAction }
+  controller: App\Controller\TrainTableController:indexAction
 train_table_search:
   path: /dienstregeling/{trainTableIndexNumber}/{routeNumber}/
   methods: [GET]
   requirements: { trainTableIndexNumber: \d+ }
-  defaults: { _controller: App\Controller\TrainTableController:indexAction }
+  controller: App\Controller\TrainTableController:indexAction
 passing_routes:
   path: /doorkomststaat/
   methods: [GET]
-  defaults: { _controller: App\Controller\TrainTableController:passingRoutesAction }
+  controller: App\Controller\TrainTableController:passingRoutesAction
 passing_routes_search:
   path: /doorkomststaat/{trainTableIndexNumber}/{locationName}/{dayNumber}/{startTime}/{endTime}/
   methods: [GET]
   requirements: { trainTableIndexNumber: \d+, dayNumber: \d+ }
-  defaults: { _controller: App\Controller\TrainTableController:passingRoutesAction }
+  controller: App\Controller\TrainTableController:passingRoutesAction
 special_routes:
   path: /drgl/
   methods: [GET]
-  defaults: { _controller: App\Controller\TrainTableController:specialRoutesAction }
+  controller: App\Controller\TrainTableController:specialRoutesAction
 special_route:
   path: /drgl/{id}/
   methods: [GET]
   requirements: { id: \d+ }
-  defaults: { _controller: App\Controller\TrainTableController:specialRoutesAction }
+  controller: App\Controller\TrainTableController:specialRoutesAction
 
 #########
 # Forum #
@@ -106,89 +106,89 @@ special_route:
 forum:
   path: /forum/
   methods: [GET]
-  defaults: { _controller: App\Controller\ForumForumController:indexAction }
+  controller: App\Controller\ForumForumController:indexAction
 forum_forum:
   path: /forum/c{id}/{name}/
   methods: [GET]
   requirements: { id: \d+ }
-  defaults: { _controller: App\Controller\ForumForumController:forumAction }
+  controller: App\Controller\ForumForumController:forumAction
 forum_forum_new_discussion:
   #!!!!
   path: /forum/c{id}/nieuwe-discussie/
   methods: [GET]
   requirements: { id: \d+ }
-  defaults: { _controller: App\Controller\ForumDiscussionController:discussionAction }
+  controller: App\Controller\ForumDiscussionController:discussionAction
 forum_discussion:
   path: /forum/{id}/{name}/
   methods: [GET]
   requirements: { id: \d+ }
-  defaults: { _controller: App\Controller\ForumDiscussionController:discussionAction }
+  controller: App\Controller\ForumDiscussionController:discussionAction }
 forum_discussion_page:
   path: /forum/{id}/{pageNumber}/{name}/
   methods: [GET]
   requirements: { id: \d+, pageNumber: \d+ }
-  defaults: { _controller: App\Controller\ForumDiscussionController:discussionAction }
+  controller: App\Controller\ForumDiscussionController:discussionAction
 forum_discussion_post:
   path: /forum/{id}/p{postId}/{name}/
   methods: [GET]
   requirements: { id: \d+, postId: \d+ }
-  defaults: { _controller: App\Controller\ForumDiscussionController:discussionAction }
+  controller: App\Controller\ForumDiscussionController:discussionAction
 
 forum_discussion_moderate:
   path: /forum/{id}/moderate/{action}/
   methods: [GET, POST]
   requirements: { id: \d+, action: 'close|open|move' }
-  defaults: { _controller: App\Controller\ForumModerateController:indexAction }
+  controller: App\Controller\ForumModerateController:indexAction
 forum_discussion_moderate_combine:
   path: /forum/{id1}/moderate/combine/{id2}/
   methods: [GET, POST]
   requirements: { id1: \d+, id2: \d+ }
-  defaults: { _controller: App\Controller\ForumModerateController:combineAction }
+  controller: App\Controller\ForumModerateController:combineAction
 forum_discussion_moderate_split:
   path: /forum/{id}/moderate/split/{postIds}/
   methods: [GET, POST]
   requirements: { id: \d+ }
-  defaults: { _controller: App\Controller\ForumModerateController:splitAction }
+  controller: App\Controller\ForumModerateController:splitAction
 
 forum_discussion_post_reply:
   path: /forum/p{id}/reageren/
   methods: [GET, POST]
   requirements: { id: \d+ }
-  defaults: { _controller: App\Controller\ForumPostController:replyAction }
+  controller: App\Controller\ForumPostController:replyAction
 forum_discussion_post_edit:
   path: /forum/p{id}/bewerken/
   methods: [GET, POST]
   requirements: { id: \d+ }
-  defaults: { _controller: App\Controller\ForumPostController:editAction }
+  controller: App\Controller\ForumPostController:editAction
 
 forum_discussion_post_alert:
   path: /forum/p{id}/melden/
   methods: [GET, POST]
   requirements: { id: \d+ }
-  defaults: { _controller: App\Controller\ForumPostAlertController:alertAction }
+  controller: App\Controller\ForumPostAlertController:alertAction
 forum_discussion_post_alerts:
   path: /forum/p{id}/meldingen/
   methods: [GET, POST]
   requirements: { id: \d+ }
-  defaults: { _controller: App\Controller\ForumPostAlertController:alertsAction }
+  controller: App\Controller\ForumPostAlertController:alertsAction
 forum_discussion_post_alerts_close:
   path: /forum/p{id}/meldingen-sluiten/
   methods: [GET]
   requirements: { id: \d+ }
-  defaults: { _controller: App\Controller\ForumPostAlertController:alertsCloseAction }
+  controller: App\Controller\ForumPostAlertController:alertsCloseAction
 
 forum_search:
   path: /forum/zoeken/
   methods: [GET]
-  defaults: { _controller: App\Controller\ForumController:searchAction }
+  controller: App\Controller\ForumController:searchAction
 forum_unread:
   path: /forum/ongelezen/
   methods: [GET]
-  defaults: { _controller: App\Controller\ForumController:unreadAction }
+  controller: App\Controller\ForumController:unreadAction
 forum_mark_read:
   path: /forum/markeer-als-gelezen/
   methods: [GET]
-  defaults: { _controller: App\Controller\ForumController:markAsReadAction }
+  controller: App\Controller\ForumController:markAsReadAction
 
 #########
 # Somda #
@@ -196,21 +196,29 @@ forum_mark_read:
 about:
   path: /over/
   methods: [GET]
-  defaults: { _controller: App\Controller\SomdaController:aboutAction }
+  controller: App\Controller\SomdaController:aboutAction
 advertise:
   path: /adverteren/
   methods: [GET]
-  defaults: { _controller: App\Controller\SomdaController:advertiseAction }
+  controller: App\Controller\SomdaController:advertiseAction
+contact:
+  path: /feedback/
+  methods: [GET, POST]
+  controller: App\Controller\SomdaController:contactAction
+disclaimer:
+  path: /disclaimer/
+  methods: [GET]
+  controller: App\Controller\SomdaController:disclaimerAction
+disclaimer_choice:
+  path: /disclaimer/{choice}/
+  methods: [GET]
+  controller: App\Controller\SomdaController:disclaimerAction
+
 profile_view:
   path: /profiel/{id}
   methods: [GET]
   requirements: { id: \d+ }
-  defaults: { _controller: App\Controller\SomdaController:profileAction }
-contact:
-  path: /feedback/
-  methods: [GET, POST]
-  defaults: { _controller: App\Controller\SomdaController:contactAction }
-
+  controller: App\Controller\SomdaController:profileAction
 
 
 
@@ -296,9 +304,6 @@ vertrektijden:
   path: /
   controller: App\Controller\HomeController::homeAction
 treinnummers:
-  path: /
-  controller: App\Controller\HomeController::homeAction
-disclaimer:
   path: /
   controller: App\Controller\HomeController::homeAction
 statistieken:

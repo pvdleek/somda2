@@ -195,7 +195,6 @@ abstract class BaseController
         }
 
         return array_merge($viewParameters, [
-            'cookieChoice' => $this->getUser() ? $this->getUser()->getCookieOk() : 0,
             'headerType' =>  $headerType,
             'headerContent' => $headerContent,
             'imageNumber' => rand(1, 11),

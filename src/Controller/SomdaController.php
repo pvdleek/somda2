@@ -51,6 +51,25 @@ class SomdaController extends BaseController
     }
 
     /**
+     * @param string|null $choice
+     * @return RedirectResponse|Response
+     */
+    public function disclaimerAction(string $choice = null)
+    {
+        if (!is_null($choice) && in_array($choice, [User::COOKIE_OK, User::COOKIE_NOT_OK])) {
+            $this->getUser()->setCookieOk($choice);
+            $this->doctrine->getManager()->flush();
+
+            $this->addFlash(
+                'info',
+                'Dankjewel voor het doorgeven van je keuze met betrekking tot de Google Analytics cookie.'
+            );
+            return $this->redirectToRoute('disclaimer');
+        }
+        return $this->render('somda/disclaimer.html.twig');
+    }
+
+    /**
      * @param int|null $id
      * @return Response
      */

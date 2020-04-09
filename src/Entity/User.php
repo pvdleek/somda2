@@ -14,6 +14,10 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class User implements UserInterface
 {
+    public const COOKIE_NOT_OK = 'nok';
+    public const COOKIE_OK = 'ok';
+    public const COOKIE_UNKNOWN = '0';
+
     /**
      * @var int
      * @ORM\Column(name="uid", type="bigint", nullable=false)
@@ -71,7 +75,7 @@ class User implements UserInterface
      * @var string
      * @ORM\Column(name="cookie_ok", type="string", length=3, nullable=false)
      */
-    private $cookieOk = '0';
+    private $cookieOk = self::COOKIE_UNKNOWN;
 
     /**
      * @var string
