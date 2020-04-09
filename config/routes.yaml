@@ -206,6 +206,10 @@ profile_view:
   methods: [GET]
   requirements: { id: \d+ }
   defaults: { _controller: App\Controller\SomdaController:profileAction }
+contact:
+  path: /feedback/
+  methods: [GET, POST]
+  defaults: { _controller: App\Controller\SomdaController:contactAction }
 
 
 
@@ -244,9 +248,6 @@ news_text:
   path: /{id}/
   controller: App\Controller\HomeController::homeAction
 spots:
-  path: /
-  controller: App\Controller\HomeController::homeAction
-feedback:
   path: /
   controller: App\Controller\HomeController::homeAction
 wachtwoord:

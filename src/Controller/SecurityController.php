@@ -83,7 +83,7 @@ class SecurityController extends BaseController
                     ['userId' => $user->getId(), 'activationKey' => $user->getActivationKey()]
                 )) {
                     $this->addFlash(
-                        'success',
+                        self::FLASH_TYPE_INFORMATION,
                         'Je registratie is geslaagd! Er is een e-mail gestuurd met daarin een link en een ' .
                         'activatiecode. Je kunt op de link klikken of de code op onderstaand scherm invoeren ' .
                         'om jouw account direct actief te maken.'
@@ -95,7 +95,7 @@ class SecurityController extends BaseController
                     $this->doctrine->getManager()->flush();
 
                     $this->addFlash(
-                        'danger',
+                        self::FLASH_TYPE_ERROR,
                         'Het is niet gelukt een e-mail naar het door jou opgegeven e-mailadres te sturen, ' .
                         'controleer het e-mailadres.'
                     );
@@ -208,9 +208,10 @@ class SecurityController extends BaseController
                     ['user' => $user, 'samePasswordUsers' => $samePasswordUsers]
                 );
 
-
-                $this->addFlash('success', 'Jouw account is geactiveerd, je kunt hieronder inloggen');
-
+                $this->addFlash(
+                    self::FLASH_TYPE_INFORMATION,
+                    'Jouw account is geactiveerd, je kunt hieronder inloggen'
+                );
                 return $this->redirectToRoute('login_with_username', ['username' => $user->getUsername()]);
             }
             $form->get('key')->addError(new FormError('De activatie-sleutel is niet correct, probeer het opnieuw'));

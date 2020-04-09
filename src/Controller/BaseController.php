@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Entity\Banner;
 use App\Entity\BannerView;
-use App\Entity\Block;
 use App\Entity\RailNews;
 use App\Entity\User;
 use App\Helpers\BreadcrumbHelper;
@@ -30,6 +29,10 @@ use Twig\Environment;
 abstract class BaseController
 {
     protected const REDIRECT_STATUS = 302;
+
+    protected const FLASH_TYPE_INFORMATION = 'info';
+    protected const FLASH_TYPE_WARNING = 'warn';
+    protected const FLASH_TYPE_ERROR = 'alert';
 
     /**
      * @var RequestStack
@@ -208,22 +211,10 @@ abstract class BaseController
      */
     protected function addFlash(string $type, string $message): void
     {
+        if (!in_array($type, [self::FLASH_TYPE_INFORMATION, self::FLASH_TYPE_WARNING, self::FLASH_TYPE_ERROR])) {
+            $type = self::FLASH_TYPE_ERROR;
+        }
         $this->requestStack->getCurrentRequest()->getSession()->getFlashBag()->add($type, $message);
-    }
-
-    /**
-     * @param Block $block
-     * @return bool
-     */
-    protected function shouldDoBlock(Block $block): bool
-    {
-        if (is_null($block->getRole())) {
-            return true;
-        }
-        if (is_null($this->getUser())) {
-            return false;
-        }
-        return $this->getUser()->hasRole($block->getRole()) || $this->getUser()->hasRole('ROLE_SUPER_ADMIN');
     }
 
     /**

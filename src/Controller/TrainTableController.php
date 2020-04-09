@@ -29,13 +29,19 @@ class TrainTableController extends BaseController
             $this->trainTableHelper->setTrainTableYear($trainTableIndexNumber);
             $this->trainTableHelper->setRoute($routeNumber);
         }
+
+        $trainTableLines = $submit ? $this->trainTableHelper->getTrainTableLines() : [];
+        $routePredictions = $submit ? $this->trainTableHelper->getRoutePredictions() : [];
+        foreach ($this->trainTableHelper->getErrorMessages() as $message) {
+            $this->addFlash(self::FLASH_TYPE_ERROR, $message);
+        }
+
         return $this->render('trainTable/index.html.twig', [
             'trainTableIndices' => $this->doctrine->getRepository(TrainTableYear::class)->findAll(),
             'trainTableIndexNumber' => $trainTableIndexNumber,
             'routeNumber' => $routeNumber,
-            'trainTableLines' => $submit ? $this->trainTableHelper->getTrainTableLines() : [],
-            'routePredictions' => $submit ? $this->trainTableHelper->getRoutePredictions() : [],
-            'errorMessages' => $this->trainTableHelper->getErrorMessages(),
+            'trainTableLines' => $trainTableLines,
+            'routePredictions' => $routePredictions,
         ]);
     }
 
@@ -59,13 +65,19 @@ class TrainTableController extends BaseController
         $this->breadcrumbHelper->addPart('general.navigation.trainTable.passingRoutes', 'passing_routes', [], true);
 
         $submit = false;
+        $passingRoutes = [];
         if (is_null($trainTableIndexNumber)) {
             $trainTableIndexNumber = $this->trainTableHelper->getDefaultTrainTableYear()->getId();
         } else {
             $submit = true;
             $this->trainTableHelper->setTrainTableYear($trainTableIndexNumber);
             $this->trainTableHelper->setLocation($locationName);
+            $passingRoutes = $this->trainTableHelper->getPassingRoutes($dayNumber, $startTime, $endTime);
         }
+        foreach ($this->trainTableHelper->getErrorMessages() as $message) {
+            $this->addFlash(self::FLASH_TYPE_ERROR, $message);
+        }
+
         return $this->render('trainTable/passingRoutes.html.twig', [
             'trainTableIndices' => $this->doctrine->getRepository(TrainTableYear::class)->findAll(),
             'trainTableIndexNumber' => $trainTableIndexNumber,
@@ -74,9 +86,7 @@ class TrainTableController extends BaseController
             'dayNumber' => $dayNumber,
             'startTime' => $startTime,
             'endTime' => $endTime,
-            'passingRoutes' => $submit ?
-                $this->trainTableHelper->getPassingRoutes($dayNumber, $startTime, $endTime) : [],
-            'errorMessages' => $this->trainTableHelper->getErrorMessages(),
+            'passingRoutes' => $passingRoutes,
         ]);
     }
 

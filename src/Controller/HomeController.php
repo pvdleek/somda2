@@ -24,10 +24,9 @@ class HomeController extends BaseController
     }
 
     /**
-     * @param Block|null $parentBlock
      * @return string
      */
-    private function getHomeColumnLeft(?Block $parentBlock = null): string
+    private function getHomeColumnLeft(): string
     {
         $return = '';
 

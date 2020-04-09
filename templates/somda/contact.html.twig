@@ -1,0 +1,21 @@
+{% extends('base.html.twig') %}
+
+{% block content %}
+    <div class="moduleS1" style="margin-bottom:0;"><div><h3 id="disc_title"><i class="fas fa-shipping-fast"></i> Feedback sturen naar de beheerder</h3></div></div>
+    <center>
+        {{ form_start(form, { 'attr': { 'id': 'contact_form' } }) }}
+        <table class="design">
+            {{ form_row(form.subject) }}
+            {{ form_row(form.text) }}
+            <tr>
+                <td>&nbsp;</td>
+                <td>
+                    <div class="button_clear"><div class="somda-button-left"><div class="blank_home"><a href="#" onclick="$('#contact_form').submit(); return false;"><span>Verstuur bericht</span></a></div></div></div>
+                    <div class="button_clear"><div class="somda-button-left"><div class="blank_home"><a href="{{ path('home') }}"><span>Terug naar home</span></a></div></div></div>
+                </td>
+            </tr>
+        </table>
+        {{ form_end(form) }}
+    </center>
+    <br />
+{% endblock %}
