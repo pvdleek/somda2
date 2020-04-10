@@ -5,6 +5,8 @@ namespace App\Controller;
 use App\Entity\ForumDiscussion;
 use App\Entity\ForumForum;
 use App\Entity\ForumPost;
+use App\Form\ForumDiscussion as ForumDiscussionForm;
+use Exception;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,7 +21,7 @@ class ForumDiscussionController extends ForumBaseController
      * @param int|null $postId
      * @return Response|RedirectResponse
      */
-    public function discussionAction(Request $request, int $id, int $pageNumber = null, int $postId = null): Response
+    public function indexAction(Request $request, int $id, int $pageNumber = null, int $postId = null): Response
     {
         /**
          * @var ForumDiscussion $discussion
@@ -95,5 +97,40 @@ class ForumDiscussionController extends ForumBaseController
             'numberOfReadPosts' => $numberOfReadPosts,
             'forumBanner' => $this->getForumBanner($request),
         ]);
+    }
+
+    /**
+     * @param Request $request
+     * @param int $id
+     * @return RedirectResponse|Response
+     * @throws Exception
+     */
+    public function newAction(Request $request, int $id)
+    {
+        /**
+         * @var ForumForum $forum
+         */
+        $forum = $this->doctrine->getRepository(ForumForum::class)->find($id);
+        if (is_null($forum)) {
+            return $this->redirectToRoute('forum');
+        }
+
+        $forumDiscussion = new ForumDiscussion();
+        $forumDiscussion->setForum($forum)->setAuthor($this->getUser());
+
+        $form = $this->formFactory->create(ForumDiscussionForm::class, $forumDiscussion);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->addPost($form, $forumDiscussion);
+            $this->doctrine->getManager()->persist($forumDiscussion);
+            $this->doctrine->getManager()->flush();
+
+            return $this->redirectToRoute(
+                'forum_discussion',
+                ['id' => $forumDiscussion->getId(), 'name' => urlencode($forumDiscussion->getTitle())]
+            );
+        }
+
+        return $this->render('forum/newDiscussion.html.twig', ['form' => $form->createView(), 'forum' => $forum]);
     }
 }

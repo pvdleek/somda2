@@ -61,6 +61,38 @@ class TrainTable extends EntityRepository
             ->join('routeLists.characteristic', 'characteristic')
             ->addOrderBy('t.time', 'ASC');
         return $queryBuilder->getQuery()->getArrayResult();
+    }
 
+    /**
+     * @param TrainTableYear $trainTableYear
+     * @return array
+     */
+    public function findAllTrainTablesForForum(TrainTableYear $trainTableYear): array
+    {
+        $queryBuilder = $this->getEntityManager()
+            ->createQueryBuilder()
+            ->select('r.number AS routeNumber')
+            ->addSelect('tr.name AS transporter')
+            ->addSelect('c.name AS characteristicName')
+            ->addSelect('c.description AS characteristicDescription')
+            ->addSelect('l1.name AS firstLocation')
+            ->addSelect('fl.firstTime AS firstTime')
+            ->addSelect('l2.name AS lastLocation')
+            ->addSelect('fl.lastTime AS lastTime')
+            ->addSelect('rl.section AS section')
+            ->from(TrainTableEntity::class, 't')
+            ->join('t.route', 'r')
+            ->join('r.trainTableFirstLasts', 'fl')
+            ->join('fl.firstLocation', 'l1')
+            ->join('fl.lastLocation', 'l2')
+            ->join('r.routeLists', 'rl')
+            ->join('rl.transporter', 'tr')
+            ->join('rl.characteristic', 'c')
+            ->andWhere('t.trainTableYear = :trainTableYear')
+            ->andWhere('fl.trainTableYear = :trainTableYear')
+            ->setParameter('trainTableYear', $trainTableYear)
+            ->andWhere('fl.dayNumber = 1')
+            ->addGroupBy('r.id');
+        return $queryBuilder->getQuery()->getArrayResult();
     }
 }

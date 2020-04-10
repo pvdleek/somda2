@@ -6,7 +6,6 @@ use App\Entity\ForumDiscussion;
 use App\Entity\ForumFavorite;
 use App\Entity\ForumPost;
 use App\Entity\ForumPostLog;
-use App\Entity\ForumPostText;
 use App\Entity\User;
 use App\Form\ForumPost as ForumPostForm;
 use DateTime;
@@ -39,7 +38,7 @@ class ForumPostController extends ForumBaseController
         $form = $this->formFactory->create(ForumPostForm::class, null, ['quotedPost' => $quotedPost]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->addPost($form, $quotedPost);
+            $this->addPost($form, $quotedPost->getDiscussion());
             $this->handleFavoritesForAddedPost($quotedPost->getDiscussion());
 
             $this->doctrine->getManager()->flush();
@@ -61,32 +60,6 @@ class ForumPostController extends ForumBaseController
             'post' => $quotedPost,
             'lastPosts' => $lastPosts,
         ]);
-    }
-
-    /**
-     * @param FormInterface $form
-     * @param ForumPost $quotedPost
-     * @throws Exception
-     */
-    private function addPost(FormInterface $form, ForumPost $quotedPost): void
-    {
-        $post = new ForumPost();
-        $post
-            ->setAuthor($this->getUser())
-            ->setTimestamp(new DateTime())
-            ->setDiscussion($quotedPost->getDiscussion())
-            ->setSignatureOn($form->get('signatureOn')->getData());
-        $this->doctrine->getManager()->persist($post);
-
-        $postText = new ForumPostText();
-        $postText->setPost($post)->setText($form->get('text')->getData());
-        $this->doctrine->getManager()->persist($postText);
-
-        $postLog = new ForumPostLog();
-        $postLog->setAction(ForumPostLog::ACTION_POST_NEW);
-        $this->doctrine->getManager()->persist($postLog);
-
-        $post->addLog($postLog)->setText($postText);
     }
 
     /**

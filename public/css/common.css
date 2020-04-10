@@ -665,6 +665,10 @@ td.text {
 	text-align: left;
 	width: 760px;
 }
+td.text ul {
+	list-style: disc;
+	padding-inline-start: 20px;
+}
 td.buttons {
 	border-left: 1px dotted;
 	vertical-align: bottom;

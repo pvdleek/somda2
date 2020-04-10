@@ -5,11 +5,14 @@ namespace App\Helpers\Controller;
 use App\Entity\RouteTrain;
 use App\Entity\TrainTable;
 use App\Helpers\DateHelper;
+use App\Traits\DateTrait;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class TrainTableHelper extends BaseControllerHelper
 {
+    use DateTrait;
+
     /**
      * @var DateHelper
      */
@@ -87,8 +90,8 @@ class TrainTableHelper extends BaseControllerHelper
             return [];
         }
 
-        $startTimeDatabase = $this->dateHelper->timeDisplayToDatabase($startTime);
-        $endTimeDatabase = $this->dateHelper->timeDisplayToDatabase($endTime);
+        $startTimeDatabase = $this->timeDisplayToDatabase($startTime);
+        $endTimeDatabase = $this->timeDisplayToDatabase($endTime);
         if ($startTimeDatabase > $endTimeDatabase) {
             $this->addErrorMessage($this->translator->trans('passingRoutes.error.dayBorderCrossed'));
             $endTimeDatabase = 1440;

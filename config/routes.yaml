@@ -113,26 +113,25 @@ forum_forum:
   requirements: { id: \d+ }
   controller: App\Controller\ForumForumController:forumAction
 forum_forum_new_discussion:
-  #!!!!
-  path: /forum/c{id}/nieuwe-discussie/
-  methods: [GET]
+  path: /forum/n{id}/nieuwe-discussie/
+  methods: [GET, POST]
   requirements: { id: \d+ }
-  controller: App\Controller\ForumDiscussionController:discussionAction
+  controller: App\Controller\ForumDiscussionController:newAction
 forum_discussion:
   path: /forum/{id}/{name}/
   methods: [GET]
   requirements: { id: \d+ }
-  controller: App\Controller\ForumDiscussionController:discussionAction }
+  controller: App\Controller\ForumDiscussionController:indexAction
 forum_discussion_page:
   path: /forum/{id}/{pageNumber}/{name}/
   methods: [GET]
   requirements: { id: \d+, pageNumber: \d+ }
-  controller: App\Controller\ForumDiscussionController:discussionAction
+  controller: App\Controller\ForumDiscussionController:indexAction
 forum_discussion_post:
   path: /forum/{id}/p{postId}/{name}/
   methods: [GET]
   requirements: { id: \d+, postId: \d+ }
-  controller: App\Controller\ForumDiscussionController:discussionAction
+  controller: App\Controller\ForumDiscussionController:indexAction
 
 forum_discussion_moderate:
   path: /forum/{id}/moderate/{action}/

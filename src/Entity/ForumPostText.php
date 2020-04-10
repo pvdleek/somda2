@@ -19,6 +19,12 @@ class ForumPostText
     private $post;
 
     /**
+     * @var boolean
+     * @ORM\Column(name="new_style", type="boolean", options={"default"=true})
+     */
+    private $newStyle = true;
+
+    /**
      * @var string
      * @ORM\Column(name="text", type="text", length=0, nullable=false)
      */
@@ -39,6 +45,24 @@ class ForumPostText
     public function setPost(ForumPost $post): ForumPostText
     {
         $this->post = $post;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isNewStyle(): bool
+    {
+        return $this->newStyle;
+    }
+
+    /**
+     * @param bool $newStyle
+     * @return ForumPostText
+     */
+    public function setNewStyle(bool $newStyle): ForumPostText
+    {
+        $this->newStyle = $newStyle;
         return $this;
     }
 

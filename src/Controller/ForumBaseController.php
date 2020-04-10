@@ -6,6 +6,12 @@ use App\Entity\Banner;
 use App\Entity\BannerView;
 use App\Entity\ForumDiscussion;
 use App\Entity\ForumForum;
+use App\Entity\ForumPost;
+use App\Entity\ForumPostLog;
+use App\Entity\ForumPostText;
+use DateTime;
+use Exception;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 abstract class ForumBaseController extends BaseController
@@ -76,5 +82,32 @@ abstract class ForumBaseController extends BaseController
     protected function userIsModerator(ForumDiscussion $discussion): bool
     {
         return in_array($this->getUser(), $discussion->getForum()->getModerators());
+    }
+
+    /**
+     * @param FormInterface $form
+     * @param ForumDiscussion $discussion
+     * @throws Exception
+     */
+    protected function addPost(FormInterface $form, ForumDiscussion $discussion): void
+    {
+        $post = new ForumPost();
+        $post
+            ->setAuthor($this->getUser())
+            ->setTimestamp(new DateTime())
+            ->setDiscussion($discussion)
+            ->setSignatureOn($form->get('signatureOn')->getData());
+        $this->doctrine->getManager()->persist($post);
+
+        $postText = new ForumPostText();
+        $postText->setPost($post)->setText($form->get('text')->getData());
+        $this->doctrine->getManager()->persist($postText);
+
+        $postLog = new ForumPostLog();
+        $postLog->setAction(ForumPostLog::ACTION_POST_NEW);
+        $this->doctrine->getManager()->persist($postLog);
+
+        $post->addLog($postLog)->setText($postText);
+        $discussion->addPost($post);
     }
 }
