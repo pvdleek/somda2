@@ -1,0 +1,19 @@
+<div class="home-panel">
+	<div class="home-panel-title">Laatste Somda nieuws</div>
+	<div class="home-panel-content">
+		<div class="home-news-container">
+			{% for news in layoutData['dashboard']['news'] %}
+				<div>{{ news.timestamp | displayDateTime(true, true) }}</div>
+				<div><i class="fas fa-newspaper"></i></div>
+				<div>
+					<a class="contentpanel" href="{{ path('news_text', { 'id': news.id }) }}">{{ news.title }}</a>
+					{% if not news.news_read %}<i class="fas fa-comment"></i>{% endif %}
+				</div>
+			{% endfor %}
+		</div>
+		<br />
+		<div class="home-panel-buttons">
+			<a class="somda-button" href="{{ path('news') }}">Nieuwsarchief</a>
+		</div>
+	</div>
+</div>

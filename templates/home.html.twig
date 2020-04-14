@@ -1,6 +1,50 @@
 {% extends('base.html.twig') %}
 
 {% block content %}
+    {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+        {% if app.user.cookieOk == constant('App\\Entity\\User::COOKIE_UNKNOWN') %}
+            <br /><p class="warn">Somda maakt gebruik van <a href="{{ path('disclaimer') }}">cookies</a>. Voor het gebruik van <a href="{{ path('disclaimer') }}">cookies</a> voor Google Analytics is jouw toestemming vereist.
+            <br />Het weigeren van het opslaan van cookies heeft geen effect op het functioneren van Somda.
+            <br /><br /><a href="{{ path('disclaimer_choice', { 'choice': constant('App\\Entity\\User::COOKIE_OK') }) }}">Ja, Somda mag cookies op mijn PC opslaan ten behoeve van Google Analytics</a>
+            <br /><a href="{{ path('disclaimer_choice', { 'choice': constant('App\\Entity\\User::COOKIE_NOT_OK') }) }}">Nee, Somda mag geen cookies op mijn PC opslaan ten behoeve van Google Analytics</a></p>
+            <p class="info">Een uitgebreide uitleg over cookies is <a href="{{ path('disclaimer') }}">hier</a> te vinden.</p>
+        {% endif %}
+
+        <br />
+        <table align="center"><tr>
+            <td>'.geefButton('document.location=\''.SITE_URL.'/instellingen/layout/\'', 'Wijzig layout van deze pagina').'</td>
+            <td>'.geefButton('document.location=\''.SITE_URL.'/instellingen/\'', 'Mijn instellingen', '', 'M').'</td>
+            <td>'.geefButton('document.location=\''.SITE_URL.'/instellingen/profiel/\'', 'Mijn profiel').'</td>
+        </tr></table>
+    {% endif %}
+
+    <div class="home-container">
+        {% for module in layoutLeft %}
+            <div class="home-block">{% include 'home/' ~ module ~ '.html.twig' ignore missing %}</div>
+        {% endfor %}
+        {% for module in layoutRight %}
+            <div class="home-block">{% include 'home/' ~ module ~ '.html.twig' ignore missing %}</div>
+        {% endfor %}
+    </div>
+
+    Left:
+    {% for module in layoutLeft %}
+        {{ module }}
+    {% endfor %}
+    <br />Right:
+    {% for module in layoutRight %}
+        {{ module }}
+    {% endfor %}
+
+{#<span style="float:right"><a href="'.$rss_link.'" target="_blank"><img alt="" height="16" src="'.IMAGES_URL.'/rss.gif" width="16" /></a></span>#}
+
+{% endblock %}
+
+
+
+
+
+{% block oldContent %}
     <div class="mainbody">
         <table border="0" cellpadding="0" cellspacing="0" width="100%" >
             <tr>

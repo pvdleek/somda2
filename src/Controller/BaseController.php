@@ -9,6 +9,7 @@ use App\Entity\User;
 use App\Helpers\BreadcrumbHelper;
 use App\Helpers\Controller\TrainTableHelper;
 use App\Helpers\MenuHelper;
+use App\Helpers\UserHelper;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 use Monolog\Logger;
@@ -85,6 +86,11 @@ abstract class BaseController
     private $menuHelper;
 
     /**
+     * @var UserHelper
+     */
+    protected $userHelper;
+
+    /**
      * @var TrainTableHelper
      */
     protected $trainTableHelper;
@@ -100,6 +106,7 @@ abstract class BaseController
      * @param MailerInterface $mailer
      * @param BreadcrumbHelper $breadcrumbHelper
      * @param MenuHelper $menuHelper
+     * @param UserHelper $userHelper
      * @param TrainTableHelper $trainTableHelper
      */
     public function __construct(
@@ -113,6 +120,7 @@ abstract class BaseController
         MailerInterface $mailer,
         BreadcrumbHelper $breadcrumbHelper,
         MenuHelper $menuHelper,
+        UserHelper $userHelper,
         TrainTableHelper $trainTableHelper
     ) {
         $this->requestStack = $requestStack;
@@ -125,6 +133,7 @@ abstract class BaseController
         $this->mailer = $mailer;
         $this->breadcrumbHelper = $breadcrumbHelper;
         $this->menuHelper = $menuHelper;
+        $this->userHelper = $userHelper;
         $this->trainTableHelper = $trainTableHelper;
     }
 

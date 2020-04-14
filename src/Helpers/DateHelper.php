@@ -25,19 +25,26 @@ class DateHelper implements RuntimeExtensionInterface
     /**
      * @param DateTime|string $date
      * @param bool $includeTime
+     * @param bool $shortDate
      * @return string
      * @throws Exception
      */
-    public function getDisplayDate($date, bool $includeTime = false): string
+    public function getDisplayDate($date, bool $includeTime = false, bool $shortDate = false): string
     {
         if (!$date instanceof DateTime) {
             $date = new DateTime($date);
         }
 
-        $output = $this->translator->trans('general.date.days.' . $date->format('w'));
-        $output .= ' ' . $date->format('j');
+        $output = '';
+        if (!$shortDate) {
+            $output .= $this->translator->trans('general.date.days.' . $date->format('w')) . ' ';
+        }
+        $output .= $date->format('j');
         $output .= ' ' . $this->translator->trans('general.date.months.' . $date->format('n'));
-        $output .= ' ' . $date->format('Y');
+
+        if (!$shortDate) {
+            $output .= ' ' . $date->format('Y');
+        }
         if ($includeTime) {
             $output .= ' ' . $date->format('H:i:s');
         }

@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="somda_drgl")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\SpecialRoute")
  */
 class SpecialRoute
 {

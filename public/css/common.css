@@ -1,3 +1,11 @@
+/*
+Basic color usage:
+	text: #515151
+	dark blue: #246da5
+	light blue (hover): #2b84c8
+	light blue (background): #d2e2f1;
+*/
+
 /****************/
 /*** ALGEMEEN ***/
 /****************/
@@ -21,7 +29,7 @@ p {
 	margin: 10px 0;
 }
 h1 {
-	color: #3A3A3A;
+	color: #3a3a3a;
 	font-size: 2.3em;
 	font-style: normal;
 	font-weight: normal;
@@ -76,13 +84,13 @@ body {
 	background: #dce9f7 url(../images/design/body-background.png) repeat-x 0 top;
 }
 hr {
-	background-color: #538EBA;
+	background-color: #538eba;
 	border: 0;
-	color: #538EBA;
+	color: #538eba;
 	height: 1px;
 }
 .banner {
-	border-bottom: 1px solid #DDDDDD;
+	border-bottom: 1px solid #ddd;
 	margin-bottom: 10px;
 	padding-bottom: 10px;
 }
@@ -90,11 +98,11 @@ hr {
 	padding: 4px 8px;
 }
 a {
-	color: #246DA5;
+	color: #246da5;
 	text-decoration: underline;
 }
 a:hover {
-	color: #2B84C8;
+	color: #2b84c8;
 	text-decoration: none;
 }
 a img {
@@ -122,6 +130,10 @@ fieldset {
 .tooltip {
 	border-bottom: 1px dotted;
 }
+.align-center {
+	align-items: center;
+	text-align: center;
+}
 
 /******************/
 /*** BREADCRUMB ***/
@@ -136,50 +148,21 @@ fieldset {
 /*********************/
 /*** SOMDA BUTTONS ***/
 /*********************/
-.somda-button-left, .somda-button-left div {
-	float: left;
-}
-.somda-button-left a, .somda-button-left span {
-	border: none;
-	color: #FFFFFF;
-	cursor: pointer;
-	display: block;
-	float: left;
-	font-family: "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
-	font-size: 100%;
+.somda-button {
+	background-color: #246da5;
+	border: 1px solid #246da5;
+	border-radius: 5px;
+	color: #fff !important;
+	display: inline-block;
 	font-weight: bold;
-	height: 25px;
-	padding: 0 6px 0 6px;
-	line-height: 22px;
+	margin: 2px;
+	padding: 5px 20px;
+	text-align: center;
 	text-decoration: none;
 }
-.somda-button-left .page a, .somda-button-left .page span {
-	padding: 0 6px;
-}
-.somda-button-left {
-	float: left;
-	margin-left: 5px;
-}
-.webp .somda-button-left {
-	background: url(../images/design/button-left-up.webp) no-repeat ! important;
-}
-.no-webp .somda-button-left {
-	background: url(../images/design/button-left-up.png) no-repeat ! important;
-}
-.somda-button-left span:hover {
-	color: #BBBBBB;
-}
-.webp .somda-button-left .blank {
-	background: url(../images/design/button-right-up.webp) 100% 0 no-repeat;
-}
-.no-webp .somda-button-left .blank {
-	background: url(../images/design/button-right-up.png) 100% 0 no-repeat;
-}
-.webp .somda-button-left .blank_home {
-	background: url(../images/design/button-right-up-home.webp) 100% 0 no-repeat;
-}
-.no-webp .somda-button-left .blank_home {
-	background: url(../images/design/button-right-up-home.png) 100% 0 no-repeat;
+.somda-button:hover {
+	background-color: #fff;
+	color: #246da5 !important;
 }
 
 /******************************/
@@ -551,19 +534,6 @@ a.mainlevel-sidenav {
 /***************/
 /*** CONTENT ***/
 /***************/
-.mainbody {
-	margin: 8px;
-}
-.componentheading {
-	border-bottom: 1px solid #EEEEEE;
-	color: #4A4A4A;
-	font-family: times, Times New Roman, times-roman, georgia, serif;
-	font-size: 2.5666em;
-	font-weight: bold;
-	letter-spacing: -2px;
-	line-height: 1.35em;
-	margin: 0 0 1px 4px;
-}
 .createdate {
 	color: #99A1A7;
 	font-size: 1em;
@@ -603,33 +573,6 @@ table.contentpaneopen, table.blog table.contentpaneopen td.contentheading, td.co
 }
 table.blog table.contentpaneopen td {
 	padding: 0 4px;
-}
-td.maincol {
-	line-height: 150%;
-	font-size: 1.166666em;
-	vertical-align: top;
-}
-td.maincol ul {
-	margin-left: 40px;
-	margin-bottom: 5px;
-}
-td.maincol ul li {
-	list-style-type: disc;
-}
-td.maincol ul li li {
-	list-style-type: circle;
-}
-td.maincol li ul {
-	margin-left: 20px;
-	margin-bottom: 0;
-}
-td.leftcol, td.rightcol {
-	font-size: 1em;	
-	vertical-align: top;
-	width: 200px;
-}
-td.leftcol p, td.rightcol p {
-	margin: 0;
 }
 .spots_home_left {
 	border-right: 1px solid;
@@ -868,6 +811,7 @@ div.blog_more ul li a:hover {
 /***************/
 /*** MODULES ***/
 /***************/
+/*TODO: migrate to home-panel*/
 div.module h3 {
 	border: none;
 	color: #242B30;
@@ -915,45 +859,70 @@ div.moduleS1 h3 {
 div.moduleS1 a, div.moduleS1 a:hover {
 	color: #1E69A3;
 }
-div.moduleS3 {
-	color: #51504A;
-	height: 1%;
-	margin: 0 5px 10px;
+
+/************/
+/*** Home ***/
+/************/
+.home-container {
+	column-count: 2;
+	column-gap: 10px;
+	margin: 10px;
 }
-.webp div.moduleS3 {
-	background: #D2E2F1 url(../images/design/top-right-dark.webp) 100% 0 no-repeat;
+.home-container .home-block {
+	-webkit-column-break-inside: avoid;
+	align-items: center;
+	box-sizing: border-box;
+	display: flex;
+	flex-direction: column;
+	margin-bottom: 5px;
+	width: 100%;
 }
-.no-webp div.moduleS3 {
-	background: #D2E2F1 url(../images/design/top-right-dark.png) 100% 0 no-repeat;
-}
-div.moduleS3 div {
-	padding: 12px 3px 3px;
-}
-.webp div.moduleS3 div {
-	background: url(../images/design/top-left-dark.webp) 0 0 no-repeat;
-}
-.no-webp div.moduleS3 div {
-	background: url(../images/design/top-left-dark.png) 0 0 no-repeat;
-}
-div.moduleS3 div div {
-	background: transparent none;
-	padding: 0;
-}
-div.moduleS3 h3 {
+.home-panel {
 	border: none;
-	color: #FFFFFF;
-	font-size: 1.2em;
-	letter-spacing:normal;
-	line-height: .75em;
-	margin: 0 0 10px 0;
-	text-indent: 0;
+	border-radius: 5px;
+	display: inline-block;
+	margin-top: 10px;
+	width: 100%;
 }
-div.moduleS3 a, div.moduleS3 a:hover {
-	color: #1E69A3;
+.home-panel .home-panel-title {
+	background-color: #246da5;
+	border-radius: 5px 5px 0 0;
+	color: #fff;
+	font-weight: bold;
+	margin: 0;
+	padding: 5px 5px 5px 10px;
+}
+.home-panel .home-panel-content {
+	background-color: #d2e2f1;
+	border-radius: 0 0 5px 5px;
+	padding: 10px;
+}
+.home-panel .home-panel-buttons {
+	text-align: center;
+}
+.home-shortcut-container {
+	display: grid;
+	grid-gap: 10px;
+	grid-template-columns: auto auto;
+}
+.home-dashboard-container {
+	display: grid;
+	grid-gap: 20px;
+	grid-template-columns: auto auto;
+}
+.home-forum-container {
+	display: grid;
+	grid-column-gap: 10px;
+	grid-template-columns: auto 10px 2fr;
+}
+.home-news-container {
+	display: grid;
+	grid-column-gap: 10px;
+	grid-template-columns: 1fr 10px 2fr;
 }
 
 /**************/
-/*** FOOTER ***/
+/*** Footer ***/
 /**************/
 #footer {
 	background-color: #1E69A3;

@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="somda_spots", uniqueConstraints={@ORM\UniqueConstraint(name="idx_48259_treinid", columns={"treinid", "posid", "locatieid", "matid", "uid", "datum"})}, indexes={@ORM\Index(name="idx_48259_matid", columns={"matid"}), @ORM\Index(name="idx_48259_datum", columns={"datum"}), @ORM\Index(name="idx_48259_uid", columns={"uid"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\Spot")
  */
 class Spot
 {

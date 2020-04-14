@@ -6,16 +6,22 @@ use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table(name="somda_stats")
- * @ORM\Entity
+ * @ORM\Table(name="somda_stats", uniqueConstraints={@ORM\UniqueConstraint(name="idx_date", columns={"datum"})})
+ * @ORM\Entity(repositoryClass="App\Repository\Statistic")
  */
 class Statistic
 {
     /**
-     * @var DateTime
-     * @ORM\Column(name="datum", type="date", nullable=false)
+     * @var int
+     * @ORM\Column(name="id", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @var DateTime
+     * @ORM\Column(name="datum", type="date", nullable=false)
      */
     private $date;
 
@@ -54,6 +60,24 @@ class Statistic
      * @ORM\Column(name="posts", type="bigint", nullable=false)
      */
     private $numberOfPosts = 0;
+
+    /**
+     * @return int
+     */
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $id
+     * @return Statistic
+     */
+    public function setId(int $id): Statistic
+    {
+        $this->id = $id;
+        return $this;
+    }
 
     /**
      * @return DateTime

@@ -10,7 +10,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Table(name="somda_users", indexes={@ORM\Index(name="idx_49053_uname", columns={"username"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\User")
  */
 class User implements UserInterface
 {

@@ -1,0 +1,24 @@
+<div class="home-panel">
+	<div class="home-panel-title">Bijzondere ritten</div>
+	<div class="home-panel-content">
+{#'/feed/rss.php?rss_type=drgl&amp;drgl_type=1'#}
+		<table align="center" border="0" cellspacing="0" cellpadding="0">
+			{% for specialRoute in layoutData['dashboard']['specialRoutes'] %}
+				<tr valign="baseline">
+					{% set date = specialRoute.endDate is null ? (specialRoute.startDate | date('d-m-Y')) : ((specialRoute.startDate | date('d-m-Y')) ~ ' t/m ' ~ (specialRoute.endDate | date('d-m-Y'))) %}
+					<td class="contentpanel" align="right" nowrap><i class="fas fa-train"></i> {{ date }}</td>
+					<td>&nbsp;</td>
+					<td class="contentpanel"><a class="contentpanel" href="{{ path('special_route', { 'id': specialRoute.id }) }}">{{ specialRoute.title }}</a></td>
+				</tr>
+			{% else %}
+				<tr valign="baseline">
+					<td class="contentpanel" align="center"><strong>Er zijn geen bijzondere ritten te melden,<br />kijk eens in het archief wat je gemist hebt!</strong></td>
+				</tr>
+			{% endfor %}
+		</table>
+		<br />
+		<div class="home-panel-buttons">
+			<a class="somda-button" href="{{ path('special_routes') }}">Archief bijzondere ritten</a>
+		</div>
+	</div>
+</div>
