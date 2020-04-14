@@ -776,38 +776,6 @@ div.drgl_text, div.nieuws_text {
 	width: 945px;
 }
 
-/*******************/
-/*** MEER NIEUWS ***/
-/*******************/
-div.blog_more {
-	border-top: 1px solid #E6E6D4;
-}
-div.blog_more strong {
-	position: relative;
-}
-div.blog_more ul li {
-	list-style: none;
-	background-image: none;
-	padding: 0;
-}
-div.blog_more ul li a {
-	border-bottom: 1px solid #EEEEEE;
-	display: block;
-	padding: 4px;
-	text-decoration: none;
-	text-indent: 14px;
-}
-.webp div.blog_more ul li a {
-	background: url(../images/design/list-arrow.webp) no-repeat 4px 10px;
-}
-.no-webp div.blog_more ul li a {
-	background: url(../images/design/list-arrow.png) no-repeat 4px 10px;
-}
-div.blog_more ul li a:hover {
-	background-color: #DFDFDF;
-	text-decoration: none;
-}
-
 /***************/
 /*** MODULES ***/
 /***************/
@@ -919,6 +887,18 @@ div.moduleS1 a, div.moduleS1 a:hover {
 	display: grid;
 	grid-column-gap: 10px;
 	grid-template-columns: 1fr 10px 2fr;
+}
+.home-rail-news-headline {
+	display: grid;
+	grid-column-gap: 10px;
+	grid-template-columns: 1fr auto;
+}
+.home-rail-news-headline img {
+	max-height: 25px;
+}
+.home-special-routes-container {
+	align-items: center;
+	text-align: center;
 }
 
 /**************/

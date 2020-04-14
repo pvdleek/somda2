@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -12,7 +13,6 @@ class RailNews
 {
     /**
      * @var int
-     *
      * @ORM\Column(name="sns_id", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -38,10 +38,10 @@ class RailNews
     private $introduction;
 
     /**
-     * @var int
-     * @ORM\Column(name="sns_datumtijd", type="bigint", nullable=false)
+     * @var DateTime
+     * @ORM\Column(name="sns_timestamp", type="datetime", nullable=false)
      */
-    private $dateTime;
+    private $timestamp;
 
     /**
      * @var boolean
@@ -141,20 +141,20 @@ class RailNews
     }
 
     /**
-     * @return int
+     * @return DateTime
      */
-    public function getDateTime(): int
+    public function getTimestamp(): DateTime
     {
-        return $this->dateTime;
+        return $this->timestamp;
     }
 
     /**
-     * @param int $dateTime
+     * @param DateTime $timestamp
      * @return RailNews
      */
-    public function setDateTime(int $dateTime): RailNews
+    public function setTimestamp(DateTime $timestamp): RailNews
     {
-        $this->dateTime = $dateTime;
+        $this->timestamp = $timestamp;
         return $this;
     }
 

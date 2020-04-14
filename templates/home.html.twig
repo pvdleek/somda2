@@ -79,7 +79,7 @@
                                             </tr>
                                         </table>
                                         <table class="contentpaneopen">
-                                            <tr><td valign="top" colspan="2" class="createdate">{{ railNews[0].dateTime | date('Y-m-d H:i') }}</td></tr>
+                                            <tr><td valign="top" colspan="2" class="createdate">{{ railNews[0].timestamp | displayDateTime(true) }}</td></tr>
                                             <tr>
                                                 <td valign="top" colspan="2">
                                                     {{ railNews[0].introduction }}

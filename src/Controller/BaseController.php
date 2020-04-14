@@ -200,7 +200,7 @@ abstract class BaseController
             $headerType = 'news';
             $headerContent = $this->doctrine
                 ->getRepository(RailNews::class)
-                ->findBy(['active' => true, 'approved' => true], ['dateTime' => 'DESC'], 3)[rand(0, 2)];
+                ->findBy(['active' => true, 'approved' => true], ['timestamp' => 'DESC'], 3)[rand(0, 2)];
         }
 
         return array_merge($viewParameters, [
