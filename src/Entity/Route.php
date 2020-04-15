@@ -11,6 +11,11 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Route
 {
+    public const SPECIAL_NO_SERVICE = 'GDST';
+    public const SPECIAL_EXTRA_SERVICE = ['LLT', 'LM', 'CARGO', 'REIZ', 'RG', 'WTR'];
+    public const SPECIAL_MEASURING = 'MEET';
+    public const SPECIAL_CHECKING = 'SCHOUW';
+
     /**
      * @var int
      * @ORM\Column(name="treinid", type="bigint", nullable=false)

@@ -5,6 +5,7 @@ namespace App\Twig;
 use App\Helpers\DateHelper;
 use App\Helpers\ForumHelper;
 use App\Helpers\SortHelper;
+use App\Helpers\SpotHelper;
 use App\Helpers\UserHelper;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
@@ -22,6 +23,7 @@ class AppExtension extends AbstractExtension
             new TwigFilter('displayDateTime', [DateHelper::class, 'getDisplayDate']),
             new TwigFilter('displayTime', [DateHelper::class, 'timeDatabaseToDisplay']),
             new TwigFilter('displayForumPost', [ForumHelper::class, 'getDisplayForumPost']),
+            new TwigFilter('displaySpot', [SpotHelper::class, 'getDisplaySpot']),
             new TwigFilter('sortByField', [SortHelper::class, 'sortByFieldFilter']),
         ];
     }

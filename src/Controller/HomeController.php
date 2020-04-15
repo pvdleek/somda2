@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\ForumDiscussion;
+use App\Entity\ForumForum;
 use App\Entity\News;
 use App\Entity\RailNews;
 use App\Entity\SpecialRoute;
@@ -39,6 +40,7 @@ class HomeController extends BaseController
         $this->loadDataForSpecialRoutes($layout, $layoutData);
         $this->loadDataForForum($layout, $layoutData);
         $this->loadDataForNews($layout, $layoutData);
+        $this->loadDataForSpots($layout, $layoutData);
 
         return $this->render('home.html.twig', [
             'layoutLeft' => $layoutLeft,
@@ -55,11 +57,11 @@ class HomeController extends BaseController
     private function loadDataForDashboard(array $layout, array &$layoutData): void
     {
         if (in_array('dashboard', $layout)) {
-            $layoutData['dashboard']['spots'] = $this->doctrine->getRepository(Spot::class)->countAll();
-            $layoutData['dashboard']['pageViews'] = $this->doctrine->getRepository(Statistic::class)->countPageViews();
             $layoutData['dashboard']['activeUsers'] = $this->doctrine->getRepository(User::class)->countActive();
-            $layoutData['dashboard']['birthdayUsers'] = $this->doctrine->getRepository(User::class)->countBirthdays();
+            $layoutData['dashboard']['pageViews'] = $this->doctrine->getRepository(Statistic::class)->countPageViews();
+            $layoutData['dashboard']['spots'] = $this->doctrine->getRepository(Spot::class)->countAll();
             $layoutData['dashboard']['statistics'] = $this->doctrine->getRepository(Statistic::class)->findLastDays(3);
+            $layoutData['dashboard']['birthdayUsers'] = $this->doctrine->getRepository(User::class)->countBirthdays();
         }
     }
 
@@ -70,11 +72,10 @@ class HomeController extends BaseController
     private function loadDataForSpecialRoutes(array $layout, array &$layoutData): void
     {
         if (in_array('drgl', $layout)) {
-            $layoutData['dashboard']['specialRoutes'] =
-                $this->doctrine->getRepository(SpecialRoute::class)->findForDashboard(false);
+            $layoutData['specialRoutes'] = $this->doctrine->getRepository(SpecialRoute::class)->findForDashboard(false);
         }
         if (in_array('werkzaamheden', $layout)) {
-            $layoutData['dashboard']['specialRoutesConstruction'] =
+            $layoutData['specialRoutesConstruction'] =
                 $this->doctrine->getRepository(SpecialRoute::class)->findForDashboard(true);
         }
     }
@@ -86,9 +87,20 @@ class HomeController extends BaseController
      */
     private function loadDataForForum(array $layout, array &$layoutData): void
     {
+        $limit = $this->userHelper->getPreferenceValueByKey($this->getUser(), UserPreference::KEY_HOME_MAX_FORUM_POSTS);
         if (in_array('forum', $layout)) {
-            $limit = $this->userHelper->getPreferenceValueByKey($this->getUser(), UserPreference::KEY_HOME_MAX_FORUM_POSTS);
-            $layoutData['dashboard']['forum'] = $this->doctrine->getRepository(ForumDiscussion::class)->findForDashboard($limit, $this->getUser());
+            $layoutData['forum'] =
+                $this->doctrine->getRepository(ForumDiscussion::class)->findForDashboard($limit, $this->getUser());
+        }
+        if (in_array('foutespots', $layout)) {
+            /**
+             * @var ForumForum $forum
+             */
+            $forum = $this->doctrine->getRepository(ForumForum::class)->find($_ENV['WRONG_SPOTS_FORUM_ID']);
+            $layoutData['forum-spots']['id'] = $forum->getId();
+            $layoutData['forum-spots']['name'] = $forum->getName();
+            $layoutData['forum-spots']['discussions'] =
+                $this->doctrine->getRepository(ForumDiscussion::class)->findByForum($forum, $this->getUser());
         }
     }
 
@@ -101,16 +113,29 @@ class HomeController extends BaseController
     {
         $limit = $this->userHelper->getPreferenceValueByKey($this->getUser(), UserPreference::KEY_HOME_MAX_NEWS);
         if (in_array('news', $layout)) {
-            $layoutData['dashboard']['news'] =
+            $layoutData['news'] =
                 $this->doctrine->getRepository(News::class)->findForDashboard($limit, $this->getUser());
         }
         if (in_array('spoornieuws', $layout)) {
             $limit = $this->userHelper->getPreferenceValueByKey($this->getUser(), UserPreference::KEY_HOME_MAX_NEWS);
-            $layoutData['dashboard']['railNews'] = $this->doctrine->getRepository(RailNews::class)->findBy(
+            $layoutData['railNews'] = $this->doctrine->getRepository(RailNews::class)->findBy(
                 ['active' => true, 'approved' => true],
                 ['timestamp' => 'DESC'],
                 $limit
             );
+        }
+    }
+
+    /**
+     * @param array $layout
+     * @param array $layoutData
+     * @throws Exception
+     */
+    private function loadDataForSpots(array $layout, array &$layoutData): void
+    {
+        if (in_array('spots', $layout)) {
+            $limit = $this->userHelper->getPreferenceValueByKey($this->getUser(), UserPreference::KEY_HOME_MAX_SPOTS);
+            $layoutData['spots'] = $this->doctrine->getRepository(Spot::class)->findBy([], ['date' => 'DESC'], $limit);
         }
     }
 }

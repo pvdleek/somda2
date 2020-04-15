@@ -10,7 +10,7 @@
 		<br /><a href="{{ railNews[0].url | url_encode }}" target="_blank">Lees verder...</a>
 
 		<ul>
-			{% for railNews in layoutData['dashboard']['railNews'] %}
+			{% for railNews in layoutData['railNews'] %}
 				{% if loop.index > 1 %}<li><i class="fas fa-arrow-right"></i> <a href="{{ railNews.url | url_encode }}" target="_blank">{{ railNews.title }}</a></li>{% endif %}
 			{% endfor %}
 		</ul>

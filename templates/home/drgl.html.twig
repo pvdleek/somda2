@@ -2,7 +2,7 @@
 <div class="home-panel">
 	<div class="home-panel-title">Bijzondere ritten</div>
 	<div class="home-panel-content home-special-routes-container">
-		{% for specialRoute in layoutData['dashboard']['specialRoutes'] %}
+		{% for specialRoute in layoutData['specialRoutes'] %}
 			{% set date = specialRoute.endDate is null ? (specialRoute.startDate | date('d-m-Y')) : ((specialRoute.startDate | date('d-m-Y')) ~ ' t/m ' ~ (specialRoute.endDate | date('d-m-Y'))) %}
 			<i class="fas fa-train"></i> {{ date }} <a href="{{ path('special_route', { 'id': specialRoute.id }) }}">{{ specialRoute.title }}</a><br />
 		{% else %}

@@ -39,6 +39,13 @@ class Train
     private $transporter;
 
     /**
+     * @var TrainNamePattern|null
+     * @ORM\ManyToOne(targetEntity="App\Entity\TrainNamePattern")
+     * @ORM\JoinColumn(name="pattern_id", referencedColumnName="id")
+     */
+    private $namePattern;
+
+    /**
      * @var Spot[]
      * @ORM\OneToMany(targetEntity="App\Entity\Spot", mappedBy="train")
      */
@@ -121,6 +128,24 @@ class Train
     public function setTransporter(Transporter $transporter): Train
     {
         $this->transporter = $transporter;
+        return $this;
+    }
+
+    /**
+     * @return TrainNamePattern|null
+     */
+    public function getNamePattern(): ?TrainNamePattern
+    {
+        return $this->namePattern;
+    }
+
+    /**
+     * @param TrainNamePattern|null $namePattern
+     * @return Train
+     */
+    public function setNamePattern(?TrainNamePattern $namePattern): Train
+    {
+        $this->namePattern = $namePattern;
         return $this;
     }
 

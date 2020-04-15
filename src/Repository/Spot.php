@@ -19,11 +19,11 @@ class Spot extends EntityRepository
             ->select('COUNT(s.id)')
             ->from(SpotEntity::class, 's');
         try {
-            return $queryBuilder->getQuery()->getSingleScalarResult();
+            return (int)$queryBuilder->getQuery()->getSingleScalarResult();
         } catch (NonUniqueResultException $exception) {
-            return null;
+            return 0;
         } catch (NoResultException $exception) {
-            return null;
+            return 0;
         }
     }
 }

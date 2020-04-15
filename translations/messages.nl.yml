@@ -21,6 +21,7 @@ general:
       home: 'Somda'
       profile: 'Profiel'
   date:
+    today: 'vandaag'
     days:
       0: 'Maandag'
       1: 'Dinsdag'
@@ -135,3 +136,11 @@ profile:
   lastVisit: 'Laatste bezoek'
   website: 'Website'
   info: 'Commentaar'
+spot:
+  display:
+    numeric: '%s reed %s te %s trein %s'
+    noService: '%s stond %s GDST te %s'
+    extraService: '%s reed %s te %s een %s'
+    measuring: '%s was %s te %s aan het meten'
+    checking: '%s was %s te %s aan het schouwen'
+    generic: '%s stond %s te %s %s'

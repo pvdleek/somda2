@@ -2,7 +2,7 @@
 	<div class="home-panel-title">Laatste Somda nieuws</div>
 	<div class="home-panel-content">
 		<div class="home-news-container">
-			{% for news in layoutData['dashboard']['news'] %}
+			{% for news in layoutData['news'] %}
 				<div>{{ news.timestamp | displayDateTime(true, true) }}</div>
 				<div><i class="fas fa-newspaper"></i></div>
 				<div>

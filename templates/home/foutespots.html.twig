@@ -1,8 +1,8 @@
 <div class="home-panel">
-	<div class="home-panel-title">Forum - Recente berichten</div>
+	<div class="home-panel-title">Forum - Recente foute-spots berichten</div>
 	<div class="home-panel-content">
 		<div class="home-forum-container">
-			{% for discussion in layoutData['forum'] %}
+			{% for discussion in layoutData['forum-spots']['discussions'] %}
 				<div>{{ discussion['max_post_timestamp'] | displayDateTime(true, true) }}</div>
 				<div>
 					{% if discussion['locked'] %}
@@ -22,11 +22,8 @@
 
 		<br />
 		<div class="home-panel-buttons">
+			<a class="somda-button" href="{{ path('forum_forum', { 'id': layoutData['forum-spots']['id'], 'name': (layoutData['forum-spots']['name'] | url_encode) }) }}">Naar het foute-spots forum</a>
 			<a class="somda-button" href="{{ path('forum') }}">Naar het forum</a>
-			{% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-				<a class="somda-button" href="/ongelezen/">Ongelezen berichten</a>
-				<a class="somda-button" href="/favorieten/">Favoriete discussies</a>
-			{% endif %}
 		</div>
 	</div>
 </div>

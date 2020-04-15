@@ -900,6 +900,13 @@ div.moduleS1 a, div.moduleS1 a:hover {
 	align-items: center;
 	text-align: center;
 }
+.home-spots-container {
+	align-items: center;
+	text-align: center;
+	display: grid;
+	grid-column-gap: 5px;
+	grid-template-columns: auto 15px 15px 15px;
+}
 
 /**************/
 /*** Footer ***/
