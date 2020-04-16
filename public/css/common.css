@@ -89,14 +89,6 @@ hr {
 	color: #538eba;
 	height: 1px;
 }
-.banner {
-	border-bottom: 1px solid #ddd;
-	margin-bottom: 10px;
-	padding-bottom: 10px;
-}
-.inside {
-	padding: 4px 8px;
-}
 a {
 	color: #246da5;
 	text-decoration: underline;
@@ -544,14 +536,6 @@ ul.visible {
 	list-style: circle;
 	padding-left: 25px;
 }
-table.blog td.contentheading {
-	border-bottom: 1px solid #F5F5F5;
-	color: #444444;
-	font-family: Verdana, Arial, sans-serif;
-	font-size:1.4666em;
-	letter-spacing: -1px;
-	line-height: 1.1em;
-}
 td.contentheading {
 	font-size:2.1em;
 	line-height: 1.1em;
@@ -566,26 +550,10 @@ a.contentpagetitle {
 a.contentpagetitle:hover {
 	color: #121517;
 }
-table.contentpaneopen, table.blog table.contentpaneopen td.contentheading, td.contentheading {
+table.contentpaneopen, td.contentheading {
 	margin: 0;
 	padding: 0;
 	width: 100%;
-}
-table.blog table.contentpaneopen td {
-	padding: 0 4px;
-}
-.spots_home_left {
-	border-right: 1px solid;
-	float: left;
-	width: 49%;
-}
-.spots_home_right {
-	float: left;
-	padding-left: 5px;
-	width: 50%
-}
-span.spots_small_text {
-	font-size: 11px;
 }
 
 /*************/
@@ -852,6 +820,10 @@ div.moduleS1 a, div.moduleS1 a:hover {
 	margin-top: 10px;
 	width: 100%;
 }
+.separate-panel {
+	margin: 10px;
+	width: auto;
+}
 .home-panel .home-panel-title {
 	background-color: #246da5;
 	border-radius: 5px 5px 0 0;
@@ -865,7 +837,7 @@ div.moduleS1 a, div.moduleS1 a:hover {
 	border-radius: 0 0 5px 5px;
 	padding: 10px;
 }
-.home-panel .home-panel-buttons {
+.home-panel-buttons {
 	text-align: center;
 }
 .home-shortcut-container {

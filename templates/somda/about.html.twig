@@ -1,52 +1,35 @@
 {% extends('base.html.twig') %}
 
 {% block content %}
-    <table width="100%" border="0" cellspacing="0" cellpadding="0">
-        <tr>
-            <td class="leftcol">{{ include('partials/homeColumnLeft.html.twig') }}</td>
-            <td class="maincol">
-                <div class="inside">
-                    <div class="banner">
-                        <script type="text/javascript"><!--
-                            google_ad_client = "pub-9032135516454843";
-                            /* 728x15, gemaakt 2-8-09 */
-                            google_ad_slot = "8555796169";
-                            google_ad_width = 728;
-                            google_ad_height = 15;
-                            //--></script>
-                        <script type="text/javascript" src="http://pagead2.googlesyndication.com/pagead/show_ads.js"></script>
-                    </div>
+    <div class="home-panel separate-panel">
+        <div class="home-panel-title">Over Somda</div>
+        <div class="home-panel-content">
+            Somda staat voor <b>S</b>pots en <b>OM</b>lopen <b>DA</b>tabase.
+            <br /><span style="font-size:9px"><i>(C) Peter van der Leek, Houten 2003-{{ 'now' | date('Y') }}></i></span>
 
-                    <div class="banner">
-                        Somda staat voor <b>S</b>pots en <b>OM</b>lopen <b>DA</b>tabase.
-                        <br /><span style="font-size:9px"><i>(C) Peter van der Leek, Houten 2003-{{ 'now' | date('Y') }}></i></span>
+            <br />Een spot is de vastlegging van treinmaterieel op een bepaald tijdstip op een bepaalde plek. De meeste <a href="/spots_home/">spots</a> bestaan slechts uit een <a href="/materieel_home/">materieelnummer</a>, een <a href="/treinnummers/">treinnummer</a>, een <a href="/verkortingen/">locatie</a> en eventueel een positie.
+            <br />Een omloop is de vastlegging van de verschillende diensten die treinmaterieel volgt.
+            <br /><br />Somda kan spots opslaan en aan de hand hiervan worden omlopen berekend. Het grote voordeel van Somda is dat spots online ingevoerd kunnen worden. De website met al zijn functionaliteiten is voor alle gebruikers bereikbaar, door iedere bezoeker te raadplegen en voor iedereen gratis!
 
-                        <br />Een spot is de vastlegging van treinmaterieel op een bepaald tijdstip op een bepaalde plek. De meeste <a href="/spots_home/">spots</a> bestaan slechts uit een <a href="/materieel_home/">materieelnummer</a>, een <a href="/treinnummers/">treinnummer</a>, een <a href="/verkortingen/">locatie</a> en eventueel een positie.
-                        <br />Een omloop is de vastlegging van de verschillende diensten die treinmaterieel volgt.
-                        <br /><br />Somda kan spots opslaan en aan de hand hiervan worden omlopen berekend. Het grote voordeel van Somda is dat spots online ingevoerd kunnen worden. De website met al zijn functionaliteiten is voor alle gebruikers bereikbaar, door iedere bezoeker te raadplegen en voor iedereen gratis!
+            <br /><br />Somda is getest met alle gangbare browsers, waaronder Firefox, Internet Explorer, Mozilla, Netscape, Opera en Safari.
+            <br />Enkele functies zullen echter niet goed werken op oudere versies waaronder Internet Explorer 8 en eerder. Overweeg in dat geval een update van je browser en/of je operating systeem.
 
-                        <br /><br />Somda is getest met alle gangbare browsers, waaronder Firefox, Internet Explorer, Mozilla, Netscape, Opera en Safari.
-                        <br />Enkele functies zullen echter niet goed werken op oudere versies waaronder Internet Explorer 8 en eerder. Overweeg in dat geval een update van je browser en/of je operating systeem.
+            <p class="info">Somda biedt de volgende gratis diensten:</p>
+            <ul>
+                <li>Webapplicatie (http://www.somda.nl/) --- Onder andere voor het invoeren van spots en bekijken van dienstregelingen.</li>
+                <li>Mobiele versie (<a href="http://m.somda.nl/" target="_blank">http://m.somda.nl/</a>) --- Voor het bekijken van dienstregelingen, omlopen en forumberichten.</li>
+                <li>Feeds (<a href="http://feed.somda.nl/" target="_blank">http://feed.somda.nl/</a>):<ul>
+                        <li>Image met verstoringen --- Actuele verstoringen als plaatje, dus direct bruikbaar op een website.</li>
+                        <li>RSS --- Keuze uit de laatste spots of komende speciale ritten</li>
+                    </ul></li>
+            </ul>
+            <p class="warn">
+                Somda biedt deze diensten, ondanks aanzienlijke onkosten, allemaal volledig gratis aan.
+                <br /><br />Mocht je echter zo tevreden zijn dat je toch jouw waardering wilt laten blijken dan is een donatie altijd welkom.
+                <br />Dat kan met IDeal op de <a href="/doneren/">donatie pagina</a> of rechtstreeks op Knab rekening NL15KNAB0725075023 ten name van P.W. van der Leek te Houten.
+            </p>
 
-                        <p class="info">Somda biedt de volgende gratis diensten:</p>
-                        <ul>
-                            <li>Webapplicatie (http://www.somda.nl/) --- Onder andere voor het invoeren van spots en bekijken van dienstregelingen.</li>
-                            <li>Mobiele versie (<a href="http://m.somda.nl/" target="_blank">http://m.somda.nl/</a>) --- Voor het bekijken van dienstregelingen, omlopen en forumberichten.</li>
-                            <li>Feeds (<a href="http://feed.somda.nl/" target="_blank">http://feed.somda.nl/</a>):<ul>
-                                    <li>Image met verstoringen --- Actuele verstoringen als plaatje, dus direct bruikbaar op een website.</li>
-                                    <li>RSS --- Keuze uit de laatste spots of komende speciale ritten</li>
-                                </ul></li>
-                        </ul>
-                        <p class="warn">
-                            Somda biedt deze diensten, ondanks aanzienlijke onkosten, allemaal volledig gratis aan.
-                            <br /><br />Mocht je echter zo tevreden zijn dat je toch jouw waardering wilt laten blijken dan is een donatie altijd welkom.
-                            <br />Dat kan met IDeal op de <a href="/doneren/">donatie pagina</a> of rechtstreeks op Knab rekening NL15KNAB0725075023 ten name van P.W. van der Leek te Houten.
-                        </p>
-
-                        <br />Een bericht sturen aan de webmaster? Gebruik dan het <a href="/feedback/">feedback-formulier</a>.
-                    </div>
-                </div>
-            </td>
-        </tr>
-    </table>
+            <br />Een bericht sturen aan de webmaster? Gebruik dan het <a href="/feedback/">feedback-formulier</a>.
+        </div>
+    </div>
 {% endblock %}

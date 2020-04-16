@@ -32,8 +32,8 @@ class HomeController extends BaseController
             $layout = str_replace('foutespots', '', $layout);
         }
         $layoutPart = explode('$', $layout);
-        $layoutLeft = explode(';', $layoutPart[0]);
-        $layoutRight = explode(';', $layoutPart[1]);
+        $layoutLeft = array_filter(array_diff(explode(';', $layoutPart[0]), ['poll', 'shout']));
+        $layoutRight = array_filter(array_diff(explode(';', $layoutPart[1]), ['poll', 'shout']));
         $layout = array_merge($layoutLeft, $layoutRight);
 
         $layoutData = [];
