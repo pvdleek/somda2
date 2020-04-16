@@ -7,11 +7,14 @@ use App\Helpers\ForumHelper;
 use App\Helpers\SortHelper;
 use App\Helpers\SpotHelper;
 use App\Helpers\UserHelper;
+use App\Traits\DateTrait;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 
 class AppExtension extends AbstractExtension
 {
+    use DateTrait;
+
     /**
      * @return array
      */
@@ -21,7 +24,7 @@ class AppExtension extends AbstractExtension
             new TwigFilter('chr', 'chr'),
             new TwigFilter('displayUser', [UserHelper::class, 'getDisplayUser']),
             new TwigFilter('displayDateTime', [DateHelper::class, 'getDisplayDate']),
-            new TwigFilter('displayTime', [DateHelper::class, 'timeDatabaseToDisplay']),
+            new TwigFilter('displayTime', [$this, 'timeDatabaseToDisplay']),
             new TwigFilter('displayForumPost', [ForumHelper::class, 'getDisplayForumPost']),
             new TwigFilter('displaySpot', [SpotHelper::class, 'getDisplaySpot']),
             new TwigFilter('sortByField', [SortHelper::class, 'sortByFieldFilter']),

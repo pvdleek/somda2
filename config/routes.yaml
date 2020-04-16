@@ -230,9 +230,6 @@ links:
 gespotmat:
   path: /
   controller: App\Controller\HomeController::homeAction
-doorkomststaat:
-  path: /doorkomststaat/
-  controller: App\Controller\TrainTableController::passingRoutesAction
 weer:
   path: /
   controller: App\Controller\HomeController::homeAction

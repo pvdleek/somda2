@@ -902,10 +902,17 @@ div.moduleS1 a, div.moduleS1 a:hover {
 }
 .home-spots-container {
 	align-items: center;
-	text-align: center;
 	display: grid;
 	grid-column-gap: 5px;
 	grid-template-columns: auto 15px 15px 15px;
+	text-align: center;
+}
+.home-passing-routes-container {
+	align-items: center;
+	display: grid;
+	grid-row-gap: 10px;
+	grid-template-rows: auto auto auto;
+	text-align: center;
 }
 
 /**************/

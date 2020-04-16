@@ -1,0 +1,16 @@
+<div class="home-panel">
+	<div class="home-panel-title">Directe doorkomststaat</div>
+	<div class="home-panel-content">
+		<div class="home-passing-routes-container">
+			<div><label for="location">Locatie</label> <input id="location" maxlength="10" name="location" type="text" value="{{ layoutData['passingRoutes']['location'] }}" /></div>
+			<div><label for="start_time">Van</label> <input id="start_time" maxlength="5" name="start_time" size="5" type="text" value="{{ layoutData['passingRoutes']['startTime'] | date('H:i') }}" /></div>
+			<div><label for="end_time">Tot</label> <input id="end_time" maxlength="5" name="end_time" size="5" type="text" value="{{ layoutData['passingRoutes']['endTime'] | date('H:i') }}" /></div>
+		</div>
+
+		<br />
+		<div class="home-panel-buttons">
+			<a class="somda-button" href="#" onclick="document.location='{{ path('passing_routes_search', { 'trainTableIndexNumber': defaultTrainTableYearId, 'dayNumber': ('now' | date('n')), 'startTime': 'start', 'endTime': 'end', 'locationName': 'location' }) }}'.replace('/start/', '/' + document.getElementById('start_time').value + '/').replace('/end/', '/' + document.getElementById('end_time').value + '/').replace('/location/', '/' + document.getElementById('location').value + '/'); return false;">Vraag op</a>
+			<a class="somda-button" href="/instellingen/">Stel standaard-locatie in</a>
+		</div>
+	</div>
+</div>

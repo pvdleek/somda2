@@ -177,6 +177,7 @@ abstract class BaseController
     /**
      * @param array $viewParameters
      * @return array
+     * @throws Exception
      */
     private function getParameters(array $viewParameters): array
     {
@@ -209,6 +210,7 @@ abstract class BaseController
             'imageNumber' => rand(1, 11),
             'breadcrumb' => $this->breadcrumbHelper->getBreadcrumb(),
             'menuStructure' => $this->menuHelper->getMenuStructure(),
+            'defaultTrainTableYearId' => $this->trainTableHelper->getDefaultTrainTableYear()->getId(),
             'nrOfOpenForumAlerts' => $this->menuHelper->getNumberOfOpenForumAlerts(),
         ]);
     }

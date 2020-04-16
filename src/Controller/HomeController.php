@@ -11,6 +11,7 @@ use App\Entity\Spot;
 use App\Entity\Statistic;
 use App\Entity\User;
 use App\Entity\UserPreference;
+use DateTime;
 use Exception;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -41,6 +42,7 @@ class HomeController extends BaseController
         $this->loadDataForForum($layout, $layoutData);
         $this->loadDataForNews($layout, $layoutData);
         $this->loadDataForSpots($layout, $layoutData);
+        $this->loadDataForPassingRoutes($layout, $layoutData);
 
         return $this->render('home.html.twig', [
             'layoutLeft' => $layoutLeft,
@@ -136,6 +138,21 @@ class HomeController extends BaseController
         if (in_array('spots', $layout)) {
             $limit = $this->userHelper->getPreferenceValueByKey($this->getUser(), UserPreference::KEY_HOME_MAX_SPOTS);
             $layoutData['spots'] = $this->doctrine->getRepository(Spot::class)->findBy([], ['date' => 'DESC'], $limit);
+        }
+    }
+
+    /**
+     * @param array $layout
+     * @param array $layoutData
+     * @throws Exception
+     */
+    private function loadDataForPassingRoutes(array $layout, array &$layoutData): void
+    {
+        if (in_array('doorkomst', $layout)) {
+            $layoutData['passingRoutes']['location'] =
+                $this->userHelper->getPreferenceValueByKey($this->getUser(), UserPreference::KEY_DEFAULT_SPOT_LOCATION);
+            $layoutData['passingRoutes']['startTime'] = new DateTime('-5 minutes');
+            $layoutData['passingRoutes']['endTime'] = new DateTime('+30 minutes');
         }
     }
 }
