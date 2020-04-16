@@ -213,6 +213,12 @@ disclaimer_choice:
   methods: [GET]
   controller: App\Controller\SomdaController:disclaimerAction
 
+########
+# User #
+########
+settings:
+  path: /instellingen/
+  controller: App\Controller\SettingsController:indexAction
 profile_view:
   path: /profiel/{id}
   methods: [GET]
@@ -267,9 +273,6 @@ ongelezen:
   path: /
   controller: App\Controller\HomeController::homeAction
 gebruikerslijst:
-  path: /
-  controller: App\Controller\HomeController::homeAction
-instellingen:
   path: /
   controller: App\Controller\HomeController::homeAction
 nieuws/126:

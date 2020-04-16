@@ -2,13 +2,8 @@
 
 {% block content %}
     {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-        <div class="button_clear"><div class="somda-button-left"><div class="blank_home">
-            <a href="{{ path('forum_forum_new_discussion', { 'id': forum.id }) }}" title="{{ 'forum.newDiscussion' | trans }}"><span>{{ 'forum.newDiscussion' | trans }}</span></a>
-        </div></div></div>
-        <div class="button_clear"><div class="somda-button-left"><div class="blank_home">
-            <a href="{{ path('forum_mark_read') }}" title="{{ 'forum.mark.all' | trans }}"><span>{{ 'forum.mark.all' | trans }}</span></a>
-        </div></div></div>
-
+        <a class="somda-button" href="{{ path('forum_forum_new_discussion', { 'id': forum.id }) }}" title="{{ 'forum.newDiscussion' | trans }}"><span>{{ 'forum.newDiscussion' | trans }}</span></a>
+        <a class="somda-button" href="{{ path('forum_mark_read') }}" title="{{ 'forum.mark.all' | trans }}"><span>{{ 'forum.mark.all' | trans }}</span></a>
         <br /><br />
     {% endif %}
 

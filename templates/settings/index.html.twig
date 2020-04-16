@@ -1,0 +1,18 @@
+{% extends('base.html.twig') %}
+
+{% block content %}
+    <div class="home-panel separate-panel">
+        <div class="home-panel-title">Mijn instellingen</div>
+        <div class="home-panel-content">
+            {{ form_start(form, { 'attr': { 'id': 'settings_form' } }) }}
+                <table class="design">
+                    {{ form_rest(form) }}
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td><a class="somda-button" href="#" onclick="$('#settings_form').submit(); return false;"><span>Instellingen opslaan</span></a></td>
+                    </tr>
+                </table>
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}

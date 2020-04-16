@@ -57,18 +57,17 @@ class UserHelper implements RuntimeExtensionInterface
         return $displayUser;
     }
 
-
     /**
      * @param User $user
      * @param string $key
-     * @return string|null
+     * @return UserPreferenceValue
      * @throws Exception
      */
-    public function getPreferenceValueByKey(User $user, string $key): string
+    public function getPreferenceByKey(User $user, string $key): UserPreferenceValue
     {
         foreach ($user->getPreferences() as $preference) {
             if ($preference->getPreference()->getKey() === $key) {
-                return $preference->getValue();
+                return $preference;
             }
         }
 
@@ -88,6 +87,6 @@ class UserHelper implements RuntimeExtensionInterface
         $this->doctrine->getManager()->persist($userPreferenceValue);
         $this->doctrine->getManager()->flush();
 
-        return $userPreference->getDefaultValue();
+        return $userPreferenceValue;
     }
 }

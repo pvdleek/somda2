@@ -14,7 +14,7 @@ final class Version20200411140736 extends AbstractMigration
      */
     public function getDescription() : string
     {
-        return 'Clean-up non-used user preferences';
+        return 'Clean-up user preferences';
     }
 
     /**
@@ -37,6 +37,8 @@ final class Version20200411140736 extends AbstractMigration
                 \'mat_recentespots\', \'mat_spotsinvoer\', \'spotting_last\'
             )
         ');
+
+        $this->addSql('UPDATE `somda_prefs` SET `type` = \'table|location|name|description\' WHERE `prefid` = 8');
     }
 
     /**

@@ -27,7 +27,7 @@ class HomeController extends BaseController
             ->getRepository(RailNews::class)
             ->findBy(['active' => true, 'approved' => true], ['timestamp' => 'DESC'], 5);
 
-        $layout = $this->userHelper->getPreferenceValueByKey($this->getUser(), UserPreference::KEY_HOME_LAYOUT);
+        $layout = $this->userHelper->getPreferenceByKey($this->getUser(), UserPreference::KEY_HOME_LAYOUT)->getValue();
         if (!$this->userIsLoggedIn()) {
             $layout = str_replace('foutespots', '', $layout);
         }
@@ -89,7 +89,9 @@ class HomeController extends BaseController
      */
     private function loadDataForForum(array $layout, array &$layoutData): void
     {
-        $limit = $this->userHelper->getPreferenceValueByKey($this->getUser(), UserPreference::KEY_HOME_MAX_FORUM_POSTS);
+        $limit = $this->userHelper
+            ->getPreferenceByKey($this->getUser(), UserPreference::KEY_HOME_MAX_FORUM_POSTS)
+            ->getValue();
         if (in_array('forum', $layout)) {
             $layoutData['forum'] =
                 $this->doctrine->getRepository(ForumDiscussion::class)->findForDashboard($limit, $this->getUser());
@@ -113,13 +115,15 @@ class HomeController extends BaseController
      */
     private function loadDataForNews(array $layout, array &$layoutData): void
     {
-        $limit = $this->userHelper->getPreferenceValueByKey($this->getUser(), UserPreference::KEY_HOME_MAX_NEWS);
+        $limit = $this->userHelper->getPreferenceByKey($this->getUser(), UserPreference::KEY_HOME_MAX_NEWS)->getValue();
         if (in_array('news', $layout)) {
             $layoutData['news'] =
                 $this->doctrine->getRepository(News::class)->findForDashboard($limit, $this->getUser());
         }
         if (in_array('spoornieuws', $layout)) {
-            $limit = $this->userHelper->getPreferenceValueByKey($this->getUser(), UserPreference::KEY_HOME_MAX_NEWS);
+            $limit = $this->userHelper
+                ->getPreferenceByKey($this->getUser(), UserPreference::KEY_HOME_MAX_NEWS)
+                ->getValue();
             $layoutData['railNews'] = $this->doctrine->getRepository(RailNews::class)->findBy(
                 ['active' => true, 'approved' => true],
                 ['timestamp' => 'DESC'],
@@ -136,7 +140,9 @@ class HomeController extends BaseController
     private function loadDataForSpots(array $layout, array &$layoutData): void
     {
         if (in_array('spots', $layout)) {
-            $limit = $this->userHelper->getPreferenceValueByKey($this->getUser(), UserPreference::KEY_HOME_MAX_SPOTS);
+            $limit = $this->userHelper
+                ->getPreferenceByKey($this->getUser(), UserPreference::KEY_HOME_MAX_SPOTS)
+                ->getValue();
             $layoutData['spots'] = $this->doctrine->getRepository(Spot::class)->findBy([], ['date' => 'DESC'], $limit);
         }
     }
@@ -149,8 +155,9 @@ class HomeController extends BaseController
     private function loadDataForPassingRoutes(array $layout, array &$layoutData): void
     {
         if (in_array('doorkomst', $layout)) {
-            $layoutData['passingRoutes']['location'] =
-                $this->userHelper->getPreferenceValueByKey($this->getUser(), UserPreference::KEY_DEFAULT_SPOT_LOCATION);
+            $layoutData['passingRoutes']['location'] = $this->userHelper
+                ->getPreferenceByKey($this->getUser(), UserPreference::KEY_DEFAULT_SPOT_LOCATION)
+                ->getValue();
             $layoutData['passingRoutes']['startTime'] = new DateTime('-5 minutes');
             $layoutData['passingRoutes']['endTime'] = new DateTime('+30 minutes');
         }

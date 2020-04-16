@@ -10,7 +10,7 @@
     {% if alertIsClosed %}
         <p class="alert">Deze melding is gesloten</p>
     {% else %}
-        <div class="button_clear"><div class="somda-button-left"><div class="blank_home"><a href="{{ path('forum_discussion_post_alerts_close', { 'id': post.id }) }}"><span>Sluit melding</span></a></div></div></div>
+        <a class="somda-button" href="{{ path('forum_discussion_post_alerts_close', { 'id': post.id }) }}"><span>Sluit melding</span></a>
         <br /><br />
     {% endif %}
 
@@ -44,8 +44,8 @@
             <tr>
                 <td>&nbsp;</td>
                 <td>
-                    <div class="button_clear"><div class="somda-button-left"><div class="blank_home"><a href="#" onclick="$('#alert_note_form').submit(); return false;"><span>Voeg toe</span></a></div></div></div>
-                    <div class="button_clear"><div class="somda-button-left"><div class="blank_home"><a href="{{ path('forum_discussion_post', { 'id': post.discussion.id, 'postId': post.id, 'name': (post.discussion.title | url_encode )}) }}"><span>Terug naar het bericht</span></a></div></div></div>
+                    <a class="somda-button" href="#" onclick="$('#alert_note_form').submit(); return false;"><span>Voeg toe</span></a>
+                    <a class="somda-button" href="{{ path('forum_discussion_post', { 'id': post.discussion.id, 'postId': post.id, 'name': (post.discussion.title | url_encode )}) }}"><span>Terug naar het bericht</span></a>
                 </td>
             </tr>
         </table>
