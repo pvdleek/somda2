@@ -828,7 +828,14 @@ div.moduleS1 a, div.moduleS1 a:hover {
 .home-panel .home-panel-content {
 	background-color: #d2e2f1;
 	border-radius: 0 0 5px 5px;
+	display: block;
 	padding: 10px;
+}
+.home-panel .home-panel-actions {
+	float: right;
+}
+.home-panel .home-panel-actions a {
+	color: #fff !important;
 }
 .home-panel-buttons {
 	text-align: center;

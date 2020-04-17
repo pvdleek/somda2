@@ -1,19 +1,14 @@
-<div class="home-panel">
-	<div class="home-panel-title">Spoornieuws</div>
-	<div class="home-panel-content">
-		<div class="home-rail-news-headline">
-			<img alt="{{ railNews[0].source.name }}" src="{{ asset('images/news-logos/' ~ railNews[0].source.logo) }}" />
-			<a href="{{ railNews[0].url | url_encode }}" target="_blank" class="contentpagetitle">{{ railNews[0].title }}</a>
-		</div>
-		<div class="createdate">{{ railNews[0].timestamp | displayDateTime(true) }}</div>
-		{{ railNews[0].introduction }}
-		<br /><a href="{{ railNews[0].url | url_encode }}" target="_blank">Lees verder...</a>
-
-		<ul>
-			{% for railNews in layoutData['railNews'] %}
-				{% if loop.index > 1 %}<li><i class="fas fa-arrow-right"></i> <a href="{{ railNews.url | url_encode }}" target="_blank">{{ railNews.title }}</a></li>{% endif %}
-			{% endfor %}
-		</ul>
-		<div><strong><a href="/nieuws_home/">Meer spoornieuws...</a></strong></div>
-	</div>
+<div class="home-rail-news-headline">
+	<img alt="{{ railNews[0].source.name }}" src="{{ asset('images/news-logos/' ~ railNews[0].source.logo) }}" />
+	<a href="{{ railNews[0].url | url_encode }}" target="_blank" class="contentpagetitle">{{ railNews[0].title }}</a>
 </div>
+<div class="createdate">{{ railNews[0].timestamp | displayDateTime(true) }}</div>
+{{ railNews[0].introduction }}
+<br /><a href="{{ railNews[0].url | url_encode }}" target="_blank">Lees verder...</a>
+
+<ul>
+	{% for railNews in layoutData['railNews'] %}
+		{% if loop.index > 1 %}<li><i class="fas fa-arrow-right"></i> <a href="{{ railNews.url | url_encode }}" target="_blank">{{ railNews.title }}</a></li>{% endif %}
+	{% endfor %}
+</ul>
+<div><strong><a href="/nieuws_home/">Meer spoornieuws...</a></strong></div>

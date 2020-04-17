@@ -68,6 +68,20 @@ general:
     trainTableIndex: 'De door jou gekozen dienstregeling is niet gevonden'
     route: 'Het door jou ingegeven treinnummer is niet gevonden in onze dienstregelings-database'
     location: 'De door jou ingegeven locatie is niet gevonden'
+dashboard:
+  panel:
+    dashboard: 'Dashboard'
+    doorkomst: 'Directe doorkomststaat'
+    drgl: 'Bijzondere ritten'
+    forum: 'Forum - Recente berichten'
+    foutespots: 'Forum - Recente foute-spots berichten'
+    news: 'Laatste Somda nieuws'
+    shortcuts: 'Snelkoppelingen'
+    spoornieuws: 'Spoornieuws'
+    spots: 'Recente spots'
+    weer: 'Het actuele weer'
+    welcome: 'Welkom op Somda'
+    werkzaamheden: 'Werkzaamheden'
 location:
   search:
     character: 'Zoek naar verkortingen<br />die starten met'
@@ -81,7 +95,6 @@ location:
   category: 'Categorie'
   credits: 'De co&ouml;rdinaten voor de verkortingen op de Google kaart komen van <a href="http://www.spoornieuws.nl/" target="_blank">Dennis</a>'
   additions: 'Aanvullingen of verbeteringen kunnen in <a href="%s">dit topic in het forum</a> worden doorgegeven.'
-jargon:
 uic:
   explanation:
     1: 'Voer het UIC-nummer in het bovenste vak in'

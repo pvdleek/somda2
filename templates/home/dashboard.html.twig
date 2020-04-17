@@ -1,34 +1,29 @@
-<div class="home-panel">
-	<div class="home-panel-title">Dashboard</div>
-	<div class="home-panel-content">
+<div>
+	<div class="home-dashboard-container">
 		<div>
-			<div class="home-dashboard-container">
-				<div>
-					<strong>Totaal aantal gebruikers</strong>
-					<br />{{ layoutData['dashboard']['activeUsers'] | number_format(0, '', '.') }}
-					<br />
-					<br /><strong>Totaal pageviews</strong>
-					<br />{{ layoutData['dashboard']['pageViews'] | number_format(0, '', '.') }}
-					<br />
-					<br /><strong>Totaal aantal spots</strong>
-					<br />{{ layoutData['dashboard']['spots'] | number_format(0, '', '.') }}
-				</div>
-				<div>
-					{% for statistic in layoutData['dashboard']['statistics'] %}
-						<strong>{{ statistic.date | displayDateTime(false, true) }} - {{ statistic.visitorsTotal }} bezoekers</strong>
-						<br />{{ statistic.numberOfSpots }} spot(s) &amp; {{ statistic.numberOfPosts }} forumbericht(en).
-						<br /><br />
-					{% endfor %}
-				</div>
-			</div>
+			<strong>Totaal aantal gebruikers</strong>
+			<br />{{ layoutData['dashboard']['activeUsers'] | number_format(0, '', '.') }}
+			<br />
+			<br /><strong>Totaal pageviews</strong>
+			<br />{{ layoutData['dashboard']['pageViews'] | number_format(0, '', '.') }}
+			<br />
+			<br /><strong>Totaal aantal spots</strong>
+			<br />{{ layoutData['dashboard']['spots'] | number_format(0, '', '.') }}
 		</div>
 		<div>
-			{% if layoutData['dashboard']['birthdayUsers'] == 1 %}
-				<strong>Er is 1 jarige gebruiker! Van harte gefeliciteerd!</strong>
-			{% elseif layoutData['dashboard']['birthdayUsers'] > 1 %}
-				<strong>Er zijn {{ layoutData['dashboard']['birthdayUsers'] }} jarige gebruikers! Van harte gefeliciteerd!</strong>
-			{% endif %}
-			<span style="font-size:9px;">Het dashboard wordt elk uur bijgewerkt.</span>
+			{% for statistic in layoutData['dashboard']['statistics'] %}
+				<strong>{{ statistic.date | displayDateTime(false, true) }} - {{ statistic.visitorsTotal }} bezoekers</strong>
+				<br />{{ statistic.numberOfSpots }} spot(s) &amp; {{ statistic.numberOfPosts }} forumbericht(en).
+				<br /><br />
+			{% endfor %}
 		</div>
 	</div>
+</div>
+<div>
+	{% if layoutData['dashboard']['birthdayUsers'] == 1 %}
+		<strong>Er is 1 jarige gebruiker! Van harte gefeliciteerd!</strong>
+	{% elseif layoutData['dashboard']['birthdayUsers'] > 1 %}
+		<strong>Er zijn {{ layoutData['dashboard']['birthdayUsers'] }} jarige gebruikers! Van harte gefeliciteerd!</strong>
+	{% endif %}
+	<span style="font-size:9px;">Het dashboard wordt elk uur bijgewerkt.</span>
 </div>

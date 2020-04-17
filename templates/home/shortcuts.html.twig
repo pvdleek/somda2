@@ -1,24 +1,19 @@
-<div class="home-panel">
-	<div class="home-panel-title">Snelkoppelingen</div>
-	<div class="home-panel-content">
-		<strong>Onderstaande links zijn bedoeld om u snel wegwijs op Somda te maken:</strong>
-		<div class="home-shortcut-container">
-			<div>
-				Ik wil weten welke treinen er in een station passeren
-				<br />Ik wil de dienstregeling van een trein weten
-				<br />Ik heb een loc of treinstel gezien
-			</div>
-			<div>
-				<i class="fas fa-arrow-right"></i> <a href="{{ path('passing_routes') }}">Doorkomststaat</a>
-				<br /><i class="fas fa-arrow-right"></i> <a href="{{ path('train_table') }}">Dienstregeling van een trein</a>
-				<br /><i class="fas fa-arrow-right"></i> <a href="{{ path('news_text', { 'id': 25 }) }}">Hulp bij het invoeren van spots</a>
-				<br /><i class="fas fa-arrow-right"></i> <a href="/invoer/">Spots invoeren</a>
-			</div>
-		</div>
-		<br />
-		<div class="home-panel-buttons">
-			<a class="somda-button" href="{{ path('help') }}">Meer hulp</a>
-			<a class="somda-button" href="{{ path('help_text', { 'id': '100000' }) }}">Voor het eerst op Somda?</a>
-		</div>
+<strong>Onderstaande links zijn bedoeld om u snel wegwijs op Somda te maken:</strong>
+<div class="home-shortcut-container">
+	<div>
+		Ik wil weten welke treinen er in een station passeren
+		<br />Ik wil de dienstregeling van een trein weten
+		<br />Ik heb een loc of treinstel gezien
 	</div>
+	<div>
+		<i class="fas fa-arrow-right"></i> <a href="{{ path('passing_routes') }}">Doorkomststaat</a>
+		<br /><i class="fas fa-arrow-right"></i> <a href="{{ path('train_table') }}">Dienstregeling van een trein</a>
+		<br /><i class="fas fa-arrow-right"></i> <a href="{{ path('news_text', { 'id': 25 }) }}">Hulp bij het invoeren van spots</a>
+		<br /><i class="fas fa-arrow-right"></i> <a href="/invoer/">Spots invoeren</a>
+	</div>
+</div>
+<br />
+<div class="home-panel-buttons">
+	<a class="somda-button" href="{{ path('help') }}">Meer hulp</a>
+	<a class="somda-button" href="{{ path('help_text', { 'id': '100000' }) }}">Voor het eerst op Somda?</a>
 </div>

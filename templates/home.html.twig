@@ -12,18 +12,73 @@
 
         <br />
         <div class="home-panel-buttons">
-            <a class="somda-button" href="/instellingen/layout/">Wijzig layout van deze pagina</a>
             <a class="somda-button" href="{{ path('settings') }}">Mijn instellingen</a>
             <a class="somda-button" href="/instellingen/profiel/">Mijn profiel</a>
         </div>
     {% endif %}
 
     <div class="home-container">
-        {% for module in layoutLeft %}
-            <div class="home-block">{% include 'home/' ~ module ~ '.html.twig' %}</div>
-        {% endfor %}
-        {% for module in layoutRight %}
-            <div class="home-block">{% include 'home/' ~ module ~ '.html.twig' %}</div>
+        {% for module in layout %}
+            {% set minimized = false %}
+            {% if module ends with '-min' %}
+                {% set minimized = true %}
+                {% set module = module[:(module | length) - 4] %}
+            {% endif %}
+            <div class="home-block" id="home_block_{{ module }}">
+                <div class="home-panel">
+                    <div class="home-panel-title">
+                        {{ ('dashboard.panel.' ~ module) | trans }}
+                        <div class="home-panel-actions">
+                            {% if minimized %}
+                                <a href="#" onclick="togglePanel('home_panel_{{ module }}'); return false;"><i class="fa fa-plus-square" id="home_panel_{{ module }}_toggle"></i></a>
+                            {% else %}
+                                <a href="#" onclick="togglePanel('home_panel_{{ module }}'); return false;"><i class="fa fa-minus-square" id="home_panel_{{ module }}_toggle"></i></a>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="home-panel-content" id="home_panel_{{ module }}"{% if minimized %} style="display:none;"{% endif %}>{% include 'home/' ~ module ~ '.html.twig' %}</div>
+                </div>
+            </div>
         {% endfor %}
     </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        function updateLayout()
+        {
+            let layout = $('.home-container').sortable('toArray');
+            // Walk through the layout and check which panels are minimized
+            layout.forEach(function (item, index) {
+                item = item.replace('home_block_', '');
+                if ($('#home_panel_' + item + '_toggle').hasClass('fa-plus-square')) {
+                    layout[index] = item + '-min';
+                } else {
+                    layout[index] = item;
+                }
+            });
+            $.ajax({
+                url: '{{ path('home_update_layout', { 'layout': 'dashboard' }) }}'.replace('/dashboard/', '/' + layout.join(';') + '/')
+            })
+        }
+
+        $(document).ready(function() {
+            $('.home-container').sortable({
+                cursor: 'move',
+            }).disableSelection().on('sortupdate', updateLayout());
+        });
+
+        function togglePanel(panelId)
+        {
+            let panel = $('#' + panelId);
+            if (panel.is(':visible')) {
+                panel.hide();
+                $('#' + panelId + '_toggle').removeClass('fa-minus-square').addClass('fa-plus-square');
+            } else {
+                panel.show();
+                $('#' + panelId + '_toggle').removeClass('fa-plus-square').addClass('fa-minus-square');
+            }
+            updateLayout();
+        }
+    </script>
 {% endblock %}

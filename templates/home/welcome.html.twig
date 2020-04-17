@@ -1,12 +1,7 @@
-<div class="home-panel">
-	<div class="home-panel-title">Welkomstbericht</div>
-	<div class="home-panel-content">
-		Somda staat voor <strong>S</strong>pots en <strong>OM</strong>lopen <strong>DA</strong>tabase.';
-		<br />Een spot is de vastlegging van treinmaterieel op een bepaald tijdstip op een bepaalde plek. De meeste <a href="/spots_home/">spots</a> bestaan slechts uit een <a href="/materieel_home/">materieelnummer</a>, een <a href="/treinnummers/">treinnummer</a>, een <a href="{{ path('location') }}">locatie</a> en eventueel een positie. Een omloop is de vastlegging van de verschillende diensten die treinmaterieel volgt.
-		<br /><br />Somda kan spots opslaan en aan de hand hiervan worden omlopen berekend. Het grote voordeel van Somda is dat spots online ingevoerd kunnen worden, het programma is voor vele gebruikers bereikbaar en door iedereen te raadplegen en voor iedereen gratis!
-		{% if not is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-			<br /><br />Met een account voor Somda kan je de indeling van deze pagina helemaal zelf bepalen. Verder kan je spots invoeren en berichten in het forum plaatsen. Ook komen er extra functies in Somda beschikbaar zoals de <a href="{{ path('passing_routes') }}">doorkomststaat</a>.
-			<br /><br /><a href="{{ path('register' )}}">Maak nu een account aan</a>.
-		{% endif %}
-	</div>
-</div>
+Somda staat voor <strong>S</strong>pots en <strong>OM</strong>lopen <strong>DA</strong>tabase.';
+<br />Een spot is de vastlegging van treinmaterieel op een bepaald tijdstip op een bepaalde plek. De meeste <a href="/spots_home/">spots</a> bestaan slechts uit een <a href="/materieel_home/">materieelnummer</a>, een <a href="/treinnummers/">treinnummer</a>, een <a href="{{ path('location') }}">locatie</a> en eventueel een positie. Een omloop is de vastlegging van de verschillende diensten die treinmaterieel volgt.
+<br /><br />Somda kan spots opslaan en aan de hand hiervan worden omlopen berekend. Het grote voordeel van Somda is dat spots online ingevoerd kunnen worden, het programma is voor vele gebruikers bereikbaar en door iedereen te raadplegen en voor iedereen gratis!
+{% if not is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+	<br /><br />Met een account voor Somda kan je de indeling van deze pagina helemaal zelf bepalen. Verder kan je spots invoeren en berichten in het forum plaatsen. Ook komen er extra functies in Somda beschikbaar zoals de <a href="{{ path('passing_routes') }}">doorkomststaat</a>.
+	<br /><br /><a href="{{ path('register' )}}">Maak nu een account aan</a>.
+{% endif %}

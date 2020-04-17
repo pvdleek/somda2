@@ -16,15 +16,25 @@ class News extends EntityRepository
      */
     public function findForDashboard(int $limit, User $user = null): array
     {
-        $query = '
-            SELECT `n`.`newsid` AS `id`, `n`.`title` AS `title`, `n`.`timestamp` AS `timestamp`,
-                IF(`r`.`uid` IS NULL, FALSE, TRUE) AS `news_read`
-            FROM somda_news n
-            LEFT JOIN somda_news_read r ON r.uid = ' . $user->getId() . ' AND r.newsid = n.newsid
-            WHERE n.archief = \'0\'
-            GROUP BY `id`, `title`, `timestamp`, `news_read`
-            ORDER BY `timestamp` DESC
-            LIMIT 0, ' . $limit;
+        if (is_null($user)) {
+            $query = '
+                SELECT `newsid` AS `id`, `title`, `timestamp`, TRUE AS `news_read`
+                FROM somda_news
+                WHERE archief = \'0\'
+                GROUP BY `id`, `title`, `timestamp`, `news_read`
+                ORDER BY `timestamp` DESC
+                LIMIT 0, ' . $limit;
+        } else {
+            $query = '
+                SELECT `n`.`newsid` AS `id`, `n`.`title` AS `title`, `n`.`timestamp` AS `timestamp`,
+                    IF(`r`.`uid` IS NULL, FALSE, TRUE) AS `news_read`
+                FROM somda_news n
+                LEFT JOIN somda_news_read r ON r.uid = ' . $user->getId() . ' AND r.newsid = n.newsid
+                WHERE n.archief = \'0\'
+                GROUP BY `id`, `title`, `timestamp`, `news_read`
+                ORDER BY `timestamp` DESC
+                LIMIT 0, ' . $limit;
+        }
         $connection = $this->getEntityManager()->getConnection();
         try {
             $statement = $connection->prepare($query);

@@ -32,7 +32,7 @@ class SettingsController extends BaseController
         if ($form->isSubmitted() && $form->isValid()) {
             foreach ($allSettings as $setting) {
                 if ($setting->getOrder() > 0) {
-                    $userPreference = $this->userHelper->getPreferenceByKey($this->getUser(), $setting->getKey());
+                    $userPreference = $this->userHelper->getPreferenceByKey($setting->getKey(), $this->getUser());
                     if (is_object($form->get($setting->getKey())->getData())) {
                         $userPreference->setValue($form->get($setting->getKey())->getData()->getName());
                     } else {

@@ -2,6 +2,10 @@ home:
   path: /
   methods: [GET]
   controller: App\Controller\HomeController::indexAction
+home_update_layout:
+  path: /layout-bewerken/{layout}/
+  methods: [GET]
+  controller: App\Controller\HomeController::updateLayoutAction
 
 ###################
 # User management #

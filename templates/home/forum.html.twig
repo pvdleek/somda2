@@ -1,32 +1,27 @@
-<div class="home-panel">
-	<div class="home-panel-title">Forum - Recente berichten</div>
-	<div class="home-panel-content">
-		<div class="home-forum-container">
-			{% for discussion in layoutData['forum'] %}
-				<div>{{ discussion['max_post_timestamp'] | displayDateTime(true, true) }}</div>
-				<div>
-					{% if discussion['locked'] %}
-						<i class="fas fa-lock"></i>
-					{% elseif discussion['posts'] > 1 %}
-						<i class="fas fa-comments"></i>
-					{% else %}
-						<i class="fas fa-comment"></i>
-					{% endif %}
-				</div>
-				<div>
-					<a href="{{ path('forum_discussion', { 'id': discussion['id'], 'name': (discussion['title'] | url_encode) }) }}">{{ discussion['title'] }}</a>
-					{% if not discussion['discussion_read'] %} <i class="fas fa-comment-dots"></i>{% endif %}
-				</div>
-			{% endfor %}
-		</div>
-
-		<br />
-		<div class="home-panel-buttons">
-			<a class="somda-button" href="{{ path('forum') }}">Naar het forum</a>
-			{% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-				<a class="somda-button" href="/ongelezen/">Ongelezen berichten</a>
-				<a class="somda-button" href="/favorieten/">Favoriete discussies</a>
+<div class="home-forum-container">
+	{% for discussion in layoutData['forum'] %}
+		<div>{{ discussion['max_post_timestamp'] | displayDateTime(true, true) }}</div>
+		<div>
+			{% if discussion['locked'] %}
+				<i class="fas fa-lock"></i>
+			{% elseif discussion['posts'] > 1 %}
+				<i class="fas fa-comments"></i>
+			{% else %}
+				<i class="fas fa-comment"></i>
 			{% endif %}
 		</div>
-	</div>
+		<div>
+			<a href="{{ path('forum_discussion', { 'id': discussion['id'], 'name': (discussion['title'] | url_encode) }) }}">{{ discussion['title'] }}</a>
+			{% if not discussion['discussion_read'] %} <i class="fas fa-comment-dots"></i>{% endif %}
+		</div>
+	{% endfor %}
+</div>
+
+<br />
+<div class="home-panel-buttons">
+	<a class="somda-button" href="{{ path('forum') }}">Naar het forum</a>
+	{% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+		<a class="somda-button" href="/ongelezen/">Ongelezen berichten</a>
+		<a class="somda-button" href="/favorieten/">Favoriete discussies</a>
+	{% endif %}
 </div>

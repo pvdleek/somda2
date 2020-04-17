@@ -47,7 +47,7 @@ class UserPreferences extends AbstractType
 
         foreach ($allSettings as $setting) {
             if ($setting->getOrder() > 0) {
-                $value = $userHelper->getPreferenceByKey($builder->getData(), $setting->getKey())->getValue();
+                $value = $userHelper->getPreferenceByKey($setting->getKey(), $builder->getData())->getValue();
                 $typePart = explode('|', $setting->getType());
                 switch($typePart[0]) {
                     case 'number':

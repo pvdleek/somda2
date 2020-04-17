@@ -58,16 +58,18 @@ class UserHelper implements RuntimeExtensionInterface
     }
 
     /**
-     * @param User $user
      * @param string $key
+     * @param User|null $user
      * @return UserPreferenceValue
      * @throws Exception
      */
-    public function getPreferenceByKey(User $user, string $key): UserPreferenceValue
+    public function getPreferenceByKey(string $key, User $user = null): UserPreferenceValue
     {
-        foreach ($user->getPreferences() as $preference) {
-            if ($preference->getPreference()->getKey() === $key) {
-                return $preference;
+        if (!is_null($user)) {
+            foreach ($user->getPreferences() as $preference) {
+                if ($preference->getPreference()->getKey() === $key) {
+                    return $preference;
+                }
             }
         }
 
@@ -80,12 +82,12 @@ class UserHelper implements RuntimeExtensionInterface
             throw new Exception('Preference with key "' . $key . '" does not exist');
         }
         $userPreferenceValue = new UserPreferenceValue();
-        $userPreferenceValue
-            ->setPreference($userPreference)
-            ->setUser($user)
-            ->setValue($userPreference->getDefaultValue());
-        $this->doctrine->getManager()->persist($userPreferenceValue);
-        $this->doctrine->getManager()->flush();
+        $userPreferenceValue->setPreference($userPreference)->setValue($userPreference->getDefaultValue());
+        if (!is_null($user)) {
+            $userPreferenceValue->setUser($user);
+            $this->doctrine->getManager()->persist($userPreferenceValue);
+            $this->doctrine->getManager()->flush();
+        }
 
         return $userPreferenceValue;
     }
