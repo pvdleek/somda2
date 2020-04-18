@@ -1,0 +1,14 @@
+{% extends('base.html.twig') %}
+
+{% block content %}
+    <div class="home-panel separate-panel">
+        <div class="home-panel-title">{{ news.date | displayDateTime }} - {{ news.title }}</div>
+        <div class="home-panel-content">
+            {{ news.text | raw }}
+            <br />
+            <div class="home-panel-buttons">
+                <a class="somda-button" href="{{ path('news') }}">Naar het nieuws-overzicht</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

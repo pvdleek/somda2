@@ -53,6 +53,19 @@ somda_home:
   methods: [GET]
   controller: App\Controller\HomeController::indexAction
 
+########
+# News #
+########
+news:
+  path: /nieuws/
+  methods: [GET]
+  controller: App\Controller\NewsController::indexAction
+news_text:
+  path: /nieuws/{id}/
+  methods: [GET]
+  requirements: { id: \d+ }
+  controller: App\Controller\NewsController::indexAction
+
 ###############
 # Information #
 ###############
@@ -262,12 +275,6 @@ help:
   path: /
   controller: App\Controller\HomeController::homeAction
 help_text:
-  path: /{id}/
-  controller: App\Controller\HomeController::homeAction
-news:
-  path: /
-  controller: App\Controller\HomeController::homeAction
-news_text:
   path: /{id}/
   controller: App\Controller\HomeController::homeAction
 spots:

@@ -41,8 +41,13 @@ final class Version20200411140736 extends AbstractMigration
         $this->addSql('UPDATE `somda_prefs` SET `type` = \'table|location|name|description\' WHERE `prefid` = 8');
         $this->addSql('
             UPDATE `somda_prefs`
-            SET `default_value` = \';welcome;dashboard;forum;spots;foutespots;drgl;werkzaamheden;$' .
-                ';shortcuts;spoornieuws;doorkomst;weer;shout;spots;news;\'
+            SET `default_value` = \';welcome;dashboard;forum;spots;foutespots;drgl;werkzaamheden;' .
+                'shortcuts;spoornieuws;doorkomst;weer;shout;spots;news;\'
+            WHERE `prefid` = 19');
+        $this->addSql('
+            UPDATE `somda_user_prefs`
+            SET `value` = \';welcome;dashboard;forum;spots;foutespots;drgl;werkzaamheden;' .
+                'shortcuts;spoornieuws;doorkomst;weer;shout;spots;news;\'
             WHERE `prefid` = 19');
     }
 
