@@ -41,7 +41,7 @@
                         <td align="left">{{ user.info.birthDate | displayDateTime | default('Onbekend') }}</td>
                     </tr><tr>
                         <th>&nbsp;</th>
-                        <td align="left"><a href="/mail/">Stuur deze gebruiker een e-mail</a></td>
+                        <td align="left"><a href="{{ path('profile_mail', { 'id': user.id }) }}">Stuur deze gebruiker een e-mail</a></td>
                     </tr><tr>
                         <th align="right">{{ 'profile.registrationDate' | trans }}</th>
                         <td align="left">{{ user.registrationDate | displayDateTime }}</td>

@@ -233,7 +233,11 @@ profile_view:
   methods: [GET, POST]
   requirements: { id: \d+ }
   controller: App\Controller\ProfileController:indexAction
-
+profile_mail:
+  path: /profiel/e-mail/{id}/
+  methods: [GET, POST]
+  requirements: { id: \d+ }
+  controller: App\Controller\ProfileController:mailAction
 
 
 

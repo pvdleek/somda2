@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\UserInfo;
+use App\Form\UserMail;
 use Exception;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -44,5 +45,54 @@ class ProfileController extends BaseController
         }
 
         return $this->render('somda/profile.html.twig', ['user' => $user, 'form' => $form ? $form->createView() : null]);
+    }
+
+    /**
+     * @param Request $request
+     * @param int $id
+     * @return Response|RedirectResponse
+     */
+    public function mailAction(Request $request, int $id)
+    {
+        /**
+         * @var User $user
+         */
+        $user = $this->doctrine->getRepository(User::class)->find($id);
+        if (is_null($user)) {
+            throw new AccessDeniedHttpException();
+        }
+
+        $form = $this->formFactory->create(
+            UserMail::class,
+            null,
+            ['isModerator' => $this->getUser()->hasRole('ROLE_ADMIN')]
+        );
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            if ($form->get('senderOption')->getData() === 'moderator') {
+                if (!$this->getUser()->hasRole('ROLE_ADMIN')) {
+                    throw new AccessDeniedHttpException();
+                }
+                $from = ['mods@somda.nl', 'Somda moderator'];
+                $template = 'user-mail-moderator';
+            } elseif ($form->get('senderOption')->getData() === 'direct') {
+                $from = [$this->getUser()->getEmail(), $this->getUser()->getUsername()];
+                $template = 'user-mail-direct';
+            } else {
+                $from = ['noreply@somda.nl', $this->getUser()->getUsername()];
+                $template = 'user-mail-anonymous';
+            }
+            $this->sendEmail(
+                $user,
+                $form->get('subject')->getData(),
+                $template,
+                ['sender' => $this->getUser(), 'from' => $from, 'text' => $form->get('text')->getData()]);
+
+            $this->addFlash(self::FLASH_TYPE_INFORMATION, 'Je bericht is verzonden');
+
+            return $this->redirectToRoute('profile_view', ['id' => $user->getId()]);
+        }
+
+        return $this->render('somda/mail.html.twig', ['user' => $user, 'form' => $form->createView()]);
     }
 }

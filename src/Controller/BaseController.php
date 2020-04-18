@@ -267,8 +267,15 @@ abstract class BaseController
      */
     protected function sendEmail(User $user, string $subject, string $template, array $parameters = []): bool
     {
+        if (isset($parameters['from'])) {
+            $from = new Address($parameters['from'][0], $parameters['from'][1]);
+            unset($parameters['from']);
+        } else {
+            $from = new Address('webmaster@somda.nl', 'Somda');
+        }
+
         $message = (new TemplatedEmail())
-            ->from(new Address('webmaster@somda.nl', 'Somda'))
+            ->from($from)
             ->to(new Address($user->getEmail(), $user->getUsername()))
             ->subject($subject)
             ->htmlTemplate('emails/' . $template . '.html.twig')
