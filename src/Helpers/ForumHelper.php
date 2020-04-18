@@ -230,7 +230,7 @@ class ForumHelper implements RuntimeExtensionInterface
      */
     private function doLinksAndSmileys(string $text): string
     {
-        $in = '/((((http|https|ftp|ftps)\:\/\/))(([a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,4})|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(\/[^) \n\r]*)?)/';
+        $in = '/((((http|https|ftp|ftps)\:\/\/))(([a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,63})|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(\/[^) \n\r]*)?)/';
         $out = '<a href="\1" rel="nofollow" target="_blank">\5</a>';
         $text = preg_replace($in, $out, $text);
         if (isset($_SERVER['HTTP_HOST'])) {
