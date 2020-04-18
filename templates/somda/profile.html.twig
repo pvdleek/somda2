@@ -1,41 +1,77 @@
 {% extends('base.html.twig') %}
 
 {% block content %}
-    <table class="design">
-        <tr>
-            <td rowspan="12" valign="top"><img src="{{ asset('images/avatar/' ~ user.info.avatar) }}" /></td>
-            <th align="right">{{ 'profile.username' | trans }}</th>
-            <td align="left">{{ user.username }}</td>
-        </tr><tr>
-            <th align="right">{{ 'profile.name' | trans }}</th>
-            <td align="left">{{ user.name }}</td>
-        </tr><tr>
-            <th align="right">{{ 'profile.city' | trans }}</th>
-            <td align="left">{{ user.info.city }}</td>
-        </tr><tr>
-            <th align="right">{{ 'profile.gender' | trans }}</th>
-            <td align="left">{{ user.info.gender }}</td>
-        </tr><tr>
-            <th align="right">{{ 'profile.birthDate' | trans }}</th>
-            <td align="left">{{ user.info.birthDate | displayDateTime | default('Onbekend') }}</td>
-        </tr><tr>
-            <th>&nbsp;</th>
-            <td align="left"><a href="#">Stuur deze gebruiker een e-mail</a></td>
-        </tr><tr>
-            <th align="right">{{ 'profile.registrationDate' | trans }}</th>
-            <td align="left">{{ user.registrationDate | displayDateTime }}</td>
-        </tr><tr>
-            <th align="right">{{ 'profile.lastVisit' | trans }}</th>
-            <td align="left">{{ user.lastVisit.lastVisit | displayDateTime(true) }}</td>
-        </tr><tr>
-            <th align="right">{{ 'profile.website' | trans }}</th>
-            <td align="left">{{ user.info.website }}</td>
-        </tr><tr>
-            <th align="right">{{ 'profile.info' | trans }}</th>
-            <td align="left">{{ user.info.info }}</td>
-        </tr><tr>
-            <th align="right">Forumbijdrages</th>
-            <td align="left"><a href="#">Klik hier voor de forumbijdrages van deze gebruiker</a></td>
-        </tr>
-    </table>
+    <div class="home-panel separate-panel">
+        {% if form is not null %}
+            {{ form_start(form, { 'attr': { 'id': 'profile_form' } }) }}
+                <div class="home-panel-title">Mijn profiel aanpassen</div>
+                <div class="home-panel-content">
+                    <table class="design">
+                        <tr><td>&nbsp;</td><td id="user_avatar"><img alt="avatar" src="{{ asset('images/avatar/' ~ user.info.avatar) }}" /></td></tr>
+                        {{ form_rest(form) }}
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td>
+                                <a class="somda-button" href="#" onclick="$('#profile_form').submit(); return false;"><span>Profiel opslaan</span></a>
+                                <a class="somda-button" href="{{ path('home') }}"><span>Terug naar home</span></a>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            {{ form_end(form) }}
+        {% else %}
+            <div class="home-panel-title">Profiel van gebruiker "{{ user.username }}"</div>
+            <div class="home-panel-content">
+                <table class="design">
+                    <tr>
+                        <td rowspan="12" valign="top"><img alt="avatar" src="{{ asset('images/avatar/' ~ user.info.avatar) }}" /></td>
+                        <th align="right">{{ 'profile.username' | trans }}</th>
+                        <td align="left">{{ user.username }}</td>
+                    </tr><tr>
+                        <th align="right">{{ 'profile.name' | trans }}</th>
+                        <td align="left">{{ user.name }}</td>
+                    </tr><tr>
+                        <th align="right">{{ 'profile.city' | trans }}</th>
+                        <td align="left">{{ user.info.city }}</td>
+                    </tr><tr>
+                        <th align="right">{{ 'profile.gender' | trans }}</th>
+                        <td align="left">{{ user.info.gender }}</td>
+                    </tr><tr>
+                        <th align="right">{{ 'profile.birthDate' | trans }}</th>
+                        <td align="left">{{ user.info.birthDate | displayDateTime | default('Onbekend') }}</td>
+                    </tr><tr>
+                        <th>&nbsp;</th>
+                        <td align="left"><a href="/mail/">Stuur deze gebruiker een e-mail</a></td>
+                    </tr><tr>
+                        <th align="right">{{ 'profile.registrationDate' | trans }}</th>
+                        <td align="left">{{ user.registrationDate | displayDateTime }}</td>
+                    </tr><tr>
+                        <th align="right">{{ 'profile.lastVisit' | trans }}</th>
+                        <td align="left">{{ user.lastVisit is null ? ('general.error.unknown' | trans) : (user.lastVisit.lastVisit | displayDateTime(true)) }}</td>
+                    </tr><tr>
+                        <th align="right">{{ 'profile.website' | trans }}</th>
+                        <td align="left">{{ user.info.website }}</td>
+                    </tr><tr>
+                        <th align="right">{{ 'profile.info' | trans }}</th>
+                        <td align="left">{{ user.info.info }}</td>
+                    </tr>
+                </table>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {% if form is not null %}
+        <script type="text/javascript">
+            $(document).ready(function() {
+                $('#user_info_avatar').on('change', function () {
+                    $('#user_avatar').html('<img alt="avatar" src="/images/avatar/' + $(this).val() + '" />');
+                });
+                $('#user_info_mobilePhone').mask('31699999999').click(function () {
+                    $(this).focus();
+                });
+            });
+        </script>
+    {% endif %}
 {% endblock %}

@@ -102,7 +102,7 @@ class User implements UserInterface
     private $info;
 
     /**
-     * @var UserLastVisit
+     * @var UserLastVisit|null
      * @ORM\OneToOne(targetEntity="App\Entity\UserLastVisit", mappedBy="user")
      */
     private $lastVisit;
@@ -404,9 +404,9 @@ class User implements UserInterface
     }
 
     /**
-     * @return UserLastVisit
+     * @return UserLastVisit|null
      */
-    public function getLastVisit(): UserLastVisit
+    public function getLastVisit(): ?UserLastVisit
     {
         return $this->lastVisit;
     }

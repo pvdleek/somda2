@@ -223,11 +223,16 @@ disclaimer_choice:
 settings:
   path: /instellingen/
   controller: App\Controller\SettingsController:indexAction
-profile_view:
-  path: /profiel/{id}
-  methods: [GET]
+profile:
+  path: /profiel/
+  methods: [GET, POST]
   requirements: { id: \d+ }
-  controller: App\Controller\SomdaController:profileAction
+  controller: App\Controller\ProfileController:indexAction
+profile_view:
+  path: /profiel/{id}/
+  methods: [GET, POST]
+  requirements: { id: \d+ }
+  controller: App\Controller\ProfileController:indexAction
 
 
 

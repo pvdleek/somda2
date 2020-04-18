@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Table(name="somda_users_info", indexes={@ORM\Index(name="idx_49074_gebdatum", columns={"gebdatum"})})
@@ -11,6 +12,10 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class UserInfo
 {
+    public const GENDER_UNKNOWN = 0;
+    public const GENDER_MALE = 1;
+    public const GENDER_FEMALE = 2;
+
     /**
      * @var User
      * @ORM\OneToOne(targetEntity="App\Entity\User", inversedBy="info")
@@ -34,6 +39,12 @@ class UserInfo
     /**
      * @var string|null
      * @ORM\Column(name="city", type="string", length=50, nullable=true)
+     * @Assert\Length(
+     *     min = 2,
+     *     max = 50,
+     *     minMessage = "De woonplaats moet minimaal 2 karakters lang zijn",
+     *     maxMessage = "De woonplaats mag maximaal 50 karakters lang zijn"
+     * )
      */
     private $city;
 
@@ -58,30 +69,52 @@ class UserInfo
     /**
      * @var int|null
      * @ORM\Column(name="mob_tel", type="bigint", nullable=true)
+     * @Assert\Length(
+     *     min = 11,
+     *     max = 11,
+     *     minMessage = "Jouw mobiele nummer moet exact 11 karakters zijn (startend met 316)",
+     *     maxMessage = "Jouw mobiele nummer moet exact 11 karakters zijn (startend met 316)",
+     * )
      */
     private $mobilePhone;
 
     /**
      * @var string|null
      * @ORM\Column(name="twitter_account", type="string", length=255, nullable=true)
+     * @Assert\Length(
+     *     max = 255,
+     *     maxMessage = "Jouw Twitter account mag maximaal 255 karakters lang zijn",
+     * )
      */
     private $twitterAccount;
 
     /**
      * @var string|null
      * @ORM\Column(name="facebook_account", type="string", length=255, nullable=true)
+     * @Assert\Length(
+     *     max = 255,
+     *     maxMessage = "Jouw Facebook account mag maximaal 255 karakters lang zijn",
+     * )
      */
     private $facebookAccount;
 
     /**
      * @var string|null
      * @ORM\Column(name="flickr_account", type="string", length=255, nullable=true)
+     * @Assert\Length(
+     *     max = 255,
+     *     maxMessage = "Jouw Flickr account mag maximaal 255 karakters lang zijn",
+     * )
      */
     private $flickrAccount;
 
     /**
      * @var string|null
      * @ORM\Column(name="youtube_account", type="string", length=255, nullable=true)
+     * @Assert\Length(
+     *     max = 255,
+     *     maxMessage = "Jouw Youtube account mag maximaal 255 karakters lang zijn",
+     * )
      */
     private $youtubeAccount;
 
