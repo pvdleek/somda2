@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -108,7 +109,7 @@ class User implements UserInterface
     private $lastVisit;
 
     /**
-     * @var Group
+     * @var Group[]
      * @ORM\ManyToMany(targetEntity="App\Entity\Group", mappedBy="users")
      */
     private $groups;
@@ -120,7 +121,7 @@ class User implements UserInterface
     private $forumFavorites;
 
     /**
-     * @var ForumForum
+     * @var ForumForum[]
      * @ORM\ManyToMany(targetEntity="App\Entity\ForumForum", mappedBy="moderators")
      */
     private $moderatedForums;
@@ -142,6 +143,7 @@ class User implements UserInterface
      */
     public function __construct()
     {
+        $this->groups = new ArrayCollection();
         $this->forumFavorites = new ArrayCollection();
         $this->moderatedForums = new ArrayCollection();
         $this->spots = new ArrayCollection();
@@ -328,14 +330,12 @@ class User implements UserInterface
         return $this;
     }
 
-
-
     /**
-     * @return Group
+     * @return Group[]
      */
-    public function getGroups(): Group
+    public function getGroups(): array
     {
-        return $this->groups;
+        return $this->groups->toArray();
     }
 
     /**
@@ -361,7 +361,11 @@ class User implements UserInterface
      */
     public function getRoles(): array
     {
-        return $this->roles;
+        $roles = $this->roles;
+        foreach ($this->getGroups() as $group) {
+            $roles = array_merge($roles, $group->getRoles());
+        }
+        return $roles;
     }
 
     /**

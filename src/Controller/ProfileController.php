@@ -56,6 +56,7 @@ class ProfileController extends BaseController
     {
         /**
          * @var User $user
+         * @var User $moderator
          */
         $user = $this->doctrine->getRepository(User::class)->find($id);
         if (is_null($user)) {
@@ -75,6 +76,15 @@ class ProfileController extends BaseController
                 }
                 $from = ['mods@somda.nl', 'Somda moderator'];
                 $template = 'user-mail-moderator';
+
+                // Send a copy of the email to the moderator user
+                $moderator = $this->doctrine->getRepository(User::class)->find(2);
+                $this->sendEmail(
+                    $moderator,
+                    'Somda - Door moderator verstuurde e-mail',
+                    'user-mail-moderator-copy',
+                    ['user' => $user, 'text' => $form->get('text')->getData()]
+                );
             } elseif ($form->get('senderOption')->getData() === 'direct') {
                 $from = [$this->getUser()->getEmail(), $this->getUser()->getUsername()];
                 $template = 'user-mail-direct';

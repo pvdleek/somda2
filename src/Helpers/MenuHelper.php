@@ -3,6 +3,7 @@
 namespace App\Helpers;
 
 use App\Entity\Block;
+use App\Entity\ForumPostAlert;
 use Doctrine\Persistence\ManagerRegistry;
 use Twig\Extension\RuntimeExtensionInterface;
 
@@ -34,7 +35,7 @@ class MenuHelper implements RuntimeExtensionInterface
     public function getNumberOfOpenForumAlerts(): int
     {
         if ($this->authorizationHelper->getUser() && $this->authorizationHelper->getUser()->hasRole('ROLE_ADMIN')) {
-            $openAlerts = $this->doctrine->getRepository('AppBundle:ForumPostAlert')->findBy(['closed' => false]);
+            $openAlerts = $this->doctrine->getRepository(ForumPostAlert::class)->findBy(['closed' => false]);
             return count($openAlerts);
         }
         return 0;
