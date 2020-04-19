@@ -1,23 +1,16 @@
 {% extends('base.html.twig') %}
 
 {% block content %}
-
-    <div class="moduleS3">
-        <div>
-            <table align="center" border="0" cellpadding="0" cellspacing="0">
-                <tr valign="baseline">
-                    <td align="left" class="contentpanel">
-                        <h3>
-                            {{ specialRoute.startDate | displayDateTime }}{% if specialRoute.endDate is not null %}{{ 'general.date.till' | trans }} {{ specialRoute.endDate | displayDateTime }}{% endif %}
-                            {{ specialRoute.title }}
-                        </h3>
-                        {% if specialRoute.image | length %}
-                            <span class="drgl_right"><img alt="{{ specialRoute.title }}" src="{{ asset('images/materieel/' ~ specialRoute.image) }}" /></span>
-                        {% endif %}
-                        <div class="drgl_text">{{ specialRoute.text | raw }}</div>
-                    </td>
-                </tr>
-            </table>
+    <div class="home-panel separate-panel">
+        <div class="home-panel-title">
+            {{ specialRoute.startDate | displayDateTime }}{% if specialRoute.endDate is not null %}{{ 'general.date.till' | trans }} {{ specialRoute.endDate | displayDateTime }}{% endif %}
+            {{ specialRoute.title }}
+        </div>
+        <div class="home-panel-content">
+            {% if specialRoute.image | length %}
+                <span class="special-route-image"><img alt="{{ specialRoute.title }}" src="{{ asset('images/materieel/' ~ specialRoute.image) }}" /></span>
+            {% endif %}
+            {{ specialRoute.text | raw }}
         </div>
     </div>
 {% endblock %}

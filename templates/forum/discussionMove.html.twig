@@ -1,19 +1,21 @@
 {% extends('base.html.twig') %}
 
 {% block content %}
-    <div class="moduleS1" style="margin-bottom:0;"><div><h3 id="disc_title"><i class="fas fa-comments"></i> {{ discussion.title }}</h3></div></div>
-
-    {{ form_start(form, { 'attr': { 'id': 'move_form' } }) }}
-        <table class="design">
-            {{ form_row(form.forum) }}
-            <tr>
-                <td>&nbsp;</td>
-                <td>
-                    <a class="somda-button" href="#" onclick="$('#move_form').submit(); return false;"><span>Verplaatsen</span></a>
-                    <a class="somda-button" href="{{ path('forum_discussion', { 'id': discussion.id, 'name': (discussion.title | url_encode )}) }}"><span>Terug naar de discussie</span></a>
-                </td>
-            </tr>
-        </table>
-    {{ form_end(form) }}
-    <br />
+    <div class="home-panel separate-panel">
+        <div class="home-panel-title"><i class="fas fa-comments"></i> Verplaatsen van "{{ discussion.title }}"</div>
+        <div class="home-panel-content panel-no-background">
+            {{ form_start(form, { 'attr': { 'id': 'move_form' } }) }}
+                <table class="design">
+                    {{ form_row(form.forum) }}
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td>
+                            <a class="somda-button" href="#" onclick="$('#move_form').submit(); return false;"><span>Verplaatsen</span></a>
+                            <a class="somda-button" href="{{ path('forum_discussion', { 'id': discussion.id, 'name': (discussion.title | url_encode )}) }}"><span>Terug naar de discussie</span></a>
+                        </td>
+                    </tr>
+                </table>
+            {{ form_end(form) }}
+        </div>
+    </div>
 {% endblock %}

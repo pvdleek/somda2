@@ -1,23 +1,24 @@
 {% extends('base.html.twig') %}
 
 {% block content %}
-    <div class="moduleS1" style="margin-bottom:0;"><div><h3 id="disc_title"><i class="fas fa-comments"></i> {{ post.discussion.title }}</h3></div></div>
-    <center>
-        {{ form_start(form, { 'attr': { 'id': 'edit_form' } }) }}
-        <table class="design">
-            {{ form_row(form.text) }}
-            {{ form_row(form.signatureOn) }}
-            {{ form_row(form.editReason) }}
-            {% if form.editAsModerator is defined %}{{ form_row(form.editAsModerator) }}{% endif %}
-            <tr>
-                <td>&nbsp;</td>
-                <td>
-                    <a class="somda-button" href="#" onclick="$('#edit_form').submit(); return false;"><span>Bewerken</span></a>
-                    <a class="somda-button" href="{{ path('forum_discussion', { 'id': post.discussion.id, 'name': (post.discussion.title | url_encode )}) }}"><span>Terug naar de discussie</span></a>
-                </td>
-            </tr>
-        </table>
-        {{ form_end(form) }}
-    </center>
-    <br />
+    <div class="home-panel separate-panel">
+        <div class="home-panel-title"><i class="fas fa-comments"></i> {{ post.discussion.title }}</div>
+        <div class="home-panel-content panel-no-background">
+            {{ form_start(form, { 'attr': { 'id': 'edit_form' } }) }}
+                <table class="design">
+                    {{ form_row(form.text) }}
+                    {{ form_row(form.signatureOn) }}
+                    {{ form_row(form.editReason) }}
+                    {% if form.editAsModerator is defined %}{{ form_row(form.editAsModerator) }}{% endif %}
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td>
+                            <a class="somda-button" href="#" onclick="$('#edit_form').submit(); return false;"><span>Bewerken</span></a>
+                            <a class="somda-button" href="{{ path('forum_discussion', { 'id': post.discussion.id, 'name': (post.discussion.title | url_encode )}) }}"><span>Terug naar de discussie</span></a>
+                        </td>
+                    </tr>
+                </table>
+            {{ form_end(form) }}
+        </div>
+    </div>
 {% endblock %}

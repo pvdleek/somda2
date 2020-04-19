@@ -36,6 +36,12 @@ activate_with_key:
   methods: [GET]
   requirements: { id: \d+ }
   controller: App\Controller\SecurityController::activateAction
+change_password:
+  path: /wachtwoord-wijzigen/
+  controller: App\Controller\HomeController::homeAction
+lost_password:
+  path: /wachtwoord-vergeten/
+  controller: App\Controller\HomeController::homeAction
 
 ################
 # Home-screens #
@@ -118,6 +124,32 @@ special_route:
   controller: App\Controller\TrainTableController:specialRoutesAction
 
 #########
+# Spots #
+#########
+spot_input:
+  path: /invoer/
+  controller: App\Controller\HomeController::homeAction
+spots:
+  path: /spots/
+  controller: App\Controller\HomeController::homeAction
+my_spots:
+  path: /mijn-spots/
+  controller: App\Controller\HomeController::homeAction
+pois:
+  path: /spotpunten/
+  controller: App\Controller\HomeController::homeAction
+
+##########
+# Trains #
+##########
+train_compositions:
+  path: /matsms/
+  controller: App\Controller\HomeController::homeAction
+ddar_trains:
+  path: /ddar/
+  controller: App\Controller\HomeController::homeAction
+
+#########
 # Forum #
 #########
 forum:
@@ -182,6 +214,10 @@ forum_discussion_post_alert:
   methods: [GET, POST]
   requirements: { id: \d+ }
   controller: App\Controller\ForumPostAlertController:alertAction
+forum_discussion_post_alerts_overview:
+  path: /forum/meldingen/
+  methods: [GET]
+  controller: App\Controller\HomeController:homeAction
 forum_discussion_post_alerts:
   path: /forum/p{id}/meldingen/
   methods: [GET, POST]
@@ -229,6 +265,15 @@ disclaimer_choice:
   path: /disclaimer/{choice}/
   methods: [GET]
   controller: App\Controller\SomdaController:disclaimerAction
+statistics:
+  path: /statistieken/
+  controller: App\Controller\HomeController::homeAction
+help:
+  path: /help/
+  controller: App\Controller\HomeController::homeAction
+help_text:
+  path: /help/{id}/
+  controller: App\Controller\HomeController::homeAction
 
 ########
 # User #
@@ -252,80 +297,58 @@ profile_mail:
   requirements: { id: \d+ }
   controller: App\Controller\ProfileController:mailAction
 
-
-
-
-links:
-  path: /
+##############
+# Management #
+##############
+manage_user:
+  path: /gebruikers-beheer/
   controller: App\Controller\HomeController::homeAction
+manage_news:
+  path: /nieuws-beheer/
+  controller: App\Controller\HomeController::homeAction
+manage_rail_news:
+  path: /spoornieuws-beheer/
+  controller: App\Controller\HomeController::homeAction
+manage_special_routes:
+  path: /bijzonder-ritten-beheer/
+  controller: App\Controller\HomeController::homeAction
+manage_banners:
+  path: /banner-beheer/
+  controller: App\Controller\HomeController::homeAction
+manage_train_tables_input:
+  path: /dienstregelingen-invoer/
+  controller: App\Controller\HomeController::homeAction
+manage_train_tables:
+  path: /dienstregelingen-beheer/
+  controller: App\Controller\HomeController::homeAction
+manage_pois:
+  path: /spotpunten-beheer/
+  controller: App\Controller\HomeController::homeAction
+manage_bans:
+  path: /ban-beheer/
+  controller: App\Controller\HomeController::homeAction
+manage_ddar_trains:
+  path: /ddar-beheer/
+  controller: App\Controller\HomeController::homeAction
+manage_train_compositions:
+  path: /matsms-beheer/
+  controller: App\Controller\HomeController::homeAction
+manage_route_lists:
+  path: /treinnummerlijst-beheer/
+  controller: App\Controller\HomeController::homeAction
+
+
 
 gespotmat:
   path: /
   controller: App\Controller\HomeController::homeAction
-weer:
-  path: /
-  controller: App\Controller\HomeController::homeAction
-matsms:
-  path: /
-  controller: App\Controller\HomeController::homeAction
-invoer:
-  path: /
-  controller: App\Controller\HomeController::homeAction
-help:
-  path: /
-  controller: App\Controller\HomeController::homeAction
-help_text:
-  path: /{id}/
-  controller: App\Controller\HomeController::homeAction
-spots:
-  path: /
-  controller: App\Controller\HomeController::homeAction
-wachtwoord:
-  path: /
-  controller: App\Controller\HomeController::homeAction
-nieuw_wachtwoord:
-  path: /
-  controller: App\Controller\HomeController::homeAction
-doneren:
-  path: /
-  controller: App\Controller\HomeController::homeAction
 ongelezen:
-  path: /
-  controller: App\Controller\HomeController::homeAction
-gebruikerslijst:
-  path: /
-  controller: App\Controller\HomeController::homeAction
-nieuws/126:
-  path: /
-  controller: App\Controller\HomeController::homeAction
-polls:
-  path: /
-  controller: App\Controller\HomeController::homeAction
-mijnspots:
-  path: /
-  controller: App\Controller\HomeController::homeAction
-spotpunten:
-  path: /spotpunten/
-  controller: App\Controller\InformationController::locationsAction
-verstoringen:
   path: /
   controller: App\Controller\HomeController::homeAction
 reisplanner:
   path: /
   controller: App\Controller\HomeController::homeAction
 ongelezen_forum:
-  path: /
-  controller: App\Controller\HomeController::homeAction
-ddar:
-  path: /
-  controller: App\Controller\HomeController::homeAction
-vertrektijden:
-  path: /
-  controller: App\Controller\HomeController::homeAction
-treinnummers:
-  path: /
-  controller: App\Controller\HomeController::homeAction
-statistieken:
   path: /
   controller: App\Controller\HomeController::homeAction
 spoornieuws:
@@ -347,9 +370,6 @@ shout_archief:
   path: /
   controller: App\Controller\HomeController::homeAction
 grafisch:
-  path: /
-  controller: App\Controller\HomeController::homeAction
-forum/meldingen:
   path: /
   controller: App\Controller\HomeController::homeAction
 nieuws_home:

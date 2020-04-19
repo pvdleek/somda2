@@ -14,8 +14,8 @@ class Block extends EntityRepository
     {
         $queryBuilder = $this->getEntityManager()
             ->createQueryBuilder()
-            ->select('b.id AS id, b.name AS name, b.urlShort AS url, b.role AS role')
-            ->addSelect('parent.id AS parent_id, parent.name AS parent_name, parent.urlShort as parent_url')
+            ->select('b.id AS id, b.name AS name, b.route AS route, b.role AS role')
+            ->addSelect('parent.id AS parent_id, parent.name AS parent_name')
             ->from(BlockEntity::class, 'b')
             ->join('b.parent', 'parent')
             ->andWhere('parent.id > 0')

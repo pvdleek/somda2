@@ -11,11 +11,6 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Block
 {
-    const BLOCK_TYPE_SECURED = 1;
-    const BLOCK_TYPE_PUBLIC = 2;
-    const BLOCK_TYPE_LOGGED_IN = 3;
-    const BLOCK_TYPE_LOGGED_OUT = 4;
-
     /**
      * @var int
      * @ORM\Column(name="blokid", type="bigint", nullable=false)
@@ -32,15 +27,9 @@ class Block
 
     /**
      * @var string
-     * @ORM\Column(name="url", type="string", length=45, nullable=false)
+     * @ORM\Column(name="route", type="string", length=45, nullable=false)
      */
-    private $url;
-
-    /**
-     * @var string
-     * @ORM\Column(name="url_short", type="string", length=20, nullable=false)
-     */
-    private $urlShort;
+    private $route;
 
     /**
      * @var string
@@ -59,24 +48,6 @@ class Block
      * @ORM\Column(name="do_separator", type="boolean", nullable=false)
      */
     private $doSeparator = false;
-
-    /**
-     * @var int|null
-     * @ORM\Column(name="sitemap_last_update", type="bigint", nullable=true)
-     */
-    private $siteMapLastUpdate;
-
-    /**
-     * @var string|null
-     * @ORM\Column(name="sitemap_frequency", type="string", length=10, nullable=true)
-     */
-    private $siteMapFrequency;
-
-    /**
-     * @var int|null
-     * @ORM\Column(name="sitemap_prio", type="bigint", nullable=true)
-     */
-    private $siteMapPriority;
 
     /**
      * @var Block
@@ -138,36 +109,18 @@ class Block
     /**
      * @return string
      */
-    public function getUrl(): string
+    public function getRoute(): string
     {
-        return $this->url;
+        return $this->route;
     }
 
     /**
-     * @param string $url
+     * @param string $route
      * @return Block
      */
-    public function setUrl(string $url): Block
+    public function setRoute(string $route): Block
     {
-        $this->url = $url;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getUrlShort(): string
-    {
-        return $this->urlShort;
-    }
-
-    /**
-     * @param string $urlShort
-     * @return Block
-     */
-    public function setUrlShort(string $urlShort): Block
-    {
-        $this->urlShort = $urlShort;
+        $this->route = $route;
         return $this;
     }
 

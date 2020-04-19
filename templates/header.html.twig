@@ -3,43 +3,30 @@
 		<h1><a href="/" id="header_image" title="Somda - Voor en door treinspotters">Somda</a></h1>
 		<h2>Voor en door treinspotters</h2>
 	</div>
-	<div id="newsflash">
+	<div class="news-flash">
 		{% if headerType == 'banner' %}
 			<a href="/click_out.php?banner_id={{ headerContent.id }}" target="_blank">
 				<img alt="'.$headerbanner_customer.' {{ headerContent.description }}" height="100" src="/images/banners/{{ headerContent.image }}" />
 			</a>
 		{% else %}
-			<table class="moduletable"><tr><td>
-				<table class="contentpaneopen"><tr><td class="contentheading" width="100%"><a href="/nieuws_home/" class="contentpagetitle">{{ headerContent.title }}</a></td></tr></table>
-				<table class="contentpaneopen"><tr>
-					<td valign="top"><p>{{ headerContent.introduction }}</p></td>
-				</tr><tr>
-					<td valign="top"><a href="/nieuws_home/">Lees verder...</a></td>
-				</tr></table>
-			</td></tr></table>
+			<div class="news-flash-title"><a href="{{ headerContent.url }}" rel="nofollow" target="_blank">{{ headerContent.title }}</a></div>
+			{{ headerContent.introduction }}
 		{% endif %}
 	</div>
 </div>
-<div id="mbar"><div id="nav">
-	<div class="menuleft">&nbsp;</div><div class="menuright">&nbsp;</div>
-	<ul class="menu">
-		<li><a href="/index.php?force=home"><span>Home</span></a></li>
+<nav class="menu">
+	<ol>
+		<li class="menu-item"><a href="{{ path('home') }}">Home</a></li>
 		{% set lastParentId = 0 %}
 		{% for block in menuStructure %}
 			{% if block['parent_id'] != lastParentId %}
-				{% if lastParentId > 0 %}</ul></li>{% endif %}
-				<li class="haschild">
-				<a href="/{{ block['parent_url'] ? block['parent_url'] : ("index.php?blokid=" ~ block['parent_id']) }}" class="haschild"><span>{{ block['parent_name'] }}</span></a>
-				<ul>
+				{% if lastParentId > 0 %}</ol></li>{% endif %}
+				<li class="menu-item"><span>{{ block['parent_name'] }}</span><ol class="sub-menu">
 				{% set lastParentId = block['parent_id'] %}
 			{% endif %}
-			<li><a href="/{{ block['url'] ? block['url'] : ("index.php?blokid=" ~ block['id']) }}"><span>{{ block['name'] }}</span></a></li>
+			<li class="menu-item"><a href="{{ path(block['route']) }}">{{ block['name'] }}{{ block['route'] == 'forum_discussion_post_alerts_overview' and is_granted('ROLE_ADMIN') ? ' (' ~ nrOfOpenForumAlerts ~ ')' }}</a></li>
 		{% endfor %}
-	</ul>
-</li>
-</ul>
-</div></div>
-
-<div class="clear">&nbsp;</div>
+	</ol>
+</nav>
 
 {% if breadcrumb | length > 0 %}<div class="breadcrumb">Je bent hier: {{ breadcrumb | raw }}</div>{% endif %}

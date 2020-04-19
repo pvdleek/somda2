@@ -55,21 +55,6 @@ h3 {
 	line-height: 1em;
 	margin: .75em 0;
 }
-html body * div.clear {
-	background: none;
-	border: 0;
-	clear: both;
-	display: block;
-	float: none;
-	font-size: 0;
-	height: 0;
-	list-style: none;
-	margin: 0;
-	padding: 0;
-	overflow: hidden;
-	visibility: hidden;
-	width: 0;
-}
 body {
 	color: #515151;
 	font-family: Verdana, Arial, sans-serif;
@@ -230,7 +215,7 @@ p.alert {
 }
 
 /**************/
-/*** HEADER ***/
+/*** Header ***/
 /**************/
 #header {
 	height: 101px;
@@ -264,239 +249,27 @@ p.alert {
 	padding: 0;
 	text-indent: -8000em;
 }
-#newsflash {
-	height: 110px;
+.news-flash {
+	height: 100px;
 	overflow: hidden;
 	position: absolute;
-	right: 5px;
+	right: 15px;
 	text-align: right;
-	top: 8px;
-	width: 605px;
+	top: 12px;
+	width: 600px;
 }
-#newsflash td.contentheading, #newsflash a.contentpagetitle {
+.news-flash .news-flash-title {
+	margin-bottom: 10px;
+}
+.news-flash .news-flash-title a {
+	color: #515151;
 	font-size: 1.3em;
-	line-height: 1.5em;
-	letter-spacing: normal;
-}
-#newsflash a {
-	color: #1E69A3;
-}
-#newsflash a:hover {
-	color: #000000;
-}
-#newsflash td {
-	padding: 0;
-	margin: 0;
-	color: #6E6E6E;
-}
-
-/************/
-/*** MENU ***/
-/************/
-.menuleft {
-	float: left;
-	height: 52px;
-	width: 10px;
-}
-.webp .menuleft {
-	background: url(../images/design/menu.webp) no-repeat scroll 0 0 transparent;
-}
-.no-webp .menuleft {
-	background: url(../images/design/menu.png) no-repeat scroll 0 0 transparent;
-}
-.menuright {
-	float: right;
-	height: 52px;
-	width: 10px;
-}
-.webp .menuright {
-	background: url(../images/design/menu.webp) no-repeat scroll -13px 0 transparent;
-}
-.no-webp .menuright {
-	background: url(../images/design/menu.png) no-repeat scroll -13px 0 transparent;
-}
-
-#nav {
-	float: none;
-	font-family: "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
-	font-weight: bold;
-	height: 52px;
-	z-index: 500;
-	[if IE] _position: relative;
-}
-.webp #nav {
-	background: url(../images/design/navigation-background.webp) repeat-x 0 bottom;
-}
-.no-webp #nav {
-	background: url(../images/design/navigation-background.png) repeat-x 0 bottom;
-}
-#nav a {
-	cursor: pointer;
-	display: block;
-	height: 42px;
-	margin: 0 0 0 8px;
-	padding: 0 0 0 7px;
 	text-decoration: none;
-	text-transform: none;
-	[if IE] _float:left;
-	[if IE] line-height: 40px;
-	[if IE] _line-height: 40px;
-	[if IE] _margin-left:4px;
 }
-#nav ul {
-	list-style: none;
-	line-height: 42px;
-	padding-top: 10px;
-}
-#nav ul ul {
-	border: none;
-}
-#nav ul ul a {
-	background: none;
-	display: block;
-	text-decoration: none;
-	text-transform: none;
-	width: 170px;
-}
-#nav ul ul a:hover {
-	background: none;
-	height: 26px;
-	line-height: 26px;
-	padding: 0;
-	margin: 0;
-}
-#nav ul ul li a {
-	border-right: none;
-}
-#nav ul li {
-	margin: 0;
-	position: relative;
-}
-#nav ul li a {
-	color: #FFFFFF;
-}
-.webp #nav ul li a {
-	background: url(../images/design/navigation-left.webp) no-repeat 0 -86px;
-}
-.no-webp #nav ul li a {
-	background: url(../images/design/navigation-left.png) no-repeat 0 -86px;
-}
-#nav ul li:hover li a, #nav ul li.iehover li a {
-	background-image: none;
-}
-.webp #nav ul li:hover, .webp #nav ul li.iehover {
-	background: url(../images/design/navigation-right.webp) no-repeat right -43px transparent;
-}
-.no-webp #nav ul li:hover, .no-webp #nav ul li.iehover {
-	background: url(../images/design/navigation-right.png) no-repeat right -43px transparent;
-}
-#nav ul li a:hover, #nav ul li:hover a, #nav ul li.iehover a {
-	/* Not possible to use webp here */
-	background: url(../images/design/navigation-left.png) no-repeat 0 -43px;
-	color: #044C84;
-}
-#nav ul li:hover li a, #nav ul li.iehover li a, #nav ul li.current:hover li a, #nav ul li.current.iehover li a, #nav ul li:hover ul ul li a {
-	background-image: none;
-	color: #FFFFFF;
-}
-#nav ul li:hover li a, #nav ul li.iehover li a, #nav ul li:hover ul ul li a, #nav ul li.iehover ul ul li a, #nav li:hover ul,
-#nav li li:hover ul, #nav li li li:hover ul, #nav li li li li:hover ul, #nav li.iehover ul, #nav li li.iehover ul, #nav li li li.iehover ul, #nav li li li li.iehover ul {
-	background-color: #2B72A9;
-	[if IE] _left: 0;
-
-}
-#nav ul li li.iehover, #nav ul li li:hover a, #nav ul li li:hover, #nav ul li li.iehover, #nav ul li li.current a:hover, #nav ul li.haschild li.current a:hover,
-#nav li ul li a:hover, #nav li ul li ul li a:hover, #nav li li:hover, #nav li li.iehover a, #nav li.haschild ul li.current.iehover, #nav li.haschild ul li.current:hover {
-	background-color: #0A5C99;
-	background-image: none;
-	color: #FFFFFF;
-}
-#nav ul li:hover li:hover, #nav ul li.current ul li a, #nav ul li.current ul li, #nav ul li.current ul li a:hover, #nav ul li.current ul li.hover, #nav li.haschild:hover li span, #nav li.haschild.iehover li span,
-#nav li.iehover li span, #nav ul li li a, #nav ul li.haschild li.current a, #nav ul li.haschild li.current, #nav ul li.iehover li.iehover, #nav ul li ul li a:hover, #nav ul li ul li:hover, #nav ul li ul li.iehover {
-	background-image: none;
-}
-#nav ul li.current ul li a, #nav ul li.current ul li, #nav ul li.current ul li a:hover, #nav ul li.current ul li.hover #nav ul li.current ul li.iehover, #nav ul li.haschild li.current a {
-	color: #FFFFFF;
-}
-#nav li {
-	float: left;
-	font-family: "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
-	font-weight: bold;
-	padding: 0 7px 0 0;
-}
-.webp #nav li {
-	background: url(../images/design/navigation-right.webp) no-repeat right -86px transparent;
-}
-.no-webp #nav li {
-	background: url(../images/design/navigation-right.png) no-repeat right -86px transparent;
-}
-#nav li:hover, #nav li.iehover {
-	left: 0;
-	position: static;
-	[if IE] _position: relative;
-}
-#nav li:hover ul, #nav li li:hover ul, #nav li li li:hover ul, #nav li li li li:hover ul, #nav li.iehover ul, #nav li li.iehover ul, #nav li li li.iehover ul, #nav li li li li.iehover ul {
-	z-index: 100;
-	left: auto;
-}
-#nav li a:hover {
-	height: 42px;
-}
-#nav li li {
-	background: none;
-	border-bottom: 1px solid #3080BE;
-	float: left;
-	padding: 0;
-}
-#nav li li.seperator {
-	border-bottom: none;
-	padding-bottom: 10px;
-}
-#nav li li, #nav li.haschild ul li.current:hover, #nav li.haschild ul li.current.iehover {
-	width: 173px;
-}
-#nav li li a {
-	font-weight: normal;
-	padding: 0;
-	margin: 0;
-	height: 26px;
-	line-height: 26px;
-	text-indent: 5px;
-}
-#nav li ul {
-	border-bottom: none;
-	border-top: none;
-	border-width: 0;
-	font-weight: normal;
-	height: auto;
-	left: -999em;
-	margin: 0;
-	padding: 0;
-	position: absolute;
-	[if IE] _position: absolute;
-	[if IE] _top: 42px;
-	width: 173px;
-}
-#nav li ul ul {
-	margin: -26px 0 0 173px;
-	[if IE] _margin: -42px 0 0 173px;
-}
-#nav li.current a, #nav li.current a:hover, #nav li.current:hover a, #nav li.current.iehover a {
-	color: #303030;
-}
-.webp #nav li.current a, .webp #nav li.current a:hover, .webp #nav li.current:hover a, .webp #nav li.current.iehover a {
-	background: url(../images/design/navigation-left.webp) no-repeat 0 0;
-}
-.no-webp #nav li.current a, .no-webp #nav li.current a:hover, .no-webp #nav li.current:hover a, .no-webp #nav li.current.iehover a {
-	background: url(../images/design/navigation-left.png) no-repeat 0 0;
+.news-flash .news-flash-title a:hover {
+	color: #246da5;
 }
 
-.webp #nav li.current, .webp #nav li.current:hover, .webp #nav li.current.iehover {
-	background: url(../images/design/navigation-right.webp) no-repeat right 0 transparent;
-}
-.no-webp #nav li.current, .no-webp #nav li.current:hover, .no-webp #nav li.current.iehover {
-	background: url(../images/design/navigation-right.png) no-repeat right 0 transparent;
-}
 .breadcrumb {
 	background-color: #D2E2F1;
 	border: 1px solid #B2C2D1;
@@ -505,9 +278,9 @@ p.alert {
 	font-size: 1.13333em;
 }
 
-/******************/
-/*** MENU LINKS ***/
-/******************/
+/*****************/
+/*** Left-menu ***/
+/*****************/
 a.mainlevel-sidenav {
 	font-size: 1.1em;
 	list-style: none;
@@ -517,23 +290,13 @@ a.mainlevel-sidenav {
 }
 
 /***************/
-/*** CONTENT ***/
+/*** Content ***/
 /***************/
-.createdate {
+.create-date {
 	color: #99A1A7;
 	font-size: 1em;
 	line-height: 1em;
 	text-transform: lowercase;
-}
-ul.visible {
-	list-style: circle;
-	padding-left: 25px;
-}
-td.contentheading {
-	font-size:2.1em;
-	line-height: 1.1em;
-	letter-spacing: -2px;
-	color: #444444;
 }
 a.contentpagetitle {
 	text-decoration: none;
@@ -542,11 +305,6 @@ a.contentpagetitle {
 }
 a.contentpagetitle:hover {
 	color: #121517;
-}
-table.contentpaneopen, td.contentheading {
-	margin: 0;
-	padding: 0;
-	width: 100%;
 }
 
 /*************/
@@ -582,52 +340,28 @@ span.edit_text {
 	font-size: 8px;
 }
 #favorite_box {
+	color: #fff;
 	float: right;
-	margin-top: -15px;
 	padding-right: 5px;
-	padding-top: 7px;
 }
-#favorite {
+#favorite_box a {
 	color: #fff;
 }
-#favorite a {
-	color: #fff;
-}
-#favorite a:hover {
+#favorite_box a:hover {
 	color: #bbb;
 }
-#mod_icons {
+#moderator_icons {
 	float: right;
-	margin-top: -7px;
 	padding-left: 20px;
 	padding-right: 10px;
 }
-#mod_icons a {
+#moderator_icons a {
 	color: #fff;
 }
-#disc_title {
-	margin-top: -7px;
-	padding-left: 5px;
-	text-align: left;
+#moderator_icons a:hover {
+	color: #bbb;
 }
-.disc_post {
-	text-align: left;
-}
-.forum_ad_text {
-	font-weight: bold;
-	font-size: 18px;
-	text-align: center;
-	width: 200px;
-}
-.forum_ad {
-	text-align: center;
-	width: 500px;
-}
-.forum_ad_link {
-	text-align:center;
-	width: 200px;
-}
-.wiki_block {
+.wiki-block {
 	background-color: #D2E2F1;
 	border: 1px solid #B2C2D1;
 	margin: 8px;
@@ -725,68 +459,11 @@ table.popup_design td {
 	color: #888888;
 }
 
-/*************/
-/*** DRGLs ***/
-/*************/
-span.drgl_right, span.nieuws_right {
+/**********************/
+/*** Special routes ***/
+/**********************/
+span.special-route-image {
 	float: right;
-}
-div.drgl_text, div.nieuws_text {
-	background-color: #D2E2F1;
-	height: 100%;
-	width: 945px;
-}
-
-/***************/
-/*** MODULES ***/
-/***************/
-/*TODO: migrate to home-panel*/
-div.module h3 {
-	border: none;
-	color: #242B30;
-	font-size: 1.2em;
-	letter-spacing:normal;
-	margin: 0 0 10px 0;
-	text-indent: 0;
-}
-div.module a, div.module a:hover {
-	color:#246DA5;
-}
-div.moduleS1 {
-	color: #51504A;
-	height: 1%;
-	margin: 5px 5px 10px;
-}
-.webp div.moduleS1 {
-	background: #FFF url(../images/design/top-right-medium.webp) 100% 0 no-repeat;
-}
-.no-webp div.moduleS1 {
-	background: #FFF url(../images/design/top-right-medium.png) 100% 0 no-repeat;
-}
-div.moduleS1 div {
-	padding: 12px 3px 3px;
-}
-.webp div.moduleS1 div {
-	background: url(../images/design/top-left-medium.webp) 0 0 no-repeat;
-}
-.no-webp div.moduleS1 div {
-	background: url(../images/design/top-left-medium.png) 0 0 no-repeat;
-}
-div.moduleS1 div div {
-	background: transparent none;
-	padding: 0;
-}
-div.moduleS1 h3 {
-	border: none;
-	color: #FFFFFF;
-	font-size: 1.2em;
-	letter-spacing:normal;
-	line-height: .75em;
-	margin: -4px 0 10px 0;
-	text-indent: 0;
-}
-div.moduleS1 a, div.moduleS1 a:hover {
-	color: #1E69A3;
 }
 
 /************/
@@ -830,6 +507,9 @@ div.moduleS1 a, div.moduleS1 a:hover {
 	border-radius: 0 0 5px 5px;
 	display: block;
 	padding: 10px;
+}
+.home-panel .panel-no-background {
+	background: none;
 }
 .home-panel .home-panel-actions {
 	float: right;
