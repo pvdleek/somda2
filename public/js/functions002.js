@@ -10,27 +10,6 @@ function checkEnter(event, button_id) {
 	return true;
 }
 
-function createCookie(name,value,days) {
-	if (days) {
-		var date = new Date();
-		date.setTime(date.getTime()+(days*24*60*60*1000));
-		var expires="; expires="+date.toGMTString();
-	} else {
-		var expires='';
-	}
-	document.cookie = name + "=" + value + expires + "; path=/";
-}
-
-function eraseCookie(name) {
-	createCookie(name, '', -1);
-}
-
-function getDynamicContent(site_url) {
-	if(document.getElementById('spotsInhoud'))     { makeRequest(site_url + '/blocks/ajax/spots.php','spotsInhoud', '<br />De recente spots worden opgehaald.<br />Even geduld...'); }
-	if(document.getElementById('shoutInhoud'))     { makeRequest(site_url + '/blocks/ajax/shout.php','shoutInhoud', '<br />De actuele shouts/tweets worden opgehaald.<br />Even geduld...'); }
-	if(document.getElementById('storingenInhoud')) { makeRequest(site_url + '/blocks/ajax/storingen.php','storingenInhoud', '<br />De actuele verstoringen worden opgehaald.<br />Even geduld...'); }
-}
-
 function getElementTop(element_id) {
 	if(document.layers) {
 		var element = getObjNN4(document,element_id);
@@ -44,38 +23,6 @@ function getElementTop(element_id) {
 			tempEl = tempEl.offsetParent;
 		}
 		return yPos;
-	}
-}
-
-function insertAtCursor(textfield, text) {
-	var sel;
-	if (document.selection) {
-		textfield.focus();
-		sel = document.selection.createRange();
-		sel.text = text;
-	} else {
-		if (textfield.selectionStart || textfield.selectionStart == '0') {
-			var sel_start   = textfield.selectionStart;
-			var sel_end     = textfield.selectionEnd;
-			textfield.value = textfield.value.substring(0, sel_start) + text + textfield.value.substring(sel_end, textfield.value.length);
-			textfield.selectionStart += text.length;
-		} else {
-			textfield.value += text;
-			textfield.selectionStart = text.length;
-		}
-	}
-	textfield.focus();
-}
-
-function makeRequest(url, elementId, waitText) {
-	if (elementId != undefined && elementId.length > 0 && waitText != undefined && waitText.length > 0) {
-		document.getElementById(elementId).innerHTML = waitText;
-	}
-
-	if (elementId != undefined && elementId.length>0) {
-		$.ajax({ url:url, cache:false }).done(function(html) { document.getElementById(elementId).innerHTML = html; });
-	} else {
-		$.ajax({ url:url, cache:false });
 	}
 }
 
@@ -94,10 +41,6 @@ function plaatsKeyUp(site_url, plaats, field_id, previous_field_id) {
 }
 
 function plaatsKlaar(_1e,_1f,_20){if(_1f!==""){document.getElementById(_20+"Input").value=_1f;document.getElementById(_20+"Div").style.visibility="hidden";makeRequest(_1e+"/blocks/ajax/verk.php?done=1&plaats="+_1f+"&element="+_20,_20+"Volledig",_1f);}}
-
-function readCookie(name){var nameEQ=name+"=";var ca=document.cookie.split(';');for(var i=0;i<ca.length;i++){var c=ca[i];while(c.charAt(0)==' ')c=c.substring(1,c.length);if(c.indexOf(nameEQ)==0)return c.substring(nameEQ.length,c.length);} return null;}
-
-function showImgSelected(_21,_22,_23){var _24,selectDom;_24=document.getElementById(_21);selectDom=document.getElementById(_22);_24.src=_23+"/"+selectDom.options[selectDom.selectedIndex].value;}
 
 function sluitmaterieelidPopup(){var _25=0;var _26=0;document.getElementById("materieelidDiv").style.visibility="hidden";for(var i=0;i<document.MasterForm.elements.length;i++){if(document.MasterForm.elements[i].type=="checkbox"&&document.MasterForm.elements[i].name.indexOf("materieelid")>-1){_26++;if(document.MasterForm.elements[i].checked){_25++;}}}if(_25==_26){var _28="Alles geselecteerd</a>";}else{if(_25==1){var _29="1 soort geselecteerd</a> -- <a href=\"#\" onclick=\"matSelecteerAlles(); sluitmaterieelidPopup(); return false;\">Selecteer alles</a>";}else{if(_25>1){var _2a=_25+" soorten geselecteerd</a> -- <a href=\"#\" onclick=\"matSelecteerAlles(); sluitmaterieelidPopup(); return false;\">Selecteer alles</a>";}else{var _2b="Selecteer tenminste 1 soort door hier te klikken</a> of <a href=\"#\" onclick=\"matSelecteerAlles(); sluitmaterieelidPopup(); return false;\">Selecteer alles</a>";}}}document.getElementById("materieelidKop").innerHTML="<a href=\"#\" onclick=\"document.getElementById('materieelidDiv').style.visibility='visible'; return false;\">"+_2b;}
 

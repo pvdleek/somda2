@@ -31,6 +31,9 @@ abstract class ForumBaseController extends BaseController
         if (count($banners) < 1) {
             return null;
         }
+        /**
+         * @var Banner $forumBanner
+         */
         $forumBanner = $banners[rand(0, count($banners) - 1)];
 
         // Create a view for this banner
