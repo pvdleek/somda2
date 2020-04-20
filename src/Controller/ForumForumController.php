@@ -45,9 +45,9 @@ class ForumForumController extends ForumBaseController
 
         $this->breadcrumbHelper->addPart('general.navigation.forum.index', 'forum');
         $this->breadcrumbHelper->addPart(
-            $forum->getCategory()->getName() . ' == ' . $forum->getName(),
+            $forum->category->name . ' == ' . $forum->name,
             'forum_forum',
-            ['id' => $id, 'name' => $forum->getName()],
+            ['id' => $id, 'name' => $forum->name],
             true
         );
 

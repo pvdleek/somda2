@@ -37,18 +37,16 @@ class ForumPostAlertController extends ForumBaseController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $forumPostAlert = new ForumPostAlert();
-            $forumPostAlert
-                ->setPost($post)
-                ->setSender($this->getUser())
-                ->setDate(new DateTime())
-                ->setTime(new DateTime())
-                ->setComment($form->get('comment')->getData());
+            $forumPostAlert->post = $post;
+            $forumPostAlert->sender = $this->getUser();
+            $forumPostAlert->timestamp = new DateTime();
+            $forumPostAlert->comment = $form->get('comment')->getData();
             $this->doctrine->getManager()->persist($forumPostAlert);
             $post->addAlert($forumPostAlert);
             $this->doctrine->getManager()->flush();
 
             // Send this alert to the forum-moderators
-            foreach ($post->getDiscussion()->getForum()->getModerators() as $moderator) {
+            foreach ($post->discussion->forum->getModerators() as $moderator) {
                 $this->sendEmail(
                     $moderator,
                     '[Somda-Forum] Een gebruiker heeft een forumbericht gemeld!',
@@ -58,9 +56,9 @@ class ForumPostAlertController extends ForumBaseController
             }
 
             return $this->redirectToRoute('forum_discussion_post', [
-                'id' => $post->getDiscussion()->getId(),
+                'id' => $post->discussion->getId(),
                 'postId' => $post->getId(),
-                'name' => urlencode($post->getDiscussion()->getTitle())
+                'name' => urlencode($post->discussion->title)
             ]);
         }
 
@@ -82,7 +80,7 @@ class ForumPostAlertController extends ForumBaseController
          * @var ForumPost $post
          */
         $post = $this->doctrine->getRepository(ForumPost::class)->find($id);
-        if (!$this->userIsModerator($post->getDiscussion())) {
+        if (!$this->userIsModerator($post->discussion)) {
             throw new AccessDeniedHttpException();
         }
 
@@ -90,20 +88,18 @@ class ForumPostAlertController extends ForumBaseController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $forumPostAlertNote = new ForumPostAlertNote();
-            $forumPostAlertNote
-                ->setAlert($post->getAlerts()[0])
-                ->setAuthor($this->getUser())
-                ->setDate(new DateTime())
-                ->setTime(new DateTime())
-                ->setText($form->get('text')->getData())
-                ->setSentToReporter($form->get('sentToReporter')->getData());
+            $forumPostAlertNote->alert = $post->getAlerts()[0];
+            $forumPostAlertNote->author = $this->getUser();
+            $forumPostAlertNote->timestamp = new DateTime();
+            $forumPostAlertNote->text = $form->get('text')->getData();
+            $forumPostAlertNote->sentToReporter = $form->get('sentToReporter')->getData();
 
             $this->doctrine->getManager()->persist($forumPostAlertNote);
             $post->getAlerts()[0]->addNote($forumPostAlertNote);
             $this->doctrine->getManager()->flush();
 
             // Send this alert-note to the forum-moderators
-            foreach ($post->getDiscussion()->getForum()->getModerators() as $moderator) {
+            foreach ($post->discussion->forum->getModerators() as $moderator) {
                 $this->sendEmail(
                     $moderator,
                     '[Somda-Forum] Notitie geplaatst bij gemeld forumbericht!',
@@ -115,14 +111,14 @@ class ForumPostAlertController extends ForumBaseController
             if ($form->get('sentToReporter')->getData()) {
                 // We need to inform the reporter(s)
                 foreach ($post->getAlerts() as $alert) {
-                    if (!$alert->isClosed()) {
-                        $template = $post->getDiscussion()->getForum()->getType() === ForumForum::TYPE_MODERATORS_ONLY ?
+                    if (!$alert->closed) {
+                        $template = $post->discussion->forum->type === ForumForum::TYPE_MODERATORS_ONLY ?
                             'forum-alert-follow-up-deleted' : 'forum-alert-follow-up';
                         $this->sendEmail(
-                            $alert->getSender(),
+                            $alert->sender,
                             '[Somda] Reactie op jouw melding van een forumbericht',
                             $template,
-                            ['user' => $alert->getSender(), 'post' => $post, 'note' => $forumPostAlertNote]
+                            ['user' => $alert->sender, 'post' => $post, 'note' => $forumPostAlertNote]
                         );
                     }
                 }
@@ -147,12 +143,12 @@ class ForumPostAlertController extends ForumBaseController
          * @var ForumPost $post
          */
         $post = $this->doctrine->getRepository(ForumPost::class)->find($id);
-        if (!$this->userIsModerator($post->getDiscussion())) {
+        if (!$this->userIsModerator($post->discussion)) {
             throw new AccessDeniedHttpException();
         }
 
         foreach ($post->getAlerts() as $alert) {
-            $alert->setClosed(true);
+            $alert->closed = true;
         }
         $this->doctrine->getManager()->flush();
 

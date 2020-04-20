@@ -23,12 +23,12 @@ class ForumPost extends AbstractType
         if (!is_null($options['quotedPost'])) {
             $data = sprintf(
                 self::QUOTE_HTML,
-                $options['quotedPost']->getAuthor()->getUsername(),
-                $options['quotedPost']->getTimestamp()->format('d-m-Y H:i:s'),
-                $options['quotedPost']->getText()->getText()
+                $options['quotedPost']->author->username,
+                $options['quotedPost']->timestamp->format('d-m-Y H:i:s'),
+                $options['quotedPost']->text->text
             );
         } elseif (!is_null($options['editedPost'])) {
-            $data = $options['editedPost']->getText()->getText();
+            $data = $options['editedPost']->text->text;
 
         }
 

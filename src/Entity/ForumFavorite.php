@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Table(name="somda_forum_favorites")
@@ -13,6 +14,7 @@ class ForumFavorite
     public const ALERTING_OFF = 0;
     public const ALERTING_ON = 1;
     public const ALERTING_SENT = 2;
+    public const ALERTING_VALUES = [self::ALERTING_OFF, self::ALERTING_ON, self::ALERTING_SENT];
 
     /**
      * @var ForumDiscussion
@@ -20,7 +22,7 @@ class ForumFavorite
      * @ORM\JoinColumn(name="discussionid", referencedColumnName="discussionid")
      * @ORM\Id
      */
-    private $discussion;
+    public $discussion;
 
     /**
      * @var User
@@ -28,65 +30,12 @@ class ForumFavorite
      * @ORM\JoinColumn(name="uid", referencedColumnName="uid")
      * @ORM\Id
      */
-    private $user;
+    public $user;
 
     /**
      * @var int
      * @ORM\Column(name="alerting", type="bigint", nullable=false)
+     * @Assert\Choice(choices=ForumFavorite::ALERTING_VALUES)
      */
-    private $alerting = self::ALERTING_OFF;
-
-    /**
-     * @return ForumDiscussion
-     */
-    public function getDiscussion(): ForumDiscussion
-    {
-        return $this->discussion;
-    }
-
-    /**
-     * @param ForumDiscussion $discussion
-     * @return ForumFavorite
-     */
-    public function setDiscussion(ForumDiscussion $discussion): ForumFavorite
-    {
-        $this->discussion = $discussion;
-        return $this;
-    }
-
-    /**
-     * @return User
-     */
-    public function getUser(): User
-    {
-        return $this->user;
-    }
-
-    /**
-     * @param User $user
-     * @return ForumFavorite
-     */
-    public function setUser(User $user): ForumFavorite
-    {
-        $this->user = $user;
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getAlerting(): int
-    {
-        return $this->alerting;
-    }
-
-    /**
-     * @param int $alerting
-     * @return ForumFavorite
-     */
-    public function setAlerting(int $alerting): ForumFavorite
-    {
-        $this->alerting = $alerting;
-        return $this;
-    }
+    public $alerting = self::ALERTING_OFF;
 }

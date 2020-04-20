@@ -61,18 +61,17 @@ class SecurityController extends BaseController
             $this->validatePassword($form);
 
             if ($form->isValid()) {
-                $user
-                    ->setActive(false)
-                    ->setPassword(md5(md5(md5($form->get('plainPassword')->getData()))))
-                    ->setActivationKey(md5(md5(rand())))
-                    ->setRegistrationDate(new DateTime());
+                $user->active = false;
+                $user->password = md5(md5(md5($form->get('plainPassword')->getData())));
+                $user->activationKey = md5(md5(rand()));
+                $user->registrationTimestamp = new DateTime();
                 $this->doctrine->getManager()->persist($user);
 
                 $userInfo = new UserInfo();
-                $userInfo->setUser($user);
+                $userInfo->user = $user;
                 $this->doctrine->getManager()->persist($userInfo);
 
-                $user->setInfo($userInfo);
+                $user->info = $userInfo;
 
                 $this->doctrine->getManager()->flush();
 
@@ -80,7 +79,7 @@ class SecurityController extends BaseController
                     $user,
                     'Jouw registratie bij Somda',
                     'register',
-                    ['userId' => $user->getId(), 'activationKey' => $user->getActivationKey()]
+                    ['userId' => $user->getId(), 'activationKey' => $user->activationKey]
                 )) {
                     $this->addFlash(
                         self::FLASH_TYPE_INFORMATION,
@@ -191,8 +190,10 @@ class SecurityController extends BaseController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            if ($form->get('key')->getData() === $user->getActivationKey()) {
-                $user->setActive(true)->setActivationKey('0')->addRole('ROLE_USER');
+            if ($form->get('key')->getData() === $user->activationKey) {
+                $user->active = true;
+                $user->activationKey = '0';
+                $user->addRole('ROLE_USER');
                 $this->doctrine->getManager()->flush();
 
                 $this->sendEmail($user, 'Welkom op Somda -- Belangrijke informatie', 'new-account');

@@ -60,8 +60,8 @@ class LinkTrainsToNamingPatternCommand extends Command
 
         foreach ($trains as $train) {
             foreach ($patterns as $pattern) {
-                if (preg_match('#' . $pattern->getPattern() . '#', $train->getNumber())) {
-                    $train->setNamePattern($pattern);
+                if (preg_match('#' . $pattern->pattern . '#', $train->number)) {
+                    $train->namePattern = $pattern;
                     break;
                 }
             }

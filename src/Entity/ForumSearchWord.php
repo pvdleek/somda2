@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="somda_forum_zoeken_woorden", uniqueConstraints={@ORM\UniqueConstraint(name="idx_48035_woord", columns={"woord"})})
  * @ORM\Entity
  */
-class ForumSearchWord
+class ForumSearchWord extends Entity
 {
     /**
      * @var int
@@ -17,13 +17,13 @@ class ForumSearchWord
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      * @ORM\Column(name="woord", type="string", length=20, nullable=false)
      */
-    private $word;
+    public $word;
 
     /**
      * @var ForumSearchList[]
@@ -37,42 +37,6 @@ class ForumSearchWord
     public function __construct()
     {
         $this->lists = new ArrayCollection();
-    }
-
-    /**
-     * @return int
-     */
-    public function getId(): int
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param int $id
-     * @return ForumSearchWord
-     */
-    public function setId(int $id): ForumSearchWord
-    {
-        $this->id = $id;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getWord(): string
-    {
-        return $this->word;
-    }
-
-    /**
-     * @param string $word
-     * @return ForumSearchWord
-     */
-    public function setWord(string $word): ForumSearchWord
-    {
-        $this->word = $word;
-        return $this;
     }
 
     /**

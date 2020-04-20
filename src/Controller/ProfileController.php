@@ -32,7 +32,7 @@ class ProfileController extends BaseController
 
         $form = null;
         if ($user === $this->getUser()) {
-            $form = $this->formFactory->create(UserInfo::class, $this->getUser()->getInfo());
+            $form = $this->formFactory->create(UserInfo::class, $this->getUser()->info);
 
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()) {

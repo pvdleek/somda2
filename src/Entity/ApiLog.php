@@ -22,31 +22,31 @@ class ApiLog
      * @var string|null
      * @ORM\Column(name="station", type="string", length=10, nullable=true)
      */
-    private $station;
+    public $station;
 
     /**
      * @var string|null
      * @ORM\Column(name="tijd", type="string", length=5, nullable=true)
      */
-    private $time;
+    public $time;
 
     /**
      * @var int|null
      * @ORM\Column(name="dagnr", type="bigint", nullable=true)
      */
-    private $dayNumber;
+    public $dayNumber;
 
     /**
      * @var int|null
      * @ORM\Column(name="resultaat_id", type="bigint", nullable=true)
      */
-    private $resultId;
+    public $resultId;
 
     /**
      * @var int|null
      * @ORM\Column(name="datumtijd", type="bigint", nullable=true)
      */
-    private $dateTime;
+    public $dateTime;
 
     /**
      * @return int
@@ -67,92 +67,10 @@ class ApiLog
     }
 
     /**
-     * @return string|null
-     */
-    public function getStation(): ?string
-    {
-        return $this->station;
-    }
-
-    /**
-     * @param string|null $station
-     * @return ApiLog
-     */
-    public function setStation(?string $station): ApiLog
-    {
-        $this->station = $station;
-        return $this;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getTime(): ?string
-    {
-        return $this->time;
-    }
-
-    /**
-     * @param string|null $time
-     * @return ApiLog
-     */
-    public function setTime(?string $time): ApiLog
-    {
-        $this->time = $time;
-        return $this;
-    }
-
-    /**
      * @return int|null
      */
     public function getDayNumber(): ?int
     {
         return $this->dayNumber;
-    }
-
-    /**
-     * @param int|null $dayNumber
-     * @return ApiLog
-     */
-    public function setDayNumber(?int $dayNumber): ApiLog
-    {
-        $this->dayNumber = $dayNumber;
-        return $this;
-    }
-
-    /**
-     * @return int|null
-     */
-    public function getResultId(): ?int
-    {
-        return $this->resultId;
-    }
-
-    /**
-     * @param int|null $resultId
-     * @return ApiLog
-     */
-    public function setResultId(?int $resultId): ApiLog
-    {
-        $this->resultId = $resultId;
-        return $this;
-    }
-
-    /**
-     * @return int|null
-     */
-    public function getDateTime(): ?int
-    {
-        return $this->dateTime;
-    }
-
-    /**
-     * @param int|null $dateTime
-     * @return ApiLog
-     */
-    public function setDateTime(?int $dateTime): ApiLog
-    {
-        $this->dateTime = $dateTime;
-        return $this;
     }
 }

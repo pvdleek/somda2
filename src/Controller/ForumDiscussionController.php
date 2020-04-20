@@ -30,24 +30,24 @@ class ForumDiscussionController extends ForumBaseController
         if (is_null($discussion)) {
             return $this->redirectToRoute('forum');
         }
-        if (!$this->mayView($discussion->getForum())) {
+        if (!$this->mayView($discussion->forum)) {
             throw new AccessDeniedHttpException();
         }
 
         $this->breadcrumbHelper->addPart('general.navigation.forum.index', 'forum');
         $this->breadcrumbHelper->addPart(
-            $discussion->getForum()->getCategory()->getName() . ' == ' . $discussion->getForum()->getName(),
+            $discussion->forum->category->name . ' == ' . $discussion->forum->name,
             'forum_forum',
-            ['id' => $discussion->getForum()->getId(), 'name' => $discussion->getForum()->getName()]
+            ['id' => $discussion->forum->getId(), 'name' => $discussion->forum->name]
         );
         $this->breadcrumbHelper->addPart(
             'Discussie',
             'forum_discussion',
-            ['id' => $id, 'name' => $discussion->getTitle()],
+            ['id' => $id, 'name' => $discussion->title],
             true
         );
 
-        $discussion->setViewed($discussion->getViewed() + 1);
+        $discussion->viewed = $discussion->viewed + 1;
         $this->doctrine->getManager()->flush();
 
         $numberOfPosts = $this->doctrine->getRepository(ForumDiscussion::class)->getNumberOfPosts($discussion);
@@ -64,7 +64,7 @@ class ForumDiscussionController extends ForumBaseController
          */
         $numberOfReadPosts = 0;
         if ($this->userIsLoggedIn()) {
-            if ($discussion->getForum()->getType() !== ForumForum::TYPE_ARCHIVE) {
+            if ($discussion->forum->type !== ForumForum::TYPE_ARCHIVE) {
                 $numberOfReadPosts = $this->doctrine->getRepository(ForumDiscussion::class)->getNumberOfReadPosts(
                     $discussion,
                     $this->getUser()
@@ -93,7 +93,7 @@ class ForumDiscussionController extends ForumBaseController
             'numberOfPages' => $numberOfPages,
             'pageNumber' => $pageNumber,
             'posts' => $posts,
-            'mayPost' => $this->mayPost($discussion->getForum()),
+            'mayPost' => $this->mayPost($discussion->forum),
             'numberOfReadPosts' => $numberOfReadPosts,
             'forumBanner' => $this->getForumBanner($request),
         ]);
@@ -116,7 +116,8 @@ class ForumDiscussionController extends ForumBaseController
         }
 
         $forumDiscussion = new ForumDiscussion();
-        $forumDiscussion->setForum($forum)->setAuthor($this->getUser());
+        $forumDiscussion->forum = $forum;
+        $forumDiscussion->author = $this->getUser();
 
         $form = $this->formFactory->create(ForumDiscussionForm::class, $forumDiscussion);
         $form->handleRequest($request);
@@ -127,7 +128,7 @@ class ForumDiscussionController extends ForumBaseController
 
             return $this->redirectToRoute(
                 'forum_discussion',
-                ['id' => $forumDiscussion->getId(), 'name' => urlencode($forumDiscussion->getTitle())]
+                ['id' => $forumDiscussion->getId(), 'name' => urlencode($forumDiscussion->title)]
             );
         }
 

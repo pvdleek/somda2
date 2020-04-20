@@ -16,7 +16,7 @@ class UserPreferenceValue
      * @ORM\JoinColumn(name="uid", referencedColumnName="uid")
      * @ORM\Id
      */
-    private $user;
+    public $user;
 
     /**
      * @var UserPreference
@@ -24,65 +24,11 @@ class UserPreferenceValue
      * @ORM\JoinColumn(name="prefid", referencedColumnName="prefid")
      * @ORM\Id
      */
-    private $preference;
+    public $preference;
 
     /**
      * @var string
      * @ORM\Column(name="value", type="string", length=200, nullable=false)
      */
-    private $value = '';
-
-    /**
-     * @return User
-     */
-    public function getUser(): User
-    {
-        return $this->user;
-    }
-
-    /**
-     * @param User $user
-     * @return UserPreferenceValue
-     */
-    public function setUser(User $user): UserPreferenceValue
-    {
-        $this->user = $user;
-        return $this;
-    }
-
-    /**
-     * @return UserPreference
-     */
-    public function getPreference(): UserPreference
-    {
-        return $this->preference;
-    }
-
-    /**
-     * @param UserPreference $preference
-     * @return UserPreferenceValue
-     */
-    public function setPreference(UserPreference $preference): UserPreferenceValue
-    {
-        $this->preference = $preference;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getValue(): string
-    {
-        return $this->value;
-    }
-
-    /**
-     * @param string $value
-     * @return UserPreferenceValue
-     */
-    public function setValue(string $value): UserPreferenceValue
-    {
-        $this->value = $value;
-        return $this;
-    }
+    public $value = '';
 }

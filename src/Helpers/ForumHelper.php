@@ -62,23 +62,23 @@ class ForumHelper implements RuntimeExtensionInterface
      */
     public function getDisplayForumPost(ForumPost $post): string
     {
-        if ($post->getText()->isNewStyle()) {
+        if ($post->text->newStyle) {
             $text = strip_tags(
-                str_replace(['&nbsp;', "\r\n", '<p>&nbsp;</p>'], ' ', $post->getText()->getText()),
+                str_replace(['&nbsp;', "\r\n", '<p>&nbsp;</p>'], ' ', $post->text->text),
                 self::ALLOWED_HTML_TAGS
             );
         } else {
-            $text = $this->doSpecialText($post->getText()->getText());
+            $text = $this->doSpecialText($post->text->text);
         }
         $text = nl2br($this->replaceLocationsAndUsers($text));
 
-        if (!is_null($post->getEditTimestamp())) {
-            $text .= '<br /><br /><i><span class="edit_text">Laatst bewerkt door ' . $post->getEditor()->getUsername() .
-                ' op ' . $post->getEditTimestamp()->format('d-m-Y H:i').
-                (strlen($post->getEditReason()) > 0 ? ', reden: ' . $post->getEditReason() : '') . '</span></i>';
+        if (!is_null($post->editTimestamp)) {
+            $text .= '<br /><br /><i><span class="edit_text">Laatst bewerkt door ' . $post->editor->username .
+                ' op ' . $post->editTimestamp->format('d-m-Y H:i').
+                (strlen($post->editReason) > 0 ? ', reden: ' . $post->editReason : '') . '</span></i>';
         }
-        if ($post->isSignatureOn() && strlen($post->getAuthor()->getInfo()->getInfo()) > 0) {
-            $text .= '<br /><hr style="margin-left:0; width:15%;" />' . $post->getAuthor()->getInfo()->getInfo();
+        if ($post->signatureOn && strlen($post->author->info->info) > 0) {
+            $text .= '<br /><hr style="margin-left:0; width:15%;" />' . $post->author->info->info;
         }
 //        if (isset($highlight) && strlen($highlight) > 0) {
 //            $text = doHighlight($text, $highlight);
@@ -121,8 +121,8 @@ class ForumHelper implements RuntimeExtensionInterface
             '/\[color=(\#[0-9a-f]{6}|[a-z]+)\](.+)\[\/color\]/Uis'
         ];
         $bbReplacements = [
-            '<b>\1</b>',
-            '<i>\1</i>',
+            '<strong>\1</strong>',
+            '<em>\1</em>',
             '<u>\1</u>',
             '<s>\1</s>',
             '<pre>\1</pre>',
@@ -300,7 +300,7 @@ class ForumHelper implements RuntimeExtensionInterface
     }
 
     /**
-     *
+     * @throws Exception
      */
     private function loadStaticData(): void
     {
@@ -308,20 +308,23 @@ class ForumHelper implements RuntimeExtensionInterface
             return;
         }
 
-        // Get all locations
+        /**
+         * @var Location[] $locations
+         * @var Jargon[] $jargons
+         * @var User[] $users
+         */
         $locations = $this->doctrine->getRepository(Location::class)->findAll();
         foreach ($locations as $location) {
-            $this->locations[$location->getName()] = $location->getDescription();
+            $this->locations[$location->name] = $location->description;
         }
         $jargons = $this->doctrine->getRepository(Jargon::class)->findAll();
         foreach ($jargons as $jargon) {
-            $this->locations[$jargon->getTerm()] = $jargon->getDescription();
+            $this->locations[$jargon->term] = $jargon->description;
         }
 
         $users = $this->doctrine->getRepository(User::class)->findBy(['active' => true]);
         foreach ($users as $user) {
-            $this->users['@' . $user->getUsername()] =
-                strlen($user->getName()) > 0 ? $user->getName() : $user->getUsername();
+            $this->users['@' . $user->username] = strlen($user->name) > 0 ? $user->name : $user->username;
         }
 
         $routes = $this->doctrine->getRepository(TrainTable::class)->findAllTrainTablesForForum(
@@ -368,9 +371,12 @@ class ForumHelper implements RuntimeExtensionInterface
      */
     private function getDefaultTrainTableYear(): TrainTableYear
     {
+        /**
+         * @var TrainTableYear[] $trainTableYears
+         */
         $trainTableYears = $this->doctrine->getRepository(TrainTableYear::class)->findAll();
         foreach ($trainTableYears as $trainTableYear) {
-            if ($trainTableYear->getStartDate() <= new DateTime() && $trainTableYear->getEndDate() >= new DateTime()) {
+            if ($trainTableYear->startDate <= new DateTime() && $trainTableYear->endDate >= new DateTime()) {
                 return $trainTableYear;
             }
         }

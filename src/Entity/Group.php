@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="somda_groups")
  * @ORM\Entity
  */
-class Group
+class Group extends Entity
 {
     /**
      * @var int
@@ -17,19 +17,19 @@ class Group
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      * @ORM\Column(name="name", type="string", length=15, nullable=false)
      */
-    private $name = '';
+    public $name = '';
 
     /**
      * @var array
      * @ORM\Column(name="roles", type="array", nullable=false)
      */
-    private $roles = [];
+    public $roles = [];
 
     /**
      * @var User
@@ -47,60 +47,6 @@ class Group
     public function __construct()
     {
         $this->users = new ArrayCollection();
-    }
-
-    /**
-     * @return int
-     */
-    public function getId(): int
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param int $id
-     * @return Group
-     */
-    public function setId(int $id): Group
-    {
-        $this->id = $id;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getName(): string
-    {
-        return $this->name;
-    }
-
-    /**
-     * @param string $name
-     * @return Group
-     */
-    public function setName(string $name): Group
-    {
-        $this->name = $name;
-        return $this;
-    }
-
-    /**
-     * @return array
-     */
-    public function getRoles(): array
-    {
-        return $this->roles;
-    }
-
-    /**
-     * @param array $roles
-     * @return Group
-     */
-    public function setRoles(array $roles): Group
-    {
-        $this->roles = $roles;
-        return $this;
     }
 
     /**

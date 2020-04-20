@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="somda_spot_provincie")
  * @ORM\Entity
  */
-class PoiCategory
+class PoiCategory extends Entity
 {
     /**
      * @var int
@@ -17,55 +17,42 @@ class PoiCategory
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      * @ORM\Column(name="naam", type="string", length=15, nullable=false)
      */
-    private $name = '';
+    public $name = '';
 
-
+    /**
+     * @var Poi[]
+     */
     private $pois;
 
+    /**
+     *
+     */
     public function __construct()
     {
         $this->pois = new ArrayCollection();
     }
 
     /**
-     * @return int
-     */
-    public function getId(): int
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param int $id
+     * @param Poi $poi
      * @return PoiCategory
      */
-    public function setId(int $id): PoiCategory
+    public function addPoi(Poi $poi): PoiCategory
     {
-        $this->id = $id;
+        $this->pois[] = $poi;
         return $this;
     }
 
     /**
-     * @return string
+     * @return Poi[]
      */
-    public function getName(): string
+    public function getPois(): array
     {
-        return $this->name;
-    }
-
-    /**
-     * @param string $name
-     * @return PoiCategory
-     */
-    public function setName(string $name): PoiCategory
-    {
-        $this->name = $name;
-        return $this;
+        return $this->pois->toArray();
     }
 }

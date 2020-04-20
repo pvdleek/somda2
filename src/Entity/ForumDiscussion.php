@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="somda_forum_discussion", indexes={@ORM\Index(name="idx_47915_forumid", columns={"forumid"})})
  * @ORM\Entity(repositoryClass="App\Repository\ForumDiscussion")
  */
-class ForumDiscussion
+class ForumDiscussion extends Entity
 {
     /**
      * @var int
@@ -17,39 +17,39 @@ class ForumDiscussion
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      * @ORM\Column(name="title", type="string", length=50, nullable=false)
      */
-    private $title = '';
+    public $title = '';
 
     /**
      * @var int
      * @ORM\Column(name="viewed", type="bigint", nullable=false)
      */
-    private $viewed = 0;
+    public $viewed = 0;
 
     /**
      * @var boolean
      * @ORM\Column(name="locked", type="boolean", nullable=false, options={"default"=false})
      */
-    private $locked = false;
+    public $locked = false;
 
     /**
      * @var ForumForum
      * @ORM\ManyToOne(targetEntity="App\Entity\ForumForum", inversedBy="discussions")
      * @ORM\JoinColumn(name="forumid", referencedColumnName="forumid")
      */
-    private $forum;
+    public $forum;
 
     /**
      * @var User
      * @ORM\ManyToOne(targetEntity="App\Entity\User")
      * @ORM\JoinColumn(name="authorid", referencedColumnName="uid")
      */
-    private $author;
+    public $author;
 
     /**
      * @var ForumPost[]
@@ -77,114 +77,6 @@ class ForumDiscussion
         $this->posts = new ArrayCollection();
         $this->wikis = new ArrayCollection();
         $this->favorites = new ArrayCollection();
-    }
-
-    /**
-     * @return int
-     */
-    public function getId(): int
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param int $id
-     * @return ForumDiscussion
-     */
-    public function setId(int $id): ForumDiscussion
-    {
-        $this->id = $id;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getTitle(): string
-    {
-        return $this->title;
-    }
-
-    /**
-     * @param string $title
-     * @return ForumDiscussion
-     */
-    public function setTitle(string $title): ForumDiscussion
-    {
-        $this->title = $title;
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getViewed(): int
-    {
-        return $this->viewed;
-    }
-
-    /**
-     * @param int $viewed
-     * @return ForumDiscussion
-     */
-    public function setViewed(int $viewed): ForumDiscussion
-    {
-        $this->viewed = $viewed;
-        return $this;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isLocked(): bool
-    {
-        return $this->locked;
-    }
-
-    /**
-     * @param bool $locked
-     * @return ForumDiscussion
-     */
-    public function setLocked(bool $locked): ForumDiscussion
-    {
-        $this->locked = $locked;
-        return $this;
-    }
-
-    /**
-     * @return ForumForum
-     */
-    public function getForum(): ForumForum
-    {
-        return $this->forum;
-    }
-
-    /**
-     * @param ForumForum $forum
-     * @return ForumDiscussion
-     */
-    public function setForum(ForumForum $forum): ForumDiscussion
-    {
-        $this->forum = $forum;
-        return $this;
-    }
-
-    /**
-     * @return User
-     */
-    public function getAuthor(): User
-    {
-        return $this->author;
-    }
-
-    /**
-     * @param User $author
-     * @return ForumDiscussion
-     */
-    public function setAuthor(User $author): ForumDiscussion
-    {
-        $this->author = $author;
-        return $this;
     }
 
     /**

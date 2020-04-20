@@ -111,7 +111,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
      */
     public function checkCredentials($credentials, UserInterface $user): bool
     {
-        return $user->isActive() && md5(md5(md5($credentials['password']))) === $user->getPassword();
+        return $user->active && md5(md5(md5($credentials['password']))) === $user->password;
     }
 
     /**

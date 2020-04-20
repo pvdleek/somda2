@@ -46,31 +46,31 @@ class UserPreferences extends AbstractType
         $userHelper = $options['userHelper'];
 
         foreach ($allSettings as $setting) {
-            if ($setting->getOrder() > 0) {
-                $value = $userHelper->getPreferenceByKey($setting->getKey(), $builder->getData())->getValue();
-                $typePart = explode('|', $setting->getType());
+            if ($setting->order > 0) {
+                $value = $userHelper->getPreferenceByKey($setting->key, $builder->getData())->value;
+                $typePart = explode('|', $setting->type);
                 switch($typePart[0]) {
                     case 'number':
-                        $builder->add($setting->getKey(), ChoiceType::class, [
+                        $builder->add($setting->key, ChoiceType::class, [
                             'choices' => array_combine(range(1, (int)$typePart[1]), range(1, (int)$typePart[1])),
                             'data' => (int)$value,
-                            'label' => $setting->getDescription(),
+                            'label' => $setting->description,
                             'mapped' => false,
                             'required' => true,
                         ]);
                         break;
                     case 'text':
-                        $builder->add($setting->getKey(), TextType::class, [
+                        $builder->add($setting->key, TextType::class, [
                             'data' => $value,
-                            'label' => $setting->getDescription(),
+                            'label' => $setting->description,
                             'mapped' => false,
                             'required' => true,
                         ]);
                         break;
                     case 'boolean':
-                        $builder->add($setting->getKey(), CheckboxType::class, [
+                        $builder->add($setting->key, CheckboxType::class, [
                             'data' => (int)$value === 1,
-                            'label' => $setting->getDescription(),
+                            'label' => $setting->description,
                             'mapped' => false,
                             'required' => true,
                         ]);
@@ -78,24 +78,24 @@ class UserPreferences extends AbstractType
                     case 'table':
                         if ($typePart[1] !== 'location') {
                             throw new Exception(
-                                'Unknown setting table ' . $typePart[1] . ' for key ' . $setting->getKey()
+                                'Unknown setting table ' . $typePart[1] . ' for key ' . $setting->key
                             );
                         }
 
-                        $builder->add($setting->getKey(), EntityType::class, [
+                        $builder->add($setting->key, EntityType::class, [
                             'choice_label' => function (Location $location) {
-                                return $location->getName() . ' - ' . $location->getDescription();
+                                return $location->name . ' - ' . $location->description;
                             },
                             'choice_value' => $typePart[2],
                             'class' => Location::class,
                             'data' => $this->doctrine->getRepository(Location::class)->findOneBy(['name' => $value]),
-                            'label' => $setting->getDescription(),
+                            'label' => $setting->description,
                             'mapped' => false,
                             'required' => true,
                         ]);
                         break;
                     default:
-                        throw new Exception('Unknown setting type ' . $typePart[0] . ' for key ' . $setting->getKey());
+                        throw new Exception('Unknown setting type ' . $typePart[0] . ' for key ' . $setting->key);
                 }
             }
         }

@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="somda_rijdagen")
  * @ORM\Entity
  */
-class RouteOperationDays
+class RouteOperationDays extends Entity
 {
     /**
      * @var int
@@ -16,193 +16,49 @@ class RouteOperationDays
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $id;
+    protected $id;
 
     /**
-     * @var int|null
-     * @ORM\Column(name="ma", type="bigint", nullable=true)
+     * @var bool
+     * @ORM\Column(name="ma", type="boolean", nullable=false)
      */
-    private $monday;
+    public $monday = false;
 
     /**
-     * @var int|null
-     * @ORM\Column(name="di", type="bigint", nullable=true)
+     * @var bool
+     * @ORM\Column(name="di", type="boolean", nullable=false)
      */
-    private $tuesday;
+    public $tuesday = false;
 
     /**
-     * @var int|null
-     * @ORM\Column(name="wo", type="bigint", nullable=true)
+     * @var bool
+     * @ORM\Column(name="wo", type="boolean", nullable=false)
      */
-    private $wednesday;
+    public $wednesday = false;
 
     /**
-     * @var int|null
-     * @ORM\Column(name="do", type="bigint", nullable=true)
+     * @var bool
+     * @ORM\Column(name="do", type="boolean", nullable=false)
      */
-    private $thursday;
+    public $thursday = false;
 
     /**
-     * @var int|null
-     * @ORM\Column(name="vr", type="bigint", nullable=true)
+     * @var bool
+     * @ORM\Column(name="vr", type="boolean", nullable=false)
      */
-    private $friday;
+    public $friday = false;
 
     /**
-     * @var int|null
-     * @ORM\Column(name="za", type="bigint", nullable=true)
+     * @var bool
+     * @ORM\Column(name="za", type="boolean", nullable=false)
      */
-    private $saturday;
+    public $saturday = false;
 
     /**
-     * @var int|null
-     * @ORM\Column(name="zf", type="bigint", nullable=true)
+     * @var bool
+     * @ORM\Column(name="zf", type="boolean", nullable=false)
      */
-    private $sunday;
-
-    /**
-     * @return int
-     */
-    public function getId(): int
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param int $id
-     * @return RouteOperationDays
-     */
-    public function setId(int $id): RouteOperationDays
-    {
-        $this->id = $id;
-        return $this;
-    }
-
-    /**
-     * @return int|null
-     */
-    public function getMonday(): ?int
-    {
-        return $this->monday;
-    }
-
-    /**
-     * @param int|null $monday
-     * @return RouteOperationDays
-     */
-    public function setMonday(?int $monday): RouteOperationDays
-    {
-        $this->monday = $monday;
-        return $this;
-    }
-
-    /**
-     * @return int|null
-     */
-    public function getTuesday(): ?int
-    {
-        return $this->tuesday;
-    }
-
-    /**
-     * @param int|null $tuesday
-     * @return RouteOperationDays
-     */
-    public function setTuesday(?int $tuesday): RouteOperationDays
-    {
-        $this->tuesday = $tuesday;
-        return $this;
-    }
-
-    /**
-     * @return int|null
-     */
-    public function getWednesday(): ?int
-    {
-        return $this->wednesday;
-    }
-
-    /**
-     * @param int|null $wednesday
-     * @return RouteOperationDays
-     */
-    public function setWednesday(?int $wednesday): RouteOperationDays
-    {
-        $this->wednesday = $wednesday;
-        return $this;
-    }
-
-    /**
-     * @return int|null
-     */
-    public function getThursday(): ?int
-    {
-        return $this->thursday;
-    }
-
-    /**
-     * @param int|null $thursday
-     * @return RouteOperationDays
-     */
-    public function setThursday(?int $thursday): RouteOperationDays
-    {
-        $this->thursday = $thursday;
-        return $this;
-    }
-
-    /**
-     * @return int|null
-     */
-    public function getFriday(): ?int
-    {
-        return $this->friday;
-    }
-
-    /**
-     * @param int|null $friday
-     * @return RouteOperationDays
-     */
-    public function setFriday(?int $friday): RouteOperationDays
-    {
-        $this->friday = $friday;
-        return $this;
-    }
-
-    /**
-     * @return int|null
-     */
-    public function getSaturday(): ?int
-    {
-        return $this->saturday;
-    }
-
-    /**
-     * @param int|null $saturday
-     * @return RouteOperationDays
-     */
-    public function setSaturday(?int $saturday): RouteOperationDays
-    {
-        $this->saturday = $saturday;
-        return $this;
-    }
-
-    /**
-     * @return int|null
-     */
-    public function getSunday(): ?int
-    {
-        return $this->sunday;
-    }
-
-    /**
-     * @param int|null $sunday
-     * @return RouteOperationDays
-     */
-    public function setSunday(?int $sunday): RouteOperationDays
-    {
-        $this->sunday = $sunday;
-        return $this;
-    }
+    public $sunday = false;
 
     /**
      * @param int $dayNumber
@@ -212,19 +68,18 @@ class RouteOperationDays
     {
         switch ($dayNumber) {
             case 0:
-                return $this->getMonday();
+                return $this->monday;
             case 1:
-                return $this->getTuesday();
+                return $this->tuesday;
             case 2:
-                return $this->getWednesday();
+                return $this->wednesday;
             case 3:
-                return $this->getThursday();
+                return $this->thursday;
             case 4:
-                return $this->getFriday();
+                return $this->friday;
             case 5:
-                return $this->getSaturday();
-            default:
-                return $this->getSunday();
+                return $this->saturday;
         }
+        return $this->sunday;
     }
 }

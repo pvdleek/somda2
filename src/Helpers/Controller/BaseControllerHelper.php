@@ -74,9 +74,12 @@ class BaseControllerHelper
      */
     public function getDefaultTrainTableYear(): TrainTableYear
     {
+        /**
+         * @var TrainTableYear[] $trainTableYears
+         */
         $trainTableYears = $this->doctrine->getRepository(TrainTableYear::class)->findAll();
         foreach ($trainTableYears as $trainTableYear) {
-            if ($trainTableYear->getStartDate() <= new DateTime() && $trainTableYear->getEndDate() >= new DateTime()) {
+            if ($trainTableYear->startDate <= new DateTime() && $trainTableYear->endDate >= new DateTime()) {
                 return $trainTableYear;
             }
         }

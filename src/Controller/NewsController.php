@@ -34,7 +34,7 @@ class NewsController extends BaseController
         /**
          * @var News[] $news
          */
-        $news = $this->doctrine->getRepository(News::class)->findBy([], ['date' => 'DESC']);
+        $news = $this->doctrine->getRepository(News::class)->findBy([], ['timestamp' => 'DESC']);
         return $this->render('news/index.html.twig', ['news' => $news]);
     }
 }

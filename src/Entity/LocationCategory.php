@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="somda_verk_cats")
  * @ORM\Entity
  */
-class LocationCategory
+class LocationCategory extends Entity
 {
     /**
      * @var int
@@ -17,19 +17,13 @@ class LocationCategory
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      * @ORM\Column(name="name", type="string", length=20, nullable=false)
      */
-    private $name = '';
-
-    /**
-     * @var string|null
-     * @ORM\Column(name="ns_code", type="string", length=2, nullable=true)
-     */
-    private $nsCode;
+    public $name = '';
 
     /**
      * @var Location[]
@@ -46,56 +40,20 @@ class LocationCategory
     }
 
     /**
-     * @return int
-     */
-    public function getId(): int
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param int $id
+     * @param Location $location
      * @return LocationCategory
      */
-    public function setId(int $id): LocationCategory
+    public function addLocation(Location $location): LocationCategory
     {
-        $this->id = $id;
+        $this->locations[] = $location;
         return $this;
     }
 
     /**
-     * @return string
+     * @return Location[]
      */
-    public function getName(): string
+    public function getLocations(): array
     {
-        return $this->name;
-    }
-
-    /**
-     * @param string $name
-     * @return LocationCategory
-     */
-    public function setName(string $name): LocationCategory
-    {
-        $this->name = $name;
-        return $this;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getNsCode(): ?string
-    {
-        return $this->nsCode;
-    }
-
-    /**
-     * @param string|null $nsCode
-     * @return LocationCategory
-     */
-    public function setNsCode(?string $nsCode): LocationCategory
-    {
-        $this->nsCode = $nsCode;
-        return $this;
+        return $this->locations->toArray();
     }
 }

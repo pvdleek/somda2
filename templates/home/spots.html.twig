@@ -2,7 +2,7 @@
 	{% for spot in layoutData['spots'] %}
 		<div>{{ spot | displaySpot | raw }}</div>
 		<div><a href="/spots/{{ spot.train.number }}" title="Bekijk alle spots van trein {{ spot.train.number }}"><i class="fas fa-train"></i></a></div>
-		<div><a href="/spots/{{ spot.date | date('Y-m-d') }}" title="Bekijk alle spots van {{ spot.date | date('d-m-Y') }}"><i class="fas fa-calendar"></i></a></div>
+		<div><a href="/spots/{{ spot.timestamp | date('Y-m-d') }}" title="Bekijk alle spots van {{ spot.timestamp | date('d-m-Y') }}"><i class="fas fa-calendar"></i></a></div>
 		<div><a href="/spots/{{ spot.location.name }}" title="Bekijk alle spots te {{ spot.location.name }}"><i class="fas fa-map-marker-alt"></i></a></div>
 	{% endfor %}
 </div>

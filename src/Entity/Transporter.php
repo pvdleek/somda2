@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="somda_vervoerder", uniqueConstraints={@ORM\UniqueConstraint(name="idx_49122_omschrijving", columns={"omschrijving"})})
  * @ORM\Entity
  */
-class Transporter
+class Transporter extends Entity
 {
     /**
      * @var int
@@ -17,19 +17,19 @@ class Transporter
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      * @ORM\Column(name="omschrijving", type="string", length=35, nullable=false)
      */
-    private $name = '';
+    public $name = '';
 
     /**
      * @var string|null
      * @ORM\Column(name="prorail_desc", type="string", length=35, nullable=true)
      */
-    private $proRailDescription = '';
+    public $proRailDescription = '';
 
     /**
      * @var Train[]
@@ -48,60 +48,6 @@ class Transporter
     {
         $this->trains = new ArrayCollection();
         $this->routeLists = new ArrayCollection();
-    }
-
-    /**
-     * @return int
-     */
-    public function getId(): int
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param int $id
-     * @return Transporter
-     */
-    public function setId(int $id): Transporter
-    {
-        $this->id = $id;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getName(): string
-    {
-        return $this->name;
-    }
-
-    /**
-     * @param string $name
-     * @return Transporter
-     */
-    public function setName(string $name): Transporter
-    {
-        $this->name = $name;
-        return $this;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getProRailDescription(): ?string
-    {
-        return $this->proRailDescription;
-    }
-
-    /**
-     * @param string|null $proRailDescription
-     * @return Transporter
-     */
-    public function setProRailDescription(?string $proRailDescription): Transporter
-    {
-        $this->proRailDescription = $proRailDescription;
-        return $this;
     }
 
     /**

@@ -1,6 +1,14 @@
 <project name="Somda" basedir=".">
     <description>Somda</description>
 
+    <target name="phpmd">
+        <exec executable="vendor/bin/phpmd">
+            <arg value="src/" />
+            <arg value="text" />
+            <arg value="config/phpmd-ruleset.xml" />
+        </exec>
+    </target>
+
     <target name="sonar">
         <exec executable="/opt/sonarqube/bin/linux-x86-64/sonar.sh">
             <arg value="console" />

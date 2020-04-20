@@ -32,15 +32,15 @@ class SpotHelper implements RuntimeExtensionInterface
      */
     public function getDisplaySpot(Spot $spot): string
     {
-        if (is_numeric($spot->getRoute()->getNumber())) {
+        if (is_numeric($spot->route->number)) {
             $translation = 'spot.display.numeric';
-        } elseif ($spot->getRoute()->getNumber() === Route::SPECIAL_NO_SERVICE) {
+        } elseif ($spot->route->number === Route::SPECIAL_NO_SERVICE) {
             $translation = 'spot.display.noService';
-        } elseif (in_array($spot->getRoute()->getNumber(), Route::SPECIAL_EXTRA_SERVICE)) {
+        } elseif (in_array($spot->route->number, Route::SPECIAL_EXTRA_SERVICE)) {
             $translation = 'spot.display.extraService';
-        } elseif ($spot->getRoute()->getNumber() === Route::SPECIAL_MEASURING) {
+        } elseif ($spot->route->number === Route::SPECIAL_MEASURING) {
             $translation = 'spot.display.measuring';
-        } elseif ($spot->getRoute()->getNumber() === Route::SPECIAL_CHECKING) {
+        } elseif ($spot->route->number === Route::SPECIAL_CHECKING) {
             $translation = 'spot.display.checking';
         } else {
             $translation = 'spot.display.numeric';
@@ -48,10 +48,10 @@ class SpotHelper implements RuntimeExtensionInterface
 
         return sprintf(
             $this->translator->trans($translation),
-            $this->getDisplayTrain($spot->getTrain()),
-            $this->getDisplayDate($spot->getDate()),
-            $this->getDisplayLocation($spot->getLocation()),
-            $this->getDisplayRoute($spot->getRoute(), $spot->getPosition())
+            $this->getDisplayTrain($spot->train),
+            $this->getDisplayDate($spot->timestamp),
+            $this->getDisplayLocation($spot->location),
+            $this->getDisplayRoute($spot->route, $spot->position)
         );
     }
 
@@ -61,10 +61,10 @@ class SpotHelper implements RuntimeExtensionInterface
      */
     private function getDisplayTrain(Train $train): string
     {
-        if (!is_null($train->getNamePattern())) {
-            return $train->getNamePattern()->getName() . ' ' . $train->getNumber();
+        if (!is_null($train->namePattern)) {
+            return $train->namePattern->name . ' ' . $train->number;
         }
-        return $train->getNumber();
+        return $train->number;
     }
 
     /**
@@ -85,7 +85,7 @@ class SpotHelper implements RuntimeExtensionInterface
      */
     private function getDisplayLocation(Location $location): string
     {
-        return '<span title="' . $location->getDescription() . '">' . $location->getName() . '</span>';
+        return '<span title="' . $location->description . '">' . $location->name . '</span>';
     }
 
     /**
@@ -95,9 +95,9 @@ class SpotHelper implements RuntimeExtensionInterface
      */
     private function getDisplayRoute(Route $route, Position $position): string
     {
-        if (strlen($position->getName()) > 0) {
-            return $route->getNumber() . '(' . $position->getName() . ')';
+        if (strlen($position->name) > 0) {
+            return $route->number . '(' . $position->name . ')';
         }
-        return $route->getNumber();
+        return $route->number;
     }
 }

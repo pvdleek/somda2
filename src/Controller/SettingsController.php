@@ -31,12 +31,12 @@ class SettingsController extends BaseController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             foreach ($allSettings as $setting) {
-                if ($setting->getOrder() > 0) {
-                    $userPreference = $this->userHelper->getPreferenceByKey($setting->getKey(), $this->getUser());
-                    if (is_object($form->get($setting->getKey())->getData())) {
-                        $userPreference->setValue($form->get($setting->getKey())->getData()->getName());
+                if ($setting->order > 0) {
+                    $userPreference = $this->userHelper->getPreferenceByKey($setting->key, $this->getUser());
+                    if (is_object($form->get($setting->key)->getData())) {
+                        $userPreference->value = $form->get($setting->key)->getData()->name;
                     } else {
-                        $userPreference->setValue($form->get($setting->getKey())->getData());
+                        $userPreference->value = $form->get($setting->key)->getData();
                     }
                 }
             }

@@ -15,7 +15,7 @@
     {% endif %}
 
     {% for alert in post.alerts %}
-        <p class="info">Commentaar van melder <a target="_blank" href="/gebruikerslijst/{{ alert.sender.id }}/">{{ alert.sender.username }}</a> op {{ alert.date | date('d-m-Y') }} om {{ alert.time | date('H:i:s') }}: <strong>{{ alert.comment }}</strong></p>
+        <p class="info">Commentaar van melder <a target="_blank" href="/gebruikerslijst/{{ alert.sender.id }}/">{{ alert.sender.username }}</a> op {{ alert.timestamp | date('d-m-Y') }} om {{ alert.time | date('H:i:s') }}: <strong>{{ alert.comment }}</strong></p>
     {% endfor %}
 
     <table align="center" class="design" width="98%">
@@ -29,7 +29,7 @@
             {% for note in alert.notes %}
                 <tr>
                     <td>{{ note.author.id | displayUser(note.author.username) | raw }}</td>
-                    <td>{{ note.date | date('d-m-Y') }} {{ note.time | date('H:i:s') }}</td>
+                    <td>{{ note.timestamp | date('d-m-Y H:i:s') }}</td>
                     <td>{{ note.text }}</td>
                     <td>{{ note.sentToReporter ? 'Ja' : 'Nee' }}</td>
                 </tr>

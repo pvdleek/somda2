@@ -10,6 +10,7 @@ use App\Helpers\BreadcrumbHelper;
 use App\Helpers\Controller\TrainTableHelper;
 use App\Helpers\MenuHelper;
 use App\Helpers\UserHelper;
+use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 use Monolog\Logger;
@@ -191,10 +192,9 @@ abstract class BaseController
 
             // Create a view for this banner
             $bannerView = new BannerView();
-            $bannerView
-                ->setBanner($headerContent)
-                ->setTimestamp(time())
-                ->setIp(inet_pton($this->requestStack->getCurrentRequest()->getClientIp()));
+            $bannerView->banner = $headerContent;
+            $bannerView->timestamp = new DateTime();
+            $bannerView->ipAddress = inet_pton($this->requestStack->getCurrentRequest()->getClientIp());
             $this->doctrine->getManager()->persist($bannerView);
             $this->doctrine->getManager()->flush();
         } else {
@@ -276,7 +276,7 @@ abstract class BaseController
 
         $message = (new TemplatedEmail())
             ->from($from)
-            ->to(new Address($user->getEmail(), $user->getUsername()))
+            ->to(new Address($user->email, $user->username))
             ->subject($subject)
             ->htmlTemplate('emails/' . $template . '.html.twig')
             ->textTemplate('emails/' . $template . '.text.twig')

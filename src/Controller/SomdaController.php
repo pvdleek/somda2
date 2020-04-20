@@ -57,7 +57,7 @@ class SomdaController extends BaseController
     public function disclaimerAction(string $choice = null)
     {
         if (!is_null($choice) && in_array($choice, [User::COOKIE_OK, User::COOKIE_NOT_OK])) {
-            $this->getUser()->setCookieOk($choice);
+            $this->getUser()->cookieOk = $choice;
             $this->doctrine->getManager()->flush();
 
             $this->addFlash(

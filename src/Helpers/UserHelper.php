@@ -67,7 +67,7 @@ class UserHelper implements RuntimeExtensionInterface
     {
         if (!is_null($user)) {
             foreach ($user->getPreferences() as $preference) {
-                if ($preference->getPreference()->getKey() === $key) {
+                if ($preference->preference->key === $key) {
                     return $preference;
                 }
             }
@@ -82,9 +82,10 @@ class UserHelper implements RuntimeExtensionInterface
             throw new Exception('Preference with key "' . $key . '" does not exist');
         }
         $userPreferenceValue = new UserPreferenceValue();
-        $userPreferenceValue->setPreference($userPreference)->setValue($userPreference->getDefaultValue());
+        $userPreferenceValue->preference = $userPreference;
+        $userPreferenceValue->value = $userPreference->defaultValue;
         if (!is_null($user)) {
-            $userPreferenceValue->setUser($user);
+            $userPreferenceValue->user = $user;
             $this->doctrine->getManager()->persist($userPreferenceValue);
             $this->doctrine->getManager()->flush();
         }

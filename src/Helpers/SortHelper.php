@@ -15,11 +15,11 @@ class SortHelper implements RuntimeExtensionInterface
     public function sortByFieldFilter(array $content, string $sortBy = null, string $direction = 'asc') {
         // Unfortunately have to suppress warnings here due to __get function causing usort to think that the array
         // has been modified: "usort(): Array was modified by the user comparison function"
-        @usort($content, function ($a, $b) use ($sortBy, $direction) {
+        @usort($content, function ($itemA, $itemB) use ($sortBy, $direction) {
             $flip = ($direction === 'desc') ? -1 : 1;
 
-            $aSortValue = $this->getSortValue($a, $sortBy);
-            $bSortValue = $this->getSortValue($b, $sortBy);
+            $aSortValue = $this->getSortValue($itemA, $sortBy);
+            $bSortValue = $this->getSortValue($itemB, $sortBy);
             if ($aSortValue == $bSortValue) {
                 return 0;
             } else if ($aSortValue > $bSortValue) {

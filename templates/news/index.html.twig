@@ -8,7 +8,7 @@
                 <tr><th>Datum</th><th>Titel</th></tr>
                 {% for item in news %}
                     <tr>
-                        <td>{{ item.date | displayDateTime }}</td>
+                        <td>{{ item.timestamp | displayDateTime }}</td>
                         <td>{{ item.archived ? '<i class="fas fa-archive"></i>' : '<i class="fas fa-newspaper"></i>' }} <a href="{{ path('news_text', { 'id': item.id }) }}">{{ item.title }}</a></td>
                     </tr>
                 {% endfor %}

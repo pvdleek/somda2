@@ -2,7 +2,7 @@
 
 {% block content %}
     <div class="home-panel separate-panel">
-        <div class="home-panel-title">{{ news.date | displayDateTime }} - {{ news.title }}</div>
+        <div class="home-panel-title">{{ news.timestamp | displayDateTime }} - {{ news.title }}</div>
         <div class="home-panel-content">
             {{ news.text | raw }}
             <br />

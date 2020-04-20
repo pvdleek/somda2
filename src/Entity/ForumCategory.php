@@ -2,13 +2,14 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="somda_forum_cats")
  * @ORM\Entity
  */
-class ForumCategory
+class ForumCategory extends Entity
 {
     /**
      * @var int
@@ -16,19 +17,19 @@ class ForumCategory
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      * @ORM\Column(name="name", type="string", length=30, nullable=false)
      */
-    private $name;
+    public $name;
 
     /**
      * @var int
      * @ORM\Column(name="volgorde", type="bigint", nullable=false)
      */
-    private $order;
+    public $order;
 
     /**
      * @var ForumForum[]
@@ -37,56 +38,28 @@ class ForumCategory
     private $forums;
 
     /**
-     * @return int
+     *
      */
-    public function getId(): int
+    public function __construct()
     {
-        return $this->id;
+        $this->forums = new ArrayCollection();
     }
 
     /**
-     * @param int $id
+     * @param ForumForum $forum
      * @return ForumCategory
      */
-    public function setId(int $id): ForumCategory
+    public function addForum(ForumForum $forum): ForumCategory
     {
-        $this->id = $id;
+        $this->forums[] = $forum;
         return $this;
     }
 
     /**
-     * @return string
+     * @return ForumForum[]
      */
-    public function getName(): string
+    public function getForums(): array
     {
-        return $this->name;
-    }
-
-    /**
-     * @param string $name
-     * @return ForumCategory
-     */
-    public function setName(string $name): ForumCategory
-    {
-        $this->name = $name;
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getOrder(): int
-    {
-        return $this->order;
-    }
-
-    /**
-     * @param int $order
-     * @return ForumCategory
-     */
-    public function setOrder(int $order): ForumCategory
-    {
-        $this->order = $order;
-        return $this;
+        return $this->forums->toArray();
     }
 }

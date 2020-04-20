@@ -38,10 +38,9 @@ abstract class ForumBaseController extends BaseController
 
         // Create a view for this banner
         $bannerView = new BannerView();
-        $bannerView
-            ->setBanner($forumBanner)
-            ->setTimestamp(time())
-            ->setIp(inet_pton($request->getClientIp()));
+        $bannerView->banner = $forumBanner;
+        $bannerView->timestamp = new DateTime();
+        $bannerView->ipAddress = inet_pton($request->getClientIp());
         $this->doctrine->getManager()->persist($bannerView);
         $this->doctrine->getManager()->flush();
 
@@ -54,10 +53,10 @@ abstract class ForumBaseController extends BaseController
      */
     protected function mayView(ForumForum $forum): bool
     {
-        if ($forum->getType() === ForumForum::TYPE_PUBLIC) {
+        if ($forum->type === ForumForum::TYPE_PUBLIC) {
             return true;
         }
-        if (in_array($forum->getType(), [ForumForum::TYPE_LOGGED_IN, ForumForum::TYPE_ARCHIVE])) {
+        if (in_array($forum->type, [ForumForum::TYPE_LOGGED_IN, ForumForum::TYPE_ARCHIVE])) {
             return $this->userIsLoggedIn();
         }
         return in_array($this->getUser(), $forum->getModerators());
@@ -69,10 +68,10 @@ abstract class ForumBaseController extends BaseController
      */
     protected function mayPost(ForumForum $forum): bool
     {
-        if (!$this->mayView($forum) || $forum->getType() === ForumForum::TYPE_ARCHIVE) {
+        if (!$this->mayView($forum) || $forum->type === ForumForum::TYPE_ARCHIVE) {
             return false;
         }
-        if (in_array($forum->getType(), [ForumForum::TYPE_PUBLIC, ForumForum::TYPE_LOGGED_IN])) {
+        if (in_array($forum->type, [ForumForum::TYPE_PUBLIC, ForumForum::TYPE_LOGGED_IN])) {
             return $this->userIsLoggedIn();
         }
         return in_array($this->getUser(), $forum->getModerators());
@@ -84,7 +83,7 @@ abstract class ForumBaseController extends BaseController
      */
     protected function userIsModerator(ForumDiscussion $discussion): bool
     {
-        return in_array($this->getUser(), $discussion->getForum()->getModerators());
+        return in_array($this->getUser(), $discussion->forum->getModerators());
     }
 
     /**
@@ -95,22 +94,23 @@ abstract class ForumBaseController extends BaseController
     protected function addPost(FormInterface $form, ForumDiscussion $discussion): void
     {
         $post = new ForumPost();
-        $post
-            ->setAuthor($this->getUser())
-            ->setTimestamp(new DateTime())
-            ->setDiscussion($discussion)
-            ->setSignatureOn($form->get('signatureOn')->getData());
+        $post->author = $this->getUser();
+        $post->timestamp = new DateTime();
+        $post->discussion = $discussion;
+        $post->signatureOn = $form->get('signatureOn')->getData();
         $this->doctrine->getManager()->persist($post);
 
         $postText = new ForumPostText();
-        $postText->setPost($post)->setText($form->get('text')->getData());
+        $postText->post = $post;
+        $postText->text = $form->get('text')->getData();
         $this->doctrine->getManager()->persist($postText);
 
         $postLog = new ForumPostLog();
-        $postLog->setAction(ForumPostLog::ACTION_POST_NEW);
+        $postLog->action = ForumPostLog::ACTION_POST_NEW;
         $this->doctrine->getManager()->persist($postLog);
 
-        $post->addLog($postLog)->setText($postText);
+        $post->addLog($postLog);
+        $post->text = $postText;
         $discussion->addPost($post);
     }
 }

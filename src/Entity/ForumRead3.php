@@ -16,7 +16,7 @@ class ForumRead3
      * @ORM\JoinColumn(name="postid", referencedColumnName="postid")
      * @ORM\Id
      */
-    private $post;
+    public $post;
 
     /**
      * @var User
@@ -24,41 +24,5 @@ class ForumRead3
      * @ORM\JoinColumn(name="uid", referencedColumnName="uid")
      * @ORM\Id
      */
-    private $user;
-
-    /**
-     * @return ForumPost
-     */
-    public function getPost(): ForumPost
-    {
-        return $this->post;
-    }
-
-    /**
-     * @param ForumPost $post
-     * @return ForumRead3
-     */
-    public function setPost(ForumPost $post): ForumRead3
-    {
-        $this->post = $post;
-        return $this;
-    }
-
-    /**
-     * @return User
-     */
-    public function getUser(): User
-    {
-        return $this->user;
-    }
-
-    /**
-     * @param User $user
-     * @return ForumRead3
-     */
-    public function setUser(User $user): ForumRead3
-    {
-        $this->user = $user;
-        return $this;
-    }
+    public $user;
 }

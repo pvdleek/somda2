@@ -31,26 +31,26 @@ class ForumPostController extends ForumBaseController
          * @var ForumPost $quotedPost
          */
         $quotedPost = $this->doctrine->getRepository(ForumPost::class)->find($id);
-        if (!$this->mayPost($quotedPost->getDiscussion()->getForum()) || $quotedPost->getDiscussion()->isLocked()) {
+        if (!$this->mayPost($quotedPost->discussion->forum) || $quotedPost->discussion->locked) {
             throw new AccessDeniedHttpException();
         }
 
         $form = $this->formFactory->create(ForumPostForm::class, null, ['quotedPost' => $quotedPost]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->addPost($form, $quotedPost->getDiscussion());
-            $this->handleFavoritesForAddedPost($quotedPost->getDiscussion());
+            $this->addPost($form, $quotedPost->discussion);
+            $this->handleFavoritesForAddedPost($quotedPost->discussion);
 
             $this->doctrine->getManager()->flush();
 
             return $this->redirectToRoute('forum_discussion', [
-                'id' => $quotedPost->getDiscussion()->getId(),
-                'name' => urlencode($quotedPost->getDiscussion()->getTitle())
+                'id' => $quotedPost->discussion->getId(),
+                'name' => urlencode($quotedPost->discussion->title)
             ]);
         }
 
         $lastPosts = $this->doctrine->getRepository(ForumPost::class)->findBy(
-            ['discussion' => $quotedPost->getDiscussion()],
+            ['discussion' => $quotedPost->discussion],
             ['timestamp' => 'DESC'],
             10
         );
@@ -68,14 +68,14 @@ class ForumPostController extends ForumBaseController
     private function handleFavoritesForAddedPost(ForumDiscussion $discussion): void
     {
         foreach ($discussion->getFavorites() as $favorite) {
-            if ($favorite->getAlerting() === ForumFavorite::ALERTING_ON) {
+            if ($favorite->alerting === ForumFavorite::ALERTING_ON) {
                 $this->sendEmail(
-                    $favorite->getUser(),
-                    'Somda - Nieuwe forumreactie op "' . $discussion->getTitle() . '"',
+                    $favorite->user,
+                    'Somda - Nieuwe forumreactie op "' . $discussion->title . '"',
                     'forum-new-reply',
                     ['discussion' => $discussion]
                 );
-                $favorite->setAlerting(ForumFavorite::ALERTING_SENT);
+                $favorite->alerting = ForumFavorite::ALERTING_SENT;
             }
         }
     }
@@ -92,14 +92,14 @@ class ForumPostController extends ForumBaseController
          * @var ForumPost $post
          */
         $post = $this->doctrine->getRepository(ForumPost::class)->find($id);
-        if (!$this->mayPost($post->getDiscussion()->getForum()) || $post->getDiscussion()->isLocked()
-            || ($post->getAuthor() !== $this->getUser() && !$this->userIsModerator($post->getDiscussion()))
+        if (!$this->mayPost($post->discussion->forum) || $post->discussion->locked
+            || ($post->author !== $this->getUser() && !$this->userIsModerator($post->discussion))
         ) {
             throw new AccessDeniedHttpException();
         }
 
         $form = $this->formFactory->create(ForumPostForm::class, null, ['editedPost' => $post]);
-        if ($this->userIsModerator($post->getDiscussion())) {
+        if ($this->userIsModerator($post->discussion)) {
             $form->add('editAsModerator', CheckboxType::class, ['label' => 'Bewerken als moderator']);
         }
         $form->handleRequest($request);
@@ -108,8 +108,8 @@ class ForumPostController extends ForumBaseController
             $this->doctrine->getManager()->flush();
 
             return $this->redirectToRoute('forum_discussion', [
-                'id' => $post->getDiscussion()->getId(),
-                'name' => urlencode($post->getDiscussion()->getTitle())
+                'id' => $post->discussion->getId(),
+                'name' => urlencode($post->discussion->title)
             ]);
         }
 
@@ -132,15 +132,14 @@ class ForumPostController extends ForumBaseController
             $editor = $this->getUser();
         }
 
-        $post
-            ->setEditTimestamp(new DateTime())
-            ->setEditor($editor)
-            ->setEditReason($form->get('editReason')->getData())
-            ->setSignatureOn($form->get('signatureOn')->getData())
-            ->getText()->setText($form->get('text')->getData());
+        $post->editTimestamp = new DateTime();
+        $post->editor = $editor;
+        $post->editReason = $form->get('editReason')->getData();
+        $post->signatureOn = $form->get('signatureOn')->getData();
+        $post->text->text = $form->get('text')->getData();
 
         $postLog = new ForumPostLog();
-        $postLog->setAction(ForumPostLog::ACTION_POST_EDIT);
+        $postLog->action = ForumPostLog::ACTION_POST_EDIT;
         $this->doctrine->getManager()->persist($postLog);
 
         $post->addLog($postLog);

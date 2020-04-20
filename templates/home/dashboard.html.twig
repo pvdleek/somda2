@@ -12,7 +12,7 @@
 		</div>
 		<div>
 			{% for statistic in layoutData['dashboard']['statistics'] %}
-				<strong>{{ statistic.date | displayDateTime(false, true) }} - {{ statistic.visitorsTotal }} bezoekers</strong>
+				<strong>{{ statistic.timestamp | displayDateTime(false, true) }} - {{ statistic.visitorsTotal }} bezoekers</strong>
 				<br />{{ statistic.numberOfSpots }} spot(s) &amp; {{ statistic.numberOfPosts }} forumbericht(en).
 				<br /><br />
 			{% endfor %}

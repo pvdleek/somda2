@@ -4,7 +4,6 @@ namespace App\Entity;
 
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -13,11 +12,12 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(name="somda_users", indexes={@ORM\Index(name="idx_49053_uname", columns={"username"})})
  * @ORM\Entity(repositoryClass="App\Repository\User")
  */
-class User implements UserInterface
+class User extends Entity implements UserInterface
 {
+    public const COOKIE_UNKNOWN = '0';
     public const COOKIE_NOT_OK = 'nok';
     public const COOKIE_OK = 'ok';
-    public const COOKIE_UNKNOWN = '0';
+    public const COOKIE_VALUES = [self::COOKIE_UNKNOWN, self::COOKIE_NOT_OK, self::COOKIE_OK];
 
     /**
      * @var int
@@ -25,19 +25,19 @@ class User implements UserInterface
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $id;
+    protected $id;
 
     /**
      * @var boolean
      * @ORM\Column(name="active", type="boolean", nullable=false)
      */
-    private $active = false;
+    public $active = false;
 
     /**
      * @var int
      * @ORM\Column(name="spots_ok", type="integer", nullable=false)
      */
-    private $spotsOk = 0;
+    public $spotsOk = 0;
 
     /**
      * @var string
@@ -50,19 +50,19 @@ class User implements UserInterface
      *     maxMessage = "De gebruikersnaam mag maximaal 10 karakters lang zijn"
      * )
      */
-    private $username = '';
+    public $username = '';
 
     /**
      * @var string|null
      * @ORM\Column(name="name", type="string", length=40, nullable=true)
      */
-    private $name;
+    public $name;
 
     /**
      * @var string
      * @ORM\Column(name="password", type="string", length=32, nullable=false)
      */
-    private $password = '';
+    public $password = '';
 
     /**
      * @var string
@@ -70,43 +70,44 @@ class User implements UserInterface
      * @Assert\NotBlank()
      * @Assert\Email(message="Dit is geen geldig e-mailadres")
      */
-    private $email = '';
+    public $email = '';
 
     /**
      * @var string
      * @ORM\Column(name="cookie_ok", type="string", length=3, nullable=false)
+     * @Assert\Choice(choices=User::COOKIE_VALUES)
      */
-    private $cookieOk = self::COOKIE_UNKNOWN;
+    public $cookieOk = self::COOKIE_UNKNOWN;
 
     /**
      * @var string
      * @ORM\Column(name="actkey", type="string", length=32, nullable=false)
      */
-    private $activationKey = '0';
+    public $activationKey = '0';
 
     /**
      * @var DateTime
      * @ORM\Column(name="regdate", type="datetime", nullable=false)
      */
-    private $registrationDate;
+    public $registrationTimestamp;
+
+    /**
+     * @var DateTime
+     * @ORM\Column(name="last_visit", type="datetime", nullable=true)
+     */
+    public $lastVisit;
 
     /**
      * @var array
      * @ORM\Column(name="roles", type="array", nullable=false)
      */
-    private $roles = [];
+    public $roles = [];
 
     /**
      * @var UserInfo
      * @ORM\OneToOne(targetEntity="App\Entity\UserInfo", mappedBy="user")
      */
-    private $info;
-
-    /**
-     * @var UserLastVisit|null
-     * @ORM\OneToOne(targetEntity="App\Entity\UserLastVisit", mappedBy="user")
-     */
-    private $lastVisit;
+    public $info;
 
     /**
      * @var Group[]
@@ -151,93 +152,11 @@ class User implements UserInterface
     }
 
     /**
-     * @return int
-     */
-    public function getId(): int
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param int $id
-     * @return User
-     */
-    public function setId(int $id): User
-    {
-        $this->id = $id;
-        return $this;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isActive(): bool
-    {
-        return $this->active;
-    }
-
-    /**
-     * @param bool $active
-     * @return User
-     */
-    public function setActive(bool $active): User
-    {
-        $this->active = $active;
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getSpotsOk(): int
-    {
-        return $this->spotsOk;
-    }
-
-    /**
-     * @param int $spotsOk
-     * @return User
-     */
-    public function setSpotsOk(int $spotsOk): User
-    {
-        $this->spotsOk = $spotsOk;
-        return $this;
-    }
-
-    /**
      * @return string
      */
     public function getUsername(): string
     {
         return $this->username;
-    }
-
-    /**
-     * @param string $username
-     * @return User
-     */
-    public function setUsername(string $username): User
-    {
-        $this->username = $username;
-        return $this;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getName(): ?string
-    {
-        return $this->name;
-    }
-
-    /**
-     * @param string|null $name
-     * @return User
-     */
-    public function setName(?string $name): User
-    {
-        $this->name = $name;
-        return $this;
     }
 
     /**
@@ -249,111 +168,19 @@ class User implements UserInterface
     }
 
     /**
-     * @param string $password
-     * @return User
-     */
-    public function setPassword(string $password): User
-    {
-        $this->password = $password;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getEmail(): string
-    {
-        return $this->email;
-    }
-
-    /**
-     * @param string $email
-     * @return User
-     */
-    public function setEmail(string $email): User
-    {
-        $this->email = $email;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getCookieOk(): string
-    {
-        return $this->cookieOk;
-    }
-
-    /**
-     * @param string $cookieOk
-     * @return User
-     */
-    public function setCookieOk(string $cookieOk): User
-    {
-        $this->cookieOk = $cookieOk;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getActivationKey(): string
-    {
-        return $this->activationKey;
-    }
-
-    /**
-     * @param string $activationKey
-     * @return User
-     */
-    public function setActivationKey(string $activationKey): User
-    {
-        $this->activationKey = $activationKey;
-        return $this;
-    }
-
-    /**
-     * @return DateTime
-     */
-    public function getRegistrationDate(): DateTime
-    {
-        return $this->registrationDate;
-    }
-
-    /**
-     * @param DateTime $registrationDate
-     * @return User
-     */
-    public function setRegistrationDate(DateTime $registrationDate): User
-    {
-        $this->registrationDate = $registrationDate;
-        return $this;
-    }
-
-    /**
-     * @return Group[]
-     */
-    public function getGroups(): array
-    {
-        return $this->groups->toArray();
-    }
-
-    /**
-     * @param Group $groups
-     * @return User
-     */
-    public function setGroups(Group $groups): User
-    {
-        $this->groups = $groups;
-        return $this;
-    }
-
-    /**
      *
      */
     public function eraseCredentials(): void
     {
         // TODO: Implement eraseCredentials() method.
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getSalt(): ?string
+    {
+        return null;
     }
 
     /**
@@ -363,7 +190,7 @@ class User implements UserInterface
     {
         $roles = $this->roles;
         foreach ($this->getGroups() as $group) {
-            $roles = array_merge($roles, $group->getRoles());
+            $roles = array_merge($roles, $group->roles);
         }
         return $roles;
     }
@@ -390,47 +217,21 @@ class User implements UserInterface
     }
 
     /**
-     * @return UserInfo
-     */
-    public function getInfo(): UserInfo
-    {
-        return $this->info;
-    }
-
-    /**
-     * @param UserInfo $info
+     * @param Group $group
      * @return User
      */
-    public function setInfo(UserInfo $info): User
+    public function addGroup(Group $group): User
     {
-        $this->info = $info;
+        $this->groups[] = $group;
         return $this;
     }
 
     /**
-     * @return UserLastVisit|null
+     * @return Group[]
      */
-    public function getLastVisit(): ?UserLastVisit
+    public function getGroups(): array
     {
-        return $this->lastVisit;
-    }
-
-    /**
-     * @param UserLastVisit $lastVisit
-     * @return User
-     */
-    public function setLastVisit(UserLastVisit $lastVisit): User
-    {
-        $this->lastVisit = $lastVisit;
-        return $this;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getSalt(): ?string
-    {
-        return null;
+        return $this->groups->toArray();
     }
 
     /**
@@ -458,7 +259,7 @@ class User implements UserInterface
     public function isForumFavorite(ForumDiscussion $discussion): bool
     {
         foreach ($this->getForumFavorites() as $forumFavorite) {
-            if ($forumFavorite->getDiscussion() === $discussion) {
+            if ($forumFavorite->discussion === $discussion) {
                 return true;
             }
         }

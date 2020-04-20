@@ -26,11 +26,11 @@ class ForumModerateController extends ForumBaseController
     public function indexAction(Request $request, int $id, string $action)
     {
         $discussion = $this->getDiscussion($id);
-        if ($action === self::ACTION_CLOSE && !$discussion->isLocked()) {
-            $discussion->setLocked(true);
+        if ($action === self::ACTION_CLOSE && !$discussion->locked) {
+            $discussion->locked = true;
             $this->doctrine->getManager()->flush();
-        } elseif ($action === self::ACTION_OPEN && $discussion->isLocked()) {
-            $discussion->setLocked(false);
+        } elseif ($action === self::ACTION_OPEN && $discussion->locked) {
+            $discussion->locked = false;
             $this->doctrine->getManager()->flush();
         } elseif ($action === self::ACTION_MOVE) {
             $form = $this->formFactory->create(ForumDiscussionMove::class, $discussion);
@@ -46,7 +46,7 @@ class ForumModerateController extends ForumBaseController
 
         return $this->redirectToRoute(
             'forum_discussion',
-            ['id' => $discussion->getId(), 'name' => urlencode($discussion->getTitle())]
+            ['id' => $discussion->getId(), 'name' => urlencode($discussion->title)]
         );
     }
 
@@ -62,17 +62,16 @@ class ForumModerateController extends ForumBaseController
         $discussion2 = $this->getDiscussion($id2);
 
         $newDiscussion = new ForumDiscussion();
-        $newDiscussion->setForum($discussion1->getForum());
+        $newDiscussion->forum = $discussion1->forum;
 
         $form = $this->formFactory->create(ForumDiscussionCombine::class, $newDiscussion);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $oldestPost = $this->movePostsAndGetOldest($discussion1, $discussion2, $newDiscussion);
 
-            $newDiscussion
-                ->setAuthor($oldestPost->getAuthor())
-                ->setTitle($form->get('title')->getData())
-                ->setViewed($discussion1->getViewed() + $discussion2->getViewed());
+            $newDiscussion->author = $oldestPost->author;
+            $newDiscussion->title = $form->get('title')->getData();
+            $newDiscussion->viewed = $discussion1->viewed + $discussion2->viewed;
             $this->doctrine->getManager()->persist($newDiscussion);
             $this->doctrine->getManager()->remove($discussion1);
             $this->doctrine->getManager()->remove($discussion2);
@@ -80,7 +79,7 @@ class ForumModerateController extends ForumBaseController
 
             return $this->redirectToRoute(
                 'forum_discussion',
-                ['id' => $newDiscussion->getId(), 'name' => urlencode($newDiscussion->getTitle())]
+                ['id' => $newDiscussion->getId(), 'name' => urlencode($newDiscussion->title)]
             );
         }
 
@@ -107,32 +106,32 @@ class ForumModerateController extends ForumBaseController
          */
         $oldestPost = null;
         foreach ($discussion1->getPosts() as $post) {
-            if (is_null($oldestPost) || $post->getTimestamp() < $oldestPost->getTimestamp()) {
+            if (is_null($oldestPost) || $post->timestamp < $oldestPost->timestamp) {
                 $oldestPost = $post;
             }
-            $post->setDiscussion($newDiscussion);
+            $post->discussion = $newDiscussion;
         }
         foreach ($discussion2->getPosts() as $post) {
-            if (is_null($oldestPost) || $post->getTimestamp() < $oldestPost->getTimestamp()) {
+            if (is_null($oldestPost) || $post->timestamp < $oldestPost->timestamp) {
                 $oldestPost = $post;
             }
-            $post->setDiscussion($newDiscussion);
+            $post->discussion = $newDiscussion;
         }
 
         // Move the favorites
         foreach ($discussion1->getFavorites() as $favorite) {
-            $favorite->setDiscussion($newDiscussion);
+            $favorite->discussion = $newDiscussion;
         }
         foreach ($discussion2->getFavorites() as $favorite) {
-            $favorite->setDiscussion($newDiscussion);
+            $favorite->discussion = $newDiscussion;
         }
 
         // Move the wikis
         foreach ($discussion1->getWikis() as $wiki) {
-            $wiki->setDiscussion($newDiscussion);
+            $wiki->discussion = $newDiscussion;
         }
         foreach ($discussion2->getWikis() as $wiki) {
-            $wiki->setDiscussion($newDiscussion);
+            $wiki->discussion = $newDiscussion;
         }
 
         return $oldestPost;
@@ -152,22 +151,21 @@ class ForumModerateController extends ForumBaseController
 
         // Create the new discussion
         $newDiscussion = new ForumDiscussion();
-        $newDiscussion
-            ->setForum($discussion->getForum())
-            ->setTitle('Verwijderd uit ' . $discussion->getTitle())
-            ->setAuthor($firstPost->getAuthor());
+        $newDiscussion->forum = $discussion->forum;
+        $newDiscussion->title = 'Verwijderd uit ' . $discussion->title;
+        $newDiscussion->author = $firstPost->author;
         $this->doctrine->getManager()->persist($newDiscussion);
 
         foreach ($postIds as $postId) {
             $post = $this->doctrine->getRepository(ForumPost::class)->find($postId);
-            $post->setDiscussion($newDiscussion);
+            $post->discussion = $newDiscussion;
         }
 
         $this->doctrine->getManager()->flush();
 
         return $this->redirectToRoute(
             'forum_discussion',
-            ['id' => $newDiscussion->getId(), 'name' => urlencode($newDiscussion->getTitle())]
+            ['id' => $newDiscussion->getId(), 'name' => urlencode($newDiscussion->title)]
         );
     }
 
@@ -177,6 +175,9 @@ class ForumModerateController extends ForumBaseController
      */
     private function getDiscussion(int $id): ForumDiscussion
     {
+        /**
+         * @var ForumDiscussion $discussion
+         */
         $discussion = $this->doctrine->getRepository(ForumDiscussion::class)->find($id);
         if (is_null($discussion) || !$this->userIsModerator($discussion)) {
             throw new AccessDeniedHttpException();

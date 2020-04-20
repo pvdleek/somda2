@@ -16,7 +16,7 @@ class ForumSearchList
      * @ORM\JoinColumn(name="woord_id", referencedColumnName="woord_id")
      * @ORM\Id
      */
-    private $word;
+    public $word;
 
     /**
      * @var ForumPost
@@ -24,65 +24,11 @@ class ForumSearchList
      * @ORM\JoinColumn(name="postid", referencedColumnName="postid")
      * @ORM\Id
      */
-    private $post;
+    public $post;
 
     /**
      * @var boolean
      * @ORM\Column(name="titel", type="boolean", nullable=false)
      */
-    private $title = false;
-
-    /**
-     * @return ForumSearchWord
-     */
-    public function getWord(): ForumSearchWord
-    {
-        return $this->word;
-    }
-
-    /**
-     * @param ForumSearchWord $word
-     * @return ForumSearchList
-     */
-    public function setWord(ForumSearchWord $word): ForumSearchList
-    {
-        $this->word = $word;
-        return $this;
-    }
-
-    /**
-     * @return ForumPost
-     */
-    public function getPost(): ForumPost
-    {
-        return $this->post;
-    }
-
-    /**
-     * @param ForumPost $post
-     * @return ForumSearchList
-     */
-    public function setPost(ForumPost $post): ForumSearchList
-    {
-        $this->post = $post;
-        return $this;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isTitle(): bool
-    {
-        return $this->title;
-    }
-
-    /**
-     * @param bool $title
-     * @return ForumSearchList
-     */
-    public function setTitle(bool $title): ForumSearchList
-    {
-        $this->title = $title;
-        return $this;
-    }
+    public $title = false;
 }

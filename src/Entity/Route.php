@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="somda_trein", uniqueConstraints={@ORM\UniqueConstraint(name="idx_49046_treinnr", columns={"treinnr"})})
  * @ORM\Entity
  */
-class Route
+class Route extends Entity
 {
     public const SPECIAL_NO_SERVICE = 'GDST';
     public const SPECIAL_EXTRA_SERVICE = ['LLT', 'LM', 'CARGO', 'REIZ', 'RG', 'WTR'];
@@ -22,13 +22,13 @@ class Route
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      * @ORM\Column(name="treinnr", type="string", length=15, nullable=false)
      */
-    private $number = '';
+    public $number = '';
 
     /**
      * @var TrainTable[]
@@ -63,42 +63,6 @@ class Route
         $this->trainTableFirstLasts = new ArrayCollection();
         $this->routeLists = new ArrayCollection();
         $this->spots = new ArrayCollection();
-    }
-
-    /**
-     * @return int
-     */
-    public function getId(): int
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param int $id
-     * @return Route
-     */
-    public function setId(int $id): Route
-    {
-        $this->id = $id;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getNumber(): string
-    {
-        return $this->number;
-    }
-
-    /**
-     * @param string $number
-     * @return Route
-     */
-    public function setNumber(string $number): Route
-    {
-        $this->number = $number;
-        return $this;
     }
 
     /**

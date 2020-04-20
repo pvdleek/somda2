@@ -22,9 +22,9 @@ class Statistic extends EntityRepository
         try {
             return $queryBuilder->getQuery()->getSingleScalarResult();
         } catch (NonUniqueResultException $exception) {
-            return null;
+            return 0;
         } catch (NoResultException $exception) {
-            return null;
+            return 0;
         }
     }
 
@@ -39,7 +39,7 @@ class Statistic extends EntityRepository
             ->createQueryBuilder()
             ->select('s')
             ->from(StatisticEntity::class, 's')
-            ->orderBy('s.date', 'DESC')
+            ->orderBy('s.timestamp', 'DESC')
             ->setMaxResults($numberOfDays);
         return $queryBuilder->getQuery()->getResult();
     }

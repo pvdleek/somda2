@@ -2,13 +2,14 @@
 
 namespace App\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="somda_ddar", indexes={@ORM\Index(name="idx_47846_matid", columns={"matid"})})
  * @ORM\Entity
  */
-class Ddar
+class Ddar extends Entity
 {
     /**
      * @var int
@@ -16,63 +17,55 @@ class Ddar
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $id;
+    protected $id;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="matid", type="bigint", nullable=false)
+     * @var Train
+     * @ORM\ManyToOne(targetEntity="App\Entity\Train")
+     * @ORM\JoinColumn(name="matid", referencedColumnName="matid")
      */
-    private $matid;
+    public $train;
 
     /**
      * @var int|null
-     *
      * @ORM\Column(name="stam", type="bigint", nullable=true)
      */
-    private $stam;
+    public $trunkNumber;
 
     /**
-     * @var int|null
-     *
-     * @ORM\Column(name="afkid", type="bigint", nullable=true)
+     * @var Location
+     * @ORM\ManyToOne(targetEntity="App\Entity\Location")
+     * @ORM\JoinColumn(name="afkid", referencedColumnName="afkid")
      */
-    private $afkid;
+    public $location;
 
     /**
-     * @var \DateTime|null
-     *
+     * @var DateTime|null
      * @ORM\Column(name="spot_ander_laatste", type="date", nullable=true)
      */
-    private $spotAnderLaatste;
+    public $spotTimestampOtherLast;
 
     /**
-     * @var \DateTime
-     *
+     * @var DateTime
      * @ORM\Column(name="spot_eerste", type="date", nullable=false)
      */
-    private $spotEerste;
+    public $spotTimestampFirst;
 
     /**
-     * @var \DateTime|null
-     *
+     * @var DateTime|null
      * @ORM\Column(name="spot_laatste", type="date", nullable=true)
      */
-    private $spotLaatste;
+    public $spotTimestampLast;
 
     /**
-     * @var \DateTime|null
-     *
+     * @var DateTime|null
      * @ORM\Column(name="spot_ander_eerste", type="date", nullable=true)
      */
-    private $spotAnderEerste;
+    public $spotTimestampOtherFirst;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="extra", type="string", length=150, nullable=false)
      */
-    private $extra = '';
-
-
+    public $extra = '';
 }
