@@ -75,7 +75,7 @@ class ForumPost extends Entity
      * @var boolean
      * @ORM\Column(name="wiki_check", type="boolean", nullable=false)
      */
-    private $wikiCheck = false;
+    public $wikiCheck = false;
 
     /**
      * @var User|null
