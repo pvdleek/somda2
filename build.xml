@@ -1,0 +1,15 @@
+<project name="Somda" basedir=".">
+    <description>Somda</description>
+
+    <target name="sonar">
+        <exec executable="/opt/sonarqube/bin/linux-x86-64/sonar.sh">
+            <arg value="console" />
+        </exec>
+        <exec executable="sonar-scanner">
+            <arg value="-Dsonar.projectKey=Somda" />
+            <arg value="-Dsonar.sources=." />
+            <arg value="-Dsonar.host.url=http://localhost:9000" />
+            <arg value="-Dsonar.login=ca67d1f8679b83483f093e083a09e2af957643e6" />
+        </exec>
+    </target>
+</project>
