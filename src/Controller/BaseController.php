@@ -36,6 +36,9 @@ abstract class BaseController
     protected const FLASH_TYPE_WARNING = 'warn';
     protected const FLASH_TYPE_ERROR = 'alert';
 
+    private const ADMINISTRATOR_UID = 1;
+    private const MODERATOR_UID = 2;
+
     /**
      * @var RequestStack
      */
@@ -150,6 +153,22 @@ abstract class BaseController
     }
 
     /**
+     * @return User
+     */
+    protected function getAdministratorUser(): User
+    {
+        return $this->doctrine->getRepository(User::class)->find(self::ADMINISTRATOR_UID);
+    }
+
+    /**
+     * @return User
+     */
+    protected function getModeratorUser(): User
+    {
+        return $this->doctrine->getRepository(User::class)->find(self::MODERATOR_UID);
+    }
+
+    /**
      * @param string $view
      * @param array $parameters
      * @param Response|null $response
@@ -170,6 +189,9 @@ abstract class BaseController
         if (null === $response) {
             $response = new Response();
         }
+
+        $this->getUser()->lastVisit = new DateTime();
+        $this->doctrine->getManager()->flush();
 
         $response->setContent($content);
         return $response;

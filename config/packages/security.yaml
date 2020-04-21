@@ -12,7 +12,7 @@ security:
       pattern: ^/(_(profiler|wdt)|css|images|js)/
       security: false
     main:
-      anonymous: lazy
+      anonymous: true
       provider: app_user_provider
       guard:
         authenticators:
@@ -26,10 +26,6 @@ security:
         path: /
         secure: true
         samesite: 'strict'
-
-  # Easy way to control access for large sections of your site
-  # Note: Only the *first* access control that matches will be used
   access_control:
     - { path: ^/inloggen, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-  # - { path: ^/admin, roles: ROLE_ADMIN }
-  # - { path: ^/profile, roles: ROLE_USER }
+    - { path: ^/beheer-, roles: ROLE_USER }

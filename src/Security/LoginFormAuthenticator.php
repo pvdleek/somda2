@@ -74,10 +74,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
             'password' => $request->request->get('password'),
             'csrf_token' => $request->request->get('_csrf_token'),
         ];
-        $request->getSession()->set(
-            Security::LAST_USERNAME,
-            $credentials['username']
-        );
+        $request->getSession()->set(Security::LAST_USERNAME, $credentials['username']);
 
         return $credentials;
     }
@@ -94,8 +91,11 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
             throw new InvalidCsrfTokenException();
         }
 
+        /**
+         * @var User $user
+         */
         $user = $this->entityManager->getRepository(User::class)->findOneBy(['username' => $credentials['username']]);
-        if (!$user) {
+        if (is_null($user)) {
             // Fail authentication with a custom error
             throw new CustomUserMessageAuthenticationException('login.userNotFound');
         }
@@ -105,13 +105,13 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
 
     /**
      * @param mixed $credentials
-     * @param User $user
+     * @param UserInterface $user
      * @return bool
      * @throws Exception
      */
     public function checkCredentials($credentials, UserInterface $user): bool
     {
-        return $user->active && md5(md5(md5($credentials['password']))) === $user->password;
+        return $user->active && password_verify($credentials['password'], $user->password);
     }
 
     /**

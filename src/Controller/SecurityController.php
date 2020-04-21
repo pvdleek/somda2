@@ -6,9 +6,10 @@ use App\Entity\User;
 use App\Entity\UserInfo;
 use App\Form\User as UserForm;
 use App\Form\UserActivate;
+use App\Form\UserLostPassword;
+use App\Form\UserPassword;
 use DateTime;
 use Exception;
-use LogicException;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -23,6 +24,7 @@ class SecurityController extends BaseController
      * @param AuthenticationUtils $authenticationUtils
      * @param string|null $username
      * @return Response
+     * @throws Exception
      */
     public function loginAction(AuthenticationUtils $authenticationUtils, string $username = null): Response
     {
@@ -62,8 +64,8 @@ class SecurityController extends BaseController
 
             if ($form->isValid()) {
                 $user->active = false;
-                $user->password = md5(md5(md5($form->get('plainPassword')->getData())));
-                $user->activationKey = md5(md5(rand()));
+                $user->password = password_hash($form->get('plainPassword')->getData(), PASSWORD_DEFAULT);
+                $user->activationKey = uniqid();
                 $user->registrationTimestamp = new DateTime();
                 $this->doctrine->getManager()->persist($user);
 
@@ -146,10 +148,11 @@ class SecurityController extends BaseController
      */
     public function validatePassword(FormInterface $form): void
     {
-        if (stristr($form->get('plainPassword')->getData(), $form->get('username')->getData())
-            || stristr($form->get('username')->getData(), $form->get('plainPassword')->getData())
-            || stristr(strrev($form->get('username')->getData()), $form->get('plainPassword')->getData())
-            || stristr($form->get('plainPassword')->getData(), strrev($form->get('username')->getData()))
+        $plainPassword = $form->get('plainPassword')->getData();
+
+        $username = $form->get('username')->getData();
+        if (stristr($plainPassword, $username) || stristr($username, $plainPassword)
+            || stristr(strrev($username), $plainPassword) || stristr($plainPassword, strrev($username))
         ) {
             $form->get('plainPassword')->addError(
                 new FormError('Het wachtwoord dat je hebt gekozen vertoont teveel overeenkomsten ' .
@@ -157,10 +160,10 @@ class SecurityController extends BaseController
                 )
             );
         }
-        if (stristr($form->get('plainPassword')->getData(), $form->get('email')->getData())
-            || stristr($form->get('email')->getData(), $form->get('plainPassword')->getData())
-            || stristr(strrev($form->get('email')->getData()), $form->get('plainPassword')->getData())
-            || stristr($form->get('plainPassword')->getData(), strrev($form->get('email')->getData()))
+
+        $email = $form->get('email')->getData();
+        if (stristr($plainPassword, $email) || stristr($email, $plainPassword)
+            || stristr(strrev($email), $plainPassword) || stristr($plainPassword, strrev($email))
         ) {
             $form->get('plainPassword')->addError(
                 new FormError('Het wachtwoord dat je hebt gekozen vertoont teveel overeenkomsten ' .
@@ -192,7 +195,7 @@ class SecurityController extends BaseController
         if ($form->isSubmitted() && $form->isValid()) {
             if ($form->get('key')->getData() === $user->activationKey) {
                 $user->active = true;
-                $user->activationKey = '0';
+                $user->activationKey = null;
                 $user->addRole('ROLE_USER');
                 $this->doctrine->getManager()->flush();
 
@@ -203,7 +206,7 @@ class SecurityController extends BaseController
                     ['password' => $user->getPassword()]
                 );
                 $this->sendEmail(
-                    $this->doctrine->getRepository(User::class)->find(1),
+                    $this->getAdministratorUser(),
                     'Nieuwe registratie bij Somda',
                     'new-account-admin',
                     ['user' => $user, 'samePasswordUsers' => $samePasswordUsers]
@@ -219,5 +222,79 @@ class SecurityController extends BaseController
         }
 
         return $this->render('security/activate.html.twig', ['form' => $form->createView()]);
+    }
+
+    /**
+     * @param Request $request
+     * @return RedirectResponse|Response
+     * @throws Exception
+     */
+    public function lostPasswordAction(Request $request)
+    {
+        $form = $this->formFactory->create(UserLostPassword::class);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            /**
+             * @var User $user
+             */
+            $user = $this->doctrine->getRepository(User::class)->findOneBy(['email' => $form->get('email')->getData()]);
+            if (!is_null($user)) {
+                $newPassword = $this->getRandomPassword(12);
+                $user->password = password_hash($newPassword, PASSWORD_DEFAULT);
+                $this->doctrine->getManager()->flush();
+
+                $this->sendEmail(
+                    $user,
+                    'Jouw nieuwe wachtwoord voor Somda',
+                    'lost-password',
+                    ['newPassword' => $newPassword]
+                );
+            }
+
+            $this->addFlash(self::FLASH_TYPE_INFORMATION, 'Er is een e-mail gestuurd met een nieuw wachtwoord');
+
+            return $this->redirectToRoute('lost_password');
+        }
+
+        return $this->render('security/lostPassword.html.twig', ['form' => $form->createView()]);
+    }
+
+    /**
+     * @param int $length
+     * @return string
+     * @throws Exception
+     */
+    private function getRandomPassword(int $length): string
+    {
+        $keySpace = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $pieces = [];
+        for ($i = 0; $i < $length; ++$i) {
+            $pieces []= $keySpace[random_int(0, mb_strlen($keySpace, '8bit') - 1)];
+        }
+        return implode('', $pieces);
+    }
+
+    /**
+     * @param Request $request
+     * @return RedirectResponse|Response
+     */
+    public function changePasswordAction(Request $request)
+    {
+        if (!$this->userIsLoggedIn()) {
+            throw new AccessDeniedHttpException();
+        }
+
+        $form = $this->formFactory->create(UserPassword::class);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->getUser()->password = password_hash($form->get('newPassword')->getData(), PASSWORD_DEFAULT);
+            $this->doctrine->getManager()->flush();
+
+            $this->addFlash(self::FLASH_TYPE_INFORMATION, 'Jouw wachtwoord is gewijzigd');
+
+            return $this->redirectToRoute('home');
+        }
+
+        return $this->render('security/changePassword.html.twig', ['form' => $form->createView()]);
     }
 }

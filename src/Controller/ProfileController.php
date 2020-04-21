@@ -78,18 +78,17 @@ class ProfileController extends BaseController
                 $template = 'user-mail-moderator';
 
                 // Send a copy of the email to the moderator user
-                $moderator = $this->doctrine->getRepository(User::class)->find(2);
                 $this->sendEmail(
-                    $moderator,
+                    $this->getModeratorUser(),
                     'Somda - Door moderator verstuurde e-mail',
                     'user-mail-moderator-copy',
                     ['user' => $user, 'text' => $form->get('text')->getData()]
                 );
             } elseif ($form->get('senderOption')->getData() === 'direct') {
-                $from = [$this->getUser()->getEmail(), $this->getUser()->getUsername()];
+                $from = [$this->getUser()->email, $this->getUser()->username];
                 $template = 'user-mail-direct';
             } else {
-                $from = ['noreply@somda.nl', $this->getUser()->getUsername()];
+                $from = ['noreply@somda.nl', $this->getUser()->username];
                 $template = 'user-mail-anonymous';
             }
             $this->sendEmail(

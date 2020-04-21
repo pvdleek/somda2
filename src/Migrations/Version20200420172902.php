@@ -58,7 +58,7 @@ final class Version20200420172902 extends AbstractMigration
         $this->addSql('CREATE INDEX `IDX_9A508BFC65F5051` ON `somda_ddar` (`afkid`)');
         $this->addSql('ALTER TABLE `somda_verk_cats` DROP `ns_code`');
         $this->addSql('UPDATE `somda_news` SET `timestamp` = `datum` WHERE `timestamp` = \'2017-12-21 16:18:28\'');
-        $this->addSql('ALTER TABLE `somda_news` DROP `datum`');
+        $this->addSql('ALTER TABLE `somda_news` CHANGE `timestamp` `timestamp` DATETIME NOT NULL, DROP `datum`');
         $this->addSql('ALTER TABLE `somda_sht_shout` CHANGE `sht_datumtijd` `sht_datumtijd` DATETIME NOT NULL');
 
         $this->addSql('ALTER TABLE `somda_forum_alerts_notes` ADD `timestamp` DATETIME NOT NULL');
@@ -67,8 +67,8 @@ final class Version20200420172902 extends AbstractMigration
 
         $this->addSql('
             ALTER TABLE `somda_banner`
-            CHANGE `start_date` `start_date` DATETIME NOT NULL,
-            CHANGE `end_date` `end_date` DATETIME NOT NULL
+            CHANGE `start_date` `start_date` DATETIME DEFAULT NULL,
+            CHANGE `end_date` `end_date` DATETIME DEFAULT NULL
         ');
         $this->addSql('
             UPDATE `somda_banner` SET

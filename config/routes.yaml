@@ -38,10 +38,12 @@ activate_with_key:
   controller: App\Controller\SecurityController::activateAction
 change_password:
   path: /wachtwoord-wijzigen/
-  controller: App\Controller\HomeController::homeAction
+  methods: [GET, POST]
+  controller: App\Controller\SecurityController::changePasswordAction
 lost_password:
   path: /wachtwoord-vergeten/
-  controller: App\Controller\HomeController::homeAction
+  methods: [GET, POST]
+  controller: App\Controller\SecurityController::lostPasswordAction
 
 ################
 # Home-screens #
@@ -301,40 +303,40 @@ profile_mail:
 # Management #
 ##############
 manage_user:
-  path: /gebruikers-beheer/
+  path: /beheer-gebruikers/
   controller: App\Controller\HomeController::homeAction
 manage_news:
-  path: /nieuws-beheer/
+  path: /beheer-nieuws/
   controller: App\Controller\HomeController::homeAction
 manage_rail_news:
-  path: /spoornieuws-beheer/
+  path: /beheer-spoor-nieuws/
   controller: App\Controller\HomeController::homeAction
 manage_special_routes:
-  path: /bijzonder-ritten-beheer/
+  path: /beheer-bijzonder-ritten/
   controller: App\Controller\HomeController::homeAction
 manage_banners:
-  path: /banner-beheer/
+  path: /beheer-banners/
   controller: App\Controller\HomeController::homeAction
 manage_train_tables_input:
-  path: /dienstregelingen-invoer/
+  path: /beheer-dienstregelingen-invoer/
   controller: App\Controller\HomeController::homeAction
 manage_train_tables:
-  path: /dienstregelingen-beheer/
+  path: /beheer-dienstregelingen/
   controller: App\Controller\HomeController::homeAction
 manage_pois:
-  path: /spotpunten-beheer/
+  path: /beheer-spotpunten/
   controller: App\Controller\HomeController::homeAction
 manage_bans:
-  path: /ban-beheer/
+  path: /beheer-bans/
   controller: App\Controller\HomeController::homeAction
 manage_ddar_trains:
-  path: /ddar-beheer/
+  path: /beheer-ddar/
   controller: App\Controller\HomeController::homeAction
 manage_train_compositions:
-  path: /matsms-beheer/
+  path: /beheer-materieel-samenstellingen/
   controller: App\Controller\HomeController::homeAction
 manage_route_lists:
-  path: /treinnummerlijst-beheer/
+  path: /beheer-treinnummerlijst/
   controller: App\Controller\HomeController::homeAction
 
 

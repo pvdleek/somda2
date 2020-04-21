@@ -127,7 +127,7 @@ class ForumPostController extends ForumBaseController
     private function editPost(FormInterface $form, ForumPost $post): void
     {
         if ($form->has('editAsModerator') && $form->get('editAsModerator')->getData()) {
-            $editor = $this->doctrine->getRepository(User::class)->find(self::MODERATOR_UID);
+            $editor = $this->getModeratorUser();
         } else {
             $editor = $this->getUser();
         }

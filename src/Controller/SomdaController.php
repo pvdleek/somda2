@@ -36,7 +36,7 @@ class SomdaController extends BaseController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $this->sendEmail(
-                $this->doctrine->getRepository(User::class)->find(1),
+                $this->getAdministratorUser(),
                 '[Somda-feedback] ' . $form->get('subject')->getData(),
                 'contact',
                 ['text' => $form->get('text')->getData(), 'user' => $this->getUser()]

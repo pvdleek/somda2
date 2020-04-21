@@ -17,7 +17,6 @@ use Symfony\Component\HttpFoundation\Request;
 abstract class ForumBaseController extends BaseController
 {
     public const MAX_POSTS_PER_PAGE = 100;
-    public const MODERATOR_UID = 2;
 
     /**
      * @param Request $request

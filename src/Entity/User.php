@@ -60,7 +60,7 @@ class User extends Entity implements UserInterface
 
     /**
      * @var string
-     * @ORM\Column(name="password", type="string", length=32, nullable=false)
+     * @ORM\Column(name="password", type="string", length=255, nullable=false)
      */
     public $password = '';
 
@@ -81,9 +81,9 @@ class User extends Entity implements UserInterface
 
     /**
      * @var string
-     * @ORM\Column(name="actkey", type="string", length=32, nullable=false)
+     * @ORM\Column(name="actkey", type="string", length=13, nullable=true)
      */
-    public $activationKey = '0';
+    public $activationKey;
 
     /**
      * @var DateTime
@@ -172,7 +172,7 @@ class User extends Entity implements UserInterface
      */
     public function eraseCredentials(): void
     {
-        // TODO: Implement eraseCredentials() method.
+        return;
     }
 
     /**
