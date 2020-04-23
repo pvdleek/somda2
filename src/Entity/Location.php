@@ -17,56 +17,56 @@ class Location extends Entity
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $id;
+    protected int $id;
 
     /**
      * @var string
      * @ORM\Column(name="afkorting", type="string", length=10, nullable=false)
      */
-    public $name = '';
+    public string $name = '';
 
     /**
      * @var float|null
      * @ORM\Column(name="latitude", type="float", precision=10, scale=0, nullable=true)
      */
-    public $latitude;
+    public ?float $latitude;
 
     /**
      * @var float|null
      * @ORM\Column(name="longitude", type="float", precision=10, scale=0, nullable=true)
      */
-    public $longitude;
+    public ?float $longitude;
 
     /**
      * @var string
      * @ORM\Column(name="description", type="string", length=100, nullable=false)
      */
-    public $description;
+    public string $description;
 
     /**
      * @var string|null
      * @ORM\Column(name="traject", type="string", length=15, nullable=true)
      */
-    public $routeDescription;
+    public ?string $routeDescription;
 
     /**
-     * @var boolean
+     * @var bool
      * @ORM\Column(name="spot_allowed", type="boolean", nullable=false)
      */
-    public $spotAllowed = true;
+    public bool $spotAllowed = true;
 
     /**
      * @var int|null
      * @ORM\Column(name="route_overstaptijd", type="bigint", nullable=true)
      */
-    public $transferTime;
+    public ?int $transferTime;
 
     /**
      * @var LocationCategory
      * @ORM\ManyToOne(targetEntity="App\Entity\LocationCategory", inversedBy="locations")
      * @ORM\JoinColumn(name="landid", referencedColumnName="verk_catid")
      */
-    public $category;
+    public LocationCategory $category;
 
     /**
      * @var TrainTable[]

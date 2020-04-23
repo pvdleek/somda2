@@ -17,56 +17,56 @@ class RailNews extends Entity
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $id;
+    protected int $id;
 
     /**
      * @var string
      * @ORM\Column(name="sns_titel", type="string", length=100, nullable=false)
      */
-    public $title;
+    public string $title;
 
     /**
      * @var string
      * @ORM\Column(name="sns_url", type="string", length=255, nullable=false)
      */
-    public $url;
+    public string $url;
 
     /**
      * @var string
      * @ORM\Column(name="sns_introductie", type="text", length=0, nullable=false)
      */
-    public $introduction;
+    public string $introduction;
 
     /**
      * @var DateTime
      * @ORM\Column(name="sns_timestamp", type="datetime", nullable=false)
      */
-    public $timestamp;
+    public DateTime $timestamp;
 
     /**
-     * @var boolean
+     * @var bool
      * @ORM\Column(name="sns_gekeurd", type="boolean", nullable=false)
      */
-    public $approved = false;
+    public bool $approved = false;
 
     /**
-     * @var boolean
+     * @var bool
      * @ORM\Column(name="sns_actief", type="boolean", nullable=false, options={"default"="1"})
      */
-    public $active = true;
+    public bool $active = true;
 
     /**
-     * @var boolean
+     * @var bool
      * @ORM\Column(name="sns_bijwerken_ok", type="boolean", nullable=false, options={"default"="1"})
      */
-    public $automaticUpdates = true;
+    public bool $automaticUpdates = true;
 
     /**
      * @var RailNewsSource
      * @ORM\ManyToOne(targetEntity="App\Entity\RailNewsSource", inversedBy="news")
      * @ORM\JoinColumn(name="sns_snb_id", referencedColumnName="snb_id")
      */
-    public $source;
+    public RailNewsSource $source;
 
     /**
      * @return string

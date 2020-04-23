@@ -18,55 +18,55 @@ class SpecialRoute extends Entity
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $id;
+    protected int $id;
 
     /**
-     * @var boolean
+     * @var bool
      * @ORM\Column(name="werkzaamheden", type="boolean", nullable=false)
      */
-    public $construction = false;
+    public bool $construction = false;
 
     /**
      * @var DateTime|null
      * @ORM\Column(name="pubdatum", type="datetime", nullable=true)
      */
-    public $publicationTimestamp;
+    public ?DateTime $publicationTimestamp;
 
     /**
      * @var DateTime
      * @ORM\Column(name="datum", type="date", nullable=false)
      */
-    public $startDate;
+    public DateTime $startDate;
 
     /**
      * @var DateTime|null
      * @ORM\Column(name="einddatum", type="date", nullable=true)
      */
-    public $endDate;
+    public ?DateTime $endDate;
 
     /**
-     * @var boolean
+     * @var bool
      * @ORM\Column(name="public", type="boolean", nullable=false)
      */
-    public $public = false;
+    public bool $public = false;
 
     /**
      * @var string
      * @ORM\Column(name="title", type="string", length=75, nullable=false)
      */
-    public $title = '';
+    public string $title = '';
 
     /**
      * @var string
      * @ORM\Column(name="image", type="string", length=20, nullable=false)
      */
-    public $image = '';
+    public string $image = '';
 
     /**
      * @var string
      * @ORM\Column(name="text", type="text", length=0, nullable=false)
      */
-    public $text;
+    public string $text;
 
     /**
      * @var User[]

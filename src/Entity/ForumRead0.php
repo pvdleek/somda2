@@ -16,7 +16,7 @@ class ForumRead0
      * @ORM\JoinColumn(name="postid", referencedColumnName="postid")
      * @ORM\Id
      */
-    public $post;
+    public ForumPost $post;
 
     /**
      * @var User
@@ -24,5 +24,5 @@ class ForumRead0
      * @ORM\JoinColumn(name="uid", referencedColumnName="uid")
      * @ORM\Id
      */
-    public $user;
+    public User $user;
 }

@@ -17,23 +17,23 @@ class TrainTableYear extends Entity
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $id;
+    protected int $id;
 
     /**
      * @var string
      * @ORM\Column(name="naam", type="string", length=10, nullable=false)
      */
-    public $name;
+    public string $name;
 
     /**
      * @var DateTime
      * @ORM\Column(name="start_datum", type="date", nullable=false)
      */
-    public $startDate;
+    public DateTime $startDate;
 
     /**
      * @var DateTime
      * @ORM\Column(name="eind_datum", type="date", nullable=false)
      */
-    public $endDate;
+    public DateTime $endDate;
 }

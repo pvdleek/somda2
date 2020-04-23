@@ -26,58 +26,58 @@ class TrainTable extends Entity
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $id;
+    protected int $id;
 
     /**
      * @var int
      * @ORM\Column(name="orderid", type="bigint", nullable=false)
      */
-    public $order;
+    public int $order;
 
     /**
      * @var string
      * @ORM\Column(name="actie", type="string", length=1, nullable=false, options={"default"="-"})
      * @Assert\Choice(choices=TrainTable::ACTION_VALUES)
      */
-    public $action = '-';
+    public string $action = '-';
 
     /**
      * @var int
      * @ORM\Column(name="tijd", type="bigint", nullable=false)
      */
-    public $time;
+    public int $time;
 
     /**
      * @var string|null
      * @ORM\Column(name="spoor", type="string", length=3, nullable=true)
      */
-    public $track;
+    public ?string $track;
 
     /**
      * @var TrainTableYear
      * @ORM\ManyToOne(targetEntity="App\Entity\TrainTableYear")
      * @ORM\JoinColumn(name="tdr_nr", referencedColumnName="tdr_nr")
      */
-    public $trainTableYear;
+    public TrainTableYear $trainTableYear;
 
     /**
      * @var Route
      * @ORM\ManyToOne(targetEntity="App\Entity\Route", inversedBy="trainTables")
      * @ORM\JoinColumn(name="treinid", referencedColumnName="treinid")
      */
-    public $route;
+    public Route $route;
 
     /**
      * @var RouteOperationDays
      * @ORM\ManyToOne(targetEntity="App\Entity\RouteOperationDays")
      * @ORM\JoinColumn(name="rijdagenid", referencedColumnName="rijdagenid")
      */
-    public $routeOperationDays;
+    public RouteOperationDays $routeOperationDays;
 
     /**
      * @var Location
      * @ORM\ManyToOne(targetEntity="App\Entity\Location", inversedBy="trainTables")
      * @ORM\JoinColumn(name="locatieid", referencedColumnName="afkid")
      */
-    public $location;
+    public Location $location;
 }

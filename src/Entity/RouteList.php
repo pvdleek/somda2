@@ -17,46 +17,46 @@ class RouteList extends Entity
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $id;
+    protected int $id;
 
     /**
      * @var int
      * @ORM\Column(name="nr_start", type="bigint", nullable=false)
      */
-    public $firstNumber;
+    public int $firstNumber;
 
     /**
      * @var int
      * @ORM\Column(name="nr_eind", type="bigint", nullable=false)
      */
-    public $lastNumber;
+    public int $lastNumber;
 
     /**
      * @var TrainTable
      * @ORM\ManyToOne(targetEntity="App\Entity\TrainTableYear")
      * @ORM\JoinColumn(name="tdr_nr", referencedColumnName="tdr_nr")
      */
-    public $trainTableYear;
+    public TrainTable $trainTableYear;
 
     /**
      * @var Transporter
      * @ORM\ManyToOne(targetEntity="App\Entity\Transporter")
      * @ORM\JoinColumn(name="vervoerder_id", referencedColumnName="vervoerder_id")
      */
-    public $transporter;
+    public Transporter $transporter;
 
     /**
      * @var Characteristic
      * @ORM\ManyToOne(targetEntity="App\Entity\Characteristic")
      * @ORM\JoinColumn(name="karakteristiek_id", referencedColumnName="karakteristiek_id")
      */
-    public $characteristic;
+    public Characteristic $characteristic;
 
     /**
      * @var string|null
      * @ORM\Column(name="traject", type="string", length=75, nullable=true)
      */
-    public $section;
+    public ?string $section;
 
     /**
      * @var Route[]

@@ -16,88 +16,88 @@ class Poi extends Entity
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $id;
+    protected int $id;
 
     /**
      * @var string
      * @ORM\Column(name="naam", type="string", length=50, nullable=false)
      */
-    public $name = '';
+    public string $name = '';
 
     /**
      * @var Location
      * @ORM\ManyToOne(targetEntity="App\Entity\Location", inversedBy="pois")
      * @ORM\JoinColumn(name="afkid_locatie", referencedColumnName="afkid")
      */
-    public $location;
+    public Location $location;
 
     /**
      * @var Location
      * @ORM\ManyToOne(targetEntity="App\Entity\Location")
      * @ORM\JoinColumn(name="afkid_traject_1", referencedColumnName="afkid")
      */
-    public $locationSection1;
+    public Location $locationSection1;
 
     /**
      * @var Location
      * @ORM\ManyToOne(targetEntity="App\Entity\Location")
      * @ORM\JoinColumn(name="afkid_traject_2", referencedColumnName="afkid")
      */
-    public $locationSection2;
+    public Location $locationSection2;
 
     /**
      * @var Location
      * @ORM\ManyToOne(targetEntity="App\Entity\Location")
      * @ORM\JoinColumn(name="afkid_dks", referencedColumnName="afkid")
      */
-    public $locationPassingRoutes;
+    public Location $locationPassingRoutes;
 
     /**
      * @var string|null
      * @ORM\Column(name="kilometrering", type="string", length=25, nullable=true)
      */
-    public $kilometre;
+    public ?string $kilometre;
 
     /**
      * @var string|null
      * @ORM\Column(name="gps", type="string", length=25, nullable=true)
      */
-    public $gps;
+    public ?string $gps;
 
     /**
      * @var string|null
      * @ORM\Column(name="zonstand_winter", type="string", length=50, nullable=true)
      */
-    public $sunPositionWinter;
+    public ?string $sunPositionWinter;
 
     /**
      * @var string|null
      * @ORM\Column(name="zonstand_zomer", type="string", length=50, nullable=true)
      */
-    public $sunPositionSummer;
+    public ?string $sunPositionSummer;
 
     /**
      * @var string|null
      * @ORM\Column(name="google_url", type="string", length=200, nullable=true)
      */
-    public $googleUrl;
+    public ?string $googleUrl;
 
     /**
      * @var string
      * @ORM\Column(name="foto", type="string", length=25, nullable=false, options={"default"="geen_foto.jpg"})
      */
-    public $photo = 'geen_foto.jpg';
+    public string $photo = 'geen_foto.jpg';
 
     /**
      * @var PoiCategory
      * @ORM\ManyToOne(targetEntity="App\Entity\PoiCategory", inversedBy="pois")
      * @ORM\JoinColumn(name="provincieid", referencedColumnName="provincieid")
      */
-    public $category;
+    public PoiCategory $category;
 
     /**
      * @var PoiText
      * @ORM\OneToOne(targetEntity="App\Entity\PoiText", mappedBy="poi")
      */
-    public $text;
+    public PoiText $text;
 }

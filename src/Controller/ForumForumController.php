@@ -5,18 +5,72 @@ namespace App\Controller;
 use App\Entity\ForumCategory;
 use App\Entity\ForumDiscussion;
 use App\Entity\ForumForum;
+use App\Helpers\ForumAuthorizationHelper;
+use App\Helpers\RedirectHelper;
+use App\Helpers\TemplateHelper;
+use App\Helpers\UserHelper;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 
-class ForumForumController extends ForumBaseController
+class ForumForumController
 {
+    /**
+     * @var ManagerRegistry
+     */
+    private $doctrine;
+
+    /**
+     * @var UserHelper
+     */
+    private $userHelper;
+
+    /**
+     * @var TemplateHelper
+     */
+    private $templateHelper;
+
+    /**
+     * @var RedirectHelper
+     */
+    private $redirectHelper;
+
+    /**
+     * @var ForumAuthorizationHelper
+     */
+    private $forumAuthHelper;
+
+    /**
+     * @param ManagerRegistry $doctrine
+     * @param UserHelper $userHelper
+     * @param TemplateHelper $templateHelper
+     * @param RedirectHelper $redirectHelper
+     * @param ForumAuthorizationHelper $forumAuthHelper
+     */
+    public function __construct(
+        ManagerRegistry $doctrine,
+        UserHelper $userHelper,
+        TemplateHelper $templateHelper,
+        RedirectHelper $redirectHelper,
+        ForumAuthorizationHelper $forumAuthHelper
+    ) {
+        $this->doctrine = $doctrine;
+        $this->userHelper = $userHelper;
+        $this->templateHelper = $templateHelper;
+        $this->redirectHelper = $redirectHelper;
+        $this->forumAuthHelper = $forumAuthHelper;
+    }
+
     /**
      * @return Response
      */
     public function indexAction(): Response
     {
-        $this->breadcrumbHelper->addPart('general.navigation.forum.index', 'forum', [], true);
+//        $this->breadcrumbHelper->addPart('general.navigation.forum.index', 'forum', [], true);
 
+        /**
+         * @var ForumCategory[] $forumCategories
+         */
         $forumCategories = $this->doctrine->getRepository(ForumCategory::class)->findBy([], ['order' => 'ASC']);
         $categories = [];
         foreach ($forumCategories as $category) {
@@ -26,7 +80,7 @@ class ForumForumController extends ForumBaseController
             ];
         }
 
-        return $this->render('forum/index.html.twig', ['categories' => $categories]);
+        return $this->templateHelper->render('forum/index.html.twig', ['categories' => $categories]);
     }
 
     /**
@@ -40,21 +94,26 @@ class ForumForumController extends ForumBaseController
          */
         $forum = $this->doctrine->getRepository(ForumForum::class)->find($id);
         if (is_null($forum)) {
-            return $this->redirectToRoute('forum');
+            return $this->redirectHelper->redirectToRoute('forum');
         }
 
-        $this->breadcrumbHelper->addPart('general.navigation.forum.index', 'forum');
-        $this->breadcrumbHelper->addPart(
-            $forum->category->name . ' == ' . $forum->name,
-            'forum_forum',
-            ['id' => $id, 'name' => $forum->name],
-            true
-        );
+//        $this->breadcrumbHelper->addPart('general.navigation.forum.index', 'forum');
+//        $this->breadcrumbHelper->addPart(
+//            $forum->category->name . ' == ' . $forum->name,
+//            'forum_forum',
+//            ['id' => $id, 'name' => $forum->name],
+//            true
+//        );
 
-        $discussions = $this->doctrine->getRepository(ForumDiscussion::class)->findByForum($forum, $this->getUser());
-        return $this->render('forum/forum.html.twig', [
+        $discussions = $this->doctrine
+            ->getRepository(ForumDiscussion::class)
+            ->findByForum($forum, $this->userHelper->getUser());
+        return $this->templateHelper->render('forum/forum.html.twig', [
             'forum' => $forum,
-            'userIsModerator' => $this->userIsModerator($forum->getDiscussions()[0]),
+            'userIsModerator' => $this->forumAuthHelper->userIsModerator(
+                $forum->getDiscussions()[0],
+                $this->userHelper->getUser()
+            ),
             'discussions' => $discussions,
         ]);
     }

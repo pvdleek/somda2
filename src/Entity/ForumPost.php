@@ -18,71 +18,71 @@ class ForumPost extends Entity
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $id;
+    protected int $id;
 
     /**
      * @var User
      * @ORM\ManyToOne(targetEntity="App\Entity\User")
      * @ORM\JoinColumn(name="authorid", referencedColumnName="uid")
      */
-    public $author;
+    public User $author;
 
     /**
      * @var ForumDiscussion
      * @ORM\ManyToOne(targetEntity="App\Entity\ForumDiscussion", inversedBy="posts")
      * @ORM\JoinColumn(name="discussionid", referencedColumnName="discussionid")
      */
-    public $discussion;
+    public ForumDiscussion $discussion;
 
     /**
      * @var DateTime
      * @ORM\Column(name="timestamp", type="datetime", nullable=false)
      */
-    public $timestamp;
+    public DateTime $timestamp;
 
     /**
      * @var ForumPostText
      * @ORM\OneToOne(targetEntity="App\Entity\ForumPostText", mappedBy="post")
      */
-    public $text;
+    public ForumPostText $text;
 
     /**
      * @var DateTime|null
      * @ORM\Column(name="edit_timestamp", type="datetime", nullable=true)
      */
-    public $editTimestamp;
+    public ?DateTime $editTimestamp;
 
     /**
      * @var User|null
      * @ORM\ManyToOne(targetEntity="App\Entity\User")
      * @ORM\JoinColumn(name="edit_uid", referencedColumnName="uid")
      */
-    public $editor;
+    public ?User $editor;
 
     /**
      * @var string|null
      * @ORM\Column(name="edit_reason", type="string", length=50, nullable=true)
      */
-    public $editReason;
+    public ?string $editReason;
 
     /**
-     * @var boolean
+     * @var bool
      * @ORM\Column(name="sign_on", type="boolean", nullable=false)
      */
-    public $signatureOn = false;
+    public bool $signatureOn = false;
 
     /**
-     * @var boolean
+     * @var bool
      * @ORM\Column(name="wiki_check", type="boolean", nullable=false)
      */
-    public $wikiCheck = false;
+    public bool $wikiCheck = false;
 
     /**
      * @var User|null
      * @ORM\ManyToOne(targetEntity="App\Entity\User")
      * @ORM\JoinColumn(name="wiki_uid", referencedColumnName="uid")
      */
-    public $wikiChecker;
+    public ?User $wikiChecker;
 
     /**
      * @var ForumPostAlert[]

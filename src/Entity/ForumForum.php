@@ -29,39 +29,39 @@ class ForumForum extends Entity
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $id;
+    protected int $id;
 
     /**
      * @var ForumCategory
      * @ORM\ManyToOne(targetEntity="App\Entity\ForumCategory", inversedBy="forums")
      * @ORM\JoinColumn(name="catid", referencedColumnName="catid")
      */
-    public $category;
+    public ForumCategory $category;
 
     /**
      * @var string
      * @ORM\Column(name="name", type="string", length=40, nullable=false)
      */
-    public $name = '';
+    public string $name = '';
 
     /**
      * @var string
      * @ORM\Column(name="description", type="string", length=100, nullable=false)
      */
-    public $description = '';
+    public string $description = '';
 
     /**
      * @var int
      * @ORM\Column(name="volgorde", type="bigint", nullable=false)
      */
-    public $order;
+    public int $order;
 
     /**
      * @var int
      * @ORM\Column(name="type", type="bigint", nullable=false)
      * @Assert\Choice(choices=ForumForum::TYPE_VALUES)
      */
-    public $type = self::TYPE_LOGGED_IN;
+    public int $type = self::TYPE_LOGGED_IN;
 
     /**
      * @var ForumDiscussion[]

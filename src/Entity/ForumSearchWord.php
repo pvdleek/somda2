@@ -17,13 +17,13 @@ class ForumSearchWord extends Entity
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $id;
+    protected int $id;
 
     /**
      * @var string
      * @ORM\Column(name="woord", type="string", length=20, nullable=false)
      */
-    public $word;
+    public string $word;
 
     /**
      * @var ForumSearchList[]

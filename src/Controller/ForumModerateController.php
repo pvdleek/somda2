@@ -6,16 +6,46 @@ use App\Entity\ForumDiscussion;
 use App\Entity\ForumPost;
 use App\Form\ForumDiscussionCombine;
 use App\Form\ForumDiscussionMove;
+use App\Helpers\FormHelper;
+use App\Helpers\RedirectHelper;
+use App\Helpers\TemplateHelper;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
-class ForumModerateController extends ForumBaseController
+class ForumModerateController
 {
     public const ACTION_CLOSE = 'close';
     public const ACTION_OPEN = 'open';
     public const ACTION_MOVE = 'move';
+
+    /**
+     * @var FormHelper
+     */
+    private $formHelper;
+
+    /**
+     * @var RedirectHelper
+     */
+    private $redirectHelper;
+
+    /**
+     * @var TemplateHelper
+     */
+    private $templateHelper;
+
+    /**
+     * @param FormHelper $formHelper
+     * @param RedirectHelper $redirectHelper
+     * @param TemplateHelper $templateHelper
+     */
+    public function __construct(FormHelper $formHelper, RedirectHelper $redirectHelper, TemplateHelper $templateHelper)
+    {
+        $this->formHelper = $formHelper;
+        $this->redirectHelper = $redirectHelper;
+        $this->templateHelper = $templateHelper;
+    }
 
     /**
      * @param Request $request
@@ -28,23 +58,23 @@ class ForumModerateController extends ForumBaseController
         $discussion = $this->getDiscussion($id);
         if ($action === self::ACTION_CLOSE && !$discussion->locked) {
             $discussion->locked = true;
-            $this->doctrine->getManager()->flush();
+            $this->formHelper->getDoctrine()->getManager()->flush();
         } elseif ($action === self::ACTION_OPEN && $discussion->locked) {
             $discussion->locked = false;
-            $this->doctrine->getManager()->flush();
+            $this->formHelper->getDoctrine()->getManager()->flush();
         } elseif ($action === self::ACTION_MOVE) {
-            $form = $this->formFactory->create(ForumDiscussionMove::class, $discussion);
+            $form = $this->formHelper->getFactory()->create(ForumDiscussionMove::class, $discussion);
             $form->handleRequest($request);
             if (!$form->isSubmitted() || !$form->isValid()) {
-                return $this->render('forum/discussionMove.html.twig', [
+                return $this->templateHelper->render('forum/discussionMove.html.twig', [
                     'discussion' => $discussion,
                     'form' => $form->createView()
                 ]);
             }
-            $this->doctrine->getManager()->flush();
+            $this->formHelper->getDoctrine()->getManager()->flush();
         }
 
-        return $this->redirectToRoute(
+        return $this->redirectHelper->redirectToRoute(
             'forum_discussion',
             ['id' => $discussion->getId(), 'name' => urlencode($discussion->title)]
         );
@@ -64,7 +94,7 @@ class ForumModerateController extends ForumBaseController
         $newDiscussion = new ForumDiscussion();
         $newDiscussion->forum = $discussion1->forum;
 
-        $form = $this->formFactory->create(ForumDiscussionCombine::class, $newDiscussion);
+        $form = $this->formHelper->getFactory()->create(ForumDiscussionCombine::class, $newDiscussion);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $oldestPost = $this->movePostsAndGetOldest($discussion1, $discussion2, $newDiscussion);
@@ -72,18 +102,17 @@ class ForumModerateController extends ForumBaseController
             $newDiscussion->author = $oldestPost->author;
             $newDiscussion->title = $form->get('title')->getData();
             $newDiscussion->viewed = $discussion1->viewed + $discussion2->viewed;
-            $this->doctrine->getManager()->persist($newDiscussion);
-            $this->doctrine->getManager()->remove($discussion1);
-            $this->doctrine->getManager()->remove($discussion2);
-            $this->doctrine->getManager()->flush();
+            $this->formHelper->getDoctrine()->getManager()->persist($newDiscussion);
+            $this->formHelper->getDoctrine()->getManager()->remove($discussion1);
+            $this->formHelper->getDoctrine()->getManager()->remove($discussion2);
 
-            return $this->redirectToRoute(
-                'forum_discussion',
-                ['id' => $newDiscussion->getId(), 'name' => urlencode($newDiscussion->title)]
-            );
+            return $this->formHelper->finishFormHandling('',  'forum_discussion', [
+                'id' => $newDiscussion->getId(),
+                'name' => urlencode($newDiscussion->title)
+            ]);
         }
 
-        return $this->render('forum/discussionCombine.html.twig', [
+        return $this->templateHelper->render('forum/discussionCombine.html.twig', [
             'discussion1' => $discussion1,
             'discussion2' => $discussion2,
             'form' => $form->createView()
@@ -147,23 +176,23 @@ class ForumModerateController extends ForumBaseController
         $discussion = $this->getDiscussion($id);
 
         $postIds = array_filter(explode(',', $postIds));
-        $firstPost = $this->doctrine->getRepository(ForumPost::class)->find($postIds[0]);
+        $firstPost = $this->formHelper->getDoctrine()->getRepository(ForumPost::class)->find($postIds[0]);
 
         // Create the new discussion
         $newDiscussion = new ForumDiscussion();
         $newDiscussion->forum = $discussion->forum;
         $newDiscussion->title = 'Verwijderd uit ' . $discussion->title;
         $newDiscussion->author = $firstPost->author;
-        $this->doctrine->getManager()->persist($newDiscussion);
+        $this->formHelper->getDoctrine()->getManager()->persist($newDiscussion);
 
         foreach ($postIds as $postId) {
-            $post = $this->doctrine->getRepository(ForumPost::class)->find($postId);
+            $post = $this->formHelper->getDoctrine()->getRepository(ForumPost::class)->find($postId);
             $post->discussion = $newDiscussion;
         }
 
-        $this->doctrine->getManager()->flush();
+        $this->formHelper->getDoctrine()->getManager()->flush();
 
-        return $this->redirectToRoute(
+        return $this->redirectHelper->redirectToRoute(
             'forum_discussion',
             ['id' => $newDiscussion->getId(), 'name' => urlencode($newDiscussion->title)]
         );
@@ -178,7 +207,7 @@ class ForumModerateController extends ForumBaseController
         /**
          * @var ForumDiscussion $discussion
          */
-        $discussion = $this->doctrine->getRepository(ForumDiscussion::class)->find($id);
+        $discussion = $this->formHelper->getDoctrine()->getRepository(ForumDiscussion::class)->find($id);
         if (is_null($discussion) || !$this->userIsModerator($discussion)) {
             throw new AccessDeniedHttpException();
         }

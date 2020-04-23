@@ -16,30 +16,30 @@ class TrainNameRange extends Entity
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $id;
+    protected int $id;
 
     /**
      * @var int
      * @ORM\Column(name="nr_start", type="bigint", nullable=false)
      */
-    public $start;
+    public int $start;
 
     /**
      * @var int
      * @ORM\Column(name="nr_eind", type="bigint", nullable=false)
      */
-    public $end;
+    public int $end;
 
     /**
      * @var string
      * @ORM\Column(name="naam", type="string", length=25, nullable=false)
      */
-    public $name;
+    public string $name;
 
     /**
      * @var Transporter
      * @ORM\ManyToOne(targetEntity="App\Entity\Transporter")
      * @ORM\JoinColumn(name="vervoerder_id", referencedColumnName="vervoerder_id")
      */
-    public $transporter;
+    public Transporter $transporter;
 }

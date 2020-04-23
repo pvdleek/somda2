@@ -16,24 +16,24 @@ class ForumDiscussionWiki extends Entity
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $id;
+    protected int $id;
 
     /**
      * @var ForumDiscussion
      * @ORM\ManyToOne(targetEntity="App\Entity\ForumDiscussion", inversedBy="wikis")
      * @ORM\JoinColumn(name="discussionid", referencedColumnName="discussionid")
      */
-    public $discussion;
+    public ForumDiscussion $discussion;
 
     /**
      * @var string
      * @ORM\Column(name="wiki", type="string", length=50, nullable=false)
      */
-    public $wiki;
+    public string $wiki;
 
     /**
      * @var string|null
      * @ORM\Column(name="titel", type="string", length=50, nullable=true)
      */
-    public $title;
+    public ?string $title;
 }

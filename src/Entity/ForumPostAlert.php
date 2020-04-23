@@ -18,39 +18,39 @@ class ForumPostAlert extends Entity
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $id;
+    protected int $id;
 
     /**
      * @var ForumPost
      * @ORM\ManyToOne(targetEntity="App\Entity\ForumPost", inversedBy="alerts")
      * @ORM\JoinColumn(name="postid", referencedColumnName="postid")
      */
-    public $post;
+    public ForumPost $post;
 
     /**
-     * @var boolean
+     * @var bool
      * @ORM\Column(name="closed", type="boolean", nullable=false)
      */
-    public $closed = false;
+    public bool $closed = false;
 
     /**
      * @var User
      * @ORM\ManyToOne(targetEntity="App\Entity\User")
      * @ORM\JoinColumn(name="senderid", referencedColumnName="uid")
      */
-    public $sender;
+    public User $sender;
 
     /**
      * @var DateTime
      * @ORM\Column(name="timestamp", type="datetime", nullable=false)
      */
-    public $timestamp;
+    public DateTime $timestamp;
 
     /**
      * @var string|null
      * @ORM\Column(name="comment", type="text", length=0, nullable=true)
      */
-    public $comment;
+    public ?string $comment;
 
     /**
      * @var ForumPostAlertNote[]

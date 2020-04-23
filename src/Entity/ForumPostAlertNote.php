@@ -17,37 +17,37 @@ class ForumPostAlertNote extends Entity
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $id;
+    protected int $id;
 
     /**
      * @var ForumPostAlert
      * @ORM\ManyToOne(targetEntity="App\Entity\ForumPostAlert", inversedBy="notes")
      * @ORM\JoinColumn(name="alertid", referencedColumnName="id")
      */
-    public $alert;
+    public ForumPostAlert $alert;
 
     /**
      * @var User
      * @ORM\ManyToOne(targetEntity="App\Entity\User")
      * @ORM\JoinColumn(name="authorid", referencedColumnName="uid")
      */
-    public $author;
+    public User $author;
 
     /**
      * @var DateTime
      * @ORM\Column(name="timestamp", type="datetime", nullable=false)
      */
-    public $timestamp;
+    public DateTime $timestamp;
 
     /**
-     * @var boolean
+     * @var bool
      * @ORM\Column(name="sent_to_reporter", type="boolean", nullable=false)
      */
-    public $sentToReporter;
+    public bool $sentToReporter;
 
     /**
      * @var string
      * @ORM\Column(name="text", type="text", length=0, nullable=false)
      */
-    public $text;
+    public string $text;
 }

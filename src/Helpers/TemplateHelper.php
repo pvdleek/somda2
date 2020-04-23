@@ -1,0 +1,137 @@
+<?php
+
+namespace App\Helpers;
+
+use App\Entity\Banner;
+use App\Entity\BannerView;
+use App\Entity\RailNews;
+use DateTime;
+use Doctrine\Persistence\ManagerRegistry;
+use Exception;
+use Monolog\Logger;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Response;
+use Twig\Environment;
+
+class TemplateHelper
+{
+    /**
+     * @var RequestStack
+     */
+    private $requestStack;
+
+    /**
+     * @var ManagerRegistry
+     */
+    protected $doctrine;
+
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
+     * @var Environment
+     */
+    private $twig;
+
+    /**
+     * @var BreadcrumbHelper
+     */
+    protected $breadcrumbHelper;
+
+    /**
+     * @var MenuHelper
+     */
+    private $menuHelper;
+
+    /**
+     * @param RequestStack $requestStack
+     * @param ManagerRegistry $registry
+     * @param LoggerInterface $logger
+     * @param Environment $environment
+     * @param BreadcrumbHelper $breadcrumbHelper
+     * @param MenuHelper $menuHelper
+     */
+    public function __construct(
+        RequestStack $requestStack,
+        ManagerRegistry $registry,
+        LoggerInterface $logger,
+        Environment $environment,
+        BreadcrumbHelper $breadcrumbHelper,
+        MenuHelper $menuHelper
+    ) {
+        $this->requestStack = $requestStack;
+        $this->doctrine = $registry;
+        $this->logger = $logger;
+        $this->twig = $environment;
+        $this->breadcrumbHelper = $breadcrumbHelper;
+        $this->menuHelper = $menuHelper;
+    }
+
+    /**
+     * @param string $view
+     * @param array $parameters
+     * @param Response|null $response
+     * @return Response
+     */
+    public function render(string $view, array $parameters = [], Response $response = null): Response
+    {
+        try {
+            $content = $this->twig->render($view, $this->getParameters($parameters));
+        } catch (Exception $exception) {
+            $this->logger->addRecord(
+                Logger::CRITICAL,
+                'Error when rendering view "' . $view . '": "' . $exception->getMessage() . '"'
+            );
+            $content = '';
+        }
+
+        if (null === $response) {
+            $response = new Response();
+        }
+
+        $response->setContent($content);
+        return $response;
+    }
+
+    /**
+     * @param array $viewParameters
+     * @return array
+     * @throws Exception
+     */
+    private function getParameters(array $viewParameters): array
+    {
+        // Check if there is an active banner for the header
+        $banners = $this->doctrine->getRepository(Banner::class)->findBy(
+            ['location' => Banner::LOCATION_HEADER, 'active' => true]
+        );
+        if (count($banners) > 0) {
+            $headerType = 'banner';
+            $headerContent = $banners[random_int(0, count($banners) - 1)];
+
+            // Create a view for this banner
+            $bannerView = new BannerView();
+            $bannerView->banner = $headerContent;
+            $bannerView->timestamp = new DateTime();
+            $bannerView->ipAddress = inet_pton($this->requestStack->getCurrentRequest()->getClientIp());
+            $this->doctrine->getManager()->persist($bannerView);
+            $this->doctrine->getManager()->flush();
+        } else {
+            $headerType = 'news';
+            $headerContent = $this->doctrine
+                ->getRepository(RailNews::class)
+                ->findBy(['active' => true, 'approved' => true], ['timestamp' => 'DESC'], 3)[random_int(0, 2)];
+        }
+
+        return array_merge($viewParameters, [
+            'headerType' =>  $headerType,
+            'headerContent' => $headerContent,
+            'imageNumber' => random_int(1, 11),
+            'breadcrumb' => $this->breadcrumbHelper->getBreadcrumb(),
+            'menuStructure' => $this->menuHelper->getMenuStructure(),
+            'nrOfOpenForumAlerts' => $this->menuHelper->getNumberOfOpenForumAlerts(),
+        ]);
+    }
+}

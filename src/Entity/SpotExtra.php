@@ -16,17 +16,17 @@ class SpotExtra
      * @ORM\JoinColumn(name="spotid", referencedColumnName="spotid")
      * @ORM\Id
      */
-    public $spot;
+    public Spot $spot;
 
     /**
      * @var string
      * @ORM\Column(name="extra", type="string", length=255, nullable=false)
      */
-    public $extra = '';
+    public string $extra = '';
 
     /**
      * @var string
      * @ORM\Column(name="user_extra", type="string", length=255, nullable=false)
      */
-    public $userExtra = '';
+    public string $userExtra = '';
 }

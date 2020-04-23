@@ -16,11 +16,11 @@ class Position extends Entity
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $id;
+    protected int $id;
 
     /**
      * @var string
      * @ORM\Column(name="positie", type="string", length=2, nullable=false)
      */
-    public $name;
+    public string $name;
 }

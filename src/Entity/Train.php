@@ -17,33 +17,33 @@ class Train extends Entity
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $id;
+    protected int $id;
 
     /**
      * @var string
      * @ORM\Column(name="nummer", type="string", length=20, nullable=false)
      */
-    public $number = '';
+    public string $number = '';
 
     /**
      * @var string|null
      * @ORM\Column(name="naam", type="string", length=35, nullable=true)
      */
-    public $name;
+    public ?string $name;
 
     /**
-     * @var Transporter
+     * @var Transporter|null
      * @ORM\ManyToOne(targetEntity="App\Entity\Transporter")
      * @ORM\JoinColumn(name="vervoerder_id", referencedColumnName="vervoerder_id")
      */
-    public $transporter;
+    public ?Transporter $transporter;
 
     /**
      * @var TrainNamePattern|null
      * @ORM\ManyToOne(targetEntity="App\Entity\TrainNamePattern")
      * @ORM\JoinColumn(name="pattern_id", referencedColumnName="id")
      */
-    public $namePattern;
+    public ?TrainNamePattern $namePattern;
 
     /**
      * @var Spot[]

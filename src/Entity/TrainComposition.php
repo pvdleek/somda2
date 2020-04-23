@@ -17,26 +17,26 @@ class TrainComposition extends Entity
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $id;
+    protected int $id;
 
     /**
      * @var TrainCompositionType
      * @ORM\ManyToOne(targetEntity="App\Entity\TrainCompositionType")
      * @ORM\JoinColumn(name="typeid", referencedColumnName="typeid")
      */
-    public $type;
+    public TrainCompositionType $type;
 
     /**
      * @var string|null
      * @ORM\Column(name="bak1", type="string", length=15, nullable=true)
      */
-    public $car1;
+    public ?string $car1;
 
     /**
      * @var string|null
      * @ORM\Column(name="bak2", type="string", length=15, nullable=true)
      */
-    public $car2;
+    public ?string $car2;
 
     /**
      * @var string|null
@@ -48,83 +48,83 @@ class TrainComposition extends Entity
      * @var string|null
      * @ORM\Column(name="bak4", type="string", length=15, nullable=true)
      */
-    public $car4;
+    public ?string $car4;
 
     /**
      * @var string|null
      * @ORM\Column(name="bak5", type="string", length=15, nullable=true)
      */
-    public $car5;
+    public ?string $car5;
 
     /**
      * @var string|null
      * @ORM\Column(name="bak6", type="string", length=15, nullable=true)
      */
-    public $car6;
+    public ?string $car6;
 
     /**
      * @var string|null
      * @ORM\Column(name="bak7", type="string", length=15, nullable=true)
      */
-    public $car7;
+    public ?string $car7;
 
     /**
      * @var string|null
      * @ORM\Column(name="bak8", type="string", length=15, nullable=true)
      */
-    public $car8;
+    public ?string $car8;
 
     /**
      * @var string|null
      * @ORM\Column(name="bak9", type="string", length=15, nullable=true)
      */
-    public $car9;
+    public ?string $car9;
 
     /**
      * @var string|null
      * @ORM\Column(name="bak10", type="string", length=15, nullable=true)
      */
-    public $car10;
+    public ?string $car10;
 
     /**
      * @var string|null
      * @ORM\Column(name="bak11", type="string", length=15, nullable=true)
      */
-    public $car11;
+    public ?string $car11;
 
     /**
      * @var string|null
      * @ORM\Column(name="bak12", type="string", length=15, nullable=true)
      */
-    public $car12;
+    public ?string $car12;
 
     /**
      * @var string|null
      * @ORM\Column(name="bak13", type="string", length=15, nullable=true)
      */
-    public $car13;
+    public ?string $car13;
 
     /**
      * @var DateTime|null
      * @ORM\Column(name="last_update", type="datetime", nullable=true)
      */
-    public $lastUpdateTimestamp;
+    public ?DateTime $lastUpdateTimestamp;
 
     /**
      * @var string|null
      * @ORM\Column(name="opmerkingen", type="string", length=255, nullable=true)
      */
-    public $note;
+    public ?string $note;
 
     /**
      * @var string
      * @ORM\Column(name="extra", type="string", length=255, nullable=false)
      */
-    public $extra = '';
+    public string $extra = '';
 
     /**
-     * @var boolean
+     * @var bool
      * @ORM\Column(name="index_regel", type="boolean", nullable=false)
      */
-    public $indexLine = false;
+    public bool $indexLine = false;
 }

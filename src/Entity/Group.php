@@ -17,19 +17,19 @@ class Group extends Entity
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $id;
+    protected int $id;
 
     /**
      * @var string
      * @ORM\Column(name="name", type="string", length=15, nullable=false)
      */
-    public $name = '';
+    public string $name = '';
 
     /**
      * @var array
      * @ORM\Column(name="roles", type="array", nullable=false)
      */
-    public $roles = [];
+    public array $roles = [];
 
     /**
      * @var User

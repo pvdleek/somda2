@@ -16,7 +16,7 @@ class UserPreferenceValue
      * @ORM\JoinColumn(name="uid", referencedColumnName="uid")
      * @ORM\Id
      */
-    public $user;
+    public User $user;
 
     /**
      * @var UserPreference
@@ -24,11 +24,11 @@ class UserPreferenceValue
      * @ORM\JoinColumn(name="prefid", referencedColumnName="prefid")
      * @ORM\Id
      */
-    public $preference;
+    public UserPreference $preference;
 
     /**
      * @var string
      * @ORM\Column(name="value", type="string", length=200, nullable=false)
      */
-    public $value = '';
+    public string $value = '';
 }

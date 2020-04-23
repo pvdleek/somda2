@@ -22,19 +22,19 @@ class UserInfo
      * @ORM\JoinColumn(name="uid", referencedColumnName="uid")
      * @ORM\Id
      */
-    public $user;
+    public User $user;
 
     /**
      * @var string
      * @ORM\Column(name="avatar", type="string", length=30, nullable=false, options={"default"="_blank.gif"})
      */
-    public $avatar = '_blank.gif';
+    public string $avatar = '_blank.gif';
 
     /**
      * @var string|null
      * @ORM\Column(name="website", type="string", length=75, nullable=true)
      */
-    public $website;
+    public ?string $website;
 
     /**
      * @var string|null
@@ -46,25 +46,25 @@ class UserInfo
      *     maxMessage = "De woonplaats mag maximaal 50 karakters lang zijn"
      * )
      */
-    public $city;
+    public ?string $city;
 
     /**
      * @var string|null
      * @ORM\Column(name="skype", type="string", length=60, nullable=true)
      */
-    public $skype;
+    public ?string $skype;
 
     /**
      * @var int
      * @ORM\Column(name="geslacht", type="smallint", nullable=false, options={"default"="0"})
      */
-    public $gender = 0;
+    public int $gender = 0;
 
     /**
      * @var DateTime|null
      * @ORM\Column(name="gebdatum", type="date", nullable=true)
      */
-    public $birthDate;
+    public ?DateTime $birthDate;
 
     /**
      * @var int|null
@@ -76,7 +76,7 @@ class UserInfo
      *     maxMessage = "Jouw mobiele nummer moet exact 11 karakters zijn (startend met 316)",
      * )
      */
-    public $mobilePhone;
+    public ?int $mobilePhone;
 
     /**
      * @var string|null
@@ -86,7 +86,7 @@ class UserInfo
      *     maxMessage = "Jouw Twitter account mag maximaal 255 karakters lang zijn",
      * )
      */
-    public $twitterAccount;
+    public ?string $twitterAccount;
 
     /**
      * @var string|null
@@ -96,7 +96,7 @@ class UserInfo
      *     maxMessage = "Jouw Facebook account mag maximaal 255 karakters lang zijn",
      * )
      */
-    public $facebookAccount;
+    public ?string $facebookAccount;
 
     /**
      * @var string|null
@@ -106,7 +106,7 @@ class UserInfo
      *     maxMessage = "Jouw Flickr account mag maximaal 255 karakters lang zijn",
      * )
      */
-    public $flickrAccount;
+    public ?string $flickrAccount;
 
     /**
      * @var string|null
@@ -116,18 +116,18 @@ class UserInfo
      *     maxMessage = "Jouw Youtube account mag maximaal 255 karakters lang zijn",
      * )
      */
-    public $youtubeAccount;
+    public ?string $youtubeAccount;
 
     /**
      * @var string|null
      * @ORM\Column(name="info", type="text", length=0, nullable=true)
      */
-    public $info;
+    public ?string $info;
 
     /**
      * @var UserCompany|null
      * @ORM\ManyToOne(targetEntity="App\Entity\UserCompany")
      * @ORM\JoinColumn(name="bedrijf_id", referencedColumnName="bedrijf_id")
      */
-    public $company;
+    public ?UserCompany $company;
 }

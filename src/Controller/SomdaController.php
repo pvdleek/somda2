@@ -4,18 +4,60 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\Contact;
+use App\Helpers\EmailHelper;
+use App\Helpers\FormHelper;
+use App\Helpers\TemplateHelper;
+use App\Helpers\UserHelper;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class SomdaController extends BaseController
+class SomdaController
 {
+    /**
+     * @var UserHelper
+     */
+    private $userHelper;
+
+    /**
+     * @var FormHelper
+     */
+    private $formHelper;
+
+    /**
+     * @var TemplateHelper
+     */
+    private $templateHelper;
+
+    /**
+     * @var EmailHelper
+     */
+    private $emailHelper;
+
+    /**
+     * @param UserHelper $userHelper
+     * @param FormHelper $formHelper
+     * @param TemplateHelper $templateHelper
+     * @param EmailHelper $emailHelper
+     */
+    public function __construct(
+        UserHelper $userHelper,
+        FormHelper $formHelper,
+        TemplateHelper $templateHelper,
+        EmailHelper $emailHelper
+    ) {
+        $this->userHelper = $userHelper;
+        $this->formHelper = $formHelper;
+        $this->templateHelper = $templateHelper;
+        $this->emailHelper = $emailHelper;
+    }
+
     /**
      * @return Response
      */
     public function aboutAction(): Response
     {
-        return $this->render('somda/about.html.twig');
+        return $this->templateHelper->render('somda/about.html.twig');
     }
 
     /**
@@ -23,7 +65,7 @@ class SomdaController extends BaseController
      */
     public function advertiseAction(): Response
     {
-        return $this->render('somda/advertise.html.twig');
+        return $this->templateHelper->render('somda/advertise.html.twig');
     }
 
     /**
@@ -32,22 +74,20 @@ class SomdaController extends BaseController
      */
     public function contactAction(Request $request)
     {
-        $form = $this->formFactory->create(Contact::class);
+        $form = $this->formHelper->getFactory()->create(Contact::class);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->sendEmail(
-                $this->getAdministratorUser(),
+            $this->emailHelper->sendEmail(
+                $this->userHelper->getAdministratorUser(),
                 '[Somda-feedback] ' . $form->get('subject')->getData(),
                 'contact',
-                ['text' => $form->get('text')->getData(), 'user' => $this->getUser()]
+                ['text' => $form->get('text')->getData(), 'user' => $this->userHelper->getUser()]
             );
 
-            $this->addFlash(self::FLASH_TYPE_INFORMATION, 'Je bericht is naar de beheerder verzonden');
-
-            return $this->redirectToRoute('home');
+            return $this->formHelper->finishFormHandling('Je bericht is naar de beheerder verzonden', 'home');
         }
 
-        return $this->render('somda/contact.html.twig', ['form' => $form->createView()]);
+        return $this->templateHelper->render('somda/contact.html.twig', ['form' => $form->createView()]);
     }
 
     /**
@@ -57,15 +97,13 @@ class SomdaController extends BaseController
     public function disclaimerAction(string $choice = null)
     {
         if (!is_null($choice) && in_array($choice, [User::COOKIE_OK, User::COOKIE_NOT_OK])) {
-            $this->getUser()->cookieOk = $choice;
-            $this->doctrine->getManager()->flush();
+            $this->userHelper->getUser()->cookieOk = $choice;
 
-            $this->addFlash(
-                'info',
-                'Dankjewel voor het doorgeven van je keuze met betrekking tot de Google Analytics cookie.'
+            return $this->formHelper->finishFormHandling(
+                'Dankjewel voor het doorgeven van je keuze met betrekking tot de Google Analytics cookie.',
+                'disclaimer'
             );
-            return $this->redirectToRoute('disclaimer');
         }
-        return $this->render('somda/disclaimer.html.twig');
+        return $this->templateHelper->render('somda/disclaimer.html.twig');
     }
 }

@@ -16,49 +16,49 @@ class RouteOperationDays extends Entity
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $id;
+    protected int $id;
 
     /**
      * @var bool
      * @ORM\Column(name="ma", type="boolean", nullable=false)
      */
-    public $monday = false;
+    public bool $monday = false;
 
     /**
      * @var bool
      * @ORM\Column(name="di", type="boolean", nullable=false)
      */
-    public $tuesday = false;
+    public bool $tuesday = false;
 
     /**
      * @var bool
      * @ORM\Column(name="wo", type="boolean", nullable=false)
      */
-    public $wednesday = false;
+    public bool $wednesday = false;
 
     /**
      * @var bool
      * @ORM\Column(name="do", type="boolean", nullable=false)
      */
-    public $thursday = false;
+    public bool $thursday = false;
 
     /**
      * @var bool
      * @ORM\Column(name="vr", type="boolean", nullable=false)
      */
-    public $friday = false;
+    public bool $friday = false;
 
     /**
      * @var bool
      * @ORM\Column(name="za", type="boolean", nullable=false)
      */
-    public $saturday = false;
+    public bool $saturday = false;
 
     /**
      * @var bool
      * @ORM\Column(name="zf", type="boolean", nullable=false)
      */
-    public $sunday = false;
+    public bool $sunday = false;
 
     /**
      * @param int $dayNumber

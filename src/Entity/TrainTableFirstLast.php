@@ -17,7 +17,7 @@ class TrainTableFirstLast
      * @ORM\JoinColumn(name="tdr_nr", referencedColumnName="tdr_nr")
      * @ORM\Id
      */
-    public $trainTableYear;
+    public TrainTable $trainTableYear;
 
     /**
      * @var Route
@@ -25,52 +25,52 @@ class TrainTableFirstLast
      * @ORM\JoinColumn(name="treinid", referencedColumnName="treinid")
      * @ORM\Id
      */
-    public $route;
+    public Route $route;
 
     /**
      * @var int
      * @ORM\Column(name="dag", type="bigint", nullable=false)
      * @ORM\Id
      */
-    public $dayNumber;
+    public int $dayNumber;
 
     /**
      * @var Location
      * @ORM\ManyToOne(targetEntity="App\Entity\Location")
      * @ORM\JoinColumn(name="v_locatieid", referencedColumnName="afkid")
      */
-    public $firstLocation;
+    public Location $firstLocation;
 
     /**
      * @var string
      * @ORM\Column(name="v_actie", type="string", length=1, nullable=false, options={"default"="-"})
      * @Assert\Choice(choices=TrainTable::ACTION_VALUES)
      */
-    public $firstAction = '-';
+    public string $firstAction = '-';
 
     /**
      * @var int
      * @ORM\Column(name="v_tijd", type="bigint", nullable=false)
      */
-    public $firstTime;
+    public int $firstTime;
 
     /**
      * @var Location
      * @ORM\ManyToOne(targetEntity="App\Entity\Location")
      * @ORM\JoinColumn(name="a_locatieid", referencedColumnName="afkid")
      */
-    public $lastLocation;
+    public Location $lastLocation;
 
     /**
      * @var string
      * @ORM\Column(name="a_actie", type="string", length=1, nullable=false, options={"default"="-"})
      * @Assert\Choice(choices=TrainTable::ACTION_VALUES)
      */
-    public $lastAction = '-';
+    public string $lastAction = '-';
 
     /**
      * @var int
      * @ORM\Column(name="a_tijd", type="bigint", nullable=false)
      */
-    public $lastTime;
+    public int $lastTime;
 }

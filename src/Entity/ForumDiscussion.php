@@ -17,39 +17,39 @@ class ForumDiscussion extends Entity
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $id;
+    protected int $id;
 
     /**
      * @var string
      * @ORM\Column(name="title", type="string", length=50, nullable=false)
      */
-    public $title = '';
+    public string $title = '';
 
     /**
      * @var int
      * @ORM\Column(name="viewed", type="bigint", nullable=false)
      */
-    public $viewed = 0;
+    public int $viewed = 0;
 
     /**
-     * @var boolean
+     * @var bool
      * @ORM\Column(name="locked", type="boolean", nullable=false, options={"default"=false})
      */
-    public $locked = false;
+    public bool $locked = false;
 
     /**
      * @var ForumForum
      * @ORM\ManyToOne(targetEntity="App\Entity\ForumForum", inversedBy="discussions")
      * @ORM\JoinColumn(name="forumid", referencedColumnName="forumid")
      */
-    public $forum;
+    public ForumForum $forum;
 
     /**
      * @var User
      * @ORM\ManyToOne(targetEntity="App\Entity\User")
      * @ORM\JoinColumn(name="authorid", referencedColumnName="uid")
      */
-    public $author;
+    public User $author;
 
     /**
      * @var ForumPost[]

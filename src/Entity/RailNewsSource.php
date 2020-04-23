@@ -17,31 +17,31 @@ class RailNewsSource extends Entity
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $id;
+    protected int $id;
 
     /**
      * @var string
      * @ORM\Column(name="snb_bron", type="string", length=7, nullable=false)
      */
-    public $name;
+    public string $name;
 
     /**
      * @var string
      * @ORM\Column(name="snb_logo", type="string", length=25, nullable=false)
      */
-    public $logo;
+    public string $logo;
 
     /**
      * @var string
      * @ORM\Column(name="snb_url", type="string", length=30, nullable=false)
      */
-    public $url;
+    public string $url;
 
     /**
      * @var string
      * @ORM\Column(name="snb_description", type="string", length=100, nullable=false)
      */
-    public $description;
+    public string $description;
 
     /**
      * @var RailNews

@@ -16,37 +16,37 @@ class ApiLog
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $id;
+    private int $id;
 
     /**
      * @var string|null
      * @ORM\Column(name="station", type="string", length=10, nullable=true)
      */
-    public $station;
+    public ?string $station;
 
     /**
      * @var string|null
      * @ORM\Column(name="tijd", type="string", length=5, nullable=true)
      */
-    public $time;
+    public ?string $time;
 
     /**
      * @var int|null
      * @ORM\Column(name="dagnr", type="bigint", nullable=true)
      */
-    public $dayNumber;
+    public ?int $dayNumber;
 
     /**
      * @var int|null
      * @ORM\Column(name="resultaat_id", type="bigint", nullable=true)
      */
-    public $resultId;
+    public ?int $resultId;
 
     /**
      * @var int|null
      * @ORM\Column(name="datumtijd", type="bigint", nullable=true)
      */
-    public $dateTime;
+    public ?int $dateTime;
 
     /**
      * @return int

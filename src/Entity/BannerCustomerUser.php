@@ -14,31 +14,31 @@ class BannerCustomerUser
      * @var bool
      * @ORM\Column(name="allowed_new", type="boolean", nullable=false, options={"default"=false})
      */
-    public $allowedNew = false;
+    public bool $allowedNew = false;
 
     /**
      * @var bool
      * @ORM\Column(name="allowed_max_views", type="boolean", nullable=false, options={"default"=false})
      */
-    public $allowedMaxViews = false;
+    public bool $allowedMaxViews = false;
 
     /**
      * @var bool
      * @ORM\Column(name="allowed_max_hits", type="boolean", nullable=false, options={"default"=false})
      */
-    public $allowedMaxHits = false;
+    public bool $allowedMaxHits = false;
 
     /**
      * @var bool
      * @ORM\Column(name="allowed_max_date", type="boolean", nullable=false, options={"default"=false})
      */
-    public $allowedMaxDate = false;
+    public bool $allowedMaxDate = false;
 
     /**
      * @var bool
      * @ORM\Column(name="allowed_deactivate", type="boolean", nullable=false, options={"default"=false})
      */
-    public $allowedDeactivate = false;
+    public bool $allowedDeactivate = false;
 
     /**
      * @var BannerCustomer
@@ -46,7 +46,7 @@ class BannerCustomerUser
      * @ORM\ManyToOne(targetEntity="App\Entity\BannerCustomer", inversedBy="customerUsers")
      * @ORM\JoinColumn(name="id", referencedColumnName="id")
      */
-    public $customer;
+    public BannerCustomer $customer;
 
     /**
      * @var User
@@ -54,5 +54,5 @@ class BannerCustomerUser
      * @ORM\ManyToOne(targetEntity="App\Entity\User")
      * @ORM\JoinColumn(name="uid", referencedColumnName="uid")
      */
-    public $user;
+    public User $user;
 }

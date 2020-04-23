@@ -16,7 +16,7 @@ class ForumSearchList
      * @ORM\JoinColumn(name="woord_id", referencedColumnName="woord_id")
      * @ORM\Id
      */
-    public $word;
+    public ForumSearchWord $word;
 
     /**
      * @var ForumPost
@@ -24,11 +24,11 @@ class ForumSearchList
      * @ORM\JoinColumn(name="postid", referencedColumnName="postid")
      * @ORM\Id
      */
-    public $post;
+    public ForumPost $post;
 
     /**
-     * @var boolean
+     * @var bool
      * @ORM\Column(name="titel", type="boolean", nullable=false)
      */
-    public $title = false;
+    public bool $title = false;
 }

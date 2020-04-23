@@ -18,31 +18,31 @@ class News extends Entity
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $id;
+    protected int $id;
 
     /**
      * @var DateTime
      * @ORM\Column(name="timestamp", type="datetime", nullable=false)
      */
-    public $timestamp;
+    public DateTime $timestamp;
 
     /**
      * @var string
      * @ORM\Column(name="title", type="string", length=50, nullable=false)
      */
-    public $title = '';
+    public string $title = '';
 
     /**
      * @var string
      * @ORM\Column(name="text", type="text", length=0, nullable=false)
      */
-    public $text;
+    public string $text;
 
     /**
-     * @var boolean
+     * @var bool
      * @ORM\Column(name="archief", type="boolean", nullable=false)
      */
-    public $archived = false;
+    public bool $archived = false;
 
     /**
      * @var User[]

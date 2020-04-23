@@ -16,7 +16,7 @@ class RouteTrain
      * @ORM\JoinColumn(name="tdr_nr", referencedColumnName="tdr_nr")
      * @ORM\Id
      */
-    public $trainTableYear;
+    public TrainTable $trainTableYear;
 
     /**
      * @var Route
@@ -24,7 +24,7 @@ class RouteTrain
      * @ORM\JoinColumn(name="treinid", referencedColumnName="treinid")
      * @ORM\Id
      */
-    public $route;
+    public Route $route;
 
     /**
      * @var Position
@@ -32,32 +32,32 @@ class RouteTrain
      * @ORM\JoinColumn(name="posid", referencedColumnName="posid")
      * @ORM\Id
      */
-    public $position;
+    public Position $position;
 
     /**
      * @var int
      * @ORM\Column(name="dag", type="bigint", nullable=false)
      * @ORM\Id
      */
-    public $dayNumber;
+    public int $dayNumber;
 
     /**
      * @var int
      * @ORM\Column(name="spots", type="bigint", nullable=false)
      */
-    public $numberOfSpots = 0;
+    public int $numberOfSpots = 0;
 
     /**
      * @var TrainNameRange
      * @ORM\ManyToOne(targetEntity="App\Entity\TrainNameRange")
      * @ORM\JoinColumn(name="mat_naam_id", referencedColumnName="id")
      */
-    public $trainNameRange;
+    public TrainNameRange $trainNameRange;
 
     /**
      * @var TrainTypeNamePattern
      * @ORM\ManyToOne(targetEntity="App\Entity\TrainTypeNamePattern")
      * @ORM\JoinColumn(name="mat_type_id", referencedColumnName="id")
      */
-    public $trainTypeNamePattern;
+    public TrainTypeNamePattern $trainTypeNamePattern;
 }

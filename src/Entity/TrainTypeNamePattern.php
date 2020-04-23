@@ -16,23 +16,23 @@ class TrainTypeNamePattern extends Entity
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $id;
+    protected int $id;
 
     /**
      * @var string
      * @ORM\Column(name="mattype", type="string", length=6, nullable=false)
      */
-    public $name;
+    public string $name;
 
     /**
      * @var string
      * @ORM\Column(name="omschrijving", type="string", length=32, nullable=false)
      */
-    public $description;
+    public string $description;
 
     /**
      * @var string
      * @ORM\Column(name="pattern_id_list", type="string", length=100, nullable=false)
      */
-    public $patternIdList;
+    public string $patternIdList;
 }

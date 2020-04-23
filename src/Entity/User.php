@@ -25,19 +25,19 @@ class User extends Entity implements UserInterface
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $id;
+    protected int $id;
 
     /**
-     * @var boolean
+     * @var bool
      * @ORM\Column(name="active", type="boolean", nullable=false)
      */
-    public $active = false;
+    public bool $active = false;
 
     /**
      * @var int
      * @ORM\Column(name="spots_ok", type="integer", nullable=false)
      */
-    public $spotsOk = 0;
+    public int $spotsOk = 0;
 
     /**
      * @var string
@@ -50,19 +50,19 @@ class User extends Entity implements UserInterface
      *     maxMessage = "De gebruikersnaam mag maximaal 10 karakters lang zijn"
      * )
      */
-    public $username = '';
+    public string $username = '';
 
     /**
      * @var string|null
      * @ORM\Column(name="name", type="string", length=40, nullable=true)
      */
-    public $name;
+    public ?string $name;
 
     /**
      * @var string
      * @ORM\Column(name="password", type="string", length=255, nullable=false)
      */
-    public $password = '';
+    public string $password = '';
 
     /**
      * @var string
@@ -70,44 +70,44 @@ class User extends Entity implements UserInterface
      * @Assert\NotBlank()
      * @Assert\Email(message="Dit is geen geldig e-mailadres")
      */
-    public $email = '';
+    public string $email = '';
 
     /**
      * @var string
      * @ORM\Column(name="cookie_ok", type="string", length=3, nullable=false)
      * @Assert\Choice(choices=User::COOKIE_VALUES)
      */
-    public $cookieOk = self::COOKIE_UNKNOWN;
+    public string $cookieOk = self::COOKIE_UNKNOWN;
 
     /**
-     * @var string
+     * @var string|null
      * @ORM\Column(name="actkey", type="string", length=13, nullable=true)
      */
-    public $activationKey;
+    public ?string $activationKey;
 
     /**
      * @var DateTime
      * @ORM\Column(name="regdate", type="datetime", nullable=false)
      */
-    public $registrationTimestamp;
+    public DateTime $registrationTimestamp;
 
     /**
-     * @var DateTime
+     * @var DateTime|null
      * @ORM\Column(name="last_visit", type="datetime", nullable=true)
      */
-    public $lastVisit;
+    public ?DateTime $lastVisit;
 
     /**
      * @var array
      * @ORM\Column(name="roles", type="array", nullable=false)
      */
-    public $roles = [];
+    public array $roles = [];
 
     /**
      * @var UserInfo
      * @ORM\OneToOne(targetEntity="App\Entity\UserInfo", mappedBy="user")
      */
-    public $info;
+    public UserInfo $info;
 
     /**
      * @var Group[]

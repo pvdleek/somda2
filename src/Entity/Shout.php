@@ -17,30 +17,30 @@ class Shout extends Entity
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $id;
+    protected int $id;
 
     /**
      * @var int
      * @ORM\Column(name="sht_ip", type="bigint", nullable=false)
      */
-    public $ipAddress;
+    public int $ipAddress;
 
     /**
      * @var DateTime
      * @ORM\Column(name="sht_datumtijd", type="datetime", nullable=false)
      */
-    public $timestamp;
+    public DateTime $timestamp;
 
     /**
      * @var string
      * @ORM\Column(name="sht_text", type="string", length=255, nullable=false)
      */
-    public $text;
+    public string $text;
 
     /**
      * @var User
      * @ORM\ManyToOne(targetEntity="App\Entity\User")
      * @ORM\JoinColumn(name="sht_uid", referencedColumnName="uid")
      */
-    public $author;
+    public User $author;
 }

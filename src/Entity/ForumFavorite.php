@@ -22,7 +22,7 @@ class ForumFavorite
      * @ORM\JoinColumn(name="discussionid", referencedColumnName="discussionid")
      * @ORM\Id
      */
-    public $discussion;
+    public ForumDiscussion $discussion;
 
     /**
      * @var User
@@ -30,12 +30,12 @@ class ForumFavorite
      * @ORM\JoinColumn(name="uid", referencedColumnName="uid")
      * @ORM\Id
      */
-    public $user;
+    public User $user;
 
     /**
      * @var int
      * @ORM\Column(name="alerting", type="bigint", nullable=false)
      * @Assert\Choice(choices=ForumFavorite::ALERTING_VALUES)
      */
-    public $alerting = self::ALERTING_OFF;
+    public int $alerting = self::ALERTING_OFF;
 }

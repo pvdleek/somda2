@@ -16,23 +16,23 @@ class PoiText
      * @ORM\JoinColumn(name="puntid", referencedColumnName="puntid")
      * @ORM\Id
      */
-    public $poi;
+    public Poi $poi;
 
     /**
      * @var string
      * @ORM\Column(name="route_auto", type="text", length=0, nullable=false)
      */
-    public $routeCar;
+    public string $routeCar;
 
     /**
      * @var string
      * @ORM\Column(name="route_ov", type="text", length=0, nullable=false)
      */
-    public $routePublicTransport;
+    public string $routePublicTransport;
 
     /**
      * @var string
      * @ORM\Column(name="bijzonderheden", type="text", length=0, nullable=false)
      */
-    public $particularities;
+    public string $particularities;
 }

@@ -6,6 +6,5 @@
 
 <br />
 <div class="home-panel-buttons">
-	<a class="somda-button" href="#" onclick="document.location='{{ path('passing_routes_search', { 'trainTableIndexNumber': defaultTrainTableYearId, 'dayNumber': ('now' | date('n')), 'startTime': 'start', 'endTime': 'end', 'locationName': 'location' }) }}'.replace('/start/', '/' + document.getElementById('start_time').value + '/').replace('/end/', '/' + document.getElementById('end_time').value + '/').replace('/location/', '/' + document.getElementById('location').value + '/'); return false;">Vraag op</a>
-	<a class="somda-button" href="/instellingen/">Stel standaard-locatie in</a>
+	<a class="somda-button" href="#" onclick="document.location='{{ path('passing_routes_search', { 'trainTableIndexNumber': 0, 'dayNumber': ('now' | date('n')), 'startTime': 'start', 'endTime': 'end', 'locationName': 'location' }) }}'.replace('/start/', '/' + document.getElementById('start_time').value + '/').replace('/end/', '/' + document.getElementById('end_time').value + '/').replace('/location/', '/' + document.getElementById('location').value + '/'); return false;">Vraag op</a>
 </div>

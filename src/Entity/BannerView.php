@@ -16,24 +16,24 @@ class BannerView extends Entity
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $id;
+    protected int $id;
 
     /**
      * @var int
      * @ORM\Column(name="datumtijd", type="bigint", nullable=false)
      */
-    public $timestamp;
+    public int $timestamp;
 
     /**
      * @var int
      * @ORM\Column(name="ip", type="bigint", nullable=false)
      */
-    public $ipAddress;
+    public int $ipAddress;
 
     /**
      * @var Banner
      * @ORM\ManyToOne(targetEntity="App\Entity\Banner", inversedBy="bannerViews")
      * @ORM\JoinColumn(name="bannerid", referencedColumnName="bannerid")
      */
-    public $banner;
+    public Banner $banner;
 }

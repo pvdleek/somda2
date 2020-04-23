@@ -4,14 +4,36 @@ namespace App\Controller;
 
 use App\Entity\Jargon;
 use App\Entity\Location;
+use App\Helpers\TemplateHelper;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Response;
 
-class InformationController extends BaseController
+class InformationController
 {
     const SEARCH_METHOD_CHARACTER = 'letter';
     const SEARCH_METHOD_SINGLE = 'specifiek';
     const SEARCH_METHOD_NAME = 'naam';
     const SEARCH_METHOD_DESCRIPTION = 'omschrijving';
+
+    /**
+     * @var ManagerRegistry
+     */
+    private $doctrine;
+
+    /**
+     * @var TemplateHelper
+     */
+    private $templateHelper;
+
+    /**
+     * @param ManagerRegistry $doctrine
+     * @param TemplateHelper $templateHelper
+     */
+    public function __construct(ManagerRegistry $doctrine, TemplateHelper $templateHelper)
+    {
+        $this->doctrine = $doctrine;
+        $this->templateHelper = $templateHelper;
+    }
 
     /**
      * @param string|null $searchMethod
@@ -20,9 +42,6 @@ class InformationController extends BaseController
      */
     public function locationsAction(string $searchMethod = null, string $search = null): Response
     {
-        $this->breadcrumbHelper->addPart('general.navigation.information.home', 'information_home');
-        $this->breadcrumbHelper->addPart('general.navigation.information.locations', 'location', [], true);
-
         switch($searchMethod) {
             case self::SEARCH_METHOD_CHARACTER:
                 $locations = $this->doctrine->getRepository(Location::class)->findByName($search . '%');
@@ -41,7 +60,7 @@ class InformationController extends BaseController
                 break;
         }
 
-        return $this->render('information/locations.html.twig', [
+        return $this->templateHelper->render('information/locations.html.twig', [
             'search' => $search,
             'locations' => $locations,
         ]);
@@ -52,10 +71,7 @@ class InformationController extends BaseController
      */
     public function jargonAction(): Response
     {
-        $this->breadcrumbHelper->addPart('general.navigation.information.home', 'information_home');
-        $this->breadcrumbHelper->addPart('general.navigation.information.jargon', 'jargon', [], true);
-
-        return $this->render('information/jargon.html.twig', [
+        return $this->templateHelper->render('information/jargon.html.twig', [
             'jargons' => $this->doctrine->getRepository(Jargon::class)->findAll()
         ]);
     }
@@ -65,9 +81,6 @@ class InformationController extends BaseController
      */
     public function uicAction(): Response
     {
-        $this->breadcrumbHelper->addPart('general.navigation.information.home', 'information_home');
-        $this->breadcrumbHelper->addPart('general.navigation.information.uic', 'uic', [], true);
-
-        return $this->render('information/uic.html.twig');
+        return $this->templateHelper->render('information/uic.html.twig');
     }
 }

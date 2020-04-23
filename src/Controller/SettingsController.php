@@ -4,13 +4,43 @@ namespace App\Controller;
 
 use App\Entity\UserPreference;
 use App\Form\UserPreferences;
+use App\Helpers\FormHelper;
+use App\Helpers\TemplateHelper;
+use App\Helpers\UserHelper;
 use Exception;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class SettingsController extends BaseController
+class SettingsController
 {
+    /**
+     * @var FormHelper
+     */
+    private $formHelper;
+
+    /**
+     * @var UserHelper
+     */
+    private $userHelper;
+
+    /**
+     * @var TemplateHelper
+     */
+    private $templateHelper;
+
+    /**
+     * @param FormHelper $formHelper
+     * @param UserHelper $userHelper
+     * @param TemplateHelper $templateHelper
+     */
+    public function __construct(FormHelper $formHelper, UserHelper $userHelper, TemplateHelper $templateHelper)
+    {
+        $this->formHelper = $formHelper;
+        $this->userHelper = $userHelper;
+        $this->templateHelper = $templateHelper;
+    }
+
     /**
      * @param Request $request
      * @return Response|RedirectResponse
@@ -21,10 +51,10 @@ class SettingsController extends BaseController
         /**
          * @var UserPreference[] $allSettings
          */
-        $allSettings = $this->doctrine->getRepository(UserPreference::class)->findBy([], ['order' => 'ASC']);
-        $form = $this->formFactory->create(
+        $allSettings = $this->formHelper->getDoctrine()->getRepository(UserPreference::class)->findBy([], ['order' => 'ASC']);
+        $form = $this->formHelper->getFactory()->create(
             UserPreferences::class,
-            $this->getUser(),
+            $this->userHelper->getUser(),
             ['userHelper' => $this->userHelper, 'allSettings' => $allSettings]
         );
 
@@ -32,7 +62,7 @@ class SettingsController extends BaseController
         if ($form->isSubmitted() && $form->isValid()) {
             foreach ($allSettings as $setting) {
                 if ($setting->order > 0) {
-                    $userPreference = $this->userHelper->getPreferenceByKey($setting->key, $this->getUser());
+                    $userPreference = $this->userHelper->getPreferenceByKey($setting->key);
                     if (is_object($form->get($setting->key)->getData())) {
                         $userPreference->value = $form->get($setting->key)->getData()->name;
                     } else {
@@ -40,14 +70,11 @@ class SettingsController extends BaseController
                     }
                 }
             }
-            $this->doctrine->getManager()->flush();
 
-            $this->addFlash(self::FLASH_TYPE_INFORMATION, 'Je instellingen zijn opgeslagen');
-
-            return $this->redirectToRoute('settings');
+            return $this->formHelper->finishFormHandling('Je instellingen zijn opgeslagen', 'settings');
         }
 
-        return $this->render('settings/index.html.twig', [
+        return $this->templateHelper->render('settings/index.html.twig', [
             'form' => $form->createView(),
         ]);
     }

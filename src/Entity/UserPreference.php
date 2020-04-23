@@ -59,36 +59,36 @@ class UserPreference extends Entity
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $id;
+    protected int $id;
 
     /**
      * @var string
      * @ORM\Column(name="sleutel", type="string", length=25, nullable=false)
      * @Assert\Choice(choices=UserPreference::KEY_VALUES)
      */
-    public $key;
+    public string $key;
 
     /**
      * @var string
      * @ORM\Column(name="type", type="string", length=50, nullable=false)
      */
-    public $type = '';
+    public string $type = '';
 
     /**
      * @var string
      * @ORM\Column(name="description", type="string", length=90, nullable=false)
      */
-    public $description = '';
+    public string $description = '';
 
     /**
      * @var string
      * @ORM\Column(name="default_value", type="string", length=100, nullable=false)
      */
-    public $defaultValue = '';
+    public string $defaultValue = '';
 
     /**
      * @var int
      * @ORM\Column(name="volgorde", type="bigint", nullable=false)
      */
-    public $order;
+    public int $order;
 }

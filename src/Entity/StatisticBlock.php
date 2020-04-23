@@ -17,7 +17,7 @@ class StatisticBlock
      * @ORM\JoinColumn(name="blokid", referencedColumnName="blokid")
      * @ORM\Id
      */
-    public $block;
+    public Block $block;
 
     /**
      * @var DateTime
@@ -25,11 +25,11 @@ class StatisticBlock
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
      */
-    public $date;
+    public DateTime $date;
 
     /**
      * @var int
      * @ORM\Column(name="pageviews", type="bigint", nullable=false)
      */
-    public $views = 0;
+    public int $views = 0;
 }

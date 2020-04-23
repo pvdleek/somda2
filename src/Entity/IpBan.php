@@ -16,42 +16,42 @@ class IpBan extends Entity
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $id;
+    protected int $id;
 
     /**
      * @var string|null
      * @ORM\Column(name="ipb_name", type="string", length=20, nullable=true)
      */
-    public $name;
+    public ?string $name;
 
     /**
      * @var int|null
      * @ORM\Column(name="ipb_ip", type="bigint", nullable=true)
      */
-    public $ipAddress;
+    public ?int $ipAddress;
 
     /**
      * @var int|null
      * @ORM\Column(name="ipb_datetime", type="bigint", nullable=true)
      */
-    public $timestamp;
+    public ?int $timestamp;
 
     /**
      * @var int|null
      * @ORM\Column(name="ipb_ban_hours", type="bigint", nullable=true)
      */
-    public $duration;
+    public ?int $duration;
 
     /**
      * @var string|null
      * @ORM\Column(name="ipb_reason", type="string", length=50, nullable=true)
      */
-    public $reason;
+    public ?string $reason;
 
     /**
      * @var User
      * @ORM\ManyToOne(targetEntity="App\Entity\User")
      * @ORM\JoinColumn(name="ipb_uid", referencedColumnName="uid")
      */
-    public $user;
+    public User $user;
 }

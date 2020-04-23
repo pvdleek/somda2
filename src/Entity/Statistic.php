@@ -17,47 +17,47 @@ class Statistic extends Entity
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $id;
+    protected int $id;
 
     /**
      * @var DateTime
      * @ORM\Column(name="datum", type="datetime", nullable=false)
      */
-    public $timestamp;
+    public DateTime $timestamp;
 
     /**
      * @var int
      * @ORM\Column(name="uniek", type="bigint", nullable=false)
      */
-    public $visitorsUnique = 0;
+    public int $visitorsUnique = 0;
 
     /**
      * @var int
      * @ORM\Column(name="pageviews", type="bigint", nullable=false)
      */
-    public $visitorsTotal = 0;
+    public int $visitorsTotal = 0;
 
     /**
      * @var int
      * @ORM\Column(name="pageviews_home", type="bigint", nullable=false)
      */
-    public $visitorsHome = 0;
+    public int $visitorsHome = 0;
 
     /**
      * @var int
      * @ORM\Column(name="pageviews_func", type="bigint", nullable=false)
      */
-    public $visitorsFunctions = 0;
+    public int $visitorsFunctions = 0;
 
     /**
      * @var int
      * @ORM\Column(name="spots", type="bigint", nullable=false)
      */
-    public $numberOfSpots = 0;
+    public int $numberOfSpots = 0;
 
     /**
      * @var int
      * @ORM\Column(name="posts", type="bigint", nullable=false)
      */
-    public $numberOfPosts = 0;
+    public int $numberOfPosts = 0;
 }

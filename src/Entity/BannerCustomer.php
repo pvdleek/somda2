@@ -17,31 +17,31 @@ class BannerCustomer extends Entity
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $id;
+    protected int $id;
 
     /**
      * @var string
      * @ORM\Column(name="name", type="string", length=6, nullable=false)
      */
-    public $name;
+    public string $name;
 
     /**
      * @var int|null
      * @ORM\Column(name="max_views", type="bigint", nullable=true)
      */
-    public $maxViews;
+    public ?int $maxViews;
 
     /**
      * @var int|null
      * @ORM\Column(name="max_hits", type="bigint", nullable=true)
      */
-    public $maxHits;
+    public ?int $maxHits;
 
     /**
      * @var int|null
      * @ORM\Column(name="max_days", type="bigint", nullable=true)
      */
-    public $maxDays;
+    public ?int $maxDays;
 
     /**
      * @var Banner[]

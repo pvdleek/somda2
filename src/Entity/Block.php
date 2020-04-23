@@ -17,44 +17,44 @@ class Block extends Entity
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $id;
+    protected int $id;
 
     /**
      * @var string
      * @ORM\Column(name="name", type="string", length=55, nullable=false)
      */
-    public $name;
+    public string $name;
 
     /**
      * @var string
      * @ORM\Column(name="route", type="string", length=45, nullable=false)
      */
-    public $route;
+    public string $route;
 
     /**
-     * @var string
+     * @var string|null
      * @ORM\Column(name="role", type="string", length=50, nullable=true)
      */
-    public $role;
+    public ?string $role;
 
     /**
      * @var int
      * @ORM\Column(name="menu_volgorde", type="bigint", nullable=false)
      */
-    public $menuOrder;
+    public int $menuOrder;
 
     /**
-     * @var int
+     * @var bool
      * @ORM\Column(name="do_separator", type="boolean", nullable=false)
      */
-    public $doSeparator = false;
+    public bool $doSeparator = false;
 
     /**
      * @var Block
      * @ORM\ManyToOne(targetEntity="App\Entity\Block", inversedBy="children")
      * @ORM\JoinColumn(name="parent_block", referencedColumnName="blokid")
      */
-    public $parent;
+    public Block $parent;
 
     /**
      * @var Block[]

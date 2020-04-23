@@ -22,19 +22,19 @@ class ForumPostLog extends Entity
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $id;
+    protected int $id;
 
     /**
      * @var ForumPost
      * @ORM\ManyToOne(targetEntity="App\Entity\ForumPost", inversedBy="logs")
      * @ORM\JoinColumn(name="postid", referencedColumnName="postid")
      */
-    public $post;
+    public ForumPost $post;
 
     /**
      * @var int
      * @ORM\Column(name="actie", type="bigint", nullable=false)
      * @Assert\Choice(choices=ForumPostLog::ACTION_VALUES)
      */
-    public $action = self::ACTION_POST_NEW;
+    public int $action = self::ACTION_POST_NEW;
 }

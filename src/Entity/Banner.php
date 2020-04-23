@@ -21,73 +21,73 @@ class Banner extends Entity
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $id;
+    protected int $id;
 
     /**
      * @var string|null
      * @ORM\Column(name="code", type="string", length=6, nullable=true)
      */
-    public $code;
+    public ?string $code;
 
     /**
      * @var bool
      * @ORM\Column(name="active", type="boolean", nullable=false, options={"default"=false})
      */
-    public $active = false;
+    public bool $active = false;
 
     /**
      * @var string
      * @ORM\Column(name="location", type="string", length=6, nullable=false, options={"default"="header"})
      */
-    public $location = self::LOCATION_HEADER;
+    public string $location = self::LOCATION_HEADER;
 
     /**
      * @var string|null
      * @ORM\Column(name="description", type="text", length=0, nullable=true)
      */
-    public $description;
+    public ?string $description;
 
     /**
      * @var string
      * @ORM\Column(name="link", type="string", length=100, nullable=false)
      */
-    public $link = '';
+    public string $link = '';
 
     /**
      * @var string|null
      * @ORM\Column(name="image", type="string", length=100, nullable=true)
      */
-    public $image;
+    public ?string $image;
 
     /**
      * @var string
      * @ORM\Column(name="email", type="string", length=50, nullable=false)
      */
-    public $email = '';
+    public string $email = '';
 
     /**
      * @var int
-     * @ORM\Column(name="max_views", type="bigint", nullable=true)
+     * @ORM\Column(name="max_views", type="bigint", nullable=false, options={"default"="0"})
      */
-    public $maxViews = 0;
+    public int $maxViews = 0;
 
     /**
      * @var int
-     * @ORM\Column(name="max_hits", type="bigint", nullable=true)
+     * @ORM\Column(name="max_hits", type="bigint", nullable=false, options={"default"="0"})
      */
-    public $maxHits = 0;
+    public int $maxHits = 0;
 
     /**
      * @var DateTime|null
      * @ORM\Column(name="start_date", type="datetime", nullable=true)
      */
-    public $startTimestamp;
+    public ?DateTime $startTimestamp;
 
     /**
      * @var DateTime|null
      * @ORM\Column(name="end_date", type="datetime", nullable=true)
      */
-    public $endTimestamp;
+    public ?DateTime $endTimestamp;
 
     /**
      * @var BannerHit[]
@@ -106,7 +106,7 @@ class Banner extends Entity
      * @ORM\ManyToOne(targetEntity="App\Entity\BannerCustomer", inversedBy="banners")
      * @ORM\JoinColumn(name="customerid", referencedColumnName="id")
      */
-    public $customer;
+    public BannerCustomer $customer;
 
     /**
      *

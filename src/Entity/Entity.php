@@ -7,7 +7,7 @@ abstract class Entity
     /**
      * @var int
      */
-    protected $id;
+    protected int $id;
 
     /**
      * @return int

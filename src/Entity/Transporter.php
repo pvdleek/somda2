@@ -17,19 +17,19 @@ class Transporter extends Entity
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $id;
+    protected int $id;
 
     /**
      * @var string
      * @ORM\Column(name="omschrijving", type="string", length=35, nullable=false)
      */
-    public $name = '';
+    public string $name = '';
 
     /**
      * @var string|null
      * @ORM\Column(name="prorail_desc", type="string", length=35, nullable=true)
      */
-    public $proRailDescription = '';
+    public ?string $proRailDescription = '';
 
     /**
      * @var Train[]

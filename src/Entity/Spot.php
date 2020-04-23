@@ -17,52 +17,52 @@ class Spot extends Entity
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $id;
+    protected int $id;
 
     /**
      * @var DateTime
      * @ORM\Column(name="datum", type="datetime", nullable=false)
      */
-    public $timestamp;
+    public DateTime $timestamp;
 
     /**
      * @var Train
      * @ORM\ManyToOne(targetEntity="App\Entity\Train", inversedBy="spots")
      * @ORM\JoinColumn(name="matid", referencedColumnName="matid")
      */
-    public $train;
+    public Train $train;
 
     /**
      * @var Route
      * @ORM\ManyToOne(targetEntity="App\Entity\Route", inversedBy="spots")
      * @ORM\JoinColumn(name="treinid", referencedColumnName="treinid")
      */
-    public $route;
+    public Route $route;
 
     /**
      * @var Position
      * @ORM\ManyToOne(targetEntity="App\Entity\Position")
      * @ORM\JoinColumn(name="posid", referencedColumnName="posid")
      */
-    public $position;
+    public Position $position;
 
     /**
      * @var Location
      * @ORM\ManyToOne(targetEntity="App\Entity\Location", inversedBy="spots")
      * @ORM\JoinColumn(name="locatieid", referencedColumnName="afkid")
      */
-    public $location;
+    public Location $location;
 
     /**
      * @var User
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="spots")
      * @ORM\JoinColumn(name="uid", referencedColumnName="uid")
      */
-    public $user;
+    public User $user;
 
     /**
-     * @var SpotExtra
+     * @var SpotExtra|null
      * @ORM\OneToOne(targetEntity="App\Entity\SpotExtra", mappedBy="spot")
      */
-    public $extra;
+    public ?SpotExtra $extra;
 }

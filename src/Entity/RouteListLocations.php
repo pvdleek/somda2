@@ -16,7 +16,7 @@ class RouteListLocations
      * @ORM\JoinColumn(name="tdr_nr", referencedColumnName="tdr_nr")
      * @ORM\Id
      */
-    public $trainTableYear;
+    public TrainTable $trainTableYear;
 
     /**
      * @var RouteList
@@ -24,7 +24,7 @@ class RouteListLocations
      * @ORM\JoinColumn(name="treinnummerlijst_id", referencedColumnName="id")
      * @ORM\Id
      */
-    public $routeList;
+    public RouteList $routeList;
 
     /**
      * @var int
@@ -32,7 +32,7 @@ class RouteListLocations
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
      */
-    public $type;
+    public int $type;
 
     /**
      * @var int
@@ -40,12 +40,12 @@ class RouteListLocations
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
      */
-    public $order;
+    public int $order;
 
     /**
      * @var Location
      * @ORM\ManyToOne(targetEntity="App\Entity\Location")
      * @ORM\JoinColumn(name="locatieid", referencedColumnName="afkid")
      */
-    public $location;
+    public Location $location;
 }

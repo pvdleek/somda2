@@ -17,7 +17,7 @@ class TrainCompositionProposition
      * @ORM\JoinColumn(name="matsmsid", referencedColumnName="matsmsid")
      * @ORM\Id
      */
-    public $composition;
+    public TrainComposition $composition;
 
     /**
      * @var User
@@ -25,95 +25,95 @@ class TrainCompositionProposition
      * @ORM\JoinColumn(name="uid", referencedColumnName="uid")
      * @ORM\Id
      */
-    public $user;
+    public User $user;
 
     /**
      * @var DateTime
      * @ORM\Column(name="datum", type="datetime", nullable=false)
      */
-    public $timestamp;
+    public DateTime $timestamp;
 
     /**
      * @var string|null
      * @ORM\Column(name="bak1", type="string", length=15, nullable=true)
      */
-    public $car1;
+    public ?string $car1;
 
     /**
      * @var string|null
      * @ORM\Column(name="bak2", type="string", length=15, nullable=true)
      */
-    public $car2;
+    public ?string $car2;
 
     /**
      * @var string|null
      * @ORM\Column(name="bak3", type="string", length=15, nullable=true)
      */
-    public $car3;
+    public ?string $car3;
 
     /**
      * @var string|null
      * @ORM\Column(name="bak4", type="string", length=15, nullable=true)
      */
-    public $car4;
+    public ?string $car4;
 
     /**
      * @var string|null
      * @ORM\Column(name="bak5", type="string", length=15, nullable=true)
      */
-    public $car5;
+    public ?string $car5;
 
     /**
      * @var string|null
      * @ORM\Column(name="bak6", type="string", length=15, nullable=true)
      */
-    public $car6;
+    public ?string $car6;
 
     /**
      * @var string|null
      * @ORM\Column(name="bak7", type="string", length=15, nullable=true)
      */
-    public $car7;
+    public ?string $car7;
 
     /**
      * @var string|null
      * @ORM\Column(name="bak8", type="string", length=15, nullable=true)
      */
-    public $car8;
+    public ?string $car8;
 
     /**
      * @var string|null
      * @ORM\Column(name="bak9", type="string", length=15, nullable=true)
      */
-    public $car9;
+    public ?string $car9;
 
     /**
      * @var string|null
      * @ORM\Column(name="bak10", type="string", length=15, nullable=true)
      */
-    public $car10;
+    public ?string $car10;
 
     /**
      * @var string|null
      * @ORM\Column(name="bak11", type="string", length=15, nullable=true)
      */
-    public $car11;
+    public ?string $car11;
 
     /**
      * @var string|null
      * @ORM\Column(name="bak12", type="string", length=15, nullable=true)
      */
-    public $car12;
+    public ?string $car12;
 
     /**
      * @var string|null
      * @ORM\Column(name="bak13", type="string", length=15, nullable=true)
      */
-    public $car13;
+    public ?string $car13;
 
     /**
      * @var string|null
      * @ORM\Column(name="opmerkingen", type="string", length=255, nullable=true)
      */
-    public $note;
+    public ?string $note;
 }

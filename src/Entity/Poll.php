@@ -18,43 +18,43 @@ class Poll extends Entity
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $id;
+    protected int $id;
 
     /**
      * @var string
      * @ORM\Column(name="question", type="string", length=200, nullable=false)
      */
-    public $question = '';
+    public string $question = '';
 
     /**
      * @var string
      * @ORM\Column(name="opt_a", type="string", length=150, nullable=false)
      */
-    public $optionA = '';
+    public string $optionA = '';
 
     /**
      * @var string
      * @ORM\Column(name="opt_b", type="string", length=150, nullable=false)
      */
-    public $optionB = '';
+    public string $optionB = '';
 
     /**
      * @var string
      * @ORM\Column(name="opt_c", type="string", length=150, nullable=false)
      */
-    public $optionC = '';
+    public string $optionC = '';
 
     /**
      * @var string
      * @ORM\Column(name="opt_d", type="string", length=150, nullable=false)
      */
-    public $optionD = '';
+    public string $optionD = '';
 
     /**
      * @var DateTime
      * @ORM\Column(name="date", type="date", nullable=false)
      */
-    public $timestamp;
+    public DateTime $timestamp;
 
     /**
      * @var PollVote[]

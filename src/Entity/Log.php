@@ -17,31 +17,31 @@ class Log extends Entity
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $id;
+    protected int $id;
 
     /**
      * @var DateTime
      * @ORM\Column(name="datumtijd", type="datetime", nullable=false)
      */
-    public $timestamp;
+    public DateTime $timestamp;
 
     /**
      * @var int
      * @ORM\Column(name="ip", type="bigint", nullable=false)
      */
-    public $ipAddress;
+    public int $ipAddress;
 
     /**
      * @var User
      * @ORM\ManyToOne(targetEntity="App\Entity\User")
      * @ORM\JoinColumn(name="uid", referencedColumnName="uid")
      */
-    public $user;
+    public User $user;
 
     /**
      * @var Block
      * @ORM\ManyToOne(targetEntity="App\Entity\Block")
      * @ORM\JoinColumn(name="blokid", referencedColumnName="blokid")
      */
-    public $block;
+    public Block $block;
 }

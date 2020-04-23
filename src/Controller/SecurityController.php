@@ -8,9 +8,16 @@ use App\Form\User as UserForm;
 use App\Form\UserActivate;
 use App\Form\UserLostPassword;
 use App\Form\UserPassword;
+use App\Helpers\EmailHelper;
+use App\Helpers\FlashHelper;
+use App\Helpers\RedirectHelper;
+use App\Helpers\TemplateHelper;
+use App\Helpers\UserHelper;
 use DateTime;
 use Exception;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Form\FormError;
+use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,8 +25,71 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
-class SecurityController extends BaseController
+class SecurityController
 {
+    /**
+     * @var ManagerRegistry
+     */
+    private $doctrine;
+
+    /**
+     * @var UserHelper
+     */
+    private $userHelper;
+
+    /**
+     * @var RedirectHelper
+     */
+    private $redirectHelper;
+
+    /**
+     * @var FormFactoryInterface
+     */
+    private $formFactory;
+
+    /**
+     * @var TemplateHelper
+     */
+    private $templateHelper;
+
+    /**
+     * @var FlashHelper
+     */
+    private $flashHelper;
+
+    /**
+     * @var EmailHelper
+     */
+    private $emailHelper;
+
+    /**
+     * @param ManagerRegistry $doctrine
+     * @param UserHelper $userHelper
+     * @param RedirectHelper $redirectHelper
+     * @param FormFactoryInterface $formFactory
+     * @param TemplateHelper $templateHelper
+     * @param FlashHelper $flashHelper
+     * @param EmailHelper $emailHelper
+     */
+    public function __construct(
+        ManagerRegistry $doctrine,
+        UserHelper $userHelper,
+        RedirectHelper $redirectHelper,
+        FormFactoryInterface $formFactory,
+        TemplateHelper $templateHelper,
+        FlashHelper $flashHelper,
+        EmailHelper $emailHelper
+    ) {
+        $this->doctrine = $doctrine;
+        $this->userHelper = $userHelper;
+        $this->redirectHelper = $redirectHelper;
+        $this->formFactory = $formFactory;
+        $this->templateHelper = $templateHelper;
+        $this->flashHelper = $flashHelper;
+        $this->emailHelper = $emailHelper;
+    }
+
+
     /**
      * @param AuthenticationUtils $authenticationUtils
      * @param string|null $username
@@ -28,11 +98,11 @@ class SecurityController extends BaseController
      */
     public function loginAction(AuthenticationUtils $authenticationUtils, string $username = null): Response
     {
-         if ($this->userIsLoggedIn()) {
-             return $this->redirectToRoute('home');
+         if ($this->userHelper->userIsLoggedIn()) {
+             return $this->redirectHelper->redirectToRoute('home');
          }
 
-        return $this->render('security/login.html.twig', [
+        return $this->templateHelper->render('security/login.html.twig', [
             'lastUsername' => is_null($username) ? $authenticationUtils->getLastUsername() : $username,
             'error' => $authenticationUtils->getLastAuthenticationError()
         ]);
@@ -43,7 +113,7 @@ class SecurityController extends BaseController
      */
     public function logoutAction(): RedirectResponse
     {
-        return $this->redirectToRoute('home');
+        return $this->redirectHelper->redirectToRoute('home');
     }
 
     /**
@@ -77,26 +147,26 @@ class SecurityController extends BaseController
 
                 $this->doctrine->getManager()->flush();
 
-                if ($this->sendEmail(
+                if ($this->emailHelper->sendEmail(
                     $user,
                     'Jouw registratie bij Somda',
                     'register',
                     ['userId' => $user->getId(), 'activationKey' => $user->activationKey]
                 )) {
-                    $this->addFlash(
-                        self::FLASH_TYPE_INFORMATION,
+                    $this->flashHelper->add(
+                        FlashHelper::FLASH_TYPE_INFORMATION,
                         'Je registratie is geslaagd! Er is een e-mail gestuurd met daarin een link en een ' .
                         'activatiecode. Je kunt op de link klikken of de code op onderstaand scherm invoeren ' .
                         'om jouw account direct actief te maken.'
                     );
 
-                    return $this->redirectToRoute('activate', ['id' => $user->getId()]);
+                    return $this->redirectHelper->redirectToRoute('activate', ['id' => $user->getId()]);
                 } else {
                     $this->doctrine->getManager()->remove($user);
                     $this->doctrine->getManager()->flush();
 
-                    $this->addFlash(
-                        self::FLASH_TYPE_ERROR,
+                    $this->flashHelper->add(
+                        FlashHelper::FLASH_TYPE_ERROR,
                         'Het is niet gelukt een e-mail naar het door jou opgegeven e-mailadres te sturen, ' .
                         'controleer het e-mailadres.'
                     );
@@ -104,7 +174,7 @@ class SecurityController extends BaseController
             }
         }
 
-        return $this->render('security/register.html.twig', ['form' => $form->createView()]);
+        return $this->templateHelper->render('security/register.html.twig', ['form' => $form->createView()]);
     }
 
     /**
@@ -190,6 +260,9 @@ class SecurityController extends BaseController
         }
 
         $form = $this->formFactory->create(UserActivate::class, $user);
+        if (!is_null($key)) {
+            $form->submit(['key' => $key]);
+        }
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -199,29 +272,32 @@ class SecurityController extends BaseController
                 $user->addRole('ROLE_USER');
                 $this->doctrine->getManager()->flush();
 
-                $this->sendEmail($user, 'Welkom op Somda -- Belangrijke informatie', 'new-account');
+                $this->emailHelper->sendEmail($user, 'Welkom op Somda -- Belangrijke informatie', 'new-account');
 
                 // Send the email to the admin account
                 $samePasswordUsers = $this->doctrine->getRepository(User::class)->findBy(
                     ['password' => $user->getPassword()]
                 );
-                $this->sendEmail(
-                    $this->getAdministratorUser(),
+                $this->emailHelper->sendEmail(
+                    $this->userHelper->getAdministratorUser(),
                     'Nieuwe registratie bij Somda',
                     'new-account-admin',
                     ['user' => $user, 'samePasswordUsers' => $samePasswordUsers]
                 );
 
-                $this->addFlash(
-                    self::FLASH_TYPE_INFORMATION,
+                $this->flashHelper->add(
+                    FlashHelper::FLASH_TYPE_INFORMATION,
                     'Jouw account is geactiveerd, je kunt hieronder inloggen'
                 );
-                return $this->redirectToRoute('login_with_username', ['username' => $user->getUsername()]);
+                return $this->redirectHelper->redirectToRoute(
+                    'login_with_username',
+                    ['username' => $user->getUsername()]
+                );
             }
             $form->get('key')->addError(new FormError('De activatie-sleutel is niet correct, probeer het opnieuw'));
         }
 
-        return $this->render('security/activate.html.twig', ['form' => $form->createView()]);
+        return $this->templateHelper->render('security/activate.html.twig', ['form' => $form->createView()]);
     }
 
     /**
@@ -243,7 +319,7 @@ class SecurityController extends BaseController
                 $user->password = password_hash($newPassword, PASSWORD_DEFAULT);
                 $this->doctrine->getManager()->flush();
 
-                $this->sendEmail(
+                $this->emailHelper->sendEmail(
                     $user,
                     'Jouw nieuwe wachtwoord voor Somda',
                     'lost-password',
@@ -251,12 +327,15 @@ class SecurityController extends BaseController
                 );
             }
 
-            $this->addFlash(self::FLASH_TYPE_INFORMATION, 'Er is een e-mail gestuurd met een nieuw wachtwoord');
+            $this->flashHelper->add(
+                FlashHelper::FLASH_TYPE_INFORMATION,
+                'Er is een e-mail gestuurd met een nieuw wachtwoord'
+            );
 
-            return $this->redirectToRoute('lost_password');
+            return $this->redirectHelper->redirectToRoute('lost_password');
         }
 
-        return $this->render('security/lostPassword.html.twig', ['form' => $form->createView()]);
+        return $this->templateHelper->render('security/lostPassword.html.twig', ['form' => $form->createView()]);
     }
 
     /**
@@ -280,21 +359,22 @@ class SecurityController extends BaseController
      */
     public function changePasswordAction(Request $request)
     {
-        if (!$this->userIsLoggedIn()) {
+        if (!$this->userHelper->userIsLoggedIn()) {
             throw new AccessDeniedHttpException();
         }
 
         $form = $this->formFactory->create(UserPassword::class);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getUser()->password = password_hash($form->get('newPassword')->getData(), PASSWORD_DEFAULT);
+            $this->userHelper->getUser()->password =
+                password_hash($form->get('newPassword')->getData(), PASSWORD_DEFAULT);
             $this->doctrine->getManager()->flush();
 
-            $this->addFlash(self::FLASH_TYPE_INFORMATION, 'Jouw wachtwoord is gewijzigd');
+            $this->flashHelper->add(FlashHelper::FLASH_TYPE_INFORMATION, 'Jouw wachtwoord is gewijzigd');
 
-            return $this->redirectToRoute('home');
+            return $this->redirectHelper->redirectToRoute('home');
         }
 
-        return $this->render('security/changePassword.html.twig', ['form' => $form->createView()]);
+        return $this->templateHelper->render('security/changePassword.html.twig', ['form' => $form->createView()]);
     }
 }

@@ -16,7 +16,7 @@ class PollVote
      * @ORM\JoinColumn(name="pollid", referencedColumnName="pollid")
      * @ORM\Id
      */
-    public $poll;
+    public Poll $poll;
 
     /**
      * @var User
@@ -24,11 +24,11 @@ class PollVote
      * @ORM\JoinColumn(name="uid", referencedColumnName="uid")
      * @ORM\Id
      */
-    public $user;
+    public User $user;
 
     /**
      * @var int
      * @ORM\Column(name="vote", type="bigint", nullable=false)
      */
-    public $vote;
+    public int $vote;
 }

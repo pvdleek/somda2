@@ -16,17 +16,17 @@ class ForumPostText
      * @ORM\JoinColumn(name="postid", referencedColumnName="postid")
      * @ORM\Id
      */
-    public $post;
+    public ForumPost $post;
 
     /**
-     * @var boolean
+     * @var bool
      * @ORM\Column(name="new_style", type="boolean", options={"default"=true})
      */
-    public $newStyle = true;
+    public bool $newStyle = true;
 
     /**
      * @var string
      * @ORM\Column(name="text", type="text", length=0, nullable=false)
      */
-    public $text;
+    public string $text;
 }

@@ -16,29 +16,29 @@ class TrainNamePattern extends Entity
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $id;
+    protected int $id;
 
     /**
      * @var int
      * @ORM\Column(name="volgorde", type="bigint", nullable=false)
      */
-    public $order;
+    public int $order;
 
     /**
      * @var string
      * @ORM\Column(name="pattern", type="string", length=80, nullable=false)
      */
-    public $pattern;
+    public string $pattern;
 
     /**
      * @var string
      * @ORM\Column(name="naam", type="string", length=50, nullable=false)
      */
-    public $name;
+    public string $name;
 
     /**
      * @var string|null
      * @ORM\Column(name="tekening", type="string", length=30, nullable=true)
      */
-    public $image;
+    public ?string $image;
 }
