@@ -3,6 +3,7 @@
 namespace App\Security;
 
 use App\Entity\User;
+use App\Form\User as UserForm;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -23,6 +24,9 @@ use Symfony\Component\Security\Http\Util\TargetPathTrait;
 class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
 {
     use TargetPathTrait;
+
+    public const CREDENTIALS_USERNAME = 'username';
+    public const CREDENTIALS_PASSWORD = 'password';
 
     /**
      * @var EntityManagerInterface
@@ -70,11 +74,11 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
     public function getCredentials(Request $request): array
     {
         $credentials = [
-            'username' => $request->request->get('username'),
-            'password' => $request->request->get('password'),
+            self::CREDENTIALS_USERNAME => $request->request->get('username'),
+            self::CREDENTIALS_PASSWORD => $request->request->get('password'),
             'csrf_token' => $request->request->get('_csrf_token'),
         ];
-        $request->getSession()->set(Security::LAST_USERNAME, $credentials['username']);
+        $request->getSession()->set(Security::LAST_USERNAME, $credentials[self::CREDENTIALS_USERNAME]);
 
         return $credentials;
     }
@@ -94,7 +98,9 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
         /**
          * @var User $user
          */
-        $user = $this->entityManager->getRepository(User::class)->findOneBy(['username' => $credentials['username']]);
+        $user = $this->entityManager->getRepository(User::class)->findOneBy([
+            UserForm::FIELD_USERNAME => $credentials[self::CREDENTIALS_USERNAME]
+        ]);
         if (is_null($user)) {
             // Fail authentication with a custom error
             throw new CustomUserMessageAuthenticationException('login.userNotFound');
@@ -111,7 +117,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
      */
     public function checkCredentials($credentials, UserInterface $user): bool
     {
-        return $user->active && password_verify($credentials['password'], $user->password);
+        return $user->active && password_verify($credentials[self::CREDENTIALS_PASSWORD], $user->password);
     }
 
     /**

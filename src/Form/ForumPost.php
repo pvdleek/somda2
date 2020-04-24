@@ -13,6 +13,11 @@ class ForumPost extends AbstractType
 {
     private const QUOTE_HTML = '<blockquote><strong>Quote</strong><hr />%s (%s): %s<hr /></blockquote><br />';
 
+    public const FIELD_EDIT_AS_MODERATOR = 'editAsModerator';
+
+    public const OPTION_QUOTED_POST = 'quotedPost';
+    public const OPTION_EDITED_POST = 'editedPost';
+
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
@@ -20,15 +25,15 @@ class ForumPost extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $data = '';
-        if (!is_null($options['quotedPost'])) {
+        if (!is_null($options[self::OPTION_QUOTED_POST])) {
             $data = sprintf(
                 self::QUOTE_HTML,
-                $options['quotedPost']->author->username,
-                $options['quotedPost']->timestamp->format('d-m-Y H:i:s'),
-                $options['quotedPost']->text->text
+                $options[self::OPTION_QUOTED_POST]->author->username,
+                $options[self::OPTION_QUOTED_POST]->timestamp->format('d-m-Y H:i:s'),
+                $options[self::OPTION_QUOTED_POST]->text->text
             );
-        } elseif (!is_null($options['editedPost'])) {
-            $data = $options['editedPost']->text->text;
+        } elseif (!is_null($options[self::OPTION_EDITED_POST])) {
+            $data = $options[self::OPTION_EDITED_POST]->text->text;
 
         }
 
@@ -43,7 +48,7 @@ class ForumPost extends AbstractType
                 'label' => 'Handtekening gebruiken',
             ]);
 
-        if (!is_null($options['editedPost'])) {
+        if (!is_null($options[self::OPTION_EDITED_POST])) {
             $builder->add('editReason', TextType::class, [
                 'label' => 'Reden voor bewerking (optioneel)',
                 'required' => false,
@@ -56,6 +61,6 @@ class ForumPost extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefaults(['quotedPost' => null, 'editedPost' => null]);
+        $resolver->setDefaults([self::OPTION_QUOTED_POST => null, self::OPTION_EDITED_POST => null]);
     }
 }

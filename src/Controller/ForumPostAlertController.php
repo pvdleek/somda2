@@ -15,6 +15,7 @@ use App\Helpers\TemplateHelper;
 use App\Helpers\UserHelper;
 use DateTime;
 use Exception;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -92,7 +93,7 @@ class ForumPostAlertController
             $forumPostAlert->post = $post;
             $forumPostAlert->sender = $this->userHelper->getUser();
             $forumPostAlert->timestamp = new DateTime();
-            $forumPostAlert->comment = $form->get('comment')->getData();
+            $forumPostAlert->comment = $form->get(ForumPostAlertForm::FIELD_COMMENT)->getData();
             $this->formHelper->getDoctrine()->getManager()->persist($forumPostAlert);
             $post->addAlert($forumPostAlert);
 
@@ -102,7 +103,11 @@ class ForumPostAlertController
                     $moderator,
                     '[Somda-Forum] Een gebruiker heeft een forumbericht gemeld!',
                     'forum-new-alert',
-                    ['post' => $post, 'user' => $this->userHelper->getUser(), 'comment' => $form->get('comment')->getData()]
+                    [
+                        'post' => $post,
+                        'user' => $this->userHelper->getUser(),
+                        'comment' => $form->get(ForumPostAlertForm::FIELD_COMMENT)->getData()
+                    ]
                 );
             }
 
@@ -138,15 +143,7 @@ class ForumPostAlertController
         $form = $this->formHelper->getFactory()->create(ForumPostAlertNoteForm::class);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $forumPostAlertNote = new ForumPostAlertNote();
-            $forumPostAlertNote->alert = $post->getAlerts()[0];
-            $forumPostAlertNote->author = $this->userHelper->getUser();
-            $forumPostAlertNote->timestamp = new DateTime();
-            $forumPostAlertNote->text = $form->get('text')->getData();
-            $forumPostAlertNote->sentToReporter = $form->get('sentToReporter')->getData();
-
-            $this->formHelper->getDoctrine()->getManager()->persist($forumPostAlertNote);
-            $post->getAlerts()[0]->addNote($forumPostAlertNote);
+            $forumPostAlertNote = $this->getNewAlertNote($post, $form);
 
             // Send this alert-note to the forum-moderators
             foreach ($post->discussion->forum->getModerators() as $moderator) {
@@ -160,18 +157,7 @@ class ForumPostAlertController
 
             if ($form->get('sentToReporter')->getData()) {
                 // We need to inform the reporter(s)
-                foreach ($post->getAlerts() as $alert) {
-                    if (!$alert->closed) {
-                        $template = $post->discussion->forum->type === ForumForum::TYPE_MODERATORS_ONLY ?
-                            'forum-alert-follow-up-deleted' : 'forum-alert-follow-up';
-                        $this->emailHelper->sendEmail(
-                            $alert->sender,
-                            '[Somda] Reactie op jouw melding van een forumbericht',
-                            $template,
-                            ['user' => $alert->sender, 'post' => $post, 'note' => $forumPostAlertNote]
-                        );
-                    }
-                }
+                $this->sendNoteToReporters($post, $forumPostAlertNote);
             }
 
             return $this->formHelper->finishFormHandling('', 'forum_discussion_post_alerts', ['id' => $post->getId()]);
@@ -181,6 +167,46 @@ class ForumPostAlertController
             'form' => $form->createView(),
             'post' => $post,
         ]);
+    }
+
+    /**
+     * @param ForumPost $post
+     * @param FormInterface $form
+     * @return ForumPostAlertNote
+     */
+    private function getNewAlertNote(ForumPost $post, FormInterface $form): ForumPostAlertNote
+    {
+        $forumPostAlertNote = new ForumPostAlertNote();
+        $forumPostAlertNote->alert = $post->getAlerts()[0];
+        $forumPostAlertNote->author = $this->userHelper->getUser();
+        $forumPostAlertNote->timestamp = new DateTime();
+        $forumPostAlertNote->text = $form->get('text')->getData();
+        $forumPostAlertNote->sentToReporter = $form->get('sentToReporter')->getData();
+
+        $this->formHelper->getDoctrine()->getManager()->persist($forumPostAlertNote);
+        $post->getAlerts()[0]->addNote($forumPostAlertNote);
+
+        return $forumPostAlertNote;
+    }
+
+    /**
+     * @param ForumPost $post
+     * @param ForumPostAlertNote $forumPostAlertNote
+     */
+    private function sendNoteToReporters(ForumPost $post, ForumPostAlertNote $forumPostAlertNote): void
+    {
+        foreach ($post->getAlerts() as $alert) {
+            if (!$alert->closed) {
+                $template = $post->discussion->forum->type === ForumForum::TYPE_MODERATORS_ONLY ?
+                    'forum-alert-follow-up-deleted' : 'forum-alert-follow-up';
+                $this->emailHelper->sendEmail(
+                    $alert->sender,
+                    '[Somda] Reactie op jouw melding van een forumbericht',
+                    $template,
+                    ['user' => $alert->sender, 'post' => $post, 'note' => $forumPostAlertNote]
+                );
+            }
+        }
     }
 
     /**

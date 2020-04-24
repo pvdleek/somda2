@@ -13,6 +13,10 @@ use Symfony\Component\Validator\Constraints\Regex;
 
 class User extends AbstractType
 {
+    public const FIELD_EMAIL = 'email';
+    public const FIELD_USERNAME = 'username';
+    public const FIELD_PLAIN_PASSWORD = 'plainPassword';
+
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
@@ -20,12 +24,12 @@ class User extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('email', TextType::class, [
+            ->add(self::FIELD_EMAIL, TextType::class, [
                 'attr' => ['maxlength' => 255],
                 'label' => 'Geef jouw e-mailadres',
                 'required' => true,
             ])
-            ->add('username', TextType::class, [
+            ->add(self::FIELD_USERNAME, TextType::class, [
                 'attr' => ['maxlength' => 10],
                 'constraints' => [
                     new Length([
@@ -42,7 +46,7 @@ class User extends AbstractType
                 'label' => 'Kies een gebruikersnaam (maximaal 10 karakters)',
                 'required' => true,
             ])
-            ->add('plainPassword', PasswordType::class, [
+            ->add(self::FIELD_PLAIN_PASSWORD, PasswordType::class, [
                 'constraints' => [
                     new Length(['min' => 8, 'minMessage' => 'Het wachtwoord moet minimaal 8 karakters lang zijn']),
                 ],
@@ -57,8 +61,6 @@ class User extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefaults([
-            'data_class' => UserEntity::class,
-        ]);
+        $resolver->setDefaults(['data_class' => UserEntity::class]);
     }
 }

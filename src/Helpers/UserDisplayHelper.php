@@ -40,7 +40,6 @@ class UserDisplayHelper implements RuntimeExtensionInterface
         }
         $displayUser = '<a href="' . $this->router->generate('profile_view', ['id' => $id]) . '"';
         $displayUser .= ' title="' . sprintf($this->translator->trans('profile.view.title'), $username) . '">';
-        $displayUser .= $username . '</a>';
-        return $displayUser;
+        return $displayUser . $username . '</a>';
     }
 }

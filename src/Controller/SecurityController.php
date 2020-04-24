@@ -134,7 +134,10 @@ class SecurityController
 
             if ($form->isValid()) {
                 $user->active = false;
-                $user->password = password_hash($form->get('plainPassword')->getData(), PASSWORD_DEFAULT);
+                $user->password = password_hash(
+                    $form->get(UserForm::FIELD_PLAIN_PASSWORD)->getData(),
+                    PASSWORD_DEFAULT
+                );
                 $user->activationKey = uniqid();
                 $user->registrationTimestamp = new DateTime();
                 $this->doctrine->getManager()->persist($user);
@@ -183,12 +186,12 @@ class SecurityController
     private function validateUsername(FormInterface $form): void
     {
         $existingUsername = $this->doctrine->getRepository(User::class)->findOneBy(
-            ['username' => $form->get('username')->getData()]
+            [UserForm::FIELD_USERNAME => $form->get(UserForm::FIELD_USERNAME)->getData()]
         );
         if (!is_null($existingUsername)) {
-            $form->get('username')->addError(new FormError(
-                'De gebruikersnaam die je hebt gekozen is al in gebruik, kies een andere gebruikersnaam'
-            ));
+            $form->get(UserForm::FIELD_USERNAME)->addError(
+                new FormError('De gebruikersnaam die je hebt gekozen is al in gebruik, kies een andere gebruikersnaam')
+            );
         }
     }
 
@@ -197,17 +200,17 @@ class SecurityController
      */
     public function validateEmail(FormInterface $form): void
     {
-        if (substr($form->get('email')->getData(), -16) === 'ikbenspamvrij.nl') {
-            $form->get('email')->addError(
+        if (substr($form->get(UserForm::FIELD_EMAIL)->getData(), -16) === 'ikbenspamvrij.nl') {
+            $form->get(UserForm::FIELD_EMAIL)->addError(
                 new FormError('E-mailadressen van ikbenspamvrij.nl zijn niet toegestaan')
             );
         }
 
         $existingEmail = $this->doctrine->getRepository(User::class)->findOneBy(
-            ['email' => $form->get('email')->getData()]
+            [UserForm::FIELD_EMAIL => $form->get(UserForm::FIELD_EMAIL)->getData()]
         );
         if (!is_null($existingEmail)) {
-            $form->get('email')->addError(
+            $form->get(UserForm::FIELD_EMAIL)->addError(
                 new FormError('Het e-mailadres dat je hebt gekozen is al in gebruik, probeer het opnieuw')
             );
         }
@@ -218,24 +221,24 @@ class SecurityController
      */
     public function validatePassword(FormInterface $form): void
     {
-        $plainPassword = $form->get('plainPassword')->getData();
+        $plainPassword = $form->get(UserForm::FIELD_PLAIN_PASSWORD)->getData();
 
-        $username = $form->get('username')->getData();
+        $username = $form->get(UserForm::FIELD_USERNAME)->getData();
         if (stristr($plainPassword, $username) || stristr($username, $plainPassword)
             || stristr(strrev($username), $plainPassword) || stristr($plainPassword, strrev($username))
         ) {
-            $form->get('plainPassword')->addError(
+            $form->get(UserForm::FIELD_PLAIN_PASSWORD)->addError(
                 new FormError('Het wachtwoord dat je hebt gekozen vertoont teveel overeenkomsten ' .
                     'met jouw gebruikersnaam, probeer het opnieuw'
                 )
             );
         }
 
-        $email = $form->get('email')->getData();
+        $email = $form->get(UserForm::FIELD_EMAIL)->getData();
         if (stristr($plainPassword, $email) || stristr($email, $plainPassword)
             || stristr(strrev($email), $plainPassword) || stristr($plainPassword, strrev($email))
         ) {
-            $form->get('plainPassword')->addError(
+            $form->get(UserForm::FIELD_PLAIN_PASSWORD)->addError(
                 new FormError('Het wachtwoord dat je hebt gekozen vertoont teveel overeenkomsten ' .
                     'met jouw e-mailadres, probeer het opnieuw'
                 )
@@ -261,12 +264,12 @@ class SecurityController
 
         $form = $this->formFactory->create(UserActivate::class, $user);
         if (!is_null($key)) {
-            $form->submit(['key' => $key]);
+            $form->submit([UserActivate::FIELD_KEY => $key]);
         }
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            if ($form->get('key')->getData() === $user->activationKey) {
+            if ($form->get(UserActivate::FIELD_KEY)->getData() === $user->activationKey) {
                 $user->active = true;
                 $user->activationKey = null;
                 $user->addRole('ROLE_USER');
@@ -294,7 +297,9 @@ class SecurityController
                     ['username' => $user->getUsername()]
                 );
             }
-            $form->get('key')->addError(new FormError('De activatie-sleutel is niet correct, probeer het opnieuw'));
+            $form->get(UserActivate::FIELD_KEY)->addError(
+                new FormError('De activatie-sleutel is niet correct, probeer het opnieuw')
+            );
         }
 
         return $this->templateHelper->render('security/activate.html.twig', ['form' => $form->createView()]);
@@ -313,7 +318,9 @@ class SecurityController
             /**
              * @var User $user
              */
-            $user = $this->doctrine->getRepository(User::class)->findOneBy(['email' => $form->get('email')->getData()]);
+            $user = $this->doctrine->getRepository(User::class)->findOneBy(
+                [UserForm::FIELD_EMAIL => $form->get(UserForm::FIELD_EMAIL)->getData()]
+            );
             if (!is_null($user)) {
                 $newPassword = $this->getRandomPassword(12);
                 $user->password = password_hash($newPassword, PASSWORD_DEFAULT);

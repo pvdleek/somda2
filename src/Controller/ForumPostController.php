@@ -89,7 +89,9 @@ class ForumPostController
             throw new AccessDeniedHttpException();
         }
 
-        $form = $this->formHelper->getFactory()->create(ForumPostForm::class, null, ['quotedPost' => $quotedPost]);
+        $form = $this->formHelper
+            ->getFactory()
+            ->create(ForumPostForm::class, null, [ForumPostForm::OPTION_QUOTED_POST => $quotedPost]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $this->addPost($form, $quotedPost->discussion);
@@ -183,9 +185,15 @@ class ForumPostController
             throw new AccessDeniedHttpException();
         }
 
-        $form = $this->formHelper->getFactory()->create(ForumPostForm::class, null, ['editedPost' => $post]);
+        $form = $this->formHelper
+            ->getFactory()
+            ->create(ForumPostForm::class, null, [ForumPostForm::OPTION_EDITED_POST => $post]);
         if ($userIsModerator) {
-            $form->add('editAsModerator', CheckboxType::class, ['label' => 'Bewerken als moderator']);
+            $form->add(
+                ForumPostForm::FIELD_EDIT_AS_MODERATOR,
+                CheckboxType::class,
+                ['label' => 'Bewerken als moderator']
+            );
         }
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -210,7 +218,9 @@ class ForumPostController
      */
     private function editPost(FormInterface $form, ForumPost $post): void
     {
-        if ($form->has('editAsModerator') && $form->get('editAsModerator')->getData()) {
+        if ($form->has(ForumPostForm::FIELD_EDIT_AS_MODERATOR)
+            && $form->get(ForumPostForm::FIELD_EDIT_AS_MODERATOR)->getData()
+        ) {
             $editor = $this->userHelper->getModeratorUser();
         } else {
             $editor = $this->userHelper->getUser();

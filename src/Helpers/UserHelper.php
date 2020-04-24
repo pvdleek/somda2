@@ -5,6 +5,7 @@ namespace App\Helpers;
 use App\Entity\User;
 use App\Entity\UserPreference;
 use App\Entity\UserPreferenceValue;
+use App\Exception\UnknownUserPreferenceKey;
 use DateTime;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Exception;
@@ -56,11 +57,7 @@ class UserHelper implements RuntimeExtensionInterface
      */
     public function getAdministratorUser(): User
     {
-        /**
-         * @var User $user
-         */
-        $user = $this->doctrine->getRepository(User::class)->find(self::ADMINISTRATOR_UID);
-        return $user;
+        return $this->doctrine->getRepository(User::class)->find(self::ADMINISTRATOR_UID);
     }
 
     /**
@@ -68,11 +65,7 @@ class UserHelper implements RuntimeExtensionInterface
      */
     public function getModeratorUser(): User
     {
-        /**
-         * @var User $user
-         */
-        $user = $this->doctrine->getRepository(User::class)->find(self::MODERATOR_UID);
-        return $user;
+        return $this->doctrine->getRepository(User::class)->find(self::MODERATOR_UID);
     }
 
     /**
@@ -115,7 +108,7 @@ class UserHelper implements RuntimeExtensionInterface
          */
         $userPreference = $this->doctrine->getRepository(UserPreference::class)->findOneBy(['key' => $key]);
         if (is_null($userPreference)) {
-            throw new Exception('Preference with key "' . $key . '" does not exist');
+            throw new UnknownUserPreferenceKey('Preference with key "' . $key . '" does not exist');
         }
         $userPreferenceValue = new UserPreferenceValue();
         $userPreferenceValue->preference = $userPreference;

@@ -172,7 +172,6 @@ class User extends Entity implements UserInterface
      */
     public function eraseCredentials(): void
     {
-        return;
     }
 
     /**
@@ -188,11 +187,11 @@ class User extends Entity implements UserInterface
      */
     public function getRoles(): array
     {
-        $roles = $this->roles;
+        $roleArray = $this->roles;
         foreach ($this->getGroups() as $group) {
-            $roles = array_merge($roles, $group->roles);
+            $roleArray = array_merge($roleArray, $group->roles);
         }
-        return $roles;
+        return $roleArray;
     }
 
     /**

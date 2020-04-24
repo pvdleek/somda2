@@ -5,6 +5,8 @@ namespace App\Form;
 use App\Entity\Location;
 use App\Entity\User as UserEntity;
 use App\Entity\UserPreference;
+use App\Exception\UnknownUserPreferenceTable;
+use App\Exception\UnknownUserPreferenceType;
 use App\Helpers\UserHelper;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
@@ -47,7 +49,7 @@ class UserPreferences extends AbstractType
 
         foreach ($allSettings as $setting) {
             if ($setting->order > 0) {
-                $value = $userHelper->getPreferenceByKey($setting->key, $builder->getData())->value;
+                $value = $userHelper->getPreferenceByKey($setting->key)->value;
                 $typePart = explode('|', $setting->type);
                 switch($typePart[0]) {
                     case 'number':
@@ -77,7 +79,7 @@ class UserPreferences extends AbstractType
                         break;
                     case 'table':
                         if ($typePart[1] !== 'location') {
-                            throw new Exception(
+                            throw new UnknownUserPreferenceTable(
                                 'Unknown setting table ' . $typePart[1] . ' for key ' . $setting->key
                             );
                         }
@@ -95,7 +97,9 @@ class UserPreferences extends AbstractType
                         ]);
                         break;
                     default:
-                        throw new Exception('Unknown setting type ' . $typePart[0] . ' for key ' . $setting->key);
+                        throw new UnknownUserPreferenceType(
+                            'Unknown setting type ' . $typePart[0] . ' for key ' . $setting->key
+                        );
                 }
             }
         }

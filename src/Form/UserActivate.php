@@ -12,6 +12,8 @@ use Symfony\Component\Validator\Constraints\Regex;
 
 class UserActivate extends AbstractType
 {
+    public const FIELD_KEY = 'key';
+
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
@@ -19,7 +21,7 @@ class UserActivate extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('key', TextType::class, [
+            ->add(self::FIELD_KEY, TextType::class, [
                 'attr' => ['maxlength' => 32],
                 'constraints' => [
                     new Length([
@@ -44,8 +46,6 @@ class UserActivate extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefaults([
-            'data_class' => UserEntity::class,
-        ]);
+        $resolver->setDefaults(['data_class' => UserEntity::class]);
     }
 }

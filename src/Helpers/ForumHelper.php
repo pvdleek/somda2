@@ -24,27 +24,27 @@ class ForumHelper implements RuntimeExtensionInterface
     /**
      * @var ManagerRegistry
      */
-    private $doctrine;
+    private ManagerRegistry $doctrine;
 
     /**
      * @var TranslatorInterface
      */
-    private $translator;
+    private TranslatorInterface $translator;
 
     /**
      * @var array
      */
-    private $locations = null;
+    private ?array $locations = null;
 
     /**
      * @var array
      */
-    private $users = null;
+    private ?array $users = null;
 
     /**
      * @var array
      */
-    private $routes = null;
+    private ?array $routes = null;
 
     /**
      * @param ManagerRegistry $doctrine
@@ -58,9 +58,10 @@ class ForumHelper implements RuntimeExtensionInterface
 
     /**
      * @param ForumPost $post
+     * @param string|null $highlight
      * @return string
      */
-    public function getDisplayForumPost(ForumPost $post): string
+    public function getDisplayForumPost(ForumPost $post, string $highlight = null): string
     {
         if ($post->text->newStyle) {
             $text = strip_tags(
@@ -80,9 +81,9 @@ class ForumHelper implements RuntimeExtensionInterface
         if ($post->signatureOn && strlen($post->author->info->info) > 0) {
             $text .= '<br /><hr style="margin-left:0; width:15%;" />' . $post->author->info->info;
         }
-//        if (isset($highlight) && strlen($highlight) > 0) {
-//            $text = doHighlight($text, $highlight);
-//        }
+        if (!is_null($highlight) && strlen($highlight) > 0) {
+            $text = $this->doHighlight($text, $highlight);
+        }
 
         return $text;
     }
@@ -109,27 +110,6 @@ class ForumHelper implements RuntimeExtensionInterface
         $text = str_replace('%unquote%', ' %unquote%', $text);
 
         $text = $this->doLinksAndSmileys($text);
-
-        // Change the BB codes (limited to [b], [i], [u], [s], [code] and [color]
-        $bbPatterns = [
-            '/\[b\](.+)\[\/b\]/Uis',
-            '/\[i\](.+)\[\/i\]/Uis',
-            '/\[u\](.+)\[\/u\]/Uis',
-            '/\[s\](.+)\[\/s\]/Uis',
-            '/\[code\](.+)\[\/code\]/Uis',
-            '/\[color=(\#[0-9a-f]{6}|[a-z]+)\](.+)\[\/color\]/Ui',
-            '/\[color=(\#[0-9a-f]{6}|[a-z]+)\](.+)\[\/color\]/Uis'
-        ];
-        $bbReplacements = [
-            '<strong>\1</strong>',
-            '<em>\1</em>',
-            '<u>\1</u>',
-            '<s>\1</s>',
-            '<pre>\1</pre>',
-            '<span style = "color: \1;">\2</span>',
-            '<div style = "color: \1;">\2</div>'
-        ];
-        $text = preg_replace($bbPatterns, $bbReplacements, $text);
 
         // Remove all whitespace before %quote%
         $parts = explode('%quote%', $text);
@@ -197,7 +177,7 @@ class ForumHelper implements RuntimeExtensionInterface
         while (strpos($text, '%quote%') !== false) {
             $text = preg_replace(
                 '[%quote%]',
-                '<blockquote><span><font size="1"><b>Quote' . '</b></font></span><hr />',
+                '<blockquote><span style="font-size:8px; font-weight:bold;">Quote' . '</span><hr />',
                 $text,
                 1
             );
@@ -207,18 +187,18 @@ class ForumHelper implements RuntimeExtensionInterface
             $text = preg_replace('[%unquote%]', '<hr /></blockquote> ', $text, 1);
             ++$numberOfUnquote;
         }
-        // Zet quotes vooraan als er teveel unquotes zijn
+
+        // Place extra quotes if necessary
         $doQuotes = $numberOfUnquote - $numberOfQuote;
         for ($doQuote = 0; $doQuote < $doQuotes; ++$doQuote) {
-            $text = '<blockquote><span><font size="1"><strong>Quote' . '</strong></font></span><hr />' . $text;
+            $text = '<blockquote><span style="font-size:8px; font-weight:bold;">Quote' . '</span><hr />' . $text;
         }
-        // Zet unquotes achteraan als er teveel quotes zijn
+        // Place extra unquotes if necessary
         $doQuotes = $numberOfQuote - $numberOfUnquote;
         for ($doUnquote = 0; $doUnquote < $doQuotes; ++$doUnquote) {
             $text .= ' <hr /></blockquote>';
         }
 
-        // Change all ampersands (&) into &amp;
         $text = str_replace('&', '&amp;', $text);
 
         return $text;

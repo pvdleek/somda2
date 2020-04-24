@@ -68,18 +68,27 @@ class RouteOperationDays extends Entity
     {
         switch ($dayNumber) {
             case 0:
-                return $this->monday;
+                $day = $this->monday;
+                break;
             case 1:
-                return $this->tuesday;
+                $day = $this->tuesday;
+                break;
             case 2:
-                return $this->wednesday;
+                $day = $this->wednesday;
+                break;
             case 3:
-                return $this->thursday;
+                $day = $this->thursday;
+                break;
             case 4:
-                return $this->friday;
+                $day = $this->friday;
+                break;
             case 5:
-                return $this->saturday;
+                $day = $this->saturday;
+                break;
+            default:
+                $day = $this->sunday;
+                break;
         }
-        return $this->sunday;
+        return $day;
     }
 }

@@ -59,19 +59,27 @@ class DateHelper implements RuntimeExtensionInterface
     {
         switch ($dayNumber) {
             case 0:
-                return 'monday';
+                $day = 'monday';
+                break;
             case 1:
-                return 'tuesday';
+                $day = 'tuesday';
+                break;
             case 2:
-                return 'wednesday';
+                $day = 'wednesday';
+                break;
             case 3:
-                return 'thursday';
+                $day = 'thursday';
+                break;
             case 4:
-                return 'friday';
+                $day = 'friday';
+                break;
             case 5:
-                return 'saturday';
+                $day = 'saturday';
+                break;
             default:
-                return 'sunday';
+                $day = 'sunday';
+                break;
         }
+        return $day;
     }
 }
