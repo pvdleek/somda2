@@ -14,7 +14,7 @@ final class Version20200424134808 extends AbstractMigration
      */
     public function getDescription() : string
     {
-        return 'Remove use of BB-codes in forum-posts';
+        return 'Remove use of BB-codes and percent-codes in forum-posts';
     }
 
     /**
@@ -59,6 +59,29 @@ final class Version20200424134808 extends AbstractMigration
                         ), \'[S]\', \'<s>\'
                     ), \'[/S]\', \'</s>\'
                 )
+        ');
+
+        $this->addSql('
+            UPDATE `somda_forum_posts_text` SET `text` =
+            REPLACE(
+                REPLACE(
+                    REPLACE(
+                        REPLACE(`text`, \'%b%\', \'</strong>\'),
+                                \'%/b%\', \'</strong>\'
+                            ), \'%i%\', \'<em>\'
+                        ), \'%/i%\', \'</em>\'
+                    )
+        ');
+        $this->addSql('
+            UPDATE `somda_forum_posts_text` SET `text` =
+            REPLACE(
+                REPLACE(
+                    REPLACE(
+                        REPLACE(`text`, \'%B%\', \'</strong>\'),
+                                \'%/B%\', \'</strong>\'
+                            ), \'%I%\', \'<em>\'
+                        ), \'%/I%\', \'</em>\'
+                    )
         ');
     }
 
