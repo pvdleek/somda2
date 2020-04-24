@@ -103,6 +103,7 @@ class SecurityController
          }
 
         return $this->templateHelper->render('security/login.html.twig', [
+            'pageTitle' => 'Inloggen',
             'lastUsername' => is_null($username) ? $authenticationUtils->getLastUsername() : $username,
             'error' => $authenticationUtils->getLastAuthenticationError()
         ]);
@@ -177,7 +178,10 @@ class SecurityController
             }
         }
 
-        return $this->templateHelper->render('security/register.html.twig', ['form' => $form->createView()]);
+        return $this->templateHelper->render('security/register.html.twig', [
+            'pageTitle' => 'Nieuw account aanmaken',
+            'form' => $form->createView(),
+        ]);
     }
 
     /**
@@ -302,7 +306,10 @@ class SecurityController
             );
         }
 
-        return $this->templateHelper->render('security/activate.html.twig', ['form' => $form->createView()]);
+        return $this->templateHelper->render('security/activate.html.twig', [
+            'pageTitle' => 'Account activeren',
+            'form' => $form->createView(),
+        ]);
     }
 
     /**
@@ -342,7 +349,10 @@ class SecurityController
             return $this->redirectHelper->redirectToRoute('lost_password');
         }
 
-        return $this->templateHelper->render('security/lostPassword.html.twig', ['form' => $form->createView()]);
+        return $this->templateHelper->render('security/lostPassword.html.twig', [
+            'pageTitle' => 'Wachtwoord vergeten',
+            'form' => $form->createView(),
+        ]);
     }
 
     /**
@@ -382,6 +392,9 @@ class SecurityController
             return $this->redirectHelper->redirectToRoute('home');
         }
 
-        return $this->templateHelper->render('security/changePassword.html.twig', ['form' => $form->createView()]);
+        return $this->templateHelper->render('security/changePassword.html.twig', [
+            'pageTitle' => 'Wachtwoord wijzigen',
+            'form' => $form->createView(),
+        ]);
     }
 }

@@ -119,6 +119,7 @@ class ForumPostAlertController
         }
 
         return $this->templateHelper->render('forum/alert.html.twig', [
+            'pageTitle' => 'Forum - ' . $post->discussion->title,
             'form' => $form->createView(),
             'post' => $post,
         ]);
@@ -164,6 +165,7 @@ class ForumPostAlertController
         }
 
         return $this->templateHelper->render('forum/alerts.html.twig', [
+            'pageTitle' => 'Forum - ' . $post->discussion->title,
             'form' => $form->createView(),
             'post' => $post,
         ]);

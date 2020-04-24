@@ -61,6 +61,7 @@ class InformationController
         }
 
         return $this->templateHelper->render('information/locations.html.twig', [
+            'pageTitle' => 'Verkortingen',
             'search' => $search,
             'locations' => $locations,
         ]);
@@ -72,6 +73,7 @@ class InformationController
     public function jargonAction(): Response
     {
         return $this->templateHelper->render('information/jargon.html.twig', [
+            'pageTitle' => 'Jargon',
             'jargons' => $this->doctrine->getRepository(Jargon::class)->findAll()
         ]);
     }
@@ -81,6 +83,6 @@ class InformationController
      */
     public function uicAction(): Response
     {
-        return $this->templateHelper->render('information/uic.html.twig');
+        return $this->templateHelper->render('information/uic.html.twig', ['pageTitle' => 'UIC berekenen']);
     }
 }

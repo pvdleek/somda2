@@ -75,6 +75,7 @@ class SettingsController
         }
 
         return $this->templateHelper->render('settings/index.html.twig', [
+            'pageTitle' => 'Instellingen',
             'form' => $form->createView(),
         ]);
     }

@@ -15,7 +15,7 @@
     {% endif %}
 
     {% for alert in post.alerts %}
-        <p class="info">Commentaar van melder <a target="_blank" href="/gebruikerslijst/{{ alert.sender.id }}/">{{ alert.sender.username }}</a> op {{ alert.timestamp | date('d-m-Y') }} om {{ alert.time | date('H:i:s') }}: <strong>{{ alert.comment }}</strong></p>
+        <p class="info">Commentaar van melder <a target="_blank" href="{{ path('profile_view', { 'id': alert.sender.id }) }}">{{ alert.sender.username }}</a> op {{ alert.timestamp | date('d-m-Y') }} om {{ alert.time | date('H:i:s') }}: <strong>{{ alert.comment }}</strong></p>
     {% endfor %}
 
     <table align="center" class="design" width="98%">

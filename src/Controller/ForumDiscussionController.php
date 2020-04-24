@@ -149,6 +149,7 @@ class ForumDiscussionController
         }
 
         return $this->templateHelper->render('forum/discussion.html.twig', [
+            'pageTitle' => 'Forum - ' . $discussion->title,
             'userIsModerator' => $this->forumAuthHelper->userIsModerator($discussion, $this->userHelper->getUser()),
             'discussion' => $discussion,
             'numberOfPages' => $numberOfPages,
@@ -224,6 +225,7 @@ class ForumDiscussionController
         }
 
         return $this->templateHelper->render('forum/newDiscussion.html.twig', [
+            'pageTitle' => 'Forum - ' . $forum->name,
             'form' => $form->createView(),
             'forum' => $forum
         ]);

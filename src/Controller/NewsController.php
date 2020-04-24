@@ -58,13 +58,19 @@ class NewsController
             }
             $this->doctrine->getManager()->flush();
 
-            return $this->templateHelper->render('news/item.html.twig', ['news' => $news]);
+            return $this->templateHelper->render('news/item.html.twig', [
+                'pageTitle' => $news->title,
+                'news' => $news,
+            ]);
         }
 
         /**
          * @var News[] $news
          */
         $news = $this->doctrine->getRepository(News::class)->findBy([], ['timestamp' => 'DESC']);
-        return $this->templateHelper->render('news/index.html.twig', ['news' => $news]);
+        return $this->templateHelper->render('news/index.html.twig', [
+            'pageTitle' => 'Nieuws',
+            'news' => $news,
+        ]);
     }
 }

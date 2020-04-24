@@ -114,6 +114,7 @@ class ProfileController
         }
 
         return $this->templateHelper->render('somda/profile.html.twig', [
+            'pageTitle' => 'Profiel van ' . $user->username,
             'user' => $user,
             'form' => $form ? $form->createView() : null
         ]);
@@ -174,6 +175,10 @@ class ProfileController
             return $this->redirectHelper->redirectToRoute('profile_view', ['id' => $user->getId()]);
         }
 
-        return $this->templateHelper->render('somda/mail.html.twig', ['user' => $user, 'form' => $form->createView()]);
+        return $this->templateHelper->render('somda/mail.html.twig', [
+            'pageTitle' => 'Mail sturen naar ' . $user->username,
+            'user' => $user,
+            'form' => $form->createView(),
+        ]);
     }
 }

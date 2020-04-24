@@ -67,6 +67,7 @@ class ForumModerateController
             $form->handleRequest($request);
             if (!$form->isSubmitted() || !$form->isValid()) {
                 return $this->templateHelper->render('forum/discussionMove.html.twig', [
+                    'pageTitle' => 'Forum - ' . $discussion->title,
                     'discussion' => $discussion,
                     'form' => $form->createView()
                 ]);
@@ -113,6 +114,7 @@ class ForumModerateController
         }
 
         return $this->templateHelper->render('forum/discussionCombine.html.twig', [
+            'pageTitle' => 'Forum - ' . $discussion1->title,
             'discussion1' => $discussion1,
             'discussion2' => $discussion2,
             'form' => $form->createView()
