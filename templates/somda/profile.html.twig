@@ -12,8 +12,8 @@
                         <tr>
                             <td>&nbsp;</td>
                             <td>
-                                <a class="somda-button" href="#" onclick="$('#profile_form').submit(); return false;"><span>Profiel opslaan</span></a>
-                                <a class="somda-button" href="{{ path('home') }}"><span>Terug naar home</span></a>
+                                <a class="somda-button" href="#" onclick="$('#profile_form').submit(); return false;">Profiel opslaan</a>
+                                <a class="somda-button" href="{{ path('home') }}">Terug naar home</a>
                             </td>
                         </tr>
                     </table>
@@ -63,7 +63,7 @@
 
 {% block javascripts %}
     {% if form is not null %}
-        <script type="text/javascript">
+        <script>
             $(document).ready(function() {
                 $('#user_info_avatar').on('change', function () {
                     $('#user_avatar').html('<img alt="avatar" src="/images/avatar/' + $(this).val() + '" />');

@@ -1,6 +1,6 @@
 <div class="home-rail-news-headline">
 	<img alt="{{ railNews[0].source.name }}" src="{{ asset('images/news-logos/' ~ railNews[0].source.logo) }}" />
-	<a href="{{ railNews[0].url | url_encode }}" target="_blank" class="contentpagetitle">{{ railNews[0].title }}</a>
+	<a class="rail-news-title" href="{{ railNews[0].url | url_encode }}" target="_blank">{{ railNews[0].title }}</a>
 </div>
 <div class="create-date">{{ railNews[0].timestamp | displayDateTime(true) }}</div>
 {{ railNews[0].introduction }}
@@ -11,4 +11,3 @@
 		{% if loop.index > 1 %}<li><i class="fas fa-arrow-right"></i> <a href="{{ railNews.url | url_encode }}" target="_blank">{{ railNews.title }}</a></li>{% endif %}
 	{% endfor %}
 </ul>
-<div><strong><a href="/nieuws_home/">Meer spoornieuws...</a></strong></div>

@@ -15,19 +15,19 @@
             <tr><th colspan="8"><label for="textSearchSingle">{{ 'location.search.single' | trans }}</label></th></tr>
             <tr>
                 <td colspan="5"><input id="textSearchSingle" maxlength="10" name="textSearchSingle" onkeypress="return checkEnter(event, 'searchSingle');" size="12" type="text" value="{{ search }}" /></td>
-                <td colspan="3"><a class="somda-button" href="#" id="searchSingle" onclick="searchSingle(); return false;" title="{{ 'location.search.single' | trans }}"><span>{{ 'general.button.search' | trans }}</span></a></td>
+                <td colspan="3"><a class="somda-button" href="#" id="searchSingle" onclick="searchSingle(); return false;" title="{{ 'location.search.single' | trans }}">{{ 'general.button.search' | trans }}</a></td>
             </tr>
             <tr><td colspan="8" style="background-color:#FFFFFF;">&nbsp;</td></tr>
             <tr><th colspan="8"><label for="textSearchName">{{ 'location.search.name' | trans }}</label></th></tr>
             <tr>
                 <td colspan="5"><input id="textSearchName" maxlength="10" name="textSearchName" onkeypress="return checkEnter(event, 'searchName');" size="12" type="text" value="{{ search }}" /></td>
-                <td colspan="3"><a class="somda-button" href="#" id="searchName" onclick="searchName(); return false;" title="{{ 'location.search.name' | trans }}"><span>{{ 'general.button.search' | trans }}</span></a></td>
+                <td colspan="3"><a class="somda-button" href="#" id="searchName" onclick="searchName(); return false;" title="{{ 'location.search.name' | trans }}">{{ 'general.button.search' | trans }}</a></td>
             </tr>
             <tr><td colspan="8" style="background-color:#FFFFFF;">&nbsp;</td></tr>
             <tr><th colspan="8"><label for="textSearchDescription">{{ 'location.search.description' | trans }}</label></th></tr>
             <tr>
                 <td colspan="5"><input id="textSearchDescription" maxlength="15" name="textSearchDescription" onkeypress="return checkEnter(event, 'searchDescription');" size="12" type="text" value="{{ search }}" /></td>
-                <td colspan="3"><a class="somda-button" href="#" id="searchDescription" onclick="searchDescription(); return false;" title="{{ 'location.search.description' | trans }}"><span>{{ 'general.button.search' | trans }}</span></a></td>
+                <td colspan="3"><a class="somda-button" href="#" id="searchDescription" onclick="searchDescription(); return false;" title="{{ 'location.search.description' | trans }}">{{ 'general.button.search' | trans }}</a></td>
             </tr>
         </table>
     </div><div style="float:left; width:710px;">
@@ -52,7 +52,7 @@
 {% endblock %}
 
 {% block javascripts %}
-    <script type="text/javascript">
+    <script>
         function searchCharacter(character) {
             const location = '{{ path('location_search', { 'searchMethod': constant('App\\Controller\\InformationController::SEARCH_METHOD_CHARACTER'), 'search': 'searchCharacter' }) }}';
             document.location = location.replace('searchCharacter', character);

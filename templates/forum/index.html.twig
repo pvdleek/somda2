@@ -1,10 +1,11 @@
 {% extends('base.html.twig') %}
 
 {% block content %}
-    <a class="somda-button" href="{{ path('forum_search') }}" title="{{ 'forum.search' | trans }}"><span>{{ 'forum.search' | trans }}</span></a>
+    <br />
+    <a class="somda-button" href="{{ path('forum_search') }}" title="{{ 'forum.search' | trans }}">{{ 'forum.search' | trans }}</a>
     {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-        <a class="somda-button" href="{{ path('forum_mark_read') }}" title="{{ 'forum.mark.all' | trans }}"><span>{{ 'forum.mark.all' | trans }}</span></a>
-        <a class="somda-button" href="{{ path('forum_unread') }}" title="{{ 'forum.unread' | trans }}"><span>{{ 'forum.unread' | trans }}</span></a>
+        <a class="somda-button" href="{{ path('forum_mark_read') }}" title="{{ 'forum.mark.all' | trans }}">{{ 'forum.mark.all' | trans }}</a>
+        <a class="somda-button" href="{{ path('forum_unread') }}" title="{{ 'forum.unread' | trans }}">{{ 'forum.unread' | trans }}</a>
     {% endif %}
 
     <br /><br />

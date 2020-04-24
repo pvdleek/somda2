@@ -1,9 +1,9 @@
 <tr>
     <th colspan="{{ is_granted('IS_AUTHENTICATED_REMEMBERED') ? 2 : 3 }}" style="text-align:left;">
         {% if userIsModerator %}<input name="sel{{ post.id }}" type="checkbox" />{% endif %}
-        <a id="p{{ post.id }}" name="p{{ post.id }}"></a>
+        <a id="p{{ post.id }}"></a>
         {% if postIsUnread and not firstUnreadAnchorDone %}
-            <a id="nieuw" name="nieuw"></a>
+            <a id="new_post"></a>
             {% set firstUnreadAnchorDone = true %}
         {% endif %}
         <a href="{{ path('forum_discussion_post', { 'id': post.discussion.id, 'name': (post.discussion.title | url_encode), 'postId': post.id }) }}">
@@ -51,10 +51,10 @@
     <td class="buttons">
         <table>
             {% if mayPost and not post.discussion.locked %}
-                <tr><td style="border:none;"><a class="somda-button" href="{{ path('forum_discussion_post_reply', { 'id': post.id }) }}"><span>Reageer</span></a></td></tr>
+                <tr><td style="border:none;"><a class="somda-button" href="{{ path('forum_discussion_post_reply', { 'id': post.id }) }}">Reageer</a></td></tr>
             {% endif %}
             {% if userIsModerator or (mayPost and not post.discussion.locked and post.author == app.user) %}
-                <tr><td style="border:none;"><a class="somda-button" href="{{ path('forum_discussion_post_edit', { 'id': post.id }) }}"><span>Bewerk</span></a>
+                <tr><td style="border:none;"><a class="somda-button" href="{{ path('forum_discussion_post_edit', { 'id': post.id }) }}">Bewerk</a>
             {% endif %}
         </table>
     </td>

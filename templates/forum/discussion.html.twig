@@ -43,6 +43,7 @@
                 <i class="fas fa-comment"></i>
             {% endif %}
             {{ discussion.title }}
+            <br />Forum: <a href="{{ path('forum_forum', { 'id': discussion.forum.id, 'name': discussion.forum.name | url_encode }) }}">{{ discussion.forum.category.name }} - {{ discussion.forum.name }}</a>
         </div>
         <div class="home-panel-content panel-no-background">
             {% block paginator %}
@@ -118,7 +119,7 @@
 
 {% block javascripts %}
     {% if is_granted('ROLE_ADMIN_WIKI') %}
-        <script type="text/javascript">
+        <script>
             function wikiadd() {
                 makeRequest('/blocks/ajax/forum_wiki.php?op=add&discid={{ discussion.id }}&title=' + document.getElementById('wiki_page_title').value + '&page=' + document.getElementById('wiki_page_add').value);
                 document.getElementById('wiki_add').innerHTML = '<br />Dank voor je toevoeging, ververs de pagina om je wijziging te zien';
@@ -131,7 +132,7 @@
     {% endif %}
 
     {% if userIsModerator %}
-        <script type="text/javascript">
+        <script>
             function moderateNew() {
                 let postIdList = '';
                 let checkboxes = document.getElementsByTagName('input');
@@ -149,7 +150,7 @@
         </script>
     {% endif %}
 
-    <script type="text/javascript">
+    <script>
         function fav_add() {
             makeRequest('/blocks/ajax/forum_fav.php?op=add&discid={{ discussion.id }}');
             document.getElementById('favorite').innerHTML = 'Discussie is in je <a href="/favorieten/">favoriete discussies</a> geplaatst.';

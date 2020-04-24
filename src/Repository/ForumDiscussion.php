@@ -147,6 +147,24 @@ class ForumDiscussion extends EntityRepository
 
     /**
      * @param ForumDiscussionEntity $discussion
+     * @param int $postId
+     * @return int
+     */
+    public function getPostNumberInDiscussion(ForumDiscussionEntity $discussion, int $postId): int
+    {
+        $queryBuilder = $this->getEntityManager()
+            ->createQueryBuilder()
+            ->select('p.id')
+            ->from(ForumPost::class, 'p')
+            ->andWhere('p.discussion = :discussion')
+            ->setParameter('discussion', $discussion)
+            ->addOrderBy('p.timestamp', 'ASC');
+        $postIds = array_column($queryBuilder->getQuery()->getResult(), 'id');
+        return array_search($postId, $postIds);
+    }
+
+    /**
+     * @param ForumDiscussionEntity $discussion
      * @param User $user
      * @return int
      */

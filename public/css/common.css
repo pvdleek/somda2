@@ -105,16 +105,6 @@ fieldset {
 	text-align: center;
 }
 
-/******************/
-/*** Breadcrumb ***/
-/******************/
-.segment_path h1 {
-	color: #246DA5;
-	display: inline;
-	font-size: 100%;
-	line-height: 150%;
-}
-
 /**************/
 /*** Button ***/
 /**************/
@@ -270,25 +260,6 @@ p.alert {
 	color: #246da5;
 }
 
-.breadcrumb {
-	background-color: #D2E2F1;
-	border: 1px solid #B2C2D1;
-	margin: 8px;
-	padding: 8px;
-	font-size: 1.13333em;
-}
-
-/*****************/
-/*** Left-menu ***/
-/*****************/
-a.mainlevel-sidenav {
-	font-size: 1.1em;
-	list-style: none;
-	margin: 0;
-	padding: 0 0 0 14px;
-	text-decoration: none;
-}
-
 /***************/
 /*** Content ***/
 /***************/
@@ -298,12 +269,12 @@ a.mainlevel-sidenav {
 	line-height: 1em;
 	text-transform: lowercase;
 }
-a.contentpagetitle {
+a.rail-news-title {
 	text-decoration: none;
 	line-height: 1.1em;
 	color: #246DA5;
 }
-a.contentpagetitle:hover {
+a.rail-news-title:hover {
 	color: #121517;
 }
 
@@ -344,22 +315,10 @@ span.edit_text {
 	float: right;
 	padding-right: 5px;
 }
-#favorite_box a {
-	color: #fff;
-}
-#favorite_box a:hover {
-	color: #bbb;
-}
 #moderator_icons {
 	float: right;
 	padding-left: 20px;
 	padding-right: 10px;
-}
-#moderator_icons a {
-	color: #fff;
-}
-#moderator_icons a:hover {
-	color: #bbb;
 }
 .wiki-block {
 	background-color: #D2E2F1;
@@ -501,6 +460,12 @@ span.special-route-image {
 	font-weight: bold;
 	margin: 0;
 	padding: 5px 5px 5px 10px;
+}
+.home-panel .home-panel-title a {
+	color: #fff;
+}
+.home-panel .home-panel-title a:hover {
+	color: #bbb;
 }
 .home-panel .home-panel-content {
 	background-color: #d2e2f1;

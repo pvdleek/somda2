@@ -1,9 +1,11 @@
 {% extends('base.html.twig') %}
 
 {% block content %}
+    <br />
+    <a class="somda-button" href="{{ path('forum') }}" title="{{ 'forum.newDiscussion' | trans }}">Terug naar het forum-overzicht</a>
     {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-        <a class="somda-button" href="{{ path('forum_forum_new_discussion', { 'id': forum.id }) }}" title="{{ 'forum.newDiscussion' | trans }}"><span>{{ 'forum.newDiscussion' | trans }}</span></a>
-        <a class="somda-button" href="{{ path('forum_mark_read') }}" title="{{ 'forum.mark.all' | trans }}"><span>{{ 'forum.mark.all' | trans }}</span></a>
+        <a class="somda-button" href="{{ path('forum_forum_new_discussion', { 'id': forum.id }) }}" title="{{ 'forum.newDiscussion' | trans }}">{{ 'forum.newDiscussion' | trans }}</a>
+        <a class="somda-button" href="{{ path('forum_mark_read') }}" title="{{ 'forum.mark.all' | trans }}">{{ 'forum.mark.all' | trans }}</a>
         <br /><br />
     {% endif %}
 
@@ -43,7 +45,7 @@
 
 {% block javascripts %}
     {% if userIsModerator %}
-        <script type="text/javascript">
+        <script>
             function moderateCombine() {
                 let discussionId1 = 0;
                 let discussionId2 = 0;

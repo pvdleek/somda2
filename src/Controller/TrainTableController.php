@@ -59,9 +59,6 @@ class TrainTableController
      */
     public function indexAction(int $trainTableIndexNumber = null, string $routeNumber = null): Response
     {
-//        $this->breadcrumbHelper->addPart('general.navigation.trainTable.home', 'train_table_home');
-//        $this->breadcrumbHelper->addPart('general.navigation.trainTable.index', 'train_table', [], true);
-
         $submit = false;
 
         if (is_null($trainTableIndexNumber)) {
@@ -103,9 +100,6 @@ class TrainTableController
         string $startTime = null,
         string $endTime = null
     ): Response {
-//        $this->breadcrumbHelper->addPart('general.navigation.trainTable.home', 'train_table_home');
-//        $this->breadcrumbHelper->addPart('general.navigation.trainTable.passingRoutes', 'passing_routes', [], true);
-
         $passingRoutes = [];
         if (is_null($trainTableIndexNumber)) {
             $trainTableIndexNumber = $this->trainTableHelper->getDefaultTrainTableYear()->getId();
@@ -141,14 +135,6 @@ class TrainTableController
             $specialRoute = $this->doctrine->getRepository(SpecialRoute::class)->find($id);
         }
 
-//        $this->breadcrumbHelper->addPart('general.navigation.trainTable.home', 'dienstregeling_home');
-//        $this->breadcrumbHelper->addPart(
-//            'general.navigation.trainTable.specialRoutes',
-//            'special_routes',
-//            [],
-//            is_null($specialRoute)
-//        );
-
         if (is_null($specialRoute)) {
             $specialRoutes = $this->doctrine->getRepository(SpecialRoute::class)->findBy(
                 [], ['startDate' => 'DESC']
@@ -156,17 +142,11 @@ class TrainTableController
             return $this->templateHelper->render('trainTable/specialRoutes.html.twig', [
                 'specialRoutes' => $specialRoutes
             ]);
-        } else {
-//            $this->breadcrumbHelper->addPart(
-//                'general.navigation.trainTable.specialRoute',
-//                'special_route',
-//                ['id' => $id],
-//                true
-//            );
-            return $this->templateHelper->render(
-                'trainTable/specialRoute.html.twig',
-                ['specialRoute' => $specialRoute]
-            );
         }
+
+        return $this->templateHelper->render(
+            'trainTable/specialRoute.html.twig',
+            ['specialRoute' => $specialRoute]
+        );
     }
 }

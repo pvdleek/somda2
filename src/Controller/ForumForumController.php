@@ -66,8 +66,6 @@ class ForumForumController
      */
     public function indexAction(): Response
     {
-//        $this->breadcrumbHelper->addPart('general.navigation.forum.index', 'forum', [], true);
-
         /**
          * @var ForumCategory[] $forumCategories
          */
@@ -96,14 +94,6 @@ class ForumForumController
         if (is_null($forum)) {
             return $this->redirectHelper->redirectToRoute('forum');
         }
-
-//        $this->breadcrumbHelper->addPart('general.navigation.forum.index', 'forum');
-//        $this->breadcrumbHelper->addPart(
-//            $forum->category->name . ' == ' . $forum->name,
-//            'forum_forum',
-//            ['id' => $id, 'name' => $forum->name],
-//            true
-//        );
 
         $discussions = $this->doctrine
             ->getRepository(ForumDiscussion::class)

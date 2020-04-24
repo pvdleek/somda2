@@ -36,7 +36,7 @@
             </tr>
             <tr>
                 <th>&nbsp;</th>
-                <td><a class="somda-button" href="#" id="searchPassingRoutes" onclick="searchPassingRoutes(); return false;" title="{{ 'passingRoutes.input.button' | trans }}"><span>{{ 'general.button.search' | trans }}</span></a></td>
+                <td><a class="somda-button" href="#" id="searchPassingRoutes" onclick="searchPassingRoutes(); return false;" title="{{ 'passingRoutes.input.button' | trans }}">{{ 'general.button.search' | trans }}</a></td>
             </tr>
         </table>
         <br />
@@ -67,7 +67,7 @@
 {% endblock %}
 
 {% block javascripts %}
-    <script type="text/javascript">
+    <script>
         function searchPassingRoutes() {
             let location = '{{ path('passing_routes_search', { 'trainTableIndexNumber': 9999, 'locationName': 'locationName', 'dayNumber': 1234, 'startTime': 'startTime', 'endTime': 'endTime' }) }}';
             location = location.replace('9999', document.getElementById('trainTableIndex').value);

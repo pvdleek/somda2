@@ -37,11 +37,6 @@ class TemplateHelper
     private $twig;
 
     /**
-     * @var BreadcrumbHelper
-     */
-    protected $breadcrumbHelper;
-
-    /**
      * @var MenuHelper
      */
     private $menuHelper;
@@ -51,7 +46,6 @@ class TemplateHelper
      * @param ManagerRegistry $registry
      * @param LoggerInterface $logger
      * @param Environment $environment
-     * @param BreadcrumbHelper $breadcrumbHelper
      * @param MenuHelper $menuHelper
      */
     public function __construct(
@@ -59,14 +53,12 @@ class TemplateHelper
         ManagerRegistry $registry,
         LoggerInterface $logger,
         Environment $environment,
-        BreadcrumbHelper $breadcrumbHelper,
         MenuHelper $menuHelper
     ) {
         $this->requestStack = $requestStack;
         $this->doctrine = $registry;
         $this->logger = $logger;
         $this->twig = $environment;
-        $this->breadcrumbHelper = $breadcrumbHelper;
         $this->menuHelper = $menuHelper;
     }
 
@@ -129,7 +121,6 @@ class TemplateHelper
             'headerType' =>  $headerType,
             'headerContent' => $headerContent,
             'imageNumber' => random_int(1, 11),
-            'breadcrumb' => $this->breadcrumbHelper->getBreadcrumb(),
             'menuStructure' => $this->menuHelper->getMenuStructure(),
             'nrOfOpenForumAlerts' => $this->menuHelper->getNumberOfOpenForumAlerts(),
         ]);

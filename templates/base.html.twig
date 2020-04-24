@@ -13,13 +13,13 @@
     <meta name="author" content="Peter van der Leek" />
     <meta name="generator" content="Peter van der Leek" />
 
-    <script src="{{asset('js/modernizr-webp.js')}}" type="text/javascript"></script>
-    <script src="{{asset('js/jquery-1.12.4.js')}}" type="text/javascript"></script>
-    <script src="{{asset('js/jquery-ui-1.12.1.js')}}" type="text/javascript"></script>
-    <script src="{{asset('js/jquery.maskedinput-1.4.1.js')}}" type="text/javascript"></script>
-    <script src="{{asset('js/jquery-defaults.js')}}" type="text/javascript"></script>
-    <script src="{{asset('js/jquery-tablesorter.js')}}" type="text/javascript"></script>
-    <script src="{{asset('js/functions002.js')}}" type="text/javascript"></script>
+    <script src="{{asset('js/modernizr-webp.js')}}"></script>
+    <script src="{{asset('js/jquery-1.12.4.js')}}"></script>
+    <script src="{{asset('js/jquery-ui-1.12.1.js')}}"></script>
+    <script src="{{asset('js/jquery.maskedinput-1.4.1.js')}}"></script>
+    <script src="{{asset('js/jquery-defaults.js')}}"></script>
+    <script src="{{asset('js/jquery-tablesorter.js')}}"></script>
+    <script src="{{asset('js/functions002.js')}}"></script>
     <script src="https://kit.fontawesome.com/be43109115.js" crossorigin="anonymous"></script>
 
     <title>', BLOCK_NAME, ' - ', SITE_TITLE, '</title>
@@ -37,7 +37,7 @@
 </head>
 <body>
 
-    <script src="{{asset('js/wz_tooltip.js')}}" type="text/javascript"></script>
+    <script src="{{asset('js/wz_tooltip.js')}}"></script>
 
     <div id="wrap">
         {% include('header.html.twig') %}
@@ -46,7 +46,7 @@
         {% include('footer.html.twig') %}
     </div>
 
-{#    <script type="text/javascript">#}
+{#    <script>#}
 {#        $(function() { $(document).tooltip(); });#}
 {#        if (document.getElementById('plaatsInput'))  { plaatsKlaar('{{ app.request.host }}', document.getElementById('plaatsInput').value, 'plaats'); }#}
 {#        if (document.getElementById('plaats1Input')) { plaatsKlaar('{{ app.request.host }}', document.getElementById('plaats1Input').value, 'plaats1'); }#}
@@ -56,12 +56,18 @@
 
     {% block javascripts %}{% endblock %}
 
-{#    // Doe de forum-jump als die van toepassing is#}
-{#    if (isset($forum_jump) && strlen($forum_jump)>0) { echo '<script type="text/javascript">window.scrollTo(0, (getElementTop(\'', $forum_jump, '\')-15));</script>'; }#}
+    {# If applicable, jump to the requested forum-post #}
+    {% if forumJump is defined and forumJump is not null %}
+        <script>
+            $(document).ready(function() {
+                $('html,body').animate({ scrollTop: $('#{{ forumJump }}').offset().top }, 'slow');
+            });
+        </script>
+    {% endif %}
 
     {% if app.user and app.user.cookieOk == constant('App\\Entity\\User::COOKIE_OK') %}
-        <script src="{{asset('js/google_ga.js')}}" type="text/javascript"></script>
-        <script type="text/javascript">try { var pageTracker = _gat._getTracker('UA-2723197-1'); pageTracker._trackPageview(); } catch(err) {}</script>
+        <script src="{{asset('js/google_ga.js')}}"></script>
+        <script>try { var pageTracker = _gat._getTracker('UA-2723197-1'); pageTracker._trackPageview(); } catch(err) {}</script>
     {% endif %}
 
 </body>

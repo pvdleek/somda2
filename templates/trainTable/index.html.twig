@@ -19,7 +19,7 @@
             </tr>
             <tr>
                 <th>&nbsp;</th>
-                <td><a class="somda-button" href="#" id="searchTrainTable" onclick="searchTrainTable(); return false;" title="{{ 'trainTable.input.button' | trans }}"><span>{{ 'general.button.search' | trans }}</span></a></td>
+                <td><a class="somda-button" href="#" id="searchTrainTable" onclick="searchTrainTable(); return false;" title="{{ 'trainTable.input.button' | trans }}">{{ 'general.button.search' | trans }}</a></td>
             </tr>
         </table>
         <br />
@@ -63,7 +63,7 @@
 {% endblock %}
 
 {% block javascripts %}
-    <script type="text/javascript">
+    <script>
         function searchTrainTable() {
             let location = '{{ path('train_table_search', { 'trainTableIndexNumber': 9999, 'routeNumber': 'routeNumber' }) }}';
             location = location.replace('9999', document.getElementById('trainTableIndex').value);

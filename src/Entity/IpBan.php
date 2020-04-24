@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -31,10 +32,10 @@ class IpBan extends Entity
     public ?int $ipAddress;
 
     /**
-     * @var int|null
-     * @ORM\Column(name="ipb_datetime", type="bigint", nullable=true)
+     * @var DateTime|null
+     * @ORM\Column(name="ipb_datetime", type="datetime", nullable=true)
      */
-    public ?int $timestamp;
+    public ?DateTime $timestamp;
 
     /**
      * @var int|null

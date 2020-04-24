@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -19,10 +20,10 @@ class BannerView extends Entity
     protected int $id;
 
     /**
-     * @var int
-     * @ORM\Column(name="datumtijd", type="bigint", nullable=false)
+     * @var DateTime
+     * @ORM\Column(name="datumtijd", type="datetime", nullable=false)
      */
-    public int $timestamp;
+    public DateTime $timestamp;
 
     /**
      * @var int

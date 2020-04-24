@@ -30,27 +30,27 @@ class ForumDiscussionController
     /**
      * @var UserHelper
      */
-    private $userHelper;
+    private UserHelper $userHelper;
 
     /**
      * @var FormHelper
      */
-    private $formHelper;
+    private FormHelper $formHelper;
 
     /**
      * @var ForumAuthorizationHelper
      */
-    private $forumAuthHelper;
+    private ForumAuthorizationHelper $forumAuthHelper;
 
     /**
      * @var RedirectHelper
      */
-    private $redirectHelper;
+    private RedirectHelper $redirectHelper;
 
     /**
      * @var TemplateHelper
      */
-    private $templateHelper;
+    private TemplateHelper $templateHelper;
 
     /**
      * @param UserHelper $userHelper
@@ -94,19 +94,6 @@ class ForumDiscussionController
             throw new AccessDeniedHttpException();
         }
 
-//        $this->breadcrumbHelper->addPart('general.navigation.forum.index', 'forum');
-//        $this->breadcrumbHelper->addPart(
-//            $discussion->forum->category->name . ' == ' . $discussion->forum->name,
-//            'forum_forum',
-//            ['id' => $discussion->forum->getId(), 'name' => $discussion->forum->name]
-//        );
-//        $this->breadcrumbHelper->addPart(
-//            'Discussie',
-//            'forum_discussion',
-//            ['id' => $id, 'name' => $discussion->title],
-//            true
-//        );
-
         $discussion->viewed = $discussion->viewed + 1;
         $this->formHelper->getDoctrine()->getManager()->flush();
 
@@ -114,24 +101,23 @@ class ForumDiscussionController
             $discussion
         );
         $numberOfPages = floor(($numberOfPosts - 1) / self::MAX_POSTS_PER_PAGE) + 1;
-        if (is_null($pageNumber)) {
-            $pageNumber = 1;
-        }
-
-
-//TODO postId afhandelen!!
 
         /**
          * @var ForumPost[] $posts
          */
+        $posts = [];
         $numberOfReadPosts = 0;
-        if ($this->userHelper->userIsLoggedIn()) {
+        $forumJump = null;
+        if (is_null($pageNumber) && is_null($postId) && $this->userHelper->userIsLoggedIn()) {
+            // Neither a specific page or post were requested but the user is logged in,
+            // so we will go to the first unread post in the discussion
             if ($discussion->forum->type !== ForumForum::TYPE_ARCHIVE) {
                 $numberOfReadPosts = $this->formHelper
                     ->getDoctrine()
                     ->getRepository(ForumDiscussion::class)
                     ->getNumberOfReadPosts($discussion, $this->userHelper->getUser());
                 $pageNumber = floor($numberOfReadPosts / self::MAX_POSTS_PER_PAGE) + 1;
+                $forumJump = 'new_post';
             }
             $posts = $this->formHelper->getDoctrine()->getRepository(ForumPost::class)->findBy(
                 ['discussion' => $discussion],
@@ -143,7 +129,17 @@ class ForumDiscussionController
                 $this->userHelper->getUser(),
                 $posts
             );
-        } else {
+        } elseif (!is_null($postId)) {
+            // A specific post was requested, so we go to this post
+            $postNumber = $this->formHelper
+                ->getDoctrine()
+                ->getRepository(ForumDiscussion::class)
+                ->getPostNumberInDiscussion($discussion, $postId);
+            $pageNumber = floor($postNumber / self::MAX_POSTS_PER_PAGE) + 1;
+            $forumJump = 'p' . $postId;
+        }
+
+        if (count($posts) < 1) {
             $posts = $this->formHelper->getDoctrine()->getRepository(ForumPost::class)->findBy(
                 ['discussion' => $discussion],
                 ['timestamp' => 'ASC'],
@@ -161,6 +157,7 @@ class ForumDiscussionController
             'mayPost' => $this->forumAuthHelper->mayPost($discussion->forum, $this->userHelper->getUser()),
             'numberOfReadPosts' => $numberOfReadPosts,
             'forumBanner' => $this->getForumBanner($request),
+            'forumJump' => $forumJump,
         ]);
     }
 
