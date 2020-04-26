@@ -79,7 +79,7 @@ class ForumForumController
         }
 
         return $this->templateHelper->render('forum/index.html.twig', [
-            'pageTitle' => 'Forum - Overzicht',
+            TemplateHelper::PARAMETER_PAGE_TITLE => 'Forum - Overzicht',
             'categories' => $categories
         ]);
     }
@@ -102,7 +102,7 @@ class ForumForumController
             ->getRepository(ForumDiscussion::class)
             ->findByForum($forum, $this->userHelper->getUser());
         return $this->templateHelper->render('forum/forum.html.twig', [
-            'pageTitle' => 'Forum - ' . $forum->name,
+            TemplateHelper::PARAMETER_PAGE_TITLE => 'Forum - ' . $forum->name,
             'forum' => $forum,
             'userIsModerator' => $this->forumAuthHelper->userIsModerator(
                 $forum->getDiscussions()[0],

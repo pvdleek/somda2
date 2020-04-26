@@ -26,27 +26,27 @@ class ForumPostAlertController
     /**
      * @var UserHelper
      */
-    private $userHelper;
+    private UserHelper $userHelper;
 
     /**
      * @var FormHelper
      */
-    private $formHelper;
+    private FormHelper $formHelper;
 
     /**
      * @var EmailHelper
      */
-    private $emailHelper;
+    private EmailHelper $emailHelper;
 
     /**
      * @var TemplateHelper
      */
-    private $templateHelper;
+    private TemplateHelper $templateHelper;
 
     /**
      * @var ForumAuthorizationHelper
      */
-    private $forumAuthHelper;
+    private ForumAuthorizationHelper $forumAuthHelper;
 
     /**
      * @param UserHelper $userHelper
@@ -69,6 +69,15 @@ class ForumPostAlertController
         $this->forumAuthHelper = $forumAuthHelper;
     }
 
+    public function alertsAction()
+    {
+        $alerts = $this->formHelper->getDoctrine()->getRepository(ForumPostAlert::class)->findForOverview();
+        return $this->templateHelper->render('forum/alerts.html.twig', [
+            TemplateHelper::PARAMETER_PAGE_TITLE => 'Forum - Overzicht van meldingen',
+            'alerts' => $alerts,
+        ]);
+
+    }
 
     /**
      * @param Request $request
@@ -119,7 +128,7 @@ class ForumPostAlertController
         }
 
         return $this->templateHelper->render('forum/alert.html.twig', [
-            'pageTitle' => 'Forum - ' . $post->discussion->title,
+            TemplateHelper::PARAMETER_PAGE_TITLE => 'Forum - ' . $post->discussion->title,
             'form' => $form->createView(),
             'post' => $post,
         ]);
@@ -131,7 +140,7 @@ class ForumPostAlertController
      * @return RedirectResponse|Response
      * @throws Exception
      */
-    public function alertsAction(Request $request, int $id)
+    public function postAlertsAction(Request $request, int $id)
     {
         /**
          * @var ForumPost $post
@@ -164,8 +173,8 @@ class ForumPostAlertController
             return $this->formHelper->finishFormHandling('', 'forum_discussion_post_alerts', ['id' => $post->getId()]);
         }
 
-        return $this->templateHelper->render('forum/alerts.html.twig', [
-            'pageTitle' => 'Forum - ' . $post->discussion->title,
+        return $this->templateHelper->render('forum/postAlerts.html.twig', [
+            TemplateHelper::PARAMETER_PAGE_TITLE => 'Forum - ' . $post->discussion->title,
             'form' => $form->createView(),
             'post' => $post,
         ]);

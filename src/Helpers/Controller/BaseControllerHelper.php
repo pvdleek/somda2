@@ -15,32 +15,32 @@ class BaseControllerHelper
     /**
      * @var ManagerRegistry
      */
-    protected $doctrine;
+    protected ManagerRegistry $doctrine;
 
     /**
      * @var TranslatorInterface
      */
-    protected $translator;
+    protected TranslatorInterface $translator;
 
     /**
      * @var TrainTableYear
      */
-    private $trainTableYear = null;
+    private ?TrainTableYear $trainTableYear = null;
 
     /**
      * @var Route
      */
-    private $route = null;
+    private ?Route $route = null;
 
     /**
      * @var Location
      */
-    private $location = null;
+    private ?Location $location = null;
 
     /**
      * @var string[]
      */
-    private $errorMessages = [];
+    private array $errorMessages = [];
 
     /**
      * @param ManagerRegistry $doctrine

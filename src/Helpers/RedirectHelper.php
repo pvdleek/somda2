@@ -13,7 +13,7 @@ class RedirectHelper
     /**
      * @var RouterInterface
      */
-    private $router;
+    private RouterInterface $router;
 
     /**
      * @param RouterInterface $router

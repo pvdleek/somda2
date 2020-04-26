@@ -11,12 +11,12 @@ class UserDisplayHelper implements RuntimeExtensionInterface
     /**
      * @var TranslatorInterface
      */
-    private $translator;
+    private TranslatorInterface $translator;
 
     /**
      * @var RouterInterface
      */
-    private $router;
+    private RouterInterface $router;
 
     /**
      * @param TranslatorInterface $translator

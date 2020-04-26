@@ -11,22 +11,22 @@ class FormHelper
     /**
      * @var ManagerRegistry
      */
-    private $doctrine;
+    private ManagerRegistry $doctrine;
 
     /**
      * @var FormFactoryInterface
      */
-    private $factory;
+    private FormFactoryInterface $factory;
 
     /**
      * @var FlashHelper
      */
-    private $flashHelper;
+    private FlashHelper $flashHelper;
 
     /**
      * @var RedirectHelper
      */
-    private $redirectHelper;
+    private RedirectHelper $redirectHelper;
 
     /**
      * @param ManagerRegistry $doctrine

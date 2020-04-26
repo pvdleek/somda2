@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="somda_forum_alerts", indexes={@ORM\Index(name="idx_47886_postid", columns={"postid"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\ForumPostAlert")
  */
 class ForumPostAlert extends Entity
 {

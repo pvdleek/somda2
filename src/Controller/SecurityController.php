@@ -103,7 +103,7 @@ class SecurityController
          }
 
         return $this->templateHelper->render('security/login.html.twig', [
-            'pageTitle' => 'Inloggen',
+            TemplateHelper::PARAMETER_PAGE_TITLE => 'Inloggen',
             'lastUsername' => is_null($username) ? $authenticationUtils->getLastUsername() : $username,
             'error' => $authenticationUtils->getLastAuthenticationError()
         ]);
@@ -179,7 +179,7 @@ class SecurityController
         }
 
         return $this->templateHelper->render('security/register.html.twig', [
-            'pageTitle' => 'Nieuw account aanmaken',
+            TemplateHelper::PARAMETER_PAGE_TITLE => 'Nieuw account aanmaken',
             'form' => $form->createView(),
         ]);
     }
@@ -307,7 +307,7 @@ class SecurityController
         }
 
         return $this->templateHelper->render('security/activate.html.twig', [
-            'pageTitle' => 'Account activeren',
+            TemplateHelper::PARAMETER_PAGE_TITLE => 'Account activeren',
             'form' => $form->createView(),
         ]);
     }
@@ -350,7 +350,7 @@ class SecurityController
         }
 
         return $this->templateHelper->render('security/lostPassword.html.twig', [
-            'pageTitle' => 'Wachtwoord vergeten',
+            TemplateHelper::PARAMETER_PAGE_TITLE => 'Wachtwoord vergeten',
             'form' => $form->createView(),
         ]);
     }
@@ -393,7 +393,7 @@ class SecurityController
         }
 
         return $this->templateHelper->render('security/changePassword.html.twig', [
-            'pageTitle' => 'Wachtwoord wijzigen',
+            TemplateHelper::PARAMETER_PAGE_TITLE => 'Wachtwoord wijzigen',
             'form' => $form->createView(),
         ]);
     }

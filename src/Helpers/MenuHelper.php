@@ -12,12 +12,12 @@ class MenuHelper implements RuntimeExtensionInterface
     /**
      * @var ManagerRegistry
      */
-    private $doctrine;
+    private ManagerRegistry $doctrine;
 
     /**
      * @var AuthorizationHelper
      */
-    private $authorizationHelper;
+    private AuthorizationHelper $authorizationHelper;
 
     /**
      * @param ManagerRegistry $doctrine

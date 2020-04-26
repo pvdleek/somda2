@@ -110,7 +110,7 @@ class ForumPostController
         );
 
         return $this->templateHelper->render('forum/reply.html.twig', [
-            'pageTitle' => 'Forum - ' . $quotedPost->discussion->title,
+            TemplateHelper::PARAMETER_PAGE_TITLE => 'Forum - ' . $quotedPost->discussion->title,
             'form' => $form->createView(),
             'post' => $quotedPost,
             'lastPosts' => $lastPosts,
@@ -207,7 +207,7 @@ class ForumPostController
         }
 
         return $this->templateHelper->render('forum/edit.html.twig', [
-            'pageTitle' => 'Forum - ' . $post->discussion->title,
+            TemplateHelper::PARAMETER_PAGE_TITLE => 'Forum - ' . $post->discussion->title,
             'form' => $form->createView(),
             'post' => $post,
         ]);

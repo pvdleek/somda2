@@ -1,54 +1,36 @@
 {% extends('base.html.twig') %}
 
 {% block content %}
-    {% set alertIsClosed = true %}
-    {% for alert in post.alerts %}
-        {% if not alert.closed %}{% set alertIsClosed = false %}{% endif %}
-    {% endfor %}
-    <br />
-
-    {% if alertIsClosed %}
-        <p class="alert">Deze melding is gesloten</p>
-    {% else %}
-        <a class="somda-button" href="{{ path('forum_discussion_post_alerts_close', { 'id': post.id }) }}">Sluit melding</a>
-        <br /><br />
-    {% endif %}
-
-    {% for alert in post.alerts %}
-        <p class="info">Commentaar van melder <a target="_blank" href="{{ path('profile_view', { 'id': alert.sender.id }) }}">{{ alert.sender.username }}</a> op {{ alert.timestamp | date('d-m-Y') }} om {{ alert.time | date('H:i:s') }}: <strong>{{ alert.comment }}</strong></p>
-    {% endfor %}
-
-    <table align="center" class="design" width="98%">
-        <tr><th colspan="3">{{ post.discussion.title }}</th></tr>
-        {% include 'forum/post.html.twig' with { 'mayPost': false, 'userIsModerator': false, 'postIsUnread': false } %}
-    </table>
-    <br />
-    <table class="design">
-        <tr><th colspan="4">Commentaar door moderators bij deze melding</th></tr>
-        {% for alert in post.alerts %}
-            {% for note in alert.notes %}
+    <div class="home-panel separate-panel">
+        <div class="home-panel-title"><i class="fas fa-comments"></i> Overzicht van laatste 100 forum-meldingen</div>
+        <div class="home-panel-content">
+            <table class="design">
                 <tr>
-                    <td>{{ note.author.id | displayUser(note.author.username) | raw }}</td>
-                    <td>{{ note.timestamp | date('d-m-Y H:i:s') }}</td>
-                    <td>{{ note.text }}</td>
-                    <td>{{ note.sentToReporter ? 'Ja' : 'Nee' }}</td>
+                    <th>Status</th>
+                    <th>Discussie</th>
+                    <th>Melder(s)</th>
+                    <th>Aantal meldingen</th>
+                    <th>Aantal notities</th>
+                    <th>&nbsp;</th>
                 </tr>
-            {% endfor %}
-        {% endfor %}
-    </table>
-    <br />
-    {{ form_start(form, { 'attr': { 'id': 'alert_note_form' } }) }}
-        <table class="design">
-            {{ form_row(form.text) }}
-            {{ form_row(form.sentToReporter) }}
-            <tr>
-                <td>&nbsp;</td>
-                <td>
-                    <a class="somda-button" href="#" onclick="$('#alert_note_form').submit(); return false;">Voeg toe</a>
-                    <a class="somda-button" href="{{ path('forum_discussion_post', { 'id': post.discussion.id, 'postId': post.id, 'name': (post.discussion.title | url_encode )}) }}">Terug naar het bericht</a>
-                </td>
-            </tr>
-        </table>
-    {{ form_end(form) }}
-    <br />
+                {% for alert in alerts %}
+                    <tr>
+                        <td>{{ alert.closed ? 'Afgehandeld' : 'Open' }}</td>
+                        <td>{{ alert.discussionTitle }}</td>
+                        <td>
+                            {% for key, senderId in alert.senderIds | split(',') %}
+                                {{ senderId | displayUser((alert.senderUsernames | split(','))[key]) | raw }}<br />
+                            {% endfor %}
+                        </td>
+                        <td>{{ alert.numberOfAlerts }}</td>
+                        <td>{{ alert.numberOfNotes }}</td>
+                        <td>
+                            <a class="somda-button" href="{{ path('forum_discussion_post', { 'id': alert.discussionId, 'name': (alert.discussionTitle | url_encode), 'postId': alert.postId }) }}">Bekijk bericht</a>
+                            <a class="somda-button" href="{{ path('forum_discussion_post_alerts', { 'id': alert.postId }) }}">Bekijk melding</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
 {% endblock %}

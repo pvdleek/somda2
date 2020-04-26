@@ -16,30 +16,32 @@ use Twig\Environment;
 
 class TemplateHelper
 {
+    public const PARAMETER_PAGE_TITLE = 'pageTitle';
+
     /**
      * @var RequestStack
      */
-    private $requestStack;
+    private RequestStack $requestStack;
 
     /**
      * @var ManagerRegistry
      */
-    protected $doctrine;
+    protected ManagerRegistry $doctrine;
 
     /**
      * @var LoggerInterface
      */
-    private $logger;
+    private LoggerInterface $logger;
 
     /**
      * @var Environment
      */
-    private $twig;
+    private Environment $twig;
 
     /**
      * @var MenuHelper
      */
-    private $menuHelper;
+    private MenuHelper $menuHelper;
 
     /**
      * @param RequestStack $requestStack

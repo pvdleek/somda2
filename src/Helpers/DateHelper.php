@@ -12,7 +12,7 @@ class DateHelper implements RuntimeExtensionInterface
     /**
      * @var TranslatorInterface
      */
-    private $translator;
+    private TranslatorInterface $translator;
 
     /**
      * @param TranslatorInterface $translator

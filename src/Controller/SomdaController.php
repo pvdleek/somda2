@@ -57,7 +57,7 @@ class SomdaController
      */
     public function aboutAction(): Response
     {
-        return $this->templateHelper->render('somda/about.html.twig', ['pageTitle' => 'Over Somda']);
+        return $this->templateHelper->render('somda/about.html.twig', [TemplateHelper::PARAMETER_PAGE_TITLE => 'Over Somda']);
     }
 
     /**
@@ -65,7 +65,7 @@ class SomdaController
      */
     public function advertiseAction(): Response
     {
-        return $this->templateHelper->render('somda/advertise.html.twig', ['pageTitle' => 'Adverteren op Somda']);
+        return $this->templateHelper->render('somda/advertise.html.twig', [TemplateHelper::PARAMETER_PAGE_TITLE => 'Adverteren op Somda']);
     }
 
     /**
@@ -88,7 +88,7 @@ class SomdaController
         }
 
         return $this->templateHelper->render('somda/contact.html.twig', [
-            'pageTitle' => 'Contact opnemen',
+            TemplateHelper::PARAMETER_PAGE_TITLE => 'Contact opnemen',
             'form' => $form->createView(),
         ]);
     }
@@ -107,6 +107,6 @@ class SomdaController
                 'disclaimer'
             );
         }
-        return $this->templateHelper->render('somda/disclaimer.html.twig', ['pageTitle' => 'Disclaimer en cookies']);
+        return $this->templateHelper->render('somda/disclaimer.html.twig', [TemplateHelper::PARAMETER_PAGE_TITLE => 'Disclaimer en cookies']);
     }
 }

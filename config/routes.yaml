@@ -219,12 +219,12 @@ forum_discussion_post_alert:
 forum_discussion_post_alerts_overview:
   path: /forum/meldingen/
   methods: [GET]
-  controller: App\Controller\HomeController:homeAction
+  controller: App\Controller\ForumPostAlertController:alertsAction
 forum_discussion_post_alerts:
   path: /forum/p{id}/meldingen/
   methods: [GET, POST]
   requirements: { id: \d+ }
-  controller: App\Controller\ForumPostAlertController:alertsAction
+  controller: App\Controller\ForumPostAlertController:postAlertsAction
 forum_discussion_post_alerts_close:
   path: /forum/p{id}/meldingen-sluiten/
   methods: [GET]

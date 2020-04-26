@@ -59,7 +59,7 @@ class NewsController
             $this->doctrine->getManager()->flush();
 
             return $this->templateHelper->render('news/item.html.twig', [
-                'pageTitle' => $news->title,
+                TemplateHelper::PARAMETER_PAGE_TITLE => $news->title,
                 'news' => $news,
             ]);
         }
@@ -69,7 +69,7 @@ class NewsController
          */
         $news = $this->doctrine->getRepository(News::class)->findBy([], ['timestamp' => 'DESC']);
         return $this->templateHelper->render('news/index.html.twig', [
-            'pageTitle' => 'Nieuws',
+            TemplateHelper::PARAMETER_PAGE_TITLE => 'Nieuws',
             'news' => $news,
         ]);
     }

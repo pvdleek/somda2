@@ -20,12 +20,12 @@ class UserHelper implements RuntimeExtensionInterface
     /**
      * @var ManagerRegistry
      */
-    private $doctrine;
+    private ManagerRegistry $doctrine;
 
     /**
      * @var Security
      */
-    private $security;
+    private Security $security;
 
     /**
      * @param ManagerRegistry $doctrine

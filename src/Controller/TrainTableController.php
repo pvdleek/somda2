@@ -76,7 +76,7 @@ class TrainTableController
         }
 
         return $this->templateHelper->render('trainTable/index.html.twig', [
-            'pageTitle' => 'Dienstregeling van een trein',
+            TemplateHelper::PARAMETER_PAGE_TITLE => 'Dienstregeling van een trein',
             'trainTableIndices' => $this->doctrine->getRepository(TrainTableYear::class)->findAll(),
             'trainTableIndexNumber' => $trainTableIndexNumber,
             'routeNumber' => $routeNumber,
@@ -114,7 +114,7 @@ class TrainTableController
         }
 
         return $this->templateHelper->render('trainTable/passingRoutes.html.twig', [
-            'pageTitle' => 'Doorkomststaat',
+            TemplateHelper::PARAMETER_PAGE_TITLE => 'Doorkomststaat',
             'trainTableIndices' => $this->doctrine->getRepository(TrainTableYear::class)->findAll(),
             'trainTableIndexNumber' => $trainTableIndexNumber,
             'trainTableIndex' => $this->trainTableHelper->getTrainTableYear(),
@@ -142,13 +142,13 @@ class TrainTableController
                 [], ['startDate' => 'DESC']
             );
             return $this->templateHelper->render('trainTable/specialRoutes.html.twig', [
-                'pageTitle' => 'Bijzondere ritten',
+                TemplateHelper::PARAMETER_PAGE_TITLE => 'Bijzondere ritten',
                 'specialRoutes' => $specialRoutes,
             ]);
         }
 
         return $this->templateHelper->render('trainTable/specialRoute.html.twig', [
-            'pageTitle' => 'Bijzondere rit ' . $specialRoute->title,
+            TemplateHelper::PARAMETER_PAGE_TITLE => 'Bijzondere rit ' . $specialRoute->title,
             'specialRoute' => $specialRoute,
         ]);
     }

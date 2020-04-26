@@ -16,7 +16,7 @@ class TrainTableHelper extends BaseControllerHelper
     /**
      * @var DateHelper
      */
-    private $dateHelper;
+    private DateHelper $dateHelper;
 
     /**
      * @param ManagerRegistry $doctrine
