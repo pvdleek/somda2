@@ -3,14 +3,13 @@
 namespace App\Form;
 
 use App\Entity\User as UserEntity;
-use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\Regex;
 
-class UserActivate extends AbstractType
+class UserActivate extends BaseForm
 {
     public const FIELD_KEY = 'key';
 
@@ -22,8 +21,8 @@ class UserActivate extends AbstractType
     {
         $builder
             ->add(self::FIELD_KEY, TextType::class, [
-                'attr' => ['maxlength' => 32],
-                'constraints' => [
+                self::KEY_ATTRIBUTES => ['maxlength' => 32],
+                self::KEY_CONSTRAINTS=> [
                     new Length([
                         'max' => 32,
                         'maxMessage' => 'De activatie-sleutel moet exact 32 karakters lang zijn',
@@ -35,9 +34,9 @@ class UserActivate extends AbstractType
                         'message' => 'De gebruikersnaam mag alleen letters en cijfers bevatten',
                     ])
                 ],
-                'label' => 'Geef de activatie-sleutel die je per e-mail hebt ontvangen',
-                'mapped' => false,
-                'required' => true,
+                self::KEY_LABEL => 'Geef de activatie-sleutel die je per e-mail hebt ontvangen',
+                self::KEY_MAPPED => false,
+                self::KEY_REQUIRED => true,
             ]);
     }
 

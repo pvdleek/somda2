@@ -2,12 +2,11 @@
 
 namespace App\Form;
 
-use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\Email;
 
-class UserLostPassword extends AbstractType
+class UserLostPassword extends BaseForm
 {
     /**
      * @param FormBuilderInterface $builder
@@ -17,12 +16,12 @@ class UserLostPassword extends AbstractType
     {
         $builder
             ->add('email', TextType::class, [
-                'attr' => ['maxlength' => 60],
-                'constraints' => [
+                self::KEY_ATTRIBUTES => ['maxlength' => 60],
+                self::KEY_CONSTRAINTS=> [
                     new Email(['message' => 'Dit is geen geldig e-mailadres']),
                 ],
-                'label' => 'Geef je e-mailadres om een nieuw wachtwoord te ontvangen',
-                'required' => true,
+                self::KEY_LABEL => 'Geef je e-mailadres om een nieuw wachtwoord te ontvangen',
+                self::KEY_REQUIRED => true,
             ]);
     }
 }

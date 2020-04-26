@@ -3,7 +3,6 @@
 namespace App\Form;
 
 use App\Entity\User as UserEntity;
-use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -11,7 +10,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\Regex;
 
-class User extends AbstractType
+class User extends BaseForm
 {
     public const FIELD_EMAIL = 'email';
     public const FIELD_USERNAME = 'username';
@@ -25,13 +24,13 @@ class User extends AbstractType
     {
         $builder
             ->add(self::FIELD_EMAIL, TextType::class, [
-                'attr' => ['maxlength' => 255],
-                'label' => 'Geef jouw e-mailadres',
-                'required' => true,
+                self::KEY_ATTRIBUTES => ['maxlength' => 255],
+                self::KEY_LABEL => 'Geef jouw e-mailadres',
+                self::KEY_REQUIRED => true,
             ])
             ->add(self::FIELD_USERNAME, TextType::class, [
-                'attr' => ['maxlength' => 10],
-                'constraints' => [
+                self::KEY_ATTRIBUTES => ['maxlength' => 10],
+                self::KEY_CONSTRAINTS=> [
                     new Length([
                         'max' => 10,
                         'maxMessage' => 'De gebruikersnaam mag maximaal 10 karakters lang zijn',
@@ -43,16 +42,16 @@ class User extends AbstractType
                         'message' => 'De gebruikersnaam mag alleen letters, cijfers of een liggend streepje bevatten',
                     ])
                 ],
-                'label' => 'Kies een gebruikersnaam (maximaal 10 karakters)',
-                'required' => true,
+                self::KEY_LABEL => 'Kies een gebruikersnaam (maximaal 10 karakters)',
+                self::KEY_REQUIRED => true,
             ])
             ->add(self::FIELD_PLAIN_PASSWORD, PasswordType::class, [
-                'constraints' => [
+                self::KEY_CONSTRAINTS=> [
                     new Length(['min' => 8, 'minMessage' => 'Het wachtwoord moet minimaal 8 karakters lang zijn']),
                 ],
-                'label' => 'Kies een wachtwoord',
-                'mapped' => false,
-                'required' => true,
+                self::KEY_LABEL => 'Kies een wachtwoord',
+                self::KEY_MAPPED => false,
+                self::KEY_REQUIRED => true,
             ]);
     }
 

@@ -6,11 +6,10 @@ use App\Entity\ForumDiscussion;
 use App\Entity\ForumForum;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class ForumDiscussionMove extends AbstractType
+class ForumDiscussionMove extends BaseForm
 {
     /**
      * @param FormBuilderInterface $builder
@@ -19,19 +18,19 @@ class ForumDiscussionMove extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->add('forum', EntityType::class, [
-            'choice_label' => function (ForumForum $forum) {
+            self::KEY_CHOICE_LABEL => function (ForumForum $forum) {
                 return $forum->category->name . ' - ' . $forum->name;
             },
-            'class' => ForumForum::class,
-            'label' => 'Kies een nieuw locatie',
-            'query_builder' => function (EntityRepository $repository) {
+            self::KEY_CLASS=> ForumForum::class,
+            self::KEY_LABEL => 'Kies een nieuw locatie',
+            self::KEY_QUERY_BUILDER => function (EntityRepository $repository) {
                 return $repository
                     ->createQueryBuilder('f')
                     ->join('f.category', 'c')
                     ->orderBy('c.order', 'ASC')
                     ->addOrderBy('f.order', 'ASC');
             },
-            'required' => true,
+            self::KEY_REQUIRED => true,
         ]);
     }
 

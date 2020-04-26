@@ -4,20 +4,85 @@ namespace App\Form;
 
 use App\Entity\UserInfo as UserInfoEntity;
 use Symfony\Component\Finder\Finder;
-use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class UserInfo extends AbstractType
+class UserInfo extends BaseForm
 {
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options): void
+    {
+        $builder
+            ->add('avatar', ChoiceType::class, [
+                self::KEY_CHOICES => $this->getAvatars(),
+                self::KEY_LABEL => 'Jouw avatar',
+                self::KEY_REQUIRED => true,
+            ])
+            ->add('birthDate', DateType::class, [
+                self::KEY_ATTRIBUTES => [self::KEY_CLASS=> 'birthday-picker'],
+                self::KEY_FORMAT=> 'dd-MM-yyyy',
+                self::KEY_HTML5 => false,
+                self::KEY_LABEL => 'Jouw geboortedatum',
+                self::KEY_REQUIRED => false,
+                self::KEY_WIDGET => 'single_text',
+            ])
+            ->add('city', TextType::class, [
+                self::KEY_LABEL => 'Jouw woonplaats',
+                self::KEY_REQUIRED => false,
+            ])
+            ->add('gender', ChoiceType::class, [
+                self::KEY_CHOICES => [
+                    'Niet opgegeven' => UserInfoEntity::GENDER_UNKNOWN,
+                    'Man' => UserInfoEntity::GENDER_MALE,
+                    'Vrouw' => UserInfoEntity::GENDER_FEMALE,
+                ],
+                self::KEY_LABEL => 'Jouw geslacht',
+                self::KEY_REQUIRED => true,
+            ])
+            ->add('info', TextType::class, [
+                self::KEY_LABEL => 'Jouw handtekening in het forum',
+                self::KEY_REQUIRED => false,
+            ])
+            ->add('mobilePhone', TextType::class, [
+                self::KEY_LABEL => 'Jouw mobiele nummer',
+                self::KEY_REQUIRED => false,
+            ])
+            ->add('skype', TextType::class, [
+                self::KEY_LABEL => 'Jouw skype account',
+                self::KEY_REQUIRED => false,
+            ])
+            ->add('website', TextType::class, [
+                self::KEY_LABEL => 'Jouw Skype account',
+                self::KEY_REQUIRED => false,
+            ])
+            ->add('facebookAccount', TextType::class, [
+                self::KEY_LABEL => 'Jouw Facebook account',
+                self::KEY_REQUIRED => false,
+            ])
+            ->add('flickrAccount', TextType::class, [
+                self::KEY_LABEL => 'Jouw Flickr account',
+                self::KEY_REQUIRED => false,
+            ])
+            ->add('twitterAccount', TextType::class, [
+                self::KEY_LABEL => 'Jouw Twitter account',
+                self::KEY_REQUIRED => false,
+            ])
+            ->add('youtubeAccount', TextType::class, [
+                self::KEY_LABEL => 'Jouw Youtube account',
+                self::KEY_REQUIRED => false,
+            ]);
+    }
+
+    /**
+     * @return array
+     */
+    private function getAvatars(): array
     {
         $finder = new Finder();
         $finder->files()->in(__DIR__ . '/../../public/images/avatar');
@@ -26,66 +91,7 @@ class UserInfo extends AbstractType
             $avatarList[strtolower($file->getFilenameWithoutExtension())] = $file->getRelativePathname();
         }
         asort($avatarList);
-
-        $builder
-            ->add('avatar', ChoiceType::class, [
-                'choices' => $avatarList,
-                'label' => 'Jouw avatar',
-                'required' => true,
-            ])
-            ->add('birthDate', DateType::class, [
-                'attr' => ['class' => 'birthday-picker'],
-                'format' => 'dd-MM-yyyy',
-                'html5' => false,
-                'label' => 'Jouw geboortedatum',
-                'required' => false,
-                'widget' => 'single_text',
-            ])
-            ->add('city', TextType::class, [
-                'label' => 'Jouw woonplaats',
-                'required' => false,
-            ])
-            ->add('gender', ChoiceType::class, [
-                'choices' => [
-                    'Niet opgegeven' => UserInfoEntity::GENDER_UNKNOWN,
-                    'Man' => UserInfoEntity::GENDER_MALE,
-                    'Vrouw' => UserInfoEntity::GENDER_FEMALE,
-                ],
-                'label' => 'Jouw geslacht',
-                'required' => true,
-            ])
-            ->add('info', TextType::class, [
-                'label' => 'Jouw handtekening in het forum',
-                'required' => false,
-            ])
-            ->add('mobilePhone', TextType::class, [
-                'label' => 'Jouw mobiele nummer',
-                'required' => false,
-            ])
-            ->add('skype', TextType::class, [
-                'label' => 'Jouw skype account',
-                'required' => false,
-            ])
-            ->add('website', TextType::class, [
-                'label' => 'Jouw Skype account',
-                'required' => false,
-            ])
-            ->add('facebookAccount', TextType::class, [
-                'label' => 'Jouw Facebook account',
-                'required' => false,
-            ])
-            ->add('flickrAccount', TextType::class, [
-                'label' => 'Jouw Flickr account',
-                'required' => false,
-            ])
-            ->add('twitterAccount', TextType::class, [
-                'label' => 'Jouw Twitter account',
-                'required' => false,
-            ])
-            ->add('youtubeAccount', TextType::class, [
-                'label' => 'Jouw Youtube account',
-                'required' => false,
-            ]);
+        return $avatarList;
     }
 
     /**

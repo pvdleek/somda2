@@ -11,14 +11,13 @@ use App\Helpers\UserHelper;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class UserPreferences extends AbstractType
+class UserPreferences extends BaseForm
 {
     /**
      * @var ManagerRegistry
@@ -54,27 +53,27 @@ class UserPreferences extends AbstractType
                 switch($typePart[0]) {
                     case 'number':
                         $builder->add($setting->key, ChoiceType::class, [
-                            'choices' => array_combine(range(1, (int)$typePart[1]), range(1, (int)$typePart[1])),
-                            'data' => (int)$value,
-                            'label' => $setting->description,
-                            'mapped' => false,
-                            'required' => true,
+                            self::KEY_CHOICES => array_combine(range(1, (int)$typePart[1]), range(1, (int)$typePart[1])),
+                            self::KEY_DATA=> (int)$value,
+                            self::KEY_LABEL => $setting->description,
+                            self::KEY_MAPPED => false,
+                            self::KEY_REQUIRED => true,
                         ]);
                         break;
                     case 'text':
                         $builder->add($setting->key, TextType::class, [
-                            'data' => $value,
-                            'label' => $setting->description,
-                            'mapped' => false,
-                            'required' => true,
+                            self::KEY_DATA=> $value,
+                            self::KEY_LABEL => $setting->description,
+                            self::KEY_MAPPED => false,
+                            self::KEY_REQUIRED => true,
                         ]);
                         break;
                     case 'boolean':
                         $builder->add($setting->key, CheckboxType::class, [
-                            'data' => (int)$value === 1,
-                            'label' => $setting->description,
-                            'mapped' => false,
-                            'required' => true,
+                            self::KEY_DATA=> (int)$value === 1,
+                            self::KEY_LABEL => $setting->description,
+                            self::KEY_MAPPED => false,
+                            self::KEY_REQUIRED => true,
                         ]);
                         break;
                     case 'table':
@@ -85,15 +84,15 @@ class UserPreferences extends AbstractType
                         }
 
                         $builder->add($setting->key, EntityType::class, [
-                            'choice_label' => function (Location $location) {
+                            self::KEY_CHOICE_LABEL => function (Location $location) {
                                 return $location->name . ' - ' . $location->description;
                             },
-                            'choice_value' => $typePart[2],
-                            'class' => Location::class,
-                            'data' => $this->doctrine->getRepository(Location::class)->findOneBy(['name' => $value]),
-                            'label' => $setting->description,
-                            'mapped' => false,
-                            'required' => true,
+                            self::KEY_CHOICE_VALUE => $typePart[2],
+                            self::KEY_CLASS=> Location::class,
+                            self::KEY_DATA=> $this->doctrine->getRepository(Location::class)->findOneBy(['name' => $value]),
+                            self::KEY_LABEL => $setting->description,
+                            self::KEY_MAPPED => false,
+                            self::KEY_REQUIRED => true,
                         ]);
                         break;
                     default:
