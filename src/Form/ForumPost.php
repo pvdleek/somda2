@@ -13,6 +13,7 @@ class ForumPost extends BaseForm
     private const QUOTE_HTML = '<blockquote><strong>Quote</strong><hr />%s (%s): %s<hr /></blockquote><br />';
 
     public const FIELD_EDIT_AS_MODERATOR = 'editAsModerator';
+    public const FIELD_TITLE = 'title';
 
     public const OPTION_QUOTED_POST = 'quotedPost';
     public const OPTION_EDITED_POST = 'editedPost';

@@ -6,6 +6,7 @@
         <div class="home-panel-content panel-no-background">
             {{ form_start(form, { 'attr': { 'id': 'edit_form' } }) }}
                 <table class="design">
+                    {% if form.title is defined %}{{ form_row(form.title) }}{% endif %}
                     {{ form_row(form.text) }}
                     {{ form_row(form.signatureOn) }}
                     {{ form_row(form.editReason) }}

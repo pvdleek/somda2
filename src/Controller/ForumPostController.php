@@ -7,6 +7,7 @@ use App\Entity\ForumFavorite;
 use App\Entity\ForumPost;
 use App\Entity\ForumPostLog;
 use App\Entity\ForumPostText;
+use App\Form\BaseForm;
 use App\Form\ForumPost as ForumPostForm;
 use App\Helpers\EmailHelper;
 use App\Helpers\FormHelper;
@@ -16,6 +17,7 @@ use App\Helpers\UserHelper;
 use DateTime;
 use Exception;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -27,27 +29,27 @@ class ForumPostController
     /**
      * @var UserHelper
      */
-    private $userHelper;
+    private UserHelper $userHelper;
 
     /**
      * @var FormHelper
      */
-    private $formHelper;
+    private FormHelper $formHelper;
 
     /**
      * @var ForumAuthorizationHelper
      */
-    private $forumAuthHelper;
+    private ForumAuthorizationHelper $forumAuthHelper;
 
     /**
      * @var TemplateHelper
      */
-    private $templateHelper;
+    private TemplateHelper $templateHelper;
 
     /**
      * @var EmailHelper
      */
-    private $emailHelper;
+    private EmailHelper $emailHelper;
 
     /**
      * @param UserHelper $userHelper
@@ -195,6 +197,16 @@ class ForumPostController
                 CheckboxType::class,
                 ['label' => 'Bewerken als moderator']
             );
+            $postNrInDiscussion = $this->formHelper->getDoctrine()
+                ->getRepository('App:ForumDiscussion')
+                ->getPostNumberInDiscussion($post->discussion, $post->getId());
+            if ($postNrInDiscussion === 0) {
+                $form->add(ForumPostForm::FIELD_TITLE, TextType::class, [
+                    BaseForm::KEY_DATA => $post->discussion->title,
+                    BaseForm::KEY_LABEL => 'Onderwerp van de discussie',
+                    BaseForm::KEY_REQUIRED => true,
+                ]);
+            }
         }
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -226,6 +238,10 @@ class ForumPostController
             $editor = $this->userHelper->getModeratorUser();
         } else {
             $editor = $this->userHelper->getUser();
+        }
+
+        if ($form->has(ForumPostForm::FIELD_TITLE)) {
+            $post->discussion->title = $form->get(ForumPostForm::FIELD_TITLE)->getData();
         }
 
         $post->editTimestamp = new DateTime();
