@@ -11,6 +11,7 @@ use App\Traits\DateTrait;
 use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Extension\RuntimeExtensionInterface;
 
 class StaticDataHelper implements RuntimeExtensionInterface
@@ -21,6 +22,11 @@ class StaticDataHelper implements RuntimeExtensionInterface
      * @var ManagerRegistry
      */
     private ManagerRegistry $doctrine;
+
+    /**
+     * @var TranslatorInterface
+     */
+    private TranslatorInterface $translator;
 
     /**
      * @var array
@@ -39,10 +45,12 @@ class StaticDataHelper implements RuntimeExtensionInterface
 
     /**
      * @param ManagerRegistry $doctrine
+     * @param TranslatorInterface $translator
      */
-    public function __construct(ManagerRegistry $doctrine)
+    public function __construct(ManagerRegistry $doctrine, TranslatorInterface $translator)
     {
         $this->doctrine = $doctrine;
+        $this->translator = $translator;
     }
 
     /**
@@ -110,12 +118,17 @@ class StaticDataHelper implements RuntimeExtensionInterface
             $this->getDefaultTrainTableYear()
         );
         foreach ($routeArray as $route) {
-            $this->routes[$route['routeNumber']] = 'Trein ' . $route['routeNumber'] . ' rijdt als ' .
-                $route['characteristicName'] . ' (' . $route['characteristicDescription'] . ') voor ' .
-                $route['transporter'] . ' van ' . $route['firstLocation'] . ' (' .
-                $this->timeDatabaseToDisplay($route['firstTime']) . ') tot ' . $route['lastLocation'] . ' (' .
-                $this->timeDatabaseToDisplay($route['lastTime']) . ')';
-
+            $this->routes[$route['routeNumber']] = sprintf(
+                $this->translator->trans('trainTable.forum.route'),
+                $route['routeNumber'],
+                $route['characteristicName'],
+                $route['characteristicDescription'],
+                $route['transporter'],
+                $route['firstLocation'],
+                $this->timeDatabaseToDisplay($route['firstTime']),
+                $route['lastLocation'],
+                $this->timeDatabaseToDisplay($route['lastTime']),
+            );
             $this->addSeriesRouteNumber($route);
         }
     }
@@ -146,16 +159,28 @@ class StaticDataHelper implements RuntimeExtensionInterface
         $seriesRouteNumber = 100 * floor($route['routeNumber'] / 100);
         if (!isset($this->routes[$seriesRouteNumber])) {
             if (strlen($route['section']) > 0) {
-                $this->routes[$seriesRouteNumber] = 'Treinserie ' . $seriesRouteNumber . ' rijdt als ' .
-                    $route['characteristicName'] . ' (' . $route['characteristicDescription'] . ') voor ' .
-                    $route['transporter'] . ' over traject ' . $route['section'];
-            } else {
-                $this->routes[$seriesRouteNumber] = 'Treinserie ' . $seriesRouteNumber . ' rijdt als ' .
-                    $route['characteristicName'] . ' (' . $route['characteristicDescription'] . ') voor ' .
-                    $route['transporter'] . ' van ' . $route['firstLocation'] . ' (' .
-                    $this->timeDatabaseToDisplay($route['firstTime']) . ') tot ' . $route['lastLocation'] . ' (' .
-                    $this->timeDatabaseToDisplay($route['lastTime']) . ')';
+                $this->routes[$seriesRouteNumber] = sprintf(
+                    $this->translator->trans('trainTable.forum.seriesWithSection'),
+                    $seriesRouteNumber,
+                    $route['characteristicName'],
+                    $route['characteristicDescription'],
+                    $route['transporter'],
+                    $route['section']
+                );
+                return;
             }
+
+            $this->routes[$seriesRouteNumber] = sprintf(
+                $this->translator->trans('trainTable.forum.series'),
+                $seriesRouteNumber,
+                $route['characteristicName'],
+                $route['characteristicDescription'],
+                $route['transporter'],
+                $route['firstLocation'],
+                $this->timeDatabaseToDisplay($route['firstTime']),
+                $route['lastLocation'],
+                $this->timeDatabaseToDisplay($route['lastTime'])
+            );
         }
     }
 }

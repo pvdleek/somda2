@@ -116,6 +116,10 @@ trainTable:
       title: 'Gepland'
       base: 'Gebaseerd op %s spot(s)'
     notFound: 'Het door jou opgegeven treinnummer is niet gevonden in onze dienstregelings-database'
+  forum:
+    route: 'Trein %s rijdt als %s (%s) voor %s van %s (%s) tot %s (%s)'
+    seriesWithSection: 'Treinserie %s rijdt als %s (%s) voor %s over traject %s'
+    series: 'Treinserie %s rijdt als %s (%s) voor %s van %s (%s) tot %s (%s)'
 passingRoutes:
   input:
     timeRange: 'Geef de begin- en eindtijd<br />(uu / uu:mm / uu.mm / uumm)'

@@ -6,7 +6,6 @@ use App\Entity\ForumDiscussion;
 use App\Entity\ForumFavorite;
 use App\Entity\ForumPost;
 use App\Entity\ForumPostLog;
-use App\Entity\ForumPostText;
 use App\Form\BaseForm;
 use App\Form\ForumPost as ForumPostForm;
 use App\Helpers\EmailHelper;
@@ -96,7 +95,7 @@ class ForumPostController
             ->create(ForumPostForm::class, null, [ForumPostForm::OPTION_QUOTED_POST => $quotedPost]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->addPost($form, $quotedPost->discussion);
+            $this->formHelper->addPost($form, $quotedPost->discussion, $this->userHelper->getUser());
             $this->handleFavoritesForAddedPost($quotedPost->discussion);
 
             return $this->formHelper->finishFormHandling('', 'forum_discussion', [
@@ -117,34 +116,6 @@ class ForumPostController
             'post' => $quotedPost,
             'lastPosts' => $lastPosts,
         ]);
-    }
-
-    /**
-     * @param FormInterface $form
-     * @param ForumDiscussion $discussion
-     * @throws Exception
-     */
-    private function addPost(FormInterface $form, ForumDiscussion $discussion): void
-    {
-        $post = new ForumPost();
-        $post->author = $this->userHelper->getUser();
-        $post->timestamp = new DateTime();
-        $post->discussion = $discussion;
-        $post->signatureOn = $form->get('signatureOn')->getData();
-        $this->formHelper->getDoctrine()->getManager()->persist($post);
-
-        $postText = new ForumPostText();
-        $postText->post = $post;
-        $postText->text = $form->get('text')->getData();
-        $this->formHelper->getDoctrine()->getManager()->persist($postText);
-
-        $postLog = new ForumPostLog();
-        $postLog->action = ForumPostLog::ACTION_POST_NEW;
-        $this->formHelper->getDoctrine()->getManager()->persist($postLog);
-
-        $post->addLog($postLog);
-        $post->text = $postText;
-        $discussion->addPost($post);
     }
 
     /**

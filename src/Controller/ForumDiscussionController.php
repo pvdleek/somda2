@@ -7,8 +7,6 @@ use App\Entity\BannerView;
 use App\Entity\ForumDiscussion;
 use App\Entity\ForumForum;
 use App\Entity\ForumPost;
-use App\Entity\ForumPostLog;
-use App\Entity\ForumPostText;
 use App\Form\ForumDiscussion as ForumDiscussionForm;
 use App\Helpers\FormHelper;
 use App\Helpers\ForumAuthorizationHelper;
@@ -17,7 +15,6 @@ use App\Helpers\TemplateHelper;
 use App\Helpers\UserHelper;
 use DateTime;
 use Exception;
-use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -191,7 +188,6 @@ class ForumDiscussionController
         return $forumBanner;
     }
 
-
     /**
      * @param Request $request
      * @param int $id
@@ -215,7 +211,7 @@ class ForumDiscussionController
         $form = $this->formHelper->getFactory()->create(ForumDiscussionForm::class, $forumDiscussion);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->addPost($form, $forumDiscussion);
+            $this->formHelper->addPost($form, $forumDiscussion, $this->userHelper->getUser());
             $this->formHelper->getDoctrine()->getManager()->persist($forumDiscussion);
 
             return $this->formHelper->finishFormHandling('', 'forum_discussion', [
@@ -229,33 +225,5 @@ class ForumDiscussionController
             'form' => $form->createView(),
             'forum' => $forum
         ]);
-    }
-
-    /**
-     * @param FormInterface $form
-     * @param ForumDiscussion $discussion
-     * @throws Exception
-     */
-    private function addPost(FormInterface $form, ForumDiscussion $discussion): void
-    {
-        $post = new ForumPost();
-        $post->author = $this->userHelper->getUser();
-        $post->timestamp = new DateTime();
-        $post->discussion = $discussion;
-        $post->signatureOn = $form->get('signatureOn')->getData();
-        $this->formHelper->getDoctrine()->getManager()->persist($post);
-
-        $postText = new ForumPostText();
-        $postText->post = $post;
-        $postText->text = $form->get('text')->getData();
-        $this->formHelper->getDoctrine()->getManager()->persist($postText);
-
-        $postLog = new ForumPostLog();
-        $postLog->action = ForumPostLog::ACTION_POST_NEW;
-        $this->formHelper->getDoctrine()->getManager()->persist($postLog);
-
-        $post->addLog($postLog);
-        $post->text = $postText;
-        $discussion->addPost($post);
     }
 }

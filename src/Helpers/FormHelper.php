@@ -2,8 +2,16 @@
 
 namespace App\Helpers;
 
+use App\Entity\ForumDiscussion;
+use App\Entity\ForumPost;
+use App\Entity\ForumPostLog;
+use App\Entity\ForumPostText;
+use App\Entity\User;
+use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
+use Exception;
 use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class FormHelper
@@ -80,5 +88,34 @@ class FormHelper
         }
 
         return $this->redirectHelper->redirectToRoute($route, $routeParameters);
+    }
+
+    /**
+     * @param FormInterface $form
+     * @param ForumDiscussion $discussion
+     * @param User $user
+     * @throws Exception
+     */
+    public function addPost(FormInterface $form, ForumDiscussion $discussion, User $user): void
+    {
+        $post = new ForumPost();
+        $post->author = $user;
+        $post->timestamp = new DateTime();
+        $post->discussion = $discussion;
+        $post->signatureOn = $form->get('signatureOn')->getData();
+        $this->doctrine->getManager()->persist($post);
+
+        $postText = new ForumPostText();
+        $postText->post = $post;
+        $postText->text = $form->get('text')->getData();
+        $this->doctrine->getManager()->persist($postText);
+
+        $postLog = new ForumPostLog();
+        $postLog->action = ForumPostLog::ACTION_POST_NEW;
+        $this->doctrine->getManager()->persist($postLog);
+
+        $post->addLog($postLog);
+        $post->text = $postText;
+        $discussion->addPost($post);
     }
 }
