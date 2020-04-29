@@ -133,7 +133,16 @@ spot_input:
   controller: App\Controller\HomeController::homeAction
 spots:
   path: /spots/
-  controller: App\Controller\HomeController::homeAction
+  controller: App\Controller\SpotController::indexAction
+spots_search:
+  path: /spots/{maxYears}/{searchParameters}
+  methods: [GET]
+  requirements: { maxYears: '1|2|3|4|5', searchParameters: .+ }
+  controller: App\Controller\SpotController:indexAction
+spots_to_train_table:
+  path: /spots/naar-dienstregeling/{routeNumber}/{date}/
+  methods: [GET]
+  controller: App\Controller\SpotController:redirectToTrainTableAction
 my_spots:
   path: /mijn-spots/
   controller: App\Controller\HomeController::homeAction

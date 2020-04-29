@@ -1,0 +1,101 @@
+{% extends('base.html.twig') %}
+
+{% block content %}
+    <br />
+    <table class="design">
+        <tr>
+            <th><label for="max_years">Bekijk spots van maximaal</label></th>
+            <td>
+                <select id="max_years" name="max_years">
+                    <option {{ maxYears == 1 ? 'selected="selected" ' }}value="1">1 jaar oud</option>
+                    <option {{ maxYears == 2 ? 'selected="selected" ' }}value="2">2 jaar oud</option>
+                    <option {{ maxYears == 3 ? 'selected="selected" ' }}value="3">3 jaar oud</option>
+                    <option {{ maxYears == 4 ? 'selected="selected" ' }}value="4">4 jaar oud</option>
+                    <option {{ maxYears == 5 ? 'selected="selected" ' }}value="5">5 jaar oud</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <th><label for="location">Filter op locatie</label></th>
+            <td><input id="location" maxlength="8" name="location" size="10" type="text" value="{{ location }}" /></td>
+        </tr>
+        <tr>
+            <th><label for="day_number">Filter op weekdag</label></th>
+            <td>
+                <select id="day_number" name="day_number">
+                    <option {{ dayNumber is null ? 'selected="selected" ' }}value="0">-</option>
+                    {% for dayNumberSelect in 1..7 %}
+                        <option {{ dayNumber == dayNumberSelect ? 'selected="selected" ' }}value="{{ dayNumberSelect }}">{{ ('general.date.days.' ~ (dayNumberSelect - 1)) | trans }}</option>
+                    {% endfor %}
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <th><label for="train_number">Filter op materieelnummer</label></th>
+            <td><input id="train_number" name="train_number" size="10" type="text" value="{{ trainNumber }}"/></td>
+        </tr>
+        <tr>
+            <th><label for="route_number">Filter op treinnummer</label></th>
+            <td><input id="route_number" name="route_number" size="10" type="text" value="{{ routeNumber }}" /></td>
+        </tr>
+        <tr>
+            <th>&nbsp;</th>
+            <td><a class="somda-button" href="#" id="searchSpots" onclick="searchSpots(); return false;" title="">{{ 'general.button.search' | trans }}</a></td>
+        </tr>
+    </table>
+    <br />
+
+    {% if spots is not null %}
+        <div class="home-panel separate-panel">
+            <div class="home-panel-title">Recente spots</div>
+            <div class="home-panel-content">
+                <table class="design">
+                    <tr>
+                        <th>Materieel</th>
+                        <th>Treinnummer</th>
+                        <th>Positie</th>
+                        <th>Extra info</th>
+                        <th>Datum</th>
+                        <th>Gespot door</th>
+                        <th>Spot-locatie</th>
+                    </tr>
+                    {% for spot in spots %}
+                        <tr>
+                            <td>
+                                {% if spot.train.namePattern is not null %}
+                                    {{ spot.train.namePattern.name }}
+                                {% endif %}
+                                {{ spot.train.number }}
+                            </td>
+                            <td>
+                                {% if spot.route.number matches '/^\\d+$/' %}
+                                    <a href="{{ path('spots_to_train_table', { 'routeNumber': spot.route.number, 'date': spot.timestamp | date('Y-m-d') }) }}" title="Bekijk de dienstregeling van trein {{ spot.route.number }}">{{ spot.route.number }}</a>
+                                {% else %}
+                                    {{ spot.route.number }}
+                                {% endif %}
+                            </td>
+                            <td>{{ spot.position.name }}</td>
+                            <td>{{ spot.extra ? spot.extra.extra }}</td>
+                            <td>{{ spot.timestamp | displayDateTime }}</td>
+                            <td>{{ spot.user.id | displayUser(spot.user.username) | raw }}</td>
+                            <td><span title="{{ spot.location.description }}">{{ spot.location.name }}</span></td>
+                        </tr>
+                    {% else %}
+                        <tr><td colspan="7">Er zijn geen spots gevonden met de ingestelde filters</td></tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        function searchSpots() {
+            let location = '{{ path('spots_search', { 'maxYears': 1, 'searchParameters': 'myParameters' }) }}';
+            location = location.replace('/1/', '/' + document.getElementById('max_years').value + '/');
+            location = location.replace('myParameters', document.getElementById('location').value + '/' + document.getElementById('day_number').value + '/' + document.getElementById('train_number').value + '/' + document.getElementById('route_number').value);
+            document.location = location;
+        }
+    </script>
+{% endblock %}

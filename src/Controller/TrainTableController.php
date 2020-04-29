@@ -16,22 +16,22 @@ class TrainTableController
     /**
      * @var ManagerRegistry
      */
-    private $doctrine;
+    private ManagerRegistry $doctrine;
 
     /**
      * @var TemplateHelper
      */
-    private $templateHelper;
+    private TemplateHelper $templateHelper;
 
     /**
      * @var TrainTableHelper
      */
-    private $trainTableHelper;
+    private TrainTableHelper $trainTableHelper;
 
     /**
      * @var FlashHelper
      */
-    private $flashHelper;
+    private FlashHelper $flashHelper;
 
     /**
      * @param ManagerRegistry $doctrine

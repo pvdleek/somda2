@@ -14,5 +14,7 @@ doctrine:
         prefix: 'App\Entity'
         alias: App
     dql:
+      datetime_functions:
+        dayofweek: DoctrineExtensions\Query\Mysql\DayOfWeek
       string_functions:
         group_concat: DoctrineExtensions\Query\Mysql\GroupConcat

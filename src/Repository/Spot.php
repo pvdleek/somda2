@@ -3,9 +3,11 @@
 namespace App\Repository;
 
 use App\Entity\Spot as SpotEntity;
+use DateTime;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
+use Exception;
 
 class Spot extends EntityRepository
 {
@@ -25,5 +27,51 @@ class Spot extends EntityRepository
         } catch (NoResultException $exception) {
             return 0;
         }
+    }
+
+    /**
+     * @param int $maxYears
+     * @param string|null $location
+     * @param int|null $dayNumber
+     * @param string|null $trainNumber
+     * @param string|null $routeNumber
+     * @return SpotEntity[]
+     * @throws Exception
+     */
+    public function findWithFilters(
+        int $maxYears,
+        string $location = null,
+        int $dayNumber = 0,
+        string $trainNumber = null,
+        string $routeNumber = null
+    ): array {
+        $queryBuilder = $this->getEntityManager()
+            ->createQueryBuilder()
+            ->select('s')
+            ->from(SpotEntity::class, 's')
+            ->andWhere('s.timestamp > :minDate')
+            ->setParameter('minDate', new DateTime('-' . $maxYears . ' years'))
+            ->addOrderBy('s.timestamp', 'DESC');
+
+        if (!is_null($location)) {
+            $queryBuilder->join('s.location', 'l')->andWhere('l.name = :location')->setParameter('location', $location);
+        }
+        if ($dayNumber > 0) {
+            $queryBuilder->andWhere('DAYOFWEEK(s.timestamp) = :dayNumber')->setParameter('dayNumber', $dayNumber);
+        }
+        if (!is_null($trainNumber)) {
+            $queryBuilder
+                ->join('s.train', 't')
+                ->andWhere('t.number = :trainNumber')
+                ->setParameter('trainNumber', $trainNumber);
+        }
+        if (!is_null($routeNumber)) {
+            $queryBuilder
+                ->join('s.route', 'r')
+                ->andWhere('r.number = :routeNumber')
+                ->setParameter('routeNumber', $routeNumber);
+        }
+
+        return $queryBuilder->getQuery()->getResult();
     }
 }
