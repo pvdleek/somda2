@@ -4,8 +4,10 @@ namespace App\Repository;
 
 use App\Entity\Location;
 use App\Entity\TrainTable as TrainTableEntity;
+use App\Entity\TrainTableFirstLast;
 use App\Entity\TrainTableYear;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query\Expr\Join;
 
 class TrainTable extends EntityRepository
 {
@@ -80,19 +82,16 @@ class TrainTable extends EntityRepository
             ->addSelect('l2.name AS lastLocation')
             ->addSelect('fl.lastTime AS lastTime')
             ->addSelect('rl.section AS section')
-            ->from(TrainTableEntity::class, 't')
-            ->join('t.route', 'r')
-            ->join('r.trainTableFirstLasts', 'fl')
+            ->from(TrainTableFirstLast::class, 'fl')
+            ->join('fl.route', 'r')
             ->join('fl.firstLocation', 'l1')
             ->join('fl.lastLocation', 'l2')
-            ->join('r.routeLists', 'rl')
+            ->join('r.routeLists', 'rl', Join::WITH, 'rl.trainTableYear = :trainTableYear')
             ->join('rl.transporter', 'tr')
             ->join('rl.characteristic', 'c')
-            ->andWhere('t.trainTableYear = :trainTableYear')
             ->andWhere('fl.trainTableYear = :trainTableYear')
-            ->setParameter('trainTableYear', $trainTableYear)
             ->andWhere('fl.dayNumber = 1')
-            ->addGroupBy('r.id');
+            ->setParameter('trainTableYear', $trainTableYear);
         return $queryBuilder->getQuery()->getArrayResult();
     }
 }
