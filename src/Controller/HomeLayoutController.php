@@ -13,12 +13,12 @@ class HomeLayoutController
     /**
      * @var ManagerRegistry
      */
-    private $doctrine;
+    private ManagerRegistry $doctrine;
 
     /**
      * @var UserHelper
      */
-    private $userHelper;
+    private UserHelper $userHelper;
 
     /**
      * @param ManagerRegistry $doctrine

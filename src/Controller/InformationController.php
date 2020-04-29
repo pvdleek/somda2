@@ -18,12 +18,12 @@ class InformationController
     /**
      * @var ManagerRegistry
      */
-    private $doctrine;
+    private ManagerRegistry $doctrine;
 
     /**
      * @var TemplateHelper
      */
-    private $templateHelper;
+    private TemplateHelper $templateHelper;
 
     /**
      * @param ManagerRegistry $doctrine

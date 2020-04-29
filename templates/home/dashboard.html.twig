@@ -2,16 +2,16 @@
 	<div class="home-dashboard-container">
 		<div>
 			<strong>Totaal aantal gebruikers</strong>
-			<br />{{ layoutData['dashboard']['activeUsers'] | number_format(0, '', '.') }}
+			<br />{{ layoutData[constant('App\\Controller\\HomeController::KEY_DASHBOARD')]['activeUsers'] | number_format(0, '', '.') }}
 			<br />
 			<br /><strong>Totaal pageviews</strong>
-			<br />{{ layoutData['dashboard']['pageViews'] | number_format(0, '', '.') }}
+			<br />{{ layoutData[constant('App\\Controller\\HomeController::KEY_DASHBOARD')]['pageViews'] | number_format(0, '', '.') }}
 			<br />
 			<br /><strong>Totaal aantal spots</strong>
-			<br />{{ layoutData['dashboard']['spots'] | number_format(0, '', '.') }}
+			<br />{{ layoutData[constant('App\\Controller\\HomeController::KEY_DASHBOARD')]['spots'] | number_format(0, '', '.') }}
 		</div>
 		<div>
-			{% for statistic in layoutData['dashboard']['statistics'] %}
+			{% for statistic in layoutData[constant('App\\Controller\\HomeController::KEY_DASHBOARD')]['statistics'] %}
 				<strong>{{ statistic.timestamp | displayDateTime(false, true) }} - {{ statistic.visitorsTotal }} bezoekers</strong>
 				<br />{{ statistic.numberOfSpots }} spot(s) &amp; {{ statistic.numberOfPosts }} forumbericht(en).
 				<br /><br />
@@ -20,10 +20,10 @@
 	</div>
 </div>
 <div>
-	{% if layoutData['dashboard']['birthdayUsers'] == 1 %}
+	{% if layoutData[constant('App\\Controller\\HomeController::KEY_DASHBOARD')]['birthdayUsers'] == 1 %}
 		<strong>Er is 1 jarige gebruiker! Van harte gefeliciteerd!</strong>
-	{% elseif layoutData['dashboard']['birthdayUsers'] > 1 %}
-		<strong>Er zijn {{ layoutData['dashboard']['birthdayUsers'] }} jarige gebruikers! Van harte gefeliciteerd!</strong>
+	{% elseif layoutData[constant('App\\Controller\\HomeController::KEY_DASHBOARD')]['birthdayUsers'] > 1 %}
+		<strong>Er zijn {{ layoutData[constant('App\\Controller\\HomeController::KEY_DASHBOARD')]['birthdayUsers'] }} jarige gebruikers! Van harte gefeliciteerd!</strong>
 	{% endif %}
 	<span style="font-size:9px;">Het dashboard wordt elk uur bijgewerkt.</span>
 </div>

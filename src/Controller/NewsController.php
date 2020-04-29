@@ -14,17 +14,17 @@ class NewsController
     /**
      * @var ManagerRegistry
      */
-    private $doctrine;
+    private ManagerRegistry $doctrine;
 
     /**
      * @var UserHelper
      */
-    private $userHelper;
+    private UserHelper $userHelper;
 
     /**
      * @var TemplateHelper
      */
-    private $templateHelper;
+    private TemplateHelper $templateHelper;
 
     /**
      * @param ManagerRegistry $doctrine

@@ -23,17 +23,17 @@ class ForumModerateController
     /**
      * @var FormHelper
      */
-    private $formHelper;
+    private FormHelper $formHelper;
 
     /**
      * @var RedirectHelper
      */
-    private $redirectHelper;
+    private RedirectHelper $redirectHelper;
 
     /**
      * @var TemplateHelper
      */
-    private $templateHelper;
+    private TemplateHelper $templateHelper;
 
     /**
      * @param FormHelper $formHelper

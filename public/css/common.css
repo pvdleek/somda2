@@ -521,7 +521,7 @@ span.special-route-image {
 	align-items: center;
 	display: grid;
 	grid-column-gap: 5px;
-	grid-template-columns: auto 15px 15px 15px;
+	grid-template-columns: auto 15px 15px;
 	text-align: center;
 }
 .home-passing-routes-container {

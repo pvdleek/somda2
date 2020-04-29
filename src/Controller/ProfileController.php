@@ -23,37 +23,37 @@ class ProfileController
     /**
      * @var ManagerRegistry
      */
-    private $doctrine;
+    private ManagerRegistry $doctrine;
 
     /**
      * @var UserHelper
      */
-    private $userHelper;
+    private UserHelper $userHelper;
 
     /**
      * @var TemplateHelper
      */
-    private $templateHelper;
+    private TemplateHelper $templateHelper;
 
     /**
      * @var FlashHelper
      */
-    private $flashHelper;
+    private FlashHelper $flashHelper;
 
     /**
      * @var FormFactoryInterface
      */
-    private $formFactory;
+    private FormFactoryInterface $formFactory;
 
     /**
      * @var RedirectHelper
      */
-    private $redirectHelper;
+    private RedirectHelper $redirectHelper;
 
     /**
      * @var EmailHelper
      */
-    private $emailHelper;
+    private EmailHelper $emailHelper;
 
     /**
      * @param ManagerRegistry $doctrine

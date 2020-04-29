@@ -17,17 +17,17 @@ class SettingsController
     /**
      * @var FormHelper
      */
-    private $formHelper;
+    private FormHelper $formHelper;
 
     /**
      * @var UserHelper
      */
-    private $userHelper;
+    private UserHelper $userHelper;
 
     /**
      * @var TemplateHelper
      */
-    private $templateHelper;
+    private TemplateHelper $templateHelper;
 
     /**
      * @param FormHelper $formHelper

@@ -17,22 +17,22 @@ class SomdaController
     /**
      * @var UserHelper
      */
-    private $userHelper;
+    private UserHelper $userHelper;
 
     /**
      * @var FormHelper
      */
-    private $formHelper;
+    private FormHelper $formHelper;
 
     /**
      * @var TemplateHelper
      */
-    private $templateHelper;
+    private TemplateHelper $templateHelper;
 
     /**
      * @var EmailHelper
      */
-    private $emailHelper;
+    private EmailHelper $emailHelper;
 
     /**
      * @param UserHelper $userHelper

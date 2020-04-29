@@ -18,27 +18,27 @@ class ForumForumController
     /**
      * @var ManagerRegistry
      */
-    private $doctrine;
+    private ManagerRegistry $doctrine;
 
     /**
      * @var UserHelper
      */
-    private $userHelper;
+    private UserHelper $userHelper;
 
     /**
      * @var TemplateHelper
      */
-    private $templateHelper;
+    private TemplateHelper $templateHelper;
 
     /**
      * @var RedirectHelper
      */
-    private $redirectHelper;
+    private RedirectHelper $redirectHelper;
 
     /**
      * @var ForumAuthorizationHelper
      */
-    private $forumAuthHelper;
+    private ForumAuthorizationHelper $forumAuthHelper;
 
     /**
      * @param ManagerRegistry $doctrine

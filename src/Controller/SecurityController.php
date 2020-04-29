@@ -30,37 +30,37 @@ class SecurityController
     /**
      * @var ManagerRegistry
      */
-    private $doctrine;
+    private ManagerRegistry $doctrine;
 
     /**
      * @var UserHelper
      */
-    private $userHelper;
+    private UserHelper $userHelper;
 
     /**
      * @var RedirectHelper
      */
-    private $redirectHelper;
+    private RedirectHelper $redirectHelper;
 
     /**
      * @var FormFactoryInterface
      */
-    private $formFactory;
+    private FormFactoryInterface $formFactory;
 
     /**
      * @var TemplateHelper
      */
-    private $templateHelper;
+    private TemplateHelper $templateHelper;
 
     /**
      * @var FlashHelper
      */
-    private $flashHelper;
+    private FlashHelper $flashHelper;
 
     /**
      * @var EmailHelper
      */
-    private $emailHelper;
+    private EmailHelper $emailHelper;
 
     /**
      * @param ManagerRegistry $doctrine

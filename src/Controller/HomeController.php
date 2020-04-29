@@ -20,20 +20,27 @@ use Symfony\Component\HttpFoundation\Response;
 
 class HomeController
 {
+    public const KEY_DASHBOARD = 'dashboard';
+    public const KEY_DASHBOARD_MINIMIZED = 'dashboard-min';
+    public const KEY_SPOTS = 'spots';
+    public const KEY_SPOTS_MINIMIZED = 'spots-min';
+    public const KEY_FORUM_SPOTS = 'forumSpots';
+    public const KEY_PASSING_ROUTES = 'passing-routes';
+
     /**
      * @var ManagerRegistry
      */
-    private $doctrine;
+    private ManagerRegistry $doctrine;
 
     /**
      * @var UserHelper
      */
-    private $userHelper;
+    private UserHelper $userHelper;
 
     /**
      * @var TemplateHelper
      */
-    private $templateHelper;
+    private TemplateHelper $templateHelper;
 
     /**
      * @param ManagerRegistry $doctrine
@@ -84,12 +91,16 @@ class HomeController
      */
     private function loadDataForDashboard(array $layout, array &$layoutData): void
     {
-        if (in_array('dashboard', $layout) || in_array('dashboard-min', $layout)) {
-            $layoutData['dashboard']['activeUsers'] = $this->doctrine->getRepository(User::class)->countActive();
-            $layoutData['dashboard']['pageViews'] = $this->doctrine->getRepository(Statistic::class)->countPageViews();
-            $layoutData['dashboard']['spots'] = $this->doctrine->getRepository(Spot::class)->countAll();
-            $layoutData['dashboard']['statistics'] = $this->doctrine->getRepository(Statistic::class)->findLastDays(3);
-            $layoutData['dashboard']['birthdayUsers'] = $this->doctrine->getRepository(User::class)->countBirthdays();
+        if (in_array(self::KEY_DASHBOARD, $layout) || in_array(self::KEY_DASHBOARD_MINIMIZED, $layout)) {
+            $layoutData[self::KEY_DASHBOARD]['activeUsers'] =
+                $this->doctrine->getRepository(User::class)->countActive();
+            $layoutData[self::KEY_DASHBOARD]['pageViews'] =
+                $this->doctrine->getRepository(Statistic::class)->countPageViews();
+            $layoutData[self::KEY_DASHBOARD]['spots'] = $this->doctrine->getRepository(Spot::class)->countAll();
+            $layoutData[self::KEY_DASHBOARD]['statistics'] =
+                $this->doctrine->getRepository(Statistic::class)->findLastDays(3);
+            $layoutData[self::KEY_DASHBOARD]['birthdayUsers'] =
+                $this->doctrine->getRepository(User::class)->countBirthdays();
         }
     }
 
@@ -127,9 +138,9 @@ class HomeController
              * @var ForumForum $forum
              */
             $forum = $this->doctrine->getRepository(ForumForum::class)->find($_ENV['WRONG_SPOTS_FORUM_ID']);
-            $layoutData['forum-spots']['id'] = $forum->getId();
-            $layoutData['forum-spots']['name'] = $forum->name;
-            $layoutData['forum-spots']['discussions'] = $this->doctrine
+            $layoutData[self::KEY_FORUM_SPOTS]['id'] = $forum->getId();
+            $layoutData[self::KEY_FORUM_SPOTS]['name'] = $forum->name;
+            $layoutData[self::KEY_FORUM_SPOTS]['discussions'] = $this->doctrine
                 ->getRepository(ForumDiscussion::class)
                 ->findByForum($forum, $this->userHelper->getUser());
         }
@@ -165,9 +176,9 @@ class HomeController
      */
     private function loadDataForSpots(array $layout, array &$layoutData): void
     {
-        if (in_array('spots', $layout) || in_array('spots-min', $layout)) {
+        if (in_array(self::KEY_SPOTS, $layout) || in_array(self::KEY_SPOTS_MINIMIZED, $layout)) {
             $limit = $this->userHelper->getPreferenceByKey(UserPreference::KEY_HOME_MAX_SPOTS)->value;
-            $layoutData['spots'] =
+            $layoutData[self::KEY_SPOTS] =
                 $this->doctrine->getRepository(Spot::class)->findBy([], ['timestamp' => 'DESC'], $limit);
         }
     }
@@ -180,10 +191,10 @@ class HomeController
     private function loadDataForPassingRoutes(array $layout, array &$layoutData): void
     {
         if (in_array('doorkomst', $layout) || in_array('doorkomst-min', $layout)) {
-            $layoutData['passingRoutes']['location'] = $this->userHelper
+            $layoutData[self::KEY_PASSING_ROUTES]['location'] = $this->userHelper
                 ->getPreferenceByKey(UserPreference::KEY_DEFAULT_SPOT_LOCATION)->value;
-            $layoutData['passingRoutes']['startTime'] = new DateTime('-5 minutes');
-            $layoutData['passingRoutes']['endTime'] = new DateTime('+30 minutes');
+            $layoutData[self::KEY_PASSING_ROUTES]['startTime'] = new DateTime('-5 minutes');
+            $layoutData[self::KEY_PASSING_ROUTES]['endTime'] = new DateTime('+30 minutes');
         }
     }
 }

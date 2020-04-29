@@ -1,7 +1,7 @@
 <div class="home-passing-routes-container">
-	<div><label for="location">Locatie</label> <input id="location" maxlength="10" name="location" type="text" value="{{ layoutData['passingRoutes']['location'] }}" /></div>
-	<div><label for="start_time">Van</label> <input id="start_time" maxlength="5" name="start_time" size="5" type="text" value="{{ layoutData['passingRoutes']['startTime'] | date('H:i') }}" /></div>
-	<div><label for="end_time">Tot</label> <input id="end_time" maxlength="5" name="end_time" size="5" type="text" value="{{ layoutData['passingRoutes']['endTime'] | date('H:i') }}" /></div>
+	<div><label for="location">Locatie</label> <input id="location" maxlength="10" name="location" type="text" value="{{ layoutData[constant('App\\Controller\\HomeController::KEY_PASSING_ROUTES')]['location'] }}" /></div>
+	<div><label for="start_time">Van</label> <input id="start_time" maxlength="5" name="start_time" size="5" type="text" value="{{ layoutData[constant('App\\Controller\\HomeController::KEY_PASSING_ROUTES')]['startTime'] | date('H:i') }}" /></div>
+	<div><label for="end_time">Tot</label> <input id="end_time" maxlength="5" name="end_time" size="5" type="text" value="{{ layoutData[constant('App\\Controller\\HomeController::KEY_PASSING_ROUTES')]['endTime'] | date('H:i') }}" /></div>
 </div>
 
 <br />
