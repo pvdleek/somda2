@@ -2,7 +2,7 @@ home:
   path: /
   methods: [GET]
   controller: App\Controller\HomeController::indexAction
-home_update_layout:
+home_update_layout_json:
   path: /layout-bewerken/{layout}/
   methods: [GET]
   controller: App\Controller\HomeLayoutController::updateAction

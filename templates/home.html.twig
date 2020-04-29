@@ -58,7 +58,7 @@
                 }
             });
             $.ajax({
-                url: '{{ path('home_update_layout', { 'layout': 'dashboard' }) }}'.replace('/dashboard/', '/' + layout.join(';') + '/')
+                url: '{{ path('home_update_layout_json', { 'layout': 'dashboard' }) }}'.replace('/dashboard/', '/' + layout.join(';') + '/')
             })
         }
 

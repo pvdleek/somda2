@@ -72,10 +72,3 @@
 
 </body>
 </html>
-
-{#$ip = getUserIP();#}
-{#$query = 'INSERT DELAYED INTO `'.DB_PREFIX.'_logging` (`uid`, `datumtijd`, `blokid`, `ip`)#}
-{#VALUES ('.$session->uid.', UNIX_TIMESTAMP(NOW()), '.$blokid.', ' . (strpos($ip, ':') === false ? 'INET_ATON(\''.getUserIP().'\')' : '0') . ')';#}
-{#$db->queryF($query);#}
-{#$db_manager->closeConnection($db_conn);#}
-{#$db->close();#}

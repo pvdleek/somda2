@@ -32,16 +32,21 @@ class Log extends Entity
     public int $ipAddress;
 
     /**
-     * @var User
+     * @var string
+     * @ORM\Column(name="route", type="string", nullable=false)
+     */
+    public string $route;
+
+    /**
+     * @var array
+     * @ORM\Column(name="route_parameters", type="array", nullable=false)
+     */
+    public array $routeParameters = [];
+
+    /**
+     * @var User|null
      * @ORM\ManyToOne(targetEntity="App\Entity\User")
      * @ORM\JoinColumn(name="uid", referencedColumnName="uid")
      */
-    public User $user;
-
-    /**
-     * @var Block
-     * @ORM\ManyToOne(targetEntity="App\Entity\Block")
-     * @ORM\JoinColumn(name="blokid", referencedColumnName="blokid")
-     */
-    public Block $block;
+    public ?User $user;
 }
