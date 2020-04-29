@@ -53,7 +53,7 @@ class MenuHelper implements RuntimeExtensionInterface
         foreach ($blocks as $block) {
             if (strlen($block['route']) > 0
                 && (is_null($block['role']) || (
-                    !is_null($user) && ($user->hasRole($block['role']) || $user->hasRole('ROLE_SUPER_ADMIN')))
+                    !is_null($user) && ($user->hasRole($block['role']) || $user->hasRole('ROLE_ADMIN')))
                 )
             ) {
                 $allowedBlocks[] = $block;

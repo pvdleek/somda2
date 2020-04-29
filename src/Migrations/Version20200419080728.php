@@ -47,7 +47,6 @@ final class Version20200419080728 extends AbstractMigration
         $this->addSql('UPDATE `somda_blokken` SET `route` = \'contact\' WHERE `blokid` = 23');
         $this->addSql('UPDATE `somda_blokken` SET `route` = \'change_password\' WHERE `blokid` = 24');
         $this->addSql('UPDATE `somda_blokken` SET `route` = \'lost_password\' WHERE `blokid` = 25');
-        $this->addSql('UPDATE `somda_blokken` SET `route` = \'activate\' WHERE `blokid` = 26');
         $this->addSql('UPDATE `somda_blokken` SET `route` = \'register\' WHERE `blokid` = 27');
         $this->addSql('UPDATE `somda_blokken` SET `route` = \'manage_user\' WHERE `blokid` = 30');
         $this->addSql('UPDATE `somda_blokken` SET `route` = \'manage_news\' WHERE `blokid` = 32');
@@ -79,15 +78,18 @@ final class Version20200419080728 extends AbstractMigration
             WHERE `blokid` IN (31, 36, 44, 47, 56, 59, 60, 62, 64, 65, 69, 80, 81, 82, 83, 84, 85, 87, 88, 90)
         ');
 
-        $this->addSql(
-            'DELETE FROM `somda_help_text` WHERE `blokid` IN (5, 10, 11, 13, 19, 29, 34, 37, 43, 46, 50, 51, 52, 68, 96)'
-        );
-        $this->addSql(
-            'DELETE FROM `somda_stats_blokken` WHERE `blokid` IN (5, 10, 11, 13, 19, 29, 34, 37, 43, 46, 50, 51, 52, 68, 96)'
-        );
-        $this->addSql(
-            'DELETE FROM `somda_blokken` WHERE `blokid` IN (5, 10, 11, 13, 19, 29, 34, 37, 43, 46, 50, 51, 52, 68, 96)'
-        );
+        $this->addSql('
+            DELETE FROM `somda_help_text`
+            WHERE `blokid` IN (5, 10, 11, 13, 19, 26, 29, 34, 37, 43, 46, 50, 51, 52, 68, 96)
+        ');
+        $this->addSql('
+            DELETE FROM `somda_stats_blokken`
+            WHERE `blokid` IN (5, 10, 11, 13, 19, 26, 29, 34, 37, 43, 46, 50, 51, 52, 68, 96)
+        ');
+        $this->addSql('
+            DELETE FROM `somda_blokken`
+            WHERE `blokid` IN (5, 10, 11, 13, 19, 26, 29, 34, 37, 43, 46, 50, 51, 52, 68, 96)
+        ');
     }
 
     /**
