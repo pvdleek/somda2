@@ -14,12 +14,12 @@ class LinkTrainsToNamingPatternCommand extends Command
     /**
      * @var string
      */
-    protected static $defaultName = 'LinkTrainsToNamingPatterns';
+    protected static $defaultName = 'app:link-trains-to-naming-pattern';
 
     /**
      * @var ManagerRegistry
      */
-    private $doctrine;
+    private ManagerRegistry $doctrine;
 
     /**
      * @param ManagerRegistry $doctrine
@@ -36,9 +36,7 @@ class LinkTrainsToNamingPatternCommand extends Command
      */
     protected function configure(): void
     {
-        $this
-            ->setName('link-trains-to-naming-pattern')
-            ->setDescription('Link all trains (somda_mat) to naming patterns');
+        $this->setDescription('Link all trains (somda_mat) to naming patterns');
     }
 
     /**
