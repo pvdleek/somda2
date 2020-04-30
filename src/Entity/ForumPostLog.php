@@ -13,8 +13,7 @@ class ForumPostLog extends Entity
 {
     public const ACTION_POST_NEW = 0;
     public const ACTION_POST_EDIT = 1;
-    public const ACTION_POST_DELETE = 2;
-    public const ACTION_VALUES = [self::ACTION_POST_NEW, self::ACTION_POST_EDIT, self::ACTION_POST_DELETE];
+    public const ACTION_VALUES = [self::ACTION_POST_NEW, self::ACTION_POST_EDIT];
 
     /**
      * @var int
