@@ -62,7 +62,8 @@ class TrainTableController
         $submit = false;
 
         if (is_null($trainTableIndexNumber)) {
-            $trainTableIndexNumber = $this->trainTableHelper->getDefaultTrainTableYear()->getId();
+            $trainTableIndexNumber =
+                $this->doctrine->getRepository(TrainTableYear::class)->findCurrentTrainTableYear()->getId();
         } else {
             $submit = true;
             $this->trainTableHelper->setTrainTableYear($trainTableIndexNumber);
@@ -103,7 +104,8 @@ class TrainTableController
     ): Response {
         $passingRoutes = [];
         if (is_null($trainTableIndexNumber)) {
-            $trainTableIndexNumber = $this->trainTableHelper->getDefaultTrainTableYear()->getId();
+            $trainTableIndexNumber =
+                $this->doctrine->getRepository(TrainTableYear::class)->findCurrentTrainTableYear()->getId();
         } else {
             $this->trainTableHelper->setTrainTableYear($trainTableIndexNumber);
             $this->trainTableHelper->setLocation($locationName);

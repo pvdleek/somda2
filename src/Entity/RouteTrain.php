@@ -11,12 +11,12 @@ use Doctrine\ORM\Mapping as ORM;
 class RouteTrain
 {
     /**
-     * @var TrainTable
+     * @var TrainTableYear
      * @ORM\ManyToOne(targetEntity="App\Entity\TrainTableYear")
      * @ORM\JoinColumn(name="tdr_nr", referencedColumnName="tdr_nr")
      * @ORM\Id
      */
-    public TrainTable $trainTableYear;
+    public TrainTableYear $trainTableYear;
 
     /**
      * @var Route
@@ -48,16 +48,9 @@ class RouteTrain
     public int $numberOfSpots = 0;
 
     /**
-     * @var TrainNameRange
-     * @ORM\ManyToOne(targetEntity="App\Entity\TrainNameRange")
-     * @ORM\JoinColumn(name="mat_naam_id", referencedColumnName="id")
+     * @var TrainNamePattern
+     * @ORM\ManyToOne(targetEntity="App\Entity\TrainNamePattern")
+     * @ORM\JoinColumn(name="mat_pattern_id", referencedColumnName="id")
      */
-    public TrainNameRange $trainNameRange;
-
-    /**
-     * @var TrainTypeNamePattern
-     * @ORM\ManyToOne(targetEntity="App\Entity\TrainTypeNamePattern")
-     * @ORM\JoinColumn(name="mat_type_id", referencedColumnName="id")
-     */
-    public TrainTypeNamePattern $trainTypeNamePattern;
+    public TrainNamePattern $trainNamePattern;
 }

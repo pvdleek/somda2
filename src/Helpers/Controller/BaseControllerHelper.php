@@ -69,24 +69,6 @@ class BaseControllerHelper
     }
 
     /**
-     * @return TrainTableYear
-     * @throws Exception
-     */
-    public function getDefaultTrainTableYear(): TrainTableYear
-    {
-        /**
-         * @var TrainTableYear[] $trainTableYears
-         */
-        $trainTableYears = $this->doctrine->getRepository(TrainTableYear::class)->findAll();
-        foreach ($trainTableYears as $trainTableYear) {
-            if ($trainTableYear->startDate <= new DateTime() && $trainTableYear->endDate >= new DateTime()) {
-                return $trainTableYear;
-            }
-        }
-        return $trainTableYears[0];
-    }
-
-    /**
      * @param string $routeNumber
      */
     public function setRoute(string $routeNumber): void

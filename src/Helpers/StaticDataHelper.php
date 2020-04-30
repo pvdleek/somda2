@@ -115,7 +115,7 @@ class StaticDataHelper implements RuntimeExtensionInterface
         }
 
         $routeArray = $this->doctrine->getRepository(TrainTable::class)->findAllTrainTablesForForum(
-            $this->getDefaultTrainTableYear()
+            $this->doctrine->getRepository(TrainTableYear::class)->findCurrentTrainTableYear()
         );
         foreach ($routeArray as $route) {
             $this->routes[$route['routeNumber']] = sprintf(
@@ -131,24 +131,6 @@ class StaticDataHelper implements RuntimeExtensionInterface
             );
             $this->addSeriesRouteNumber($route);
         }
-    }
-
-    /**
-     * @return TrainTableYear
-     * @throws Exception
-     */
-    private function getDefaultTrainTableYear(): TrainTableYear
-    {
-        /**
-         * @var TrainTableYear[] $trainTableYears
-         */
-        $trainTableYears = $this->doctrine->getRepository(TrainTableYear::class)->findAll();
-        foreach ($trainTableYears as $trainTableYear) {
-            if ($trainTableYear->startDate <= new DateTime() && $trainTableYear->endDate >= new DateTime()) {
-                return $trainTableYear;
-            }
-        }
-        return $trainTableYears[0];
     }
 
     /**

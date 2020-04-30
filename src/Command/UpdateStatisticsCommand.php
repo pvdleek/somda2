@@ -2,6 +2,7 @@
 
 namespace App\Command;
 
+use AurimasNiekis\SchedulerBundle\ScheduledJobInterface;
 use DateTime;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Exception;
@@ -9,7 +10,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class UpdateStatisticsCommand extends Command
+class UpdateStatisticsCommand extends Command implements ScheduledJobInterface
 {
     /**
      * @var string
@@ -34,18 +35,34 @@ class UpdateStatisticsCommand extends Command
     /**
      *
      */
+    public function __invoke()
+    {
+        $this->execute();
+    }
+
+    /**
+     * @return string
+     */
+    public function getSchedulerExpresion(): string
+    {
+        return '7 * * * *';
+    }
+
+    /**
+     *
+     */
     protected function configure(): void
     {
         $this->setDescription('Update statistics');
     }
 
     /**
-     * @param InputInterface $input
-     * @param OutputInterface $output
+     * @param InputInterface|null $input
+     * @param OutputInterface|null $output
      * @return int
      * @throws Exception
      */
-    protected function execute(InputInterface $input, OutputInterface $output): int
+    protected function execute(InputInterface $input = null, OutputInterface $output = null): int
     {
         $today = new DateTime();
         $yesterday = new DateTime('-1 day');

@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="somda_tdr_drgl")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\TrainTableYear")
  */
 class TrainTableYear extends Entity
 {

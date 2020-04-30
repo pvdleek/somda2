@@ -1,4 +1,7 @@
 {
+    "aurimasniekis/scheduler-bundle": {
+        "version": "1.0.0"
+    },
     "beberlei/doctrineextensions": {
         "version": "v1.2.6"
     },
@@ -95,6 +98,9 @@
     },
     "doctrine/reflection": {
         "version": "v1.1.0"
+    },
+    "dragonmantank/cron-expression": {
+        "version": "v2.3.0"
     },
     "egulias/email-validator": {
         "version": "2.1.17"

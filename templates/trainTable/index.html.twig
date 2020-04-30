@@ -33,17 +33,17 @@
                     {% endfor %}
                 </tr>
                 <tr>
-                    {% for dayNumber in 0..6 %}
+                    {% for dayNumber in 1..7 %}
                         <td>
                             {% for routeTrain in routePredictions %}
                                 {% if routeTrain.dayNumber == dayNumber %}
                                     {{ 'trainTable.output.planned.title' | trans }}:
-                                    <a title="{{ 'trainTable.output.planned.base' | trans | format(routeTrain.numberOfSpots) }}">{{ routeTrain.trainNameRange.name }}{% if routeTrain.position.id > 0 %} ({{ routeTrain.position.name }}){% endif %}</a><br />
+                                    <a title="{{ 'trainTable.output.planned.base' | trans | format(routeTrain.numberOfSpots) }}">{{ routeTrain.trainNamePattern.name }}{% if routeTrain.position.id > 0 %} ({{ routeTrain.position.name }}){% endif %}</a><br />
                                 {% endif %}
                             {% endfor %}
                             <table class="design">
                                 {% for trainTable in trainTableLines %}
-                                    {% if trainTable.routeOperationDays.day(dayNumber) %}
+                                    {% if trainTable.routeOperationDays.day(dayNumber - 1) %}
                                         <tr>
                                             <td><span class="tooltip" title="{{ trainTable.location.description }}">{{ trainTable.location.name }}</span></td>
                                             <td>{{ trainTable.action }}</td>

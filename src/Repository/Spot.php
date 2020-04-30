@@ -2,11 +2,13 @@
 
 namespace App\Repository;
 
+use App\Entity\Route;
 use App\Entity\Spot as SpotEntity;
 use DateTime;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
+use Doctrine\ORM\Query\Expr\Join;
 use Exception;
 
 class Spot extends EntityRepository
@@ -73,5 +75,30 @@ class Spot extends EntityRepository
         }
 
         return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * @param DateTime $checkDate
+     * @return array
+     */
+    public function findForRouteTrains(DateTime $checkDate): array
+    {
+        $queryBuilder = $this->getEntityManager()
+            ->createQueryBuilder()
+            ->addSelect('r.id AS routeId')
+            ->addSelect('n.id AS patternId')
+            ->addSelect('p.id AS positionId')
+            ->addSelect('DAYOFWEEK(s.timestamp) AS dayOfWeek')
+            ->addSelect('COUNT(s.id) AS numberOfSPots')
+            ->from(Route::class, 'r')
+            ->join('r.spots', 's', Join::WITH, 's.timestamp >= :checkDate')
+            ->join('s.train', 't')
+            ->join('t.namePattern', 'n')
+            ->join('s.position', 'p')
+            ->setParameter('checkDate', $checkDate)
+            ->addGroupBy('r.id')
+            ->addGroupBy('n.id')
+            ->addGroupBy('dayOfWeek');
+        return $queryBuilder->getQuery()->getArrayResult();
     }
 }
