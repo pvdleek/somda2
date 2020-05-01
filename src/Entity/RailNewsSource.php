@@ -44,6 +44,12 @@ class RailNewsSource extends Entity
     public string $description;
 
     /**
+     * @var RailNewsSourceFeed
+     * @ORM\OneToMany(targetEntity="App\Entity\RailNewsSourceFeed", mappedBy="source")
+     */
+    private $feeds;
+
+    /**
      * @var RailNews
      * @ORM\OneToMany(targetEntity="App\Entity\RailNews", mappedBy="source")
      */
@@ -54,7 +60,26 @@ class RailNewsSource extends Entity
      */
     public function __construct()
     {
+        $this->feeds = new ArrayCollection();
         $this->news = new ArrayCollection();
+    }
+
+    /**
+     * @param RailNewsSourceFeed $railNewsSourceFeed
+     * @return RailNewsSource
+     */
+    public function addFeed(RailNewsSourceFeed $railNewsSourceFeed): RailNewsSource
+    {
+        $this->feeds[] = $railNewsSourceFeed;
+        return $this;
+    }
+
+    /**
+     * @return RailNewsSourceFeed[]
+     */
+    public function getFeeds(): array
+    {
+        return $this->feeds->toArray();
     }
 
     /**

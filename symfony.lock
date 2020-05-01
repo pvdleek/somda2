@@ -8,6 +8,22 @@
     "composer/xdebug-handler": {
         "version": "1.4.1"
     },
+    "debril/feed-io": {
+        "version": "v4.6.0"
+    },
+    "debril/rss-atom-bundle": {
+        "version": "4.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "4.0",
+            "ref": "2c23ed747eda9f4c13f5e7eb55fffa1091fdd505"
+        },
+        "files": [
+            "config/packages/rss_atom.yaml",
+            "config/routes/rss_atom.yaml"
+        ]
+    },
     "doctrine/annotations": {
         "version": "1.0",
         "recipe": {
@@ -117,6 +133,15 @@
             "config/packages/fos_ckeditor.yaml"
         ]
     },
+    "guzzlehttp/guzzle": {
+        "version": "6.5.3"
+    },
+    "guzzlehttp/promises": {
+        "version": "v1.3.1"
+    },
+    "guzzlehttp/psr7": {
+        "version": "1.6.1"
+    },
     "jdorn/sql-formatter": {
         "version": "v1.2.17"
     },
@@ -162,11 +187,17 @@
     "psr/event-dispatcher": {
         "version": "1.0.0"
     },
+    "psr/http-message": {
+        "version": "1.0.1"
+    },
     "psr/link": {
         "version": "1.0.0"
     },
     "psr/log": {
         "version": "1.1.2"
+    },
+    "ralouphie/getallheaders": {
+        "version": "3.0.3"
     },
     "sensio/framework-extra-bundle": {
         "version": "5.2",

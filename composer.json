@@ -7,6 +7,7 @@
         "ext-iconv": "*",
         "aurimasniekis/scheduler-bundle": "^1.0",
         "beberlei/doctrineextensions": "^1.2",
+        "debril/rss-atom-bundle": "^5.0",
         "friendsofsymfony/ckeditor-bundle": "^2.2",
         "sensio/framework-extra-bundle": "^5.1",
         "symfony/asset": "5.0.*",
