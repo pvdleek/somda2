@@ -40,6 +40,7 @@ final class Version20200501094837 extends AbstractMigration
         $this->addSql('
             INSERT INTO `somda_snf_spoor_nieuws_bron_feed` (`snf_snb_id`, `snf_url`, `snf_filter_results`) VALUES
             (18, \'https://nieuws.ns.nl/feed/nl\', \'0\'),
+            (22, \'https://www.prorail.nl/nieuws/rss\', \'0\'),
             (39, \'https://www.treinreiziger.nl/rss/\', \'0\'),
             (51, \'https://www.treinenweb.nl/rss\', \'0\'),
             (38, \'https://www.treinennieuws.nl/feed/\', \'0\'),
