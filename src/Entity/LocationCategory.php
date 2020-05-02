@@ -11,6 +11,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class LocationCategory extends Entity
 {
+    public const NO_LONGER_VALID_ID = 50;
+
     /**
      * @var int
      * @ORM\Column(name="verk_catid", type="bigint", nullable=false)
@@ -18,6 +20,12 @@ class LocationCategory extends Entity
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     protected int $id;
+
+    /**
+     * @var string
+     * @ORM\Column(name="code", type="string", length=5, nullable=false)
+     */
+    public string $code = '';
 
     /**
      * @var string

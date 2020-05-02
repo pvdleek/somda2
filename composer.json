@@ -4,7 +4,9 @@
     "require": {
         "php": "^7.4",
         "ext-ctype": "*",
+        "ext-curl": "*",
         "ext-iconv": "*",
+        "ext-json": "*",
         "aurimasniekis/scheduler-bundle": "^1.0",
         "beberlei/doctrineextensions": "^1.2",
         "debril/rss-atom-bundle": "^5.0",
