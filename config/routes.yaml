@@ -346,7 +346,18 @@ manage_train_compositions:
   controller: App\Controller\HomeController::homeAction
 manage_route_lists:
   path: /beheer-treinnummerlijst/
-  controller: App\Controller\HomeController::homeAction
+  methods: [GET]
+  controller: App\Controller\ManageTrainTableController::routeListsAction
+manage_route_lists_year:
+  path: /beheer-treinnummerlijst/{id}/
+  methods: [GET]
+  requirements: { id: \d+ }
+  controller: App\Controller\ManageTrainTableController::routeListsAction
+manage_route_list:
+  path: /beheer-treinnummerlijst-item/{yearId}/{id}/
+  methods: [GET, POST]
+  requirements: { yearId: \d+, id: \d+ }
+  controller: App\Controller\ManageTrainTableController::routeListAction
 
 
 
@@ -381,26 +392,5 @@ shout_archief:
   path: /
   controller: App\Controller\HomeController::homeAction
 grafisch:
-  path: /
-  controller: App\Controller\HomeController::homeAction
-nieuws_home:
-  path: /
-  controller: App\Controller\HomeController::homeAction
-informatie_home:
-  path: /
-  controller: App\Controller\HomeController::homeAction
-dienstregeling_home:
-  path: /
-  controller: App\Controller\HomeController::homeAction
-spots_home:
-  path: /
-  controller: App\Controller\HomeController::homeAction
-materieel_home:
-  path: /
-  controller: App\Controller\HomeController::homeAction
-forum_home:
-  path: /
-  controller: App\Controller\HomeController::homeAction
-mijnsomda_home:
   path: /
   controller: App\Controller\HomeController::homeAction

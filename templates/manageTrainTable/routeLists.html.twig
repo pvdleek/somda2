@@ -1,0 +1,50 @@
+{% extends('base.html.twig') %}
+
+{% block content %}
+    <div class="home-panel separate-panel">
+        <div class="home-panel-title">Beheer treinnummerlijst</div>
+        <div class="home-panel-content">
+            <label for="trainTableYear">Selecteer het dienstregelings-jaar</label>
+            <select id="trainTableYear" name="trainTableYear">
+                {% for trainTable in trainTableYears %}
+                    <option {% if trainTable.id == trainTableYear.id %}selected="selected" {% endif %}value="{{ trainTable.id }}">{{ trainTable.name }}</option>
+                {% endfor %}
+            </select>
+            <a class="somda-button" href="#" id="manageTrainTableYear" onclick="manageTrainTableYear(); return false;">Toon treinnummerlijst</a>
+
+            {% if routeLists | length %}
+                <br /><br />
+                <table class="design">
+                    <tr>
+                        <th>Van</th>
+                        <th>Tot</th>
+                        <th>Vervoerder</th>
+                        <th>Karakteristiek</th>
+                        <th>Traject</th>
+                        <th><a href="{{ path('manage_route_list', { 'yearId': trainTableYear.id, 'id': 0 }) }}">Voeg een serie toe</a></th>
+                    </tr>
+                    {% for routeList in routeLists %}
+                        <tr>
+                            <td>{{ routeList.firstNumber }}</td>
+                            <td>{{ routeList.lastNumber }}</td>
+                            <td>{{ routeList.transporter.name }}</td>
+                            <td>{{ routeList.characteristic.name }} ({{ routeList.characteristic.description }})</td>
+                            <td>{{ routeList.section }}</td>
+                            <td><a href="{{ path('manage_route_list', { 'yearId': trainTableYear.id, 'id': routeList.id }) }}">Bewerk</a></td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        function manageTrainTableYear() {
+            let location = '{{ path('manage_route_lists_year', { 'id': 9999 }) }}';
+            location = location.replace('9999', document.getElementById('trainTableYear').value);
+            document.location = location;
+        }
+    </script>
+{% endblock %}

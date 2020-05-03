@@ -30,7 +30,7 @@ class User extends BaseForm
             ])
             ->add(self::FIELD_USERNAME, TextType::class, [
                 self::KEY_ATTRIBUTES => ['maxlength' => 10],
-                self::KEY_CONSTRAINTS=> [
+                self::KEY_CONSTRAINTS => [
                     new Length([
                         'max' => 10,
                         'maxMessage' => 'De gebruikersnaam mag maximaal 10 karakters lang zijn',
@@ -46,7 +46,7 @@ class User extends BaseForm
                 self::KEY_REQUIRED => true,
             ])
             ->add(self::FIELD_PLAIN_PASSWORD, PasswordType::class, [
-                self::KEY_CONSTRAINTS=> [
+                self::KEY_CONSTRAINTS => [
                     new Length(['min' => 8, 'minMessage' => 'Het wachtwoord moet minimaal 8 karakters lang zijn']),
                 ],
                 self::KEY_LABEL => 'Kies een wachtwoord',

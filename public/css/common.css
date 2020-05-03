@@ -91,6 +91,14 @@ fieldset {
 	padding: 5px;
 }
 
+label {
+	font-weight: bold;
+}
+label.required:after {
+	color: red;
+	content: ' *';
+}
+
 #wrap {
 	background: #FFF;
 	margin: 10px auto 0 auto;

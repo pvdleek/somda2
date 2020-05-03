@@ -17,7 +17,7 @@ class UserLostPassword extends BaseForm
         $builder
             ->add('email', TextType::class, [
                 self::KEY_ATTRIBUTES => ['maxlength' => 60],
-                self::KEY_CONSTRAINTS=> [
+                self::KEY_CONSTRAINTS => [
                     new Email(['message' => 'Dit is geen geldig e-mailadres']),
                 ],
                 self::KEY_LABEL => 'Geef je e-mailadres om een nieuw wachtwoord te ontvangen',

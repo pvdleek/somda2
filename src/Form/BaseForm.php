@@ -23,6 +23,7 @@ class BaseForm extends AbstractType
     protected const KEY_MAPPED = 'mapped';
     protected const KEY_QUERY_BUILDER = 'query_builder';
     public const KEY_REQUIRED = 'required';
+    protected const KEY_SCALE = 'scale';
     protected const KEY_SECOND_OPTIONS = 'second_options';
     protected const KEY_TYPE = 'type';
     protected const KEY_WIDGET = 'widget';

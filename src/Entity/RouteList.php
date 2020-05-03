@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Table(name="somda_tdr_treinnummerlijst", indexes={@ORM\Index(name="idx_48381_nr_start", columns={"nr_start"}), @ORM\Index(name="idx_48381_nr_eind", columns={"nr_eind"})})
@@ -23,20 +24,21 @@ class RouteList extends Entity
      * @var int
      * @ORM\Column(name="nr_start", type="bigint", nullable=false)
      */
-    public int $firstNumber;
+    public int $firstNumber = 1;
 
     /**
      * @var int
      * @ORM\Column(name="nr_eind", type="bigint", nullable=false)
+     * @Assert\GreaterThan(propertyPath="firstNumber", message="Het eindnummer moet meer zijn dan het startnummer")
      */
-    public int $lastNumber;
+    public int $lastNumber = 2;
 
     /**
-     * @var TrainTable
+     * @var TrainTableYear
      * @ORM\ManyToOne(targetEntity="App\Entity\TrainTableYear")
      * @ORM\JoinColumn(name="tdr_nr", referencedColumnName="tdr_nr")
      */
-    public TrainTable $trainTableYear;
+    public TrainTableYear $trainTableYear;
 
     /**
      * @var Transporter
@@ -56,7 +58,7 @@ class RouteList extends Entity
      * @var string|null
      * @ORM\Column(name="traject", type="string", length=75, nullable=true)
      */
-    public ?string $section;
+    public ?string $section = null;
 
     /**
      * @var Route[]

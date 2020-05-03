@@ -22,7 +22,7 @@ class UserActivate extends BaseForm
         $builder
             ->add(self::FIELD_KEY, TextType::class, [
                 self::KEY_ATTRIBUTES => ['maxlength' => 32],
-                self::KEY_CONSTRAINTS=> [
+                self::KEY_CONSTRAINTS => [
                     new Length([
                         'max' => 32,
                         'maxMessage' => 'De activatie-sleutel moet exact 32 karakters lang zijn',

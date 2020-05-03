@@ -1,0 +1,25 @@
+{% extends('base.html.twig') %}
+
+{% block content %}
+    <div class="home-panel separate-panel">
+        <div class="home-panel-title">Beheer treinnummerlijst</div>
+        <div class="home-panel-content panel-no-background">
+            {{ form_start(form, { 'attr': { 'id': 'route_list_form' } }) }}
+                <table class="design">
+                    {{ form_row(form.firstNumber) }}
+                    {{ form_row(form.lastNumber) }}
+                    {{ form_row(form.transporter) }}
+                    {{ form_row(form.characteristic) }}
+                    {{ form_row(form.section) }}
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td>
+                            <a class="somda-button" href="#" onclick="$('#route_list_form').submit(); return false;">Opslaan</a>
+                            <a class="somda-button" href="{{ path('manage_route_lists_year', { 'id': routeList.trainTableYear.id }) }}">Terug naar het overzicht</a>
+                        </td>
+                    </tr>
+                </table>
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}
