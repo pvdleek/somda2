@@ -337,7 +337,12 @@ manage_pois:
   controller: App\Controller\HomeController::homeAction
 manage_bans:
   path: /beheer-bans/
-  controller: App\Controller\HomeController::homeAction
+  controller: App\Controller\ManageUsersController::bansAction
+manage_ban:
+  path: /beheer-ban/{id}/
+  methods: [GET, POST]
+  requirements: { id: \d+ }
+  controller: App\Controller\ManageUsersController::banAction
 manage_ddar_trains:
   path: /beheer-ddar/
   controller: App\Controller\HomeController::homeAction

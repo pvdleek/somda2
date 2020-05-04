@@ -24,9 +24,9 @@ class User extends EntityRepository
         try {
             return $queryBuilder->getQuery()->getSingleScalarResult();
         } catch (NonUniqueResultException $exception) {
-            return null;
+            return 0;
         } catch (NoResultException $exception) {
-            return null;
+            return 0;
         }
     }
 
@@ -47,9 +47,22 @@ class User extends EntityRepository
         try {
             return $queryBuilder->getQuery()->getSingleScalarResult();
         } catch (NonUniqueResultException $exception) {
-            return null;
+            return 0;
         } catch (NoResultException $exception) {
-            return null;
+            return 0;
         }
+    }
+
+    /**
+     * @return UserEntity[]
+     */
+    public function findBanned(): array
+    {
+        $queryBuilder = $this->getEntityManager()
+            ->createQueryBuilder()
+            ->select('u')
+            ->from(UserEntity::class, 'u')
+            ->andWhere('u.banExpireTimestamp IS NOT NULL');
+        return $queryBuilder->getQuery()->getResult();
     }
 }

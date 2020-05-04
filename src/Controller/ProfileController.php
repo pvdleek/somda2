@@ -129,7 +129,6 @@ class ProfileController
     {
         /**
          * @var User $user
-         * @var User $moderator
          */
         $user = $this->doctrine->getRepository(User::class)->find($id);
         if (is_null($user)) {

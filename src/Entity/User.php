@@ -93,6 +93,12 @@ class User extends Entity implements UserInterface
 
     /**
      * @var DateTime|null
+     * @ORM\Column(name="ban_expire_timestamp", type="datetime", nullable=true)
+     */
+    public ?DateTime $banExpireTimestamp;
+
+    /**
+     * @var DateTime|null
      * @ORM\Column(name="last_visit", type="datetime", nullable=true)
      */
     public ?DateTime $lastVisit;

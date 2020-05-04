@@ -9,6 +9,7 @@ use Exception;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\KernelEvents;
 
 class KernelListener implements EventSubscriberInterface
@@ -49,6 +50,15 @@ class KernelListener implements EventSubscriberInterface
     {
         if (!$event->isMasterRequest()) {
             return;
+        }
+
+        if (!is_null($this->userHelper->getUser())
+            && $this->userHelper->getUser()->banExpireTimestamp >= new DateTime()
+        ) {
+            throw new AccessDeniedHttpException(
+                'Je kunt tot ' . $this->userHelper->getUser()->banExpireTimestamp->format('Y-m-d') .
+                ' geen gebruik maken van Somda'
+            );
         }
 
         $route = (string)$event->getRequest()->attributes->get('_route');

@@ -34,4 +34,22 @@ $(document).ready(function() {
 		showButtonPanel: true,
 		yearRange: '1920:' + new Date().getFullYear(),
 	});
+	$('input.ban-datepicker').datepicker({
+		changeMonth: true,
+		changeYear: true,
+		closeText: 'Sluiten',
+		constrainInput: true,
+		currentText: 'Vandaag',
+		dateFormat: 'dd-mm-yy',
+		dayNames: ['Zondag', 'Maandag', 'Dinsdag', 'Woensdag', 'Donderdag', 'Vrijdag', 'Zaterdag'],
+		dayNamesMin: ['zo', 'ma', 'di', 'wo', 'do', 'vr', 'za'],
+		dayNamesShort: ['Zon', 'Maa', 'Din', 'Woe', 'Don', 'Vri', 'Zat'],
+		minDate: 0,
+		monthNames: ['januari', 'februari', 'maart', 'april', 'mei', 'juni', 'juli', 'augustus', 'september', 'oktober', 'november', 'december'],
+		monthNamesShort: ['jan', 'feb', 'mar', 'apr', 'mei', 'jun', 'jul', 'aug', 'sep', 'okt', 'nov', 'dec'],
+		nextText: 'Volgende maand',
+		prevText: 'Vorige maand',
+		showButtonPanel: true,
+		yearRange: new Date().getFullYear() + ':2099',
+	});
 });

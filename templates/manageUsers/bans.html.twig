@@ -1,0 +1,29 @@
+{% extends('base.html.twig') %}
+
+{% block content %}
+    <div class="home-panel separate-panel">
+        <div class="home-panel-title">Beheer bans</div>
+        <div class="home-panel-content">
+            <table class="design">
+                <tr>
+                    <th>Gebruikersnaam</th>
+                    <th>E-mailadres</th>
+                    <th>Echte naam</th>
+                    <th>Status</th>
+                    <th>Ban duurt tot</th>
+                    <th>&nbsp;</th>
+                </tr>
+                {% for user in users %}
+                    <tr>
+                        <td>{{ user.id | displayUser(user.username) | raw }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>{{ user.name }}</td>
+                        <td>{{ (user.banExpireTimestamp | date('Y-m-d')) > ('now' | date('Y-m-d')) ? 'Actief' : 'Verlopen' }}</td>
+                        <td>{{ user.banExpireTimestamp | displayDateTime }}</td>
+                        <td><a href="{{ path('manage_ban', { 'id': user.id }) }}">Bewerk</a></td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+{% endblock %}

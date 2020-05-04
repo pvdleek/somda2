@@ -81,8 +81,16 @@ final class Version20200307111303 extends AbstractMigration
         );
         $this->addSql('UPDATE somda_groups SET roles = \'a:1:{i:0;s:15:"ROLE_ADMIN_WIKI";}\' WHERE groupid = 20');
         $this->addSql('UPDATE somda_groups SET roles = \'a:1:{i:0;s:15:"ROLE_ADMIN_NEWS";}\' WHERE groupid = 21');
-        $this->addSql('DELETE FROM somda_users_groups WHERE groupid IN (-1, 5, 8, 14)');
-        $this->addSql('DELETE FROM somda_groups WHERE groupid IN (-1, 5, 8, 14)');
+
+        $this->addSql('ALTER TABLE somda_users ADD ban_expire_timestamp DATETIME DEFAULT NULL');
+        $this->addSql('
+            UPDATE somda_users u
+            JOIN somda_users_groups g ON g.uid = u.uid AND g.groupid = 0
+            SET ban_expire_timestamp = \'2099-01-01\'
+        ');
+
+        $this->addSql('DELETE FROM somda_users_groups WHERE groupid IN (-1, 0, 5, 8, 14)');
+        $this->addSql('DELETE FROM somda_groups WHERE groupid IN (-1, 0, 5, 8, 14)');
     }
 
     /**
