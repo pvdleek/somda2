@@ -6,6 +6,7 @@ use App\Entity\ForumDiscussion as ForumDiscussionEntity;
 use App\Entity\ForumForum;
 use App\Entity\ForumPost;
 use App\Entity\User;
+use App\Helpers\GenericsHelper;
 use DateTime;
 use Doctrine\DBAL\DBALException;
 use Doctrine\ORM\EntityRepository;
@@ -63,7 +64,10 @@ class ForumDiscussion extends EntityRepository
         $connection = $this->getEntityManager()->getConnection();
         try {
             $statement = $connection->prepare($query);
-            $statement->bindValue('minDate', date('Y-m-d', mktime(0, 0, 0, date('m'), date('d') - 100, date('Y'))));
+            $statement->bindValue(
+                'minDate',
+                date(GenericsHelper::DATE_FORMAT_DATABASE, mktime(0, 0, 0, date('m'), date('d') - 100, date('Y')))
+            );
             $statement->execute();
             return $statement->fetchAll();
         } catch (DBALException $exception) {

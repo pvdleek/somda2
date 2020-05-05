@@ -73,10 +73,10 @@ class SpotHelper implements RuntimeExtensionInterface
      */
     private function getDisplayDate(DateTime $dateTime): string
     {
-        if ($dateTime->format('Y-m-d') === date('Y-m-d')) {
+        if ($dateTime->format(GenericsHelper::DATE_FORMAT_DATABASE) === date(GenericsHelper::DATE_FORMAT_DATABASE)) {
             return $this->translator->trans('general.date.today');
         }
-        return $dateTime->format('d-m-Y');
+        return $dateTime->format(GenericsHelper::DATE_FORMAT);
     }
 
     /**
