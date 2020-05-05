@@ -16,7 +16,7 @@ class RouteOperationDays extends Entity
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected int $id;
+    protected ?int $id = null;
 
     /**
      * @var bool

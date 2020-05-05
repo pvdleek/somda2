@@ -69,7 +69,7 @@ class ManageUsersController
         return $this->templateHelper->render('manageUsers/ban.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Beheer ban',
             'user' => $user,
-            'form' => $form->createView(),
+            TemplateHelper::PARAMETER_FORM => $form->createView(),
         ]);
     }
 }

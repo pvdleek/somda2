@@ -89,7 +89,7 @@ class SomdaController
 
         return $this->templateHelper->render('somda/contact.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Contact opnemen',
-            'form' => $form->createView(),
+            TemplateHelper::PARAMETER_FORM => $form->createView(),
         ]);
     }
 

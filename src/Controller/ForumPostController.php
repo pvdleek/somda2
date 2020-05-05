@@ -112,7 +112,7 @@ class ForumPostController
 
         return $this->templateHelper->render('forum/reply.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Forum - ' . $quotedPost->discussion->title,
-            'form' => $form->createView(),
+            TemplateHelper::PARAMETER_FORM => $form->createView(),
             'post' => $quotedPost,
             'lastPosts' => $lastPosts,
         ]);
@@ -191,7 +191,7 @@ class ForumPostController
 
         return $this->templateHelper->render('forum/edit.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Forum - ' . $post->discussion->title,
-            'form' => $form->createView(),
+            TemplateHelper::PARAMETER_FORM => $form->createView(),
             'post' => $post,
         ]);
     }

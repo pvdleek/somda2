@@ -180,7 +180,7 @@ class SecurityController
 
         return $this->templateHelper->render('security/register.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Nieuw account aanmaken',
-            'form' => $form->createView(),
+            TemplateHelper::PARAMETER_FORM => $form->createView(),
         ]);
     }
 
@@ -308,7 +308,7 @@ class SecurityController
 
         return $this->templateHelper->render('security/activate.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Account activeren',
-            'form' => $form->createView(),
+            TemplateHelper::PARAMETER_FORM => $form->createView(),
         ]);
     }
 
@@ -351,7 +351,7 @@ class SecurityController
 
         return $this->templateHelper->render('security/lostPassword.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Wachtwoord vergeten',
-            'form' => $form->createView(),
+            TemplateHelper::PARAMETER_FORM => $form->createView(),
         ]);
     }
 
@@ -394,7 +394,7 @@ class SecurityController
 
         return $this->templateHelper->render('security/changePassword.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Wachtwoord wijzigen',
-            'form' => $form->createView(),
+            TemplateHelper::PARAMETER_FORM => $form->createView(),
         ]);
     }
 }

@@ -316,15 +316,20 @@ manage_user:
   controller: App\Controller\HomeController::homeAction
 manage_news:
   path: /beheer-nieuws/
-  controller: App\Controller\HomeController::homeAction
+  controller: App\Controller\ManageNewsController::indexAction
+manage_news_edit:
+  path: /beheer-nieuws-item/{id}/
+  methods: [GET, POST]
+  requirements: { id: \d+ }
+  controller: App\Controller\ManageNewsController::editAction
 manage_rail_news:
   path: /beheer-spoor-nieuws/
-  controller: App\Controller\ManageRailNewsController::indexAction
+  controller: App\Controller\ManageNewsController::indexAction
 manage_rail_news_edit:
   path: /beheer-spoor-nieuws-item/{id}/
   methods: [GET, POST]
   requirements: { id: \d+ }
-  controller: App\Controller\ManageRailNewsController::editAction
+  controller: App\Controller\ManageNewsController::railNewsEditAction
 manage_special_routes:
   path: /beheer-bijzonder-ritten/
   controller: App\Controller\HomeController::homeAction

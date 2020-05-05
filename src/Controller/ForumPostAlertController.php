@@ -129,7 +129,7 @@ class ForumPostAlertController
 
         return $this->templateHelper->render('forum/alert.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Forum - ' . $post->discussion->title,
-            'form' => $form->createView(),
+            TemplateHelper::PARAMETER_FORM => $form->createView(),
             'post' => $post,
         ]);
     }
@@ -175,7 +175,7 @@ class ForumPostAlertController
 
         return $this->templateHelper->render('forum/postAlerts.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Forum - ' . $post->discussion->title,
-            'form' => $form->createView(),
+            TemplateHelper::PARAMETER_FORM => $form->createView(),
             'post' => $post,
         ]);
     }

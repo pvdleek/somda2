@@ -105,7 +105,7 @@ class ManageTrainTableController
         return $this->templateHelper->render('manageTrainTable/routeList.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Beheer treinnummerlijst',
             'routeList' => $routeList,
-            'form' => $form->createView(),
+            TemplateHelper::PARAMETER_FORM => $form->createView(),
         ]);
     }
 

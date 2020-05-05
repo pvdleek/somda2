@@ -17,6 +17,7 @@ use Twig\Environment;
 class TemplateHelper
 {
     public const PARAMETER_PAGE_TITLE = 'pageTitle';
+    public const PARAMETER_FORM = 'form';
 
     /**
      * @var RequestStack

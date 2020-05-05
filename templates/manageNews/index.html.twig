@@ -1,0 +1,25 @@
+{% extends('base.html.twig') %}
+
+{% block content %}
+    <div class="home-panel separate-panel">
+        <div class="home-panel-title">Beheer nieuws</div>
+        <div class="home-panel-content">
+            <table class="design">
+                <tr>
+                    <th>Datum</th>
+                    <th>Titel</th>
+                    <th>Status</th>
+                    <th><a href="{{ path('manage_news_edit', { 'id': 0 }) }}">Voeg een bericht toe</a></th>
+                </tr>
+                {% for item in news %}
+                    <tr>
+                        <td>{{ item.timestamp | displayDateTime(true) }}</td>
+                        <td>{{ item.title }}</td>
+                        <td>{{ item.archived ? 'Gearchiveerd' : 'Actief' }}</td>
+                        <td><a href="{{ path('manage_news_edit', { 'id': item.id }) }}">Bewerk</a></td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+{% endblock %}

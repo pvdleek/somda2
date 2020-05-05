@@ -222,7 +222,7 @@ class ForumDiscussionController
 
         return $this->templateHelper->render('forum/newDiscussion.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Forum - ' . $forum->name,
-            'form' => $form->createView(),
+            TemplateHelper::PARAMETER_FORM => $form->createView(),
             'forum' => $forum
         ]);
     }

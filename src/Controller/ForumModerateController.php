@@ -69,7 +69,7 @@ class ForumModerateController
                 return $this->templateHelper->render('forum/discussionMove.html.twig', [
                     TemplateHelper::PARAMETER_PAGE_TITLE => 'Forum - ' . $discussion->title,
                     'discussion' => $discussion,
-                    'form' => $form->createView()
+                    TemplateHelper::PARAMETER_FORM => $form->createView()
                 ]);
             }
             $this->formHelper->getDoctrine()->getManager()->flush();
@@ -117,7 +117,7 @@ class ForumModerateController
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Forum - ' . $discussion1->title,
             'discussion1' => $discussion1,
             'discussion2' => $discussion2,
-            'form' => $form->createView()
+            TemplateHelper::PARAMETER_FORM => $form->createView()
         ]);
     }
 

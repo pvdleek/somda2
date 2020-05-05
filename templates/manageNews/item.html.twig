@@ -1,0 +1,24 @@
+{% extends('base.html.twig') %}
+
+{% block content %}
+    <div class="home-panel separate-panel">
+        <div class="home-panel-title">Beheer nieuwsbericht</div>
+        <div class="home-panel-content panel-no-background">
+            {{ form_start(form, { 'attr': { 'id': 'news_form' } }) }}
+                <table class="design">
+                    <tr><td><strong>Datum</strong></td><td>{{ news.timestamp | displayDateTime(true) }}</td></tr>
+                    {{ form_row(form.title) }}
+                    {{ form_row(form.text) }}
+                    {{ form_row(form.archived) }}
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td>
+                            <a class="somda-button" href="#" onclick="$('#news_form').submit(); return false;">Opslaan</a>
+                            <a class="somda-button" href="{{ path('manage_news') }}">Terug naar het overzicht</a>
+                        </td>
+                    </tr>
+                </table>
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}

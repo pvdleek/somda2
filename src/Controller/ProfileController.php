@@ -177,7 +177,7 @@ class ProfileController
         return $this->templateHelper->render('somda/mail.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Mail sturen naar ' . $user->username,
             'user' => $user,
-            'form' => $form->createView(),
+            TemplateHelper::PARAMETER_FORM => $form->createView(),
         ]);
     }
 }

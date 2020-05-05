@@ -18,7 +18,7 @@ class News extends Entity
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected int $id;
+    protected ?int $id = null;
 
     /**
      * @var DateTime
@@ -36,7 +36,7 @@ class News extends Entity
      * @var string
      * @ORM\Column(name="text", type="text", length=0, nullable=false)
      */
-    public string $text;
+    public string $text = '';
 
     /**
      * @var bool
