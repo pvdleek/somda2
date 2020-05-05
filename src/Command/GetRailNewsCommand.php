@@ -16,23 +16,48 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class GetRailNewsCommand extends Command implements ScheduledJobInterface
 {
+    private const CASE_SENSITIVE = 'caseSensitive';
+    private const DESCRIPTION = 'description';
+    private const POSITIVE_WORD = 'positiveWord';
+    private const NEGATIVE_WORD = 'negativeWord';
+
     private static $wordMatches = [
-        ['caseSensitive' => false, 'description' => true, 'positiveWord' => 'spoor', 'negativeWord' => 'opgespoord'],
-        ['caseSensitive' => false, 'description' => true, 'positiveWord' => 'rail', 'negativeWord' => 'vangrail'],
-        ['caseSensitive' => false, 'description' => true, 'positiveWord' => 'station', 'negativeWord' => 'tankstation'],
-        ['caseSensitive' => false, 'description' => true, 'positiveWord' => 'trein'],
-        ['caseSensitive' => false, 'description' => true, 'positiveWord' => 'machinist'],
-        ['caseSensitive' => false, 'description' => true, 'positiveWord' => 'conducteur'],
-        ['caseSensitive' => false, 'description' => true, 'positiveWord' => 'chipkaart'],
-        ['caseSensitive' => false, 'description' => true, 'positiveWord' => 'hispeed'],
-        ['caseSensitive' => true, 'description' => true, 'positiveWord' => 'HSL'],
-        ['caseSensitive' => false, 'description' => true, 'positiveWord' => 'fyra'],
-        ['caseSensitive' => false, 'description' => true, 'positiveWord' => 'syntus'],
-        ['caseSensitive' => false, 'description' => true, 'positiveWord' => 'noordned'],
-        ['caseSensitive' => false, 'description' => true, 'positiveWord' => 'veolia'],
-        ['caseSensitive' => false, 'description' => true, 'positiveWord' => 'acts'],
-        ['caseSensitive' => false, 'description' => true, 'positiveWord' => 'railion'],
-        ['caseSensitive' => true, 'description' => false, 'positiveWord' => 'NS', 'negativeWord' => 'SNS'],
+        [
+            self::CASE_SENSITIVE => false,
+            self::DESCRIPTION => true,
+            self::POSITIVE_WORD => 'spoor',
+            self::NEGATIVE_WORD => 'opgespoord'
+        ],
+        [
+            self::CASE_SENSITIVE => false,
+            self::DESCRIPTION => true,
+            self::POSITIVE_WORD => 'rail',
+            self::NEGATIVE_WORD => 'vangrail'
+        ],
+        [
+            self::CASE_SENSITIVE => false,
+            self::DESCRIPTION => true,
+            self::POSITIVE_WORD => 'station',
+            self::NEGATIVE_WORD => 'tankstation'
+        ],
+        [self::CASE_SENSITIVE => false, self::DESCRIPTION => true, self::POSITIVE_WORD => 'trein'],
+        [self::CASE_SENSITIVE => false, self::DESCRIPTION => true, self::POSITIVE_WORD => 'machinist'],
+        [self::CASE_SENSITIVE => false, self::DESCRIPTION => true, self::POSITIVE_WORD => 'conducteur'],
+        [self::CASE_SENSITIVE => false, self::DESCRIPTION => true, self::POSITIVE_WORD => 'chipkaart'],
+        [self::CASE_SENSITIVE => false, self::DESCRIPTION => true, self::POSITIVE_WORD => 'hispeed'],
+        [self::CASE_SENSITIVE => true, self::DESCRIPTION => true, self::POSITIVE_WORD => 'HSL'],
+        [self::CASE_SENSITIVE => false, self::DESCRIPTION => true, self::POSITIVE_WORD => 'fyra'],
+        [self::CASE_SENSITIVE => false, self::DESCRIPTION => true, self::POSITIVE_WORD => 'syntus'],
+        [self::CASE_SENSITIVE => false, self::DESCRIPTION => true, self::POSITIVE_WORD => 'noordned'],
+        [self::CASE_SENSITIVE => false, self::DESCRIPTION => true, self::POSITIVE_WORD => 'veolia'],
+        [self::CASE_SENSITIVE => false, self::DESCRIPTION => true, self::POSITIVE_WORD => 'acts'],
+        [self::CASE_SENSITIVE => false, self::DESCRIPTION => true, self::POSITIVE_WORD => 'railion'],
+        [
+            self::CASE_SENSITIVE => true,
+            self::DESCRIPTION => false,
+            self::POSITIVE_WORD => 'NS',
+            self::NEGATIVE_WORD => 'SNS'
+        ],
     ];
 
     /**
@@ -145,26 +170,26 @@ class GetRailNewsCommand extends Command implements ScheduledJobInterface
     private function isArticleMatch(ItemInterface $item): bool
     {
         foreach (self::$wordMatches as $wordMatch) {
-            if ($wordMatch['description']) {
-                if ($wordMatch['caseSensitive']) {
-                    $positiveMatch = strpos($item->getTitle(), $wordMatch['positiveWord']) !== false
-                        || strpos($item->getDescription(), $wordMatch['positiveWord']) !== false;
+            if ($wordMatch[self::DESCRIPTION]) {
+                if ($wordMatch[self::CASE_SENSITIVE]) {
+                    $positiveMatch = strpos($item->getTitle(), $wordMatch[self::POSITIVE_WORD]) !== false
+                        || strpos($item->getDescription(), $wordMatch[self::POSITIVE_WORD]) !== false;
                 } else {
-                    $positiveMatch = stripos($item->getTitle(), $wordMatch['positiveWord']) !== false
-                        || stripos($item->getDescription(), $wordMatch['positiveWord']) !== false;
+                    $positiveMatch = stripos($item->getTitle(), $wordMatch[self::POSITIVE_WORD]) !== false
+                        || stripos($item->getDescription(), $wordMatch[self::POSITIVE_WORD]) !== false;
                 }
             } else {
-                if ($wordMatch['caseSensitive']) {
-                    $positiveMatch = strpos($item->getTitle(), $wordMatch['positiveWord']) !== false;
+                if ($wordMatch[self::CASE_SENSITIVE]) {
+                    $positiveMatch = strpos($item->getTitle(), $wordMatch[self::POSITIVE_WORD]) !== false;
                 } else {
-                    $positiveMatch = stripos($item->getTitle(), $wordMatch['positiveWord']) !== false;
+                    $positiveMatch = stripos($item->getTitle(), $wordMatch[self::POSITIVE_WORD]) !== false;
                 }
             }
 
             if ($positiveMatch) {
-                if (isset($wordMatch['negativeWord'])) {
-                    if (stripos($item->getTitle(), $wordMatch['negativeWord']) === false
-                        && stripos($item->getDescription(), $wordMatch['negativeWord']) === false
+                if (isset($wordMatch[self::NEGATIVE_WORD])) {
+                    if (stripos($item->getTitle(), $wordMatch[self::NEGATIVE_WORD]) === false
+                        && stripos($item->getDescription(), $wordMatch[self::NEGATIVE_WORD]) === false
                     ) {
                         return true;
                     }

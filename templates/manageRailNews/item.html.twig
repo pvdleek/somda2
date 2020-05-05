@@ -1,0 +1,27 @@
+{% extends('base.html.twig') %}
+
+{% block content %}
+    <div class="home-panel separate-panel">
+        <div class="home-panel-title">Beheer spoornieuws bericht</div>
+        <div class="home-panel-content panel-no-background">
+            {{ form_start(form, { 'attr': { 'id': 'rail_news_form' } }) }}
+                <table class="design">
+                    <tr><td><strong>Datum</strong></td><td>{{ railNews.timestamp | displayDateTime(true) }}</td></tr>
+                    <tr><td><strong>Bron</strong></td><td><img alt="{{ railNews.source.name }}" src="{{ asset('images/news-logos/' ~ railNews.source.logo) }}" style="max-height:25px;" /></td></tr>
+                    <tr><td><strong>Link</strong></td><td><a href="{{ railNews.url }}" target="_blank">{{ railNews.url }}</a></td></tr>
+                    {{ form_row(form.title) }}
+                    {{ form_row(form.introduction) }}
+                    {{ form_row(form.approved) }}
+                    {{ form_row(form.automaticUpdates) }}
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td>
+                            <a class="somda-button" href="#" onclick="$('#rail_news_form').submit(); return false;">Opslaan</a>
+                            <a class="somda-button" href="{{ path('manage_rail_news') }}">Terug naar het overzicht</a>
+                        </td>
+                    </tr>
+                </table>
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}

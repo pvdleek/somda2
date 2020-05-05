@@ -319,7 +319,12 @@ manage_news:
   controller: App\Controller\HomeController::homeAction
 manage_rail_news:
   path: /beheer-spoor-nieuws/
-  controller: App\Controller\HomeController::homeAction
+  controller: App\Controller\ManageRailNewsController::indexAction
+manage_rail_news_edit:
+  path: /beheer-spoor-nieuws-item/{id}/
+  methods: [GET, POST]
+  requirements: { id: \d+ }
+  controller: App\Controller\ManageRailNewsController::editAction
 manage_special_routes:
   path: /beheer-bijzonder-ritten/
   controller: App\Controller\HomeController::homeAction
