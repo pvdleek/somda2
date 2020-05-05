@@ -16,48 +16,27 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class GetRailNewsCommand extends Command implements ScheduledJobInterface
 {
-    private const CASE_SENSITIVE = 'caseSensitive';
-    private const DESCRIPTION = 'description';
+    private const TITLE_ONLY = 'titleOnly';
     private const POSITIVE_WORD = 'positiveWord';
     private const NEGATIVE_WORD = 'negativeWord';
 
     private static $wordMatches = [
-        [
-            self::CASE_SENSITIVE => false,
-            self::DESCRIPTION => true,
-            self::POSITIVE_WORD => 'spoor',
-            self::NEGATIVE_WORD => 'opgespoord'
-        ],
-        [
-            self::CASE_SENSITIVE => false,
-            self::DESCRIPTION => true,
-            self::POSITIVE_WORD => 'rail',
-            self::NEGATIVE_WORD => 'vangrail'
-        ],
-        [
-            self::CASE_SENSITIVE => false,
-            self::DESCRIPTION => true,
-            self::POSITIVE_WORD => 'station',
-            self::NEGATIVE_WORD => 'tankstation'
-        ],
-        [self::CASE_SENSITIVE => false, self::DESCRIPTION => true, self::POSITIVE_WORD => 'trein'],
-        [self::CASE_SENSITIVE => false, self::DESCRIPTION => true, self::POSITIVE_WORD => 'machinist'],
-        [self::CASE_SENSITIVE => false, self::DESCRIPTION => true, self::POSITIVE_WORD => 'conducteur'],
-        [self::CASE_SENSITIVE => false, self::DESCRIPTION => true, self::POSITIVE_WORD => 'chipkaart'],
-        [self::CASE_SENSITIVE => false, self::DESCRIPTION => true, self::POSITIVE_WORD => 'hispeed'],
-        [self::CASE_SENSITIVE => true, self::DESCRIPTION => true, self::POSITIVE_WORD => 'HSL'],
-        [self::CASE_SENSITIVE => false, self::DESCRIPTION => true, self::POSITIVE_WORD => 'fyra'],
-        [self::CASE_SENSITIVE => false, self::DESCRIPTION => true, self::POSITIVE_WORD => 'syntus'],
-        [self::CASE_SENSITIVE => false, self::DESCRIPTION => true, self::POSITIVE_WORD => 'noordned'],
-        [self::CASE_SENSITIVE => false, self::DESCRIPTION => true, self::POSITIVE_WORD => 'veolia'],
-        [self::CASE_SENSITIVE => false, self::DESCRIPTION => true, self::POSITIVE_WORD => 'acts'],
-        [self::CASE_SENSITIVE => false, self::DESCRIPTION => true, self::POSITIVE_WORD => 'railion'],
-        [
-            self::CASE_SENSITIVE => true,
-            self::DESCRIPTION => false,
-            self::POSITIVE_WORD => 'NS',
-            self::NEGATIVE_WORD => 'SNS'
-        ],
+        [self::TITLE_ONLY => false, self::POSITIVE_WORD => 'spoor', self::NEGATIVE_WORD => 'opgespoord'],
+        [self::TITLE_ONLY => false, self::POSITIVE_WORD => 'rail', self::NEGATIVE_WORD => 'vangrail'],
+        [self::TITLE_ONLY => false, self::POSITIVE_WORD => 'station', self::NEGATIVE_WORD => 'tankstation'],
+        [self::TITLE_ONLY => false, self::POSITIVE_WORD => 'trein'],
+        [self::TITLE_ONLY => false, self::POSITIVE_WORD => 'machinist'],
+        [self::TITLE_ONLY => false, self::POSITIVE_WORD => 'conducteur'],
+        [self::TITLE_ONLY => false, self::POSITIVE_WORD => 'chipkaart'],
+        [self::TITLE_ONLY => false, self::POSITIVE_WORD => 'hispeed'],
+        [self::TITLE_ONLY => false, self::POSITIVE_WORD => 'HSL'],
+        [self::TITLE_ONLY => false, self::POSITIVE_WORD => 'fyra'],
+        [self::TITLE_ONLY => false, self::POSITIVE_WORD => 'syntus'],
+        [self::TITLE_ONLY => false, self::POSITIVE_WORD => 'noordned'],
+        [self::TITLE_ONLY => false, self::POSITIVE_WORD => 'veolia'],
+        [self::TITLE_ONLY => false, self::POSITIVE_WORD => 'acts'],
+        [self::TITLE_ONLY => false, self::POSITIVE_WORD => 'railion'],
+        [self::TITLE_ONLY => true, self::POSITIVE_WORD => 'NS', self::NEGATIVE_WORD => 'SNS'],
     ];
 
     /**
@@ -170,23 +149,7 @@ class GetRailNewsCommand extends Command implements ScheduledJobInterface
     private function isArticleMatch(ItemInterface $item): bool
     {
         foreach (self::$wordMatches as $wordMatch) {
-            if ($wordMatch[self::DESCRIPTION]) {
-                if ($wordMatch[self::CASE_SENSITIVE]) {
-                    $positiveMatch = strpos($item->getTitle(), $wordMatch[self::POSITIVE_WORD]) !== false
-                        || strpos($item->getDescription(), $wordMatch[self::POSITIVE_WORD]) !== false;
-                } else {
-                    $positiveMatch = stripos($item->getTitle(), $wordMatch[self::POSITIVE_WORD]) !== false
-                        || stripos($item->getDescription(), $wordMatch[self::POSITIVE_WORD]) !== false;
-                }
-            } else {
-                if ($wordMatch[self::CASE_SENSITIVE]) {
-                    $positiveMatch = strpos($item->getTitle(), $wordMatch[self::POSITIVE_WORD]) !== false;
-                } else {
-                    $positiveMatch = stripos($item->getTitle(), $wordMatch[self::POSITIVE_WORD]) !== false;
-                }
-            }
-
-            if ($positiveMatch) {
+            if ($this->isWordMatch($wordMatch, $item)) {
                 if (isset($wordMatch[self::NEGATIVE_WORD])) {
                     if (stripos($item->getTitle(), $wordMatch[self::NEGATIVE_WORD]) === false
                         && stripos($item->getDescription(), $wordMatch[self::NEGATIVE_WORD]) === false
@@ -200,5 +163,19 @@ class GetRailNewsCommand extends Command implements ScheduledJobInterface
         }
 
         return false;
+    }
+
+    /**
+     * @param array $wordMatch
+     * @param ItemInterface $item
+     * @return bool
+     */
+    private function isWordMatch(array $wordMatch, ItemInterface $item): bool
+    {
+        if ($wordMatch[self::TITLE_ONLY]) {
+            return stripos($item->getTitle(), $wordMatch[self::POSITIVE_WORD]) !== false;
+        }
+        return stripos($item->getTitle(), $wordMatch[self::POSITIVE_WORD]) !== false
+            || stripos($item->getDescription(), $wordMatch[self::POSITIVE_WORD]) !== false;
     }
 }
