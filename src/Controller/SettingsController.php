@@ -51,7 +51,10 @@ class SettingsController
         /**
          * @var UserPreference[] $allSettings
          */
-        $allSettings = $this->formHelper->getDoctrine()->getRepository(UserPreference::class)->findBy([], ['order' => 'ASC']);
+        $allSettings = $this->formHelper
+            ->getDoctrine()
+            ->getRepository(UserPreference::class)
+            ->findBy([], ['order' => 'ASC']);
         $form = $this->formHelper->getFactory()->create(
             UserPreferences::class,
             $this->userHelper->getUser(),

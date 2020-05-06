@@ -53,6 +53,11 @@ class KernelListener implements EventSubscriberInterface
             return;
         }
 
+        $route = (string)$event->getRequest()->attributes->get('_route');
+        if (substr($route, 0, 1) === '_' || substr($route, -5) === '_json') {
+            return;
+        }
+
         if (!is_null($this->userHelper->getUser())
             && $this->userHelper->getUser()->banExpireTimestamp >= new DateTime()
         ) {
@@ -60,11 +65,6 @@ class KernelListener implements EventSubscriberInterface
                 'Je kunt tot ' . $this->userHelper->getUser()->banExpireTimestamp->format(GenericsHelper::DATE_FORMAT) .
                 ' geen gebruik maken van Somda'
             );
-        }
-
-        $route = (string)$event->getRequest()->attributes->get('_route');
-        if (substr($route, 0, 1) === '_' || substr($route, -5) === '_json') {
-            return;
         }
 
         $log = new Log();

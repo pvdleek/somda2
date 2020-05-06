@@ -88,7 +88,7 @@ class UserPreference extends Entity
 
     /**
      * @var int
-     * @ORM\Column(name="volgorde", type="bigint", nullable=false)
+     * @ORM\Column(name="volgorde", type="integer", nullable=false)
      */
-    public int $order;
+    public int $order = 0;
 }
