@@ -1,0 +1,27 @@
+{% extends('base.html.twig') %}
+
+{% block content %}
+    <div class="home-panel separate-panel">
+        <div class="home-panel-title">Beheer bijzondere ritten</div>
+        <div class="home-panel-content">
+            <table class="design">
+                <tr>
+                    <th>Datum</th>
+                    <th>Werkzaamheden</th>
+                    <th>Gepubliceerd</th>
+                    <th>Titel</th>
+                    <th><a href="{{ path('manage_special_route', { 'id': 0 }) }}">Voeg een bericht toe</a></th>
+                </tr>
+                {% for specialRoute in specialRoutes %}
+                    <tr>
+                        <td>{{ specialRoute.endDate is null ? (specialRoute.startDate | date('d-m-Y')) : ((specialRoute.startDate | date('d-m-Y')) ~ ' t/m ' ~ (specialRoute.endDate | date('d-m-Y'))) }}</td>
+                        <td>{{ specialRoute.construction ? 'Ja' : 'Nee' }}</td>
+                        <td>{{ specialRoute.public ? 'Ja' : 'Nee' }}</td>
+                        <td>{{ specialRoute.title }}</td>
+                        <td><a href="{{ path('manage_special_route', { 'id': specialRoute.id }) }}">Bewerk</a></td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+{% endblock %}

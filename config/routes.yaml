@@ -332,7 +332,12 @@ manage_rail_news_edit:
   controller: App\Controller\ManageNewsController::railNewsEditAction
 manage_special_routes:
   path: /beheer-bijzonder-ritten/
-  controller: App\Controller\HomeController::homeAction
+  controller: App\Controller\ManageSpecialRoutesController::indexAction
+manage_special_route:
+  path: /beheer-bijzondere-rit/{id}/
+  methods: [GET, POST]
+  requirements: { id: \d+ }
+  controller: App\Controller\ManageSpecialRoutesController::editAction
 manage_banners:
   path: /beheer-banners/
   controller: App\Controller\HomeController::homeAction

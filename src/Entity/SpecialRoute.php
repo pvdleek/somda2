@@ -42,7 +42,7 @@ class SpecialRoute extends Entity
      * @var DateTime|null
      * @ORM\Column(name="einddatum", type="date", nullable=true)
      */
-    public ?DateTime $endDate;
+    public ?DateTime $endDate = null;
 
     /**
      * @var bool
@@ -66,7 +66,7 @@ class SpecialRoute extends Entity
      * @var string
      * @ORM\Column(name="text", type="text", length=0, nullable=false)
      */
-    public string $text;
+    public string $text = '';
 
     /**
      * @var User[]
