@@ -28,7 +28,7 @@ class PollVote
 
     /**
      * @var int
-     * @ORM\Column(name="vote", type="bigint", nullable=false)
+     * @ORM\Column(name="vote", type="integer", nullable=false, options={"default"="0"})
      */
-    public int $vote;
+    public int $vote = 0;
 }

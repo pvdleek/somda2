@@ -314,6 +314,7 @@ profile_mail:
 manage_user:
   path: /beheer-gebruikers/
   controller: App\Controller\HomeController::homeAction
+
 manage_news:
   path: /beheer-nieuws/
   controller: App\Controller\ManageNewsController::indexAction
@@ -322,6 +323,7 @@ manage_news_edit:
   methods: [GET, POST]
   requirements: { id: \d+ }
   controller: App\Controller\ManageNewsController::editAction
+
 manage_rail_news:
   path: /beheer-spoor-nieuws/
   controller: App\Controller\ManageNewsController::indexAction
@@ -330,6 +332,7 @@ manage_rail_news_edit:
   methods: [GET, POST]
   requirements: { id: \d+ }
   controller: App\Controller\ManageNewsController::railNewsEditAction
+
 manage_special_routes:
   path: /beheer-bijzonder-ritten/
   controller: App\Controller\ManageSpecialRoutesController::indexAction
@@ -338,18 +341,45 @@ manage_special_route:
   methods: [GET, POST]
   requirements: { id: \d+ }
   controller: App\Controller\ManageSpecialRoutesController::editAction
+
 manage_banners:
   path: /beheer-banners/
   controller: App\Controller\HomeController::homeAction
-manage_train_tables_input:
-  path: /beheer-dienstregelingen-invoer/
-  controller: App\Controller\HomeController::homeAction
+
 manage_train_tables:
   path: /beheer-dienstregelingen/
+  controller: App\Controller\ManageTrainTablesController::manageAction
+manage_train_tables_year:
+  path: /beheer-dienstregelingen-invoer/{yearId}/
+  methods: [GET]
+  requirements: { yearId: \d+ }
+  controller: App\Controller\ManageTrainTablesController::manageAction
+manage_train_tables_year_route_list:
+  path: /beheer-dienstregelingen-invoer/{yearId}/{routeListId}/
+  methods: [GET]
+  requirements: { yearId: \d+, routeListId: \d+ }
+  controller: App\Controller\ManageTrainTablesController::manageAction
+manage_train_table:
+  path: /beheer-dienstregeling/{routeListId}/{routeId}/
+  methods: [GET, POST]
+  requirements: { routeListId: \d+, routeId: \d+ }
+  controller: App\Controller\ManageTrainTablesController::manageRouteAction
+
+
+
+manage_train_tables_input:
+  path: /beheer-dienstregelingen/
   controller: App\Controller\HomeController::homeAction
+
+
+
+
+
+
 manage_pois:
   path: /beheer-spotpunten/
   controller: App\Controller\HomeController::homeAction
+
 manage_bans:
   path: /beheer-bans/
   controller: App\Controller\ManageUsersController::bansAction
@@ -358,26 +388,29 @@ manage_ban:
   methods: [GET, POST]
   requirements: { id: \d+ }
   controller: App\Controller\ManageUsersController::banAction
+
 manage_ddar_trains:
   path: /beheer-ddar/
   controller: App\Controller\HomeController::homeAction
+
 manage_train_compositions:
   path: /beheer-materieel-samenstellingen/
   controller: App\Controller\HomeController::homeAction
+
 manage_route_lists:
   path: /beheer-treinnummerlijst/
   methods: [GET]
-  controller: App\Controller\ManageTrainTableController::routeListsAction
+  controller: App\Controller\ManageRouteListsController::routeListsAction
 manage_route_lists_year:
   path: /beheer-treinnummerlijst/{id}/
   methods: [GET]
   requirements: { id: \d+ }
-  controller: App\Controller\ManageTrainTableController::routeListsAction
+  controller: App\Controller\ManageRouteListsController::routeListsAction
 manage_route_list:
   path: /beheer-treinnummerlijst-item/{yearId}/{id}/
   methods: [GET, POST]
   requirements: { yearId: \d+, id: \d+ }
-  controller: App\Controller\ManageTrainTableController::routeListAction
+  controller: App\Controller\ManageRouteListsController::routeListAction
 
 
 

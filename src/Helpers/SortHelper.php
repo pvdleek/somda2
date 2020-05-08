@@ -32,16 +32,15 @@ class SortHelper implements RuntimeExtensionInterface
     }
 
     /**
-     * @param array $array
+     * @param object|array $item
      * @param string $sortBy
      * @return string
      */
-    private function getSortValue(array $array, string $sortBy): string
+    private function getSortValue($item, string $sortBy): string
     {
-        if (is_array($array)) {
-            return $array[$sortBy];
-        } else {
-            return $array->{'get' . ucfirst($sortBy)}();
+        if (is_array($item)) {
+            return $item[$sortBy];
         }
+        return $item->$sortBy;
     }
 }

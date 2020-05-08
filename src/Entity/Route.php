@@ -102,6 +102,20 @@ class Route extends Entity
     }
 
     /**
+     * @param int $dayNumber
+     * @return TrainTableFirstLast|null
+     */
+    public function getTrainTableFirstLastByDay(int $dayNumber): ?TrainTableFirstLast
+    {
+        foreach ($this->getTrainTableFirstLasts() as $trainTableFirstLast) {
+            if ($trainTableFirstLast->dayNumber === $dayNumber) {
+                return $trainTableFirstLast;
+            }
+        }
+        return null;
+    }
+
+    /**
      * @param RouteList $routeList
      * @return Route
      */

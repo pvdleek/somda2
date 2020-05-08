@@ -30,9 +30,9 @@ class TrainTable extends Entity
 
     /**
      * @var int
-     * @ORM\Column(name="orderid", type="bigint", nullable=false)
+     * @ORM\Column(name="orderid", type="integer", nullable=false, options={"default"="1"})
      */
-    public int $order;
+    public int $order = 1;
 
     /**
      * @var string
@@ -43,9 +43,9 @@ class TrainTable extends Entity
 
     /**
      * @var int
-     * @ORM\Column(name="tijd", type="bigint", nullable=false)
+     * @ORM\Column(name="tijd", type="integer", nullable=false, options={"default"="0"})
      */
-    public int $time;
+    public int $time = 0;
 
     /**
      * @var string|null

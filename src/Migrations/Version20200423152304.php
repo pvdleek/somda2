@@ -12,7 +12,7 @@ final class Version20200423152304 extends AbstractMigration
     /**
      * @return string
      */
-    public function getDescription() : string
+    public function getDescription(): string
     {
         return 'Fix default values in banner table';
     }
@@ -20,7 +20,7 @@ final class Version20200423152304 extends AbstractMigration
     /**
      * @param Schema $schema
      */
-    public function up(Schema $schema) : void
+    public function up(Schema $schema): void
     {
         $this->addSql('
             ALTER TABLE `somda_banner`
@@ -32,7 +32,7 @@ final class Version20200423152304 extends AbstractMigration
     /**
      * @param Schema $schema
      */
-    public function down(Schema $schema) : void
+    public function down(Schema $schema): void
     {
         // Not applicable
     }

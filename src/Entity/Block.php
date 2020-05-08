@@ -21,15 +21,15 @@ class Block extends Entity
 
     /**
      * @var string
-     * @ORM\Column(name="name", type="string", length=55, nullable=false)
+     * @ORM\Column(name="name", type="string", length=55, nullable=false, options={"default"=""})
      */
-    public string $name;
+    public string $name = '';
 
     /**
      * @var string
-     * @ORM\Column(name="route", type="string", length=45, nullable=false)
+     * @ORM\Column(name="route", type="string", length=45, nullable=false, options={"default"=""})
      */
-    public string $route;
+    public string $route = '';
 
     /**
      * @var string|null
@@ -39,9 +39,9 @@ class Block extends Entity
 
     /**
      * @var int
-     * @ORM\Column(name="menu_volgorde", type="bigint", nullable=false)
+     * @ORM\Column(name="menu_volgorde", type="integer", nullable=false, options={"default"="1"})
      */
-    public int $menuOrder;
+    public int $menuOrder = 1;
 
     /**
      * @var bool

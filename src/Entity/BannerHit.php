@@ -21,7 +21,7 @@ class BannerHit extends Entity
 
     /**
      * @var DateTime
-     * @ORM\Column(name="datumtijd", type="datetime", nullable=false)
+     * @ORM\Column(name="timestamp", type="datetime", nullable=false)
      */
     public DateTime $timestamp;
 

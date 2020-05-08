@@ -28,7 +28,7 @@ class Ddar extends Entity
 
     /**
      * @var int|null
-     * @ORM\Column(name="stam", type="bigint", nullable=true)
+     * @ORM\Column(name="stam", type="integer", nullable=true)
      */
     public ?int $trunkNumber;
 

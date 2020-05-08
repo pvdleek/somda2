@@ -28,19 +28,19 @@ class RouteListLocations
 
     /**
      * @var int
-     * @ORM\Column(name="type", type="bigint", nullable=false)
+     * @ORM\Column(name="type", type="integer", nullable=false, options={"default"="1"})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
      */
-    public int $type;
+    public int $type = 1;
 
     /**
      * @var int
-     * @ORM\Column(name="volgorde", type="bigint", nullable=false)
+     * @ORM\Column(name="volgorde", type="integer", nullable=false, options={"default"="1"})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
      */
-    public int $order;
+    public int $order = 1;
 
     /**
      * @var Location

@@ -32,7 +32,7 @@ class ForumPostLog extends Entity
 
     /**
      * @var int
-     * @ORM\Column(name="actie", type="bigint", nullable=false)
+     * @ORM\Column(name="actie", type="integer", nullable=false, options={"default"=ForumPostLog::ACTION_POST_NEW})
      * @Assert\Choice(choices=ForumPostLog::ACTION_VALUES)
      */
     public int $action = self::ACTION_POST_NEW;

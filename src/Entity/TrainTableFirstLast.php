@@ -12,12 +12,12 @@ use Symfony\Component\Validator\Constraints as Assert;
 class TrainTableFirstLast
 {
     /**
-     * @var TrainTable
+     * @var TrainTableYear
      * @ORM\ManyToOne(targetEntity="App\Entity\TrainTableYear")
      * @ORM\JoinColumn(name="tdr_nr", referencedColumnName="tdr_nr")
      * @ORM\Id
      */
-    public TrainTable $trainTableYear;
+    public TrainTableYear $trainTableYear;
 
     /**
      * @var Route
@@ -29,10 +29,10 @@ class TrainTableFirstLast
 
     /**
      * @var int
-     * @ORM\Column(name="dag", type="bigint", nullable=false)
+     * @ORM\Column(name="dag", type="integer", nullable=false, options={"default"="1"})
      * @ORM\Id
      */
-    public int $dayNumber;
+    public int $dayNumber = 1;
 
     /**
      * @var Location
@@ -50,9 +50,9 @@ class TrainTableFirstLast
 
     /**
      * @var int
-     * @ORM\Column(name="v_tijd", type="bigint", nullable=false)
+     * @ORM\Column(name="v_tijd", type="integer", nullable=false, options={"default"="0"})
      */
-    public int $firstTime;
+    public int $firstTime = 0;
 
     /**
      * @var Location
@@ -70,7 +70,7 @@ class TrainTableFirstLast
 
     /**
      * @var int
-     * @ORM\Column(name="a_tijd", type="bigint", nullable=false)
+     * @ORM\Column(name="a_tijd", type="integer", nullable=false, options={"default"="0"})
      */
-    public int $lastTime;
+    public int $lastTime = 0;
 }

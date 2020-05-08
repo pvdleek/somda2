@@ -67,13 +67,13 @@ class Banner extends Entity
 
     /**
      * @var int
-     * @ORM\Column(name="max_views", type="bigint", nullable=false, options={"default"="0"})
+     * @ORM\Column(name="max_views", type="integer", nullable=false, options={"default"="0"})
      */
     public int $maxViews = 0;
 
     /**
      * @var int
-     * @ORM\Column(name="max_hits", type="bigint", nullable=false, options={"default"="0"})
+     * @ORM\Column(name="max_hits", type="integer", nullable=false, options={"default"="0"})
      */
     public int $maxHits = 0;
 

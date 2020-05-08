@@ -27,9 +27,9 @@ class ForumCategory extends Entity
 
     /**
      * @var int
-     * @ORM\Column(name="volgorde", type="bigint", nullable=false)
+     * @ORM\Column(name="volgorde", type="integer", nullable=false, options={"default"="1"})
      */
-    public int $order;
+    public int $order = 1;
 
     /**
      * @var ForumForum[]

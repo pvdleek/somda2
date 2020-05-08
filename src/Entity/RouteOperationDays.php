@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="somda_rijdagen")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\RouteOperationDays")
  */
 class RouteOperationDays extends Entity
 {

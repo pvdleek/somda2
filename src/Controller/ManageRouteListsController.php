@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
-class ManageTrainTableController
+class ManageRouteListsController
 {
     /**
      * @var ManagerRegistry
@@ -65,7 +65,7 @@ class ManageTrainTableController
             );
         }
 
-        return $this->templateHelper->render('manageTrainTable/routeLists.html.twig', [
+        return $this->templateHelper->render('manageTrainTable/index.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Beheer treinnummerlijst',
             'trainTableYears' => $this->doctrine
                 ->getRepository(TrainTableYear::class)
@@ -102,7 +102,7 @@ class ManageTrainTableController
             );
         }
 
-        return $this->templateHelper->render('manageTrainTable/routeList.html.twig', [
+        return $this->templateHelper->render('manageTrainTable/item.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Beheer treinnummerlijst',
             'routeList' => $routeList,
             TemplateHelper::PARAMETER_FORM => $form->createView(),

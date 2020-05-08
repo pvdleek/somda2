@@ -1,0 +1,130 @@
+{% extends('base.html.twig') %}
+
+{% block content %}
+    <div class="home-panel separate-panel">
+        <div class="home-panel-title">Beheer dienstregeling van trein {{ route.number }}</div>
+        <div class="home-panel-content panel-no-background">
+            <form id="train_table_form" method="post">
+                <table class="design">
+                    <tr><th colspan="7">Dienstregeling van trein {{ route.number }} beheren</th></tr>
+                    <tr>
+                        {% for dayNumber in 1..7 %}
+                            <th>{{ ('general.date.days.' ~ (dayNumber - 1)) | trans }}</th>
+                        {% endfor %}
+                    </tr>
+                    <tr>
+                        {% for dayNumber in 1..7 %}
+                            {% set rowNumber = 1 %}
+                            <td>
+                                <table class="design" id="train_table_{{ dayNumber }}">
+                                    {% for trainTable in trainTableLines %}
+                                        {% if trainTable.routeOperationDays.day(dayNumber - 1) %}
+                                            <tr id="row_{{ dayNumber }}_{{ rowNumber }}">
+                                                <td><input class="location-picker{{ trainTable.location.name == constant('App\\Entity\\Location::UNKNOWN_NAME') ? ' with-error' }}" name="location_{{ dayNumber }}_{{ rowNumber }}" size="6" type="text" value="{{ trainTable.location.name }}" /></td>
+                                                <td>
+                                                    <select name="action_{{ dayNumber }}_{{ rowNumber }}">
+                                                        {% for action in constant('App\\Entity\\TrainTable::ACTION_VALUES') %}
+                                                            <option {{ trainTable.action == action ? 'selected="selected" ' }}value="{{ action }}">{{ action }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </td>
+                                                <td><input class="time-picker time-day-{{ dayNumber }}" name="time_{{ dayNumber }}_{{ rowNumber }}" size="8" type="text" value="{{ trainTable.time | displayTime }}" /></td>
+                                            </tr>
+                                        {% endif %}
+                                        {% set rowNumber = rowNumber + 1 %}
+                                    {% endfor %}
+                                </table>
+                            </td>
+                        {% endfor %}
+                    </tr>
+                    <tr>
+                        {% for dayNumber in 1..7 %}
+                            <td>
+                                <a class="somda-button" href="#" onclick="addRow({{ dayNumber }}); return false;">Rij toevoegen</a>
+                            </td>
+                        {% endfor %}
+                    </tr>
+                    <tr>
+                        <td colspan="7">
+                            <a class="somda-button" href="#" onclick="$('#train_table_form').submit(); return false;">Opslaan</a>
+                            <a class="somda-button" href="{{ path('manage_train_tables_year_route_list', { 'yearId': routeList.trainTableYear.id, 'routeListId': routeList.id }) }}">Terug naar het overzicht</a>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('js/jquery.clockpicker-0.0.7.js') }}"></script>
+    <script>
+        function addRow(dayNumber)
+        {
+            let lastRow = $('#train_table_' + dayNumber + ' tr:last');
+            let newRowNumber = 1;
+            console.log(lastRow);
+            if (lastRow.attr('id') !== undefined) {
+                newRowNumber = parseInt(lastRow.attr('id').substr(6)) + 1;
+            }
+
+            const html =
+                '<tr id="row_' + dayNumber + '_' + newRowNumber + '">' +
+                '<td><input class="location-picker" name="location_' + dayNumber + '_' + newRowNumber + '" size="6" type="text" /></td>' +
+                '<td><select name="action_' + dayNumber + '_' + newRowNumber + '">' +
+                {% for action in constant('App\\Entity\\TrainTable::ACTION_VALUES') %}'<option value="{{ action }}">{{ action }}</option>' +{% endfor %}
+                '</select></td>' +
+                '<td><input class="time-picker time-day-' + dayNumber + '" name="time_' + dayNumber + '_' + newRowNumber + '" size="8" type="text" /></td>' +
+                '</tr>';
+
+            if (lastRow.attr('id') !== undefined) {
+                lastRow.after(html);
+            } else {
+                $('#train_table_' + dayNumber).append(html);
+            }
+
+            $('.time-picker').clockpicker({
+                donetext: 'Klaar',
+            }).on('change', function () {
+                verifyTimeRow(parseInt($(this).attr('name').substr(5, 1)));
+            });
+        }
+
+        /**
+         * @param {int} dayNumber
+         */
+        function verifyTimeRow(dayNumber)
+        {
+            $('.time-day-' + dayNumber).each(function () {
+                $(this).removeClass('with-error');
+
+                const rowNumber = parseInt($(this).attr('name').substr(7));
+
+                if (rowNumber > 1) {
+                    const previousTimeString = $('input[name="time_' + dayNumber + '_' + (rowNumber - 1) + '"').val();
+                    const previousTime = new Date(0, 0, 0, parseInt(previousTimeString.substr(0, 2)), parseInt(previousTimeString.substr(3, 2)), 0);
+                    const currentTime = new Date(0, 0, 0, parseInt($(this).val().substr(0, 2)), parseInt($(this).val().substr(3, 2)), 0);
+
+                    if (currentTime < previousTime) {
+                        $(this).addClass('with-error');
+                    }
+                }
+            });
+        }
+
+        $(document).ready(function() {
+            $('.location-picker').on('change', function () {
+                $(this).removeClass('with-error');
+            });
+            $('.time-picker').clockpicker({
+                donetext: 'Klaar',
+            }).on('change', function () {
+                verifyTimeRow(parseInt($(this).attr('name').substr(5, 1)));
+            });
+        });
+    </script>
+{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/jquery.clockpicker-0.0.7.css') }}" type="text/css" />
+{% endblock %}

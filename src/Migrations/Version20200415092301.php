@@ -12,7 +12,7 @@ final class Version20200415092301 extends AbstractMigration
     /**
      * @return string
      */
-    public function getDescription() : string
+    public function getDescription(): string
     {
         return 'Links trains (somda_mat) to naming patterns';
     }
@@ -20,7 +20,7 @@ final class Version20200415092301 extends AbstractMigration
     /**
      * @param Schema $schema
      */
-    public function up(Schema $schema) : void
+    public function up(Schema $schema): void
     {
         $this->addSql('ALTER TABLE `somda_mat` ADD `pattern_id` BIGINT DEFAULT NULL');
         $this->addSql('
@@ -32,7 +32,7 @@ final class Version20200415092301 extends AbstractMigration
     /**
      * @param Schema $schema
      */
-    public function down(Schema $schema) : void
+    public function down(Schema $schema): void
     {
         // Not applicable
     }

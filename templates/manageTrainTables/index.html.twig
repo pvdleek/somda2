@@ -1,0 +1,75 @@
+{% extends('base.html.twig') %}
+
+{% block content %}
+    <div class="home-panel separate-panel">
+        <div class="home-panel-title">Beheer dienstregelingen</div>
+        <div class="home-panel-content">
+            <label for="trainTableYear">Selecteer het dienstregelings-jaar</label>
+            <select id="trainTableYear" name="trainTableYear">
+                {% for trainTableYear in trainTableYears %}
+                    <option {% if trainTableYear == selectedTrainTableYear %}selected="selected" {% endif %}value="{{ trainTableYear.id }}">{{ trainTableYear.name }}</option>
+                {% endfor %}
+            </select>
+            <a class="somda-button" href="#" onclick="manageTrainTableYear(); return false;">Toon treinseries</a>
+
+            {% if routeLists | length %}
+                <br /><br />
+                <label for="routeList">Selecteer de serie</label>
+                <select id="routeList" name="routeList">
+                    {% for routeList in routeLists %}
+                        <option {% if routeList == selectedRouteList %}selected="selected" {% endif %}value="{{ routeList.id }}">
+                            {{ routeList.firstNumber }}-{{ routeList.lastNumber }} - {{ routeList.characteristic.name }} - {{ routeList.transporter.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+                <a class="somda-button" href="#" onclick="manageTrainTableYearRouteList(); return false;">Toon treinen</a>
+            {% endif %}
+
+            {% if routes | length %}
+                <br /><br />
+                <table class="design">
+                    <tr>
+                        <th>Treinnummer</th>
+                        <th>Maandag</th>
+                        <th>Dinsdag</th>
+                        <th>Woensdag</th>
+                        <th>Donderdag</th>
+                        <th>Vrijdag</th>
+                        <th>Zaterdag</th>
+                        <th>Zondag</th>
+{#                        <th><a href="{{ path('manage_route_list', { 'yearId': trainTableYear.id, 'id': 0 }) }}">Voeg een serie toe</a></th>#}
+                    </tr>
+                    {% for route in routes %}
+                        <tr>
+                            <td>{{ route.number }}</td>
+                            <td>{{ route.trainTableFirstLastByDay(1) ? route.trainTableFirstLastByDay(1).firstLocation.name ~ ' - ' ~ route.trainTableFirstLastByDay(1).lastLocation.name }}</td>
+                            <td>{{ route.trainTableFirstLastByDay(2) ? route.trainTableFirstLastByDay(2).firstLocation.name ~ ' - ' ~ route.trainTableFirstLastByDay(2).lastLocation.name }}</td>
+                            <td>{{ route.trainTableFirstLastByDay(3) ? route.trainTableFirstLastByDay(3).firstLocation.name ~ ' - ' ~ route.trainTableFirstLastByDay(3).lastLocation.name }}</td>
+                            <td>{{ route.trainTableFirstLastByDay(4) ? route.trainTableFirstLastByDay(4).firstLocation.name ~ ' - ' ~ route.trainTableFirstLastByDay(4).lastLocation.name }}</td>
+                            <td>{{ route.trainTableFirstLastByDay(5) ? route.trainTableFirstLastByDay(5).firstLocation.name ~ ' - ' ~ route.trainTableFirstLastByDay(5).lastLocation.name }}</td>
+                            <td>{{ route.trainTableFirstLastByDay(6) ? route.trainTableFirstLastByDay(6).firstLocation.name ~ ' - ' ~ route.trainTableFirstLastByDay(6).lastLocation.name }}</td>
+                            <td>{{ route.trainTableFirstLastByDay(7) ? route.trainTableFirstLastByDay(7).firstLocation.name ~ ' - ' ~ route.trainTableFirstLastByDay(7).lastLocation.name }}</td>
+                            <td><a href="{{ path('manage_train_table', { 'routeListId': selectedRouteList.id, 'routeId': route.id }) }}">Bewerk</a></td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        function manageTrainTableYear() {
+            let location = '{{ path('manage_train_tables_year', { 'yearId': 9999 }) }}';
+            location = location.replace('9999', document.getElementById('trainTableYear').value);
+            document.location = location;
+        }
+        function manageTrainTableYearRouteList() {
+            let location = '{{ path('manage_train_tables_year_route_list', { 'yearId': 1234, 'routeListId': 5678 }) }}';
+            location = location.replace('1234', document.getElementById('trainTableYear').value);
+            location = location.replace('5678', document.getElementById('routeList').value);
+            document.location = location;
+        }
+    </script>
+{% endblock %}

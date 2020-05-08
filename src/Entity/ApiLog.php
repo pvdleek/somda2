@@ -32,13 +32,13 @@ class ApiLog
 
     /**
      * @var int|null
-     * @ORM\Column(name="dagnr", type="bigint", nullable=true)
+     * @ORM\Column(name="dagnr", type="integer", nullable=true)
      */
     public ?int $dayNumber;
 
     /**
      * @var int|null
-     * @ORM\Column(name="resultaat_id", type="bigint", nullable=true)
+     * @ORM\Column(name="resultaat_id", type="integer", nullable=true)
      */
     public ?int $resultId;
 

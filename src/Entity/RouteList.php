@@ -22,13 +22,13 @@ class RouteList extends Entity
 
     /**
      * @var int
-     * @ORM\Column(name="nr_start", type="bigint", nullable=false)
+     * @ORM\Column(name="nr_start", type="integer", nullable=false, options={"default"="1"})
      */
     public int $firstNumber = 1;
 
     /**
      * @var int
-     * @ORM\Column(name="nr_eind", type="bigint", nullable=false)
+     * @ORM\Column(name="nr_eind", type="integer", nullable=false, options={"default"="2"})
      * @Assert\GreaterThan(propertyPath="firstNumber", message="Het eindnummer moet meer zijn dan het startnummer")
      */
     public int $lastNumber = 2;

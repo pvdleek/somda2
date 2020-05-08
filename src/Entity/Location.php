@@ -11,6 +11,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Location extends Entity
 {
+    public const UNKNOWN_NAME = 'Fout!';
+
     /**
      * @var int
      * @ORM\Column(name="afkid", type="bigint", nullable=false)
@@ -57,7 +59,7 @@ class Location extends Entity
 
     /**
      * @var int|null
-     * @ORM\Column(name="route_overstaptijd", type="bigint", nullable=true)
+     * @ORM\Column(name="route_overstaptijd", type="integer", nullable=true)
      */
     public ?int $transferTime;
 

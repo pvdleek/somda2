@@ -71,6 +71,14 @@ class FormHelper
     }
 
     /**
+     * @return FlashHelper
+     */
+    public function getFlashHelper(): FlashHelper
+    {
+        return $this->flashHelper;
+    }
+
+    /**
      * @param string $flashMessage
      * @param string $route
      * @param array $routeParameters

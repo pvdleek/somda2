@@ -27,19 +27,19 @@ class BannerCustomer extends Entity
 
     /**
      * @var int|null
-     * @ORM\Column(name="max_views", type="bigint", nullable=true)
+     * @ORM\Column(name="max_views", type="integer", nullable=true)
      */
     public ?int $maxViews;
 
     /**
      * @var int|null
-     * @ORM\Column(name="max_hits", type="bigint", nullable=true)
+     * @ORM\Column(name="max_hits", type="integer", nullable=true)
      */
     public ?int $maxHits;
 
     /**
      * @var int|null
-     * @ORM\Column(name="max_days", type="bigint", nullable=true)
+     * @ORM\Column(name="max_days", type="integer", nullable=true)
      */
     public ?int $maxDays;
 

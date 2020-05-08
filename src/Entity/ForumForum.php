@@ -52,13 +52,13 @@ class ForumForum extends Entity
 
     /**
      * @var int
-     * @ORM\Column(name="volgorde", type="bigint", nullable=false)
+     * @ORM\Column(name="volgorde", type="integer", nullable=false, options={"default"="1"})
      */
-    public int $order;
+    public int $order = 1;
 
     /**
      * @var int
-     * @ORM\Column(name="type", type="bigint", nullable=false)
+     * @ORM\Column(name="type", type="integer", nullable=false, options={"default"=ForumForum::TYPE_LOGGED_IN})
      * @Assert\Choice(choices=ForumForum::TYPE_VALUES)
      */
     public int $type = self::TYPE_LOGGED_IN;

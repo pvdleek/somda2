@@ -36,10 +36,10 @@ class RouteTrain
 
     /**
      * @var int
-     * @ORM\Column(name="dag", type="bigint", nullable=false)
+     * @ORM\Column(name="dag", type="integer", nullable=false, options={"default"="1"})
      * @ORM\Id
      */
-    public int $dayNumber;
+    public int $dayNumber = 1;
 
     /**
      * @var int

@@ -8,7 +8,6 @@ use App\Entity\TrainTable;
 use App\Entity\TrainTableYear;
 use App\Entity\User;
 use App\Traits\DateTrait;
-use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 use Symfony\Contracts\Translation\TranslatorInterface;

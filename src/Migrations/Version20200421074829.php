@@ -12,7 +12,7 @@ final class Version20200421074829 extends AbstractMigration
     /**
      * @return string
      */
-    public function getDescription() : string
+    public function getDescription(): string
     {
         return 'Increase security level for users';
     }
@@ -20,7 +20,7 @@ final class Version20200421074829 extends AbstractMigration
     /**
      * @param Schema $schema
      */
-    public function up(Schema $schema) : void
+    public function up(Schema $schema): void
     {
         $this->addSql('UPDATE `somda_users` SET `password` = \'\'');
         $this->addSql('
@@ -34,7 +34,7 @@ final class Version20200421074829 extends AbstractMigration
     /**
      * @param Schema $schema
      */
-    public function down(Schema $schema) : void
+    public function down(Schema $schema): void
     {
         // Not applicable
     }

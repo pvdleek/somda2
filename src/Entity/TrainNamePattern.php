@@ -20,21 +20,21 @@ class TrainNamePattern extends Entity
 
     /**
      * @var int
-     * @ORM\Column(name="volgorde", type="bigint", nullable=false)
+     * @ORM\Column(name="volgorde", type="integer", nullable=false, options={"default"="1"})
      */
-    public int $order;
+    public int $order = 1;
 
     /**
      * @var string
-     * @ORM\Column(name="pattern", type="string", length=80, nullable=false)
+     * @ORM\Column(name="pattern", type="string", length=80, nullable=false, options={"default"=""})
      */
-    public string $pattern;
+    public string $pattern = '';
 
     /**
      * @var string
-     * @ORM\Column(name="naam", type="string", length=50, nullable=false)
+     * @ORM\Column(name="naam", type="string", length=50, nullable=false, options={"default"=""})
      */
-    public string $name;
+    public string $name = '';
 
     /**
      * @var string|null

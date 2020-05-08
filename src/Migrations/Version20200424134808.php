@@ -12,7 +12,7 @@ final class Version20200424134808 extends AbstractMigration
     /**
      * @return string
      */
-    public function getDescription() : string
+    public function getDescription(): string
     {
         return 'Remove use of BB-codes and percent-codes in forum-posts';
     }
@@ -20,7 +20,7 @@ final class Version20200424134808 extends AbstractMigration
     /**
      * @param Schema $schema
      */
-    public function up(Schema $schema) : void
+    public function up(Schema $schema): void
     {
         $this->addSql('
             UPDATE `somda_forum_posts_text` SET `text` =
@@ -88,7 +88,7 @@ final class Version20200424134808 extends AbstractMigration
     /**
      * @param Schema $schema
      */
-    public function down(Schema $schema) : void
+    public function down(Schema $schema): void
     {
         // Not applicable
     }
