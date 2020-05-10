@@ -149,14 +149,7 @@ class ManageTrainTablesController
         }
 
         if ($request->getMethod() === Request::METHOD_POST) {
-            $routeDayArray = [];
-            $allSubmitted = $request->request->all();
-            foreach ($allSubmitted as $key => $value) {
-                $keyPart = explode('_', $key);
-                $routeDayArray[(int)$keyPart[1]][(int)$keyPart[2]][$keyPart[0]] = $value;
-            }
-            $routeDayArray = $this->getUniqueRouteDayArray($routeDayArray);
-
+            $routeDayArray = $this->getUniqueRouteDayArray($this->getRouteDayArrayFromRequest($request));
             $this->removeExistingTrainTablesFromRoute($route);
             if ($this->saveRouteDay($routeDayArray, $routeList->trainTableYear, $route)) {
                 return $this->formHelper->finishFormHandling(
@@ -183,6 +176,21 @@ class ManageTrainTablesController
             'route' => $route,
             'trainTableLines' => $trainTableLines,
         ]);
+    }
+
+    /**
+     * @param Request $request
+     * @return array
+     */
+    private function getRouteDayArrayFromRequest(Request $request): array
+    {
+        $routeDayArray = [];
+        $allSubmitted = $request->request->all();
+        foreach ($allSubmitted as $key => $value) {
+            $keyPart = explode('_', $key);
+            $routeDayArray[(int)$keyPart[1]][(int)$keyPart[2]][$keyPart[0]] = $value;
+        }
+        return $routeDayArray;
     }
 
     /**
