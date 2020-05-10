@@ -16,10 +16,15 @@
                         {% for dayNumber in 1..7 %}
                             {% set rowNumber = 1 %}
                             <td>
-                                <table class="design" id="train_table_{{ dayNumber }}">
+                                <table id="train_table_{{ dayNumber }}">
                                     {% for trainTable in trainTableLines %}
                                         {% if trainTable.routeOperationDays.day(dayNumber - 1) %}
                                             <tr id="row_{{ dayNumber }}_{{ rowNumber }}">
+                                                <td class="icon-controls">
+                                                    <a href="#" onclick="moveRowUp($(this).parent().parent()); return false;" title="Rij naar boven verplaatsen"><i class="fas fa-angle-double-up"></i></a>
+                                                    <a href="#" onclick="$(this).parent().parent().remove(); return false;" title="Rij verwijderen"><i class="fas fa-times"></i></a>
+                                                    <a href="#" onclick="moveRowDown($(this).parent().parent()); return false;" title="Rij naar beneden verplaatsen"><i class="fas fa-angle-double-down"></i></a>
+                                                </td>
                                                 <td><input class="location-picker{{ trainTable.location.name == constant('App\\Entity\\Location::UNKNOWN_NAME') ? ' with-error' }}" name="location_{{ dayNumber }}_{{ rowNumber }}" size="6" type="text" value="{{ trainTable.location.name }}" /></td>
                                                 <td>
                                                     <select name="action_{{ dayNumber }}_{{ rowNumber }}">
@@ -30,8 +35,9 @@
                                                 </td>
                                                 <td><input class="time-picker time-day-{{ dayNumber }}" name="time_{{ dayNumber }}_{{ rowNumber }}" size="8" type="text" value="{{ trainTable.time | displayTime }}" /></td>
                                             </tr>
+
+                                            {% set rowNumber = rowNumber + 1 %}
                                         {% endif %}
-                                        {% set rowNumber = rowNumber + 1 %}
                                     {% endfor %}
                                 </table>
                             </td>
@@ -59,17 +65,24 @@
 {% block javascripts %}
     <script src="{{ asset('js/jquery.clockpicker-0.0.7.js') }}"></script>
     <script>
+        /**
+         * @param {int} dayNumber
+         */
         function addRow(dayNumber)
         {
-            let lastRow = $('#train_table_' + dayNumber + ' tr:last');
             let newRowNumber = 1;
-            console.log(lastRow);
+            let lastRow = $('#train_table_' + dayNumber + ' tr:last');
             if (lastRow.attr('id') !== undefined) {
                 newRowNumber = parseInt(lastRow.attr('id').substr(6)) + 1;
             }
 
             const html =
                 '<tr id="row_' + dayNumber + '_' + newRowNumber + '">' +
+                '<td class="icon-controls">' +
+                '<a href="#" onclick="moveRowUp($(this).parent().parent()); return false;" title="Rij naar boven verplaatsen"><i class="fas fa-angle-double-up"></i></a>' +
+                '<a href="#" onclick="$(this).parent().parent().remove(); return false;" title="Rij verwijderen"><i class="fas fa-times"></i></a>' +
+                '<a href="#" onclick="moveRowDown($(this).parent().parent()); return false;" title="Rij naar beneden verplaatsen"><i class="fas fa-angle-double-down"></i></a>' +
+                '</td>' +
                 '<td><input class="location-picker" name="location_' + dayNumber + '_' + newRowNumber + '" size="6" type="text" /></td>' +
                 '<td><select name="action_' + dayNumber + '_' + newRowNumber + '">' +
                 {% for action in constant('App\\Entity\\TrainTable::ACTION_VALUES') %}'<option value="{{ action }}">{{ action }}</option>' +{% endfor %}
@@ -88,6 +101,59 @@
             }).on('change', function () {
                 verifyTimeRow(parseInt($(this).attr('name').substr(5, 1)));
             });
+        }
+
+        /**
+         * @param thisRow
+         */
+        function moveRowUp(thisRow)
+        {
+            let aboveRow = thisRow.prev();
+
+            if (!thisRow.length || !aboveRow.length) {
+                alert('Fout bij verplaatsen van de rij!');
+                return;
+            }
+
+            switchRows(parseInt(thisRow.attr('id').substr(4, 1)), thisRow, aboveRow);
+        }
+
+        /**
+         * @param thisRow
+         */
+        function moveRowDown(thisRow)
+        {
+            let belowRow = thisRow.next();
+
+            if (!thisRow.length || !belowRow.length) {
+                alert('Fout bij verplaatsen van de rij!');
+                return;
+            }
+
+            switchRows(parseInt(thisRow.attr('id').substr(4, 1)), belowRow, thisRow);
+        }
+
+        /**
+         * @param {int} dayNumber
+         * @param row1
+         * @param row2
+         */
+        function switchRows(dayNumber, row1, row2)
+        {
+            let row1Number = parseInt(row1.attr('id').substr(6));
+            let row2Number = parseInt(row2.attr('id').substr(6));
+
+            row1.after(row2);
+            row1.attr('id', row2.attr('id'));
+            row2.attr('id', 'row_' + dayNumber + '_' + row1Number);
+
+            row1.find('input[name="location_' + dayNumber + '_' + row1Number + '"]').attr('name', 'location_' + dayNumber + '_' + row2Number);
+            row1.find('select[name="action_' + dayNumber + '_' + row1Number + '"]').attr('name', 'action_' + dayNumber + '_' + row2Number);
+            row1.find('input[name="time_' + dayNumber + '_' + row1Number + '"]').attr('name', 'time_' + dayNumber + '_' + row2Number);
+
+            row2.find('input[name="location_' + dayNumber + '_' + row2Number + '"]').attr('name', 'location_' + dayNumber + '_' + row1Number);
+            row2.find('select[name="action_' + dayNumber + '_' + row2Number + '"]').attr('name', 'action_' + dayNumber + '_' + row1Number);
+            row2.find('input[name="time_' + dayNumber + '_' + row2Number + '"]').attr('name', 'time_' + dayNumber + '_' + row1Number);
         }
 
         /**

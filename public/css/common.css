@@ -176,9 +176,9 @@ table.design td.disc_spacer {
 	background-color: #FFFFFF;
 }
 
-/*************************/
-/*** BLOKKEN MET ICONS ***/
-/*************************/
+/**************/
+/*** Alerts ***/
+/**************/
 p.info {
 	border-bottom: 2px solid #B5D4FE;
 	border-top: 2px solid #B5D4FE;
@@ -291,7 +291,7 @@ a.rail-news-title:hover {
 }
 
 /*************/
-/*** FORUM ***/
+/*** Forum ***/
 /*************/
 table.forum {
 	background-color: #D2E2F1;
@@ -338,96 +338,6 @@ span.edit_text {
 	margin: 8px;
 	padding: 8px;
 	font-size: 13pt;
-}
-
-/**************/
-/*** POPUPS ***/
-/**************/
-.ui-widget-content a {
-	border-bottom: 1px solid;
-	color: #246DA5!important;
-}
-table.popup_design {
-	border: 1px solid #C2D2E1;
-}
-table.popup_design th {
-	background-color: #1D679F;
-	color: #FFFFFF;
-	font-weight: bold;
-	padding: 0;
-}
-table.popup_design th a {
-	color: #BBBBBB;
-	text-decoration: none;
-}
-table.popup_design th a:hover {
-	color: #FFFFFF;
-}
-table.popup_design td {
-	background-color: #D2E2F1;
-	color: #515151;
-	padding: 0;
-}
-.popupDiv {
-	overflow: auto;
-}
-.trein {
-	background-color: #D2E2F1;
-	border: 1px solid;
-	display: none;
-	position: absolute;
-	width: 180px;
-	z-index: 1000;
-}
-.plaatsDiv {
-	background-color: #D2E2F1;
-	border: 1px solid #303030;
-	overflow: visible;
-	position: absolute;
-	visibility: hidden;
-	width: 400px;
-	z-index: 1000;
-}
-.plaatsDiv td:hover {
-	background-color: #1D679F;
-	color: #FFFFFF;
-}
-.plaatsVolledig {
-	width: 300px;
-}
-.verkNormal {
-	background-color: #D2E2F1;
-	color: #1D679F;
-}
-.verkMouseOver {
-	background-color: #1D679F;
-	color: #D2E2F1;
-}
-#materieelidDiv {
-	background-color: #003399;
-	border: 1px solid #303030;
-	position: absolute;
-	visibility: hidden;
-	width: 500px;
-	z-index: 1000;
-}
-#materieelidDivInhoud {
-	overflow:auto;
-}
-#materieelidTable {
-	background-color: #010066;
-	width:500px;
-}
-.materieelidTH {
-	color: #FFFFFF;
-	text-align:left;
-}
-.materieelidTD {
-	text-align: right;
-	font-size: 9px;
-}
-.materieelidSluit {
-	color: #888888;
 }
 
 /**********************/
@@ -599,4 +509,13 @@ span.special-route-image {
 }
 .no-webp .ftr-right {
 	background: url(../images/design/footer-right.png) no-repeat right 20px transparent;
+}
+
+/***************************/
+/*** Manage train-tables ***/
+/***************************/
+.icon-controls {
+	display: grid;
+	grid-gap: 0.4rem;
+	grid-template-columns: 1fr 1fr 1fr;
 }

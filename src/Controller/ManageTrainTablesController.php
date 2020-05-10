@@ -155,15 +155,6 @@ class ManageTrainTablesController
                 $keyPart = explode('_', $key);
                 $routeDayArray[(int)$keyPart[1]][(int)$keyPart[2]][$keyPart[0]] = $value;
             }
-
-
-
-
-            // FILTER!
-
-
-
-
             $routeDayArray = $this->getUniqueRouteDayArray($routeDayArray);
 
             $this->removeExistingTrainTablesFromRoute($route);
