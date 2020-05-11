@@ -108,7 +108,7 @@ class UpdateStatisticsCommand extends Command implements ScheduledJobInterface
         $statement = $connection->prepare($query);
         $statement->bindValue(self::DATE_PERIOD_YEAR_AGO, $yearAgo->format(GenericsHelper::DATE_FORMAT_DATABASE));
         $statement->execute();
-        $query = 'UPDATE `somda_stats` `s` SET spots =
+        $query = 'UPDATE `somda_stats` `s` SET posts =
             (SELECT COUNT(*) FROM `somda_forum_posts` `f`
             WHERE DATE(`f`.`timestamp`) = `s`.`datum` AND `f`.`timestamp` > :yearAgo)';
         $statement = $connection->prepare($query);
