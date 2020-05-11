@@ -1,0 +1,59 @@
+{% extends('base.html.twig') %}
+
+{% block content %}
+    <div class="home-panel separate-panel">
+        <div class="home-panel-title">Jouw ingevoerde spots</div>
+        <div class="home-panel-content panel-no-background">
+            <table class="design">
+                <tr>
+                    <th>Spot-datum</th>
+                    <th>Materieel</th>
+                    <th>Trein</th>
+                    <th>Positie</th>
+                    <th>Spot-locatie</th>
+                    <th>Feedback</th>
+                </tr>
+                {% for spot in spots %}
+                    <tr>
+                        <td>{{ spot.spotDate | displayDateTime }}</td>
+                        <td>
+                            {% if spot.train.namePattern is not null %}
+                                {{ spot.train.namePattern.name }}
+                            {% endif %}
+                            {{ spot.train.number }}
+                        </td>
+                        <td>{{ spot.route.number }}</td>
+                        <td>{{ spot.position.name }}</td>
+                        <td><span title="{{ spot.location.description }}">{{ spot.location.name }}</span></td>
+                        <td>
+                            {% if spot.inputFeedbackFlag == 0 %}
+                                Spot opgeslagen
+                            {% else %}
+                                {% if spot.inputFeedbackFlag b-and constant('App\\Entity\\Spot::INPUT_FEEDBACK_TRAIN_NEW') %}
+                                    <strong>Materieel niet bekend in Somda, is het materieelnummer correct?</strong><br />
+                                {% endif %}
+                                {% if spot.inputFeedbackFlag b-and constant('App\\Entity\\Spot::INPUT_FEEDBACK_TRAIN_NEW_NO_PATTERN') %}
+                                    <strong>Dit materieel is nieuw in Somda en zonder naam, is het materieelnummer correct?</strong><br />
+                                {% endif %}
+                                {% if spot.inputFeedbackFlag b-and constant('App\\Entity\\Spot::INPUT_FEEDBACK_ROUTE_NEW') %}
+                                    <strong>Dit treinnummer is nieuw in Somda, is het treinnummer correct?</strong><br />
+                                {% endif %}
+                                {% if spot.inputFeedbackFlag b-and constant('App\\Entity\\Spot::INPUT_FEEDBACK_ROUTE_NOT_ON_DAY') %}
+                                    <strong>Dit treinnummer rijdt volgens Somda niet op {{ spot.spotDate | displayDateTime(false, true) }}, is het treinnummer correct?</strong><br />
+                                {% endif %}
+                                {% if spot.inputFeedbackFlag b-and constant('App\\Entity\\Spot::INPUT_FEEDBACK_ROUTE_NOT_ON_LOCATION') %}
+                                    <strong>Dit treinnummer komt volgens Somda op {{ spot.spotDate | displayDateTime(false, true) }} niet langs {{ spot.location.description }}, is de locatie correct?</strong><br />
+                                {% endif %}
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                <tr>
+                    <td colspan="6">
+                        <a class="somda-button" href="{{ path('spot_input') }}">Meer spots invoeren</a>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+{% endblock %}

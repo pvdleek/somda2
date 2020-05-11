@@ -9,13 +9,14 @@ use App\Entity\RouteOperationDays;
 use App\Entity\TrainTable;
 use App\Entity\TrainTableFirstLast;
 use App\Entity\TrainTableYear;
-use App\Helpers\DateHelper;
 use App\Helpers\FlashHelper;
 use App\Helpers\FormHelper;
 use App\Helpers\SortHelper;
 use App\Helpers\TemplateHelper;
 use App\Traits\DateTrait;
+use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
+use Exception;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -52,30 +53,28 @@ class ManageTrainTablesController
     private SortHelper $sortHelper;
 
     /**
-     * @var DateHelper
-     */
-    private DateHelper $dateHelper;
-
-    /**
      * @param ManagerRegistry $doctrine
      * @param FormHelper $formHelper
      * @param TemplateHelper $templateHelper
      * @param SortHelper $sortHelper
-     * @param DateHelper $dateHelper
      */
-    public function __construct(ManagerRegistry $doctrine, FormHelper $formHelper, TemplateHelper $templateHelper, SortHelper $sortHelper, DateHelper $dateHelper)
-    {
+    public function __construct(
+        ManagerRegistry $doctrine,
+        FormHelper $formHelper,
+        TemplateHelper $templateHelper,
+        SortHelper $sortHelper
+    ) {
         $this->doctrine = $doctrine;
         $this->formHelper = $formHelper;
         $this->templateHelper = $templateHelper;
         $this->sortHelper = $sortHelper;
-        $this->dateHelper = $dateHelper;
     }
 
     /**
      * @param int|null $yearId
      * @param int|null $routeListId
      * @return Response
+     * @throws Exception
      */
     public function manageAction(int $yearId = null, int $routeListId = null): Response
     {
@@ -90,7 +89,7 @@ class ManageTrainTablesController
         if (is_null($yearId)) {
             $selectedTrainTableYear = $this->doctrine
                 ->getRepository(TrainTableYear::class)
-                ->findCurrentTrainTableYear();
+                ->findTrainTableYearByDate(new DateTime());
         } else {
             $selectedTrainTableYear = $this->doctrine->getRepository(TrainTableYear::class)->find($yearId);
             if (is_null($selectedTrainTableYear)) {
@@ -203,12 +202,12 @@ class ManageTrainTablesController
         for ($dayNumber = 1; $dayNumber <= 7; ++$dayNumber) {
             if (isset($routeDayArray[$dayNumber])) {
                 $days = $this->getEmptyDaysArray();
-                $days[$this->dateHelper->getDayName($dayNumber - 1)] = true;
+                $days[$this->getDayName($dayNumber - 1)] = true;
                 for ($checkDayNumber = $dayNumber + 1; $checkDayNumber <= 7; ++$checkDayNumber) {
                     if (isset($routeDayArray[$checkDayNumber])
                         && $routeDayArray[$dayNumber] === $routeDayArray[$checkDayNumber]
                     ) {
-                        $days[$this->dateHelper->getDayName($checkDayNumber - 1)] = true;
+                        $days[$this->getDayName($checkDayNumber - 1)] = true;
                         unset($routeDayArray[$checkDayNumber]);
                     }
                 }
@@ -233,7 +232,7 @@ class ManageTrainTablesController
     {
         $result = [];
         for ($dayNumber = 1; $dayNumber <= 7; ++$dayNumber) {
-            $result[$this->dateHelper->getDayName($dayNumber - 1)] = false;
+            $result[$this->getDayName($dayNumber - 1)] = false;
         }
         return $result;
     }

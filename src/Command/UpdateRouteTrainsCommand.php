@@ -75,7 +75,9 @@ class UpdateRouteTrainsCommand extends Command implements ScheduledJobInterface
         /**
          * @var TrainTableYear $trainTableYear
          */
-        $trainTableYear = $this->doctrine->getRepository(TrainTableYear::class)->findCurrentTrainTableYear();
+        $trainTableYear = $this->doctrine
+            ->getRepository(TrainTableYear::class)
+            ->findTrainTableYearByDate(new DateTime());
         $checkDate = max($trainTableYear->startDate, new DateTime('-' . self::CHECK_DATE_DAYS . ' days'));
 
         $routeArray = $this->doctrine->getRepository(Spot::class)->findForRouteTrains($checkDate);

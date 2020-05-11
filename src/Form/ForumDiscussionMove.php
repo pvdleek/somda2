@@ -21,7 +21,7 @@ class ForumDiscussionMove extends BaseForm
             self::KEY_CHOICE_LABEL => function (ForumForum $forum) {
                 return $forum->category->name . ' - ' . $forum->name;
             },
-            self::KEY_CLASS=> ForumForum::class,
+            self::KEY_CLASS => ForumForum::class,
             self::KEY_LABEL => 'Kies een nieuw locatie',
             self::KEY_QUERY_BUILDER => function (EntityRepository $repository) {
                 return $repository

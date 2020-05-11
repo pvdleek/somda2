@@ -12,18 +12,19 @@ use Exception;
 class TrainTableYear extends EntityRepository
 {
     /**
-     * @return TrainTableYearEntity
+     * @param DateTime $checkDate
+     * @return TrainTableYearEntity|null
      * @throws Exception
      */
-    public function findCurrentTrainTableYear(): TrainTableYearEntity
+    public function findTrainTableYearByDate(DateTime $checkDate): ?TrainTableYearEntity
     {
         $queryBuilder = $this->getEntityManager()
             ->createQueryBuilder()
             ->select('t')
             ->from(TrainTableYearEntity::class, 't')
-            ->andWhere('t.startDate <= :now')
-            ->andWhere('t.endDate > :now')
-            ->setParameter('now', new DateTime())
+            ->andWhere('t.startDate <= :checkDate')
+            ->andWhere('t.endDate > :checkDate')
+            ->setParameter('checkDate', $checkDate)
             ->setMaxResults(1);
         try {
             return $queryBuilder->getQuery()->getSingleResult();

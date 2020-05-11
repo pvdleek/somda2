@@ -130,7 +130,13 @@ special_route:
 #########
 spot_input:
   path: /invoer/
-  controller: App\Controller\HomeController::homeAction
+  methods: [GET, POST]
+  controller: App\Controller\SpotInputController::indexAction
+spot_input_feedback:
+  path: /invoer-feedback/{idList}
+  methods: [GET]
+  requirements: { idList: .+ }
+  controller: App\Controller\SpotInputController::feedbackAction
 spots:
   path: /spots/
   controller: App\Controller\SpotController::indexAction
@@ -364,17 +370,6 @@ manage_train_table:
   methods: [GET, POST]
   requirements: { routeListId: \d+, routeId: \d+ }
   controller: App\Controller\ManageTrainTablesController::manageRouteAction
-
-
-
-manage_train_tables_input:
-  path: /beheer-dienstregelingen/
-  controller: App\Controller\HomeController::homeAction
-
-
-
-
-
 
 manage_pois:
   path: /beheer-spotpunten/

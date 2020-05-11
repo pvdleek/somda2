@@ -7,6 +7,7 @@ use App\Entity\TrainTableYear;
 use App\Helpers\Controller\TrainTableHelper;
 use App\Helpers\FlashHelper;
 use App\Helpers\TemplateHelper;
+use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 use Symfony\Component\HttpFoundation\Response;
@@ -62,8 +63,10 @@ class TrainTableController
         $submit = false;
 
         if (is_null($trainTableIndexNumber)) {
-            $trainTableIndexNumber =
-                $this->doctrine->getRepository(TrainTableYear::class)->findCurrentTrainTableYear()->getId();
+            $trainTableIndexNumber = $this->doctrine
+                ->getRepository(TrainTableYear::class)
+                ->findTrainTableYearByDate(new DateTime())
+                ->getId();
         } else {
             $submit = true;
             $this->trainTableHelper->setTrainTableYear($trainTableIndexNumber);
@@ -104,8 +107,10 @@ class TrainTableController
     ): Response {
         $passingRoutes = [];
         if (is_null($trainTableIndexNumber)) {
-            $trainTableIndexNumber =
-                $this->doctrine->getRepository(TrainTableYear::class)->findCurrentTrainTableYear()->getId();
+            $trainTableIndexNumber = $this->doctrine
+                ->getRepository(TrainTableYear::class)
+                ->findTrainTableYearByDate(new DateTime())
+                ->getId();
         } else {
             $this->trainTableHelper->setTrainTableYear($trainTableIndexNumber);
             $this->trainTableHelper->setLocation($locationName);

@@ -88,8 +88,8 @@ class UserPreferences extends BaseForm
                                 return $location->name . ' - ' . $location->description;
                             },
                             self::KEY_CHOICE_VALUE => $typePart[2],
-                            self::KEY_CLASS=> Location::class,
-                            self::KEY_DATA=> $this->doctrine->getRepository(Location::class)->findOneBy(['name' => $value]),
+                            self::KEY_CLASS => Location::class,
+                            self::KEY_DATA => $this->doctrine->getRepository(Location::class)->findOneBy(['name' => $value]),
                             self::KEY_LABEL => $setting->description,
                             self::KEY_MAPPED => false,
                             self::KEY_REQUIRED => true,

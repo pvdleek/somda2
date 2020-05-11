@@ -3,14 +3,20 @@
 namespace App\Repository;
 
 use App\Entity\Location;
+use App\Entity\Route;
 use App\Entity\TrainTable as TrainTableEntity;
 use App\Entity\TrainTableFirstLast;
 use App\Entity\TrainTableYear;
+use App\Traits\DateTrait;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\Query\Expr\Join;
 
 class TrainTable extends EntityRepository
 {
+    use DateTrait;
+
     /**
      * @param TrainTableYear $trainTableYear
      * @param Location $location
@@ -93,5 +99,39 @@ class TrainTable extends EntityRepository
             ->andWhere('fl.dayNumber = 1')
             ->setParameter('trainTableYear', $trainTableYear);
         return $queryBuilder->getQuery()->getArrayResult();
+    }
+
+    /**
+     * @param TrainTableYear $trainTableYear
+     * @param Route $route
+     * @param Location $location
+     * @param int $dayNumber
+     * @return bool
+     */
+    public function isExistingForSpot(
+        TrainTableYear $trainTableYear,
+        Route $route,
+        Location $location,
+        int $dayNumber
+    ): bool {
+        $queryBuilder = $this->getEntityManager()
+            ->createQueryBuilder()
+            ->select('COUNT(t.id)')
+            ->from(TrainTableEntity::class, 't')
+            ->andWhere('t.trainTableYear = :trainTableYear')
+            ->setParameter('trainTableYear', $trainTableYear)
+            ->andWhere('t.route = :route')
+            ->setParameter('route', $route)
+            ->andWhere('t.location = :location')
+            ->setParameter('location', $location)
+            ->join('t.routeOperationDays', 'o')
+            ->andWhere('o.' . $this->getDayName($dayNumber - 1) .' = TRUE');
+        try {
+            return $queryBuilder->getQuery()->getSingleScalarResult() > 0;
+        } catch (NonUniqueResultException $exception) {
+            return false;
+        } catch (NoResultException $exception) {
+            return false;
+        }
     }
 }

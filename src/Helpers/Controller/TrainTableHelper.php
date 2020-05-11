@@ -4,7 +4,6 @@ namespace App\Helpers\Controller;
 
 use App\Entity\RouteTrain;
 use App\Entity\TrainTable;
-use App\Helpers\DateHelper;
 use App\Traits\DateTrait;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -14,20 +13,12 @@ class TrainTableHelper extends BaseControllerHelper
     use DateTrait;
 
     /**
-     * @var DateHelper
-     */
-    private DateHelper $dateHelper;
-
-    /**
      * @param ManagerRegistry $doctrine
      * @param TranslatorInterface $translator
-     * @param DateHelper $dateHelper
      */
-    public function __construct(ManagerRegistry $doctrine, TranslatorInterface $translator, DateHelper $dateHelper)
+    public function __construct(ManagerRegistry $doctrine, TranslatorInterface $translator)
     {
         parent::__construct($doctrine, $translator);
-
-        $this->dateHelper = $dateHelper;
     }
 
     /**
@@ -101,7 +92,7 @@ class TrainTableHelper extends BaseControllerHelper
             $this->getTrainTableYear(),
             $this->getLocation(),
             $dayNumber,
-            $this->dateHelper->getDayName($dayNumber),
+            $this->getDayName($dayNumber),
             $startTimeDatabase,
             $endTimeDatabase
         );

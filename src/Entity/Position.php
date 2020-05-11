@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="somda_positie")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\Position")
  */
 class Position extends Entity
 {

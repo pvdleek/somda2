@@ -8,6 +8,7 @@ use App\Entity\TrainTable;
 use App\Entity\TrainTableYear;
 use App\Entity\User;
 use App\Traits\DateTrait;
+use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -114,7 +115,7 @@ class StaticDataHelper implements RuntimeExtensionInterface
         }
 
         $routeArray = $this->doctrine->getRepository(TrainTable::class)->findAllTrainTablesForForum(
-            $this->doctrine->getRepository(TrainTableYear::class)->findCurrentTrainTableYear()
+            $this->doctrine->getRepository(TrainTableYear::class)->findTrainTableYearByDate(new DateTime())
         );
         foreach ($routeArray as $route) {
             $this->routes[$route['routeNumber']] = sprintf(

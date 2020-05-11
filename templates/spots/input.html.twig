@@ -1,0 +1,52 @@
+{% extends('base.html.twig') %}
+
+{% block content %}
+    <div class="home-panel separate-panel">
+        <div class="home-panel-title">Spots invoeren</div>
+        <div class="home-panel-content panel-no-background">
+            <p class="warn" style="width:400px;">Voer je spot(s) in volgens onderstaande opmaak:</p>
+            <table class="design">
+                <tr>
+                    <th colspan="3">Layout:</th>
+                    <th colspan="3">Voorbeeld:</th>
+                </tr>
+                <tr>
+                    <td>nnnn (materieelnummer)</td>
+                    <td>nnnnnn (treinnummer)</td>
+                    <td>{V/M/A/+xx} (eventueel positie of vertraging)</td>
+                    <td>9520 2054</td>
+                </tr>
+                <tr>
+                    <td>nnnn (materieelnummer)</td>
+                    <td>nnnnnn (treinnummer)</td>
+                    <td>{V/M/A/+xx} (eventueel positie of vertraging)</td>
+                    <td>7844 4312 +5</td>
+                </tr>
+                <tr>
+                    <td colspan="3">Enzovoorts...</td>
+                    <td>7419 5710 V</td>
+                </tr>
+            </table>
+            <i>LET OP: De posities zijn altijd bij <strong>vertrek</strong> van de trein!</i> (uitgezonderd spot invoer op het eindpunt van de trein)
+            <p class="warn" style="width:600px;">
+                Kijk voor je spots invoert naar onze &gt;&gt;&gt;<a href="{{ path('news_text', { 'id': 25 }) }}" target="_blank">algemene richtlijnen voor het invoeren van spots</a>&lt;&lt;&lt;
+                <br />of de &gt;&gt;&gt;<a href="{{ path('news_text', { 'id': 165 }) }}" target="_blank">richtlijnen voor het invoeren van spots van reizigersmaterieel</a>&lt;&lt;&lt;
+                <br />of de &gt;&gt;&gt;<a href="{{ path('news_text', { 'id': 143 }) }}" target="_blank">richtlijnen voor het invoeren van CARGO-spots</a>&lt;&lt;&lt;
+            </p>
+
+            {{ form_start(form, { 'attr': { 'id': 'spot_form' } }) }}
+                <table class="design">
+                    {{ form_row(form.location) }}
+                    {{ form_row(form.date) }}
+                    {{ form_row(form.spots) }}
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td>
+                            <a class="somda-button" href="#" onclick="$('#spot_form').submit(); return false;">Spots opslaan</a>
+                        </td>
+                    </tr>
+                </table>
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}

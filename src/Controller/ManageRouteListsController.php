@@ -9,7 +9,9 @@ use App\Entity\Transporter;
 use App\Form\RouteList as RouteListForm;
 use App\Helpers\FormHelper;
 use App\Helpers\TemplateHelper;
+use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
+use Exception;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -47,11 +49,14 @@ class ManageRouteListsController
     /**
      * @param int|null $id
      * @return Response
+     * @throws Exception
      */
     public function routeListsAction(int $id = null): Response
     {
         if (is_null($id)) {
-            $trainTableYear = $this->doctrine->getRepository(TrainTableYear::class)->findCurrentTrainTableYear();
+            $trainTableYear = $this->doctrine
+                ->getRepository(TrainTableYear::class)
+                ->findTrainTableYearByDate(new DateTime());
             $routeLists = [];
         } else {
             $trainTableYear = $this->doctrine->getRepository(TrainTableYear::class)->find($id);

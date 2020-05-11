@@ -53,21 +53,11 @@ class SpotController
     public function redirectToTrainTableAction(string $routeNumber, string $date): RedirectResponse
     {
         $checkDate = new DateTime($date);
-        /**
-         * @var TrainTableYear[] $trainTableYears
-         */
-        $trainTableYears = $this->doctrine->getRepository(TrainTableYear::class)->findAll();
-        foreach ($trainTableYears as $trainTableYear) {
-            if ($trainTableYear->startDate <= $checkDate && $trainTableYear->endDate >= $checkDate) {
-                return $this->redirectHelper->redirectToRoute(
-                    'train_table_search',
-                    ['trainTableIndexNumber' => $trainTableYear->getId(), 'routeNumber' => $routeNumber]
-                );
-            }
-        }
+        $trainTableYear = $this->doctrine->getRepository(TrainTableYear::class)->findTrainTableYearByDate($checkDate);
+
         return $this->redirectHelper->redirectToRoute(
             'train_table_search',
-            ['trainTableIndexNumber' => $trainTableYears[0]->getId(), 'routeNumber' => $routeNumber]
+            ['trainTableIndexNumber' => $trainTableYear->getId(), 'routeNumber' => $routeNumber]
         );
     }
 
