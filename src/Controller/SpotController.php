@@ -9,6 +9,7 @@ use App\Helpers\TemplateHelper;
 use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -62,6 +63,7 @@ class SpotController
     }
 
     /**
+     * @IsGranted("ROLE_SPOTS_RECENT")
      * @param int $maxYears
      * @param string|null $searchParameters
      * @return Response

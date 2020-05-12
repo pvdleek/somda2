@@ -9,6 +9,7 @@ use App\Helpers\SpotInputHelper;
 use App\Helpers\TemplateHelper;
 use App\Helpers\UserHelper;
 use Doctrine\Persistence\ManagerRegistry;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\RedirectResponse as RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response as Response;
@@ -63,6 +64,7 @@ class SpotInputController
     }
 
     /**
+     * @IsGranted("ROLE_SPOTS_NEW")
      * @param Request $request
      * @return RedirectResponse|Response
      */
@@ -98,6 +100,7 @@ class SpotInputController
     }
 
     /**
+     * @IsGranted("ROLE_SPOTS_NEW")
      * @param string $idList
      * @return Response
      */

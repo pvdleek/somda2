@@ -12,6 +12,7 @@ use App\Helpers\TemplateHelper;
 use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -47,6 +48,7 @@ class ManageRouteListsController
     }
 
     /**
+     * @IsGranted("ROLE_ADMIN_ROUTE_NUMBER_LIST")
      * @param int|null $id
      * @return Response
      * @throws Exception
@@ -81,6 +83,7 @@ class ManageRouteListsController
     }
 
     /**
+     * @IsGranted("ROLE_ADMIN_ROUTE_NUMBER_LIST")
      * @param Request $request
      * @param int $yearId
      * @param int $id

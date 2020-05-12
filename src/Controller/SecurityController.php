@@ -16,6 +16,7 @@ use App\Helpers\UserHelper;
 use DateTime;
 use Exception;
 use Doctrine\Persistence\ManagerRegistry;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
@@ -371,15 +372,12 @@ class SecurityController
     }
 
     /**
+     * @IsGranted("ROLE_USER")
      * @param Request $request
      * @return RedirectResponse|Response
      */
     public function changePasswordAction(Request $request)
     {
-        if (!$this->userHelper->userIsLoggedIn()) {
-            throw new AccessDeniedHttpException();
-        }
-
         $form = $this->formFactory->create(UserPassword::class);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {

@@ -17,6 +17,7 @@ use App\Helpers\TemplateHelper;
 use App\Helpers\UserHelper;
 use DateTime;
 use Exception;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -166,7 +167,7 @@ class ForumDiscussionController
      * @return Banner|null
      * @throws Exception
      */
-    protected function getForumBanner(Request $request): ?Banner
+    private function getForumBanner(Request $request): ?Banner
     {
         $banners = $this->formHelper->getDoctrine()->getRepository(Banner::class)->findBy(
             ['location' => Banner::LOCATION_FORUM, 'active' => true]
@@ -191,6 +192,7 @@ class ForumDiscussionController
     }
 
     /**
+     * @IsGranted("ROLE_USER")
      * @param Request $request
      * @param int $id
      * @return RedirectResponse|Response

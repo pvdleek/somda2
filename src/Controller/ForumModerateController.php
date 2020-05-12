@@ -8,8 +8,11 @@ use App\Form\ForumDiscussionCombine;
 use App\Form\ForumDiscussionMove;
 use App\Generics\RouteGenerics;
 use App\Helpers\FormHelper;
+use App\Helpers\ForumAuthorizationHelper;
 use App\Helpers\RedirectHelper;
 use App\Helpers\TemplateHelper;
+use App\Helpers\UserHelper;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,6 +30,11 @@ class ForumModerateController
     private FormHelper $formHelper;
 
     /**
+     * @var UserHelper
+     */
+    private UserHelper $userHelper;
+
+    /**
      * @var RedirectHelper
      */
     private RedirectHelper $redirectHelper;
@@ -37,18 +45,33 @@ class ForumModerateController
     private TemplateHelper $templateHelper;
 
     /**
+     * @var ForumAuthorizationHelper
+     */
+    private ForumAuthorizationHelper $forumAuthHelper;
+
+    /**
      * @param FormHelper $formHelper
+     * @param UserHelper $userHelper
      * @param RedirectHelper $redirectHelper
      * @param TemplateHelper $templateHelper
+     * @param ForumAuthorizationHelper $forumAuthHelper
      */
-    public function __construct(FormHelper $formHelper, RedirectHelper $redirectHelper, TemplateHelper $templateHelper)
-    {
+    public function __construct(
+        FormHelper $formHelper,
+        UserHelper $userHelper,
+        RedirectHelper $redirectHelper,
+        TemplateHelper $templateHelper,
+        ForumAuthorizationHelper $forumAuthHelper
+    ) {
         $this->formHelper = $formHelper;
+        $this->userHelper = $userHelper;
         $this->redirectHelper = $redirectHelper;
         $this->templateHelper = $templateHelper;
+        $this->forumAuthHelper = $forumAuthHelper;
     }
 
     /**
+     * @IsGranted("ROLE_USER")
      * @param Request $request
      * @param int $id
      * @param string $action
@@ -57,6 +80,10 @@ class ForumModerateController
     public function indexAction(Request $request, int $id, string $action)
     {
         $discussion = $this->getDiscussion($id);
+        if (!in_array($this->userHelper->getUser(), $discussion->forum->getModerators())) {
+            throw new AccessDeniedHttpException();
+        }
+
         if ($action === self::ACTION_CLOSE && !$discussion->locked) {
             $discussion->locked = true;
             $this->formHelper->getDoctrine()->getManager()->flush();
@@ -83,6 +110,7 @@ class ForumModerateController
     }
 
     /**
+     * @IsGranted("ROLE_USER")
      * @param Request $request
      * @param int $id1
      * @param int $id2
@@ -90,8 +118,15 @@ class ForumModerateController
      */
     public function combineAction(Request $request, int $id1, int $id2)
     {
+
         $discussion1 = $this->getDiscussion($id1);
         $discussion2 = $this->getDiscussion($id2);
+
+        if ($discussion1->forum !== $discussion2->forum
+            || !in_array($this->userHelper->getUser(), $discussion1->forum->getModerators())
+        ) {
+            throw new AccessDeniedHttpException();
+        }
 
         $newDiscussion = new ForumDiscussion();
         $newDiscussion->forum = $discussion1->forum;
@@ -170,6 +205,7 @@ class ForumModerateController
     }
 
     /**
+     * @IsGranted("ROLE_USER")
      * @param int $id
      * @param string $postIds
      * @return RedirectResponse
@@ -177,6 +213,9 @@ class ForumModerateController
     public function splitAction(int $id, string $postIds): RedirectResponse
     {
         $discussion = $this->getDiscussion($id);
+        if (!in_array($this->userHelper->getUser(), $discussion->forum->getModerators())) {
+            throw new AccessDeniedHttpException();
+        }
 
         $postIds = array_filter(explode(',', $postIds));
         $firstPost = $this->formHelper->getDoctrine()->getRepository(ForumPost::class)->find($postIds[0]);
@@ -211,7 +250,7 @@ class ForumModerateController
          * @var ForumDiscussion $discussion
          */
         $discussion = $this->formHelper->getDoctrine()->getRepository(ForumDiscussion::class)->find($id);
-        if (is_null($discussion) || !$this->userIsModerator($discussion)) {
+        if (is_null($discussion) || !$this->forumAuthHelper->userIsModerator($discussion)) {
             throw new AccessDeniedHttpException();
         }
         return $discussion;

@@ -26,6 +26,26 @@ security:
         path: /
         secure: true
         samesite: 'strict'
+  role_hierarchy:
+    ROLE_ADMIN:
+      - ROLE_USER
+      - ROLE_ABBREVIATIONS
+      - ROLE_PASSING_ROUTES
+      - ROLE_ROUTE_OVERVIEW
+      - ROLE_SPOTS_EDIT
+      - ROLE_SPOTS_NEW
+      - ROLE_SPOTS_RECENT
+      - ROLE_TRAIN_DDAR
+      - ROLE_TRAIN_NAMES
+      - ROLE_TRAINTABLE
+    ROLE_SUPER_ADMIN:
+      - ROLE_ADMIN
+      - ROLE_ADMIN_BANS
+      - ROLE_ADMIN_NEWS
+      - ROLE_ADMIN_RAIL_NEWS
+      - ROLE_ADMIN_ROUTE_NUMBER_LIST
+      - ROLE_ADMIN_SPECIAL_ROUTES
+      - ROLE_ADMIN_TRAINTABLE_EDIT
+      - ROLE_ADMIN_WIKI
   access_control:
     - { path: ^/inloggen, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-    - { path: ^/beheer-, roles: ROLE_USER }

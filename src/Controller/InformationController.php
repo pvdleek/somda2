@@ -6,6 +6,7 @@ use App\Entity\Jargon;
 use App\Entity\Location;
 use App\Helpers\TemplateHelper;
 use Doctrine\Persistence\ManagerRegistry;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Response;
 
 class InformationController
@@ -36,6 +37,7 @@ class InformationController
     }
 
     /**
+     * @IsGranted("ROLE_ABBREVIATIONS")
      * @param string|null $searchMethod
      * @param string|null $search
      * @return Response

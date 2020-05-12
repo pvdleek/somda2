@@ -10,16 +10,15 @@ use App\Form\ForumPostAlert as ForumPostAlertForm;
 use App\Form\ForumPostAlertNote as ForumPostAlertNoteForm;
 use App\Helpers\EmailHelper;
 use App\Helpers\FormHelper;
-use App\Helpers\ForumAuthorizationHelper;
 use App\Helpers\TemplateHelper;
 use App\Helpers\UserHelper;
 use DateTime;
 use Exception;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class ForumPostAlertController
 {
@@ -44,32 +43,28 @@ class ForumPostAlertController
     private TemplateHelper $templateHelper;
 
     /**
-     * @var ForumAuthorizationHelper
-     */
-    private ForumAuthorizationHelper $forumAuthHelper;
-
-    /**
      * @param UserHelper $userHelper
      * @param FormHelper $formHelper
      * @param EmailHelper $emailHelper
      * @param TemplateHelper $templateHelper
-     * @param ForumAuthorizationHelper $forumAuthHelper
      */
     public function __construct(
         UserHelper $userHelper,
         FormHelper $formHelper,
         EmailHelper $emailHelper,
-        TemplateHelper $templateHelper,
-        ForumAuthorizationHelper $forumAuthHelper
+        TemplateHelper $templateHelper
     ) {
         $this->userHelper = $userHelper;
         $this->formHelper = $formHelper;
         $this->emailHelper = $emailHelper;
         $this->templateHelper = $templateHelper;
-        $this->forumAuthHelper = $forumAuthHelper;
     }
 
-    public function alertsAction()
+    /**
+     * @IsGranted("ROLE_ADMIN")
+     * @return Response
+     */
+    public function alertsAction(): Response
     {
         $alerts = $this->formHelper->getDoctrine()->getRepository(ForumPostAlert::class)->findForOverview();
         return $this->templateHelper->render('forum/alerts.html.twig', [
@@ -80,6 +75,9 @@ class ForumPostAlertController
     }
 
     /**
+     * User can create a new alert for a post
+     *
+     * @IsGranted("ROLE_USER")
      * @param Request $request
      * @param int $id
      * @return Response|RedirectResponse
@@ -87,10 +85,6 @@ class ForumPostAlertController
      */
     public function alertAction(Request $request, int $id)
     {
-        if (!$this->userHelper->userIsLoggedIn()) {
-            throw new AccessDeniedHttpException();
-        }
-
         /**
          * @var ForumPost $post
          */
@@ -135,6 +129,9 @@ class ForumPostAlertController
     }
 
     /**
+     * View alerts for a specific post and add a note
+     *
+     * @IsGranted("ROLE_ADMIN")
      * @param Request $request
      * @param int $id
      * @return RedirectResponse|Response
@@ -146,9 +143,6 @@ class ForumPostAlertController
          * @var ForumPost $post
          */
         $post = $this->formHelper->getDoctrine()->getRepository(ForumPost::class)->find($id);
-        if (!$this->forumAuthHelper->userIsModerator($post->discussion, $this->userHelper->getUser())) {
-            throw new AccessDeniedHttpException();
-        }
 
         $form = $this->formHelper->getFactory()->create(ForumPostAlertNoteForm::class);
         $form->handleRequest($request);
@@ -221,6 +215,7 @@ class ForumPostAlertController
     }
 
     /**
+     * @IsGranted("ROLE_ADMIN")
      * @param int $id
      * @return RedirectResponse
      */
@@ -230,10 +225,6 @@ class ForumPostAlertController
          * @var ForumPost $post
          */
         $post = $this->formHelper->getDoctrine()->getRepository(ForumPost::class)->find($id);
-        if (!$this->forumAuthHelper->userIsModerator($post->discussion, $this->userHelper->getUser())) {
-            throw new AccessDeniedHttpException();
-        }
-
         foreach ($post->getAlerts() as $alert) {
             $alert->closed = true;
         }

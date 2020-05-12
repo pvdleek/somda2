@@ -17,6 +17,7 @@ use App\Traits\DateTrait;
 use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -71,6 +72,7 @@ class ManageTrainTablesController
     }
 
     /**
+     * @IsGranted("ROLE_ADMIN_TRAINTABLE_EDIT")
      * @param int|null $yearId
      * @param int|null $routeListId
      * @return Response
@@ -124,6 +126,7 @@ class ManageTrainTablesController
     }
 
     /**
+     * @IsGranted("ROLE_ADMIN_TRAINTABLE_EDIT")
      * @param Request $request
      * @param int $routeListId
      * @param int $routeId

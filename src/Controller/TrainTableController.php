@@ -10,6 +10,7 @@ use App\Helpers\TemplateHelper;
 use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Response;
 
 class TrainTableController
@@ -53,6 +54,7 @@ class TrainTableController
     }
 
     /**
+     * @IsGranted("ROLE_TRAINTABLE")
      * @param int|null $trainTableIndexNumber
      * @param string|null $routeNumber
      * @return Response
@@ -90,6 +92,7 @@ class TrainTableController
     }
 
     /**
+     * @IsGranted("ROLE_PASSING_ROUTES")
      * @param int|null $trainTableIndexNumber
      * @param string|null $locationName
      * @param int|null $dayNumber

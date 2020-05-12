@@ -12,6 +12,7 @@ use App\Helpers\TemplateHelper;
 use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -47,6 +48,7 @@ class ManageNewsController
     }
 
     /**
+     * @IsGranted("ROLE_ADMIN_NEWS")
      * @return Response
      */
     public function indexAction(): Response
@@ -58,6 +60,7 @@ class ManageNewsController
     }
 
     /**
+     * @IsGranted("ROLE_ADMIN_NEWS")
      * @param Request $request
      * @param int $id
      * @return RedirectResponse|Response
@@ -92,6 +95,7 @@ class ManageNewsController
     }
 
     /**
+     * @IsGranted("ROLE_ADMIN_RAIL_NEWS")
      * @return Response
      */
     public function railNewsAction(): Response
@@ -105,6 +109,7 @@ class ManageNewsController
     }
 
     /**
+     * @IsGranted("ROLE_ADMIN_RAIL_NEWS")
      * @param Request $request
      * @param int $id
      * @return RedirectResponse|Response

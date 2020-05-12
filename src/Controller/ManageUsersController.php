@@ -7,6 +7,7 @@ use App\Form\UserBan;
 use App\Helpers\FormHelper;
 use App\Helpers\TemplateHelper;
 use Doctrine\Persistence\ManagerRegistry;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -41,6 +42,7 @@ class ManageUsersController
     }
 
     /**
+     * @IsGranted("ROLE_ADMIN_BANS")
      * @return Response
      */
     public function bansAction(): Response
@@ -52,6 +54,7 @@ class ManageUsersController
     }
 
     /**
+     * @IsGranted("ROLE_ADMIN_BANS")
      * @param Request $request
      * @param int $id
      * @return RedirectResponse|Response

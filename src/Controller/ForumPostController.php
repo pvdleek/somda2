@@ -16,6 +16,7 @@ use App\Helpers\TemplateHelper;
 use App\Helpers\UserHelper;
 use DateTime;
 use Exception;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormInterface;
@@ -74,6 +75,7 @@ class ForumPostController
 
 
     /**
+     * @IsGranted("ROLE_USER")
      * @param Request $request
      * @param int $id
      * @return Response|RedirectResponse
@@ -138,6 +140,7 @@ class ForumPostController
     }
 
     /**
+     * @IsGranted("ROLE_USER")
      * @param Request $request
      * @param int $id
      * @return Response|RedirectResponse

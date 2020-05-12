@@ -9,6 +9,7 @@ use App\Helpers\TemplateHelper;
 use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -43,6 +44,7 @@ class ManageSpecialRoutesController
     }
 
     /**
+     * @IsGranted("ROLE_ADMIN_SPECIAL_ROUTES")
      * @return Response
      */
     public function indexAction(): Response
@@ -54,6 +56,7 @@ class ManageSpecialRoutesController
     }
 
     /**
+     * @IsGranted("ROLE_ADMIN_SPECIAL_ROUTES")
      * @param Request $request
      * @param int $id
      * @return RedirectResponse|Response

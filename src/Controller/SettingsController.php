@@ -8,6 +8,7 @@ use App\Helpers\FormHelper;
 use App\Helpers\TemplateHelper;
 use App\Helpers\UserHelper;
 use Exception;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -42,6 +43,7 @@ class SettingsController
     }
 
     /**
+     * @IsGranted("ROLE_USER")
      * @param Request $request
      * @return Response|RedirectResponse
      * @throws Exception
