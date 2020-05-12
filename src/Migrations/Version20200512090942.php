@@ -23,10 +23,10 @@ final class Version20200512090942 extends AbstractMigration
     public function up(Schema $schema) : void
     {
         $this->addSql('
-            INSERT IGNORE INTO `somda_user_groups` (`uid`, `groupid`)
-            SELECT `uid`, 9 FROM `somda_user_groups` WHERE `groupid` = 10
+            INSERT IGNORE INTO `somda_users_groups` (`uid`, `groupid`)
+            SELECT `uid`, 9 FROM `somda_users_groups` WHERE `groupid` = 10
         ');
-        $this->addSql('DELETE FROM `somda_user_groups` WHERE `groupid` = 10');
+        $this->addSql('DELETE FROM `somda_users_groups` WHERE `groupid` = 10');
         $this->addSql('DELETE FROM `somda_groups` WHERE `groupid` = 10');
 
         $this->addSql('
