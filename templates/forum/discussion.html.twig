@@ -80,7 +80,7 @@
                 {% if loop.index == 5 or loop.index == 55 %}
                     {% if forumBanner is not null %}
                         <br /><table align="center" class="design" width="98%"><tr>
-                            <td><a href="/click_out.php?banner_id={{ forumBanner.id }}" target="_blank">
+                            <td><a href="/click_out.php?banner_id={{ forumBanner.id }}" rel="sponsored" target="_blank">
                                 <img alt="{{ forumBanner.customer.name }} {{ forumBanner.description }}" height="150" src="{{ asset('images/banners/' ~ forumBanner.image) }}" />
                             </a></td>
                             <td><a href="{{ path('advertise') }}">advertentie</a></td>

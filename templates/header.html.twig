@@ -5,11 +5,11 @@
 	</div>
 	<div class="news-flash">
 		{% if headerType == 'banner' %}
-			<a href="/click_out.php?banner_id={{ headerContent.id }}" target="_blank">
+			<a href="/click_out.php?banner_id={{ headerContent.id }}" rel="sponsored" target="_blank">
 				<img alt="'.$headerbanner_customer.' {{ headerContent.description }}" height="100" src="/images/banners/{{ headerContent.image }}" />
 			</a>
 		{% else %}
-			<div class="news-flash-title"><a href="{{ headerContent.url }}" rel="nofollow" target="_blank">{{ headerContent.title }}</a></div>
+			<div class="news-flash-title"><a href="{{ headerContent.url }}" target="_blank">{{ headerContent.title }}</a></div>
 			{{ headerContent.introduction }}
 		{% endif %}
 	</div>

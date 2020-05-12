@@ -9,6 +9,9 @@ use Twig\Extension\RuntimeExtensionInterface;
 
 class ForumHelper implements RuntimeExtensionInterface
 {
+    private const REPLACE_WORD_START = '/(^|[<\s.-?:;().-\/\[\]])(';
+    private const REPLACE_WORD_END = ')($|[<\s,-?:;().-\/\[\]])/m';
+
     /**
      * @var TranslatorInterface
      */
@@ -125,7 +128,7 @@ class ForumHelper implements RuntimeExtensionInterface
     {
         $pattern = '/((((http|https|ftp|ftps)\:\/\/))' .
             '(([a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,63})|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(\/[^) \n\r]*)?)/';
-        $replacement = '<a href="\1" rel="nofollow" target="_blank">\5</a>';
+        $replacement = '<a href="\1" rel="ugc" target="_blank">\5</a>';
         $text = preg_replace($pattern, $replacement, $text);
         if (isset($_SERVER['HTTP_HOST'])) {
             $server = $_SERVER['HTTP_HOST'];
@@ -191,7 +194,7 @@ class ForumHelper implements RuntimeExtensionInterface
                 // Match on an abbreviation (uppercase character followed by a 0 or more lowercase characters)
                 if (!isset($locationsDone[$word]) && isset($locations[$word])) {
                     $text = preg_replace(
-                        '/(^|[<\s.-?:;().-\/\[\]])(' . $word . ')($|[<\s,-?:;().-\/\[\]])/m',
+                        self::REPLACE_WORD_START . $word . self::REPLACE_WORD_END,
                         '\\1<!-- s\\2 --><span class="tooltip" title="' .
                             strtolower(htmlspecialchars($locations[$word])) . '">\\2<!-- s\\2 --></span>\\3',
                         $text
@@ -200,7 +203,7 @@ class ForumHelper implements RuntimeExtensionInterface
                 }
             } elseif (!isset($usersDone[$word]) && isset($users[$word])) {
                 $text = preg_replace(
-                    '/(^|[<\s.-?:;().-\/\[\]])(' . $word . ')($|[<\s,-?:;().-\/\[\]])/m',
+                    self::REPLACE_WORD_START . $word . self::REPLACE_WORD_END,
                     '\\1<!-- s\\2 --><span class="tooltip" title="Somda gebruiker ' .
                         htmlspecialchars($users[$word]) . '">' . substr($word, 1) . '<!-- \\2 --></span>\\3',
                     $text
@@ -208,7 +211,7 @@ class ForumHelper implements RuntimeExtensionInterface
                 $usersDone[$word] = true;
             } elseif (!isset($routesDone[$word]) && isset($routes[$word])) {
                 $text = preg_replace(
-                    '/(^|[<\s.-?:;().-\/\[\]])(' . $word . ')($|[<\s,-?:;().-\/\[\]])/m',
+                    self::REPLACE_WORD_START . $word . self::REPLACE_WORD_END,
                     '\\1<!-- s\\2 --><span class="tooltip" title="' . htmlspecialchars($routes[$word]) .
                         '">\\2<!-- s\\2 --></span>\\3',
                     $text,
