@@ -6,6 +6,7 @@ use App\Entity\News;
 use App\Entity\RailNews;
 use App\Form\RailNews as RailNewsForm;
 use App\Form\News as NewsForm;
+use App\Generics\RouteGenerics;
 use App\Helpers\FormHelper;
 use App\Helpers\TemplateHelper;
 use DateTime;
@@ -52,7 +53,7 @@ class ManageNewsController
     {
         return $this->templateHelper->render('manageNews/index.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Beheer nieuws',
-            'news' => $this->doctrine->getRepository(News::class)->findBy([], ['timestamp' => 'DESC']),
+            'news' => $this->doctrine->getRepository(News::class)->findBy([], [NewsForm::FIELD_TIMESTAMP => 'DESC']),
         ]);
     }
 
@@ -75,9 +76,12 @@ class ManageNewsController
         if ($form->isSubmitted() && $form->isValid()) {
             if (is_null($news->getId())) {
                 $this->doctrine->getManager()->persist($news);
-                return $this->formHelper->finishFormHandling('Bericht toegevoegd', 'manage_rail_news');
+                return $this->formHelper->finishFormHandling(
+                    'Bericht toegevoegd',
+                    RouteGenerics::ROUTE_MANAGE_RAIL_NEWS
+                );
             }
-            return $this->formHelper->finishFormHandling('Bericht bijgewerkt', 'manage_rail_news');
+            return $this->formHelper->finishFormHandling('Bericht bijgewerkt', RouteGenerics::ROUTE_MANAGE_RAIL_NEWS);
         }
 
         return $this->templateHelper->render('manageNews/item.html.twig', [
@@ -96,7 +100,7 @@ class ManageNewsController
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Beheer spoornieuws',
             'railNews' => $this->doctrine
                 ->getRepository(RailNews::class)
-                ->findBy([], ['approved' => 'ASC', 'timestamp' => 'DESC'], 100),
+                ->findBy([], ['approved' => 'ASC', RailNewsForm::FIELD_TIMESTAMP => 'DESC'], 100),
         ]);
     }
 
@@ -115,7 +119,7 @@ class ManageNewsController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            return $this->formHelper->finishFormHandling('Bericht bijgewerkt', 'manage_rail_news');
+            return $this->formHelper->finishFormHandling('Bericht bijgewerkt', RouteGenerics::ROUTE_MANAGE_RAIL_NEWS);
         }
 
         return $this->templateHelper->render('manageNews/railNewsItem.html.twig', [

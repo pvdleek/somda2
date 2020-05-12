@@ -11,6 +11,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class News extends BaseForm
 {
+    public const FIELD_TIMESTAMP = 'timestamp';
+
     /**
      * @param FormBuilderInterface $builder
      * @param array $options

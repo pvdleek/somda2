@@ -2,7 +2,7 @@
 
 namespace App\Command;
 
-use App\Helpers\GenericsHelper;
+use App\Generics\DateGenerics;
 use AurimasNiekis\SchedulerBundle\ScheduledJobInterface;
 use DateTime;
 use Doctrine\Common\Persistence\ManagerRegistry;
@@ -85,7 +85,7 @@ class UpdateStatisticsCommand extends Command implements ScheduledJobInterface
 			WHERE DATE(`datumtijd`) >= :yesterday
 			GROUP BY DATE(`datumtijd`)';
         $statement = $connection->prepare($query);
-        $statement->bindValue(self::DATE_PERIOD_YESTERDAY, $yesterday->format(GenericsHelper::DATE_FORMAT_DATABASE));
+        $statement->bindValue(self::DATE_PERIOD_YESTERDAY, $yesterday->format(DateGenerics::DATE_FORMAT_DATABASE));
         $statement->execute();
 
         // Update for the unique visitors
@@ -93,26 +93,26 @@ class UpdateStatisticsCommand extends Command implements ScheduledJobInterface
 		    (SELECT COUNT(DISTINCT(`l`.`ip`)) FROM `somda_logging` `l` WHERE DATE(`l`.`datumtijd`) = :today)
 			WHERE `s`.`datum` = :today';
         $statement = $connection->prepare($query);
-        $statement->bindValue(self::DATE_PERIOD_TODAY, $today->format(GenericsHelper::DATE_FORMAT_DATABASE));
+        $statement->bindValue(self::DATE_PERIOD_TODAY, $today->format(DateGenerics::DATE_FORMAT_DATABASE));
         $statement->execute();
         $query = 'UPDATE `somda_stats` `s` SET `s`.`uniek` =
 		    (SELECT COUNT(DISTINCT(`l`.`ip`)) FROM `somda_logging` `l` WHERE DATE(`l`.`datumtijd`) = :yesterday)
 			WHERE `s`.`datum` = :yesterday';
         $statement = $connection->prepare($query);
-        $statement->bindValue(self::DATE_PERIOD_YESTERDAY, $yesterday->format(GenericsHelper::DATE_FORMAT_DATABASE));
+        $statement->bindValue(self::DATE_PERIOD_YESTERDAY, $yesterday->format(DateGenerics::DATE_FORMAT_DATABASE));
         $statement->execute();
 
         // Update for the spots and forum-posts
         $query = 'UPDATE `somda_stats` `s` SET spots =
             (SELECT COUNT(*) FROM `somda_spots` `sp` WHERE `sp`.`datum` = `s`.`datum` AND `sp`.`datum` > :yearAgo)';
         $statement = $connection->prepare($query);
-        $statement->bindValue(self::DATE_PERIOD_YEAR_AGO, $yearAgo->format(GenericsHelper::DATE_FORMAT_DATABASE));
+        $statement->bindValue(self::DATE_PERIOD_YEAR_AGO, $yearAgo->format(DateGenerics::DATE_FORMAT_DATABASE));
         $statement->execute();
         $query = 'UPDATE `somda_stats` `s` SET posts =
             (SELECT COUNT(*) FROM `somda_forum_posts` `f`
             WHERE DATE(`f`.`timestamp`) = `s`.`datum` AND `f`.`timestamp` > :yearAgo)';
         $statement = $connection->prepare($query);
-        $statement->bindValue(self::DATE_PERIOD_YEAR_AGO, $yearAgo->format(GenericsHelper::DATE_FORMAT_DATABASE));
+        $statement->bindValue(self::DATE_PERIOD_YEAR_AGO, $yearAgo->format(DateGenerics::DATE_FORMAT_DATABASE));
         $statement->execute();
 
         // Update for the block-visits
@@ -121,19 +121,19 @@ class UpdateStatisticsCommand extends Command implements ScheduledJobInterface
 		    JOIN `somda_blokken` `b` ON `b`.`route` = `l`.`route` 
 		    WHERE DATE(`l`.`datumtijd`) = :today GROUP BY `b`.`blokid`';
         $statement = $connection->prepare($query);
-        $statement->bindValue(self::DATE_PERIOD_TODAY, $today->format(GenericsHelper::DATE_FORMAT_DATABASE));
+        $statement->bindValue(self::DATE_PERIOD_TODAY, $today->format(DateGenerics::DATE_FORMAT_DATABASE));
         $statement->execute();
         $query = 'REPLACE INTO `somda_stats_blokken` (`blokid`, `date`, `pageviews`)
 		    SELECT `b`.`blokid`, :yesterday, COUNT(*) FROM `somda_logging` `l`
 		    JOIN `somda_blokken` `b` ON `b`.`route` = `l`.`route` 
 		    WHERE DATE(`l`.`datumtijd`) = :yesterday GROUP BY `b`.`blokid`';
         $statement = $connection->prepare($query);
-        $statement->bindValue(self::DATE_PERIOD_YESTERDAY, $yesterday->format(GenericsHelper::DATE_FORMAT_DATABASE));
+        $statement->bindValue(self::DATE_PERIOD_YESTERDAY, $yesterday->format(DateGenerics::DATE_FORMAT_DATABASE));
         $statement->execute();
 
         $query = 'DELETE FROM `somda_logging` WHERE `datumtijd` <= :weekAgo';
         $statement = $connection->prepare($query);
-        $statement->bindValue(self::DATE_PERIOD_WEEK_AGO, $weekAgo->format(GenericsHelper::DATE_FORMAT_DATABASE));
+        $statement->bindValue(self::DATE_PERIOD_WEEK_AGO, $weekAgo->format(DateGenerics::DATE_FORMAT_DATABASE));
         $statement->execute();
 
         return 0;

@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Characteristic;
 use App\Entity\RouteList as RouteListEntity;
 use App\Entity\Transporter;
+use App\Generics\ConstraintGenerics;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
@@ -25,8 +26,14 @@ class RouteList extends BaseForm
         $builder
             ->add('firstNumber', NumberType::class, [
                 self::KEY_CONSTRAINTS => [
-                    new GreaterThan(['message' => 'Het startnummer moet minimaal 1 zijn', 'value' => 0]),
-                    new LessThan(['message' => 'Het startnummer mag maximaal 999999 zijn', 'value' => 1000000]),
+                    new GreaterThan([
+                        ConstraintGenerics::MESSAGE => 'Het startnummer moet minimaal 1 zijn',
+                        ConstraintGenerics::VALUE => 0,
+                    ]),
+                    new LessThan([
+                        ConstraintGenerics::MESSAGE => 'Het startnummer mag maximaal 999999 zijn',
+                        ConstraintGenerics::VALUE => 1000000,
+                    ]),
                 ],
                 self::KEY_HTML5 => true,
                 self::KEY_LABEL => 'Startnummer',
@@ -35,8 +42,14 @@ class RouteList extends BaseForm
             ])
             ->add('lastNumber', NumberType::class, [
                 self::KEY_CONSTRAINTS => [
-                    new GreaterThan(['message' => 'Het eindnummer moet minimaal 1 zijn', 'value' => 0]),
-                    new LessThan(['message' => 'Het eindnummer mag maximaal 999999 zijn', 'value' => 1000000]),
+                    new GreaterThan([
+                        ConstraintGenerics::MESSAGE => 'Het eindnummer moet minimaal 1 zijn',
+                        ConstraintGenerics::VALUE => 0,
+                    ]),
+                    new LessThan([
+                        ConstraintGenerics::MESSAGE => 'Het eindnummer mag maximaal 999999 zijn',
+                        ConstraintGenerics::VALUE => 1000000,
+                    ]),
                 ],
                 self::KEY_HTML5 => true,
                 self::KEY_LABEL => 'Eindnummer',

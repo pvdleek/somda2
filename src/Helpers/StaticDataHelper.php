@@ -7,6 +7,7 @@ use App\Entity\Location;
 use App\Entity\TrainTable;
 use App\Entity\TrainTableYear;
 use App\Entity\User;
+use App\Repository\TrainTable as TrainTableRepository;
 use App\Traits\DateTrait;
 use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
@@ -118,9 +119,9 @@ class StaticDataHelper implements RuntimeExtensionInterface
             $this->doctrine->getRepository(TrainTableYear::class)->findTrainTableYearByDate(new DateTime())
         );
         foreach ($routeArray as $route) {
-            $this->routes[$route['routeNumber']] = sprintf(
+            $this->routes[$route[TrainTableRepository::FIELD_ROUTE_NUMBER]] = sprintf(
                 $this->translator->trans('trainTable.forum.route'),
-                $route['routeNumber'],
+                $route[TrainTableRepository::FIELD_ROUTE_NUMBER],
                 $route['characteristicName'],
                 $route['characteristicDescription'],
                 $route['transporter'],
@@ -138,7 +139,7 @@ class StaticDataHelper implements RuntimeExtensionInterface
      */
     private function addSeriesRouteNumber(array $route): void
     {
-        $seriesRouteNumber = 100 * floor($route['routeNumber'] / 100);
+        $seriesRouteNumber = 100 * floor($route[TrainTableRepository::FIELD_ROUTE_NUMBER] / 100);
         if (!isset($this->routes[$seriesRouteNumber])) {
             if (strlen($route['section']) > 0) {
                 $this->routes[$seriesRouteNumber] = sprintf(

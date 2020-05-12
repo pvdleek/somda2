@@ -14,6 +14,8 @@ class ForumPost extends BaseForm
 
     public const FIELD_EDIT_AS_MODERATOR = 'editAsModerator';
     public const FIELD_TITLE = 'title';
+    public const FIELD_DISCUSSION = 'discussion';
+    public const FIELD_TIMESTAMP = 'timestamp';
 
     public const OPTION_QUOTED_POST = 'quotedPost';
     public const OPTION_EDITED_POST = 'editedPost';

@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\News;
+use App\Form\News as NewsForm;
 use App\Helpers\TemplateHelper;
 use App\Helpers\UserHelper;
 use Doctrine\Persistence\ManagerRegistry;
@@ -67,7 +68,7 @@ class NewsController
         /**
          * @var News[] $news
          */
-        $news = $this->doctrine->getRepository(News::class)->findBy([], ['timestamp' => 'DESC']);
+        $news = $this->doctrine->getRepository(News::class)->findBy([], [NewsForm::FIELD_TIMESTAMP => 'DESC']);
         return $this->templateHelper->render('news/index.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Nieuws',
             'news' => $news,

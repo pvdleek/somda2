@@ -5,6 +5,7 @@ namespace App\Helpers;
 use App\Entity\Banner;
 use App\Entity\BannerView;
 use App\Entity\RailNews;
+use App\Form\RailNews as RailNewsForm;
 use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
@@ -18,6 +19,8 @@ class TemplateHelper
 {
     public const PARAMETER_PAGE_TITLE = 'pageTitle';
     public const PARAMETER_FORM = 'form';
+    public const PARAMETER_FORUM = 'forum';
+    public const PARAMETER_DISCUSSION = 'discussion';
 
     /**
      * @var RequestStack
@@ -115,9 +118,11 @@ class TemplateHelper
             $this->doctrine->getManager()->flush();
         } else {
             $headerType = 'news';
-            $headerContent = $this->doctrine
-                ->getRepository(RailNews::class)
-                ->findBy(['active' => true, 'approved' => true], ['timestamp' => 'DESC'], 3)[random_int(0, 2)];
+            $headerContent = $this->doctrine->getRepository(RailNews::class)->findBy(
+                ['active' => true, 'approved' => true],
+                [RailNewsForm::FIELD_TIMESTAMP => 'DESC'],
+                3
+            )[random_int(0, 2)];
         }
 
         return array_merge($viewParameters, [

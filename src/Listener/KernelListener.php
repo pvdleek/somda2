@@ -3,7 +3,7 @@
 namespace App\Listener;
 
 use App\Entity\Log;
-use App\Helpers\GenericsHelper;
+use App\Generics\DateGenerics;
 use App\Helpers\UserHelper;
 use DateTime;
 use Exception;
@@ -62,7 +62,7 @@ class KernelListener implements EventSubscriberInterface
             && $this->userHelper->getUser()->banExpireTimestamp >= new DateTime()
         ) {
             throw new AccessDeniedHttpException(
-                'Je kunt tot ' . $this->userHelper->getUser()->banExpireTimestamp->format(GenericsHelper::DATE_FORMAT) .
+                'Je kunt tot ' . $this->userHelper->getUser()->banExpireTimestamp->format(DateGenerics::DATE_FORMAT) .
                 ' geen gebruik maken van Somda'
             );
         }

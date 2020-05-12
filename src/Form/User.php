@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\User as UserEntity;
+use App\Generics\ConstraintGenerics;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -32,14 +33,15 @@ class User extends BaseForm
                 self::KEY_ATTRIBUTES => ['maxlength' => 10],
                 self::KEY_CONSTRAINTS => [
                     new Length([
-                        'max' => 10,
-                        'maxMessage' => 'De gebruikersnaam mag maximaal 10 karakters lang zijn',
-                        'min' => 3,
-                        'minMessage' => 'De gebruikersnaam moet minimaal 3 karakters lang zijn',
+                        ConstraintGenerics::MAX => 10,
+                        ConstraintGenerics::MAX_MESSAGE => 'De gebruikersnaam mag maximaal 10 karakters lang zijn',
+                        ConstraintGenerics::MIN => 3,
+                        ConstraintGenerics::MIN_MESSAGE => 'De gebruikersnaam moet minimaal 3 karakters lang zijn',
                     ]),
                     new Regex([
-                        'pattern' => '/^[a-z0-9-]+$/i',
-                        'message' => 'De gebruikersnaam mag alleen letters, cijfers of een liggend streepje bevatten',
+                        ConstraintGenerics::PATTERN => '/^[a-z0-9-]+$/i',
+                        ConstraintGenerics::MESSAGE =>
+                            'De gebruikersnaam mag alleen letters, cijfers of een liggend streepje bevatten',
                     ])
                 ],
                 self::KEY_LABEL => 'Kies een gebruikersnaam (maximaal 10 karakters)',
@@ -47,7 +49,10 @@ class User extends BaseForm
             ])
             ->add(self::FIELD_PLAIN_PASSWORD, PasswordType::class, [
                 self::KEY_CONSTRAINTS => [
-                    new Length(['min' => 8, 'minMessage' => 'Het wachtwoord moet minimaal 8 karakters lang zijn']),
+                    new Length([
+                        ConstraintGenerics::MIN => 8,
+                        ConstraintGenerics::MIN_MESSAGE => 'Het wachtwoord moet minimaal 8 karakters lang zijn',
+                    ]),
                 ],
                 self::KEY_LABEL => 'Kies een wachtwoord',
                 self::KEY_MAPPED => false,

@@ -8,6 +8,7 @@ use App\Entity\ForumPost;
 use App\Entity\ForumPostLog;
 use App\Form\BaseForm;
 use App\Form\ForumPost as ForumPostForm;
+use App\Generics\RouteGenerics;
 use App\Helpers\EmailHelper;
 use App\Helpers\FormHelper;
 use App\Helpers\ForumAuthorizationHelper;
@@ -98,15 +99,15 @@ class ForumPostController
             $this->formHelper->addPost($form, $quotedPost->discussion, $this->userHelper->getUser());
             $this->handleFavoritesForAddedPost($quotedPost->discussion);
 
-            return $this->formHelper->finishFormHandling('', 'forum_discussion', [
+            return $this->formHelper->finishFormHandling('', RouteGenerics::ROUTE_FORUM_DISCUSSION, [
                 'id' => $quotedPost->discussion->getId(),
                 'name' => urlencode($quotedPost->discussion->title)
             ]);
         }
 
         $lastPosts = $this->formHelper->getDoctrine()->getRepository(ForumPost::class)->findBy(
-            ['discussion' => $quotedPost->discussion],
-            ['timestamp' => 'DESC'],
+            [ForumPostForm::FIELD_DISCUSSION => $quotedPost->discussion],
+            [ForumPostForm::FIELD_TIMESTAMP => 'DESC'],
             10
         );
 
@@ -129,7 +130,7 @@ class ForumPostController
                     $favorite->user,
                     'Somda - Nieuwe forumreactie op "' . $discussion->title . '"',
                     'forum-new-reply',
-                    ['discussion' => $discussion]
+                    [ForumPostForm::FIELD_DISCUSSION => $discussion]
                 );
                 $favorite->alerting = ForumFavorite::ALERTING_SENT;
             }
@@ -183,7 +184,7 @@ class ForumPostController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->editPost($form, $post);
 
-            return $this->formHelper->finishFormHandling('', 'forum_discussion', [
+            return $this->formHelper->finishFormHandling('', RouteGenerics::ROUTE_FORUM_DISCUSSION, [
                 'id' => $post->discussion->getId(),
                 'name' => urlencode($post->discussion->title)
             ]);

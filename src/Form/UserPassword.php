@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\Generics\ConstraintGenerics;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -19,14 +20,17 @@ class UserPassword extends BaseForm
         $builder
             ->add('currentPassword', PasswordType::class, [
                 self::KEY_CONSTRAINTS => new UserPasswordAssert(
-                    ['message' => 'Jouw huidige wachtwoord is niet correct']
+                    [ConstraintGenerics::MESSAGE => 'Jouw huidige wachtwoord is niet correct']
                 ),
                 self::KEY_LABEL => 'Jouw huidige wachtwoord',
                 self::KEY_REQUIRED => true,
             ])
             ->add('newPassword', RepeatedType::class, [
                 self::KEY_CONSTRAINTS => [
-                    new Length(['min' => 8, 'minMessage' => 'Het wachtwoord moet minimaal 8 karakters lang zijn']),
+                    new Length([
+                        ConstraintGenerics::MIN => 8,
+                        ConstraintGenerics::MIN_MESSAGE => 'Het wachtwoord moet minimaal 8 karakters lang zijn',
+                    ]),
                 ],
                 self::KEY_FIRST_OPTIONS => [self::KEY_LABEL => 'Kies een nieuw wachtwoord'],
                 self::KEY_INVALID_MESSAGE => 'De wachtwoorden moeten overeen komen',

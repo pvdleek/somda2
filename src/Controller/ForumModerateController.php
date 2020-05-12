@@ -6,6 +6,7 @@ use App\Entity\ForumDiscussion;
 use App\Entity\ForumPost;
 use App\Form\ForumDiscussionCombine;
 use App\Form\ForumDiscussionMove;
+use App\Generics\RouteGenerics;
 use App\Helpers\FormHelper;
 use App\Helpers\RedirectHelper;
 use App\Helpers\TemplateHelper;
@@ -68,7 +69,7 @@ class ForumModerateController
             if (!$form->isSubmitted() || !$form->isValid()) {
                 return $this->templateHelper->render('forum/discussionMove.html.twig', [
                     TemplateHelper::PARAMETER_PAGE_TITLE => 'Forum - ' . $discussion->title,
-                    'discussion' => $discussion,
+                    TemplateHelper::PARAMETER_DISCUSSION => $discussion,
                     TemplateHelper::PARAMETER_FORM => $form->createView()
                 ]);
             }
@@ -76,7 +77,7 @@ class ForumModerateController
         }
 
         return $this->redirectHelper->redirectToRoute(
-            'forum_discussion',
+            RouteGenerics::ROUTE_FORUM_DISCUSSION,
             ['id' => $discussion->getId(), 'name' => urlencode($discussion->title)]
         );
     }
@@ -107,7 +108,7 @@ class ForumModerateController
             $this->formHelper->getDoctrine()->getManager()->remove($discussion1);
             $this->formHelper->getDoctrine()->getManager()->remove($discussion2);
 
-            return $this->formHelper->finishFormHandling('',  'forum_discussion', [
+            return $this->formHelper->finishFormHandling('',  RouteGenerics::ROUTE_FORUM_DISCUSSION, [
                 'id' => $newDiscussion->getId(),
                 'name' => urlencode($newDiscussion->title)
             ]);
@@ -195,7 +196,7 @@ class ForumModerateController
         $this->formHelper->getDoctrine()->getManager()->flush();
 
         return $this->redirectHelper->redirectToRoute(
-            'forum_discussion',
+            RouteGenerics::ROUTE_FORUM_DISCUSSION,
             ['id' => $newDiscussion->getId(), 'name' => urlencode($newDiscussion->title)]
         );
     }

@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\User as UserEntity;
+use App\Generics\ConstraintGenerics;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -24,14 +25,14 @@ class UserActivate extends BaseForm
                 self::KEY_ATTRIBUTES => ['maxlength' => 32],
                 self::KEY_CONSTRAINTS => [
                     new Length([
-                        'max' => 32,
-                        'maxMessage' => 'De activatie-sleutel moet exact 32 karakters lang zijn',
-                        'min' => 32,
-                        'minMessage' => 'De activatie-sleutel moet exact 32 karakters lang zijn',
+                        ConstraintGenerics::MAX => 32,
+                        ConstraintGenerics::MAX_MESSAGE => 'De activatie-sleutel moet exact 32 karakters lang zijn',
+                        ConstraintGenerics::MIN => 32,
+                        ConstraintGenerics::MIN_MESSAGE => 'De activatie-sleutel moet exact 32 karakters lang zijn',
                     ]),
                     new Regex([
-                        'pattern' => '/^[a-z0-9]+$/i',
-                        'message' => 'De gebruikersnaam mag alleen letters en cijfers bevatten',
+                        ConstraintGenerics::PATTERN => '/^[a-z0-9]+$/i',
+                        ConstraintGenerics::MESSAGE => 'De gebruikersnaam mag alleen letters en cijfers bevatten',
                     ])
                 ],
                 self::KEY_LABEL => 'Geef de activatie-sleutel die je per e-mail hebt ontvangen',

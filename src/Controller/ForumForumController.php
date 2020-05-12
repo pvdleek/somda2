@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\ForumCategory;
 use App\Entity\ForumDiscussion;
 use App\Entity\ForumForum;
+use App\Generics\RouteGenerics;
 use App\Helpers\ForumAuthorizationHelper;
 use App\Helpers\RedirectHelper;
 use App\Helpers\TemplateHelper;
@@ -95,7 +96,7 @@ class ForumForumController
          */
         $forum = $this->doctrine->getRepository(ForumForum::class)->find($id);
         if (is_null($forum)) {
-            return $this->redirectHelper->redirectToRoute('forum');
+            return $this->redirectHelper->redirectToRoute(RouteGenerics::ROUTE_FORUM);
         }
 
         $discussions = $this->doctrine
@@ -103,7 +104,7 @@ class ForumForumController
             ->findByForum($forum, $this->userHelper->getUser());
         return $this->templateHelper->render('forum/forum.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Forum - ' . $forum->name,
-            'forum' => $forum,
+            TemplateHelper::PARAMETER_FORUM => $forum,
             'userIsModerator' => $this->forumAuthHelper->userIsModerator(
                 $forum->getDiscussions()[0],
                 $this->userHelper->getUser()

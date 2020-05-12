@@ -6,8 +6,8 @@ use App\Entity\ForumDiscussion as ForumDiscussionEntity;
 use App\Entity\ForumForum;
 use App\Entity\ForumPost;
 use App\Entity\User;
-use App\Helpers\GenericsHelper;
-use DateTime;
+use App\Form\ForumPost as ForumPostForm;
+use App\Generics\DateGenerics;
 use Doctrine\DBAL\DBALException;
 use Doctrine\ORM\EntityRepository;
 use Exception;
@@ -66,7 +66,7 @@ class ForumDiscussion extends EntityRepository
             $statement = $connection->prepare($query);
             $statement->bindValue(
                 'minDate',
-                date(GenericsHelper::DATE_FORMAT_DATABASE, mktime(0, 0, 0, date('m'), date('d') - 100, date('Y')))
+                date(DateGenerics::DATE_FORMAT_DATABASE, mktime(0, 0, 0, date('m'), date('d') - 100, date('Y')))
             );
             $statement->execute();
             return $statement->fetchAll();
@@ -139,8 +139,8 @@ class ForumDiscussion extends EntityRepository
             ->createQueryBuilder()
             ->select('COUNT(p.id)')
             ->from(ForumPost::class, 'p')
-            ->andWhere('p.discussion = :discussion')
-            ->setParameter('discussion', $discussion)
+            ->andWhere('p.discussion = :' . ForumPostForm::FIELD_DISCUSSION)
+            ->setParameter(ForumPostForm::FIELD_DISCUSSION, $discussion)
             ->setMaxResults(1);
         try {
             return $queryBuilder->getQuery()->getSingleScalarResult();
@@ -160,8 +160,8 @@ class ForumDiscussion extends EntityRepository
             ->createQueryBuilder()
             ->select('p.id')
             ->from(ForumPost::class, 'p')
-            ->andWhere('p.discussion = :discussion')
-            ->setParameter('discussion', $discussion)
+            ->andWhere('p.discussion = :' . ForumPostForm::FIELD_DISCUSSION)
+            ->setParameter(ForumPostForm::FIELD_DISCUSSION, $discussion)
             ->addOrderBy('p.timestamp', 'ASC');
         $postIds = array_column($queryBuilder->getQuery()->getResult(), 'id');
         return array_search($postId, $postIds);
@@ -179,8 +179,8 @@ class ForumDiscussion extends EntityRepository
             ->select('COUNT(p.id)')
             ->from('App\Entity\ForumRead' . substr($user->getId(), -1), 'r')
             ->join('r.post', 'p')
-            ->andWhere('p.discussion = :discussion')
-            ->setParameter('discussion', $discussion)
+            ->andWhere('p.discussion = :' . ForumPostForm::FIELD_DISCUSSION)
+            ->setParameter(ForumPostForm::FIELD_DISCUSSION, $discussion)
             ->andWhere('r.user = :user')
             ->setParameter('user', $user);
         try {

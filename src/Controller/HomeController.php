@@ -11,6 +11,7 @@ use App\Entity\Spot;
 use App\Entity\Statistic;
 use App\Entity\User;
 use App\Entity\UserPreference;
+use App\Form\RailNews as RailNewsForm;
 use App\Helpers\TemplateHelper;
 use App\Helpers\UserHelper;
 use DateTime;
@@ -22,6 +23,7 @@ class HomeController
 {
     public const KEY_DASHBOARD = 'dashboard';
     public const KEY_DASHBOARD_MINIMIZED = 'dashboard-min';
+    public const KEY_FORUM = 'forum';
     public const KEY_SPOTS = 'spots';
     public const KEY_SPOTS_MINIMIZED = 'spots-min';
     public const KEY_FORUM_SPOTS = 'forumSpots';
@@ -62,7 +64,7 @@ class HomeController
     {
         $railNews = $this->doctrine
             ->getRepository(RailNews::class)
-            ->findBy(['active' => true, 'approved' => true], ['timestamp' => 'DESC'], 5);
+            ->findBy(['active' => true, 'approved' => true], [RailNewsForm::FIELD_TIMESTAMP => 'DESC'], 5);
 
         $layout = $this->userHelper->getPreferenceByKey(UserPreference::KEY_HOME_LAYOUT)->value;
         if (!$this->userHelper->userIsLoggedIn()) {
@@ -128,8 +130,8 @@ class HomeController
     {
         $limit = $this->userHelper->getPreferenceByKey(UserPreference::KEY_HOME_MAX_FORUM_POSTS)->value;
 
-        if (in_array('forum', $layout) || in_array('forum-min', $layout)) {
-            $layoutData['forum'] = $this->doctrine
+        if (in_array(self::KEY_FORUM, $layout) || in_array('forum-min', $layout)) {
+            $layoutData[self::KEY_FORUM] = $this->doctrine
                 ->getRepository(ForumDiscussion::class)
                 ->findForDashboard($limit, $this->userHelper->getUser());
         }
@@ -163,7 +165,7 @@ class HomeController
             $limit = $this->userHelper->getPreferenceByKey(UserPreference::KEY_HOME_MAX_NEWS)->value;
             $layoutData['railNews'] = $this->doctrine->getRepository(RailNews::class)->findBy(
                 ['active' => true, 'approved' => true],
-                ['timestamp' => 'DESC'],
+                [RailNewsForm::FIELD_TIMESTAMP => 'DESC'],
                 $limit
             );
         }

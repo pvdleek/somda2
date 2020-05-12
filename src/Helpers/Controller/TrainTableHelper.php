@@ -5,21 +5,10 @@ namespace App\Helpers\Controller;
 use App\Entity\RouteTrain;
 use App\Entity\TrainTable;
 use App\Traits\DateTrait;
-use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 class TrainTableHelper extends BaseControllerHelper
 {
     use DateTrait;
-
-    /**
-     * @param ManagerRegistry $doctrine
-     * @param TranslatorInterface $translator
-     */
-    public function __construct(ManagerRegistry $doctrine, TranslatorInterface $translator)
-    {
-        parent::__construct($doctrine, $translator);
-    }
 
     /**
      * @return TrainTable[]

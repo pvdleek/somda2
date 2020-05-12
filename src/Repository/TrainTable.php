@@ -17,6 +17,8 @@ class TrainTable extends EntityRepository
 {
     use DateTrait;
 
+    public const FIELD_ROUTE_NUMBER = 'routeNumber';
+
     /**
      * @param TrainTableYear $trainTableYear
      * @param Location $location
@@ -79,7 +81,7 @@ class TrainTable extends EntityRepository
     {
         $queryBuilder = $this->getEntityManager()
             ->createQueryBuilder()
-            ->select('r.number AS routeNumber')
+            ->select('r.number AS ' . self::FIELD_ROUTE_NUMBER)
             ->addSelect('tr.name AS transporter')
             ->addSelect('c.name AS characteristicName')
             ->addSelect('c.description AS characteristicDescription')

@@ -8,6 +8,8 @@ use App\Entity\ForumDiscussion;
 use App\Entity\ForumForum;
 use App\Entity\ForumPost;
 use App\Form\ForumDiscussion as ForumDiscussionForm;
+use App\Form\ForumPost as ForumPostForm;
+use App\Generics\RouteGenerics;
 use App\Helpers\FormHelper;
 use App\Helpers\ForumAuthorizationHelper;
 use App\Helpers\RedirectHelper;
@@ -85,7 +87,7 @@ class ForumDiscussionController
          */
         $discussion = $this->formHelper->getDoctrine()->getRepository(ForumDiscussion::class)->find($id);
         if (is_null($discussion)) {
-            return $this->redirectHelper->redirectToRoute('forum');
+            return $this->redirectHelper->redirectToRoute(RouteGenerics::ROUTE_FORUM);
         }
         if (!$this->forumAuthHelper->mayView($discussion->forum, $this->userHelper->getUser())) {
             throw new AccessDeniedHttpException();
@@ -117,8 +119,8 @@ class ForumDiscussionController
                 $forumJump = 'new_post';
             }
             $posts = $this->formHelper->getDoctrine()->getRepository(ForumPost::class)->findBy(
-                ['discussion' => $discussion],
-                ['timestamp' => 'ASC'],
+                [ForumPostForm::FIELD_DISCUSSION => $discussion],
+                [ForumPostForm::FIELD_TIMESTAMP => 'ASC'],
                 self::MAX_POSTS_PER_PAGE,
                 ($pageNumber - 1) * self::MAX_POSTS_PER_PAGE
             );
@@ -138,8 +140,8 @@ class ForumDiscussionController
 
         if (count($posts) < 1) {
             $posts = $this->formHelper->getDoctrine()->getRepository(ForumPost::class)->findBy(
-                ['discussion' => $discussion],
-                ['timestamp' => 'ASC'],
+                [ForumPostForm::FIELD_DISCUSSION => $discussion],
+                [ForumPostForm::FIELD_TIMESTAMP => 'ASC'],
                 self::MAX_POSTS_PER_PAGE,
                 ($pageNumber - 1) * self::MAX_POSTS_PER_PAGE
             );
@@ -148,7 +150,7 @@ class ForumDiscussionController
         return $this->templateHelper->render('forum/discussion.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Forum - ' . $discussion->title,
             'userIsModerator' => $this->forumAuthHelper->userIsModerator($discussion, $this->userHelper->getUser()),
-            'discussion' => $discussion,
+            TemplateHelper::PARAMETER_DISCUSSION => $discussion,
             'numberOfPages' => $numberOfPages,
             'pageNumber' => $pageNumber,
             'posts' => $posts,
@@ -201,7 +203,7 @@ class ForumDiscussionController
          */
         $forum = $this->formHelper->getDoctrine()->getRepository(ForumForum::class)->find($id);
         if (is_null($forum)) {
-            return $this->redirectHelper->redirectToRoute('forum');
+            return $this->redirectHelper->redirectToRoute(RouteGenerics::ROUTE_FORUM);
         }
 
         $forumDiscussion = new ForumDiscussion();
@@ -214,7 +216,7 @@ class ForumDiscussionController
             $this->formHelper->addPost($form, $forumDiscussion, $this->userHelper->getUser());
             $this->formHelper->getDoctrine()->getManager()->persist($forumDiscussion);
 
-            return $this->formHelper->finishFormHandling('', 'forum_discussion', [
+            return $this->formHelper->finishFormHandling('', RouteGenerics::ROUTE_FORUM_DISCUSSION, [
                 'id' => $forumDiscussion->getId(),
                 'name' => urlencode($forumDiscussion->title)
             ]);
@@ -223,7 +225,7 @@ class ForumDiscussionController
         return $this->templateHelper->render('forum/newDiscussion.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Forum - ' . $forum->name,
             TemplateHelper::PARAMETER_FORM => $form->createView(),
-            'forum' => $forum
+            TemplateHelper::PARAMETER_FORUM => $forum
         ]);
     }
 }

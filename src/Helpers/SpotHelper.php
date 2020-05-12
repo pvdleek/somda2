@@ -7,6 +7,7 @@ use App\Entity\Position;
 use App\Entity\Route;
 use App\Entity\Spot;
 use App\Entity\Train;
+use App\Generics\DateGenerics;
 use DateTime;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Extension\RuntimeExtensionInterface;
@@ -73,10 +74,10 @@ class SpotHelper implements RuntimeExtensionInterface
      */
     private function getDisplayDate(DateTime $dateTime): string
     {
-        if ($dateTime->format(GenericsHelper::DATE_FORMAT_DATABASE) === date(GenericsHelper::DATE_FORMAT_DATABASE)) {
+        if ($dateTime->format(DateGenerics::DATE_FORMAT_DATABASE) === date(DateGenerics::DATE_FORMAT_DATABASE)) {
             return $this->translator->trans('general.date.today');
         }
-        return $dateTime->format(GenericsHelper::DATE_FORMAT);
+        return $dateTime->format(DateGenerics::DATE_FORMAT);
     }
 
     /**

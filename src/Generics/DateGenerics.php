@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Helpers;
+namespace App\Generics;
 
-class GenericsHelper
+final class DateGenerics
 {
     public const DATE_FORMAT = 'd-m-Y';
     public const DATE_FORMAT_DATABASE = 'Y-m-d';
