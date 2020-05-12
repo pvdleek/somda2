@@ -122,9 +122,9 @@ class StaticDataHelper implements RuntimeExtensionInterface
             $this->routes[$route[TrainTableRepository::FIELD_ROUTE_NUMBER]] = sprintf(
                 $this->translator->trans('trainTable.forum.route'),
                 $route[TrainTableRepository::FIELD_ROUTE_NUMBER],
-                $route['characteristicName'],
-                $route['characteristicDescription'],
-                $route['transporter'],
+                $route[TrainTableRepository::FIELD_CHARACTERISTIC_NAME],
+                $route[TrainTableRepository::FIELD_CHARACTERISTIC_DESCRIPTION],
+                $route[TrainTableRepository::FIELD_TRANSPORTER_NAME],
                 $route['firstLocation'],
                 $this->timeDatabaseToDisplay($route['firstTime']),
                 $route['lastLocation'],
@@ -141,14 +141,14 @@ class StaticDataHelper implements RuntimeExtensionInterface
     {
         $seriesRouteNumber = 100 * floor($route[TrainTableRepository::FIELD_ROUTE_NUMBER] / 100);
         if (!isset($this->routes[$seriesRouteNumber])) {
-            if (strlen($route['section']) > 0) {
+            if (strlen($route[TrainTableRepository::FIELD_SECTION]) > 0) {
                 $this->routes[$seriesRouteNumber] = sprintf(
                     $this->translator->trans('trainTable.forum.seriesWithSection'),
                     $seriesRouteNumber,
-                    $route['characteristicName'],
-                    $route['characteristicDescription'],
-                    $route['transporter'],
-                    $route['section']
+                    $route[TrainTableRepository::FIELD_CHARACTERISTIC_NAME],
+                    $route[TrainTableRepository::FIELD_CHARACTERISTIC_DESCRIPTION],
+                    $route[TrainTableRepository::FIELD_TRANSPORTER_NAME],
+                    $route[TrainTableRepository::FIELD_SECTION]
                 );
                 return;
             }
@@ -156,9 +156,9 @@ class StaticDataHelper implements RuntimeExtensionInterface
             $this->routes[$seriesRouteNumber] = sprintf(
                 $this->translator->trans('trainTable.forum.series'),
                 $seriesRouteNumber,
-                $route['characteristicName'],
-                $route['characteristicDescription'],
-                $route['transporter'],
+                $route[TrainTableRepository::FIELD_CHARACTERISTIC_NAME],
+                $route[TrainTableRepository::FIELD_CHARACTERISTIC_DESCRIPTION],
+                $route[TrainTableRepository::FIELD_TRANSPORTER_NAME],
                 $route['firstLocation'],
                 $this->timeDatabaseToDisplay($route['firstTime']),
                 $route['lastLocation'],

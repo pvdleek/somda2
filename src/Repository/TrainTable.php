@@ -18,6 +18,10 @@ class TrainTable extends EntityRepository
     use DateTrait;
 
     public const FIELD_ROUTE_NUMBER = 'routeNumber';
+    public const FIELD_TRANSPORTER_NAME = 'transporterName';
+    public const FIELD_CHARACTERISTIC_NAME = 'characteristicName';
+    public const FIELD_CHARACTERISTIC_DESCRIPTION = 'characteristicDescription';
+    public const FIELD_SECTION = 'section';
 
     /**
      * @param TrainTableYear $trainTableYear
@@ -45,8 +49,8 @@ class TrainTable extends EntityRepository
             ->addSelect('fl_first.description AS fl_first_description')
             ->addSelect('fl_last.name AS fl_last_name')
             ->addSelect('fl_last.description AS fl_last_description')
-            ->addSelect('transporter.name AS transporter_name')
-            ->addSelect('characteristic.description AS characteristic_description')
+            ->addSelect('transporter.name AS ' . self::FIELD_TRANSPORTER_NAME)
+            ->addSelect('characteristic.description AS ' . self::FIELD_CHARACTERISTIC_DESCRIPTION)
             ->from(TrainTableEntity::class, 't')
             ->andWhere('t.trainTableYear = :trainTableYear')
             ->setParameter('trainTableYear', $trainTableYear)
@@ -82,14 +86,14 @@ class TrainTable extends EntityRepository
         $queryBuilder = $this->getEntityManager()
             ->createQueryBuilder()
             ->select('r.number AS ' . self::FIELD_ROUTE_NUMBER)
-            ->addSelect('tr.name AS transporter')
-            ->addSelect('c.name AS characteristicName')
-            ->addSelect('c.description AS characteristicDescription')
+            ->addSelect('tr.name AS ' . self::FIELD_TRANSPORTER_NAME)
+            ->addSelect('c.name AS ' . self::FIELD_CHARACTERISTIC_NAME)
+            ->addSelect('c.description AS ' . self::FIELD_CHARACTERISTIC_DESCRIPTION)
             ->addSelect('l1.name AS firstLocation')
             ->addSelect('fl.firstTime AS firstTime')
             ->addSelect('l2.name AS lastLocation')
             ->addSelect('fl.lastTime AS lastTime')
-            ->addSelect('rl.section AS section')
+            ->addSelect('rl.section AS ' . self::FIELD_SECTION)
             ->from(TrainTableFirstLast::class, 'fl')
             ->join('fl.route', 'r')
             ->join('fl.firstLocation', 'l1')

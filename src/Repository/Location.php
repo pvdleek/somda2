@@ -9,6 +9,8 @@ use Doctrine\ORM\NoResultException;
 
 class Location extends EntityRepository
 {
+    private const PARAMETER_SEARCH = 'search';
+
     /**
      * @param string $search
      * @return LocationEntity|null
@@ -19,8 +21,8 @@ class Location extends EntityRepository
             ->createQueryBuilder()
             ->select('l')
             ->from(LocationEntity::class, 'l')
-            ->andWhere('LOWER(l.name) = :search')
-            ->setParameter('search', strtolower($search));
+            ->andWhere('LOWER(l.name) = :' . self::PARAMETER_SEARCH)
+            ->setParameter(self::PARAMETER_SEARCH, strtolower($search));
         try {
             return $queryBuilder->getQuery()->getSingleResult();
         } catch (NonUniqueResultException $exception) {
@@ -40,8 +42,8 @@ class Location extends EntityRepository
             ->createQueryBuilder()
             ->select('l')
             ->from(LocationEntity::class, 'l')
-            ->andWhere('LOWER(l.name) LIKE :search')
-            ->setParameter('search', strtolower($search));
+            ->andWhere('LOWER(l.name) LIKE :' . self::PARAMETER_SEARCH)
+            ->setParameter(self::PARAMETER_SEARCH, strtolower($search));
         return $queryBuilder->getQuery()->getResult();
     }
 
@@ -55,8 +57,8 @@ class Location extends EntityRepository
             ->createQueryBuilder()
             ->select('l')
             ->from(LocationEntity::class, 'l')
-            ->andWhere('LOWER(l.description) LIKE :search')
-            ->setParameter('search', strtolower($search));
+            ->andWhere('LOWER(l.description) LIKE :' . self::PARAMETER_SEARCH)
+            ->setParameter(self::PARAMETER_SEARCH, strtolower($search));
         return $queryBuilder->getQuery()->getResult();
     }
 }
