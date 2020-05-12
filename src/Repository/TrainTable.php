@@ -23,6 +23,8 @@ class TrainTable extends EntityRepository
     public const FIELD_CHARACTERISTIC_DESCRIPTION = 'characteristicDescription';
     public const FIELD_SECTION = 'section';
 
+    private const PARAMETER_TRAIN_TABLE_YEAR = 'trainTableYear';
+
     /**
      * @param TrainTableYear $trainTableYear
      * @param Location $location
@@ -52,8 +54,8 @@ class TrainTable extends EntityRepository
             ->addSelect('transporter.name AS ' . self::FIELD_TRANSPORTER_NAME)
             ->addSelect('characteristic.description AS ' . self::FIELD_CHARACTERISTIC_DESCRIPTION)
             ->from(TrainTableEntity::class, 't')
-            ->andWhere('t.trainTableYear = :trainTableYear')
-            ->setParameter('trainTableYear', $trainTableYear)
+            ->andWhere('t.trainTableYear = :' . self::PARAMETER_TRAIN_TABLE_YEAR)
+            ->setParameter(self::PARAMETER_TRAIN_TABLE_YEAR, $trainTableYear)
             ->andWhere('t.location = :location')
             ->setParameter('location', $location)
             ->andWhere('t.time >= :startTime')
@@ -66,11 +68,11 @@ class TrainTable extends EntityRepository
             ->join('route.trainTableFirstLasts', 'trainTableFirstLasts')
             ->andWhere('trainTableFirstLasts.dayNumber = :dayNumber')
             ->setParameter('dayNumber', $dayNumber + 1)
-            ->andWhere('trainTableFirstLasts.trainTableYear = :trainTableYear')
+            ->andWhere('trainTableFirstLasts.trainTableYear = :' . self::PARAMETER_TRAIN_TABLE_YEAR)
             ->join('trainTableFirstLasts.firstLocation', 'fl_first')
             ->join('trainTableFirstLasts.lastLocation', 'fl_last')
             ->join('route.routeLists', 'routeLists')
-            ->andWhere('routeLists.trainTableYear = :trainTableYear')
+            ->andWhere('routeLists.trainTableYear = :' . self::PARAMETER_TRAIN_TABLE_YEAR)
             ->join('routeLists.transporter', 'transporter')
             ->join('routeLists.characteristic', 'characteristic')
             ->addOrderBy('t.time', 'ASC');
@@ -98,12 +100,12 @@ class TrainTable extends EntityRepository
             ->join('fl.route', 'r')
             ->join('fl.firstLocation', 'l1')
             ->join('fl.lastLocation', 'l2')
-            ->join('r.routeLists', 'rl', Join::WITH, 'rl.trainTableYear = :trainTableYear')
+            ->join('r.routeLists', 'rl', Join::WITH, 'rl.trainTableYear = :' . self::PARAMETER_TRAIN_TABLE_YEAR)
             ->join('rl.transporter', 'tr')
             ->join('rl.characteristic', 'c')
-            ->andWhere('fl.trainTableYear = :trainTableYear')
+            ->andWhere('fl.trainTableYear = :' . self::PARAMETER_TRAIN_TABLE_YEAR)
             ->andWhere('fl.dayNumber = 1')
-            ->setParameter('trainTableYear', $trainTableYear);
+            ->setParameter(self::PARAMETER_TRAIN_TABLE_YEAR, $trainTableYear);
         return $queryBuilder->getQuery()->getArrayResult();
     }
 
@@ -124,8 +126,8 @@ class TrainTable extends EntityRepository
             ->createQueryBuilder()
             ->select('COUNT(t.id)')
             ->from(TrainTableEntity::class, 't')
-            ->andWhere('t.trainTableYear = :trainTableYear')
-            ->setParameter('trainTableYear', $trainTableYear)
+            ->andWhere('t.trainTableYear = :' . self::PARAMETER_TRAIN_TABLE_YEAR)
+            ->setParameter(self::PARAMETER_TRAIN_TABLE_YEAR, $trainTableYear)
             ->andWhere('t.route = :route')
             ->setParameter('route', $route)
             ->andWhere('t.location = :location')
