@@ -259,6 +259,12 @@ forum_mark_read:
   methods: [GET]
   controller: App\Controller\ForumController:markAsReadAction
 
+forum_post_wiki_check:
+  path: /forum/p{id}/{operation}/
+  methods: [GET]
+  requirements: { id: \d+, operation: 'ok|na' }
+  controller: App\Controller\ForumPostWikiController:checkAction
+
 #########
 # Somda #
 #########

@@ -65,14 +65,13 @@ class ForumPostController
         ForumAuthorizationHelper $forumAuthHelper,
         TemplateHelper $templateHelper,
         EmailHelper $emailHelper
-    )    {
+    ) {
         $this->userHelper = $userHelper;
         $this->formHelper = $formHelper;
         $this->forumAuthHelper = $forumAuthHelper;
         $this->templateHelper = $templateHelper;
         $this->emailHelper = $emailHelper;
     }
-
 
     /**
      * @IsGranted("ROLE_USER")

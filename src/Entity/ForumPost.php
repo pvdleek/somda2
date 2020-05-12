@@ -5,13 +5,26 @@ namespace App\Entity;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Table(name="somda_forum_posts", indexes={@ORM\Index(name="idx_47961_timestamp", columns={"timestamp"}), @ORM\Index(name="idx_47961_authorid", columns={"authorid"}), @ORM\Index(name="idx_47961_discussionid", columns={"discussionid"})})
+ * @ORM\Table(
+ *     name="somda_forum_posts",
+ *     indexes={
+ *         @ORM\Index(name="idx_47961_timestamp", columns={"timestamp"}),
+ *         @ORM\Index(name="idx_47961_authorid", columns={"authorid"}),
+ *         @ORM\Index(name="idx_47961_discussionid", columns={"discussionid"})
+ *     }
+ * )
  * @ORM\Entity
  */
 class ForumPost extends Entity
 {
+    public const WIKI_CHECK_NOT_CHECKED = 0;
+    public const WIKI_CHECK_OK = 1;
+    public const WIKI_CHECK_N_A = 2;
+    public const WIKI_CHECK_VALUES = [self::WIKI_CHECK_NOT_CHECKED, self::WIKI_CHECK_OK, self::WIKI_CHECK_N_A];
+
     /**
      * @var int
      * @ORM\Column(name="postid", type="bigint", nullable=false)
@@ -72,10 +85,11 @@ class ForumPost extends Entity
     public bool $signatureOn = false;
 
     /**
-     * @var bool
-     * @ORM\Column(name="wiki_check", type="boolean", nullable=false)
+     * @var integer
+     * @ORM\Column(name="wiki_check", type="integer", nullable=false)
+     * @Assert\Choice(choices=ForumPost::WIKI_CHECK_VALUES)
      */
-    public bool $wikiCheck = false;
+    public int $wikiCheck = self::WIKI_CHECK_NOT_CHECKED;
 
     /**
      * @var User|null

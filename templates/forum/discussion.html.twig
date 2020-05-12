@@ -4,13 +4,21 @@
 
     {% block wiki %}
         {% if discussion.wikis | length > 0 %}
-            <div class="wiki-block"><table border="0" width="100%"><tr><td align="center">Deze forumdiscussie is gekoppeld aan de <a href="http://www.railwiki.nl/" target="_blank">RailWiki.nl</a> pagina('s):<br />
-            {% for wiki in discussion.wikis %}
-                <a href="http://www.railwiki.nl/index.php/{{ wiki.wiki }}" target="_blank">{{ wiki.title }}</a>
-                {% if not loop.last %} - {% endif %}
-            {% endfor %}
-            </td>
-            <td><a href="http://www.railwiki.nl/" target="_blank"><img alt="RailWiki.nl" height="110" src="{{ asset('images/railwiki-logo.png') }}" width="296" /></a></td></tr></table></div>
+            <div class="wiki-block">
+                <table border="0" width="100%">
+                    <tr>
+                        <td align="center">
+                            Deze forumdiscussie is gekoppeld aan de <a href="http://www.railwiki.nl/" target="_blank">RailWiki.nl</a> pagina('s):
+                            <br />
+                            {% for wiki in discussion.wikis %}
+                                <a href="http://www.railwiki.nl/index.php/{{ wiki.wiki }}" target="_blank">{{ wiki.title ? wiki.witle : wiki.wiki }}</a>
+                                {% if not loop.last %} - {% endif %}
+                            {% endfor %}
+                        </td>
+                        <td><a href="http://www.railwiki.nl/" target="_blank"><img alt="RailWiki.nl" height="110" src="{{ asset('images/railwiki-logo.png') }}" width="296" /></a></td>
+                    </tr>
+                </table>
+            </div>
         {% endif %}
     {% endblock %}
 
@@ -87,27 +95,29 @@
                         </tr></table><br />
                     {% else %}
                         <br /><table align="center" class="design" width="98%"><tr>
-                            <td><p class="warn">Tevreden over Somda? Overweeg dan eens een <a href="/doneren/">vrijwillige donatie</a>, alvast bedankt!</p></td>
+                            <td><p class="warn">Tevreden over Somda? Overweeg dan eens een <a href="{{ path('about') }}">vrijwillige donatie</a>, alvast bedankt!</p></td>
                         </tr></table><br />
                     {% endif %}
                 {% endif %}
 
                 <table align="center" class="design" width="98%">
                     {% include('forum/post.html.twig') %}
-                    {% if is_granted('ROLE_ADMIN_WIKI') and discussion.wikis | length > 0 %}
+                    {% if is_granted('ROLE_ADMIN_WIKI') and (discussion.wikis | length) > 0 %}
                         <tr><td colspan="3">Railwiki.nl:
                             {% if post.wikiCheck == 0 %}
-                                <span id="wiki_{{ post.id }}" style="background-color:orange">Nog te controleren - <a href="#" onclick="wikicheck({{ post.id }}, 'ok'); return false;">Markeer als gecontroleerd</a> - <a href="#" onclick="wikicheck({{ post.id }}, 'na'); return false;">Markeer als niet relevante inhoud</a></span>
+                                <span id="wiki_{{ post.id }}" style="background-color:orange">Nog te controleren - <a href="#" onclick="wikiCheck({{ post.id }}, 'ok'); return false;">Markeer als gecontroleerd</a> - <a href="#" onclick="wikiCheck({{ post.id }}, 'na'); return false;">Markeer als niet relevante inhoud</a></span>
                             {% elseif post.wikiCheck == 1 %}
-                                Verwerkt in de wiki door {{ post.wikiChecker | displayUser }}
+                                Verwerkt in de wiki door {{ post.wikiChecker.id | displayUser(post.wikiChecker.username) | raw }}
                             {% else %}
-                                Geen relevante inhoud, gecontroleerd door {{ post.wikiChecker | displayUser }}
+                                Geen relevante inhoud, gecontroleerd door {{ post.wikiChecker.id | displayUser(post.wikiChecker.username) | raw }}
                             {% endif %}
                         </td></tr>
                     {% endif %}
                 </table>
                 <br />
             {% endfor %}
+
+            {% if not firstUnreadAnchorDone %}<a id="new_post"></a>{% endif %}
 
             {{ block('wiki') }}
 
@@ -120,13 +130,16 @@
 {% block javascripts %}
     {% if is_granted('ROLE_ADMIN_WIKI') %}
         <script>
-            function wikiadd() {
-                makeRequest('/blocks/ajax/forum_wiki.php?op=add&discid={{ discussion.id }}&title=' + document.getElementById('wiki_page_title').value + '&page=' + document.getElementById('wiki_page_add').value);
-                document.getElementById('wiki_add').innerHTML = '<br />Dank voor je toevoeging, ververs de pagina om je wijziging te zien';
-            }
-            function wikicheck(postid, op) {
-                makeRequest('/blocks/ajax/forum_wiki.php?op=' + op + '&postid=' + postid);
-                document.getElementById('wiki_' + postid).innerHTML = '<img alt="" border="0" height="15" src="/vinkje.jpg" width="15" /></a>';
+            /**
+             * @param {integer} postId
+             * @param {string} operation
+             */
+            function wikiCheck(postId, operation)
+            {
+                $.ajax({
+                    url: '{{ path('forum_post_wiki_check', { 'id': 1234, 'operation': 'ok' }) }}'.replace('1234', postId).replace('ok', operation)
+                })
+                $('#wiki_' + postId).html('<i class="fas fa-check"></i>');
             }
         </script>
     {% endif %}
