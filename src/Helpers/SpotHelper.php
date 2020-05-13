@@ -29,9 +29,10 @@ class SpotHelper implements RuntimeExtensionInterface
 
     /**
      * @param Spot $spot
+     * @param bool $noHtml
      * @return string
      */
-    public function getDisplaySpot(Spot $spot): string
+    public function getDisplaySpot(Spot $spot, bool $noHtml = false): string
     {
         if (is_numeric($spot->route->number)) {
             $translation = 'spot.display.numeric';
@@ -51,7 +52,7 @@ class SpotHelper implements RuntimeExtensionInterface
             $this->translator->trans($translation),
             $this->getDisplayTrain($spot->train),
             $this->getDisplayDate($spot->timestamp),
-            $this->getDisplayLocation($spot->location),
+            $this->getDisplayLocation($spot->location, $noHtml),
             $this->getDisplayRoute($spot->route, $spot->position)
         );
     }
@@ -82,10 +83,14 @@ class SpotHelper implements RuntimeExtensionInterface
 
     /**
      * @param Location $location
+     * @param bool $noHtml
      * @return string
      */
-    private function getDisplayLocation(Location $location): string
+    private function getDisplayLocation(Location $location, bool $noHtml): string
     {
+        if ($noHtml) {
+            return $location->name;
+        }
         return '<span title="' . $location->description . '">' . $location->name . '</span>';
     }
 

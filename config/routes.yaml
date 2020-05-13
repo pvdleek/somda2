@@ -320,6 +320,19 @@ profile_mail:
   requirements: { id: \d+ }
   controller: App\Controller\ProfileController:mailAction
 
+#########
+# Feeds #
+#########
+feed_rss:
+  path: /feed/rss/{id}/
+  defaults: { _controller: Debril\RssAtomBundle\Controller\StreamController::indexAction, 'format': 'rss', 'id': 'spots|special-routes' }
+feed_atom:
+  path: /feed/atom/{id}/
+  defaults: { _controller: Debril\RssAtomBundle\Controller\StreamController::indexAction, 'format': 'atom', 'id': 'spots|special-routes' }
+feed_json:
+  path: /feed/json/{id}/
+  defaults: { _controller: Debril\RssAtomBundle\Controller\StreamController::indexAction, 'format': 'json', 'id': 'spots|special-routes' }
+
 ##############
 # Management #
 ##############
@@ -425,9 +438,6 @@ reisplanner:
   path: /
   controller: App\Controller\HomeController::homeAction
 ongelezen_forum:
-  path: /
-  controller: App\Controller\HomeController::homeAction
-spoornieuws:
   path: /
   controller: App\Controller\HomeController::homeAction
 materieelnamen:
