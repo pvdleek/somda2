@@ -288,6 +288,10 @@ disclaimer_choice:
   path: /disclaimer/{choice}/
   methods: [GET]
   controller: App\Controller\SomdaController:disclaimerAction
+feeds:
+  path: /feeds/
+  methods: [GET]
+  controller: App\Controller\FeedController::indexAction
 statistics:
   path: /statistieken/
   controller: App\Controller\HomeController::homeAction
@@ -444,9 +448,6 @@ materieelnamen:
   path: /
   controller: App\Controller\HomeController::homeAction
 favorieten:
-  path: /
-  controller: App\Controller\HomeController::homeAction
-feeds:
   path: /
   controller: App\Controller\HomeController::homeAction
 forum/zoeken:

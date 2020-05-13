@@ -28,6 +28,11 @@
                 <div class="home-panel">
                     <div class="home-panel-title">
                         {{ ('dashboard.panel.' ~ module) | trans }}
+                        {% if module == 'drgl' or module == 'werkzaamheden' %}
+                            <a href="{{ path('feed_rss', { 'id': 'specialRoutes' }) }}" target="_blank"><i class="fas fa-rss rss-link"></i></a>
+                        {% elseif module == 'spots' %}
+                            <a href="{{ path('feed_rss', { 'id': 'spots' }) }}" target="_blank"><i class="fas fa-rss rss-link"></i></a>
+                        {% endif %}
                         <div class="home-panel-actions">
                             {% if minimized %}
                                 <a href="#" onclick="togglePanel('home_panel_{{ module }}'); return false;"><i class="fa fa-plus-square" id="home_panel_{{ module }}_toggle"></i></a>

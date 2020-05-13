@@ -453,6 +453,9 @@ span.special-route-image {
 	grid-template-rows: auto auto auto;
 	text-align: center;
 }
+.rss-link {
+	color: orange;
+}
 
 /**************/
 /*** Footer ***/

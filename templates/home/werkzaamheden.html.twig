@@ -1,4 +1,3 @@
-{#'/feed/rss.php?rss_type=drgl&amp;drgl_type=2'#}
 <div class="home-special-routes-container">
 	{% for specialRoute in layoutData['specialRoutesConstruction'] %}
 		{% set date = specialRoute.endDate is null ? (specialRoute.startDate | date('d-m-Y')) : ((specialRoute.startDate | date('d-m-Y')) ~ ' t/m ' ~ (specialRoute.endDate | date('d-m-Y'))) %}
