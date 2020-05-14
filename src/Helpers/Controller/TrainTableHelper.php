@@ -70,11 +70,23 @@ class TrainTableHelper extends BaseControllerHelper
             return [];
         }
 
-        $startTimeDatabase = $this->timeDisplayToDatabase($startTime);
-        $endTimeDatabase = $this->timeDisplayToDatabase($endTime);
-        if ($startTimeDatabase > $endTimeDatabase) {
-            $this->addErrorMessage($this->translator->trans('passingRoutes.error.dayBorderCrossed'));
-            $endTimeDatabase = 1440;
+        if (is_null($dayNumber)) {
+            $dayNumber = date('N');
+        }
+
+        if (!is_null($startTime)) {
+            $startTimeDatabase = $this->timeDisplayToDatabase($startTime);
+        } else {
+            $startTimeDatabase = $this->timeDisplayToDatabase(date('H:i'));
+        }
+        if (!is_null($endTime)) {
+            $endTimeDatabase = $this->timeDisplayToDatabase($endTime);
+            if ($startTimeDatabase > $endTimeDatabase) {
+                $this->addErrorMessage($this->translator->trans('passingRoutes.error.dayBorderCrossed'));
+                $endTimeDatabase = 1440;
+            }
+        } else {
+            $endTimeDatabase = $startTimeDatabase + 120;
         }
 
         return $this->doctrine->getRepository(TrainTable::class)->findPassingRoutes(

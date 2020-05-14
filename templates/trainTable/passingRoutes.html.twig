@@ -59,8 +59,8 @@
                         <td><a title="{{ trainTable['fl_first_description'] }}">{{ trainTable['fl_first_name'] }}</a></td>
                         <td>{{ ("general.action." ~ trainTable['action']) | trans }}</td>
                         <td><a title="{{ trainTable['fl_last_description'] }}">{{ trainTable['fl_last_name'] }}</a></td>
-                    {% endfor %}
-                </tr>
+                    </tr>
+                {% endfor %}
             </table>
         {% endif %}
     </div>

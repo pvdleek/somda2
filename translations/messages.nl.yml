@@ -126,6 +126,9 @@ passingRoutes:
     button: 'Zoek in de dienstregelingen'
   error:
     dayBorderCrossed: 'Het is niet mogelijk om de nachtgrens van 02.00 te overschrijden, bijvoorbeeld 1.30 tot 2.30 is dus niet mogelijk'
+  feedHeader:
+    single: 'De eerstvolgende trein op station %s (bron www.Somda.nl):'
+    multiple: 'De %d eerstvolgende treinen op station %s (bron www.Somda.nl):'
 forum:
   author: 'Auteur'
   lastPost: 'Laatste bericht'
