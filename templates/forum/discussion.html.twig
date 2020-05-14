@@ -34,15 +34,15 @@
                     <a href="{{ path('forum_discussion_moderate', { 'id': discussion.id, 'action': constant('App\\Controller\\ForumModerateController::ACTION_MOVE') }) }}"><i class="fas fa-angle-double-right" title="Verplaats discussie"></i></a>
                 </span>
              {% endif %}
-            {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-                <span id="favorite_box">
-                    {% if app.user and app.user.forumFavorite(discussion) %}
-                        <a href="#" onclick="fav_del(); return false;">Verwijder discussie</a> uit je <a href="/favorieten/">favorieten</a>
-                    {% else %}
-                        <a href="#" onclick="fav_add(); return false;">Voeg discussie toe</a> aan je <a href="/favorieten/">favorieten</a>
-                    {% endif %}
-                </span>
-            {% endif %}
+{#            {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}#}
+{#                <span id="favorite_box">#}
+{#                    {% if app.user and app.user.forumFavorite(discussion) %}#}
+{#                        <a href="#" onclick="fav_del(); return false;">Verwijder discussie</a> uit je <a href="/favorieten/">favorieten</a>#}
+{#                    {% else %}#}
+{#                        <a href="#" onclick="fav_add(); return false;">Voeg discussie toe</a> aan je <a href="/favorieten/">favorieten</a>#}
+{#                    {% endif %}#}
+{#                </span>#}
+{#            {% endif %}#}
             {% if discussion.locked %}
                 <i class="fas fa-lock"></i>
             {% elseif posts | length > 1 %}
@@ -68,19 +68,11 @@
                 {% endif %}
             {% endblock %}
 
-            <p style="margin-left:10px;">
-                {% if userIsModerator %}
-                    Met geselecteerd: <a href="#" onclick="moderateNew(); return false;"><i class="fas fa-divide" title="Splits af naar een nieuwe discussie"></i></a>
-                {% endif %}
-                {% if is_granted('ROLE_ADMIN_WIKI') %}
-                    <a href="#" onclick="getElementById('wiki_add').style.visibility = 'visible'; return false;"><img alt="Voeg een RailWiki link toe" src="{{ asset('images/plus.png') }}" /> Voeg een RailWiki link toe</a>
-                    <span id="wiki_add" style="visibility:hidden;">
-                        <br />Plak de gehele URL van de wiki pagina: <input id="wiki_page_add" name="wiki_page_add" size="50" type="text" />
-                        <br />Titel van de wiki pagina: <input id="wiki_page_title" name="wiki_page_title" size="50" type="text" />&nbsp;<a href="#" onclick="wikiadd();">Voeg verwijzing toe</a>
-                    </span>
-                {% endif %}
-                {% if userIsModerator or is_granted('ROLE_ADMIN_WIKI') %}<br />{% endif %}
-            </p>
+            {% if userIsModerator %}
+                <p style="margin-left:10px;">
+                    Met geselecteerd: <a href="#" onclick="moderateNew(); return false;"><i class="fas fa-divide" title="Splits af naar een nieuwe discussie"></i></a><br />
+                </p>
+            {% endif %}
 
             {% set firstUnreadAnchorDone = false %}
             {% for post in posts %}
@@ -162,15 +154,4 @@
             }
         </script>
     {% endif %}
-
-    <script>
-        function fav_add() {
-            makeRequest('/blocks/ajax/forum_fav.php?op=add&discid={{ discussion.id }}');
-            document.getElementById('favorite').innerHTML = 'Discussie is in je <a href="/favorieten/">favoriete discussies</a> geplaatst.';
-        }
-        function fav_del() {
-            makeRequest('/blocks/ajax/forum_fav.php?op=del&discid={{ discussion.id }}');
-            document.getElementById('favorite').innerHTML = 'Discussie is uit je <a href="/favorieten/">favoriete discussies</a> verwijderd.';
-        }
-    </script>
 {% endblock %}
