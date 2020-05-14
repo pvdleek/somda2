@@ -7,6 +7,12 @@ home_update_layout_json:
   methods: [GET]
   controller: App\Controller\HomeLayoutController::updateAction
 
+banner_click_out:
+  path: /click-out/{id}/
+  methods: [GET]
+  requirements: { id: \d+ }
+  controller: App\Controller\BannerController::clickOutAction
+
 ###################
 # User management #
 ###################

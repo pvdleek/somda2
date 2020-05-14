@@ -113,7 +113,7 @@ class TemplateHelper
             $bannerView = new BannerView();
             $bannerView->banner = $headerContent;
             $bannerView->timestamp = new DateTime();
-            $bannerView->ipAddress = inet_pton($this->requestStack->getCurrentRequest()->getClientIp());
+            $bannerView->ipAddress = ip2long($this->requestStack->getCurrentRequest()->getClientIp());
             $this->doctrine->getManager()->persist($bannerView);
             $this->doctrine->getManager()->flush();
         } else {

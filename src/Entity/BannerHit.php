@@ -26,10 +26,10 @@ class BannerHit extends Entity
     public DateTime $timestamp;
 
     /**
-     * @var string
-     * @ORM\Column(name="ip", type="string", length=15, nullable=false)
+     * @var int
+     * @ORM\Column(name="ip_address", type="bigint", nullable=false)
      */
-    public string $ipAddress = '';
+    public int $ipAddress;
 
     /**
      * @var Banner
