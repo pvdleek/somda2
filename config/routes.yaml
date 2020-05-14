@@ -157,20 +157,23 @@ spots_to_train_table:
   controller: App\Controller\SpotController:redirectToTrainTableAction
 my_spots:
   path: /mijn-spots/
-  controller: App\Controller\HomeController::homeAction
+  controller: App\Controller\HomeController::notImplementedAction
 pois:
   path: /spotpunten/
-  controller: App\Controller\HomeController::homeAction
+  controller: App\Controller\HomeController::notImplementedAction
 
 ##########
 # Trains #
 ##########
 train_compositions:
   path: /matsms/
-  controller: App\Controller\HomeController::homeAction
+  controller: App\Controller\HomeController::notImplementedAction
 ddar_trains:
   path: /ddar/
-  controller: App\Controller\HomeController::homeAction
+  controller: App\Controller\HomeController::notImplementedAction
+materieelnamen:
+  path: /materieel-namen/
+  controller: App\Controller\HomeController::notImplementedAction
 
 #########
 # Forum #
@@ -300,13 +303,13 @@ feeds:
   controller: App\Controller\FeedController::indexAction
 statistics:
   path: /statistieken/
-  controller: App\Controller\HomeController::homeAction
+  controller: App\Controller\HomeController::notImplementedAction
 help:
   path: /help/
-  controller: App\Controller\HomeController::homeAction
+  controller: App\Controller\HomeController::notImplementedAction
 help_text:
   path: /help/{id}/
-  controller: App\Controller\HomeController::homeAction
+  controller: App\Controller\HomeController::notImplementedAction
 
 ########
 # User #
@@ -363,7 +366,7 @@ feed_image_with_start_time:
 ##############
 manage_user:
   path: /beheer-gebruikers/
-  controller: App\Controller\HomeController::homeAction
+  controller: App\Controller\HomeController::notImplementedAction
 
 manage_news:
   path: /beheer-nieuws/
@@ -394,7 +397,7 @@ manage_special_route:
 
 manage_banners:
   path: /beheer-banners/
-  controller: App\Controller\HomeController::homeAction
+  controller: App\Controller\HomeController::notImplementedAction
 
 manage_train_tables:
   path: /beheer-dienstregelingen/
@@ -417,7 +420,7 @@ manage_train_table:
 
 manage_pois:
   path: /beheer-spotpunten/
-  controller: App\Controller\HomeController::homeAction
+  controller: App\Controller\HomeController::notImplementedAction
 
 manage_bans:
   path: /beheer-bans/
@@ -430,11 +433,11 @@ manage_ban:
 
 manage_ddar_trains:
   path: /beheer-ddar/
-  controller: App\Controller\HomeController::homeAction
+  controller: App\Controller\HomeController::notImplementedAction
 
 manage_train_compositions:
   path: /beheer-materieel-samenstellingen/
-  controller: App\Controller\HomeController::homeAction
+  controller: App\Controller\HomeController::notImplementedAction
 
 manage_route_lists:
   path: /beheer-treinnummerlijst/
@@ -451,32 +454,21 @@ manage_route_list:
   requirements: { yearId: \d+, id: \d+ }
   controller: App\Controller\ManageRouteListsController::routeListAction
 
-
-
-gespotmat:
-  path: /
-  controller: App\Controller\HomeController::homeAction
-ongelezen:
-  path: /
-  controller: App\Controller\HomeController::homeAction
-reisplanner:
-  path: /
-  controller: App\Controller\HomeController::homeAction
-ongelezen_forum:
-  path: /
-  controller: App\Controller\HomeController::homeAction
-materieelnamen:
-  path: /
-  controller: App\Controller\HomeController::homeAction
-favorieten:
-  path: /
-  controller: App\Controller\HomeController::homeAction
-forum/zoeken:
-  path: /
-  controller: App\Controller\HomeController::homeAction
-shout_archief:
-  path: /
-  controller: App\Controller\HomeController::homeAction
-grafisch:
-  path: /
-  controller: App\Controller\HomeController::homeAction
+#reisplanner:
+#  path: /
+#  controller: App\Controller\HomeController::notImplementedAction
+#ongelezen_forum:
+#  path: /
+#  controller: App\Controller\HomeController::notImplementedAction
+#favorieten:
+#  path: /
+#  controller: App\Controller\HomeController::notImplementedAction
+#forum/zoeken:
+#  path: /
+#  controller: App\Controller\HomeController::notImplementedAction
+#shout_archief:
+#  path: /
+#  controller: App\Controller\HomeController::notImplementedAction
+#grafisch:
+#  path: /
+#  controller: App\Controller\HomeController::notImplementedAction

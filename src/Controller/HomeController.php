@@ -199,4 +199,14 @@ class HomeController
             $layoutData[self::KEY_PASSING_ROUTES]['endTime'] = new DateTime('+30 minutes');
         }
     }
+
+    /**
+     * @return Response
+     */
+    public function notImplementedAction(): Response
+    {
+        return $this->templateHelper->render('notImplemented.html.twig', [
+            TemplateHelper::PARAMETER_PAGE_TITLE => 'Niet geimplementeerd'
+        ]);
+    }
 }
