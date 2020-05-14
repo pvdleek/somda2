@@ -80,9 +80,7 @@ class FeedProvider implements FeedProviderInterface
         $feedType = $request->attributes->get('id');
 
         $this->limit = (int)$request->query->get('limit', 10);
-        if ($request->query->has('train')) {
-            $this->trainFilter = (string)$request->query->get('train');
-        }
+        $this->trainFilter = $request->query->get('train', null);
 
         $feed = new Feed();
         $feed

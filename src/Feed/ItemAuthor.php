@@ -4,11 +4,12 @@ namespace App\Feed;
 
 use App\Entity\User;
 use App\Exception\UnusedItemAuthorMethod;
-use Exception;
 use FeedIo\Feed\Item\AuthorInterface;
 
 class ItemAuthor implements AuthorInterface
 {
+    private const SETTER_EXCEPTION_MESSAGE = 'Use the ItemAuthor constructor to set the author';
+
     /**
      * @var User
      */
@@ -53,7 +54,7 @@ class ItemAuthor implements AuthorInterface
      */
     public function setEmail(string $email = null): AuthorInterface
     {
-        throw new UnusedItemAuthorMethod('Use the ItemAuthor constructor to set the author');
+        throw new UnusedItemAuthorMethod(self::SETTER_EXCEPTION_MESSAGE);
     }
 
     /**
@@ -63,7 +64,7 @@ class ItemAuthor implements AuthorInterface
      */
     public function setName(string $name = null): AuthorInterface
     {
-        throw new UnusedItemAuthorMethod('Use the ItemAuthor constructor to set the author');
+        throw new UnusedItemAuthorMethod(self::SETTER_EXCEPTION_MESSAGE);
     }
 
     /**
@@ -73,6 +74,6 @@ class ItemAuthor implements AuthorInterface
      */
     public function setUri(string $uri = null): AuthorInterface
     {
-        throw new UnusedItemAuthorMethod('Use the ItemAuthor constructor to set the author');
+        throw new UnusedItemAuthorMethod(self::SETTER_EXCEPTION_MESSAGE);
     }
 }

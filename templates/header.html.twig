@@ -24,7 +24,7 @@
 				<li class="menu-item"><span>{{ block['parent_name'] }}</span><ol class="sub-menu">
 				{% set lastParentId = block['parent_id'] %}
 			{% endif %}
-			<li class="menu-item"><a href="{{ path(block['route']) }}">{{ block['name'] }}{{ block['route'] == 'forum_discussion_post_alerts_overview' and is_granted('ROLE_ADMIN') ? ' (' ~ nrOfOpenForumAlerts ~ ')' }}</a></li>
+			<li class="menu-item"><a href="{{ path(block['route']) }}">{{ block['name'] }}{{ block['route'] == 'forum_discussion_post_alerts_overview' and is_granted(constant('App\\Generics\\RoleGenerics::ROLE_ADMIN')) ? ' (' ~ nrOfOpenForumAlerts ~ ')' }}</a></li>
 		{% endfor %}
 	</ol>
 </nav>

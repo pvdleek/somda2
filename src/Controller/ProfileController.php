@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\UserInfo;
 use App\Form\UserMail;
+use App\Generics\RoleGenerics;
 use App\Helpers\EmailHelper;
 use App\Helpers\FlashHelper;
 use App\Helpers\RedirectHelper;
@@ -140,12 +141,12 @@ class ProfileController
         $form = $this->formFactory->create(
             UserMail::class,
             null,
-            ['isModerator' => $this->userHelper->getUser()->hasRole('ROLE_ADMIN')]
+            ['isModerator' => $this->userHelper->getUser()->hasRole(RoleGenerics::ROLE_ADMIN)]
         );
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             if ($form->get('senderOption')->getData() === 'moderator') {
-                if (!$this->userHelper->getUser()->hasRole('ROLE_ADMIN')) {
+                if (!$this->userHelper->getUser()->hasRole(RoleGenerics::ROLE_ADMIN)) {
                     throw new AccessDeniedHttpException();
                 }
                 $from = ['mods@somda.nl', 'Somda moderator'];

@@ -45,11 +45,6 @@ class FeedController
     /**
      * @var int
      */
-    private int $backgroundColor;
-
-    /**
-     * @var int
-     */
     private int $foregroundColor;
 
     /**

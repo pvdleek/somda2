@@ -4,6 +4,7 @@ namespace App\Helpers;
 
 use App\Entity\Block;
 use App\Entity\ForumPostAlert;
+use App\Generics\RoleGenerics;
 use Doctrine\Persistence\ManagerRegistry;
 use Twig\Extension\RuntimeExtensionInterface;
 
@@ -34,7 +35,9 @@ class MenuHelper implements RuntimeExtensionInterface
      */
     public function getNumberOfOpenForumAlerts(): int
     {
-        if ($this->authorizationHelper->getUser() && $this->authorizationHelper->getUser()->hasRole('ROLE_ADMIN')) {
+        if ($this->authorizationHelper->getUser()
+            && $this->authorizationHelper->getUser()->hasRole(RoleGenerics::ROLE_ADMIN)
+        ) {
             $openAlerts = $this->doctrine->getRepository(ForumPostAlert::class)->findBy(['closed' => false]);
             return count($openAlerts);
         }
@@ -53,7 +56,7 @@ class MenuHelper implements RuntimeExtensionInterface
         foreach ($blocks as $block) {
             if (strlen($block['route']) > 0
                 && (is_null($block['role']) || (
-                    !is_null($user) && ($user->hasRole($block['role']) || $user->hasRole('ROLE_ADMIN')))
+                    !is_null($user) && ($user->hasRole($block['role']) || $user->hasRole(RoleGenerics::ROLE_ADMIN)))
                 )
             ) {
                 $allowedBlocks[] = $block;

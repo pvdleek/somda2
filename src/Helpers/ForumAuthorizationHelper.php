@@ -5,6 +5,7 @@ namespace App\Helpers;
 use App\Entity\ForumDiscussion;
 use App\Entity\ForumForum;
 use App\Entity\User;
+use App\Generics\RoleGenerics;
 
 class ForumAuthorizationHelper
 {
@@ -15,7 +16,7 @@ class ForumAuthorizationHelper
      */
     public function mayView(ForumForum $forum, User $user = null): bool
     {
-        if ($forum->type === ForumForum::TYPE_PUBLIC || (!is_null($user) && $user->hasRole('ROLE_ADMIN'))) {
+        if ($forum->type === ForumForum::TYPE_PUBLIC || (!is_null($user) && $user->hasRole(RoleGenerics::ROLE_ADMIN))) {
             return true;
         }
         if (in_array($forum->type, [ForumForum::TYPE_LOGGED_IN, ForumForum::TYPE_ARCHIVE])) {
@@ -37,7 +38,7 @@ class ForumAuthorizationHelper
         if (in_array($forum->type, [ForumForum::TYPE_PUBLIC, ForumForum::TYPE_LOGGED_IN])) {
             return !is_null($user);
         }
-        return in_array($user, $forum->getModerators()) || $user->hasRole('ROLE_ADMIN');
+        return in_array($user, $forum->getModerators()) || $user->hasRole(RoleGenerics::ROLE_ADMIN);
     }
 
     /**
@@ -48,6 +49,6 @@ class ForumAuthorizationHelper
     public function userIsModerator(ForumDiscussion $discussion, User $user = null): bool
     {
         return !is_null($user)
-            && (in_array($user, $discussion->forum->getModerators()) || $user->hasRole('ROLE_ADMIN'));
+            && (in_array($user, $discussion->forum->getModerators()) || $user->hasRole(RoleGenerics::ROLE_ADMIN));
     }
 }

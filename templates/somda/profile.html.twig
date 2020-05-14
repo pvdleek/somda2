@@ -22,7 +22,7 @@
         {% else %}
             <div class="home-panel-title">Profiel van gebruiker "{{ user.username }}"</div>
             <div class="home-panel-content">
-                {% if is_granted('ROLE_ADMIN') %}
+                {% if is_granted(constant('App\\Generics\\RoleGenerics::ROLE_ADMIN')) %}
                     {% if (user.banExpireTimestamp | date('Y-m-d')) > ('now' | date('Y-m-d')) %}
                         <p class="warn">Deze gebruiker is geband tot {{ user.banExpireTimestamp | displayDateTime }} - <a href="{{ path('manage_ban', { 'id': user.id }) }}">Bewerk</a></p>
                     {% elseif user.banExpireTimestamp is not null %}
