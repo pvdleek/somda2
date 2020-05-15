@@ -145,6 +145,7 @@ spot_input_feedback:
   controller: App\Controller\SpotInputController::feedbackAction
 spots:
   path: /spots/
+  methods: [GET]
   controller: App\Controller\SpotController::indexAction
 spots_search:
   path: /spots/{maxYears}/{searchParameters}
@@ -157,9 +158,11 @@ spots_to_train_table:
   controller: App\Controller\SpotController:redirectToTrainTableAction
 my_spots:
   path: /mijn-spots/
+  methods: [GET]
   controller: App\Controller\HomeController::notImplementedAction
 pois:
   path: /spotpunten/
+  methods: [GET]
   controller: App\Controller\HomeController::notImplementedAction
 
 ##########
@@ -167,12 +170,15 @@ pois:
 ##########
 train_compositions:
   path: /matsms/
+  methods: [GET]
   controller: App\Controller\HomeController::notImplementedAction
 ddar_trains:
   path: /ddar/
+  methods: [GET]
   controller: App\Controller\HomeController::notImplementedAction
 materieelnamen:
   path: /materieel-namen/
+  methods: [GET]
   controller: App\Controller\HomeController::notImplementedAction
 
 #########
@@ -303,12 +309,15 @@ feeds:
   controller: App\Controller\FeedController::indexAction
 statistics:
   path: /statistieken/
-  controller: App\Controller\HomeController::notImplementedAction
+  methods: [GET]
+  controller: App\Controller\StatisticsController::indexAction
 help:
   path: /help/
+  methods: [GET]
   controller: App\Controller\HomeController::notImplementedAction
 help_text:
   path: /help/{id}/
+  methods: [GET]
   controller: App\Controller\HomeController::notImplementedAction
 
 ########
@@ -316,6 +325,7 @@ help_text:
 ########
 settings:
   path: /instellingen/
+  methods: [GET]
   controller: App\Controller\SettingsController:indexAction
 profile:
   path: /profiel/
@@ -338,12 +348,15 @@ profile_mail:
 #########
 feed_rss:
   path: /feeds/rss/{id}/
+  methods: [GET]
   defaults: { _controller: Debril\RssAtomBundle\Controller\StreamController::indexAction, 'format': 'rss', 'id': 'spots|special-routes' }
 feed_atom:
   path: /feeds/atom/{id}/
+  methods: [GET]
   defaults: { _controller: Debril\RssAtomBundle\Controller\StreamController::indexAction, 'format': 'atom', 'id': 'spots|special-routes' }
 feed_json:
   path: /feeds/json/{id}/
+  methods: [GET]
   defaults: { _controller: Debril\RssAtomBundle\Controller\StreamController::indexAction, 'format': 'json', 'id': 'spots|special-routes' }
 feed_image:
   path: /feeds/image/{locationName}/
@@ -366,10 +379,12 @@ feed_image_with_start_time:
 ##############
 manage_user:
   path: /beheer-gebruikers/
+  methods: [GET]
   controller: App\Controller\HomeController::notImplementedAction
 
 manage_news:
   path: /beheer-nieuws/
+  methods: [GET]
   controller: App\Controller\ManageNewsController::indexAction
 manage_news_edit:
   path: /beheer-nieuws-item/{id}/
@@ -379,6 +394,7 @@ manage_news_edit:
 
 manage_rail_news:
   path: /beheer-spoor-nieuws/
+  methods: [GET]
   controller: App\Controller\ManageNewsController::indexAction
 manage_rail_news_edit:
   path: /beheer-spoor-nieuws-item/{id}/
@@ -388,6 +404,7 @@ manage_rail_news_edit:
 
 manage_special_routes:
   path: /beheer-bijzonder-ritten/
+  methods: [GET]
   controller: App\Controller\ManageSpecialRoutesController::indexAction
 manage_special_route:
   path: /beheer-bijzondere-rit/{id}/
@@ -397,10 +414,12 @@ manage_special_route:
 
 manage_banners:
   path: /beheer-banners/
+  methods: [GET]
   controller: App\Controller\HomeController::notImplementedAction
 
 manage_train_tables:
   path: /beheer-dienstregelingen/
+  methods: [GET]
   controller: App\Controller\ManageTrainTablesController::manageAction
 manage_train_tables_year:
   path: /beheer-dienstregelingen-invoer/{yearId}/
@@ -420,10 +439,12 @@ manage_train_table:
 
 manage_pois:
   path: /beheer-spotpunten/
+  methods: [GET]
   controller: App\Controller\HomeController::notImplementedAction
 
 manage_bans:
   path: /beheer-bans/
+  methods: [GET]
   controller: App\Controller\ManageUsersController::bansAction
 manage_ban:
   path: /beheer-ban/{id}/
@@ -433,10 +454,12 @@ manage_ban:
 
 manage_ddar_trains:
   path: /beheer-ddar/
+  methods: [GET]
   controller: App\Controller\HomeController::notImplementedAction
 
 manage_train_compositions:
   path: /beheer-materieel-samenstellingen/
+  methods: [GET]
   controller: App\Controller\HomeController::notImplementedAction
 
 manage_route_lists:
@@ -456,19 +479,25 @@ manage_route_list:
 
 #reisplanner:
 #  path: /
+#  methods: [GET]
 #  controller: App\Controller\HomeController::notImplementedAction
 #ongelezen_forum:
 #  path: /
+#  methods: [GET]
 #  controller: App\Controller\HomeController::notImplementedAction
 #favorieten:
 #  path: /
+#  methods: [GET]
 #  controller: App\Controller\HomeController::notImplementedAction
 #forum/zoeken:
 #  path: /
+#  methods: [GET]
 #  controller: App\Controller\HomeController::notImplementedAction
 #shout_archief:
 #  path: /
+#  methods: [GET]
 #  controller: App\Controller\HomeController::notImplementedAction
 #grafisch:
 #  path: /
+#  methods: [GET]
 #  controller: App\Controller\HomeController::notImplementedAction

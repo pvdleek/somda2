@@ -16,5 +16,7 @@ doctrine:
     dql:
       datetime_functions:
         dayofweek: DoctrineExtensions\Query\Mysql\DayOfWeek
+        month: DoctrineExtensions\Query\Mysql\Month
+        year: DoctrineExtensions\Query\Mysql\Year
       string_functions:
         group_concat: DoctrineExtensions\Query\Mysql\GroupConcat
