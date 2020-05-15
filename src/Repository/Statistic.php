@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Statistic as StatisticEntity;
+use App\Model\StatisticBusiest;
 use DateTime;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
@@ -11,10 +12,6 @@ use Exception;
 
 class Statistic extends EntityRepository
 {
-    public const BUSIEST_TYPE_PAGE_VIEWS = 0;
-    public const BUSIEST_TYPE_SPOTS = 1;
-    public const BUSIEST_TYPE_POSTS = 2;
-
     /**
      * @return int
      */
@@ -93,19 +90,20 @@ class Statistic extends EntityRepository
     }
 
     /**
-     * @param int $type
-     * @return array
+     * @param StatisticBusiest $statisticBusiest
      */
-    public function findBusiest(int $type): array
+    public function findBusiest(StatisticBusiest $statisticBusiest): void
     {
         $queryBuilder = $this->getEntityManager()
             ->createQueryBuilder()
             ->select('s.timestamp AS timestamp')
-            ->addSelect('s.' . $this->getBusiestFieldName($type) . ' AS number')
+            ->addSelect('s.' . $this->getBusiestFieldName($statisticBusiest->type) . ' AS number')
             ->from(StatisticEntity::class, 's')
-            ->orderBy('s.' . $this->getBusiestFieldName($type), 'DESC')
+            ->orderBy('s.' . $this->getBusiestFieldName($statisticBusiest->type), 'DESC')
             ->setMaxResults(1);
-        return $queryBuilder->getQuery()->getArrayResult()[0];
+        $result = $queryBuilder->getQuery()->getArrayResult()[0];
+        $statisticBusiest->timestamp = $result['timestamp'];
+        $statisticBusiest->number = $result['number'];
     }
 
     /**
@@ -114,10 +112,10 @@ class Statistic extends EntityRepository
      */
     private function getBusiestFieldName(int $type): string
     {
-        if ($type === self::BUSIEST_TYPE_PAGE_VIEWS) {
+        if ($type === StatisticBusiest::TYPE_PAGE_VIEWS) {
             return 'visitorsTotal';
         }
-        if ($type === self::BUSIEST_TYPE_SPOTS) {
+        if ($type === StatisticBusiest::TYPE_SPOTS) {
             return 'numberOfSpots';
         }
         return 'numberOfPosts';

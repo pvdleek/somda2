@@ -169,7 +169,7 @@ class ForumPostController
             $form->add(
                 ForumPostForm::FIELD_EDIT_AS_MODERATOR,
                 CheckboxType::class,
-                ['label' => 'Bewerken als moderator']
+                [BaseForm::KEY_LABEL => 'Bewerken als moderator']
             );
             $postNrInDiscussion = $this->formHelper->getDoctrine()
                 ->getRepository('App:ForumDiscussion')

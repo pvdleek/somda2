@@ -4,8 +4,8 @@ namespace App\Controller;
 
 use App\Entity\Statistic;
 use App\Helpers\TemplateHelper;
+use App\Model\StatisticBusiest;
 use App\Model\StatisticSummary;
-use App\Repository\Statistic as StatisticRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -56,23 +56,20 @@ class StatisticsController
         $statisticsSummary->startMeasurement = $this->doctrine->getRepository(Statistic::class)->getFirstDate();
         $statisticsSummary->pageViewsTotal = $this->doctrine->getRepository(Statistic::class)->countPageViews();
 
-        $busiestPageViews = $this->doctrine->getRepository(Statistic::class)->findBusiest(
-            StatisticRepository::BUSIEST_TYPE_PAGE_VIEWS
-        );
-        $statisticsSummary->busiestPageViewsTimestamp = $busiestPageViews['timestamp'];
-        $statisticsSummary->busiestPageViews = $busiestPageViews['number'];
+        $busiestPageViews = new StatisticBusiest(StatisticBusiest::TYPE_PAGE_VIEWS);
+        $this->doctrine->getRepository(Statistic::class)->findBusiest($busiestPageViews);
+        $statisticsSummary->busiestPageViewsTimestamp = $busiestPageViews->timestamp;
+        $statisticsSummary->busiestPageViews = $busiestPageViews->number;
 
-        $busiestSpots = $this->doctrine->getRepository(Statistic::class)->findBusiest(
-            StatisticRepository::BUSIEST_TYPE_SPOTS
-        );
-        $statisticsSummary->busiestSpotsTimestamp = $busiestSpots['timestamp'];
-        $statisticsSummary->busiestSpots = $busiestSpots['number'];
+        $busiestSpots = new StatisticBusiest(StatisticBusiest::TYPE_SPOTS);
+        $this->doctrine->getRepository(Statistic::class)->findBusiest($busiestSpots);
+        $statisticsSummary->busiestSpotsTimestamp = $busiestSpots->timestamp;
+        $statisticsSummary->busiestSpots = $busiestSpots->number;
 
-        $busiestPosts = $this->doctrine->getRepository(Statistic::class)->findBusiest(
-            StatisticRepository::BUSIEST_TYPE_POSTS
-        );
-        $statisticsSummary->busiestPostsTimestamp = $busiestPosts['timestamp'];
-        $statisticsSummary->busiestPosts = $busiestPosts['number'];
+        $busiestPosts = new StatisticBusiest(StatisticBusiest::TYPE_POSTS);
+        $this->doctrine->getRepository(Statistic::class)->findBusiest($busiestPosts);
+        $statisticsSummary->busiestPostsTimestamp = $busiestPosts->timestamp;
+        $statisticsSummary->busiestPosts = $busiestPosts->number;
 
         return $statisticsSummary;
     }
