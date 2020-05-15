@@ -67,7 +67,7 @@ class UserInfo
     public ?DateTime $birthDate;
 
     /**
-     * @var int|null
+     * @var string|null
      * @ORM\Column(name="mob_tel", type="bigint", nullable=true)
      * @Assert\Length(
      *     min = 11,
@@ -76,7 +76,7 @@ class UserInfo
      *     maxMessage = "Jouw mobiele nummer moet exact 11 karakters zijn (startend met 316)",
      * )
      */
-    public ?int $mobilePhone;
+    public ?string $mobilePhone;
 
     /**
      * @var string|null

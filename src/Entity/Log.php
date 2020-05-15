@@ -26,10 +26,10 @@ class Log extends Entity
     public DateTime $timestamp;
 
     /**
-     * @var int
+     * @var string
      * @ORM\Column(name="ip", type="bigint", nullable=false)
      */
-    public int $ipAddress;
+    public string $ipAddress;
 
     /**
      * @var string

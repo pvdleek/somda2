@@ -20,10 +20,10 @@ class Shout extends Entity
     protected ?int $id = null;
 
     /**
-     * @var int
+     * @var string
      * @ORM\Column(name="sht_ip", type="bigint", nullable=false)
      */
-    public int $ipAddress;
+    public string $ipAddress;
 
     /**
      * @var DateTime

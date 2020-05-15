@@ -26,38 +26,38 @@ class Statistic extends Entity
     public DateTime $timestamp;
 
     /**
-     * @var int
+     * @var string
      * @ORM\Column(name="uniek", type="bigint", nullable=false)
      */
-    public int $visitorsUnique = 0;
+    public string $visitorsUnique = '0';
 
     /**
-     * @var int
+     * @var string
      * @ORM\Column(name="pageviews", type="bigint", nullable=false)
      */
-    public int $visitorsTotal = 0;
+    public string $visitorsTotal = '0';
 
     /**
-     * @var int
+     * @var string
      * @ORM\Column(name="pageviews_home", type="bigint", nullable=false)
      */
-    public int $visitorsHome = 0;
+    public string $visitorsHome = '0';
 
     /**
-     * @var int
+     * @var string
      * @ORM\Column(name="pageviews_func", type="bigint", nullable=false)
      */
-    public int $visitorsFunctions = 0;
+    public string $visitorsFunctions = '0';
 
     /**
-     * @var int
+     * @var string
      * @ORM\Column(name="spots", type="bigint", nullable=false)
      */
-    public int $numberOfSpots = 0;
+    public string $numberOfSpots = '0';
 
     /**
-     * @var int
+     * @var string
      * @ORM\Column(name="posts", type="bigint", nullable=false)
      */
-    public int $numberOfPosts = 0;
+    public string $numberOfPosts = '0';
 }

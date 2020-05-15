@@ -28,8 +28,8 @@ class StatisticBlock
     public DateTime $date;
 
     /**
-     * @var int
+     * @var string
      * @ORM\Column(name="pageviews", type="bigint", nullable=false)
      */
-    public int $views = 0;
+    public string $views = '0';
 }

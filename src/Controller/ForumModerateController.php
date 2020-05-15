@@ -138,7 +138,7 @@ class ForumModerateController
 
             $newDiscussion->author = $oldestPost->author;
             $newDiscussion->title = $form->get('title')->getData();
-            $newDiscussion->viewed = $discussion1->viewed + $discussion2->viewed;
+            $newDiscussion->viewed = (int)$discussion1->viewed + (int)$discussion2->viewed;
             $this->formHelper->getDoctrine()->getManager()->persist($newDiscussion);
             $this->formHelper->getDoctrine()->getManager()->remove($discussion1);
             $this->formHelper->getDoctrine()->getManager()->remove($discussion2);

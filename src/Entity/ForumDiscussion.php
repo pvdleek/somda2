@@ -26,10 +26,10 @@ class ForumDiscussion extends Entity
     public string $title = '';
 
     /**
-     * @var int
+     * @var string
      * @ORM\Column(name="viewed", type="bigint", nullable=false)
      */
-    public int $viewed = 0;
+    public string $viewed = '0';
 
     /**
      * @var bool

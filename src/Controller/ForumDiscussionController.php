@@ -94,7 +94,7 @@ class ForumDiscussionController
             throw new AccessDeniedHttpException();
         }
 
-        $discussion->viewed = $discussion->viewed + 1;
+        $discussion->viewed = (int)$discussion->viewed + 1;
         $this->formHelper->getDoctrine()->getManager()->flush();
 
         $numberOfPosts = $this->formHelper->getDoctrine()->getRepository(ForumDiscussion::class)->getNumberOfPosts(
