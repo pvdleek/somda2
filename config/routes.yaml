@@ -261,24 +261,31 @@ forum_discussion_post_alerts_close:
   requirements: { id: \d+ }
   controller: App\Controller\ForumPostAlertController:alertsCloseAction
 
-forum_search:
-  path: /forum/zoeken/
-  methods: [GET]
-  controller: App\Controller\ForumController:searchAction
-forum_unread:
-  path: /forum/ongelezen/
-  methods: [GET]
-  controller: App\Controller\ForumController:unreadAction
-forum_mark_read:
-  path: /forum/markeer-als-gelezen/
-  methods: [GET]
-  controller: App\Controller\ForumController:markAsReadAction
-
 forum_post_wiki_check:
   path: /forum/p{id}/{operation}/
   methods: [GET]
   requirements: { id: \d+, operation: 'ok|na' }
   controller: App\Controller\ForumPostWikiController:checkAction
+
+forum_favorites:
+  path: /forum/favorieten/
+  methods: [GET]
+  controller: App\Controller\ForumPostFavoriteController:indexAction
+forum_favorite_toggle:
+  path: /forum/favoriet/{id}/{alerting}/
+  methods: [GET]
+  requirements: { id: \d+, alerting: '0|1' }
+  controller: App\Controller\ForumPostFavoriteController:toggleAction
+forum_favorite_add:
+  path: /forum/favoriet/{id}/toevoegen/
+  methods: [GET]
+  requirements: { id: \d+ }
+  controller: App\Controller\ForumPostFavoriteController:addAction
+forum_favorite_remove:
+  path: /forum/favoriet/{id}/verwijderen/
+  methods: [GET]
+  requirements: { id: \d+ }
+  controller: App\Controller\ForumPostFavoriteController:removeAction
 
 #########
 # Somda #

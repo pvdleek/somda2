@@ -5,7 +5,6 @@
     <a class="somda-button" href="{{ path('forum') }}" title="{{ 'forum.newDiscussion' | trans }}">Terug naar het forum-overzicht</a>
     {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
         <a class="somda-button" href="{{ path('forum_forum_new_discussion', { 'id': forum.id }) }}" title="{{ 'forum.newDiscussion' | trans }}">{{ 'forum.newDiscussion' | trans }}</a>
-        <a class="somda-button" href="{{ path('forum_mark_read') }}" title="{{ 'forum.mark.all' | trans }}">{{ 'forum.mark.all' | trans }}</a>
         <br /><br />
     {% endif %}
 
