@@ -15,6 +15,7 @@ class BaseForm extends AbstractType
     protected const KEY_CLASS = 'class';
     protected const KEY_CONSTRAINTS = 'constraints';
     public const KEY_DATA = 'data';
+    protected const KEY_EXPANDED = 'expanded';
     protected const KEY_FIRST_OPTIONS = 'first_options';
     protected const KEY_FORMAT = 'format';
     protected const KEY_HTML5 = 'html5';

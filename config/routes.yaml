@@ -287,6 +287,11 @@ forum_favorite_remove:
   requirements: { id: \d+ }
   controller: App\Controller\ForumPostFavoriteController:removeAction
 
+forum_search:
+  path: /forum/zoeken/
+  methods: [GET, POST]
+  controller: App\Controller\ForumSearchController::indexAction
+
 #########
 # Somda #
 #########
@@ -493,10 +498,6 @@ manage_route_list:
 #  methods: [GET]
 #  controller: App\Controller\HomeController::notImplementedAction
 #favorieten:
-#  path: /
-#  methods: [GET]
-#  controller: App\Controller\HomeController::notImplementedAction
-#forum/zoeken:
 #  path: /
 #  methods: [GET]
 #  controller: App\Controller\HomeController::notImplementedAction

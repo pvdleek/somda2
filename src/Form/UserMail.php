@@ -27,7 +27,7 @@ class UserMail extends BaseForm
         $builder
             ->add('senderOption', ChoiceType::class, [
                 self::KEY_CHOICES => $senderChoices,
-                self::KEY_DATA=> 'direct',
+                self::KEY_DATA => 'direct',
                 self::KEY_LABEL => 'Kies de afzender',
                 self::KEY_REQUIRED => true,
             ])

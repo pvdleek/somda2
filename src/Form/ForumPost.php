@@ -42,7 +42,7 @@ class ForumPost extends BaseForm
         $builder
             ->add('text', CKEditorType::class, [
                 self::KEY_ATTRIBUTES => [self::KEY_ATTRIBUTES_ROWS => 10, self::KEY_ATTRIBUTES_COLS => 80],
-                self::KEY_DATA=> $data,
+                self::KEY_DATA => $data,
                 self::KEY_LABEL => 'Jouw reactie',
                 self::KEY_REQUIRED => true,
             ])

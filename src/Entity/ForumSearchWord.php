@@ -6,8 +6,11 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table(name="somda_forum_zoeken_woorden", uniqueConstraints={@ORM\UniqueConstraint(name="idx_48035_woord", columns={"woord"})})
- * @ORM\Entity
+ * @ORM\Table(
+ *     name="somda_forum_zoeken_woorden",
+ *     uniqueConstraints={@ORM\UniqueConstraint(name="idx_48035_woord", columns={"woord"})}
+ * )
+ * @ORM\Entity(repositoryClass="App\Repository\ForumSearchWord")
  */
 class ForumSearchWord extends Entity
 {

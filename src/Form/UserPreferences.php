@@ -54,7 +54,7 @@ class UserPreferences extends BaseForm
                     case 'number':
                         $builder->add($setting->key, ChoiceType::class, [
                             self::KEY_CHOICES => array_combine(range(1, (int)$typePart[1]), range(1, (int)$typePart[1])),
-                            self::KEY_DATA=> (int)$value,
+                            self::KEY_DATA => (int)$value,
                             self::KEY_LABEL => $setting->description,
                             self::KEY_MAPPED => false,
                             self::KEY_REQUIRED => true,
@@ -62,7 +62,7 @@ class UserPreferences extends BaseForm
                         break;
                     case 'text':
                         $builder->add($setting->key, TextType::class, [
-                            self::KEY_DATA=> $value,
+                            self::KEY_DATA => $value,
                             self::KEY_LABEL => $setting->description,
                             self::KEY_MAPPED => false,
                             self::KEY_REQUIRED => true,
@@ -70,7 +70,7 @@ class UserPreferences extends BaseForm
                         break;
                     case 'boolean':
                         $builder->add($setting->key, CheckboxType::class, [
-                            self::KEY_DATA=> (int)$value === 1,
+                            self::KEY_DATA => (int)$value === 1,
                             self::KEY_LABEL => $setting->description,
                             self::KEY_MAPPED => false,
                             self::KEY_REQUIRED => true,

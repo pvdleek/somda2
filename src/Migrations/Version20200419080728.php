@@ -66,6 +66,7 @@ final class Version20200419080728 extends AbstractMigration
         $this->addSql('UPDATE `somda_blokken` SET `route` = \'about\' WHERE `blokid` = 57');
         $this->addSql('UPDATE `somda_blokken` SET `route` = \'favorites\' WHERE `blokid` = 59');
         $this->addSql('UPDATE `somda_blokken` SET `route` = \'feeds\' WHERE `blokid` = 60');
+        $this->addSql('UPDATE `somda_blokken` SET `route` = \'forum_search\' WHERE `blokid` = 64');
         $this->addSql(
             'UPDATE `somda_blokken` SET `route` = \'forum_discussion_post_alerts_overview\' WHERE `blokid` = 70'
         );
@@ -77,7 +78,7 @@ final class Version20200419080728 extends AbstractMigration
         $this->addSql('
             UPDATE `somda_blokken`
             SET `route` = \'\'
-            WHERE `blokid` IN (31, 36, 44, 47, 56, 62, 64, 65, 69, 80, 81, 82, 83, 84, 85, 87, 88, 90)
+            WHERE `blokid` IN (31, 36, 44, 47, 56, 62, 65, 69, 80, 81, 82, 83, 84, 85, 87, 88, 90)
         ');
 
         $this->addSql('

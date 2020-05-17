@@ -111,12 +111,19 @@ class ForumPost extends Entity
     private $logs;
 
     /**
+     * @var ForumSearchList[]
+     * @ORM\OneToMany(targetEntity="App\Entity\ForumSearchList", mappedBy="post")
+     */
+    private $searchLists;
+
+    /**
      *
      */
     public function __construct()
     {
         $this->alerts = new ArrayCollection();
         $this->logs = new ArrayCollection();
+        $this->searchLists = new ArrayCollection();
     }
 
     /**
@@ -126,6 +133,7 @@ class ForumPost extends Entity
     public function addAlert(ForumPostAlert $forumPostAlert): ForumPost
     {
         $this->alerts[] = $forumPostAlert;
+        $forumPostAlert->post = $this;
         return $this;
     }
 
@@ -154,5 +162,24 @@ class ForumPost extends Entity
     public function getLogs(): array
     {
         return $this->logs->toArray();
+    }
+
+    /**
+     * @param ForumSearchList $forumSearchList
+     * @return ForumPost
+     */
+    public function addSearchList(ForumSearchList $forumSearchList): ForumPost
+    {
+        $this->searchLists[] = $forumSearchList;
+        $forumSearchList->post = $this;
+        return $this;
+    }
+
+    /**
+     * @return ForumSearchList[]
+     */
+    public function getSearchLists(): array
+    {
+        return $this->searchLists->toArray();
     }
 }
