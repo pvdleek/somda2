@@ -9,6 +9,7 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class Spot extends BaseForm
 {
@@ -26,6 +27,7 @@ class Spot extends BaseForm
                 },
                 self::KEY_CHOICE_VALUE => 'name',
                 self::KEY_CLASS => Location::class,
+                self::KEY_PREFERRED_CHOICES => [$options['defaultLocation']],
                 self::KEY_LABEL => 'Spot-locatie',
                 self::KEY_REQUIRED => true,
             ])
@@ -43,5 +45,13 @@ class Spot extends BaseForm
                 self::KEY_LABEL => 'Spots',
                 self::KEY_REQUIRED => true,
             ]);
+    }
+
+    /**
+     * @param OptionsResolver $resolver
+     */
+    public function configureOptions(OptionsResolver $resolver): void
+    {
+        $resolver->setDefaults(['defaultLocation' => null]);
     }
 }

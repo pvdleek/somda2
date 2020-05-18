@@ -2,13 +2,16 @@
 
 namespace App\Controller;
 
+use App\Entity\Location;
 use App\Entity\Spot;
+use App\Entity\UserPreference;
 use App\Form\Spot as SpotForm;
 use App\Helpers\FormHelper;
 use App\Helpers\SpotInputHelper;
 use App\Helpers\TemplateHelper;
 use App\Helpers\UserHelper;
 use Doctrine\Persistence\ManagerRegistry;
+use Exception;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\RedirectResponse as RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -67,10 +70,15 @@ class SpotInputController
      * @IsGranted("ROLE_SPOTS_NEW")
      * @param Request $request
      * @return RedirectResponse|Response
+     * @throws Exception
      */
     public function indexAction(Request $request)
     {
-        $form = $this->formHelper->getFactory()->create(SpotForm::class);
+        $form = $this->formHelper->getFactory()->create(
+            SpotForm::class,
+            null,
+            ['defaultLocation' => $this->getDefaultLocation()]
+        );
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -97,6 +105,23 @@ class SpotInputController
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Spots invoeren',
             'form' => $form->createView(),
         ]);
+    }
+
+    /**
+     * @return Location|null
+     * @throws Exception
+     */
+    private function getDefaultLocation(): ?Location
+    {
+        $defaultLocation = $this->userHelper->getPreferenceByKey(UserPreference::KEY_DEFAULT_SPOT_LOCATION);
+        if (strlen($defaultLocation->value) > 0) {
+            /**
+             * @var Location $location
+             */
+            $location = $this->doctrine->getRepository(Location::class)->findOneBy(['name' => 'Amf']);
+            return $location;
+        }
+        return null;
     }
 
     /**
