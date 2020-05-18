@@ -54,22 +54,22 @@
 {% block javascripts %}
     <script>
         function searchCharacter(character) {
-            const location = '{{ path('location_search', { 'searchMethod': constant('App\\Controller\\InformationController::SEARCH_METHOD_CHARACTER'), 'search': 'searchCharacter' }) }}';
+            const location = '{{ path('location_search', { 'searchMethod': constant('App\\Controller\\LocationController::SEARCH_METHOD_CHARACTER'), 'search': 'searchCharacter' }) }}';
             document.location = location.replace('searchCharacter', character);
         }
 
         function searchSingle() {
-            const location = '{{ path('location_search', { 'searchMethod': constant('App\\Controller\\InformationController::SEARCH_METHOD_SINGLE'), 'search': 'searchSingle' }) }}';
+            const location = '{{ path('location_search', { 'searchMethod': constant('App\\Controller\\LocationController::SEARCH_METHOD_SINGLE'), 'search': 'searchSingle' }) }}';
             document.location = location.replace('searchSingle', document.getElementById('textSearchSingle').value);
         }
 
         function searchName() {
-            const location = '{{ path('location_search', { 'searchMethod': constant('App\\Controller\\InformationController::SEARCH_METHOD_NAME'), 'search': 'searchName' }) }}';
+            const location = '{{ path('location_search', { 'searchMethod': constant('App\\Controller\\LocationController::SEARCH_METHOD_NAME'), 'search': 'searchName' }) }}';
             document.location = location.replace('searchName', document.getElementById('textSearchName').value);
         }
 
         function searchDescription() {
-            const location = '{{ path('location_search', { 'searchMethod': constant('App\\Controller\\InformationController::SEARCH_METHOD_DESCRIPTION'), 'search': 'searchDescription' }) }}';
+            const location = '{{ path('location_search', { 'searchMethod': constant('App\\Controller\\LocationController::SEARCH_METHOD_DESCRIPTION'), 'search': 'searchDescription' }) }}';
             document.location = location.replace('searchDescription', document.getElementById('textSearchDescription').value);
         }
 

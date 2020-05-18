@@ -48,14 +48,6 @@
         {% include('footer.html.twig') %}
     </div>
 
-{#    <script>#}
-{#        $(function() { $(document).tooltip(); });#}
-{#        if (document.getElementById('plaatsInput'))  { plaatsKlaar('{{ app.request.host }}', document.getElementById('plaatsInput').value, 'plaats'); }#}
-{#        if (document.getElementById('plaats1Input')) { plaatsKlaar('{{ app.request.host }}', document.getElementById('plaats1Input').value, 'plaats1'); }#}
-{#        if (document.getElementById('plaats2Input')) { plaatsKlaar('{{ app.request.host }}', document.getElementById('plaats2Input').value, 'plaats2'); }#}
-{#        if (document.getElementById('plaats3Input')) { plaatsKlaar('{{ app.request.host }}', document.getElementById('plaats3Input').value, 'plaats3'); }#}
-{#$   </script>#}
-
     {% block javascripts %}{% endblock %}
 
     {# If applicable, jump to the requested forum-post #}

@@ -25,7 +25,10 @@
             </tr>
             <tr>
                 <th><label for="location">{{ 'general.input.location' | trans }}</label></th>
-                <td><input id="location" maxlength="8" name="location" size="10" type="text" value="{{ locationName }}" /></td>
+                <td>
+                    <input id="location" maxlength="8" name="location" size="10" type="text" value="{{ locationName }}" />
+                    <span id="location_description"></span>
+                </td>
             </tr>
             <tr>
                 <th><label for="startTime">{{ 'passingRoutes.input.timeRange' | trans | raw }}</label></th>
@@ -68,6 +71,36 @@
 
 {% block javascripts %}
     <script>
+        $(document).ready(function() {
+            $('#location').autocomplete({
+                source: function(request, response) {
+                    $.ajax({
+                        url: '{{ path('location_json', { 'search': '1234' }) }}'.replace('1234', request.term),
+                        dataType: 'json',
+                        success: function(data) {
+                            response(data);
+                        }
+                    });
+                },
+                minLength: 2,
+                select: function (event, ui) {
+                    $('#location_description').html(ui.item.description);
+                }
+            }).on('change', function () {
+                $.ajax({
+                    url: '{{ path('location_json', { 'search': '1234' }) }}'.replace('1234', $(this).val()),
+                    dataType: 'json',
+                    success: function(data) {
+                        if (data.length === 1) {
+                            $('#location_description').html(data[0].description);
+                        } else {
+                            $('#location_description').html('Locatie niet gevonden');
+                        }
+                    },
+                });
+            });
+        });
+
         function searchPassingRoutes() {
             let location = '{{ path('passing_routes_search', { 'trainTableIndexNumber': 9999, 'locationName': 'locationName', 'dayNumber': 1234, 'startTime': 'startTime', 'endTime': 'endTime' }) }}';
             location = location.replace('9999', document.getElementById('trainTableIndex').value);

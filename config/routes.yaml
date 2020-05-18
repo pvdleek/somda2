@@ -83,18 +83,22 @@ news_text:
 ###############
 # Information #
 ###############
+location:
+  path: /verkortingen/
+  methods: [GET]
+  controller: App\Controller\LocationController:indexAction
+location_search:
+  path: /verkortingen/{searchMethod}/{search}/
+  methods: [GET]
+  controller: App\Controller\LocationController:indexAction
+location_json:
+  path: /verkortingen-zoeken/{search}/
+  methods: [GET]
+  controller: App\Controller\LocationController:jsonAction
 jargon:
   path: /jargon/
   methods: [GET]
   controller: App\Controller\InformationController::jargonAction
-location:
-  path: /verkortingen/
-  methods: [GET]
-  controller: App\Controller\InformationController:locationsAction
-location_search:
-  path: /verkortingen/{searchMethod}/{search}/
-  methods: [GET]
-  controller: App\Controller\InformationController:locationsAction
 uic:
   path: /uic/
   methods: [GET]
