@@ -113,15 +113,15 @@ class SpotInputController
      */
     private function getDefaultLocation(): ?Location
     {
+        $location = null;
         $defaultLocation = $this->userHelper->getPreferenceByKey(UserPreference::KEY_DEFAULT_SPOT_LOCATION);
         if (strlen($defaultLocation->value) > 0) {
             /**
              * @var Location $location
              */
             $location = $this->doctrine->getRepository(Location::class)->findOneBy(['name' => 'Amf']);
-            return $location;
         }
-        return null;
+        return $location;
     }
 
     /**
