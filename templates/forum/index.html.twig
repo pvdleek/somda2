@@ -3,12 +3,8 @@
 {% block content %}
     <br />
     <a class="somda-button" href="{{ path('forum_search') }}" title="{{ 'forum.search' | trans }}">{{ 'forum.search' | trans }}</a>
-    {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-        <a class="somda-button" href="{{ path('forum_mark_read') }}" title="{{ 'forum.mark.all' | trans }}">{{ 'forum.mark.all' | trans }}</a>
-        <a class="somda-button" href="{{ path('forum_unread') }}" title="{{ 'forum.unread' | trans }}">{{ 'forum.unread' | trans }}</a>
-    {% endif %}
-
-    <br /><br />
+    <br />
+    <br />
 
     <table class="design">
         <tr><th colspan="2">{{ 'forum.category' | trans }}</th><th>{{ 'forum.number.discussions' | trans }}</th></tr>

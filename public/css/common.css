@@ -522,3 +522,22 @@ span.special-route-image {
 	grid-gap: 0.4rem;
 	grid-template-columns: 1fr 1fr 1fr;
 }
+
+/************/
+/*** Help ***/
+/************/
+.help-index {
+	margin: 1rem;
+}
+.help-index-title {
+	font-weight: bold;
+	margin-bottom: 0.5rem
+}
+.help-index-items {
+	display: grid;
+	grid-gap: 0.5rem;
+	grid-template-columns: repeat(4, 1fr);
+}
+.help-index-item:before {
+	content: '• ';
+}

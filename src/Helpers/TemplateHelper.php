@@ -4,6 +4,8 @@ namespace App\Helpers;
 
 use App\Entity\Banner;
 use App\Entity\BannerView;
+use App\Entity\Block;
+use App\Entity\BlockHelp;
 use App\Entity\RailNews;
 use App\Form\RailNews as RailNewsForm;
 use DateTime;
@@ -131,6 +133,25 @@ class TemplateHelper
             'imageNumber' => random_int(1, 11),
             'menuStructure' => $this->menuHelper->getMenuStructure(),
             'nrOfOpenForumAlerts' => $this->menuHelper->getNumberOfOpenForumAlerts(),
+            'blockHelp' => $this->getBlockHelp(),
         ]);
+    }
+
+    /**
+     * @return BlockHelp|null
+     */
+    private function getBlockHelp(): ?BlockHelp
+    {
+        /**
+         * @var Block $block
+         */
+        $block = $this->doctrine->getRepository(Block::class)->findOneBy(
+            ['route' => $this->requestStack->getCurrentRequest()->get('_route')]
+        );
+        if (!is_null($block) && !is_null($block->blockHelp)) {
+            return $block->blockHelp;
+        }
+
+        return null;
     }
 }

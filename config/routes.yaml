@@ -326,11 +326,13 @@ statistics:
 help:
   path: /help/
   methods: [GET]
-  controller: App\Controller\HomeController::notImplementedAction
+  defaults: { 'id': 1 }
+  controller: App\Controller\HelpController::indexAction
 help_text:
   path: /help/{id}/
   methods: [GET]
-  controller: App\Controller\HomeController::notImplementedAction
+  requirements: { id: \d+ }
+  controller: App\Controller\HelpController::indexAction
 
 ########
 # User #

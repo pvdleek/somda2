@@ -50,6 +50,12 @@ class Block extends Entity
     public bool $doSeparator = false;
 
     /**
+     * @var BlockHelp|null
+     * @ORM\OneToOne(targetEntity="App\Entity\BlockHelp", mappedBy="block")
+     */
+    public ?BlockHelp $blockHelp;
+
+    /**
      * @var Block
      * @ORM\ManyToOne(targetEntity="App\Entity\Block", inversedBy="children")
      * @ORM\JoinColumn(name="parent_block", referencedColumnName="blokid")

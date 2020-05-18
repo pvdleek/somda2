@@ -43,6 +43,7 @@
     <div id="wrap">
         {% include('header.html.twig') %}
         {% include 'partials/errorMessages.html.twig' %}
+        {% if blockHelp is not null %}<p class="info">{{ blockHelp.text | raw }}</p>{% endif %}
         {% block content %}{% endblock %}
         {% include('footer.html.twig') %}
     </div>
