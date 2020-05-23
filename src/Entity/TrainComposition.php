@@ -3,14 +3,17 @@
 namespace App\Entity;
 
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="somda_mat_sms", indexes={@ORM\Index(name="idx_48145_typeid", columns={"typeid"})})
  * @ORM\Entity
  */
-class TrainComposition extends Entity
+class TrainComposition extends TrainCompositionBase
 {
+    public const NUMBER_OF_CARS = 13;
+
     /**
      * @var int
      * @ORM\Column(name="matsmsid", type="bigint", nullable=false)
@@ -42,7 +45,7 @@ class TrainComposition extends Entity
      * @var string|null
      * @ORM\Column(name="bak3", type="string", length=15, nullable=true)
      */
-    public $car3;
+    public ?string $car3;
 
     /**
      * @var string|null
@@ -117,14 +120,73 @@ class TrainComposition extends Entity
     public ?string $note;
 
     /**
-     * @var string
-     * @ORM\Column(name="extra", type="string", length=255, nullable=false)
+     * @var string|null
+     * @ORM\Column(name="extra", type="string", length=255, nullable=true)
      */
-    public string $extra = '';
+    public ?string $extra;
 
     /**
      * @var bool
      * @ORM\Column(name="index_regel", type="boolean", nullable=false)
      */
     public bool $indexLine = false;
+
+    /**
+     * @var TrainCompositionProposition[]
+     * @ORM\OneToMany(targetEntity="App\Entity\TrainCompositionProposition", mappedBy="composition")
+     */
+    private $propositions;
+
+    /**
+     *
+     */
+    public function __construct()
+    {
+        $this->propositions = new ArrayCollection();
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $id
+     * @return static
+     */
+    public function setId(int $id)
+    {
+        $this->id = $id;
+        return $this;
+    }
+
+    /**
+     * @return TrainCompositionType
+     */
+    public function getType(): TrainCompositionType
+    {
+        return $this->type;
+    }
+
+    /**
+     * @param TrainCompositionProposition $trainCompositionProposition
+     * @return TrainComposition
+     */
+    public function addProposition(TrainCompositionProposition $trainCompositionProposition): TrainComposition
+    {
+        $this->propositions[] = $trainCompositionProposition;
+        $trainCompositionProposition->composition = $this;
+        return $this;
+    }
+
+    /**
+     * @return TrainCompositionProposition[]
+     */
+    public function getPropositions(): array
+    {
+        return $this->propositions->toArray();
+    }
 }

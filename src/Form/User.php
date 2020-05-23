@@ -25,12 +25,12 @@ class User extends BaseForm
     {
         $builder
             ->add(self::FIELD_EMAIL, TextType::class, [
-                self::KEY_ATTRIBUTES => ['maxlength' => 255],
+                self::KEY_ATTRIBUTES => [self::KEY_ATTRIBUTES_MAX_LENGTH => 255],
                 self::KEY_LABEL => 'Geef jouw e-mailadres',
                 self::KEY_REQUIRED => true,
             ])
             ->add(self::FIELD_USERNAME, TextType::class, [
-                self::KEY_ATTRIBUTES => ['maxlength' => 10],
+                self::KEY_ATTRIBUTES => [self::KEY_ATTRIBUTES_MAX_LENGTH => 10],
                 self::KEY_CONSTRAINTS => [
                     new Length([
                         ConstraintGenerics::MAX => 10,

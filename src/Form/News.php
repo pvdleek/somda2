@@ -21,7 +21,7 @@ class News extends BaseForm
     {
         $builder
             ->add('title', TextType::class, [
-                self::KEY_ATTRIBUTES => ['maxlength' => 255],
+                self::KEY_ATTRIBUTES => [self::KEY_ATTRIBUTES_MAX_LENGTH => 255],
                 self::KEY_LABEL => 'Titel van het bericht',
                 self::KEY_REQUIRED => true,
             ])

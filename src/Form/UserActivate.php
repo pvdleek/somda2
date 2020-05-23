@@ -22,7 +22,7 @@ class UserActivate extends BaseForm
     {
         $builder
             ->add(self::FIELD_KEY, TextType::class, [
-                self::KEY_ATTRIBUTES => ['maxlength' => 32],
+                self::KEY_ATTRIBUTES => [self::KEY_ATTRIBUTES_MAX_LENGTH => 32],
                 self::KEY_CONSTRAINTS => [
                     new Length([
                         ConstraintGenerics::MAX => 32,

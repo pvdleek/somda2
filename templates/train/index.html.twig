@@ -1,0 +1,108 @@
+{% extends('base.html.twig') %}
+
+{% block content %}
+    <br />
+    <table class="design">
+        <tr>
+            <th><label for="type_id">Kies een materieel-type</label></th>
+            <td>
+                <select id="type_id" name="type_id">
+                    {% for type in types %}
+                        <option {{ selectedType.id == type.id ? 'selected="selected" ' }}value="{{ type.id }}">{{ type.description }}</option>
+                    {% endfor %}
+                </select>
+            </td>
+        </tr><tr>
+            <th><label for="search">Of zoek op baknummer</label></th>
+            <td><input id="search" name="search" type="text" /></td>
+        </tr><tr>
+            <th>&nbsp;</th>
+            <td><a class="somda-button" href="#" id="searchSpots" onclick="searchTrains(); return false;" title="">{{ 'general.button.search' | trans }}</a></td>
+        </tr>
+    </table>
+    <br />
+
+    {% if selectedType is not null and trains | length > 0 %}
+        <div class="home-panel separate-panel">
+            <div class="home-panel-title">{{ selectedType.description }}</div>
+            <div class="home-panel-content">
+                <table class="design">
+                    <tr>
+                        <th>&nbsp;</th>
+                        <th>Laatst bijgewerkt</th>
+                        {% for car in 1..constant('App\\Entity\\TrainComposition::NUMBER_OF_CARS') %}{% if selectedType.car(car) is not null %}<th>{{ selectedType.car(car) }}</th>{% endif %}{% endfor %}
+                        <th>Opmerkingen</th>
+                        <th>Extra</th>
+                    </tr>
+                    {% for train in trains %}
+                        <tr>
+                            {% if train.indexLine %}
+                                {% if is_granted('ROLE_ADMIN_TRAIN_COMPOSITIONS') %}
+                                    <td><a href="{{ path('train_composition_edit', { 'id': train.id }) }}"><i class="fas fa-pen"></i></a></td>
+                                {% else %}
+                                    <td>&nbsp;</td>
+                                {% endif %}
+                                <th>&nbsp;</th>
+                                {% for car in 1..constant('App\\Entity\\TrainComposition::NUMBER_OF_CARS') %}{% if selectedType.car(car) is not null %}<th>{{ train.car(car) | raw }}</th>{% endif %}{% endfor %}
+                                <th>{{ train.note }}</th>
+                                <th>{{ train.extra }}</th>
+                            {% else %}
+                                <td><a href="{{ path('train_composition_edit', { 'id': train.id }) }}"><i class="fas fa-pen"></i></a></td>
+                                <td>{{ train.lastUpdateTimestamp is null ? 'Onbekend' : (train.lastUpdateTimestamp | displayDateTime) }}</td>
+                                {% for car in 1..constant('App\\Entity\\TrainComposition::NUMBER_OF_CARS') %}{% if selectedType.car(car) is not null %}<td>{{ train.car(car) | raw }}</td>{% endif %}{% endfor %}
+                                <td>{{ train.note }}</td>
+                                <td>{{ train.extra }}</td>
+                            {% endif %}
+                        </tr>
+                        {% if is_granted('ROLE_ADMIN_TRAIN_COMPOSITIONS') %}
+                            {% for proposition in train.propositions %}
+                                <tr class="proposition-row" id="proposition_row_{{ train.id }}_{{ proposition.user.id }}">
+                                    <td>
+                                        <a href="#" onclick="checkProposition({{ train.id }}, {{ proposition.user.id }}, true); return false;">Goed</a>
+                                        <br /><a href="#" onclick="checkProposition({{ train.id }}, {{ proposition.user.id }}, false); return false;">Fout</a>
+                                    </td>
+                                    <td>{{ proposition.timestamp | displayDateTime(true, true) }}<br />{{ proposition.user.id | displayUser(proposition.user.username) | raw }}</td>
+                                    {% for car in 1..constant('App\\Entity\\TrainComposition::NUMBER_OF_CARS') %}
+                                        {% if selectedType.car(car) is not null %}
+                                            <td{% if train.car(car) != proposition.car(car) %} class="changed"{% endif %}>{{ proposition.car(car) | raw }}</td>
+                                        {% endif %}
+                                    {% endfor %}
+                                    <td{% if train.note != proposition.note %} class="changed"{% endif %}>{{ proposition.note }}</td>
+                                    <td>&nbsp;</td>
+                                </tr>
+                            {% endfor %}
+                        {% endif %}
+                    {% else %}
+                        <tr><td colspan="17">Er is geen materieel gevonden met de ingestelde filters</td></tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        function searchTrains()
+        {
+            document.location = '{{ path('train_compositions_type', { 'typeId': 1234 }) }}'.replace('1234', $('#type_id').val());
+        }
+
+        /**
+         * @param {int} trainId
+         * @param {int} userId
+         * @param {boolean} approved
+         */
+        function checkProposition(trainId, userId, approved)
+        {
+            $.ajax({
+                url: '{{ path('train_composition_check', { 'trainId': '1234', 'userId': '5678', 'approved': 0 }) }}'.replace('0', approved ? '1' : '0').replace('1234', trainId).replace('5678', userId),
+            });
+            if (approved) {
+                $('#proposition_row_' + trainId + '_' + userId).html('<td colspan="17">Voorstel goedgekeurd</td>');
+            } else {
+                $('#proposition_row_' + trainId + '_' + userId).html('<td colspan="17">Voorstel afgekeurd</td>');
+            }
+        }
+    </script>
+{% endblock %}

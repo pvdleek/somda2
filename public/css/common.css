@@ -168,13 +168,6 @@ table.design td {
 	padding: 5px;
 	vertical-align: top;
 }
-table.design td.explicit {
-	background-color: #FF9900;
-	color: #FFFFFF;
-}
-table.design td.disc_spacer {
-	background-color: #FFFFFF;
-}
 
 /**************/
 /*** Alerts ***/
@@ -540,4 +533,22 @@ span.special-route-image {
 }
 .help-index-item:before {
 	content: '• ';
+}
+
+/**************************/
+/*** Train compositions ***/
+/**************************/
+table.design tr.proposition-row td {
+	background-color: #A46A1F;
+	color: #FFFFFF;
+}
+table.design tr.proposition-row a {
+	color: #FFFFFF;
+	text-decoration: underline;
+}
+table.design tr.proposition-row a:hover {
+	text-decoration: none;
+}
+table.design tr.proposition-row td.changed {
+	background-color: #FF9900;
 }

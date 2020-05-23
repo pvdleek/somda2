@@ -173,9 +173,24 @@ pois:
 # Trains #
 ##########
 train_compositions:
-  path: /matsms/
+  path: /materieel-samenstellingen/
   methods: [GET]
-  controller: App\Controller\HomeController::notImplementedAction
+  controller: App\Controller\TrainController::indexAction
+train_compositions_type:
+  path: /materieel-samenstellingen/t{typeId}/
+  methods: [GET]
+  requirements: { typeId: \d+ }
+  controller: App\Controller\TrainController::indexAction
+train_composition_edit:
+  path: /materieel-samenstelling/bewerken/{id}/
+  methods: [GET, POST]
+  requirements: { id: \d+ }
+  controller: App\Controller\TrainController::editAction
+train_composition_check:
+  path: /materieel-samenstelling/controleren/{trainId}/{userId}/{approved}/
+  methods: [GET, POST]
+  requirements: { trainId: \d+, userId: \d+, approved: '0|1' }
+  controller: App\Controller\TrainController::checkAction
 ddar_trains:
   path: /ddar/
   methods: [GET]

@@ -101,4 +101,13 @@ class TrainCompositionType extends Entity
      * @ORM\Column(name="bak13", type="string", length=25, nullable=true)
      */
     public ?string $car13;
+
+    /**
+     * @param int $carNumber
+     * @return string|null
+     */
+    public function getCar(int $carNumber): ?string
+    {
+        return $this->{'car' . $carNumber};
+    }
 }

@@ -38,7 +38,7 @@ class SpecialRoute extends BaseForm
                 self::KEY_WIDGET => 'single_text',
             ])
             ->add('title', TextType::class, [
-                self::KEY_ATTRIBUTES => ['maxlength' => 255],
+                self::KEY_ATTRIBUTES => [self::KEY_ATTRIBUTES_MAX_LENGTH => 255],
                 self::KEY_LABEL => 'Titel',
                 self::KEY_REQUIRED => true,
             ])

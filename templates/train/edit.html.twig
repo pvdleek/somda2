@@ -1,0 +1,26 @@
+{% extends('base.html.twig') %}
+
+{% block content %}
+    <div class="home-panel separate-panel">
+        <div class="home-panel-title">Beheer materieel-samenstelling van type "{{ trainComposition.type.description }}"</div>
+        <div class="home-panel-content panel-no-background">
+            {{ form_start(form, { 'attr': { 'id': 'composition_form' } }) }}
+            <table class="design">
+                {% for car in 1..constant('App\\Entity\\TrainComposition::NUMBER_OF_CARS') %}
+                    {% if attribute(form, 'car' ~ car) is defined %}{{ form_row(attribute(form, 'car' ~ car)) }}{% endif %}
+                {% endfor %}
+                {{ form_row(form.note) }}
+                {% if form.extra is defined %}{{ form_row(form.extra) }}{% endif %}
+                {% if form.indexLine is defined %}{{ form_row(form.indexLine) }}{% endif %}
+                <tr>
+                    <td>&nbsp;</td>
+                    <td>
+                        <a class="somda-button" href="#" onclick="$('#composition_form').submit(); return false;">Opslaan</a>
+                        <a class="somda-button" href="{{ path('train_compositions_type', { 'typeId': trainComposition.type.id }) }}">Terug naar het overzicht</a>
+                    </td>
+                </tr>
+            </table>
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}

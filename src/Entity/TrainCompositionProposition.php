@@ -9,11 +9,11 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="somda_mat_changes")
  * @ORM\Entity
  */
-class TrainCompositionProposition
+class TrainCompositionProposition extends TrainCompositionBase
 {
     /**
      * @var TrainComposition
-     * @ORM\ManyToOne(targetEntity="App\Entity\TrainComposition")
+     * @ORM\ManyToOne(targetEntity="App\Entity\TrainComposition", inversedBy="propositions")
      * @ORM\JoinColumn(name="matsmsid", referencedColumnName="matsmsid")
      * @ORM\Id
      */
@@ -116,4 +116,34 @@ class TrainCompositionProposition
      * @ORM\Column(name="opmerkingen", type="string", length=255, nullable=true)
      */
     public ?string $note;
+
+    /**
+     * @param TrainComposition $trainComposition
+     */
+    public function setFromTrainComposition(TrainComposition $trainComposition): void
+    {
+        $this->composition = $trainComposition;
+        $this->car1 = $trainComposition->car1;
+        $this->car2 = $trainComposition->car2;
+        $this->car3 = $trainComposition->car3;
+        $this->car4 = $trainComposition->car4;
+        $this->car5 = $trainComposition->car5;
+        $this->car6 = $trainComposition->car6;
+        $this->car7 = $trainComposition->car7;
+        $this->car8 = $trainComposition->car8;
+        $this->car9 = $trainComposition->car9;
+        $this->car10 = $trainComposition->car10;
+        $this->car11 = $trainComposition->car11;
+        $this->car12 = $trainComposition->car11;
+        $this->car13 = $trainComposition->car11;
+        $this->note = $trainComposition->note;
+    }
+
+    /**
+     * @return TrainCompositionType
+     */
+    public function getType(): TrainCompositionType
+    {
+        return $this->composition->getType();
+    }
 }

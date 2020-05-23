@@ -79,6 +79,14 @@ class FormHelper
     }
 
     /**
+     * @return RedirectHelper
+     */
+    public function getRedirectHelper(): RedirectHelper
+    {
+        return $this->redirectHelper;
+    }
+
+    /**
      * @param string $flashMessage
      * @param string $route
      * @param array $routeParameters

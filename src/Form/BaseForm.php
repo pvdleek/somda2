@@ -7,8 +7,9 @@ use Symfony\Component\Form\AbstractType;
 class BaseForm extends AbstractType
 {
     protected const KEY_ATTRIBUTES = 'attr';
-    protected const KEY_ATTRIBUTES_ROWS = 'rows';
     protected const KEY_ATTRIBUTES_COLS = 'cols';
+    protected const KEY_ATTRIBUTES_MAX_LENGTH = 'maxlength';
+    protected const KEY_ATTRIBUTES_ROWS = 'rows';
     protected const KEY_CHOICE_LABEL = 'choice_label';
     protected const KEY_CHOICE_VALUE = 'choice_value';
     protected const KEY_CHOICES = 'choices';
