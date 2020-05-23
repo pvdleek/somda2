@@ -154,23 +154,23 @@ class TrainController
      */
     private function editAsUser(Request $request, TrainComposition $trainComposition)
     {
-        $trainCompositionProposition = $this->formHelper
+        $trainProposition = $this->formHelper
             ->getDoctrine()
             ->getRepository(TrainCompositionProposition::class)
             ->findOneBy(['composition' => $trainComposition, 'user' => $this->userHelper->getUser()]);
-        if (is_null($trainCompositionProposition)) {
-            $trainCompositionProposition = new TrainCompositionProposition();
-            $trainCompositionProposition->setFromTrainComposition($trainComposition);
-            $trainCompositionProposition->user = $this->userHelper->getUser();
+        if (is_null($trainProposition)) {
+            $trainProposition = new TrainCompositionProposition();
+            $trainProposition->setFromTrainComposition($trainComposition);
+            $trainProposition->user = $this->userHelper->getUser();
         }
 
-        $trainCompositionProposition->timestamp = new DateTime();
+        $trainProposition->timestamp = new DateTime();
 
-        $form = $this->formHelper->getFactory()->create(TrainCompositionForm::class, $trainCompositionProposition);
+        $form = $this->formHelper->getFactory()->create(TrainCompositionForm::class, $trainProposition);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->formHelper->getDoctrine()->getManager()->persist($trainCompositionProposition);
-            $trainComposition->addProposition($trainCompositionProposition);
+            $this->formHelper->getDoctrine()->getManager()->persist($trainProposition);
+            $trainComposition->addProposition($trainProposition);
 
             return $this->formHelper->finishFormHandling(
                 'Je voorstel is ingediend. Na goedkeuring door 1 van de beheerders wordt het overzicht aangepast',
@@ -196,7 +196,7 @@ class TrainController
     {
         /**
          * @var TrainComposition $trainComposition
-         * @var TrainCompositionProposition $trainCompositionProposition
+         * @var TrainCompositionProposition $trainProposition
          */
         $trainComposition = $this->formHelper->getDoctrine()->getRepository(TrainComposition::class)->find($trainId);
         if (is_null($trainComposition)) {
@@ -208,27 +208,27 @@ class TrainController
             throw new AccessDeniedHttpException();
         }
 
-        $trainCompositionProposition = $this->formHelper
+        $trainProposition = $this->formHelper
             ->getDoctrine()
             ->getRepository(TrainCompositionProposition::class)
             ->findOneBy(['composition' => $trainComposition, 'user' => $user]);
-        if (is_null($trainCompositionProposition)) {
+        if (is_null($trainProposition)) {
             throw new AccessDeniedHttpException();
         }
 
         if ($approved === 1) {
             for ($car = 1; $car <= TrainComposition::NUMBER_OF_CARS; ++$car) {
-                $trainComposition->{'car' . $car} = $trainCompositionProposition->{'car' . $car};
+                $trainComposition->{'car' . $car} = $trainProposition->{'car' . $car};
             }
-            $trainComposition->note = $trainCompositionProposition->note;
+            $trainComposition->note = $trainProposition->note;
 
-            $this->formHelper->getDoctrine()->getManager()->remove($trainCompositionProposition);
+            $this->formHelper->getDoctrine()->getManager()->remove($trainProposition);
             $this->formHelper->getDoctrine()->getManager()->flush();
 
             return new JsonResponse();
         }
 
-        $this->formHelper->getDoctrine()->getManager()->remove($trainCompositionProposition);
+        $this->formHelper->getDoctrine()->getManager()->remove($trainProposition);
         $this->formHelper->getDoctrine()->getManager()->flush();
 
         return new JsonResponse();

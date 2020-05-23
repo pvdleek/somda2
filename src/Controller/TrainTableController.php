@@ -55,23 +55,23 @@ class TrainTableController
 
     /**
      * @IsGranted("ROLE_TRAINTABLE")
-     * @param int|null $trainTableIndexNumber
+     * @param int|null $trainTableYearId
      * @param string|null $routeNumber
      * @return Response
      * @throws Exception
      */
-    public function indexAction(int $trainTableIndexNumber = null, string $routeNumber = null): Response
+    public function indexAction(int $trainTableYearId = null, string $routeNumber = null): Response
     {
         $submit = false;
 
-        if (is_null($trainTableIndexNumber)) {
-            $trainTableIndexNumber = $this->doctrine
+        if (is_null($trainTableYearId)) {
+            $trainTableYearId = $this->doctrine
                 ->getRepository(TrainTableYear::class)
                 ->findTrainTableYearByDate(new DateTime())
                 ->getId();
         } else {
             $submit = true;
-            $this->trainTableHelper->setTrainTableYear($trainTableIndexNumber);
+            $this->trainTableHelper->setTrainTableYear($trainTableYearId);
             $this->trainTableHelper->setRoute($routeNumber);
         }
 
@@ -84,7 +84,7 @@ class TrainTableController
         return $this->templateHelper->render('trainTable/index.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Dienstregeling van een trein',
             'trainTableIndices' => $this->doctrine->getRepository(TrainTableYear::class)->findAll(),
-            'trainTableIndexNumber' => $trainTableIndexNumber,
+            'trainTableIndexNumber' => $trainTableYearId,
             'routeNumber' => $routeNumber,
             'trainTableLines' => $trainTableLines,
             'routePredictions' => $routePredictions,
@@ -93,7 +93,7 @@ class TrainTableController
 
     /**
      * @IsGranted("ROLE_PASSING_ROUTES")
-     * @param int|null $trainTableIndexNumber
+     * @param int|null $trainTableYearId
      * @param string|null $locationName
      * @param int|null $dayNumber
      * @param string|null $startTime
@@ -102,20 +102,20 @@ class TrainTableController
      * @throws Exception
      */
     public function passingRoutesAction(
-        int $trainTableIndexNumber = null,
+        int $trainTableYearId = null,
         string $locationName = null,
         int $dayNumber = null,
         string $startTime = null,
         string $endTime = null
     ): Response {
         $passingRoutes = [];
-        if (is_null($trainTableIndexNumber)) {
-            $trainTableIndexNumber = $this->doctrine
+        if (is_null($trainTableYearId)) {
+            $trainTableYearId = $this->doctrine
                 ->getRepository(TrainTableYear::class)
                 ->findTrainTableYearByDate(new DateTime())
                 ->getId();
         } else {
-            $this->trainTableHelper->setTrainTableYear($trainTableIndexNumber);
+            $this->trainTableHelper->setTrainTableYear($trainTableYearId);
             $this->trainTableHelper->setLocation($locationName);
             $passingRoutes = $this->trainTableHelper->getPassingRoutes($dayNumber, $startTime, $endTime);
         }
@@ -126,7 +126,7 @@ class TrainTableController
         return $this->templateHelper->render('trainTable/passingRoutes.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Doorkomststaat',
             'trainTableIndices' => $this->doctrine->getRepository(TrainTableYear::class)->findAll(),
-            'trainTableIndexNumber' => $trainTableIndexNumber,
+            'trainTableIndexNumber' => $trainTableYearId,
             'trainTableIndex' => $this->trainTableHelper->getTrainTableYear(),
             'locationName' => $locationName,
             'dayNumber' => $dayNumber,

@@ -66,20 +66,20 @@ class UpdateLocationsCommand extends Command implements ScheduledJobInterface
      */
     protected function execute(InputInterface $input = null, OutputInterface $output = null): int
     {
-        $ch = curl_init();
+        $curl = curl_init();
 
-        curl_setopt($ch, CURLOPT_URL, 'https://gateway.apiportal.ns.nl/reisinformatie-api/api/v2/stations');
-        curl_setopt($ch, CURLOPT_POST, 0);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Ocp-Apim-Subscription-Key:' . $_ENV['NS_API_PRIMARY_KEY']]);
+        curl_setopt($curl, CURLOPT_URL, 'https://gateway.apiportal.ns.nl/reisinformatie-api/api/v2/stations');
+        curl_setopt($curl, CURLOPT_POST, 0);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl, CURLOPT_HTTPHEADER, ['Ocp-Apim-Subscription-Key:' . $_ENV['NS_API_PRIMARY_KEY']]);
 
-        $result = json_decode(curl_exec($ch), true);
-        curl_close($ch);
+        $result = json_decode(curl_exec($curl), true);
+        curl_close($curl);
 
         /**
-         * @var LocationCategory $noLongerValidCategory
+         * @var LocationCategory $notValidCategory
          */
-        $noLongerValidCategory = $this->doctrine->getRepository(LocationCategory::class)->find(
+        $notValidCategory = $this->doctrine->getRepository(LocationCategory::class)->find(
             LocationCategory::NO_LONGER_VALID_ID
         );
 
@@ -89,8 +89,7 @@ class UpdateLocationsCommand extends Command implements ScheduledJobInterface
             );
             if (is_null($category)) {
                 $category = new LocationCategory();
-                $category->code = $station['land'];
-                $category->name = $station['land'];
+                $category->code = $category->name = $station['land'];
 
                 $this->doctrine->getManager()->persist($category);
             }
@@ -112,7 +111,7 @@ class UpdateLocationsCommand extends Command implements ScheduledJobInterface
             $location->description = $station['namen']['lang'];
 
             if (isset($station['eindDatum']) && new DateTime($station['eindDatum']) < new DateTime()) {
-                $location->category = $noLongerValidCategory;
+                $location->category = $notValidCategory;
             }
 
             $this->doctrine->getManager()->flush();

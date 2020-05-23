@@ -85,22 +85,22 @@ class ManageTrainTablesController
         $routes = [];
 
         /**
-         * @var TrainTableYear $selectedTrainTableYear
+         * @var TrainTableYear $trainTableYear
          * @var RouteList $selectedRouteList
          */
         if (is_null($yearId)) {
-            $selectedTrainTableYear = $this->doctrine
+            $trainTableYear = $this->doctrine
                 ->getRepository(TrainTableYear::class)
                 ->findTrainTableYearByDate(new DateTime());
         } else {
-            $selectedTrainTableYear = $this->doctrine->getRepository(TrainTableYear::class)->find($yearId);
-            if (is_null($selectedTrainTableYear)) {
+            $trainTableYear = $this->doctrine->getRepository(TrainTableYear::class)->find($yearId);
+            if (is_null($trainTableYear)) {
                 throw new AccessDeniedHttpException();
             }
 
             $routeLists = $this->doctrine
                 ->getRepository(RouteList::class)
-                ->findBy(['trainTableYear' => $selectedTrainTableYear], ['firstNumber' => 'ASC']);
+                ->findBy(['trainTableYear' => $trainTableYear], ['firstNumber' => 'ASC']);
 
             if (!is_null($routeListId)) {
                 $selectedRouteList = $this->doctrine->getRepository(RouteList::class)->find($routeListId);
@@ -118,7 +118,7 @@ class ManageTrainTablesController
             'trainTableYears' => $this->doctrine
                 ->getRepository(TrainTableYear::class)
                 ->findBy([], ['startDate' => 'DESC']),
-            'selectedTrainTableYear' => $selectedTrainTableYear,
+            'selectedTrainTableYear' => $trainTableYear,
             'routeLists' => $routeLists,
             'selectedRouteList' => $selectedRouteList,
             'routes' => $routes,

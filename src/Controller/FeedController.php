@@ -168,11 +168,11 @@ class FeedController
      */
     private function getPassingRoutes(Location $location, ?int $dayNumber, ?string $startTime): array
     {
-        $trainTableIndexNumber = $this->doctrine
+        $trainTableYearId = $this->doctrine
             ->getRepository(TrainTableYear::class)
             ->findTrainTableYearByDate(new DateTime())
             ->getId();
-        $this->trainTableHelper->setTrainTableYear($trainTableIndexNumber);
+        $this->trainTableHelper->setTrainTableYear($trainTableYearId);
         $this->trainTableHelper->setLocation($location->name);
 
         return $this->trainTableHelper->getPassingRoutes($dayNumber, $startTime);
