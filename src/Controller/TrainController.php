@@ -64,7 +64,8 @@ class TrainController
             }
 
             $trains = $this->formHelper->getDoctrine()->getRepository(TrainComposition::class)->findBy(
-                ['type' => $type]
+                ['type' => $type],
+                ['id' => 'ASC']
             );
         }
 
@@ -80,20 +81,39 @@ class TrainController
      * @IsGranted("ROLE_USER")
      * @param Request $request
      * @param int $id
+     * @param int|null $typeId
      * @return RedirectResponse|Response
      * @throws Exception
      */
-    public function editAction(Request $request, int $id)
+    public function editAction(Request $request, int $id, int $typeId = null)
     {
+        $isAdministrator = $this->userHelper->getUser()->hasRole('ROLE_ADMIN_TRAIN_COMPOSITIONS');
+
         /**
          * @var TrainComposition $trainComposition
          */
-        $trainComposition = $this->formHelper->getDoctrine()->getRepository(TrainComposition::class)->find($id);
-        if (is_null($trainComposition)) {
-            throw new AccessDeniedHttpException();
+
+        if ($id === 0 && !is_null($typeId) && $isAdministrator) {
+            $trainCompositionType = $this->formHelper
+                ->getDoctrine()
+                ->getRepository(TrainCompositionType::class)
+                ->find($typeId);
+            if (is_null($trainCompositionType)) {
+                throw new AccessDeniedHttpException();
+            }
+
+            $trainComposition = new TrainComposition();
+            $trainComposition->type = $trainCompositionType;
+
+            $this->formHelper->getDoctrine()->getManager()->persist($trainComposition);
+        } else {
+            $trainComposition = $this->formHelper->getDoctrine()->getRepository(TrainComposition::class)->find($id);
+            if (is_null($trainComposition)) {
+                throw new AccessDeniedHttpException();
+            }
         }
 
-        if ($this->userHelper->getUser()->hasRole('ROLE_ADMIN_TRAIN_COMPOSITIONS')) {
+        if ($isAdministrator) {
             return $this->editAsManager($request, $trainComposition);
         }
         return $this->editAsUser($request, $trainComposition);

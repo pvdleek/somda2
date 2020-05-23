@@ -552,3 +552,7 @@ table.design tr.proposition-row a:hover {
 table.design tr.proposition-row td.changed {
 	background-color: #FF9900;
 }
+span.train-composition-add {
+	float: right;
+	margin-right: 5px;
+}

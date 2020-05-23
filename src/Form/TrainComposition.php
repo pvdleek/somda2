@@ -29,7 +29,7 @@ class TrainComposition extends BaseForm
                 $builder->add('car' . $car, TextType::class, [
                     self::KEY_ATTRIBUTES => [self::KEY_ATTRIBUTES_MAX_LENGTH => 15],
                     self::KEY_LABEL => $trainComposition->getType()->getCar($car),
-                    self::KEY_REQUIRED => true,
+                    self::KEY_REQUIRED => false,
                 ]);
             }
         }

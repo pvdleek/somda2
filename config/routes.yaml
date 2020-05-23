@@ -181,6 +181,12 @@ train_compositions_type:
   methods: [GET]
   requirements: { typeId: \d+ }
   controller: App\Controller\TrainController::indexAction
+train_composition_add:
+  path: /materieel-samenstelling/toevoegen/{typeId}/
+  methods: [GET, POST]
+  requirements: { typeId: \d+ }
+  defaults: { 'id': 0 }
+  controller: App\Controller\TrainController::editAction
 train_composition_edit:
   path: /materieel-samenstelling/bewerken/{id}/
   methods: [GET, POST]
