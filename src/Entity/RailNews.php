@@ -88,7 +88,8 @@ class RailNews extends Entity
      * @param array $maxSizes - an array with 2 values: 0 = width, 1 = height
      * @return array - an array with 2 values: 0 = width, 1 = height
      */
-    private function resizeImage(array $currentSizes, array $maxSizes): array {
+    private function resizeImage(array $currentSizes, array $maxSizes): array
+    {
         if (($currentSizes[0] <= $maxSizes[0]) && ($currentSizes[1] <= $maxSizes[1])) {
             return [$currentSizes[0], $currentSizes[1]];
         }

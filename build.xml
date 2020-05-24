@@ -9,6 +9,10 @@
         </exec>
     </target>
 
+    <target name="phpcs">
+        <exec executable="vendor/bin/phpcs" />
+    </target>
+
     <target name="sonar-start">
         <exec executable="/opt/sonarqube/bin/linux-x86-64/sonar.sh">
             <arg value="console" />

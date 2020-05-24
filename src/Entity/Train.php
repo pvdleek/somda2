@@ -6,7 +6,11 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table(name="somda_mat", uniqueConstraints={@ORM\UniqueConstraint(name="idx_48117_nummer", columns={"nummer"})}, indexes={@ORM\Index(name="idx_48117_vervoerder_id", columns={"vervoerder_id"})})
+ * @ORM\Table(
+ *     name="somda_mat",
+ *     uniqueConstraints={@ORM\UniqueConstraint(name="idx_48117_nummer", columns={"nummer"})},
+ *     indexes={@ORM\Index(name="idx_48117_vervoerder_id", columns={"vervoerder_id"})}
+ * )
  * @ORM\Entity
  */
 class Train extends Entity

@@ -143,7 +143,7 @@ class ForumModerateController
             $this->formHelper->getDoctrine()->getManager()->remove($discussion1);
             $this->formHelper->getDoctrine()->getManager()->remove($discussion2);
 
-            return $this->formHelper->finishFormHandling('',  RouteGenerics::ROUTE_FORUM_DISCUSSION, [
+            return $this->formHelper->finishFormHandling('', RouteGenerics::ROUTE_FORUM_DISCUSSION, [
                 'id' => $newDiscussion->getId(),
                 'name' => urlencode($newDiscussion->title)
             ]);

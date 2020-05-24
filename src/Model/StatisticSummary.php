@@ -19,7 +19,7 @@ class StatisticSummary
     /**
      * @var DateTime
      */
-    public DateTime $busiestPageViewsTimestamp;
+    public DateTime $busiestPageViewsDate;
 
     /**
      * @var int
@@ -29,7 +29,7 @@ class StatisticSummary
     /**
      * @var DateTime
      */
-    public DateTime $busiestSpotsTimestamp;
+    public DateTime $busiestSpotsDate;
 
     /**
      * @var int
@@ -39,7 +39,7 @@ class StatisticSummary
     /**
      * @var DateTime
      */
-    public DateTime $busiestPostsTimestamp;
+    public DateTime $busiestPostsDate;
 
     /**
      * @var int

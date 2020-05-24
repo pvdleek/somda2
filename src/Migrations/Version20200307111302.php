@@ -22,8 +22,17 @@ final class Version20200307111302 extends AbstractMigration
      */
     public function up(Schema $schema): void
     {
-        // Dubbele gebruikersnamen: SELECT u1.uid, u1.username, u2.uid, u2.username FROM somda_users u1 JOIN somda_users u2 ON LOWER(u1.username) = LOWER(u2.username) AND u1.uid <> u2.uid ORDER BY u1.uid ASC
-        // Dubbele e-mailadressen: SELECT u1.uid, u1.email, u2.uid, u2.email FROM somda_users u1 JOIN somda_users u2 ON LOWER(u1.email) = LOWER(u2.email) AND u1.uid <> u2.uid AND u1.email <> '' ORDER BY u1.uid ASC
+        // Dubbele gebruikersnamen:
+        // SELECT u1.uid, u1.username, u2.uid, u2.username
+        // FROM somda_users u1
+        // JOIN somda_users u2 ON LOWER(u1.username) = LOWER(u2.username) AND u1.uid <> u2.uid
+        // ORDER BY u1.uid ASC
+        //
+        // Dubbele e-mailadressen:
+        // SELECT u1.uid, u1.email, u2.uid, u2.email
+        // FROM somda_users u1
+        // JOIN somda_users u2 ON LOWER(u1.email) = LOWER(u2.email) AND u1.uid <> u2.uid AND u1.email <> ''
+        // ORDER BY u1.uid ASC
         $cleanupUserIds = [
             17 => 520,
             139 => 595,

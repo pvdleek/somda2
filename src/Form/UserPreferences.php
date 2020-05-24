@@ -50,10 +50,13 @@ class UserPreferences extends BaseForm
             if ($setting->order > 0) {
                 $value = $userHelper->getPreferenceByKey($setting->key)->value;
                 $typePart = explode('|', $setting->type);
-                switch($typePart[0]) {
+                switch ($typePart[0]) {
                     case 'number':
                         $builder->add($setting->key, ChoiceType::class, [
-                            self::KEY_CHOICES => array_combine(range(1, (int)$typePart[1]), range(1, (int)$typePart[1])),
+                            self::KEY_CHOICES => array_combine(
+                                range(1, (int)$typePart[1]),
+                                range(1, (int)$typePart[1])
+                            ),
                             self::KEY_DATA => (int)$value,
                             self::KEY_LABEL => $setting->description,
                             self::KEY_MAPPED => false,
@@ -89,7 +92,9 @@ class UserPreferences extends BaseForm
                             },
                             self::KEY_CHOICE_VALUE => $typePart[2],
                             self::KEY_CLASS => Location::class,
-                            self::KEY_DATA => $this->doctrine->getRepository(Location::class)->findOneBy(['name' => $value]),
+                            self::KEY_DATA => $this->doctrine->getRepository(Location::class)->findOneBy(
+                                ['name' => $value]
+                            ),
                             self::KEY_LABEL => $setting->description,
                             self::KEY_MAPPED => false,
                             self::KEY_REQUIRED => true,

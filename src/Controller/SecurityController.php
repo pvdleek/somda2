@@ -99,9 +99,9 @@ class SecurityController
      */
     public function loginAction(AuthenticationUtils $authenticationUtils, string $username = null): Response
     {
-         if ($this->userHelper->userIsLoggedIn()) {
-             return $this->redirectHelper->redirectToRoute('home');
-         }
+        if ($this->userHelper->userIsLoggedIn()) {
+            return $this->redirectHelper->redirectToRoute('home');
+        }
 
         return $this->templateHelper->render('security/login.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Inloggen',
@@ -141,7 +141,7 @@ class SecurityController
                     PASSWORD_DEFAULT
                 );
                 $user->activationKey = uniqid();
-                $user->registrationTimestamp = new DateTime();
+                $user->registerTimestamp = new DateTime();
                 $this->doctrine->getManager()->persist($user);
 
                 $userInfo = new UserInfo();
@@ -234,8 +234,7 @@ class SecurityController
         ) {
             $form->get(UserForm::FIELD_PLAIN_PASSWORD)->addError(
                 new FormError('Het wachtwoord dat je hebt gekozen vertoont teveel overeenkomsten ' .
-                    'met jouw gebruikersnaam, probeer het opnieuw'
-                )
+                    'met jouw gebruikersnaam, probeer het opnieuw')
             );
         }
 
@@ -245,8 +244,7 @@ class SecurityController
         ) {
             $form->get(UserForm::FIELD_PLAIN_PASSWORD)->addError(
                 new FormError('Het wachtwoord dat je hebt gekozen vertoont teveel overeenkomsten ' .
-                    'met jouw e-mailadres, probeer het opnieuw'
-                )
+                    'met jouw e-mailadres, probeer het opnieuw')
             );
         }
     }

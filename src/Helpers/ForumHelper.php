@@ -81,7 +81,7 @@ class ForumHelper implements RuntimeExtensionInterface
      * @param string $text
      * @return string
      */
-    function doSpecialText(string $text): string
+    private function doSpecialText(string $text): string
     {
         // Put a space before all unquotes or else they can give a Javascript error in IE (if proceeded by a link)
         $text = str_replace('%unquote%', ' %unquote%', $text);

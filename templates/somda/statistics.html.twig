@@ -7,11 +7,11 @@
             <table align="center" class="design">
                 <tr><td><strong>Start meting</strong></td><td nowrap="nowrap">{{ statisticsSummary.startMeasurement | displayDateTime }}</td></tr>
                 <tr><td><strong>Totaal aantal pageviews tot nu toe</strong></td><td nowrap="nowrap">{{ statisticsSummary.pageViewsTotal | number_format(0, '', '.') }}</td></tr>
-                <tr><td><strong>Drukste dag tot nu toe qua pageviews</strong></td><td nowrap="nowrap">{{ statisticsSummary.busiestPageViewsTimestamp | displayDateTime }}</td></tr>
+                <tr><td><strong>Drukste dag tot nu toe qua pageviews</strong></td><td nowrap="nowrap">{{ statisticsSummary.busiestPageViewsDate | displayDateTime }}</td></tr>
                 <tr><td><strong>Pageviews</strong></td><td nowrap="nowrap">{{ statisticsSummary.busiestPageViews | number_format(0, '', '.') }}</td></tr>
-                <tr><td><strong>Drukste dag tot nu toe qua spots</strong></td><td nowrap="nowrap">{{ statisticsSummary.busiestSpotsTimestamp | displayDateTime }}</td></tr>
+                <tr><td><strong>Drukste dag tot nu toe qua spots</strong></td><td nowrap="nowrap">{{ statisticsSummary.busiestSpotsDate | displayDateTime }}</td></tr>
                 <tr><td><strong>Spots</strong></td><td nowrap="nowrap">{{ statisticsSummary.busiestSpots | number_format(0, '', '.') }}</td></tr>
-                <tr><td><strong>Drukste dag tot nu toe qua forumberichten</strong></td><td nowrap="nowrap">{{ statisticsSummary.busiestPostsTimestamp | displayDateTime }}</td></tr>
+                <tr><td><strong>Drukste dag tot nu toe qua forumberichten</strong></td><td nowrap="nowrap">{{ statisticsSummary.busiestPostsDate | displayDateTime }}</td></tr>
                 <tr><td><strong>Forumberichten</strong></td><td nowrap="nowrap">{{ statisticsSummary.busiestPosts | number_format(0, '', '.') }}</td></tr>
             </table>
             <br />De statistieken worden elk uur bijgewerkt

@@ -52,7 +52,7 @@ class LocationController
      */
     public function indexAction(string $searchMethod = null, string $search = null): Response
     {
-        switch($searchMethod) {
+        switch ($searchMethod) {
             case self::SEARCH_METHOD_CHARACTER:
                 $locations = $this->doctrine->getRepository(Location::class)->findByName($search . '%');
                 break;

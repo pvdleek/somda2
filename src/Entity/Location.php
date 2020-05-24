@@ -6,7 +6,14 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table(name="somda_verk", uniqueConstraints={@ORM\UniqueConstraint(name="idx_49103_afkorting_2", columns={"afkorting", "landid"})}, indexes={@ORM\Index(name="idx_49103_landid", columns={"landid"}), @ORM\Index(name="idx_49103_description", columns={"description"})})
+ * @ORM\Table(
+ *     name="somda_verk",
+ *     uniqueConstraints={@ORM\UniqueConstraint(name="idx_49103_afkorting_2", columns={"afkorting", "landid"})},
+ *     indexes={
+ *         @ORM\Index(name="idx_49103_landid", columns={"landid"}),
+ *         @ORM\Index(name="idx_49103_description", columns={"description"})
+ *     }
+ * )
  * @ORM\Entity(repositoryClass="App\Repository\Location")
  */
 class Location extends Entity

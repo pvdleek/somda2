@@ -130,7 +130,7 @@ class ProcessForumLogCommand extends Command implements ScheduledJobInterface
         // Filter strange characters such as ^, $, &
         $text = str_replace($strangeCharacters, ' ', $text);
 
-        return array_unique(array_filter(explode(' ', $text), function($value) {
+        return array_unique(array_filter(explode(' ', $text), function ($value) {
             return strlen($value) > 2;
         }));
     }

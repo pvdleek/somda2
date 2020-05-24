@@ -89,7 +89,7 @@ class User extends Entity implements UserInterface
      * @var DateTime
      * @ORM\Column(name="regdate", type="datetime", nullable=false)
      */
-    public DateTime $registrationTimestamp;
+    public DateTime $registerTimestamp;
 
     /**
      * @var DateTime|null

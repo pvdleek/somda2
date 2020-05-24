@@ -36,7 +36,6 @@ class ForumPost extends BaseForm
             );
         } elseif (!is_null($options[self::OPTION_EDITED_POST])) {
             $data = $options[self::OPTION_EDITED_POST]->text->text;
-
         }
 
         $builder

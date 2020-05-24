@@ -64,7 +64,7 @@ class RouteOperationDays extends Entity
      * @param int $dayNumber
      * @return bool
      */
-    public function getDay(int $dayNumber): bool
+    public function isRunningOnDay(int $dayNumber): bool
     {
         switch ($dayNumber) {
             case 0:

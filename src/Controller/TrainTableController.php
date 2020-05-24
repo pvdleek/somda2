@@ -148,9 +148,9 @@ class TrainTableController
         }
 
         if (is_null($specialRoute)) {
-            $specialRoutes = $this->doctrine->getRepository(SpecialRoute::class)->findBy(
-                [], ['startDate' => 'DESC']
-            );
+            $specialRoutes = $this->doctrine
+                ->getRepository(SpecialRoute::class)
+                ->findBy([], ['startDate' => 'DESC']);
             return $this->templateHelper->render('trainTable/specialRoutes.html.twig', [
                 TemplateHelper::PARAMETER_PAGE_TITLE => 'Bijzondere ritten',
                 'specialRoutes' => $specialRoutes,

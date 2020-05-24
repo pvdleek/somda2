@@ -12,7 +12,8 @@ class SortHelper implements RuntimeExtensionInterface
      * @param string $direction
      * @return array
      */
-    public function sortByFieldFilter(array $content, string $sortBy = null, string $direction = 'asc') {
+    public function sortByFieldFilter(array $content, string $sortBy = null, string $direction = 'asc'): array
+    {
         // Unfortunately have to suppress warnings here due to __get function causing usort to think that the array
         // has been modified: "usort(): Array was modified by the user comparison function"
         @usort($content, function ($itemA, $itemB) use ($sortBy, $direction) {
@@ -22,7 +23,7 @@ class SortHelper implements RuntimeExtensionInterface
             $bSortValue = $this->getSortValue($itemB, $sortBy);
             if ($aSortValue == $bSortValue) {
                 return 0;
-            } else if ($aSortValue > $bSortValue) {
+            } elseif ($aSortValue > $bSortValue) {
                 return (1 * $flip);
             } else {
                 return (-1 * $flip);

@@ -43,25 +43,25 @@ class Ddar extends Entity
      * @var DateTime|null
      * @ORM\Column(name="spot_ander_laatste", type="date", nullable=true)
      */
-    public ?DateTime $spotTimestampOtherLast;
+    public ?DateTime $timestampOtherLast;
 
     /**
      * @var DateTime
      * @ORM\Column(name="spot_eerste", type="date", nullable=false)
      */
-    public DateTime $spotTimestampFirst;
+    public DateTime $timestampFirst;
 
     /**
      * @var DateTime|null
      * @ORM\Column(name="spot_laatste", type="date", nullable=true)
      */
-    public ?DateTime $spotTimestampLast;
+    public ?DateTime $timestampLast;
 
     /**
      * @var DateTime|null
      * @ORM\Column(name="spot_ander_eerste", type="date", nullable=true)
      */
-    public ?DateTime $spotTimestampOtherFirst;
+    public ?DateTime $timestampOtherFirst;
 
     /**
      * @var string

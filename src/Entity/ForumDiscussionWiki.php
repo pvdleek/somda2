@@ -5,7 +5,10 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table(name="somda_forum_discussion_wiki", indexes={@ORM\Index(name="idx_47927_discussionid", columns={"discussionid"})})
+ * @ORM\Table(
+ *     name="somda_forum_discussion_wiki",
+ *     indexes={@ORM\Index(name="idx_47927_discussionid", columns={"discussionid"})}
+ * )
  * @ORM\Entity
  */
 class ForumDiscussionWiki extends Entity

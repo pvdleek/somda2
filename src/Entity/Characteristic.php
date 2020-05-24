@@ -5,7 +5,10 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table(name="somda_karakteristiek", uniqueConstraints={@ORM\UniqueConstraint(name="idx_48102_omschrijving", columns={"naam"})})
+ * @ORM\Table(
+ *     name="somda_karakteristiek",
+ *     uniqueConstraints={@ORM\UniqueConstraint(name="idx_48102_omschrijving", columns={"naam"})}
+ * )
  * @ORM\Entity
  */
 class Characteristic extends Entity

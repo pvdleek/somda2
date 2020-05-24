@@ -45,6 +45,9 @@ class InformationController
      */
     public function uicAction(): Response
     {
-        return $this->templateHelper->render('information/uic.html.twig', [TemplateHelper::PARAMETER_PAGE_TITLE => 'UIC berekenen']);
+        return $this->templateHelper->render(
+            'information/uic.html.twig',
+            [TemplateHelper::PARAMETER_PAGE_TITLE => 'UIC berekenen']
+        );
     }
 }

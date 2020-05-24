@@ -50,7 +50,7 @@ class Poi extends Entity
      * @ORM\ManyToOne(targetEntity="App\Entity\Location")
      * @ORM\JoinColumn(name="afkid_dks", referencedColumnName="afkid")
      */
-    public Location $locationPassingRoutes;
+    public Location $locationForRoutes;
 
     /**
      * @var string|null

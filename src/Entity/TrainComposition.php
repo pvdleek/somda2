@@ -172,13 +172,13 @@ class TrainComposition extends TrainCompositionBase
     }
 
     /**
-     * @param TrainCompositionProposition $trainCompositionProposition
+     * @param TrainCompositionProposition $proposition
      * @return TrainComposition
      */
-    public function addProposition(TrainCompositionProposition $trainCompositionProposition): TrainComposition
+    public function addProposition(TrainCompositionProposition $proposition): TrainComposition
     {
-        $this->propositions[] = $trainCompositionProposition;
-        $trainCompositionProposition->composition = $this;
+        $this->propositions[] = $proposition;
+        $proposition->composition = $this;
         return $this;
     }
 

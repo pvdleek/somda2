@@ -8,7 +8,7 @@ trait DateTrait
      * @param string $time
      * @return int
      */
-    function timeDisplayToDatabase(string $time): int
+    public function timeDisplayToDatabase(string $time): int
     {
         // Convert the given display time (hh or hh:mm or hh.mm) to a database time (minutes after 2.00)
         $time = str_replace(':', '.', $time);

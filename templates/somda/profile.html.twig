@@ -53,7 +53,7 @@
                         <td align="left"><a href="{{ path('profile_mail', { 'id': user.id }) }}">Stuur deze gebruiker een e-mail</a></td>
                     </tr><tr>
                         <th align="right">{{ 'profile.registrationDate' | trans }}</th>
-                        <td align="left">{{ user.registrationTimestamp | displayDateTime }}</td>
+                        <td align="left">{{ user.registerTimestamp | displayDateTime }}</td>
                     </tr><tr>
                         <th align="right">{{ 'profile.lastVisit' | trans }}</th>
                         <td align="left">{{ user.lastVisit is null ? ('general.error.unknown' | trans) : (user.lastVisit | displayDateTime(true)) }}</td>

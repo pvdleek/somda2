@@ -282,7 +282,7 @@ class ManageTrainTablesController
             }
 
             for ($dayNumber = 1; $dayNumber <= 7; ++$dayNumber) {
-                if ($routeDay[self::ROUTE_KEY_ROUTE_OPERATION_DAYS]->getDay($dayNumber - 1)) {
+                if ($routeDay[self::ROUTE_KEY_ROUTE_OPERATION_DAYS]->isRunningOnDay($dayNumber - 1)) {
                     $lastLine = end($routeDay[self::ROUTE_KEY_LINES]);
                     $firstLine = reset($routeDay[self::ROUTE_KEY_LINES]);
 

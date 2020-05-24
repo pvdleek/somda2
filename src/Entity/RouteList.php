@@ -7,7 +7,13 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Table(name="somda_tdr_treinnummerlijst", indexes={@ORM\Index(name="idx_48381_nr_start", columns={"nr_start"}), @ORM\Index(name="idx_48381_nr_eind", columns={"nr_eind"})})
+ * @ORM\Table(
+ *     name="somda_tdr_treinnummerlijst",
+ *     indexes={
+ *         @ORM\Index(name="idx_48381_nr_start", columns={"nr_start"}),
+ *         @ORM\Index(name="idx_48381_nr_eind", columns={"nr_eind"})
+ *     }
+ * )
  * @ORM\Entity
  */
 class RouteList extends Entity

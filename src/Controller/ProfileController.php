@@ -170,7 +170,8 @@ class ProfileController
                 $user,
                 $form->get('subject')->getData(),
                 $template,
-                ['sender' => $this->userHelper->getUser(), 'from' => $from, 'text' => $form->get('text')->getData()]);
+                ['sender' => $this->userHelper->getUser(), 'from' => $from, 'text' => $form->get('text')->getData()]
+            );
 
             $this->flashHelper->add(FlashHelper::FLASH_TYPE_INFORMATION, 'Je bericht is verzonden');
 

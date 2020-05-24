@@ -71,7 +71,6 @@ class ForumPostAlertController
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Forum - Overzicht van meldingen',
             'alerts' => $alerts,
         ]);
-
     }
 
     /**

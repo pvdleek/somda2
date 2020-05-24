@@ -5,7 +5,10 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table(name="somda_mat_patterns", uniqueConstraints={@ORM\UniqueConstraint(name="idx_48139_volgorde", columns={"volgorde"})})
+ * @ORM\Table(
+ *     name="somda_mat_patterns",
+ *     uniqueConstraints={@ORM\UniqueConstraint(name="idx_48139_volgorde", columns={"volgorde"})}
+ * )
  * @ORM\Entity
  */
 class TrainNamePattern extends Entity

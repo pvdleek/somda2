@@ -6,7 +6,10 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table(name="somda_vervoerder", uniqueConstraints={@ORM\UniqueConstraint(name="idx_49122_omschrijving", columns={"omschrijving"})})
+ * @ORM\Table(
+ *     name="somda_vervoerder",
+ *     uniqueConstraints={@ORM\UniqueConstraint(name="idx_49122_omschrijving", columns={"omschrijving"})}
+ * )
  * @ORM\Entity
  */
 class Transporter extends Entity

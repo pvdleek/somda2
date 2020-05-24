@@ -91,7 +91,7 @@ class FeedProvider implements FeedProviderInterface
             ->setLastModified(new DateTime());
 
         $items = $feedType === 'spots' ? $this->getSpotItems() : $this->getSpecialRouteItems();
-        foreach($items as $item ) {
+        foreach ($items as $item) {
             $feed->add($item);
         }
 
