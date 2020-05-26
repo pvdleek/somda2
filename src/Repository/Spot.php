@@ -11,16 +11,19 @@ use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\Query\Expr\Join;
+use Doctrine\ORM\QueryBuilder;
 use Exception;
 
 class Spot extends EntityRepository
 {
+    private const FIELD_LOCATION = 'location';
+
     /**
      * @var string[]
      */
     private static array $orderColumn = [
         'timestamp' => 's.spotDate',
-        'location' => 'l.name',
+        self::FIELD_LOCATION => 'l.name',
         'train' => 't.number',
         'route' => 'r.number',
         'extra' => 'e.extra',
@@ -69,28 +72,23 @@ class Spot extends EntityRepository
             ->createQueryBuilder()
             ->select('s')
             ->from(SpotEntity::class, 's')
+            ->join('s.train', 't')
+            ->join('s.route', 'r')
             ->andWhere('s.timestamp > :minDate')
             ->setParameter('minDate', new DateTime('-' . $maxYears . ' years'))
             ->addOrderBy('s.timestamp', 'DESC');
 
         if (!is_null($location)) {
-            $queryBuilder->join('s.location', 'l')->andWhere('l.name = :location')->setParameter('location', $location);
+            $queryBuilder
+                ->join('s.location', 'l')
+                ->andWhere('l.name = :location')
+                ->setParameter(self::FIELD_LOCATION, $location);
         }
         if ($dayNumber > 0) {
             $queryBuilder->andWhere('DAYOFWEEK(s.timestamp) = :dayNumber')->setParameter('dayNumber', $dayNumber);
         }
-        if (!is_null($trainNumber)) {
-            $queryBuilder
-                ->join('s.train', 't')
-                ->andWhere('t.number = :trainNumber')
-                ->setParameter('trainNumber', $trainNumber);
-        }
-        if (!is_null($routeNumber)) {
-            $queryBuilder
-                ->join('s.route', 'r')
-                ->andWhere('r.number = :routeNumber')
-                ->setParameter('routeNumber', $routeNumber);
-        }
+        $this->filterOnTrainNumber($queryBuilder, true, $trainNumber);
+        $this->filterOnRouteNumber($queryBuilder, true, $routeNumber);
 
         return $queryBuilder->getQuery()->getResult();
     }
@@ -128,18 +126,10 @@ class Spot extends EntityRepository
             ->setFirstResult($offset);
 
         if (!is_null($location)) {
-            $queryBuilder->andWhere('l.name LIKE :location')->setParameter('location', '%' . $location . '%');
+            $queryBuilder->andWhere('l.name LIKE :location')->setParameter(self::FIELD_LOCATION, '%' . $location . '%');
         }
-        if (!is_null($trainNumber)) {
-            $queryBuilder
-                ->andWhere('t.number LIKE :trainNumber')
-                ->setParameter('trainNumber', '%' . $trainNumber . '%');
-        }
-        if (!is_null($routeNumber)) {
-            $queryBuilder
-                ->andWhere('r.number LIKE :routeNumber')
-                ->setParameter('routeNumber', '%' . $routeNumber . '%');
-        }
+        $this->filterOnTrainNumber($queryBuilder, false, $trainNumber);
+        $this->filterOnRouteNumber($queryBuilder, false, $routeNumber);
 
         if (count($orderArray) > 0) {
             foreach ($orderArray as $order) {
@@ -171,18 +161,10 @@ class Spot extends EntityRepository
             ->setParameter('user', $user);
 
         if (!is_null($location)) {
-            $queryBuilder->andWhere('l.name LIKE :location')->setParameter('location', '%' . $location . '%');
+            $queryBuilder->andWhere('l.name LIKE :location')->setParameter(self::FIELD_LOCATION, '%' . $location . '%');
         }
-        if (!is_null($trainNumber)) {
-            $queryBuilder
-                ->andWhere('t.number LIKE :trainNumber')
-                ->setParameter('trainNumber', '%' . $trainNumber . '%');
-        }
-        if (!is_null($routeNumber)) {
-            $queryBuilder
-                ->andWhere('r.number LIKE :routeNumber')
-                ->setParameter('routeNumber', '%' . $routeNumber . '%');
-        }
+        $this->filterOnTrainNumber($queryBuilder, false, $trainNumber);
+        $this->filterOnRouteNumber($queryBuilder, false, $routeNumber);
 
         try {
             return (int)$queryBuilder->getQuery()->getSingleScalarResult();
@@ -216,5 +198,41 @@ class Spot extends EntityRepository
             ->addGroupBy('n.id')
             ->addGroupBy('dayOfWeek');
         return $queryBuilder->getQuery()->getArrayResult();
+    }
+
+    /**
+     * @param QueryBuilder $queryBuilder
+     * @param bool $exact
+     * @param string|null $trainNumber
+     */
+    private function filterOnTrainNumber(QueryBuilder $queryBuilder, bool $exact, ?string $trainNumber = null): void
+    {
+        if (!is_null($trainNumber)) {
+            if ($exact) {
+                $queryBuilder->andWhere('t.number = :trainNumber')->setParameter('trainNumber', $trainNumber);
+            } else {
+                $queryBuilder
+                    ->andWhere('t.number LIKE :trainNumber')
+                    ->setParameter('trainNumber', '%' . $trainNumber . '%');
+            }
+        }
+    }
+
+    /**
+     * @param QueryBuilder $queryBuilder
+     * @param bool $exact
+     * @param string|null $routeNumber
+     */
+    private function filterOnRouteNumber(QueryBuilder $queryBuilder, bool $exact, ?string $routeNumber = null): void
+    {
+        if (!is_null($routeNumber)) {
+            if ($exact) {
+                $queryBuilder->andWhere('r.number = :routeNumber')->setParameter('routeNumber', $routeNumber);
+            } else {
+                $queryBuilder
+                    ->andWhere('r.number LIKE :routeNumber')
+                    ->setParameter('routeNumber', '%' . $routeNumber . '%');
+            }
+        }
     }
 }

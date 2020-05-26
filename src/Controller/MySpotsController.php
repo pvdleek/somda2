@@ -19,6 +19,10 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class MySpotsController
 {
+    private const COLUMN_DATA = 'data';
+    private const COLUMN_SEARCH = 'search';
+    private const COLUMN_SEARCH_VALUE = 'value';
+
     /**
      * @var FormHelper
      */
@@ -75,15 +79,17 @@ class MySpotsController
      */
     public function jsonAction(Request $request): JsonResponse
     {
+        $columns = $request->get('columns');
+
         $locationSearch = $trainNumberSearch = $routeNumberSearch = null;
-        foreach ($request->get('columns') as $column) {
-            if (strlen($column['search']['value']) > 0) {
-                if ($column['data'] === 'location') {
-                    $locationSearch = $column['search']['value'];
-                } elseif ($column['data'] === 'train') {
-                    $trainNumberSearch = $column['search']['value'];
-                } elseif ($column['data'] === 'route') {
-                    $routeNumberSearch = $column['search']['value'];
+        foreach ($columns as $column) {
+            if (strlen($column[self::COLUMN_SEARCH][self::COLUMN_SEARCH_VALUE]) > 0) {
+                if ($column[self::COLUMN_DATA] === 'location') {
+                    $locationSearch = $column[self::COLUMN_SEARCH][self::COLUMN_SEARCH_VALUE];
+                } elseif ($column[self::COLUMN_DATA] === 'train') {
+                    $trainNumberSearch = $column[self::COLUMN_SEARCH][self::COLUMN_SEARCH_VALUE];
+                } elseif ($column[self::COLUMN_DATA] === 'route') {
+                    $routeNumberSearch = $column[self::COLUMN_SEARCH][self::COLUMN_SEARCH_VALUE];
                 }
             }
         }
@@ -92,7 +98,7 @@ class MySpotsController
         $spotOrder = [];
         foreach ($orderArray as $key => $order) {
             $spotOrder[$key] = new DataTableOrder(
-                $request->get('columns')[$order['column']]['data'],
+                $columns[$order['column']][self::COLUMN_DATA],
                 strtolower($order['dir']) === 'asc'
             );
         }
@@ -119,10 +125,10 @@ class MySpotsController
                 $this->userHelper->getUser()
             ),
             'recordsFiltered' => $filteredRecords,
-            'data' => [],
+            self::COLUMN_DATA => [],
         ];
         foreach ($spots as $spot) {
-            $response['data'][] = $spot->toArray();
+            $response[self::COLUMN_DATA][] = $spot->toArray();
         }
 
         return new JsonResponse($response);
