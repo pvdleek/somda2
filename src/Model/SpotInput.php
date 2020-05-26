@@ -3,10 +3,21 @@
 namespace App\Model;
 
 use App\Entity\Location;
+use App\Entity\User;
 use DateTime;
 
 class SpotInput
 {
+    /**
+     * @var int|null
+     */
+    public ?int $existingSpotId = null;
+
+    /**
+     * @var User
+     */
+    public User $user;
+
     /**
      * @var DateTime
      */
@@ -36,4 +47,14 @@ class SpotInput
      * @var string
      */
     public string $extra;
+
+    /**
+     * @var string|null
+     */
+    public ?string $userExtra = null;
+
+    /**
+     * @var int
+     */
+    public int $feedbackFlag = 0;
 }

@@ -102,4 +102,22 @@ class Spot extends Entity
     {
         $this->timestamp = new DateTime();
     }
+
+    /**
+     * @return array
+     */
+    public function toArray(): array
+    {
+        return [
+            'id' => $this->getId(),
+            'timestamp' => $this->spotDate,
+            'train' => $this->train->number,
+            'route' => $this->route->number,
+            'position' => $this->position->name,
+            'location' => $this->location->name,
+            'locationDescription' => $this->location->description,
+            'extra' => $this->extra ? $this->extra->extra : null,
+            'userExtra' => $this->extra ? $this->extra->userExtra : null,
+        ];
+    }
 }

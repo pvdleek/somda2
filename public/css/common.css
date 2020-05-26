@@ -559,3 +559,10 @@ span.train-composition-add {
     float: right;
     margin-right: 5px;
 }
+
+/****************/
+/*** My spots ***/
+/****************/
+#my_spots_table_filter {
+    display: none;
+}

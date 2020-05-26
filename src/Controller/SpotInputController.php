@@ -5,7 +5,7 @@ namespace App\Controller;
 use App\Entity\Location;
 use App\Entity\Spot;
 use App\Entity\UserPreference;
-use App\Form\Spot as SpotForm;
+use App\Form\SpotBulk;
 use App\Helpers\FormHelper;
 use App\Helpers\SpotInputHelper;
 use App\Helpers\TemplateHelper;
@@ -75,7 +75,7 @@ class SpotInputController
     public function indexAction(Request $request)
     {
         $form = $this->formHelper->getFactory()->create(
-            SpotForm::class,
+            SpotBulk::class,
             null,
             ['defaultLocation' => $this->getDefaultLocation()]
         );

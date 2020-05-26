@@ -27,14 +27,18 @@ final class Version20200411140736 extends AbstractMigration
             WHERE `prefid` IN (
                 SELECT `prefid` FROM `somda_prefs` WHERE `sleutel` IN (
                     \'intro_text\', \'omloop_tabel\', \'tdr_tabel\', \'forum_new_old\', \'mat_mijnspots\',
-                    \'mat_recentespots\', \'mat_spotsinvoer\', \'spotting_last\'
+                    \'mat_recentespots\', \'mat_spotsinvoer\', \'spotting_last\', \'myspots_default_nr\',
+                    \'myspots_default_start\', \'myspots_sort\', \'myspots_sort_method\', \'myspots_sort2\',
+                    \'myspots_sort_method2\'
                 )
             )
         ');
         $this->addSql('
             DELETE FROM `somda_prefs` WHERE `sleutel` IN (
                 \'intro_text\', \'omloop_tabel\', \'tdr_tabel\', \'forum_new_old\', \'mat_mijnspots\',
-                \'mat_recentespots\', \'mat_spotsinvoer\', \'spotting_last\'
+                \'mat_recentespots\', \'mat_spotsinvoer\', \'spotting_last\', \'myspots_default_nr\',
+                \'myspots_default_start\', \'myspots_sort\', \'myspots_sort_method\', \'myspots_sort2\',
+                \'myspots_sort_method2\'
             )
         ');
 
@@ -42,12 +46,12 @@ final class Version20200411140736 extends AbstractMigration
         $this->addSql('
             UPDATE `somda_prefs`
             SET `default_value` = \';welcome;dashboard;forum;spots;foutespots;drgl;werkzaamheden;' .
-                'shortcuts;spoornieuws;doorkomst;weer;shout;spots;news;\'
+                'shortcuts;spoornieuws;doorkomst;weer;spots;news;\'
             WHERE `prefid` = 19');
         $this->addSql('
-            UPDATE `somda_user_prefs`
+            UPDATE `somda_users_prefs`
             SET `value` = \';welcome;dashboard;forum;spots;foutespots;drgl;werkzaamheden;' .
-                'shortcuts;spoornieuws;doorkomst;weer;shout;spots;news;\'
+                'shortcuts;spoornieuws;doorkomst;weer;spots;news;\'
             WHERE `prefid` = 19');
     }
 

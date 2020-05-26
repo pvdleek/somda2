@@ -163,7 +163,19 @@ spots_to_train_table:
 my_spots:
   path: /mijn-spots/
   methods: [GET]
-  controller: App\Controller\HomeController::notImplementedAction
+  controller: App\Controller\MySpotsController::indexAction
+my_spots_json:
+  path: /mijn-spots/json/
+  methods: [GET]
+  controller: App\Controller\MySpotsController::jsonAction
+my_spots_edit:
+  path: /mijn-spots/bewerken/{id}/
+  methods: [GET, POST]
+  controller: App\Controller\MySpotsController::editAction
+my_spots_delete:
+  path: /mijn-spots/verwijderen/{id}/
+  methods: [GET]
+  controller: App\Controller\MySpotsController::deleteAction
 pois:
   path: /spotpunten/
   methods: [GET]

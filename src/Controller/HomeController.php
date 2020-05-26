@@ -70,7 +70,7 @@ class HomeController
         if (!$this->userHelper->userIsLoggedIn()) {
             $layout = str_replace('foutespots', '', $layout);
         }
-        $layout = array_filter(array_diff(explode(';', str_replace('$', ';', $layout)), ['poll', 'shout']));
+        $layout = array_filter(explode(';', $layout));
 
         $layoutData = [];
         $this->loadDataForDashboard($layout, $layoutData);

@@ -1,0 +1,27 @@
+{% extends('base.html.twig') %}
+
+{% block content %}
+    <div class="home-panel separate-panel">
+        <div class="home-panel-title">Bewerk spot</div>
+        <div class="home-panel-content panel-no-background">
+            {{ form_start(form, { 'attr': { 'id': 'spot_form' } }) }}
+                <table class="design">
+                    {{ form_row(form.spotDate) }}
+                    {{ form_row(form.train) }}
+                    {{ form_row(form.route) }}
+                    {{ form_row(form.position) }}
+                    {{ form_row(form.location) }}
+                    {{ form_row(form.extra) }}
+                    {{ form_row(form.userExtra) }}
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td>
+                            <a class="somda-button" href="#" onclick="$('#spot_form').submit(); return false;">Opslaan</a>
+                            <a class="somda-button" href="{{ path('my_spots') }}">Terug naar mijn spots</a>
+                        </td>
+                    </tr>
+                </table>
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}

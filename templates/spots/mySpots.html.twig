@@ -1,0 +1,153 @@
+{% extends('base.html.twig') %}
+
+{% block content %}
+    <div class="home-panel separate-panel">
+        <div class="home-panel-title">Mijn spots</div>
+        <div class="home-panel-content">
+            <table class="design nowrap" id="my_spots_table">
+                <thead>
+                    <tr>
+                        <th>Spot-datum</th>
+                        <th>Materieel</th>
+                        <th>Treinnummer</th>
+                        <th>Spot-locatie</th>
+                        <th>Extra</th>
+                        <th>Verborgen informatie</th>
+                        <th>&nbsp;</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+                <tfoot>
+                    <tr>
+                        <th>&nbsp;</th>
+                        <th>trein</th>
+                        <th>trein</th>
+                        <th>locatie</th>
+                        <th>&nbsp;</th>
+                        <th>&nbsp;</th>
+                        <th>&nbsp;</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="//cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+    <script src="{{ asset('js/dateFormat-2019-08-01.js') }}"></script>
+    <script>
+        /**
+         * @param {int} id
+         */
+        function editSpot(id)
+        {
+            document.location = '{{ path('my_spots_edit', { 'id': 1234 }) }}'.replace('1234', id);
+        }
+
+        /**
+         * @param {int} id
+         */
+        function deleteSpot(id)
+        {
+            if (confirm('Weet je zeker dat je deze spot wilt verwijderen?')) {
+                document.location = '{{ path('my_spots_delete', { 'id': 1234 }) }}'.replace('1234', id);
+            }
+        }
+
+        $(document).ready(function() {
+            $('#my_spots_table tfoot th').each(function () {
+                const title = $(this).text();
+                if (title.length > 1) {
+                    $(this).html('<input placeholder="Zoek een ' + title + '" size="10" type="text" />');
+                }
+            });
+
+            let mySpotsTable = $('#my_spots_table').DataTable({
+                'ajax': '{{ path('my_spots_json') }}',
+                'columnDefs': [
+                    {
+                        'render': function (data) {
+                            return DateFormat.format.date(data.date, 'dd-MM-yyyy');
+                        },
+                        'targets': 0,
+                    },
+                    {
+                        'render': function (data, type, row) {
+                            if (row['position'].length > 0) {
+                                return data + '(' + row['position'] + ')';
+                            }
+                            return data;
+                        },
+                        'targets': 2,
+                    },
+                    {
+                        'render': function (data, type, row) {
+                            return '<span title="' + row['locationDescription'] + '">' + data + '</span>';
+                        },
+                        'targets': 3,
+                    },
+                    {
+                        'data': null,
+                        'render': function (data, type, row) {
+                            return '<a href="#" onclick="editSpot(' + row['id'] + '); return false;" title="Bewerk deze spot"><i class="fas fa-pen"></i></a>' +
+                                ' <a href="#" onclick="deleteSpot(' + row['id'] + '); return false;" title="Verwijder deze spot"><i class="fas fa-trash-alt"></i></a>';
+                        },
+                        'targets': -1,
+                    },
+                    {
+                        'sortable': false,
+                        'targets': [-1],
+                    }
+                ],
+                'columns': [
+                    { 'data': 'timestamp' },
+                    { 'data': 'train' },
+                    { 'data': 'route' },
+                    { 'data': 'location' },
+                    { 'data': 'extra' },
+                    { 'data': 'userExtra' },
+                    { 'data': null },
+                ],
+                initComplete: function () {
+                    this.api().columns().every( function () {
+                        let that = this;
+                        $('input', this.footer()).on('keyup change clear', function () {
+                            if (that.search() !== this.value) {
+                                that.search(this.value).draw();
+                            }
+                        });
+                    });
+                },
+                'language': {
+                    'aria': {
+                        'sortAscending': ': activeer om oplopend te sorteren',
+                        'sortDescending': ': activeer om aflopend te sorteren'
+                    },
+                    'emptyTable': 'Geen spots gevonden',
+                    'info': 'Toont pagina _PAGE_ van _PAGES_',
+                    'infoEmpty': 'Geen spots gevonden',
+                    'infoFiltered': '(gefilterd uit _MAX_ spots)',
+                    'lengthMenu': 'Toon _MENU_ spots per pagina',
+                    'loadingRecords': 'Laden ...',
+                    'processing': 'Laden ...',
+                    'search': 'Zoeken:',
+                    'paginate': {
+                        'first': 'Eerste',
+                        'last': 'Laatste',
+                        'next': 'Volgende',
+                        'previous': 'Vorige',
+                    },
+                    'zeroRecords': 'Geen spots gevonden',
+                },
+                'processing': true,
+                'serverSide': true,
+                'stateSave': true,
+            });
+        });
+    </script>
+{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="//cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css" type="text/css" />
+{% endblock %}
