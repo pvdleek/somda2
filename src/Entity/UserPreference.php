@@ -82,7 +82,7 @@ class UserPreference extends Entity
 
     /**
      * @var string
-     * @ORM\Column(name="default_value", type="string", length=100, nullable=false)
+     * @ORM\Column(name="default_value", type="string", length=200, nullable=false)
      */
     public string $defaultValue = '';
 

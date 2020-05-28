@@ -6,7 +6,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
-class LoginFormAuthenticator extends BaseFormAuthenticator
+class MobileLoginFormAuthenticator extends BaseFormAuthenticator
 {
     public function __construct(
         EntityManagerInterface $entityManager,
@@ -15,6 +15,6 @@ class LoginFormAuthenticator extends BaseFormAuthenticator
     ) {
         parent::__construct($entityManager, $urlGenerator, $csrfTokenManager);
 
-        $this->setLoginRoute('login')->setHomeRoute('home');
+        $this->setLoginRoute('mobile_login')->setHomeRoute('mobile_home');
     }
 }

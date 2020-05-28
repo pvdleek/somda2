@@ -2,11 +2,22 @@ mobile_home:
   path: /
   methods: [GET, POST]
   controller: App\Controller\MobileController::indexAction
+
+###################
+# User management #
+###################
 mobile_login:
   path: /inloggen/
-  methods: [POST]
-  controller: App\Controller\MobileController::indexAction
+  methods: [GET, POST]
+  controller: App\Controller\SecurityController::loginMobileAction
+mobile_logout:
+  path: /uitloggen/
+  methods: [GET]
+  controller: App\Controller\SecurityController::logoutMobileAction
 
+###############
+# Train table #
+###############
 mobile_train_table:
   path: /dienstregeling/
   methods: [GET]
@@ -16,7 +27,6 @@ mobile_train_table_search:
   methods: [GET]
   requirements: { routeNumber: \d+ }
   controller: App\Controller\MobileController::trainTableAction
-
 mobile_passing_routes:
   path: /doorkomststaat/
   methods: [GET]
@@ -26,7 +36,6 @@ mobile_passing_routes_search:
   methods: [GET]
   requirements: { dayNumber: \d+ }
   controller: App\Controller\MobileController::passingRoutesAction
-
 mobile_special_routes:
   path: /drgl/
   methods: [GET]

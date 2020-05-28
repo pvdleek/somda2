@@ -110,11 +110,38 @@ class SecurityController
     }
 
     /**
+     * @param AuthenticationUtils $authenticationUtils
+     * @param string|null $username
+     * @return Response
+     * @throws Exception
+     */
+    public function loginMobileAction(AuthenticationUtils $authenticationUtils, string $username = null): Response
+    {
+        if ($this->userHelper->userIsLoggedIn()) {
+            return $this->redirectHelper->redirectToRoute('mobile_home');
+        }
+
+        return $this->templateHelper->render('mobile/home.html.twig', [
+            TemplateHelper::PARAMETER_PAGE_TITLE => 'Somda mobiel',
+            'lastUsername' => is_null($username) ? $authenticationUtils->getLastUsername() : $username,
+            'error' => $authenticationUtils->getLastAuthenticationError()
+        ]);
+    }
+
+    /**
      * @return RedirectResponse
      */
     public function logoutAction(): RedirectResponse
     {
         return $this->redirectHelper->redirectToRoute('home');
+    }
+
+    /**
+     * @return RedirectResponse
+     */
+    public function logoutMobileAction(): RedirectResponse
+    {
+        return $this->redirectHelper->redirectToRoute('mobile_home');
     }
 
     /**

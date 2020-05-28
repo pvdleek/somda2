@@ -36,18 +36,17 @@
         <div id="menu">
             <a href="{{ path('mobile_home') }}">Home</a> -
             {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-                <a href="{{ path('mobile_passing_routes') }}">Doorkomststaat</a> - <a href="{{ path('mobile_train_table') }}">Dienstregeling</a> - <a href="{{ path('mobile_special_routes') }}">Bijzondere ritten</a> - <a href="spot_invoeren.php">Spots invoeren</a> - <a href="forum.php">Forum</a> - <a href="index.php?op=logout">Afmelden</a>
+                <a href="{{ path('mobile_passing_routes') }}">Doorkomststaat</a> - <a href="{{ path('mobile_train_table') }}">Dienstregeling</a> - <a href="{{ path('mobile_special_routes') }}">Bijzondere ritten</a> - <a href="spot_invoeren.php">Spots invoeren</a> - <a href="forum.php">Forum</a> - <a href="{{ path('mobile_logout') }}">Afmelden</a>
             {% else %}
-                <a href="{{ path('mobile_train_table') }}">Dienstregeling</a> - <a href="{{ path('mobile_special_routes') }}">Bijzondere ritten</a> - <a href="forum.php">Forum</a> - <a href="index.php">Inloggen</a>
+                <a href="{{ path('mobile_train_table') }}">Dienstregeling</a> - <a href="{{ path('mobile_special_routes') }}">Bijzondere ritten</a> - <a href="forum.php">Forum</a>
             {% endif %}
-             - <a href="javascript:history.back();">Terug</a>
         </div>
 
         <div id="content">{% block content %}{% endblock %}</div>
 
         <div id="footer">
-            <p><span style="float:left;"><a href="javascript:history.back();">Terug</a></span><span style="float:right;">Powered by Somda.nl</span></p>
-            <br /><p>Copyright &#169; 2003-'.date('Y').' Somda.nl - alle rechten voorbehouden</p>
+            <p><span style="float:left;"><a href="#" onclick="history.back(); return false;">Terug</a></span><span style="float:right;">Powered by <a href="{{ path('home') }}">Somda.nl</a></span></p>
+            <br /><p>Copyright &#169; 2003-{{ 'now' | date('Y') }} Somda.nl - alle rechten voorbehouden</p>
         </div>
     </div>
 
