@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC "-//WAPFORUM//DTD XHTML Mobile 1.0//EN" "http://www.wapforum.org/DTD/xhtml-mobile10.dtd">
+<html lang="nl" xml:lang="nl" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <link rel="apple-touch-icon" href="{{ asset('images/logos-somda/app-logo.png') }}" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="robots" content="index, follow" />
+    <meta name="keywords" content="Somda" />
+    <meta name="description" content="Somda" />
+    <meta name="author" content="Peter van der Leek" />
+    <meta name="generator" content="Peter van der Leek" />
+
+    <meta name="HandheldFriendly" content="true" />
+    <meta http-equiv="Cache-Control" content="no-cache"/>
+    <meta name="format-detection" content="telephone=yes" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
+
+    <script src="{{asset('js/jquery-1.12.4.js')}}"></script>
+
+    <title>{% if pageTitle is defined %}{{ pageTitle }} - {% endif %}Somda</title>
+
+    <link rel="stylesheet" href="{{ asset('css/mobile.css') }}" type="text/css" />
+    <style type="text/css">
+        #header_image {
+            background: url('{{ asset('images/logos-somda/logo-' ~ imageNumber ~ '.png') }}') no-repeat;
+        }
+    </style>
+
+    <link href="{{ asset('images/design/favicon.ico') }}" rel="shortcut icon" type="image/x-icon" />
+</head>
+<body>
+    <div id="container">
+        <div id="header"><img alt="Somda" src="{{ asset('images/logos-somda/logo-' ~ imageNumber ~ '.png') }}" /></div>
+
+        <div id="menu">
+            <a href="{{ path('mobile_home') }}">Home</a> -
+            {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                <a href="{{ path('mobile_passing_routes') }}">Doorkomststaat</a> - <a href="{{ path('mobile_train_table') }}">Dienstregeling</a> - <a href="{{ path('mobile_special_routes') }}">Bijzondere ritten</a> - <a href="spot_invoeren.php">Spots invoeren</a> - <a href="forum.php">Forum</a> - <a href="index.php?op=logout">Afmelden</a>
+            {% else %}
+                <a href="{{ path('mobile_train_table') }}">Dienstregeling</a> - <a href="{{ path('mobile_special_routes') }}">Bijzondere ritten</a> - <a href="forum.php">Forum</a> - <a href="index.php">Inloggen</a>
+            {% endif %}
+             - <a href="javascript:history.back();">Terug</a>
+        </div>
+
+        <div id="content">{% block content %}{% endblock %}</div>
+
+        <div id="footer">
+            <p><span style="float:left;"><a href="javascript:history.back();">Terug</a></span><span style="float:right;">Powered by Somda.nl</span></p>
+            <br /><p>Copyright &#169; 2003-'.date('Y').' Somda.nl - alle rechten voorbehouden</p>
+        </div>
+    </div>
+
+{#    if (isset($forum_jump) && strlen($forum_jump)>0) {#}
+{#    echo '<script language="javascript" type="text/javascript">';#}
+{#        echo 'function getElementTop(element_id){if(document.layers){var element=getObjNN4(document,element_id);return element.pageY;}else{var element=document.getElementById(element_id);var yPos=element.offsetTop;var tempEl=element.offsetParent;while(tempEl!=null){yPos+=tempEl.offsetTop;tempEl=tempEl.offsetParent;}return yPos;}}';#}
+{#        echo "window.scrollTo(0, (getElementTop('".$forum_jump."')-5));";#}
+{#        echo '</script>';#}
+{#    }#}
+
+    {% block javascripts %}{% endblock %}
+</body>
+</html>

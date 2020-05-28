@@ -90,7 +90,6 @@ class SecurityController
         $this->emailHelper = $emailHelper;
     }
 
-
     /**
      * @param AuthenticationUtils $authenticationUtils
      * @param string|null $username

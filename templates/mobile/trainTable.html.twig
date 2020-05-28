@@ -1,0 +1,40 @@
+{% extends('mobile/base.html.twig') %}
+
+{% block content %}
+    <table>
+        <tr class="thead"><th colspan="2">Dienstregeling van een trein</th></tr>
+        <tr>
+            <td style="width:135px; text-align:right;"><label for="route_number">Treinnummer:</label></td>
+            <td style="height:20px; text-align:left;"><input id="route_number" style="width:100px;" type="number" value="{{ routeNumber }}" /></td>
+        </tr>
+        <tr><td colspan="2"><a href="#" onclick="searchTrainTable(); return false;">Opvragen</a></td></tr>
+    </table>
+
+    {% if routeNumber is not null %}
+        <table style="margin-top: 5px;">
+            <tr class="thead"><th colspan="3">Trein {{ routeNumber }}</th></tr>
+            {% set lastRouteOperationDays = null %}
+            {% for trainTableLine in trainTableLines %}
+                {% if trainTableLine.routeOperationDays != lastRouteOperationDays %}
+                    {% set lastRouteOperationDays = trainTableLine.routeOperationDays %}
+                    <tr class="thead"><th colspan="3">{{ trainTableLine.routeOperationDays | displayRouteOperationDays }}</th></tr>
+                {% endif %}
+                <tr>
+                    <td style="text-align: right;">{{ trainTableLine.location.name }} ({{ trainTableLine.location.description }})</td>
+                    <td>{{ trainTableLine.action }}</td>
+                    <td style="text-align:left;">{{ trainTableLine.time | displayTime }}</td>
+                </tr>
+            {% else %}
+                <tr><td colspan="3">Er bestaat geen trein met dat treinnummer.<br />Controleer de ingevoerde gegevens.</td></tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        function searchTrainTable() {
+            document.location = '{{ path('mobile_train_table_search', { 'routeNumber': '1234' }) }}'.replace('1234', $('#route_number').val());
+        }
+    </script>
+{% endblock %}

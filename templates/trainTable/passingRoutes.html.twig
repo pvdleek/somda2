@@ -18,7 +18,7 @@
                 <td>
                     <select id="dayNumber" name="dayNumber">
                         {% for dayNumberSelect in 0..6 %}
-                            <option {{ dayNumber == dayNumberSelect ? "selected=\"selected\" " }}value="{{ dayNumberSelect }}">{{ ('general.date.days.' ~ dayNumberSelect) | trans }}</option>
+                            <option {{ dayNumber == dayNumberSelect ? 'selected="selected" ' }}value="{{ dayNumberSelect }}">{{ ('general.date.days.' ~ dayNumberSelect) | trans }}</option>
                         {% endfor %}
                     </select>
                 </td>

@@ -4,6 +4,7 @@ namespace App\Twig;
 
 use App\Helpers\DateHelper;
 use App\Helpers\ForumHelper;
+use App\Helpers\RouteOperationDaysHelper;
 use App\Helpers\SortHelper;
 use App\Helpers\SpotHelper;
 use App\Helpers\UserDisplayHelper;
@@ -27,6 +28,7 @@ class AppExtension extends AbstractExtension
             new TwigFilter('displayTime', [$this, 'timeDatabaseToDisplay']),
             new TwigFilter('displayForumPost', [ForumHelper::class, 'getDisplayForumPost']),
             new TwigFilter('displaySpot', [SpotHelper::class, 'getDisplaySpot']),
+            new TwigFilter('displayRouteOperationDays', [RouteOperationDaysHelper::class, 'getDisplay']),
             new TwigFilter('sortByField', [SortHelper::class, 'sortByFieldFilter']),
         ];
     }

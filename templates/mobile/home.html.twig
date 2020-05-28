@@ -1,0 +1,33 @@
+{% extends('mobile/base.html.twig') %}
+
+{% block content %}
+    Welkom op Somda mobiel.
+    <br />
+    <br />Deze mobiele versie bevat een selectie van de vele beschikbare functionaliteiten op <a href="{{ path('home') }}">www.somda.nl</a>. In het menu hierboven vind je de mogelijkheden.
+    <br />
+    {% if not is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+        <br />Na inloggen kan je ook spots invoeren en reageren in het forum.
+        <br />
+        <br />
+        {% if error %}
+            <p class="alert">{{ error.messageKey | trans(error.messageData, 'security') }}</p>
+        {% endif %}
+        <form action="{{ path('mobile_login') }}" method="post">
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}" />
+            <table>
+                <tr class="thead"><th colspan="2">Inloggen op Somda Mobiel<br /><i style="font-size:12px;">(sommige onderdelen zijn beveiligd)</i></th></tr>
+                <tr><td><label for="username">Gebruikersnaam</label></td><td><input id="username" maxlength="10" name="username" size="20" type="text" value="{{ lastUsername }}" /></td></tr>
+                <tr><td><label for="password">Wachtwoord</label></td><td><input id="password" name="password" size="20" type="password" /></td></tr>
+                <tr><td>&nbsp;</td><td><label for="remember_me"><input id="remember_me" name="_remember_me" type="checkbox" /> Blijf ingelogd</label></td></tr>
+                <tr><td colspan="2"><input class="somda-button" type="submit" value="Inloggen bij Somda "/></td></tr>
+            </table>
+        </form>
+        <br />
+        <p class="info">
+            Nog geen gebruikersnaam en wachtwoord? <a href="{{ path('register') }}">Registreer je gratis en vrijblijvend</a>
+            <br />
+            <br />Wachtwoord vergeten?<br /><a href="{{ path('lost_password') }}">Vraag een nieuw wachtwoord aan</a>
+        </p>
+        <br />
+    {% endif %}
+{% endblock %}

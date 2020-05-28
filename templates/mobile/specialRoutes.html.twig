@@ -1,0 +1,23 @@
+{% extends('mobile/base.html.twig') %}
+
+{% block content %}
+    {% if specialRoute is null %}
+        <table>
+            <tr class="thead"><th colspan="2">Bijzondere ritten</th></tr>
+            {% for specialRoute in specialRoutes %}
+                <tr>
+                    <td>{{ specialRoute.startDate | displayDateTime(false, true) }}{% if specialRoute.endDate is not null %} {{ 'general.date.till' | trans }} {{ specialRoute.endDate | displayDateTime(false, true) }}{% endif %}</td>
+                    <td><a href="{{ path('mobile_special_route', { 'id': specialRoute.id }) }}">{{ specialRoute.title }}</a></td>
+                </tr>
+            {% else %}
+                <tr><td colspan="2">Op dit moment zijn er geen bijzondere ritten beschikbaar</td></tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <table>
+            <tr class="thead"><th>{{ specialRoute.title }}</th></tr>
+            <tr class="thead"><th>{{ specialRoute.startDate | displayDateTime(false, true) }}{% if specialRoute.endDate is not null %} {{ 'general.date.till' | trans }} {{ specialRoute.endDate | displayDateTime(false, true) }}{% endif %}</th></tr>
+            <tr><td style="text-align:left;">{{ specialRoute.text | raw }}</td></tr>
+        </table>
+    {% endif %}
+{% endblock %}

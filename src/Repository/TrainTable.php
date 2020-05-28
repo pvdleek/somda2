@@ -52,6 +52,7 @@ class TrainTable extends EntityRepository
             ->addSelect('fl_last.name AS fl_last_name')
             ->addSelect('fl_last.description AS fl_last_description')
             ->addSelect('transporter.name AS ' . self::FIELD_TRANSPORTER_NAME)
+            ->addSelect('characteristic.name AS ' . self::FIELD_CHARACTERISTIC_NAME)
             ->addSelect('characteristic.description AS ' . self::FIELD_CHARACTERISTIC_DESCRIPTION)
             ->from(TrainTableEntity::class, 't')
             ->andWhere('t.trainTableYear = :' . self::PARAMETER_TRAIN_TABLE_YEAR)
