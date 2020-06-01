@@ -1,3 +1,8 @@
+- Users checken (zie eerste migratie script)
+
+- Nginx configuratie aanpassen (zie server-configuration)
+- .env.local maken (zie server-configuration)
+
 - ForumLog vullen met alle posts en dan app:process-forum-log draaien
 - Iedereen nieuw wachtwoord aanvragen
 - Alle commands draaien
