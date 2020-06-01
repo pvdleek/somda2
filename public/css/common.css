@@ -522,6 +522,14 @@ span.special-route-image {
 /************/
 /*** Help ***/
 /************/
+ul.about {
+    list-style: disc;
+    padding-inline-start: 20px;
+}
+
+/************/
+/*** Help ***/
+/************/
 .help-index {
     margin: 1rem;
 }

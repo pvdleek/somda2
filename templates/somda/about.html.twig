@@ -16,11 +16,11 @@
             <br />Enkele functies zullen echter niet goed werken op oudere versies waaronder Internet Explorer 8 en eerder. Overweeg in dat geval een update van je browser en/of je operating systeem.
 
             <p class="info">Somda biedt de volgende gratis diensten:</p>
-            <ul>
-                <li>Webapplicatie (https://www.somda.nl/) --- Onder andere voor het invoeren van spots en bekijken van dienstregelingen.</li>
+            <ul class="about">
+                <li>Webapplicatie ({{ absolute_url(path('home')) }}) --- Onder andere voor het invoeren van spots en bekijken van dienstregelingen.</li>
                 <li>Mobiele versie (wordt automatisch gedetecteerd) --- Voor het bekijken van dienstregelingen, omlopen en forumberichten.</li>
-                <li>Feeds (<a href="https://feed.somda.nl/" target="_blank">https://feed.somda.nl/</a>):
-                    <ul>
+                <li>Feeds (<a href="{{ path('feeds') }}" target="_blank">{{ absolute_url(path('feeds')) }}</a>):
+                    <ul class="about">
                         <li>Image met verstoringen --- Actuele verstoringen als plaatje, dus direct bruikbaar op een website.</li>
                         <li>RSS --- Keuze uit de laatste spots of komende speciale ritten</li>
                     </ul>
