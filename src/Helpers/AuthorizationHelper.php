@@ -9,6 +9,7 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 class AuthorizationHelper
 {
@@ -23,13 +24,23 @@ class AuthorizationHelper
     private TokenStorageInterface $tokenStorage;
 
     /**
+     * @var AuthorizationCheckerInterface
+     */
+    private AuthorizationCheckerInterface $securityChecker;
+
+    /**
      * @param LoggerInterface $logger
      * @param TokenStorageInterface $tokenStorage
+     * @param AuthorizationCheckerInterface $securityChecker
      */
-    public function __construct(LoggerInterface $logger, TokenStorageInterface $tokenStorage)
-    {
+    public function __construct(
+        LoggerInterface $logger,
+        TokenStorageInterface $tokenStorage,
+        AuthorizationCheckerInterface $securityChecker
+    ) {
         $this->logger = $logger;
         $this->tokenStorage = $tokenStorage;
+        $this->securityChecker = $securityChecker;
     }
 
     /**
@@ -114,5 +125,14 @@ class AuthorizationHelper
         }
 
         return $user;
+    }
+
+    /**
+     * @param string $role
+     * @return bool
+     */
+    public function isGranted(string $role): bool
+    {
+        return $this->securityChecker->isGranted($role, $this->getUser());
     }
 }

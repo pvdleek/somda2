@@ -49,14 +49,15 @@ class MenuHelper implements RuntimeExtensionInterface
      */
     public function getMenuStructure(): array
     {
-        $user = $this->authorizationHelper->getUser();
         $blocks = $this->doctrine->getRepository(Block::class)->getMenuStructure();
         $allowedBlocks = [];
 
         foreach ($blocks as $block) {
             if (strlen($block['route']) > 0
-                && (is_null($block['role']) || (
-                    !is_null($user) && ($user->hasRole($block['role']) || $user->hasRole(RoleGenerics::ROLE_ADMIN)))
+                && (
+                    is_null($block['role'])
+                    || $this->authorizationHelper->isGranted($block['role'])
+                    || $this->authorizationHelper->isGranted(RoleGenerics::ROLE_ADMIN)
                 )
             ) {
                 $allowedBlocks[] = $block;
