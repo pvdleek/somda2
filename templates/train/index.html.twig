@@ -8,13 +8,10 @@
             <td>
                 <select id="type_id" name="type_id">
                     {% for type in types %}
-                        <option {{ selectedType.id == type.id ? 'selected="selected" ' }}value="{{ type.id }}">{{ type.description }}</option>
+                        <option {{ selectedType is not null and selectedType.id == type.id ? 'selected="selected" ' }}value="{{ type.id }}">{{ type.description }}</option>
                     {% endfor %}
                 </select>
             </td>
-        </tr><tr>
-            <th><label for="search">Of zoek op baknummer</label></th>
-            <td><input id="search" name="search" type="text" /></td>
         </tr><tr>
             <th>&nbsp;</th>
             <td><a class="somda-button" href="#" id="searchSpots" onclick="searchTrains(); return false;" title="">{{ 'general.button.search' | trans }}</a></td>

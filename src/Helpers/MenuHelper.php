@@ -4,6 +4,7 @@ namespace App\Helpers;
 
 use App\Entity\Block;
 use App\Entity\ForumPostAlert;
+use App\Entity\Position;
 use App\Generics\RoleGenerics;
 use Doctrine\Persistence\ManagerRegistry;
 use Twig\Extension\RuntimeExtensionInterface;
@@ -53,17 +54,26 @@ class MenuHelper implements RuntimeExtensionInterface
         $allowedBlocks = [];
 
         foreach ($blocks as $block) {
-            if (strlen($block['route']) > 0
-                && (
-                    is_null($block['role'])
-                    || $this->authorizationHelper->isGranted($block['role'])
-                    || $this->authorizationHelper->isGranted(RoleGenerics::ROLE_ADMIN)
-                )
-            ) {
+            if (strlen($block['route']) > 0 && $this->isAuthorizedForBlock($block)) {
                 $allowedBlocks[] = $block;
             }
         }
 
         return $allowedBlocks;
+    }
+
+    /**
+     * @param array $block
+     * @return bool
+     */
+    private function isAuthorizedForBlock(array $block): bool
+    {
+        if (is_null($block['role']) || $this->authorizationHelper->isGranted(RoleGenerics::ROLE_ADMIN)) {
+            return true;
+        }
+        if ($block['role'] === 'IS_AUTHENTICATED_ANONYMOUSLY') {
+            return is_null($this->authorizationHelper->getUser());
+        }
+        return substr($block['role'], 0, 11) !== 'ROLE_ADMIN_' || $this->authorizationHelper->isGranted($block['role']);
     }
 }
