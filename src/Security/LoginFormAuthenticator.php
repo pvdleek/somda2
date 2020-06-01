@@ -8,6 +8,11 @@ use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 class LoginFormAuthenticator extends BaseFormAuthenticator
 {
+    /**
+     * @param EntityManagerInterface $entityManager
+     * @param UrlGeneratorInterface $urlGenerator
+     * @param CsrfTokenManagerInterface $csrfTokenManager
+     */
     public function __construct(
         EntityManagerInterface $entityManager,
         UrlGeneratorInterface $urlGenerator,

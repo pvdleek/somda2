@@ -73,10 +73,15 @@ class ForumForumController
         $forumCategories = $this->doctrine->getRepository(ForumCategory::class)->findBy([], ['order' => 'ASC']);
         $categories = [];
         foreach ($forumCategories as $category) {
-            $categories[] = [
-                'category' => $category,
-                'forums' => $this->doctrine->getRepository(ForumForum::class)->findByCategory($category),
-            ];
+            $categoryItem = ['category' => $category, 'forums' => []];
+            $forums = $this->doctrine->getRepository(ForumForum::class)->findByCategory($category);
+            foreach ($forums as $forum) {
+                $forumEntity = $this->doctrine->getRepository(ForumForum::class)->find($forum['id']);
+                if ($this->forumAuthHelper->mayView($forumEntity, $this->userHelper->getUser())) {
+                    $categoryItem['forums'][] = $forum;
+                }
+            }
+            $categories[] = $categoryItem;
         }
 
         return $this->templateHelper->render('forum/index.html.twig', [

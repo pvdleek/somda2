@@ -93,8 +93,8 @@
     <script>
         function searchSpots() {
             let location = '{{ path('spots_search', { 'maxYears': 1, 'searchParameters': 'myParameters' }) }}';
-            location = location.replace('/1/', '/' + document.getElementById('max_years').value + '/');
-            location = location.replace('myParameters', document.getElementById('location').value + '/' + document.getElementById('day_number').value + '/' + document.getElementById('train_number').value + '/' + document.getElementById('route_number').value);
+            location = location.replace('/1/', '/' + $('#max_years').val() + '/');
+            location = location.replace('myParameters', $('#location').val() + '/' + $('#day_number').val() + '/' + $('#train_number').val() + '/' + $('#route_number').val());
             document.location = location;
         }
     </script>

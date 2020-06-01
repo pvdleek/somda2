@@ -1,0 +1,27 @@
+{% extends('mobile/base.html.twig') %}
+
+{% block content %}
+    <div><i class="fas fa-comments"></i> {{ post.discussion.title }}</div>
+
+    {{ form_start(form, { 'attr': { 'id': 'reply_form' } }) }}
+        <table>
+            {{ form_row(form.text) }}
+            {{ form_row(form.signatureOn) }}
+            <tr>
+                <td>&nbsp;</td>
+                <td>
+                    <a class="somda-button" href="#" onclick="$('#reply_form').submit(); return false;">Reageer</a>
+                    <a class="somda-button" href="{{ path('forum_discussion', { 'id': post.discussion.id, 'name': (post.discussion.title | url_encode) }) }}">Terug naar de discussie</a>
+                </td>
+            </tr>
+        </table>
+    {{ form_end(form) }}
+
+    <br />
+
+    {% for post in lastPosts %}
+        <table align="center" class="design" width="98%">
+            {% include 'mobile/forum/post.html.twig' with { 'mayPost': false, 'userIsModerator': false, 'postIsUnread': false } %}
+        </table>
+    {% endfor %}
+{% endblock %}

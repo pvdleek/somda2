@@ -1,0 +1,38 @@
+{% extends('mobile/base.html.twig') %}
+
+{% block content %}
+    <p class="warn">Voer je spot(s) in volgens onderstaande opmaak:</p>
+    <table>
+        <tr class="thead">
+            <th>Layout</th>
+            <th>Voorbeeld</th>
+        </tr>
+        <tr>
+            <td rowspan="3">materieel trein<br />{evt positie of vertraging}</td>
+            <td>9520 2054</td>
+        </tr>
+        <tr>
+            <td>7844 4312 +5</td>
+        </tr>
+        <tr>
+            <td>7419 5710 V</td>
+        </tr>
+    </table>
+    <i>LET OP: De posities zijn altijd bij <strong>vertrek</strong> van de trein!</i> (uitgezonderd spot invoer op het eindpunt van de trein)
+    <br />
+    <br />
+
+    {{ form_start(form, { 'attr': { 'id': 'spot_form' } }) }}
+        <table class="design">
+            {{ form_row(form.location) }}
+            {{ form_row(form.date) }}
+            {{ form_row(form.spots) }}
+            <tr>
+                <td>&nbsp;</td>
+                <td>
+                    <a class="somda-button" href="#" onclick="$('#spot_form').submit(); return false;">Spots opslaan</a>
+                </td>
+            </tr>
+        </table>
+    {{ form_end(form) }}
+{% endblock %}

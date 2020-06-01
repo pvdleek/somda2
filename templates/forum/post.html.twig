@@ -54,7 +54,7 @@
                 <tr><td style="border:none;"><a class="somda-button" href="{{ path('forum_discussion_post_reply', { 'id': post.id }) }}">Reageer</a></td></tr>
             {% endif %}
             {% if userIsModerator or (mayPost and not post.discussion.locked and post.author == app.user) %}
-                <tr><td style="border:none;"><a class="somda-button" href="{{ path('forum_discussion_post_edit', { 'id': post.id }) }}">Bewerk</a>
+                <tr><td style="border:none;"><a class="somda-button" href="{{ path('forum_discussion_post_edit', { 'id': post.id }) }}">Bewerk</a></td></tr>
             {% endif %}
         </table>
     </td>

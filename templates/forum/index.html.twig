@@ -9,14 +9,17 @@
     <table class="design">
         <tr><th colspan="2">{{ 'forum.category' | trans }}</th><th>{{ 'forum.number.discussions' | trans }}</th></tr>
         {% for category in categories %}
-            <tr><th colspan="3">{{ category['category'].name }}</th></tr>
-            {% for forum in category['forums'] %}
-                <tr>
-                    <td><i class="fas fa-comments"></i></td>
-                    <td><a href="{{ path('forum_forum', { 'id': forum['id'], 'name': forum['name'] }) }}">{{ forum['name'] }}</a></td>
-                    <td>{{ forum['numberOfDiscussions'] }}</td>
-                </tr>
-            {% endfor %}
+            {% if category['forums'] | length > 0 %}
+                <tr><th colspan="3">{{ category['category'].name }}</th></tr>
+                {% for forum in category['forums'] %}
+                    <tr>
+                        <td><i class="fas fa-comments"></i></td>
+                        <td><a href="{{ path('forum_forum', { 'id': forum['id'], 'name': forum['name'] }) }}">{{ forum['name'] }}</a></td>
+                        <td>{{ forum['numberOfDiscussions'] }}</td>
+                    </tr>
+                {% endfor %}
+            {% endif %}
         {% endfor %}
     </table>
+    <br />
 {% endblock %}

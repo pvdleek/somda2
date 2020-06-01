@@ -1,0 +1,9 @@
+{% extends('mobile/base.html.twig') %}
+
+{% block content %}
+    <table>
+        <tr class="thead"><th>{{ specialRoute.title }}</th></tr>
+        <tr class="thead"><th>{{ specialRoute.startDate | displayDateTime(false, true) }}{% if specialRoute.endDate is not null %} {{ 'general.date.till' | trans }} {{ specialRoute.endDate | displayDateTime(false, true) }}{% endif %}</th></tr>
+        <tr><td style="text-align:left;">{{ specialRoute.text | raw }}</td></tr>
+    </table>
+{% endblock %}

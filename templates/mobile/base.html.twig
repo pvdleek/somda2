@@ -17,6 +17,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
 
     <script src="{{asset('js/jquery-1.12.4.js')}}"></script>
+    <script src="https://kit.fontawesome.com/be43109115.js" crossorigin="anonymous"></script>
 
     <title>{% if pageTitle is defined %}{{ pageTitle }} - {% endif %}Somda</title>
 
@@ -34,11 +35,11 @@
         <div id="header"><img alt="Somda" src="{{ asset('images/logos-somda/logo-' ~ imageNumber ~ '.png') }}" /></div>
 
         <div id="menu">
-            <a href="{{ path('mobile_home') }}">Home</a> -
+            <a href="{{ path('home') }}">Home</a> -
             {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-                <a href="{{ path('mobile_passing_routes') }}">Doorkomststaat</a> - <a href="{{ path('mobile_train_table') }}">Dienstregeling</a> - <a href="{{ path('mobile_special_routes') }}">Bijzondere ritten</a> - <a href="spot_invoeren.php">Spots invoeren</a> - <a href="forum.php">Forum</a> - <a href="{{ path('mobile_logout') }}">Afmelden</a>
+                <a href="{{ path('passing_routes') }}">Doorkomststaat</a> - <a href="{{ path('train_table') }}">Dienstregeling</a> - <a href="{{ path('special_routes') }}">Bijzondere ritten</a> - <a href="{{ path('spot_input') }}">Spots invoeren</a> - <a href="{{ path('forum') }}">Forum</a> - <a href="{{ path('logout') }}">Afmelden</a>
             {% else %}
-                <a href="{{ path('mobile_train_table') }}">Dienstregeling</a> - <a href="{{ path('mobile_special_routes') }}">Bijzondere ritten</a> - <a href="forum.php">Forum</a>
+                <a href="{{ path('train_table') }}">Dienstregeling</a> - <a href="{{ path('special_routes') }}">Bijzondere ritten</a> - <a href="{{ path('forum') }}">Forum</a>
             {% endif %}
         </div>
 
@@ -50,12 +51,14 @@
         </div>
     </div>
 
-{#    if (isset($forum_jump) && strlen($forum_jump)>0) {#}
-{#    echo '<script language="javascript" type="text/javascript">';#}
-{#        echo 'function getElementTop(element_id){if(document.layers){var element=getObjNN4(document,element_id);return element.pageY;}else{var element=document.getElementById(element_id);var yPos=element.offsetTop;var tempEl=element.offsetParent;while(tempEl!=null){yPos+=tempEl.offsetTop;tempEl=tempEl.offsetParent;}return yPos;}}';#}
-{#        echo "window.scrollTo(0, (getElementTop('".$forum_jump."')-5));";#}
-{#        echo '</script>';#}
-{#    }#}
+    {# If applicable, jump to the requested forum-post #}
+    {% if forumJump is defined and forumJump is not null %}
+        <script>
+            $(document).ready(function() {
+                $('html,body').animate({ scrollTop: $('#{{ forumJump }}').offset().top }, 'fast');
+            });
+        </script>
+    {% endif %}
 
     {% block javascripts %}{% endblock %}
 </body>

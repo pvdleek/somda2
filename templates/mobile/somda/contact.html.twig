@@ -1,0 +1,19 @@
+{% extends('mobile/base.html.twig') %}
+
+{% block content %}
+    <div><i class="fas fa-shipping-fast"></i> Feedback sturen naar de beheerder</div>
+
+    {{ form_start(form, { 'attr': { 'id': 'contact_form' } }) }}
+        <table>
+            {{ form_row(form.subject) }}
+            {{ form_row(form.text) }}
+            <tr>
+                <td>&nbsp;</td>
+                <td>
+                    <a class="somda-button" href="#" onclick="$('#contact_form').submit(); return false;">Verstuur bericht</a>
+                    <a class="somda-button" href="{{ path('home') }}">Terug naar home</a>
+                </td>
+            </tr>
+        </table>
+    {{ form_end(form) }}
+{% endblock %}

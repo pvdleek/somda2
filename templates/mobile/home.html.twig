@@ -9,14 +9,14 @@
         <br />Na inloggen kan je ook spots invoeren en reageren in het forum.
         <br />
         <br />
-        {% if error %}
+        {% if error is defined and error %}
             <p class="alert">{{ error.messageKey | trans(error.messageData, 'security') }}</p>
         {% endif %}
-        <form action="{{ path('mobile_login') }}" method="post">
+        <form action="{{ path('login') }}" method="post">
             <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}" />
             <table>
                 <tr class="thead"><th colspan="2">Inloggen op Somda Mobiel<br /><i style="font-size:12px;">(sommige onderdelen zijn beveiligd)</i></th></tr>
-                <tr><td><label for="username">Gebruikersnaam</label></td><td><input id="username" maxlength="10" name="username" size="20" type="text" value="{{ lastUsername }}" /></td></tr>
+                <tr><td><label for="username">Gebruikersnaam</label></td><td><input id="username" maxlength="10" name="username" size="20" type="text"{% if lastUsername is defined %} value="{{ lastUsername }}"{% endif%} /></td></tr>
                 <tr><td><label for="password">Wachtwoord</label></td><td><input id="password" name="password" size="20" type="password" /></td></tr>
                 <tr><td>&nbsp;</td><td><label for="remember_me"><input id="remember_me" name="_remember_me" type="checkbox" /> Blijf ingelogd</label></td></tr>
                 <tr><td colspan="2"><input class="somda-button" type="submit" value="Inloggen bij Somda "/></td></tr>

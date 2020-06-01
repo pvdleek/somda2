@@ -29,7 +29,6 @@ final class Version20200307111303 extends AbstractMigration
         $this->addSql('UPDATE somda_blokken SET `role` = \'ROLE_ABBREVIATIONS\' WHERE blokid = 6');
         $this->addSql('UPDATE somda_blokken SET `role` = \'ROLE_ADMIN_ROUTE_NUMBER_LIST\' WHERE blokid = 7');
         $this->addSql('UPDATE somda_blokken SET `role` = \'ROLE_ADMIN_TRAINTABLE_NEW\' WHERE blokid = 8');
-        $this->addSql('UPDATE somda_blokken SET `role` = \'ROLE_TRAINTABLE\' WHERE blokid = 9');
         $this->addSql('UPDATE somda_blokken SET `role` = \'ROLE_ADMIN_LTI\' WHERE blokid = 11');
         $this->addSql('UPDATE somda_blokken SET `role` = \'ROLE_PASSING_ROUTES\' WHERE blokid = 12');
         $this->addSql('UPDATE somda_blokken SET `role` = \'ROLE_SPOTS_NEW\' WHERE blokid = 17');
@@ -65,14 +64,14 @@ final class Version20200307111303 extends AbstractMigration
 
         $this->addSql('UPDATE somda_groups SET roles = \'a:1:{i:0;s:13:"ROLE_API_USER";}\' WHERE groupid = 2');
         $this->addSql('
-            UPDATE somda_groups SET roles = \'a:7:{i:0;s:18:"ROLE_ABBREVIATIONS";i:1;s:15:"ROLE_TRAINTABLE";i:2;s:19:' .
-            '"ROLE_PASSING_ROUTES";i:3;s:17:"ROLE_SPOTS_RECENT";i:4;s:15:"ROLE_TRAIN_DDAR";i:5;s:19:' .
-            '"ROLE_ROUTE_OVERVIEW";i:6;s:16:"ROLE_TRAIN_NAMES";}\' WHERE groupid = 3
+            UPDATE somda_groups SET roles = \'a:6:{i:0;s:18:"ROLE_ABBREVIATIONS";i:1;s:19:' .
+            '"ROLE_PASSING_ROUTES";i:2;s:17:"ROLE_SPOTS_RECENT";i:3;s:15:"ROLE_TRAIN_DDAR";i:4;s:19:' .
+            '"ROLE_ROUTE_OVERVIEW";i:5;s:16:"ROLE_TRAIN_NAMES";}\' WHERE groupid = 3
         ');
         $this->addSql('
-            UPDATE somda_groups SET roles = \'a:9:{i:0;s:18:"ROLE_ABBREVIATIONS";i:1;s:15:"ROLE_TRAINTABLE";i:2;s:19:' .
-            '"ROLE_PASSING_ROUTES";i:3;s:14:"ROLE_SPOTS_NEW";i:4;s:17:"ROLE_SPOTS_RECENT";i:5;s:15:' .
-            '"ROLE_SPOTS_EDIT";i:6;s:15:"ROLE_TRAIN_DDAR;i:7;s:19:"ROLE_ROUTE_OVERVIEW";i:8;s:16:' .
+            UPDATE somda_groups SET roles = \'a:8:{i:0;s:18:"ROLE_ABBREVIATIONS";i:1;s:19:' .
+            '"ROLE_PASSING_ROUTES";i:2;s:14:"ROLE_SPOTS_NEW";i:3;s:17:"ROLE_SPOTS_RECENT";i:4;s:15:' .
+            '"ROLE_SPOTS_EDIT";i:5;s:15:"ROLE_TRAIN_DDAR;i:6;s:19:"ROLE_ROUTE_OVERVIEW";i:7;s:16:' .
             '"ROLE_TRAIN_NAMES";}\' WHERE groupid = 4
         ');
         $this->addSql('UPDATE somda_groups SET roles = \'a:1:{i:0;s:16:"ROLE_ADMIN_SPOTS";}\' WHERE groupid = 6');

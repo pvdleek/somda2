@@ -11,6 +11,7 @@ use App\Form\RailNews as RailNewsForm;
 use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
+use Mobile_Detect;
 use Monolog\Logger;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -78,6 +79,11 @@ class TemplateHelper
      */
     public function render(string $view, array $parameters = [], Response $response = null): Response
     {
+        $detect = new Mobile_Detect();
+        if ($detect->isMobile() && file_exists(__DIR__ . '/../../templates/mobile/' . $view)) {
+            $view = 'mobile/' . $view;
+        }
+
         try {
             $content = $this->twig->render($view, $this->getParameters($parameters));
         } catch (Exception $exception) {

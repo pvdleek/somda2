@@ -24,6 +24,26 @@ p {
     margin-right: auto;
 }
 
+/**************/
+/*** Button ***/
+/**************/
+.somda-button {
+    background-color: #246da5;
+    border: 1px solid #246da5;
+    border-radius: 5px;
+    color: #fff !important;
+    display: inline-block;
+    font-weight: bold;
+    margin: 2px;
+    padding: 5px 20px;
+    text-align: center;
+    text-decoration: none;
+}
+.somda-button:hover, .somda-button:focus {
+    background-color: #fff;
+    color: #246da5 !important;
+}
+
 /*************/
 /*** Forms ***/
 /*************/
@@ -51,14 +71,19 @@ table {
 tr {
     background-color: #d4e1f6;
 }
-tr.thead, th {
+tr.thead th {
     background-color: #1D679F;
     color: #FFF;
     font-weight: bold;
     padding: 2px;
 }
-tr.thead, th a {
-    color: #AAA;
+tr.thead th a {
+    color: #aaa;
+}
+#moderator_icons {
+    float: right;
+    padding-left: 20px;
+    padding-right: 10px;
 }
 
 /**************/

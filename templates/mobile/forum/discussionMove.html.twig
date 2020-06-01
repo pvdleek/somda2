@@ -1,0 +1,18 @@
+{% extends('mobile/base.html.twig') %}
+
+{% block content %}
+    <div><i class="fas fa-comments"></i> Verplaatsen van "{{ discussion.title }}"</div>
+
+    {{ form_start(form, { 'attr': { 'id': 'move_form' } }) }}
+        <table>
+            {{ form_row(form.forum) }}
+            <tr>
+                <td>&nbsp;</td>
+                <td>
+                    <a class="somda-button" href="#" onclick="$('#move_form').submit(); return false;">Verplaatsen</a>
+                    <a class="somda-button" href="{{ path('forum_discussion', { 'id': discussion.id, 'name': (discussion.title | url_encode )}) }}">Terug naar de discussie</a>
+                </td>
+            </tr>
+        </table>
+    {{ form_end(form) }}
+{% endblock %}

@@ -1,0 +1,85 @@
+{% extends('mobile/base.html.twig') %}
+
+{% block content %}
+    {% if form is not null %}
+        {{ form_start(form, { 'attr': { 'id': 'profile_form' } }) }}
+            <table class="design">
+                <tr class="thead"><tr><th colspan="2">Mijn profiel aanpassen</th></tr>
+                <tr><td>&nbsp;</td><td id="user_avatar"><img alt="avatar" src="{{ asset('images/avatar/' ~ user.info.avatar) }}" /></td></tr>
+                {{ form_rest(form) }}
+                <tr>
+                    <td>&nbsp;</td>
+                    <td>
+                        <a class="somda-button" href="#" onclick="$('#profile_form').submit(); return false;">Profiel opslaan</a>
+                        <a class="somda-button" href="{{ path('home') }}">Terug naar home</a>
+                    </td>
+                </tr>
+            </table>
+        {{ form_end(form) }}
+    {% else %}
+        {% if is_granted(constant('App\\Generics\\RoleGenerics::ROLE_ADMIN')) %}
+            {% if (user.banExpireTimestamp | date('Y-m-d')) > ('now' | date('Y-m-d')) %}
+                <p class="warn">Deze gebruiker is geband tot {{ user.banExpireTimestamp | displayDateTime }} - <a href="{{ path('manage_ban', { 'id': user.id }) }}">Bewerk</a></p>
+            {% elseif user.banExpireTimestamp is not null %}
+                <p class="info">Deze gebruiker was geband tot {{ user.banExpireTimestamp | displayDateTime }} - <a href="{{ path('manage_ban', { 'id': user.id }) }}">Opnieuw bannen</a></p>
+            {% else %}
+                <br /><a href="{{ path('manage_ban', { 'id': user.id }) }}">Bannen</a>
+            {% endif %}
+        {% endif %}
+        <table>
+            <tr class="thead">
+                <td valign="top"><img alt="avatar" src="{{ asset('images/avatar/' ~ user.info.avatar) }}" /></td>
+                <th>Profiel van gebruiker "{{ user.username }}"</th>
+            </tr><tr class="thead">
+                <th align="right">{{ 'profile.username' | trans }}</th>
+                <td align="left">{{ user.username }}</td>
+            </tr><tr class="thead">
+                <th align="right">{{ 'profile.name' | trans }}</th>
+                <td align="left">{{ user.name }}</td>
+            </tr><tr class="thead">
+                <th align="right">{{ 'profile.city' | trans }}</th>
+                <td align="left">{{ user.info.city }}</td>
+            </tr><tr class="thead">
+                <th align="right">{{ 'profile.gender' | trans }}</th>
+                <td align="left">{{ user.info.gender }}</td>
+            </tr><tr class="thead">
+                <th align="right">{{ 'profile.birthDate' | trans }}</th>
+                <td align="left">{{ user.info.birthDate | displayDateTime | default('Onbekend') }}</td>
+            </tr>
+            {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                <tr class="thead">
+                    <th>&nbsp;</th>
+                    <td align="left"><a href="{{ path('profile_mail', { 'id': user.id }) }}">Stuur deze gebruiker een e-mail</a></td>
+                </tr>
+            {% endif %}
+            <tr class="thead">
+                <th align="right">{{ 'profile.registrationDate' | trans }}</th>
+                <td align="left">{{ user.registerTimestamp | displayDateTime }}</td>
+            </tr><tr class="thead">
+                <th align="right">{{ 'profile.lastVisit' | trans }}</th>
+                <td align="left">{{ user.lastVisit is null ? ('general.error.unknown' | trans) : (user.lastVisit | displayDateTime(true)) }}</td>
+            </tr><tr class="thead">
+                <th align="right">{{ 'profile.website' | trans }}</th>
+                <td align="left">{{ user.info.website }}</td>
+            </tr><tr class="thead">
+                <th align="right">{{ 'profile.info' | trans }}</th>
+                <td align="left">{{ user.info.info }}</td>
+            </tr>
+        </table>
+    {% endif %}
+{% endblock %}
+
+{% block javascripts %}
+    {% if form is not null %}
+        <script>
+            $(document).ready(function() {
+                $('#user_info_avatar').on('change', function () {
+                    $('#user_avatar').html('<img alt="avatar" src="/images/avatar/' + $(this).val() + '" />');
+                });
+                $('#user_info_mobilePhone').mask('31699999999').click(function () {
+                    $(this).focus();
+                });
+            });
+        </script>
+    {% endif %}
+{% endblock %}

@@ -13,10 +13,6 @@ banner_click_out:
   requirements: { id: \d+ }
   controller: App\Controller\BannerController::clickOutAction
 
-_mobile:
-  resource: 'routes_mobile.yaml'
-  prefix: /mobiel
-
 ###################
 # User management #
 ###################
@@ -100,18 +96,18 @@ train_table:
   methods: [GET]
   controller: App\Controller\TrainTableController:indexAction
 train_table_search:
-  path: /dienstregeling/{trainTableIndexNumber}/{routeNumber}/
+  path: /dienstregeling/{trainTableYearId}/{routeNumber}/
   methods: [GET]
-  requirements: { trainTableIndexNumber: \d+ }
+  requirements: { trainTableYearId: \d+ }
   controller: App\Controller\TrainTableController:indexAction
 passing_routes:
   path: /doorkomststaat/
   methods: [GET]
   controller: App\Controller\TrainTableController:passingRoutesAction
 passing_routes_search:
-  path: /doorkomststaat/{trainTableIndexNumber}/{locationName}/{dayNumber}/{startTime}/{endTime}/
+  path: /doorkomststaat/{trainTableYearId}/{locationName}/{dayNumber}/{startTime}/{endTime}/
   methods: [GET]
-  requirements: { trainTableIndexNumber: \d+, dayNumber: \d+ }
+  requirements: { trainTableYearId: \d+, dayNumber: \d+ }
   controller: App\Controller\TrainTableController:passingRoutesAction
 special_routes:
   path: /drgl/

@@ -11,22 +11,6 @@ security:
     dev:
       pattern: ^/(_(profiler|wdt)|css|images|js)/
       security: false
-    mobile:
-      pattern: ^/mobiel
-      anonymous: true
-      provider: app_user_provider
-      guard:
-        authenticators:
-          - App\Security\MobileLoginFormAuthenticator
-      logout:
-        path: mobile_logout
-        target: mobile_home
-      remember_me:
-        secret: '%kernel.secret%.mobile'
-        lifetime: 604800
-        path: mobile_home
-        secure: true
-        samesite: 'strict'
     main:
       anonymous: true
       provider: app_user_provider
@@ -35,11 +19,11 @@ security:
           - App\Security\LoginFormAuthenticator
       logout:
         path: logout
-        target: home
+        target: /
       remember_me:
         secret: '%kernel.secret%'
         lifetime: 604800
-        path: home
+        path: /
         secure: true
         samesite: 'strict'
   role_hierarchy:
@@ -53,7 +37,6 @@ security:
       - ROLE_SPOTS_RECENT
       - ROLE_TRAIN_DDAR
       - ROLE_TRAIN_NAMES
-      - ROLE_TRAINTABLE
     ROLE_SUPER_ADMIN:
       - ROLE_ADMIN
       - ROLE_ADMIN_BANS

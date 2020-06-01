@@ -11,7 +11,7 @@
                             Deze forumdiscussie is gekoppeld aan de <a href="http://www.railwiki.nl/" target="_blank">RailWiki.nl</a> pagina('s):
                             <br />
                             {% for wiki in discussion.wikis %}
-                                <a href="http://www.railwiki.nl/index.php/{{ wiki.wiki }}" target="_blank">{{ wiki.title ? wiki.witle : wiki.wiki }}</a>
+                                <a href="http://www.railwiki.nl/index.php/{{ wiki.wiki }}" target="_blank">{{ wiki.title ? wiki.title : wiki.wiki }}</a>
                                 {% if not loop.last %} - {% endif %}
                             {% endfor %}
                         </td>

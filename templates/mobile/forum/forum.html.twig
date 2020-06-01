@@ -1,0 +1,67 @@
+{% extends('mobile/base.html.twig') %}
+
+{% block content %}
+    <a class="somda-button" href="{{ path('forum') }}" title="{{ 'forum.newDiscussion' | trans }}">Terug naar het forum-overzicht</a>
+    {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+        <br /><a class="somda-button" href="{{ path('forum_forum_new_discussion', { 'id': forum.id }) }}" title="{{ 'forum.newDiscussion' | trans }}">{{ 'forum.newDiscussion' | trans }}</a>
+        <br /><br />
+    {% endif %}
+
+    <table>
+        <tr class="thead">
+            <th>
+                Forum-discussies
+                {% if userIsModerator %}
+                    <span id="moderator_icons">
+                        <a href="#" onclick="moderateCombine(); return false;"><i class="fas fa-compress-alt" title="Combineer discussies"></i></a>
+                    </span>
+                {% endif %}
+            </th>
+        </tr>
+        {% for discussion in discussions | slice(0, 25) %}
+            <tr>
+                <td style="border-top:1px #000000 solid; padding:5px;">
+                    {% if userIsModerator %}<input name="sel{{ discussion.id }}" type="checkbox" />{% endif %}
+                    {% if discussion['locked'] %}
+                        <i class="fas fa-lock"></i>
+                    {% elseif discussion['posts'] > 1 %}
+                        <i class="fas fa-comments"></i>
+                    {% else %}
+                        <i class="fas fa-comment"></i>
+                    {% endif %}
+
+                    <a href="{{ path('forum_discussion', { 'id': discussion['id'], 'name': (discussion['title'] | url_encode) }) }}">{{ discussion['title'] }}</a>
+                    {% if not discussion['discussion_read'] %} <i class="fas fa-comment-dots"></i>{% endif %}
+
+                    <br />Laatste op {{ discussion['max_post_timestamp'] | displayDateTime(true, true) }} door {{ discussion['author_id'] | displayUser(discussion['author_username']) | raw }}
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
+
+{% block javascripts %}
+    {% if userIsModerator %}
+        <script>
+            function moderateCombine() {
+                let discussionId1 = 0;
+                let discussionId2 = 0;
+                let checkboxes = document.getElementsByTagName('input');
+                for (let box = 0; box < checkboxes.length; box++)  {
+                    if (checkboxes[box].type === 'checkbox' && checkboxes[box].checked) {
+                        if (discussionId1 > 0) {
+                            discussionId2 = parseInt(checkboxes[box].name.substr(3));
+                            break;
+                        }
+                        discussionId1 = parseInt(checkboxes[box].name.substr(3));
+                    }
+                }
+                if (discussionId1 > 0 && discussionId2 > 0) {
+                    document.location = '{{ path('forum_discussion_moderate_combine', { 'id1': 1234, 'id2': 5678 }) }}'.replace('/1234/', '/' + discussionId1 + '/').replace('/5678/', '/' + discussionId2 + '/');
+                } else {
+                    alert('Selecteer 2 discussies om te combineren');
+                }
+            }
+        </script>
+    {% endif %}
+{% endblock %}

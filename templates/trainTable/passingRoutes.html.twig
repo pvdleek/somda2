@@ -57,7 +57,7 @@
                 {% for trainTable in passingRoutes %}
                     <tr>
                         <td>{{ trainTable['time'] | displayTime }}</td>
-                        <td><a href="{{ path('train_table_search', {'trainTableIndexNumber': trainTableIndexNumber, 'routeNumber': trainTable['route_number'] }) }}">{{ trainTable['route_number'] }}</a></td>
+                        <td><a href="{{ path('train_table_search', {'trainTableYearId': trainTableIndexNumber, 'routeNumber': trainTable['route_number'] }) }}">{{ trainTable['route_number'] }}</a></td>
                         <td>{{ trainTable[constant('App\\Repository\\TrainTable::FIELD_TRANSPORTER_NAME')] }} - {{ trainTable[constant('App\\Repository\\TrainTable::FIELD_CHARACTERISTIC_DESCRIPTION')] }}</td>
                         <td><a title="{{ trainTable['fl_first_description'] }}">{{ trainTable['fl_first_name'] }}</a></td>
                         <td>{{ ("general.action." ~ trainTable['action']) | trans }}</td>
@@ -102,12 +102,12 @@
         });
 
         function searchPassingRoutes() {
-            let location = '{{ path('passing_routes_search', { 'trainTableIndexNumber': 9999, 'locationName': 'locationName', 'dayNumber': 1234, 'startTime': 'startTime', 'endTime': 'endTime' }) }}';
-            location = location.replace('9999', document.getElementById('trainTableIndex').value);
-            location = location.replace('locationName', document.getElementById('location').value);
-            location = location.replace('1234', document.getElementById('dayNumber').value);
-            location = location.replace('startTime', document.getElementById('startTime').value);
-            location = location.replace('endTime', document.getElementById('endTime').value);
+            let location = '{{ path('passing_routes_search', { 'trainTableYearId': 9999, 'locationName': 'locationName', 'dayNumber': 1234, 'startTime': 'startTime', 'endTime': 'endTime' }) }}';
+            location = location.replace('9999', $('#trainTableIndex').val());
+            location = location.replace('locationName', $('#location').val());
+            location = location.replace('1234', $('#dayNumber').val());
+            location = location.replace('startTime', $('#startTime').val());
+            location = location.replace('endTime', $('#endTime').val());
             document.location = location;
         }
     </script>

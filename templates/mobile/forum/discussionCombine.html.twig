@@ -1,0 +1,28 @@
+{% extends('mobile/base.html.twig') %}
+
+{% block content %}
+    <div><i class="fas fa-compress-alt"></i> Combineren van "{{ discussion1.title }}" en "{{ discussion2.title }}"</div>
+
+    {{ form_start(form, { 'attr': { 'id': 'combine_form' } }) }}
+        <table>
+            {{ form_row(form.title) }}
+            <tr>
+                <td>&nbsp;</td>
+                <td>
+                    <a href="#" onclick="$('#forum_discussion_combine_title').val('{{ discussion1.title }}'); return false;">Zet titel op "{{ discussion1.title }}"</a>
+                    <br /><a href="#" onclick="$('#forum_discussion_combine_title').val('{{ discussion2.title }}'); return false;">Zet titel op "{{ discussion2.title }}"</a>
+                </td>
+            </tr>
+            <tr>
+                <td>&nbsp;</td>
+                <td>
+                    <a class="somda-button" href="#" onclick="$('#combine_form').submit(); return false;">Combineer discussies</a>
+                    <br /><br />
+                    <a class="somda-button" href="{{ path('forum_discussion', { 'id': discussion1.id, 'name': (discussion1.title | url_encode )}) }}">Terug naar de discussie "{{ discussion1.title }}"</a>
+                    <a class="somda-button" href="{{ path('forum_discussion', { 'id': discussion2.id, 'name': (discussion2.title | url_encode )}) }}">Terug naar de discussie "{{ discussion2.title }}"</a>
+                </td>
+            </tr>
+        </table>
+    {{ form_end(form) }}
+    <br />
+{% endblock %}

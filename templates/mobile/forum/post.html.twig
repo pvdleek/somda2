@@ -1,0 +1,26 @@
+<tr class="thead">
+    <th style="text-align:left;">
+        {% if userIsModerator %}<input name="sel{{ post.id }}" type="checkbox" />{% endif %}
+        <a id="p{{ post.id }}"></a>
+        {% if postIsUnread and not firstUnreadAnchorDone %}
+            <a id="new_post"></a>
+            {% set firstUnreadAnchorDone = true %}
+        {% endif %}
+        {% if postIsUnread %}<i class="fas fa-comment-dots"></i>{% else %}<i class="fas fa-comment"></i>{% endif %}
+        {{ post.author.id | displayUser(post.author.username) | raw }} ~ {{ post.timestamp | date('d-m-Y H:i:s') }}
+    </th>
+</tr>
+<tr><td class="text">{{ post | displayForumPost | raw }}</td></tr>
+<tr>
+    <td>
+        {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+            <a class="somda-button" href="{{ path('forum_discussion_post_alert', { 'id': post.id }) }}" rel="nofollow" title="Klik hier om dit bericht aan de beheerders te melden. Gebruik dit voor bijvoorbeeld overtredingen van forumregels">Meld</a>
+        {% endif %}
+        {% if mayPost and not post.discussion.locked %}
+            <a class="somda-button" href="{{ path('forum_discussion_post_reply', { 'id': post.id }) }}">Reageer</a>
+        {% endif %}
+        {% if userIsModerator or (mayPost and not post.discussion.locked and post.author == app.user) %}
+            <a class="somda-button" href="{{ path('forum_discussion_post_edit', { 'id': post.id }) }}">Bewerk</a>
+        {% endif %}
+    </td>
+</tr>

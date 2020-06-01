@@ -39,8 +39,11 @@ class DateHelper implements RuntimeExtensionInterface
         if (!$shortDate) {
             $output .= $this->translator->trans('general.date.days.' . $date->format('w')) . ' ';
         }
-        $output .= $date->format('j');
-        $output .= ' ' . $this->translator->trans('general.date.months.' . $date->format('n'));
+        $output .= $date->format('j') . ' ';
+
+        $output .= $this->translator->trans(
+            'general.date.months' . ($shortDate ? 'Short' : '') . '.' . $date->format('n')
+        );
 
         if (!$shortDate) {
             $output .= ' ' . $date->format('Y');

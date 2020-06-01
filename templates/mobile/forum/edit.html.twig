@@ -1,0 +1,22 @@
+{% extends('mobile/base.html.twig') %}
+
+{% block content %}
+    <div><i class="fas fa-comments"></i> {{ post.discussion.title }}</div>
+
+    {{ form_start(form, { 'attr': { 'id': 'edit_form' } }) }}
+        <table>
+            {% if form.title is defined %}{{ form_row(form.title) }}{% endif %}
+            {{ form_row(form.text) }}
+            {{ form_row(form.signatureOn) }}
+            {{ form_row(form.editReason) }}
+            {% if form.editAsModerator is defined %}{{ form_row(form.editAsModerator) }}{% endif %}
+            <tr>
+                <td>&nbsp;</td>
+                <td>
+                    <a class="somda-button" href="#" onclick="$('#edit_form').submit(); return false;">Bewerken</a>
+                    <a class="somda-button" href="{{ path('forum_discussion', { 'id': post.discussion.id, 'name': (post.discussion.title | url_encode )}) }}">Terug naar de discussie</a>
+                </td>
+            </tr>
+        </table>
+    {{ form_end(form) }}
+{% endblock %}

@@ -44,7 +44,7 @@
                             {% endfor %}
                             <table class="design">
                                 {% for trainTable in trainTableLines %}
-                                    {% if trainTable.routeOperationDays.day(dayNumber - 1) %}
+                                    {% if trainTable.routeOperationDays.runningOnDay(dayNumber - 1) %}
                                         <tr>
                                             <td><span class="tooltip" title="{{ trainTable.location.description }}">{{ trainTable.location.name }}</span></td>
                                             <td>{{ trainTable.action }}</td>
@@ -67,9 +67,9 @@
 {% block javascripts %}
     <script>
         function searchTrainTable() {
-            let location = '{{ path('train_table_search', { 'trainTableIndexNumber': 9999, 'routeNumber': 'routeNumber' }) }}';
-            location = location.replace('9999', document.getElementById('trainTableIndex').value);
-            location = location.replace('routeNumber', document.getElementById('routeNumber').value);
+            let location = '{{ path('train_table_search', { 'trainTableYearId': 9999, 'routeNumber': 'routeNumber' }) }}';
+            location = location.replace('9999', $('#trainTableIndex').val());
+            location = location.replace('routeNumber', $('#routeNumber').val());
             document.location = location;
         }
     </script>

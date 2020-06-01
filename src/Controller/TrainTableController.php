@@ -54,7 +54,6 @@ class TrainTableController
     }
 
     /**
-     * @IsGranted("ROLE_TRAINTABLE")
      * @param int|null $trainTableYearId
      * @param string|null $routeNumber
      * @return Response
@@ -109,16 +108,29 @@ class TrainTableController
         string $endTime = null
     ): Response {
         $passingRoutes = [];
-        if (is_null($trainTableYearId)) {
+
+        if (is_null($dayNumber)) {
             $trainTableYearId = $this->doctrine
                 ->getRepository(TrainTableYear::class)
                 ->findTrainTableYearByDate(new DateTime())
                 ->getId();
+
+            $dayNumber = date('N') - 1;
+            $startTime = date('H:i', time() - (60 * 15));
+            $endTime = date('H:i', time() + (60 * 45));
+
+            $passingRoutes = [];
         } else {
+            $trainTableYearId = $this->doctrine
+                ->getRepository(TrainTableYear::class)
+                ->findTrainTableYearByDate(new DateTime())
+                ->getId();
             $this->trainTableHelper->setTrainTableYear($trainTableYearId);
             $this->trainTableHelper->setLocation($locationName);
+
             $passingRoutes = $this->trainTableHelper->getPassingRoutes($dayNumber, $startTime, $endTime);
         }
+
         foreach ($this->trainTableHelper->getErrorMessages() as $message) {
             $this->flashHelper->add(FlashHelper::FLASH_TYPE_ERROR, $message);
         }

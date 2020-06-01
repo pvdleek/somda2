@@ -1,0 +1,33 @@
+{% extends('mobile/base.html.twig') %}
+
+{% block content %}
+    Somda staat voor <b>S</b>pots en <b>OM</b>lopen <b>DA</b>tabase.
+    <br /><span style="font-size:9px"><i>(C) Peter van der Leek, Zeewolde 2003-{{ 'now' | date('Y') }}</i></span>
+    <br />
+    <br />Een spot is de vastlegging van treinmaterieel op een bepaald tijdstip op een bepaalde plek. De meeste <a href="{{ path('spots') }}">spots</a> bestaan slechts uit een materieelnummer, een <a href="{{ path('train_table') }}">treinnummer</a>, een <a href="{{ path('location') }}">locatie</a> en eventueel een positie.
+    <br />Een omloop is de vastlegging van de verschillende diensten die treinmaterieel volgt.
+    <br />
+    <br />Somda kan spots opslaan en aan de hand hiervan worden omlopen berekend. Het grote voordeel van Somda is dat spots online ingevoerd kunnen worden. De website met al zijn functionaliteiten is voor alle gebruikers bereikbaar, door iedere bezoeker te raadplegen en voor iedereen gratis!
+    <br />
+    <br />Somda is getest met alle gangbare browsers, waaronder Firefox, Internet Explorer, Mozilla, Netscape, Opera en Safari.
+    <br />Enkele functies zullen echter niet goed werken op oudere versies waaronder Internet Explorer 8 en eerder. Overweeg in dat geval een update van je browser en/of je operating systeem.
+
+    <p class="info">Somda biedt de volgende gratis diensten:</p>
+    <ul>
+        <li>Webapplicatie --- Onder andere voor het invoeren van spots en bekijken van dienstregelingen.</li>
+        <li>Mobiele versie --- Voor het bekijken van dienstregelingen, omlopen en forumberichten.</li>
+        <li>Feeds (<a href="{{ path('feeds') }}" target="_blank">{{ absolute_url(path('feeds')) }}</a>):
+            <ul>
+                <li>Image met verstoringen --- Actuele verstoringen als plaatje, dus direct bruikbaar op een website.</li>
+                <li>RSS --- Keuze uit de laatste spots of komende speciale ritten</li>
+            </ul>
+        </li>
+    </ul>
+    <p class="warn">
+        Somda biedt deze diensten, ondanks aanzienlijke onkosten, allemaal volledig gratis aan.
+        <br /><br />Mocht je echter zo tevreden zijn dat je toch jouw waardering wilt laten blijken dan is een donatie altijd welkom.
+        <br />Dat kan rechtstreeks op SNS rekening NL23SNSB0945345933 ten name van P.W. van der Leek te Zeewolde.
+    </p>
+
+    <br />Een bericht sturen aan de webmaster? Gebruik dan het <a href="{{ path('contact') }}">feedback-formulier</a>.
+{% endblock %}

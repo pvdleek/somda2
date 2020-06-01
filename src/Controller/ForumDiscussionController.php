@@ -140,6 +140,9 @@ class ForumDiscussionController
         }
 
         if (count($posts) < 1) {
+            if (is_null($pageNumber)) {
+                $pageNumber = 1;
+            }
             $posts = $this->formHelper->getDoctrine()->getRepository(ForumPost::class)->findBy(
                 [ForumPostForm::FIELD_DISCUSSION => $discussion],
                 [ForumPostForm::FIELD_TIMESTAMP => 'ASC'],

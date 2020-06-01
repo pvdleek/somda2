@@ -80,9 +80,6 @@ class ForumModerateController
     public function indexAction(Request $request, int $id, string $action)
     {
         $discussion = $this->getDiscussion($id);
-        if (!in_array($this->userHelper->getUser(), $discussion->forum->getModerators())) {
-            throw new AccessDeniedHttpException();
-        }
 
         if ($action === self::ACTION_CLOSE && !$discussion->locked) {
             $discussion->locked = true;
@@ -118,13 +115,10 @@ class ForumModerateController
      */
     public function combineAction(Request $request, int $id1, int $id2)
     {
-
         $discussion1 = $this->getDiscussion($id1);
         $discussion2 = $this->getDiscussion($id2);
 
-        if ($discussion1->forum !== $discussion2->forum
-            || !in_array($this->userHelper->getUser(), $discussion1->forum->getModerators())
-        ) {
+        if ($discussion1->forum !== $discussion2->forum) {
             throw new AccessDeniedHttpException();
         }
 
@@ -213,9 +207,6 @@ class ForumModerateController
     public function splitAction(int $id, string $postIds): RedirectResponse
     {
         $discussion = $this->getDiscussion($id);
-        if (!in_array($this->userHelper->getUser(), $discussion->forum->getModerators())) {
-            throw new AccessDeniedHttpException();
-        }
 
         $postIds = array_filter(explode(',', $postIds));
         $firstPost = $this->formHelper->getDoctrine()->getRepository(ForumPost::class)->find($postIds[0]);
@@ -250,7 +241,9 @@ class ForumModerateController
          * @var ForumDiscussion $discussion
          */
         $discussion = $this->formHelper->getDoctrine()->getRepository(ForumDiscussion::class)->find($id);
-        if (is_null($discussion) || !$this->forumAuthHelper->userIsModerator($discussion)) {
+        if (is_null($discussion)
+            || !$this->forumAuthHelper->userIsModerator($discussion, $this->userHelper->getUser())
+        ) {
             throw new AccessDeniedHttpException();
         }
         return $discussion;
