@@ -61,13 +61,13 @@ class Spot extends BaseForm
                 self::KEY_REQUIRED => true,
             ])
             ->add('extra', TextType::class, [
-                self::KEY_DATA => $options['data']->extra->extra,
+                self::KEY_DATA => $options['data']->extra ? $options['data']->extra->extra : null,
                 self::KEY_LABEL => 'Extra',
                 self::KEY_MAPPED => false,
                 self::KEY_REQUIRED => false,
             ])
             ->add('userExtra', TextType::class, [
-                self::KEY_DATA => $options['data']->extra->userExtra,
+                self::KEY_DATA => $options['data']->extra ? $options['data']->extra->userExtra : null,
                 self::KEY_LABEL => 'Verborgen informatie',
                 self::KEY_MAPPED => false,
                 self::KEY_REQUIRED => false,
