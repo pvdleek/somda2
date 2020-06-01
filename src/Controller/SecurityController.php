@@ -110,14 +110,6 @@ class SecurityController
     }
 
     /**
-     * @return RedirectResponse
-     */
-    public function logoutAction(): RedirectResponse
-    {
-        return $this->redirectHelper->redirectToRoute('home');
-    }
-
-    /**
      * @param Request $request
      * @return RedirectResponse|Response
      * @throws Exception

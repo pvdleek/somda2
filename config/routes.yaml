@@ -27,7 +27,6 @@ login_with_username:
 logout:
   path: /uitloggen/
   methods: [GET]
-  controller: App\Controller\SecurityController::logoutAction
 register:
   path: /registreren/
   methods: [GET, POST]

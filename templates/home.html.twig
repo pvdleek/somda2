@@ -33,13 +33,15 @@
                         {% elseif module == 'spots' %}
                             <a href="{{ path('feed_rss', { 'id': 'spots' }) }}" target="_blank"><i class="fas fa-rss rss-link"></i></a>
                         {% endif %}
-                        <div class="home-panel-actions">
-                            {% if minimized %}
-                                <a href="#" onclick="togglePanel('home_panel_{{ module }}'); return false;"><i class="fa fa-plus-square" id="home_panel_{{ module }}_toggle"></i></a>
-                            {% else %}
-                                <a href="#" onclick="togglePanel('home_panel_{{ module }}'); return false;"><i class="fa fa-minus-square" id="home_panel_{{ module }}_toggle"></i></a>
-                            {% endif %}
-                        </div>
+                        {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                            <div class="home-panel-actions">
+                                {% if minimized %}
+                                    <a href="#" onclick="togglePanel('home_panel_{{ module }}'); return false;"><i class="fa fa-plus-square" id="home_panel_{{ module }}_toggle"></i></a>
+                                {% else %}
+                                    <a href="#" onclick="togglePanel('home_panel_{{ module }}'); return false;"><i class="fa fa-minus-square" id="home_panel_{{ module }}_toggle"></i></a>
+                                {% endif %}
+                            </div>
+                        {% endif %}
                     </div>
                     <div class="home-panel-content" id="home_panel_{{ module }}"{% if minimized %} style="display:none;"{% endif %}>{% include 'home/' ~ module ~ '.html.twig' %}</div>
                 </div>
@@ -49,41 +51,43 @@
 {% endblock %}
 
 {% block javascripts %}
-    <script>
-        function updateLayout()
-        {
-            let layout = $('.home-container').sortable('toArray');
-            // Walk through the layout and check which panels are minimized
-            layout.forEach(function (item, index) {
-                item = item.replace('home_block_', '');
-                if ($('#home_panel_' + item + '_toggle').hasClass('fa-plus-square')) {
-                    layout[index] = item + '-min';
-                } else {
-                    layout[index] = item;
-                }
-            });
-            $.ajax({
-                url: '{{ path('home_update_layout_json', { 'layout': 'dashboard' }) }}'.replace('/dashboard/', '/' + layout.join(';') + '/')
-            })
-        }
-
-        $(document).ready(function() {
-            $('.home-container').sortable({
-                cursor: 'move',
-            }).disableSelection().on('sortupdate', updateLayout());
-        });
-
-        function togglePanel(panelId)
-        {
-            let panel = $('#' + panelId);
-            if (panel.is(':visible')) {
-                panel.hide();
-                $('#' + panelId + '_toggle').removeClass('fa-minus-square').addClass('fa-plus-square');
-            } else {
-                panel.show();
-                $('#' + panelId + '_toggle').removeClass('fa-plus-square').addClass('fa-minus-square');
+    {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+        <script>
+            function updateLayout()
+            {
+                let layout = $('.home-container').sortable('toArray');
+                // Walk through the layout and check which panels are minimized
+                layout.forEach(function (item, index) {
+                    item = item.replace('home_block_', '');
+                    if ($('#home_panel_' + item + '_toggle').hasClass('fa-plus-square')) {
+                        layout[index] = item + '-min';
+                    } else {
+                        layout[index] = item;
+                    }
+                });
+                $.ajax({
+                    url: '{{ path('home_update_layout_json', { 'layout': 'dashboard' }) }}'.replace('/dashboard/', '/' + layout.join(';') + '/')
+                })
             }
-            updateLayout();
-        }
-    </script>
+
+            $(document).ready(function() {
+                $('.home-container').sortable({
+                    cursor: 'move',
+                }).disableSelection().on('sortupdate', updateLayout());
+            });
+
+            function togglePanel(panelId)
+            {
+                let panel = $('#' + panelId);
+                if (panel.is(':visible')) {
+                    panel.hide();
+                    $('#' + panelId + '_toggle').removeClass('fa-minus-square').addClass('fa-plus-square');
+                } else {
+                    panel.show();
+                    $('#' + panelId + '_toggle').removeClass('fa-plus-square').addClass('fa-minus-square');
+                }
+                updateLayout();
+            }
+        </script>
+    {% endif %}
 {% endblock %}

@@ -19,11 +19,10 @@ security:
           - App\Security\LoginFormAuthenticator
       logout:
         path: logout
-        target: /
+        target: home
       remember_me:
         secret: '%kernel.secret%'
         lifetime: 604800
-        path: /
         secure: true
         samesite: 'strict'
   role_hierarchy:

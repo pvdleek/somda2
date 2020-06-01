@@ -40,7 +40,7 @@ class KernelListener implements EventSubscriberInterface
      */
     public static function getSubscribedEvents(): array
     {
-        return [KernelEvents::REQUEST => ['onKernelView', 0]];
+        return [KernelEvents::REQUEST => ['onKernelView', -255]];
     }
 
     /**
