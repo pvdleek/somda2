@@ -54,7 +54,7 @@ class NewsController
                 throw new AccessDeniedHttpException();
             }
 
-            if (!in_array($this->userHelper->getUser(), $news->getUserReads())) {
+            if ($this->userHelper->userIsLoggedIn() && !in_array($this->userHelper->getUser(), $news->getUserReads())) {
                 $news->addUserRead($this->userHelper->getUser());
             }
             $this->doctrine->getManager()->flush();
