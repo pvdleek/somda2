@@ -6,3 +6,4 @@
 - ForumLog vullen met alle posts en dan app:process-forum-log draaien
 - Iedereen nieuw wachtwoord aanvragen
 - Alle commands draaien
+- Links in nieuwsbericht 126 naar "het beheer" fixen

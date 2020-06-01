@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\ForumForum;
 use App\Entity\ForumSearchWord;
 use App\Form\ForumSearch;
 use App\Helpers\FormHelper;
@@ -9,6 +10,7 @@ use App\Helpers\TemplateHelper;
 use App\Helpers\UserHelper;
 use App\Model\ForumSearchResult;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -109,5 +111,19 @@ class ForumSearchController
         }
 
         return $results;
+    }
+
+    /**
+     * @return RedirectResponse
+     */
+    public function noteworthyStuffAction(): RedirectResponse
+    {
+        $forum = $this->formHelper->getDoctrine()->getRepository(ForumForum::class)->find(
+            $_ENV['NOTEWORTHY_STUFF_FORUM_ID']
+        );
+        return $this->formHelper->getRedirectHelper()->redirectToRoute(
+            'forum_forum',
+            ['id' => $forum->getId(), 'name' => $forum->name]
+        );
     }
 }

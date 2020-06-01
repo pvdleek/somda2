@@ -312,6 +312,11 @@ forum_search:
   methods: [GET, POST]
   controller: App\Controller\ForumSearchController::indexAction
 
+forum_noteworthy_stuff:
+  path: /od/
+  methods: [GET]
+  controller: App\Controller\ForumSearchController::noteworthyStuffAction
+
 #########
 # Somda #
 #########
