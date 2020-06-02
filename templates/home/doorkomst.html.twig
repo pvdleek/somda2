@@ -6,5 +6,5 @@
 
 <br />
 <div class="home-panel-buttons">
-	<a class="somda-button" href="#" onclick="document.location='{{ path('passing_routes_search', { 'trainTableYearId': 0, 'dayNumber': ('now' | date('n')), 'startTime': 'start', 'endTime': 'end', 'locationName': 'location' }) }}'.replace('/start/', '/' + $('#start_time').val() + '/').replace('/end/', '/' + $('#end_time').val() + '/').replace('/location/', '/' + $('#location').val() + '/'); return false;">Vraag op</a>
+	<a class="somda-button" href="#" onclick="document.location='{{ path('passing_routes_search', { 'trainTableYearId': 0, 'dayNumber': ('now' | date('N')) - 1, 'startTime': 'start', 'endTime': 'end', 'locationName': 'location' }) }}'.replace('/start/', '/' + $('#start_time').val() + '/').replace('/end/', '/' + $('#end_time').val() + '/').replace('/location/', '/' + $('#location').val() + '/'); return false;">Vraag op</a>
 </div>
