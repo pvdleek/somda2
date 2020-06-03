@@ -107,8 +107,6 @@ class TrainTableController
         string $startTime = null,
         string $endTime = null
     ): Response {
-        $passingRoutes = [];
-
         if (is_null($dayNumber)) {
             $trainTableYearId = $this->doctrine
                 ->getRepository(TrainTableYear::class)

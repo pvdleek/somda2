@@ -4,7 +4,7 @@
     <table>
         {% for category in categories %}
             {% if category['forums'] | length > 0 %}
-                <tr class="thead"><th colspan="2">{{ category['category'].name }}</th></tr>
+                <tr><th colspan="2">{{ category['category'].name }}</th></tr>
                 {% for forum in category['forums'] %}
                     <tr>
                         <td>

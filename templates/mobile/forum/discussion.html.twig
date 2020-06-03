@@ -8,7 +8,7 @@
                 <tr>
                     <td align="center">
                         Deze forumdiscussie is gekoppeld aan de <a href="http://www.railwiki.nl/" target="_blank">RailWiki.nl</a> pagina('s):
-                        <br />
+                        <div class="forum-spacer-row"></div>
                         {% for wiki in discussion.wikis %}
                             <a href="http://www.railwiki.nl/index.php/{{ wiki.wiki }}" target="_blank">{{ wiki.title ? wiki.title : wiki.wiki }}</a>
                             {% if not loop.last %} - {% endif %}
@@ -21,79 +21,82 @@
 
     {% block paginator %}
         {% if numberOfPages > 1 %}
-            <br /><strong>Pagina's:</strong>
+            <div class="forum-spacer-row"></div>
+            <strong>Pagina's:</strong>
             {% if pageNumber > 1 %}<a href="{{ path('forum_discussion_page', { 'id': discussion.id, 'name': (discussion.title | url_encode), 'pageNumber': (pageNumber - 1) }) }}">«</a>{% endif %}
             {% for page in 1..numberOfPages %}
                 {% if page != pageNumber %}<a href="{{ path('forum_discussion_page', { 'id': discussion.id, 'name': (discussion.title | url_encode), 'pageNumber': page }) }}">{{ page }}</a>{% else %}{{ page }}{% endif %}
             {% endfor %}
             {% if pageNumber < numberOfPages %}<a href="{{ path('forum_discussion_page', { 'id': discussion.id, 'name': (discussion.title | url_encode), 'pageNumber': (pageNumber + 1) }) }}">»</a>{% endif %}
-            <br /><br />
+            <div class="forum-spacer-row"></div>
         {% endif %}
     {% endblock %}
 
     {% if userIsModerator %}
-        <p>Met geselecteerd: <a href="#" onclick="moderateNew(); return false;"><i class="fas fa-divide" title="Splits af naar een nieuwe discussie"></i></a><br /></p>
+        <p>Met geselecteerd: <a href="#" onclick="moderateNew(); return false;"><i class="fas fa-divide" title="Splits af naar een nieuwe discussie"></i></a></p>
     {% endif %}
 
-    <table>
-        <tr class="thead">
-            <th>
-                {% if userIsModerator %}
-                    <span id="moderator_icons">
-                        {% if discussion.locked %}
-                            <a href="{{ path('forum_discussion_moderate', { 'id': discussion.id, 'action': constant('App\\Controller\\ForumModerateController::ACTION_OPEN') }) }}"><i class="fas fa-lock-open" title="Open discussie"></i></a>
-                        {% else %}
-                            <a href="{{ path('forum_discussion_moderate', { 'id': discussion.id, 'action': constant('App\\Controller\\ForumModerateController::ACTION_CLOSE') }) }}"><i class="fas fa-lock" title="Sluit discussie"></i></a>
-                        {% endif %}
-                        <a href="{{ path('forum_discussion_moderate', { 'id': discussion.id, 'action': constant('App\\Controller\\ForumModerateController::ACTION_MOVE') }) }}"><i class="fas fa-angle-double-right" title="Verplaats discussie"></i></a>
-                    </span>
-                 {% endif %}
-                {% if discussion.locked %}
-                    <i class="fas fa-lock"></i>
-                {% elseif posts | length > 1 %}
-                    <i class="fas fa-comments"></i>
-                {% else %}
-                    <i class="fas fa-comment"></i>
-                {% endif %}
-                {{ discussion.title }}
-                <br />Forum: <a href="{{ path('forum_forum', { 'id': discussion.forum.id, 'name': discussion.forum.name | url_encode }) }}">{{ discussion.forum.category.name }} - {{ discussion.forum.name }}</a>
-            </th>
-        </tr>
+    {% if userIsModerator %}
+        <span id="moderator_icons">
+            {% if discussion.locked %}
+                <a href="{{ path('forum_discussion_moderate', { 'id': discussion.id, 'action': constant('App\\Controller\\ForumModerateController::ACTION_OPEN') }) }}"><i class="fas fa-lock-open" title="Open discussie"></i></a>
+            {% else %}
+                <a href="{{ path('forum_discussion_moderate', { 'id': discussion.id, 'action': constant('App\\Controller\\ForumModerateController::ACTION_CLOSE') }) }}"><i class="fas fa-lock" title="Sluit discussie"></i></a>
+            {% endif %}
+            <a href="{{ path('forum_discussion_moderate', { 'id': discussion.id, 'action': constant('App\\Controller\\ForumModerateController::ACTION_MOVE') }) }}"><i class="fas fa-angle-double-right" title="Verplaats discussie"></i></a>
+        </span>
+        <div class="forum-spacer-row"></div>
+     {% endif %}
+    {% if discussion.locked %}
+        <i class="fas fa-lock"></i>
+    {% elseif posts | length > 1 %}
+        <i class="fas fa-comments"></i>
+    {% else %}
+        <i class="fas fa-comment"></i>
+    {% endif %}
+    {{ discussion.title }}
+    <br />Forum: <a href="{{ path('forum_forum', { 'id': discussion.forum.id, 'name': discussion.forum.name | url_encode }) }}">{{ discussion.forum.category.name }} - {{ discussion.forum.name }}</a>
+    <div class="forum-spacer-row"></div>
 
-        {% set firstUnreadAnchorDone = false %}
-        {% for post in posts %}
-            {% set postIsUnread = loop.index > (constant('App\\Controller\\ForumDiscussionController::MAX_POSTS_PER_PAGE') * (pageNumber - 1) + numberOfReadPosts) %}
-            {% if loop.index == 5 or loop.index == 55 %}
-                {% if forumBanner is not null %}
+    {% set firstUnreadAnchorDone = false %}
+    {% for post in posts %}
+        {% set postIsUnread = loop.index > (constant('App\\Controller\\ForumDiscussionController::MAX_POSTS_PER_PAGE') * (pageNumber - 1) + numberOfReadPosts) %}
+        {% if loop.index == 5 or loop.index == 55 %}
+            {% if forumBanner is not null %}
+                <table>
                     <tr>
                         <td><a href="{{ path('banner_click_out', { 'id': forumBanner.id }) }}" rel="sponsored" target="_blank">
                             <img alt="{{ forumBanner.customer.name }} {{ forumBanner.description }}" height="150" src="{{ asset('images/banners/' ~ forumBanner.image) }}" />
                         </a></td>
                         <td><a href="{{ path('advertise') }}">advertentie</a></td>
                     </tr>
-                {% else %}
-                    <tr><td><p class="warn">Tevreden over Somda? Overweeg dan eens een <a href="{{ path('about') }}">vrijwillige donatie</a>, alvast bedankt!</p></td></tr>
-                {% endif %}
+                </table>
+            {% else %}
+                <p class="warn">Tevreden over Somda? Overweeg dan eens een <a href="{{ path('about') }}">vrijwillige donatie</a>, alvast bedankt!</p>
+                <div class="forum-spacer-row"></div>
             {% endif %}
+        {% endif %}
 
-            {% include('mobile/forum/post.html.twig') %}
-            {% if is_granted('ROLE_ADMIN_WIKI') and (discussion.wikis | length) > 0 %}
+        <table class="forum-post">{% include('mobile/forum/post.html.twig') %}</table>
+        <div class="forum-spacer-row"></div>
+        {% if is_granted('ROLE_ADMIN_WIKI') and (discussion.wikis | length) > 0 %}
+            <table>
                 <tr><td colspan="3">Railwiki.nl:
                     {% if post.wikiCheck == 0 %}
-                        <span id="wiki_{{ post.id }}" style="background-color:orange">Nog te controleren - <a href="#" onclick="wikiCheck({{ post.id }}, 'ok'); return false;">Markeer als gecontroleerd</a> - <a href="#" onclick="wikiCheck({{ post.id }}, 'na'); return false;">Markeer als niet relevante inhoud</a></span>
+                        <span class="background-color-orange" id="wiki_{{ post.id }}">Nog te controleren - <a href="#" onclick="wikiCheck({{ post.id }}, 'ok'); return false;">Markeer als gecontroleerd</a> - <a href="#" onclick="wikiCheck({{ post.id }}, 'na'); return false;">Markeer als niet relevante inhoud</a></span>
                     {% elseif post.wikiCheck == 1 %}
                         Verwerkt in de wiki door {{ post.wikiChecker.id | displayUser(post.wikiChecker.username) | raw }}
                     {% else %}
                         Geen relevante inhoud, gecontroleerd door {{ post.wikiChecker.id | displayUser(post.wikiChecker.username) | raw }}
                     {% endif %}
                 </td></tr>
-            {% endif %}
-        {% endfor %}
+            </table>
+        {% endif %}
+    {% endfor %}
 
-        {% if not firstUnreadAnchorDone %}<a id="new_post"></a>{% endif %}
-    </table>
+    {% if not firstUnreadAnchorDone %}<a id="new_post"></a>{% endif %}
 
-    <br />
+    <div class="forum-spacer-row"></div>
 
     {{ block('wiki') }}
 

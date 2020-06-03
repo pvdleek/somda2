@@ -21,6 +21,7 @@
 
     <title>{% if pageTitle is defined %}{{ pageTitle }} - {% endif %}Somda</title>
 
+    <link rel="stylesheet" href="{{ asset('css/base.css') }}" type="text/css" />
     <link rel="stylesheet" href="{{ asset('css/mobile.css') }}" type="text/css" />
     <style type="text/css">
         #header_image {
@@ -30,7 +31,7 @@
 
     <link href="{{ asset('favicon.ico') }}" rel="shortcut icon" type="image/x-icon" />
 </head>
-<body>
+<body class="no-webp">
     <div id="container">
         <div id="header"><img alt="Somda" src="{{ asset('images/logos-somda/logo-' ~ imageNumber ~ '.png') }}" /></div>
 
@@ -43,10 +44,13 @@
             {% endif %}
         </div>
 
-        <div id="content">{% block content %}{% endblock %}</div>
+        <div id="content">
+            {% include 'partials/errorMessages.html.twig' %}
+            {% block content %}{% endblock %}
+        </div>
 
         <div id="footer">
-            <p><span style="float:left;"><a href="#" onclick="history.back(); return false;">Terug</a></span><span style="float:right;">Powered by <a href="{{ path('home') }}">Somda.nl</a></span></p>
+            <p><span class="left"><a href="#" onclick="history.back(); return false;">Terug</a></span><span class="right">Powered by <a href="{{ path('home') }}">Somda.nl</a></span></p>
             <br /><p>Copyright &#169; 2003-{{ 'now' | date('Y') }} Somda.nl - alle rechten voorbehouden</p>
         </div>
     </div>

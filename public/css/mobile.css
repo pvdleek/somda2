@@ -1,6 +1,4 @@
 body {
-    margin: 0;
-    padding: 0;
     color: #000366;
     font-size: 14px;
     font-family: Arial, Helvetica, sans-serif;
@@ -24,26 +22,6 @@ p {
     margin-right: auto;
 }
 
-/**************/
-/*** Button ***/
-/**************/
-.somda-button {
-    background-color: #246da5;
-    border: 1px solid #246da5;
-    border-radius: 5px;
-    color: #fff !important;
-    display: inline-block;
-    font-weight: bold;
-    margin: 2px;
-    padding: 5px 20px;
-    text-align: center;
-    text-decoration: none;
-}
-.somda-button:hover, .somda-button:focus {
-    background-color: #fff;
-    color: #246da5 !important;
-}
-
 /*************/
 /*** Forms ***/
 /*************/
@@ -60,7 +38,6 @@ select {
 /*** Tables ***/
 /**************/
 table {
-    width: 300px;
     margin-left: auto;
     margin-right: auto;
     padding: 0;
@@ -68,17 +45,25 @@ table {
     background-color: #d4e1f6;
     border: none;
 }
-tr {
+table tr {
     background-color: #d4e1f6;
 }
-tr.thead th {
+table th {
     background-color: #1D679F;
     color: #FFF;
     font-weight: bold;
     padding: 2px;
 }
-tr.thead th a {
-    color: #aaa;
+table th.left-align, table td.left-align {
+    text-align: left;
+}
+table th a {
+    color: #aaa !important;
+}
+table.forum-overview td {
+    border-bottom: 1px #246da5 solid;
+    padding-bottom: 0.5rem;
+    padding-top: 0.5rem;
 }
 #moderator_icons {
     float: right;
@@ -119,31 +104,6 @@ img#logo {
     text-decoration: none;
 }
 
-/**************/
-/*** Alerts ***/
-/**************/
-p.info {
-    background: #F8FAFC url(../images/design/icon-info.png) no-repeat 15px 50%;
-    border-bottom: 2px solid #B5D4FE;
-    border-top: 2px solid #B5D4FE;
-    padding: 5px 20px 5px 45px;
-    text-align: left;
-}
-p.warn {
-    background: #FFF7C0 url(../images/design/icon-warning.png) no-repeat 15px 50%;
-    border-bottom: 2px solid #F7D229;
-    border-top: 2px solid #F7D229;
-    padding: 5px 20px 5px 45px;
-    text-align: left;
-}
-p.alert {
-    background: #FBEEF1 url(../images/design/icon-alert.png) no-repeat 15px 50%;
-    border-bottom: 2px solid #FEABB9;
-    border-top: 2px solid #FEABB9;
-    padding: 5px 20px 5px 45px;
-    text-align: left;
-}
-
 /***************/
 /*** Content ***/
 /***************/
@@ -162,4 +122,30 @@ p.alert {
     text-align: center;
     font-size: 10px;
     color: #aaaaaa;
+}
+#footer .left {
+    float: left;
+}
+#footer .right {
+    float: right;
+}
+
+/*******************/
+/*** TrainTables ***/
+/*******************/
+.train-table-location {
+    text-align: right;
+}
+.train-table-time {
+    text-align: left;
+}
+
+/*************/
+/*** Forum ***/
+/*************/
+table.forum-post {
+    width: 100%;
+}
+.forum-spacer-row {
+    height: 0.5rem;
 }

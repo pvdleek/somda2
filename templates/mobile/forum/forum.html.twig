@@ -7,8 +7,8 @@
         <br /><br />
     {% endif %}
 
-    <table>
-        <tr class="thead">
+    <table class="forum-overview">
+        <tr>
             <th>
                 Forum-discussies
                 {% if userIsModerator %}
@@ -20,7 +20,7 @@
         </tr>
         {% for discussion in discussions | slice(0, 25) %}
             <tr>
-                <td style="border-top:1px #000000 solid; padding:5px;">
+                <td>
                     {% if userIsModerator %}<input name="sel{{ discussion.id }}" type="checkbox" />{% endif %}
                     {% if discussion['locked'] %}
                         <i class="fas fa-lock"></i>

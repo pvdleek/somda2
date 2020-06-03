@@ -1,26 +1,6 @@
-/*
-Basic color usage:
-	text: #515151
-	dark blue: #246da5
-	light blue (hover): #2b84c8
-	light blue (background): #d2e2f1;
-*/
-
 /***************/
 /*** Generic ***/
 /***************/
-html, body, iframe, div, span, applet, object, h1, h2, h3, p, pre, a, big, code, del, em, font, img, ins, s, hr,
-small, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, tbody, tfoot, thead, tr, th, td {
-    padding: 0;
-    outline: 0;
-    font-size: 99%;
-}
-iframe {
-    border: none;
-}
-ol, ul {
-    list-style: none;
-}
 p {
     margin: 10px 0;
 }
@@ -126,26 +106,6 @@ input.with-error {
     border: 1px solid red;
 }
 
-/**************/
-/*** Button ***/
-/**************/
-.somda-button {
-    background-color: #246da5;
-    border: 1px solid #246da5;
-    border-radius: 5px;
-    color: #fff !important;
-    display: inline-block;
-    font-weight: bold;
-    margin: 2px;
-    padding: 5px 20px;
-    text-align: center;
-    text-decoration: none;
-}
-.somda-button:hover, .somda-button:focus {
-    background-color: #fff;
-    color: #246da5 !important;
-}
-
 /****************************/
 /*** Generic table design ***/
 /****************************/
@@ -157,7 +117,7 @@ table {
 table th {
     background-color: #1D679F;
     border: 1px solid #C2D2E1;
-    color: #FFFFFF;
+    color: #fff;
     font-weight: bold;
     padding: 5px;
 }
@@ -165,11 +125,11 @@ table th.left-align {
     text-align: left;
 }
 table th a {
-    color: #BBBBBB;
+    color: #bbb;
     text-decoration: none;
 }
 table th a:hover {
-    color: #FFFFFF;
+    color: #fff;
 }
 table td {
     background-color: #D2E2F1;
@@ -177,46 +137,6 @@ table td {
     color: #515151;
     padding: 5px;
     vertical-align: top;
-}
-
-/**************/
-/*** Alerts ***/
-/**************/
-p.info {
-    border-bottom: 2px solid #B5D4FE;
-    border-top: 2px solid #B5D4FE;
-    padding: 5px 20px 5px 45px;
-    text-align: left;
-}
-.webp p.info {
-    background: #F8FAFC url(../images/design/icon-info.webp) no-repeat 15px 50%;
-}
-.no-webp p.info {
-    background: #F8FAFC url(../images/design/icon-info.png) no-repeat 15px 50%;
-}
-p.warn {
-    border-bottom: 2px solid #F7D229;
-    border-top: 2px solid #F7D229;
-    padding: 5px 20px 5px 45px;
-    text-align: left;
-}
-.webp p.warn {
-    background: #FFF7C0 url(../images/design/icon-warning.webp) no-repeat 15px 50%;
-}
-.no-webp p.warn {
-    background: #FFF7C0 url(../images/design/icon-warning.png) no-repeat 15px 50%;
-}
-p.alert {
-    border-bottom: 2px solid #FEABB9;
-    border-top: 2px solid #FEABB9;
-    padding: 5px 20px 5px 45px;
-    text-align: left;
-}
-.webp p.alert {
-    background: #FBEEF1 url(../images/design/icon-alert.webp) no-repeat 15px 50%;
-}
-.no-webp p.alert {
-    background: #FBEEF1 url(../images/design/icon-alert.png) no-repeat 15px 50%;
 }
 
 /**************/

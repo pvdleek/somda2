@@ -1,5 +1,5 @@
-<tr class="thead">
-    <th style="text-align:left;">
+<tr>
+    <th class="left-align">
         {% if userIsModerator %}<input name="sel{{ post.id }}" type="checkbox" />{% endif %}
         <a id="p{{ post.id }}"></a>
         {% if postIsUnread and not firstUnreadAnchorDone %}
@@ -13,6 +13,7 @@
 <tr><td class="text">{{ post | displayForumPost | raw }}</td></tr>
 <tr>
     <td>
+        <div class="forum-spacer-row"></div>
         {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
             <a class="somda-button" href="{{ path('forum_discussion_post_alert', { 'id': post.id }) }}" rel="nofollow" title="Klik hier om dit bericht aan de beheerders te melden. Gebruik dit voor bijvoorbeeld overtredingen van forumregels">Meld</a>
         {% endif %}
