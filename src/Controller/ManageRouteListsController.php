@@ -72,7 +72,7 @@ class ManageRouteListsController
             );
         }
 
-        return $this->templateHelper->render('manageTrainTable/index.html.twig', [
+        return $this->templateHelper->render('manageTrainTables/index.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Beheer treinnummerlijst',
             'trainTableYears' => $this->doctrine
                 ->getRepository(TrainTableYear::class)
