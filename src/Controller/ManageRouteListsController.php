@@ -72,7 +72,7 @@ class ManageRouteListsController
             );
         }
 
-        return $this->templateHelper->render('manageTrainTables/index.html.twig', [
+        return $this->templateHelper->render('manageRouteLists/index.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Beheer treinnummerlijst',
             'trainTableYears' => $this->doctrine
                 ->getRepository(TrainTableYear::class)
@@ -110,7 +110,7 @@ class ManageRouteListsController
             );
         }
 
-        return $this->templateHelper->render('manageTrainTables/item.html.twig', [
+        return $this->templateHelper->render('manageRouteLists/item.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Beheer treinnummerlijst',
             'routeList' => $routeList,
             TemplateHelper::PARAMETER_FORM => $form->createView(),

@@ -18,7 +18,7 @@
                             <td>
                                 <table id="train_table_{{ dayNumber }}">
                                     {% for trainTable in trainTableLines %}
-                                        {% if trainTable.routeOperationDays.day(dayNumber - 1) %}
+                                        {% if trainTable.routeOperationDays.runningOnDay(dayNumber - 1) %}
                                             <tr id="row_{{ dayNumber }}_{{ rowNumber }}">
                                                 <td class="icon-controls">
                                                     <a href="#" onclick="moveRowUp($(this).parent().parent()); return false;" title="Rij naar boven verplaatsen"><i class="fas fa-angle-double-up"></i></a>
