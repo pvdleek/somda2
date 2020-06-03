@@ -8,7 +8,7 @@
     <br />
 
     {{ form_start(form, { 'attr': { 'id': 'alert_form' } }) }}
-        <table align="center" class="design" width="98%">
+        <table align="center">
             {{ form_row(form.comment) }}
             <tr>
                 <td colspan="2">
@@ -21,7 +21,7 @@
 
     <br />
 
-    <table align="center" class="design" width="98%">
+    <table align="center">
         {% include 'mobile/forum/post.html.twig' with { 'mayPost': false, 'userIsModerator': false, 'postIsUnread': false } %}
     </table>
 {% endblock %}

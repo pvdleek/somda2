@@ -8,7 +8,7 @@
         <div class="home-panel-title"><i class="fas fa-search"></i> Zoeken in het forum</div>
         <div class="home-panel-content">
             {{ form_start(form, { 'attr': { 'id': 'search_form' } }) }}
-                <table class="design">
+                <table>
                     {{ form_row(form.words) }}
                     {{ form_row(form.method) }}
                     <tr>
@@ -28,7 +28,7 @@
             {% if moreResults %}
                 <p class="warn">Er werden meer dan 100 resultaten gevonden, verfijn je zoekcriteria voor een beter resultaat</p>
             {% endif %}
-            <table class="design">
+            <table>
                 <tr>
                     <th colspan="3">{{ 'forum.discussion.subject' | trans }}</th>
                     <th>{{ 'forum.author' | trans }}</th>

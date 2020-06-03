@@ -5,7 +5,7 @@
         <div class="home-panel-title">Beheer materieel-samenstelling van type "{{ trainComposition.type.description }}"</div>
         <div class="home-panel-content panel-no-background">
             {{ form_start(form, { 'attr': { 'id': 'composition_form' } }) }}
-            <table class="design">
+            <table>
                 {% for car in 1..constant('App\\Entity\\TrainComposition::NUMBER_OF_CARS') %}
                     {% if attribute(form, 'car' ~ car) is defined %}{{ form_row(attribute(form, 'car' ~ car)) }}{% endif %}
                 {% endfor %}

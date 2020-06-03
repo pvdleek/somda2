@@ -5,7 +5,7 @@
         <div class="home-panel-title">Spots invoeren</div>
         <div class="home-panel-content panel-no-background">
             <p class="warn" style="width:400px;">Voer je spot(s) in volgens onderstaande opmaak:</p>
-            <table class="design">
+            <table>
                 <tr>
                     <th colspan="3">Layout:</th>
                     <th colspan="3">Voorbeeld:</th>
@@ -35,7 +35,7 @@
             </p>
 
             {{ form_start(form, { 'attr': { 'id': 'spot_form' } }) }}
-                <table class="design">
+                <table>
                     {{ form_row(form.location) }}
                     {{ form_row(form.date) }}
                     {{ form_row(form.spots) }}

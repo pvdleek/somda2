@@ -21,12 +21,12 @@
         <p class="info">Commentaar van melder <a target="_blank" href="{{ path('profile_view', { 'id': alert.sender.id }) }}">{{ alert.sender.username }}</a> op {{ alert.timestamp | date('d-m-Y') }} om {{ alert.timestamp | date('H:i:s') }}: <strong>{{ alert.comment }}</strong></p>
     {% endfor %}
 
-    <table align="center" class="design" width="98%">
+    <table align="center">
         <tr><th colspan="3">{{ post.discussion.title }}</th></tr>
         {% include 'forum/post.html.twig' with { 'mayPost': false, 'userIsModerator': false, 'postIsUnread': false } %}
     </table>
     <br />
-    <table class="design">
+    <table>
         <tr><th colspan="4">Commentaar door moderators bij deze melding</th></tr>
         {% for alert in post.alerts %}
             {% for note in alert.notes %}
@@ -41,7 +41,7 @@
     </table>
     <br />
     {{ form_start(form, { 'attr': { 'id': 'alert_note_form' } }) }}
-        <table class="design">
+        <table>
             {{ form_row(form.text) }}
             {{ form_row(form.sentToReporter) }}
             <tr>

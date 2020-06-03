@@ -6,7 +6,7 @@
             {{ form_start(form, { 'attr': { 'id': 'profile_form' } }) }}
                 <div class="home-panel-title">Mijn profiel aanpassen</div>
                 <div class="home-panel-content">
-                    <table class="design">
+                    <table>
                         <tr><td>&nbsp;</td><td id="user_avatar"><img alt="avatar" src="{{ asset('images/avatar/' ~ user.info.avatar) }}" /></td></tr>
                         {{ form_rest(form) }}
                         <tr>
@@ -31,7 +31,7 @@
                         <br /><a href="{{ path('manage_ban', { 'id': user.id }) }}">Bannen</a>
                     {% endif %}
                 {% endif %}
-                <table class="design">
+                <table>
                     <tr>
                         <td rowspan="12" valign="top"><img alt="avatar" src="{{ asset('images/avatar/' ~ user.info.avatar) }}" /></td>
                         <th align="right">{{ 'profile.username' | trans }}</th>

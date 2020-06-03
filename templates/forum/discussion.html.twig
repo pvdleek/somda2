@@ -69,9 +69,7 @@
             {% endblock %}
 
             {% if userIsModerator %}
-                <p style="margin-left:10px;">
-                    Met geselecteerd: <a href="#" onclick="moderateNew(); return false;"><i class="fas fa-divide" title="Splits af naar een nieuwe discussie"></i></a><br />
-                </p>
+                <p>Met geselecteerd: <a href="#" onclick="moderateNew(); return false;"><i class="fas fa-divide" title="Splits af naar een nieuwe discussie"></i></a><br /></p>
             {% endif %}
 
             {% set firstUnreadAnchorDone = false %}
@@ -79,25 +77,25 @@
                 {% set postIsUnread = loop.index > (constant('App\\Controller\\ForumDiscussionController::MAX_POSTS_PER_PAGE') * (pageNumber - 1) + numberOfReadPosts) %}
                 {% if loop.index == 5 or loop.index == 55 %}
                     {% if forumBanner is not null %}
-                        <br /><table align="center" class="design" width="98%"><tr>
+                        <br /><table align="center"><tr>
                             <td><a href="{{ path('banner_click_out', { 'id': forumBanner.id }) }}" rel="sponsored" target="_blank">
                                 <img alt="{{ forumBanner.customer.name }} {{ forumBanner.description }}" height="150" src="{{ asset('images/banners/' ~ forumBanner.image) }}" />
                             </a></td>
                             <td><a href="{{ path('advertise') }}">advertentie</a></td>
                         </tr></table><br />
                     {% else %}
-                        <br /><table align="center" class="design" width="98%"><tr>
+                        <br /><table align="center"><tr>
                             <td><p class="warn">Tevreden over Somda? Overweeg dan eens een <a href="{{ path('about') }}">vrijwillige donatie</a>, alvast bedankt!</p></td>
                         </tr></table><br />
                     {% endif %}
                 {% endif %}
 
-                <table align="center" class="design" width="98%">
+                <table align="center">
                     {% include('forum/post.html.twig') %}
                     {% if is_granted('ROLE_ADMIN_WIKI') and (discussion.wikis | length) > 0 %}
                         <tr><td colspan="3">Railwiki.nl:
                             {% if post.wikiCheck == 0 %}
-                                <span id="wiki_{{ post.id }}" style="background-color:orange">Nog te controleren - <a href="#" onclick="wikiCheck({{ post.id }}, 'ok'); return false;">Markeer als gecontroleerd</a> - <a href="#" onclick="wikiCheck({{ post.id }}, 'na'); return false;">Markeer als niet relevante inhoud</a></span>
+                                <span id="wiki_{{ post.id }}" class="background-color-orange">Nog te controleren - <a href="#" onclick="wikiCheck({{ post.id }}, 'ok'); return false;">Markeer als gecontroleerd</a> - <a href="#" onclick="wikiCheck({{ post.id }}, 'na'); return false;">Markeer als niet relevante inhoud</a></span>
                             {% elseif post.wikiCheck == 1 %}
                                 Verwerkt in de wiki door {{ post.wikiChecker.id | displayUser(post.wikiChecker.username) | raw }}
                             {% else %}

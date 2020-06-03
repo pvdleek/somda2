@@ -5,7 +5,7 @@
         <div class="home-panel-title">Beheer nieuwsbericht</div>
         <div class="home-panel-content panel-no-background">
             {{ form_start(form, { 'attr': { 'id': 'news_form' } }) }}
-                <table class="design">
+                <table>
                     <tr><td><strong>Datum</strong></td><td>{{ news.timestamp | displayDateTime(true) }}</td></tr>
                     {{ form_row(form.title) }}
                     {{ form_row(form.text) }}

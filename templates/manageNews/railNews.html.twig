@@ -4,7 +4,7 @@
     <div class="home-panel separate-panel">
         <div class="home-panel-title">Beheer spoornieuws</div>
         <div class="home-panel-content">
-            <table class="design">
+            <table>
                 <tr>
                     <th>Datum</th>
                     <th>Bron</th>
@@ -15,7 +15,7 @@
                 {% for item in railNews %}
                     <tr>
                         <td>{{ item.timestamp | displayDateTime(true) }}</td>
-                        <td><img alt="{{ item.source.name }}" src="{{ asset('images/news-logos/' ~ item.source.logo) }}" style="max-height:25px;" /></td>
+                        <td><img alt="{{ item.source.name }}" class="rail-news-logo-overview" src="{{ asset('images/news-logos/' ~ item.source.logo) }}" /></td>
                         <td>{{ item.title }}</td>
                         <td>{{ item.approved ? 'Ja' : 'Nee' }}</td>
                         <td><a href="{{ path('manage_rail_news_edit', { 'id': item.id }) }}">Bewerk</a></td>

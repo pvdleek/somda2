@@ -3,7 +3,7 @@
 {% block content %}
     <br />
     <div align="center">
-        <table class="design">
+        <table>
             <tr>
                 <th><label for="trainTableIndex">{{ 'general.input.index' | trans }}</label></th>
                 <td>
@@ -26,7 +26,7 @@
         <br />
 
         {% if trainTableLines | length %}
-            <table class="design">
+            <table>
                 <tr><th colspan="7">{{ 'trainTable.output.title' | trans | format(routeNumber) }}</th></tr>
                 <tr>
                     {% for dayNumber in 0..6 %}
@@ -39,14 +39,14 @@
                             {% for routeTrain in routePredictions %}
                                 {% if routeTrain.dayNumber == dayNumber %}
                                     {{ 'trainTable.output.planned.title' | trans }}:
-                                    <a title="{{ 'trainTable.output.planned.base' | trans | format(routeTrain.numberOfSpots) }}">{{ routeTrain.trainNamePattern.name }}{% if routeTrain.position.name | length > 0 %} ({{ routeTrain.position.name }}){% endif %}</a><br />
+                                    <span title="{{ 'trainTable.output.planned.base' | trans | format(routeTrain.numberOfSpots) }}">{{ routeTrain.trainNamePattern.name }}{% if routeTrain.position.name | length > 0 %} ({{ routeTrain.position.name }}){% endif %}</span><br />
                                 {% endif %}
                             {% endfor %}
-                            <table class="design">
+                            <table>
                                 {% for trainTable in trainTableLines %}
                                     {% if trainTable.routeOperationDays.runningOnDay(dayNumber - 1) %}
                                         <tr>
-                                            <td><span class="tooltip" title="{{ trainTable.location.description }}">{{ trainTable.location.name }}</span></td>
+                                            <td><span title="{{ trainTable.location.description }}">{{ trainTable.location.name }}</span></td>
                                             <td>{{ trainTable.action }}</td>
                                             <td>{{ trainTable.time | displayTime }}</td>
                                         </tr>

@@ -43,7 +43,7 @@
                             </div>
                         {% endif %}
                     </div>
-                    <div class="home-panel-content" id="home_panel_{{ module }}"{% if minimized %} style="display:none;"{% endif %}>{% include 'home/' ~ module ~ '.html.twig' %}</div>
+                    <div class="home-panel-content {% if minimized %}home-panel-content-hidden{% else %}home-panel-content-shown{% endif %}" id="home_panel_{{ module }}">{% include 'home/' ~ module ~ '.html.twig' %}</div>
                 </div>
             </div>
         {% endfor %}
@@ -79,13 +79,21 @@
             function togglePanel(panelId)
             {
                 let panel = $('#' + panelId);
-                if (panel.is(':visible')) {
-                    panel.hide();
+                if (panel.hasClass('home-panel-content-shown')) {
+                    panel.removeClass('home-panel-content-shown').addClass('home-panel-content-hidden');
                     $('#' + panelId + '_toggle').removeClass('fa-minus-square').addClass('fa-plus-square');
                 } else {
-                    panel.show();
+                    panel.removeClass('home-panel-content-hidden').addClass('home-panel-content-shown');
                     $('#' + panelId + '_toggle').removeClass('fa-plus-square').addClass('fa-minus-square');
                 }
+
+                // if (panel.is(':visible')) {
+                //     panel.hide();
+                //     $('#' + panelId + '_toggle').removeClass('fa-minus-square').addClass('fa-plus-square');
+                // } else {
+                //     panel.show();
+                //     $('#' + panelId + '_toggle').removeClass('fa-plus-square').addClass('fa-minus-square');
+                // }
                 updateLayout();
             }
         </script>

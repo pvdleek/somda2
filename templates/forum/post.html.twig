@@ -1,5 +1,5 @@
 <tr>
-    <th colspan="{{ is_granted('IS_AUTHENTICATED_REMEMBERED') ? 2 : 3 }}" style="text-align:left;">
+    <th class="left-align" colspan="{{ is_granted('IS_AUTHENTICATED_REMEMBERED') ? 2 : 3 }}">
         {% if userIsModerator %}<input name="sel{{ post.id }}" type="checkbox" />{% endif %}
         <a id="p{{ post.id }}"></a>
         {% if postIsUnread and not firstUnreadAnchorDone %}
@@ -49,13 +49,11 @@
     </td>
     <td class="text">{{ post | displayForumPost | raw }}</td>
     <td class="buttons">
-        <table>
-            {% if mayPost and not post.discussion.locked %}
-                <tr><td style="border:none;"><a class="somda-button" href="{{ path('forum_discussion_post_reply', { 'id': post.id }) }}">Reageer</a></td></tr>
-            {% endif %}
-            {% if userIsModerator or (mayPost and not post.discussion.locked and post.author == app.user) %}
-                <tr><td style="border:none;"><a class="somda-button" href="{{ path('forum_discussion_post_edit', { 'id': post.id }) }}">Bewerk</a></td></tr>
-            {% endif %}
-        </table>
+        {% if mayPost and not post.discussion.locked %}
+            <a class="somda-button" href="{{ path('forum_discussion_post_reply', { 'id': post.id }) }}">Reageer</a>
+        {% endif %}
+        {% if userIsModerator or (mayPost and not post.discussion.locked and post.author == app.user) %}
+            <a class="somda-button" href="{{ path('forum_discussion_post_edit', { 'id': post.id }) }}">Bewerk</a>
+        {% endif %}
     </td>
 </tr>

@@ -5,7 +5,7 @@
         <div class="home-panel-title">Beheer bijzondere rit</div>
         <div class="home-panel-content panel-no-background">
             {{ form_start(form, { 'attr': { 'id': 'special_route_form' } }) }}
-                <table class="design">
+                <table>
                     {{ form_row(form.startDate) }}
                     <tr><td><label for="toggle_single_day">Bijzondere rit voor 1 dag</label></td><td><input checked="checked" id="toggle_single_day" type="checkbox" /></td></tr>
                     {{ form_row(form.endDate) }}

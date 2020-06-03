@@ -5,9 +5,9 @@
         <div class="home-panel-title">Beheer spoornieuws bericht</div>
         <div class="home-panel-content panel-no-background">
             {{ form_start(form, { 'attr': { 'id': 'rail_news_form' } }) }}
-                <table class="design">
+                <table>
                     <tr><td><strong>Datum</strong></td><td>{{ railNews.timestamp | displayDateTime(true) }}</td></tr>
-                    <tr><td><strong>Bron</strong></td><td><img alt="{{ railNews.source.name }}" src="{{ asset('images/news-logos/' ~ railNews.source.logo) }}" style="max-height:25px;" /></td></tr>
+                    <tr><td><strong>Bron</strong></td><td><img alt="{{ railNews.source.name }}" class="rail-news-logo-overview" src="{{ asset('images/news-logos/' ~ railNews.source.logo) }}" /></td></tr>
                     <tr><td><strong>Link</strong></td><td><a href="{{ railNews.url }}" target="_blank">{{ railNews.url }}</a></td></tr>
                     {{ form_row(form.title) }}
                     {{ form_row(form.introduction) }}

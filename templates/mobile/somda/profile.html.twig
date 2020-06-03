@@ -3,7 +3,7 @@
 {% block content %}
     {% if form is not null %}
         {{ form_start(form, { 'attr': { 'id': 'profile_form' } }) }}
-            <table class="design">
+            <table>
                 <tr class="thead"><tr><th colspan="2">Mijn profiel aanpassen</th></tr>
                 <tr><td>&nbsp;</td><td id="user_avatar"><img alt="avatar" src="{{ asset('images/avatar/' ~ user.info.avatar) }}" /></td></tr>
                 {{ form_rest(form) }}

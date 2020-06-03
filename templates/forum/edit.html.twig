@@ -5,7 +5,7 @@
         <div class="home-panel-title"><i class="fas fa-comments"></i> {{ post.discussion.title }}</div>
         <div class="home-panel-content panel-no-background">
             {{ form_start(form, { 'attr': { 'id': 'edit_form' } }) }}
-                <table class="design">
+                <table>
                     {% if form.title is defined %}{{ form_row(form.title) }}{% endif %}
                     {{ form_row(form.text) }}
                     {{ form_row(form.signatureOn) }}

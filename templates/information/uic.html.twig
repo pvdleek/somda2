@@ -1,24 +1,27 @@
 {% extends('base.html.twig') %}
 
 {% block content %}
-    <center>
-        <p class="info" style="width:500px;">
-            {{ 'uic.explanation.1' | trans }}<br />{{ 'uic.explanation.2' | trans | raw }}<br />{{ 'uic.explanation.3' | trans }}<br />{{ 'uic.explanation.4' | trans }}
-        </p>
-        <form name="uic">
-            <table class="design">
-                <tr>
-                    <th><label for="uic">{{ 'uic.input.uic' | trans }}</label></th>
-                    <td><input id="uic" name="uic" onkeypress="return checkEnter(event, 'do_uic');" size="20" type="text" /></td>
-                </tr>
-                <tr>
-                    <th>&nbsp;</th>
-                    <td><a class="somda-button" href="#" onclick="calculate(document.uic); return false;" title="{{ 'general.button.calculate' | trans }}">{{ 'general.button.calculate' | trans }}</a></td>
-                </tr>
-                <tr><th><label for="result">{{ 'uic.output.uic' | trans }}</label></th><td><input id="result" name="result" size="20" type="text" /></td></tr>
-                <tr><th><label for="result1">{{ 'uic.output.missingDigit' | trans }}</label></th><td><input id="result1" name="result1" size="2" type="text" /></td></tr>
-            </table>
-        </form>
-        <br /><p class="info" style="width:450px;">{{ 'uic.credits' | trans | raw }}</p>
-    </center>
+    <div class="home-panel separate-panel">
+        <div class="home-panel-title">UIC berekenen</div>
+        <div class="home-panel-content">
+            <p class="info">
+                {{ 'uic.explanation.1' | trans }}<br />{{ 'uic.explanation.2' | trans | raw }}<br />{{ 'uic.explanation.3' | trans }}<br />{{ 'uic.explanation.4' | trans }}
+            </p>
+            <form name="uic">
+                <table>
+                    <tr>
+                        <th><label for="uic">{{ 'uic.input.uic' | trans }}</label></th>
+                        <td><input id="uic" name="uic" onkeypress="return checkEnter(event, 'do_uic');" size="20" type="text" /></td>
+                    </tr>
+                    <tr>
+                        <th>&nbsp;</th>
+                        <td><a class="somda-button" href="#" onclick="calculate(document.uic); return false;" title="{{ 'general.button.calculate' | trans }}">{{ 'general.button.calculate' | trans }}</a></td>
+                    </tr>
+                    <tr><th><label for="result">{{ 'uic.output.uic' | trans }}</label></th><td><input id="result" name="result" size="20" type="text" /></td></tr>
+                    <tr><th><label for="result1">{{ 'uic.output.missingDigit' | trans }}</label></th><td><input id="result1" name="result1" size="2" type="text" /></td></tr>
+                </table>
+            </form>
+            <br /><p class="info">{{ 'uic.credits' | trans | raw }}</p>
+        </div>
+    </div>
 {% endblock %}

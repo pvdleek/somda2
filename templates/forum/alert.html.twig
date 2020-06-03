@@ -5,7 +5,7 @@
         <div class="home-panel-title"><i class="fas fa-comments"></i> Bericht bij de beheerders melden uit de discussie "{{ post.discussion.title }}"</div>
         <div class="home-panel-content panel-no-background">
             {{ form_start(form, { 'attr': { 'id': 'alert_form' } }) }}
-                <table align="center" class="design" width="98%">
+                <table align="center">
                     <tr>
                         <td colspan="2">
                             Gebruik deze functie om de moderators en administrators op de hoogte te stellen van berichten die verkeerd geplaatst zijn of in overtreding zijn met de regels van het forum.
@@ -26,7 +26,7 @@
                 </table>
             {{ form_end(form) }}
         </div>
-        <table align="center" class="design" width="98%">
+        <table align="center">
             {% include 'forum/post.html.twig' with { 'mayPost': false, 'userIsModerator': false, 'postIsUnread': false } %}
         </table>
     </div>
