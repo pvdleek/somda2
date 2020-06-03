@@ -60,9 +60,9 @@
                         <td>{{ trainTable['time'] | displayTime }}</td>
                         <td><a href="{{ path('train_table_search', {'trainTableYearId': trainTableIndexNumber, 'routeNumber': trainTable['route_number'] }) }}">{{ trainTable['route_number'] }}</a></td>
                         <td>{{ trainTable[constant('App\\Repository\\TrainTable::FIELD_TRANSPORTER_NAME')] }} - {{ trainTable[constant('App\\Repository\\TrainTable::FIELD_CHARACTERISTIC_DESCRIPTION')] }}</td>
-                        <td><a title="{{ trainTable['fl_first_description'] }}">{{ trainTable['fl_first_name'] }}</a></td>
+                        <td><span title="{{ trainTable['fl_first_description'] }}">{{ trainTable['fl_first_name'] }}</span></td>
                         <td>{{ ("general.action." ~ trainTable['action']) | trans }}</td>
-                        <td><a title="{{ trainTable['fl_last_description'] }}">{{ trainTable['fl_last_name'] }}</a></td>
+                        <td><span title="{{ trainTable['fl_last_description'] }}">{{ trainTable['fl_last_name'] }}</span></td>
                     </tr>
                 {% endfor %}
             </table>
