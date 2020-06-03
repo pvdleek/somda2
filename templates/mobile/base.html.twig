@@ -1,6 +1,18 @@
 <!DOCTYPE html>
-<html lang="nl" xml:lang="nl" xmlns="http://www.w3.org/1999/xhtml">
+<html class="no-webp" lang="nl" xml:lang="nl" xmlns="http://www.w3.org/1999/xhtml">
 <head>
+    {% if app.user and app.user.cookieOk == constant('App\\Entity\\User::COOKIE_OK') %}
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-2723197-1"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){
+                dataLayer.push(arguments);
+            }
+            gtag('js', new Date());
+            gtag('config', 'UA-2723197-1');
+        </script>
+    {% endif %}
+
     <link rel="apple-touch-icon" href="{{ asset('images/logos-somda/app-logo.png') }}" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
 
@@ -16,9 +28,6 @@
     <meta name="format-detection" content="telephone=yes" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
 
-    <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
-    <script src="https://kit.fontawesome.com/be43109115.js" crossorigin="anonymous"></script>
-
     <title>{% if pageTitle is defined %}{{ pageTitle }} - {% endif %}Somda</title>
 
     <link rel="stylesheet" href="{{ asset('css/base.css') }}" type="text/css" />
@@ -31,7 +40,7 @@
 
     <link href="{{ asset('favicon.ico') }}" rel="shortcut icon" type="image/x-icon" />
 </head>
-<body class="no-webp">
+<body>
     <div id="container">
         <div id="header"><img alt="Somda" src="{{ asset('images/logos-somda/logo-' ~ imageNumber ~ '.png') }}" /></div>
 
@@ -54,6 +63,9 @@
             <br /><p>Copyright &#169; 2003-{{ 'now' | date('Y') }} Somda.nl - alle rechten voorbehouden</p>
         </div>
     </div>
+
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+    <script async src="https://kit.fontawesome.com/be43109115.js" crossorigin="anonymous"></script>
 
     {# If applicable, jump to the requested forum-post #}
     {% if forumJump is defined and forumJump is not null %}
