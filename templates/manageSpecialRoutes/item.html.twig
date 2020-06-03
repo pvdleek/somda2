@@ -1,9 +1,9 @@
 {% extends('base.html.twig') %}
 
 {% block content %}
-    <div class="home-panel separate-panel">
-        <div class="home-panel-title">Beheer bijzondere rit</div>
-        <div class="home-panel-content panel-no-background">
+    <div class="panel">
+        <div class="panel-title">Beheer bijzondere rit</div>
+        <div class="panel-content panel-no-background">
             {{ form_start(form, { 'attr': { 'id': 'special_route_form' } }) }}
                 <table>
                     {{ form_row(form.startDate) }}

@@ -1,9 +1,9 @@
 {% extends('base.html.twig') %}
 
 {% block content %}
-    <div class="home-panel separate-panel">
-        <div class="home-panel-title">Statistieken samenvatting</div>
-        <div class="home-panel-content">
+    <div class="panel">
+        <div class="panel-title">Statistieken samenvatting</div>
+        <div class="panel-content">
             <table align="center">
                 <tr><td><strong>Start meting</strong></td><td nowrap="nowrap">{{ statisticsSummary.startMeasurement | displayDateTime }}</td></tr>
                 <tr><td><strong>Totaal aantal pageviews tot nu toe</strong></td><td nowrap="nowrap">{{ statisticsSummary.pageViewsTotal | number_format(0, '', '.') }}</td></tr>
@@ -18,9 +18,9 @@
         </div>
     </div>
 
-    <div class="home-panel separate-panel">
-        <div class="home-panel-title">Bezoekers-aantallen de afgelopen 2 maanden</div>
-        <div class="home-panel-content">
+    <div class="panel">
+        <div class="panel-title">Bezoekers-aantallen de afgelopen 2 maanden</div>
+        <div class="panel-content">
             <table>
                 <tr>
                     <td><strong>Datum</strong></td>
@@ -45,9 +45,9 @@
         </div>
     </div>
 
-    <div class="home-panel separate-panel">
-        <div class="home-panel-title">Bezoekers-aantallen per maand</div>
-        <div class="home-panel-content">
+    <div class="panel">
+        <div class="panel-title">Bezoekers-aantallen per maand</div>
+        <div class="panel-content">
             <table>
                 <tr>
                     <td><strong>Periode</strong></td>

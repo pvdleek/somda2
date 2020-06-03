@@ -1,9 +1,9 @@
 {% extends('base.html.twig') %}
 
 {% block content %}
-    <div class="home-panel separate-panel">
-        <div class="home-panel-title">Bewerk spot</div>
-        <div class="home-panel-content panel-no-background">
+    <div class="panel">
+        <div class="panel-title">Bewerk spot</div>
+        <div class="panel-content panel-no-background">
             {{ form_start(form, { 'attr': { 'id': 'spot_form' } }) }}
                 <table>
                     {{ form_row(form.spotDate) }}

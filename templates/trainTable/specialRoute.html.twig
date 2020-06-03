@@ -1,12 +1,12 @@
 {% extends('base.html.twig') %}
 
 {% block content %}
-    <div class="home-panel separate-panel">
-        <div class="home-panel-title">
+    <div class="panel">
+        <div class="panel-title">
             {{ specialRoute.startDate | displayDateTime }}{% if specialRoute.endDate is not null %}{{ 'general.date.till' | trans }} {{ specialRoute.endDate | displayDateTime }}{% endif %}
             {{ specialRoute.title }}
         </div>
-        <div class="home-panel-content">
+        <div class="panel-content">
             {% if specialRoute.image | length %}
                 <span class="special-route-image"><img alt="{{ specialRoute.title }}" src="{{ asset('images/materieel/' ~ specialRoute.image) }}" /></span>
             {% endif %}

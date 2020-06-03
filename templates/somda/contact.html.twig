@@ -1,9 +1,9 @@
 {% extends('base.html.twig') %}
 
 {% block content %}
-    <div class="home-panel separate-panel">
-        <div class="home-panel-title"><i class="fas fa-shipping-fast"></i> Feedback sturen naar de beheerder</div>
-        <div class="home-panel-content">
+    <div class="panel">
+        <div class="panel-title"><i class="fas fa-shipping-fast"></i> Feedback sturen naar de beheerder</div>
+        <div class="panel-content">
             {{ form_start(form, { 'attr': { 'id': 'contact_form' } }) }}
             <table>
                 {{ form_row(form.subject) }}

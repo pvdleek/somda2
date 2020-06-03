@@ -11,7 +11,7 @@
         {% endif %}
 
         <br />
-        <div class="home-panel-buttons">
+        <div class="panel-buttons">
             <a class="somda-button" href="{{ path('settings') }}">Mijn instellingen</a>
             <a class="somda-button" href="{{ path('profile') }}">Mijn profiel</a>
         </div>
@@ -26,7 +26,7 @@
             {% endif %}
             <div class="home-block" id="home_block_{{ module }}">
                 <div class="home-panel">
-                    <div class="home-panel-title">
+                    <div class="panel-title">
                         {{ ('dashboard.panel.' ~ module) | trans }}
                         {% if module == 'drgl' or module == 'werkzaamheden' %}
                             <a href="{{ path('feed_rss', { 'id': 'specialRoutes' }) }}" target="_blank"><i class="fas fa-rss rss-link"></i></a>
@@ -34,7 +34,7 @@
                             <a href="{{ path('feed_rss', { 'id': 'spots' }) }}" target="_blank"><i class="fas fa-rss rss-link"></i></a>
                         {% endif %}
                         {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-                            <div class="home-panel-actions">
+                            <div class="panel-actions">
                                 {% if minimized %}
                                     <a href="#" onclick="togglePanel('home_panel_{{ module }}'); return false;"><i class="fa fa-plus-square" id="home_panel_{{ module }}_toggle"></i></a>
                                 {% else %}
@@ -43,7 +43,7 @@
                             </div>
                         {% endif %}
                     </div>
-                    <div class="home-panel-content {% if minimized %}home-panel-content-hidden{% else %}home-panel-content-shown{% endif %}" id="home_panel_{{ module }}">{% include 'home/' ~ module ~ '.html.twig' %}</div>
+                    <div class="panel-content {% if minimized %}panel-content-hidden{% else %}panel-content-shown{% endif %}" id="home_panel_{{ module }}">{% include 'home/' ~ module ~ '.html.twig' %}</div>
                 </div>
             </div>
         {% endfor %}
@@ -79,11 +79,11 @@
             function togglePanel(panelId)
             {
                 let panel = $('#' + panelId);
-                if (panel.hasClass('home-panel-content-shown')) {
-                    panel.removeClass('home-panel-content-shown').addClass('home-panel-content-hidden');
+                if (panel.hasClass('panel-content-shown')) {
+                    panel.removeClass('panel-content-shown').addClass('panel-content-hidden');
                     $('#' + panelId + '_toggle').removeClass('fa-minus-square').addClass('fa-plus-square');
                 } else {
-                    panel.removeClass('home-panel-content-hidden').addClass('home-panel-content-shown');
+                    panel.removeClass('panel-content-hidden').addClass('panel-content-shown');
                     $('#' + panelId + '_toggle').removeClass('fa-plus-square').addClass('fa-minus-square');
                 }
 

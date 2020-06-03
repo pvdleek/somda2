@@ -36,10 +36,10 @@ body {
     background: #dce9f7 url(../images/design/body-background.png) repeat-x 0 top;
 }
 #wrap {
-    background: #FFF;
+    background: #fff;
     margin: 10px auto 0 auto;
+    max-width: 1280px;
     position: relative;
-    width: 960px;
 }
 
 hr {
@@ -181,7 +181,7 @@ table td {
     right: 15px;
     text-align: right;
     top: 8px;
-    width: 600px;
+    max-width: 800px;
 }
 .news-flash .news-flash-title {
     margin-bottom: 10px;
@@ -230,6 +230,7 @@ a.rail-news-title:hover {
     margin-bottom: 5px;
     width: 100%;
 }
+
 .home-panel {
     border: none;
     border-radius: 5px;
@@ -237,11 +238,15 @@ a.rail-news-title:hover {
     margin-top: 10px;
     width: 100%;
 }
-.separate-panel {
+.panel {
+    border: none;
+    border-radius: 5px;
+    display: inline-block;
     margin: 10px;
     width: auto;
 }
-.home-panel .home-panel-title {
+
+.home-panel .panel-title, .panel .panel-title {
     background-color: #246da5;
     border-radius: 5px 5px 0 0;
     color: #fff;
@@ -249,36 +254,38 @@ a.rail-news-title:hover {
     margin: 0;
     padding: 5px 5px 5px 10px;
 }
-.home-panel .home-panel-title a {
+.home-panel .panel-title a, .panel .panel-title a {
     color: #fff;
 }
-.home-panel .home-panel-title a:hover {
+.home-panel .panel-title a:hover, .panel .panel-title a:hover {
     color: #bbb;
 }
-.home-panel .home-panel-content {
+.home-panel .panel-content, .panel .panel-content {
     background-color: #d2e2f1;
     border-radius: 0 0 5px 5px;
     display: block;
     padding: 10px;
 }
-.home-panel .home-panel-content-shown {
+.home-panel .panel-content-shown {
     display: block;
 }
-.home-panel .home-panel-content-hidden {
+.home-panel .panel-content-hidden {
     display: none;
 }
-.home-panel .panel-no-background {
+
+.panel .panel-no-background {
     background: none;
 }
-.home-panel .home-panel-actions {
+.home-panel .panel-actions {
     float: right;
 }
-.home-panel .home-panel-actions a {
+.home-panel .panel-actions a {
     color: #fff !important;
 }
-.home-panel-buttons {
+.panel-buttons {
     text-align: center;
 }
+
 .home-shortcut-container {
     display: grid;
     grid-gap: 10px;
@@ -354,7 +361,7 @@ a.rail-news-title:hover {
     float: left;
     height: 50px;
     padding-top: 19px;
-    width: 180px;
+    width: 150px;
 }
 .webp .ftr-left {
     background: url(../images/design/footer-left.webp) no-repeat left 20px transparent;
@@ -366,10 +373,11 @@ a.rail-news-title:hover {
     font-weight: bold;
     height: 50px;
     left: 150px;
+    max-width: 980px;
     position: absolute;
     text-align: center;
     top: 9px;
-    width: 660px;
+    width: 100%;
 }
 .ftr-right {
     float: right;
@@ -391,7 +399,7 @@ a.rail-news-title:hover {
 /*************/
 table.forum {
     background-color: #D2E2F1;
-    width: 940px;
+    width: 100%;
 }
 td.info {
     border-right: 1px dotted;

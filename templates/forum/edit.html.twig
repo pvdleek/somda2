@@ -1,9 +1,9 @@
 {% extends('base.html.twig') %}
 
 {% block content %}
-    <div class="home-panel separate-panel">
-        <div class="home-panel-title"><i class="fas fa-comments"></i> {{ post.discussion.title }}</div>
-        <div class="home-panel-content panel-no-background">
+    <div class="panel">
+        <div class="panel-title"><i class="fas fa-comments"></i> {{ post.discussion.title }}</div>
+        <div class="panel-content panel-no-background">
             {{ form_start(form, { 'attr': { 'id': 'edit_form' } }) }}
                 <table>
                     {% if form.title is defined %}{{ form_row(form.title) }}{% endif %}

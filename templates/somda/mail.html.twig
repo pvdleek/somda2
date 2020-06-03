@@ -1,10 +1,10 @@
 {% extends('base.html.twig') %}
 
 {% block content %}
-    <div class="home-panel separate-panel">
+    <div class="panel">
         {{ form_start(form, { 'attr': { 'id': 'mail_form' } }) }}
-            <div class="home-panel-title">E-mail versturen naar gebruiker "{{ user.username }}"</div>
-            <div class="home-panel-content">
+            <div class="panel-title">E-mail versturen naar gebruiker "{{ user.username }}"</div>
+            <div class="panel-content">
                 <table>
                     {{ form_rest(form) }}
                     <tr>

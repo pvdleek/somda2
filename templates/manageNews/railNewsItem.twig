@@ -1,9 +1,9 @@
 {% extends('base.html.twig') %}
 
 {% block content %}
-    <div class="home-panel separate-panel">
-        <div class="home-panel-title">Beheer spoornieuws bericht</div>
-        <div class="home-panel-content panel-no-background">
+    <div class="panel">
+        <div class="panel-title">Beheer spoornieuws bericht</div>
+        <div class="panel-content panel-no-background">
             {{ form_start(form, { 'attr': { 'id': 'rail_news_form' } }) }}
                 <table>
                     <tr><td><strong>Datum</strong></td><td>{{ railNews.timestamp | displayDateTime(true) }}</td></tr>

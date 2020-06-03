@@ -20,12 +20,12 @@
     <br />
 
     {% if selectedType is not null and trains | length > 0 %}
-        <div class="home-panel separate-panel">
-            <div class="home-panel-title">
+        <div class="panel">
+            <div class="panel-title">
                 {{ selectedType.description }}
                 <span class="train-composition-add"><a href="{{ path('train_composition_add', { 'typeId': selectedType.id }) }}"><i class="fas fa-plus"></i></a></span>
             </div>
-            <div class="home-panel-content">
+            <div class="panel-content">
                 <table>
                     <tr>
                         <th>&nbsp;</th>

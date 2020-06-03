@@ -1,9 +1,9 @@
 {% extends('base.html.twig') %}
 
 {% block content %}
-    <div class="home-panel separate-panel">
-        <div class="home-panel-title">Beheer materieel-samenstelling van type "{{ trainComposition.type.description }}"</div>
-        <div class="home-panel-content panel-no-background">
+    <div class="panel">
+        <div class="panel-title">Beheer materieel-samenstelling van type "{{ trainComposition.type.description }}"</div>
+        <div class="panel-content panel-no-background">
             {{ form_start(form, { 'attr': { 'id': 'composition_form' } }) }}
             <table>
                 {% for car in 1..constant('App\\Entity\\TrainComposition::NUMBER_OF_CARS') %}

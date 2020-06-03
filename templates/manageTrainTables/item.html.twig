@@ -1,9 +1,9 @@
 {% extends('base.html.twig') %}
 
 {% block content %}
-    <div class="home-panel separate-panel">
-        <div class="home-panel-title">Beheer dienstregeling van trein {{ route.number }}</div>
-        <div class="home-panel-content panel-no-background">
+    <div class="panel">
+        <div class="panel-title">Beheer dienstregeling van trein {{ route.number }}</div>
+        <div class="panel-content panel-no-background">
             <form id="train_table_form" method="post">
                 <table>
                     <tr><th colspan="7">Dienstregeling van trein {{ route.number }} beheren</th></tr>

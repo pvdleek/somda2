@@ -22,8 +22,8 @@
         {% endif %}
     {% endblock %}
 
-    <div class="home-panel separate-panel">
-        <div class="home-panel-title">
+    <div class="panel">
+        <div class="panel-title">
             {% if userIsModerator %}
                 <span id="moderator_icons">
                     {% if discussion.locked %}
@@ -53,7 +53,7 @@
             {{ discussion.title }}
             <br />Forum: <a href="{{ path('forum_forum', { 'id': discussion.forum.id, 'name': discussion.forum.name | url_encode }) }}">{{ discussion.forum.category.name }} - {{ discussion.forum.name }}</a>
         </div>
-        <div class="home-panel-content panel-no-background">
+        <div class="panel-content panel-no-background">
             {% block paginator %}
                 {% if numberOfPages > 1 %}
                     <ul class="pagination">
