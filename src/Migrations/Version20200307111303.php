@@ -71,7 +71,7 @@ final class Version20200307111303 extends AbstractMigration
         $this->addSql('
             UPDATE somda_groups SET roles = \'a:8:{i:0;s:18:"ROLE_ABBREVIATIONS";i:1;s:19:' .
             '"ROLE_PASSING_ROUTES";i:2;s:14:"ROLE_SPOTS_NEW";i:3;s:17:"ROLE_SPOTS_RECENT";i:4;s:15:' .
-            '"ROLE_SPOTS_EDIT";i:5;s:15:"ROLE_TRAIN_DDAR;i:6;s:19:"ROLE_ROUTE_OVERVIEW";i:7;s:16:' .
+            '"ROLE_SPOTS_EDIT";i:5;s:15:"ROLE_TRAIN_DDAR";i:6;s:19:"ROLE_ROUTE_OVERVIEW";i:7;s:16:' .
             '"ROLE_TRAIN_NAMES";}\' WHERE groupid = 4
         ');
         $this->addSql('UPDATE somda_groups SET roles = \'a:1:{i:0;s:16:"ROLE_ADMIN_SPOTS";}\' WHERE groupid = 6');
