@@ -434,7 +434,7 @@ manage_news_edit:
 manage_rail_news:
   path: /beheer-spoor-nieuws/
   methods: [GET]
-  controller: App\Controller\ManageNewsController::indexAction
+  controller: App\Controller\ManageNewsController::railNewsAction
 manage_rail_news_edit:
   path: /beheer-spoor-nieuws-item/{id}/
   methods: [GET, POST]
