@@ -5,7 +5,7 @@
     <link rel="stylesheet" href="{{ asset('css/web.css') }}" type="text/css" />
     <link rel="stylesheet" href="{{ asset('css/menu.css') }}" type="text/css" />
     <link rel="stylesheet" href="{{ asset('css/bootstrap-pagination-3.0.3.css') }}" type="text/css" />
-    <link rel="stylesheet" href="{{ asset('css/jquery-ui-1.12.1.css') }}" type="text/css" />
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/redmond/jquery-ui.css" type="text/css" />
     {% block stylesheets %}{% endblock %}
 
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
@@ -15,13 +15,13 @@
     <meta name="author" content="Peter van der Leek" />
     <meta name="generator" content="Peter van der Leek" />
 
-    <script src="{{asset('js/modernizr-webp.js')}}"></script>
-    <script src="{{asset('js/jquery-1.12.4.js')}}"></script>
-    <script src="{{asset('js/jquery-ui-1.12.1.js')}}"></script>
-    <script src="{{asset('js/jquery.maskedinput-1.4.1.js')}}"></script>
-    <script src="{{asset('js/jquery-defaults.js')}}"></script>
-    <script src="{{asset('js/jquery-tablesorter.js')}}"></script>
-    <script src="{{asset('js/functions.js')}}"></script>
+    <script src="{{ asset('js/modernizr-webp-3.6.0.js') }}"></script>
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <script src="{{ asset('js/jquery.maskedinput-1.4.1.js') }}"></script>
+    <script src="{{ asset('js/jquery-defaults.js') }}"></script>
+    <script src="{{ asset('js/jquery-tablesorter.js') }}"></script>
+    <script src="{{ asset('js/functions.js') }}"></script>
     <script src="https://kit.fontawesome.com/be43109115.js" crossorigin="anonymous"></script>
 
     <title>{% if pageTitle is defined %}{{ pageTitle }} - {% endif %}Somda</title>
@@ -58,7 +58,7 @@
     {% endif %}
 
     {% if app.user and app.user.cookieOk == constant('App\\Entity\\User::COOKIE_OK') %}
-        <script src="{{asset('js/google_ga.js')}}"></script>
+        <script src="{{ asset('js/google_ga.js') }}"></script>
         <script>try { var pageTracker = _gat._getTracker('UA-2723197-1'); pageTracker._trackPageview(); } catch(err) {}</script>
     {% endif %}
 </body>
