@@ -69,15 +69,15 @@ news_text:
 location:
   path: /verkortingen/
   methods: [GET]
-  controller: App\Controller\LocationController:indexAction
+  controller: App\Controller\LocationController::indexAction
 location_search:
   path: /verkortingen/{searchMethod}/{search}/
   methods: [GET]
-  controller: App\Controller\LocationController:indexAction
+  controller: App\Controller\LocationController::indexAction
 location_json:
   path: /verkortingen-zoeken/{search}/
   methods: [GET]
-  controller: App\Controller\LocationController:jsonAction
+  controller: App\Controller\LocationController::jsonAction
 jargon:
   path: /jargon/
   methods: [GET]
@@ -85,7 +85,7 @@ jargon:
 uic:
   path: /uic/
   methods: [GET]
-  controller: App\Controller\InformationController:uicAction
+  controller: App\Controller\InformationController::uicAction
 
 ###############
 # Train table #
@@ -93,30 +93,30 @@ uic:
 train_table:
   path: /dienstregeling/
   methods: [GET]
-  controller: App\Controller\TrainTableController:indexAction
+  controller: App\Controller\TrainTableController::indexAction
 train_table_search:
   path: /dienstregeling/{trainTableYearId}/{routeNumber}/
   methods: [GET]
   requirements: { trainTableYearId: \d+ }
-  controller: App\Controller\TrainTableController:indexAction
+  controller: App\Controller\TrainTableController::indexAction
 passing_routes:
   path: /doorkomststaat/
   methods: [GET]
-  controller: App\Controller\TrainTableController:passingRoutesAction
+  controller: App\Controller\TrainTableController::passingRoutesAction
 passing_routes_search:
   path: /doorkomststaat/{trainTableYearId}/{locationName}/{dayNumber}/{startTime}/{endTime}/
   methods: [GET]
   requirements: { trainTableYearId: \d+, dayNumber: \d+ }
-  controller: App\Controller\TrainTableController:passingRoutesAction
+  controller: App\Controller\TrainTableController::passingRoutesAction
 special_routes:
   path: /drgl/
   methods: [GET]
-  controller: App\Controller\TrainTableController:specialRoutesAction
+  controller: App\Controller\TrainTableController::specialRoutesAction
 special_route:
   path: /drgl/{id}/
   methods: [GET]
   requirements: { id: \d+ }
-  controller: App\Controller\TrainTableController:specialRoutesAction
+  controller: App\Controller\TrainTableController::specialRoutesAction
 
 #########
 # Spots #
@@ -138,11 +138,11 @@ spots_search:
   path: /spots/{maxYears}/{searchParameters}
   methods: [GET]
   requirements: { maxYears: '1|2|3|4|5', searchParameters: .+ }
-  controller: App\Controller\SpotController:indexAction
+  controller: App\Controller\SpotController::indexAction
 spots_to_train_table:
   path: /spots/naar-dienstregeling/{routeNumber}/{date}/
   methods: [GET]
-  controller: App\Controller\SpotController:redirectToTrainTableAction
+  controller: App\Controller\SpotController::redirectToTrainTableAction
 my_spots:
   path: /mijn-spots/
   methods: [GET]
@@ -207,105 +207,105 @@ materieelnamen:
 forum:
   path: /forum/
   methods: [GET]
-  controller: App\Controller\ForumForumController:indexAction
+  controller: App\Controller\ForumForumController::indexAction
 forum_forum:
   path: /forum/c{id}/{name}/
   methods: [GET]
   requirements: { id: \d+ }
-  controller: App\Controller\ForumForumController:forumAction
+  controller: App\Controller\ForumForumController::forumAction
 forum_forum_new_discussion:
   path: /forum/n{id}/nieuwe-discussie/
   methods: [GET, POST]
   requirements: { id: \d+ }
-  controller: App\Controller\ForumDiscussionController:newAction
+  controller: App\Controller\ForumDiscussionController::newAction
 forum_discussion:
   path: /forum/{id}/{name}/
   methods: [GET]
   requirements: { id: \d+ }
-  controller: App\Controller\ForumDiscussionController:indexAction
+  controller: App\Controller\ForumDiscussionController::indexAction
 forum_discussion_page:
   path: /forum/{id}/{pageNumber}/{name}/
   methods: [GET]
   requirements: { id: \d+, pageNumber: \d+ }
-  controller: App\Controller\ForumDiscussionController:indexAction
+  controller: App\Controller\ForumDiscussionController::indexAction
 forum_discussion_post:
   path: /forum/{id}/p{postId}/{name}/
   methods: [GET]
   requirements: { id: \d+, postId: \d+ }
-  controller: App\Controller\ForumDiscussionController:indexAction
+  controller: App\Controller\ForumDiscussionController::indexAction
 
 forum_discussion_moderate:
   path: /forum/{id}/moderate/{action}/
   methods: [GET, POST]
   requirements: { id: \d+, action: 'close|open|move' }
-  controller: App\Controller\ForumModerateController:indexAction
+  controller: App\Controller\ForumModerateController::indexAction
 forum_discussion_moderate_combine:
   path: /forum/{id1}/moderate/combine/{id2}/
   methods: [GET, POST]
   requirements: { id1: \d+, id2: \d+ }
-  controller: App\Controller\ForumModerateController:combineAction
+  controller: App\Controller\ForumModerateController::combineAction
 forum_discussion_moderate_split:
   path: /forum/{id}/moderate/split/{postIds}/
   methods: [GET, POST]
   requirements: { id: \d+ }
-  controller: App\Controller\ForumModerateController:splitAction
+  controller: App\Controller\ForumModerateController::splitAction
 
 forum_discussion_post_reply:
   path: /forum/p{id}/reageren/
   methods: [GET, POST]
   requirements: { id: \d+ }
-  controller: App\Controller\ForumPostController:replyAction
+  controller: App\Controller\ForumPostController::replyAction
 forum_discussion_post_edit:
   path: /forum/p{id}/bewerken/
   methods: [GET, POST]
   requirements: { id: \d+ }
-  controller: App\Controller\ForumPostController:editAction
+  controller: App\Controller\ForumPostController::editAction
 
 forum_discussion_post_alert:
   path: /forum/p{id}/melden/
   methods: [GET, POST]
   requirements: { id: \d+ }
-  controller: App\Controller\ForumPostAlertController:alertAction
+  controller: App\Controller\ForumPostAlertController::alertAction
 forum_discussion_post_alerts_overview:
   path: /forum/meldingen/
   methods: [GET]
-  controller: App\Controller\ForumPostAlertController:alertsAction
+  controller: App\Controller\ForumPostAlertController::alertsAction
 forum_discussion_post_alerts:
   path: /forum/p{id}/meldingen/
   methods: [GET, POST]
   requirements: { id: \d+ }
-  controller: App\Controller\ForumPostAlertController:postAlertsAction
+  controller: App\Controller\ForumPostAlertController::postAlertsAction
 forum_discussion_post_alerts_close:
   path: /forum/p{id}/meldingen-sluiten/
   methods: [GET]
   requirements: { id: \d+ }
-  controller: App\Controller\ForumPostAlertController:alertsCloseAction
+  controller: App\Controller\ForumPostAlertController::alertsCloseAction
 
 forum_post_wiki_check:
   path: /forum/p{id}/{operation}/
   methods: [GET]
   requirements: { id: \d+, operation: 'ok|na' }
-  controller: App\Controller\ForumPostWikiController:checkAction
+  controller: App\Controller\ForumPostWikiController::checkAction
 
 forum_favorites:
   path: /forum/favorieten/
   methods: [GET]
-  controller: App\Controller\ForumPostFavoriteController:indexAction
+  controller: App\Controller\ForumPostFavoriteController::indexAction
 forum_favorite_toggle:
   path: /forum/favoriet/{id}/{alerting}/
   methods: [GET]
   requirements: { id: \d+, alerting: '0|1' }
-  controller: App\Controller\ForumPostFavoriteController:toggleAction
+  controller: App\Controller\ForumPostFavoriteController::toggleAction
 forum_favorite_add:
   path: /forum/favoriet/{id}/toevoegen/
   methods: [GET]
   requirements: { id: \d+ }
-  controller: App\Controller\ForumPostFavoriteController:addAction
+  controller: App\Controller\ForumPostFavoriteController::addAction
 forum_favorite_remove:
   path: /forum/favoriet/{id}/verwijderen/
   methods: [GET]
   requirements: { id: \d+ }
-  controller: App\Controller\ForumPostFavoriteController:removeAction
+  controller: App\Controller\ForumPostFavoriteController::removeAction
 
 forum_search:
   path: /forum/zoeken/
@@ -323,23 +323,23 @@ forum_noteworthy_stuff:
 about:
   path: /over/
   methods: [GET]
-  controller: App\Controller\SomdaController:aboutAction
+  controller: App\Controller\SomdaController::aboutAction
 advertise:
   path: /adverteren/
   methods: [GET]
-  controller: App\Controller\SomdaController:advertiseAction
+  controller: App\Controller\SomdaController::advertiseAction
 contact:
   path: /feedback/
   methods: [GET, POST]
-  controller: App\Controller\SomdaController:contactAction
+  controller: App\Controller\SomdaController::contactAction
 disclaimer:
   path: /disclaimer/
   methods: [GET]
-  controller: App\Controller\SomdaController:disclaimerAction
+  controller: App\Controller\SomdaController::disclaimerAction
 disclaimer_choice:
   path: /disclaimer/{choice}/
   methods: [GET]
-  controller: App\Controller\SomdaController:disclaimerAction
+  controller: App\Controller\SomdaController::disclaimerAction
 feeds:
   path: /feeds/
   methods: [GET]
@@ -365,22 +365,22 @@ help_text:
 settings:
   path: /instellingen/
   methods: [GET]
-  controller: App\Controller\SettingsController:indexAction
+  controller: App\Controller\SettingsController::indexAction
 profile:
   path: /profiel/
   methods: [GET, POST]
   requirements: { id: \d+ }
-  controller: App\Controller\ProfileController:indexAction
+  controller: App\Controller\ProfileController::indexAction
 profile_view:
   path: /profiel/{id}/
   methods: [GET, POST]
   requirements: { id: \d+ }
-  controller: App\Controller\ProfileController:indexAction
+  controller: App\Controller\ProfileController::indexAction
 profile_mail:
   path: /profiel/e-mail/{id}/
   methods: [GET, POST]
   requirements: { id: \d+ }
-  controller: App\Controller\ProfileController:mailAction
+  controller: App\Controller\ProfileController::mailAction
 
 #########
 # Feeds #
@@ -401,17 +401,17 @@ feed_image:
   path: /feeds/image/{locationName}/
   methods: [GET]
   requirements: { locationName: '[a-zA-z]{1,10}' }
-  controller: App\Controller\FeedController:imageAction
+  controller: App\Controller\FeedController::imageAction
 feed_image_with_day_number:
   path: /feeds/image/{locationName}/{dayNumber}/
   methods: [GET]
   requirements: { locationName: '[a-zA-z]{1,10}', dayNumber: '[1-7]' }
-  controller: App\Controller\FeedController:imageAction
+  controller: App\Controller\FeedController::imageAction
 feed_image_with_start_time:
   path: /feeds/image/{locationName}/{dayNumber}/{startTime}/
   methods: [GET]
   requirements: { locationName: '[a-zA-z]{1,10}', dayNumber: '[1-7]', startTime: '[0-9]{2}:[0-9]{2}' }
-  controller: App\Controller\FeedController:imageAction
+  controller: App\Controller\FeedController::imageAction
 
 ##############
 # Management #
@@ -515,24 +515,3 @@ manage_route_list:
   methods: [GET, POST]
   requirements: { yearId: \d+, id: \d+ }
   controller: App\Controller\ManageRouteListsController::routeListAction
-
-#reisplanner:
-#  path: /
-#  methods: [GET]
-#  controller: App\Controller\HomeController::notImplementedAction
-#ongelezen_forum:
-#  path: /
-#  methods: [GET]
-#  controller: App\Controller\HomeController::notImplementedAction
-#favorieten:
-#  path: /
-#  methods: [GET]
-#  controller: App\Controller\HomeController::notImplementedAction
-#shout_archief:
-#  path: /
-#  methods: [GET]
-#  controller: App\Controller\HomeController::notImplementedAction
-#grafisch:
-#  path: /
-#  methods: [GET]
-#  controller: App\Controller\HomeController::notImplementedAction
