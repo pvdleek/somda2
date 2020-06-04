@@ -8,14 +8,14 @@
                 <table border="0" width="100%">
                     <tr>
                         <td align="center">
-                            Deze forumdiscussie is gekoppeld aan de <a href="http://www.railwiki.nl/" target="_blank">RailWiki.nl</a> pagina('s):
+                            Deze forumdiscussie is gekoppeld aan de <a href="http://www.railwiki.nl/" rel="noopener" target="_blank">RailWiki.nl</a> pagina('s):
                             <br />
                             {% for wiki in discussion.wikis %}
-                                <a href="http://www.railwiki.nl/index.php/{{ wiki.wiki }}" target="_blank">{{ wiki.title ? wiki.title : wiki.wiki }}</a>
+                                <a href="http://www.railwiki.nl/index.php/{{ wiki.wiki }}" rel="noopener" target="_blank">{{ wiki.title ? wiki.title : wiki.wiki }}</a>
                                 {% if not loop.last %} - {% endif %}
                             {% endfor %}
                         </td>
-                        <td><a href="http://www.railwiki.nl/" target="_blank"><img alt="RailWiki.nl" height="110" src="{{ asset('images/railwiki-logo.png') }}" width="296" /></a></td>
+                        <td><a href="http://www.railwiki.nl/" rel="noopener" target="_blank"><img alt="RailWiki.nl" height="110" src="{{ asset('images/railwiki-logo.png') }}" width="296" /></a></td>
                     </tr>
                 </table>
             </div>
@@ -78,7 +78,7 @@
                 {% if loop.index == 5 or loop.index == 55 %}
                     {% if forumBanner is not null %}
                         <br /><table align="center"><tr>
-                            <td><a href="{{ path('banner_click_out', { 'id': forumBanner.id }) }}" rel="sponsored" target="_blank">
+                            <td><a href="{{ path('banner_click_out', { 'id': forumBanner.id }) }}" rel="sponsored noopener" target="_blank">
                                 <img alt="{{ forumBanner.customer.name }} {{ forumBanner.description }}" height="150" src="{{ asset('images/banners/' ~ forumBanner.image) }}" />
                             </a></td>
                             <td><a href="{{ path('advertise') }}">advertentie</a></td>
