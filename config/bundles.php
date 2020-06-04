@@ -16,4 +16,5 @@ return [
     FOS\CKEditorBundle\FOSCKEditorBundle::class => ['all' => true],
     AurimasNiekis\SchedulerBundle\AurimasNiekisSchedulerBundle::class => ['all' => true],
     Debril\RssAtomBundle\DebrilRssAtomBundle::class => ['all' => true],
+    Nelmio\SecurityBundle\NelmioSecurityBundle::class => ['all' => true],
 ];

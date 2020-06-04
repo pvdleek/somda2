@@ -1,0 +1,54 @@
+nelmio_security:
+  signed_cookie:
+    names: ['*']
+  # Prevent framing of the entire site
+  clickjacking:
+    paths:
+      '^/.*': DENY
+  # Prevent re-directions outside the website's domain
+  external_redirects:
+    abort: true
+    log: true
+
+  # Prevent inline scripts, unsafe eval, external scripts/images/styles/frames, etc
+  csp:
+    hosts: []
+    content_types: []
+    enforce:
+      level1_fallback: false
+      browser_adaptive:
+        enabled: false
+      default-src:
+        - 'none'
+      connect-src:
+        - 'self'
+      script-src:
+        - 'self'
+        - 'unsafe-inline'
+        - 'code.jquery.com'
+        - '*.fontawesome.com'
+      style-src:
+        - 'self'
+        - 'unsafe-inline'
+        - 'code.jquery.com'
+      img-src:
+        - 'self'
+        - 'data:'
+        - '*.buienradar.nl'
+      block-all-mixed-content: true
+      upgrade-insecure-requests: true
+
+  # Disable content type sniffing for script resources
+  content_type:
+    nosniff: true
+
+  # Force Microsoft's XSS-Protection with its block mode
+  xss_protection:
+    enabled: true
+    mode_block: true
+
+  referrer_policy:
+    enabled: true
+    policies:
+      - 'no-referrer'
+      - 'strict-origin-when-cross-origin'

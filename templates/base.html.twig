@@ -5,11 +5,11 @@
         <script async src="https://www.googletagmanager.com/gtag/js?id=UA-2723197-1"></script>
         <script>
             window.dataLayer = window.dataLayer || [];
-            function gtag(){
+            function googleTag() {
                 dataLayer.push(arguments);
             }
-            gtag('js', new Date());
-            gtag('config', 'UA-2723197-1');
+            googleTag('js', new Date());
+            googleTag('config', 'UA-2723197-1');
         </script>
     {% endif %}
 
@@ -68,5 +68,17 @@
     {% endif %}
 
     {% block javascripts %}{% endblock %}
+
+    <script>
+        function initializeImages() {
+            let imgDefer = document.getElementsByTagName('img');
+            for (let image = 0; image < imgDefer.length; image++) {
+                if (imgDefer[image].getAttribute('data-src')) {
+                    imgDefer[image].setAttribute('src', imgDefer[image].getAttribute('data-src'));
+                }
+            }
+        }
+        window.onload = initializeImages;
+    </script>
 </body>
 </html>
