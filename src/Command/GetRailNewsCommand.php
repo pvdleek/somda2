@@ -10,6 +10,7 @@ use Doctrine\Common\Persistence\ManagerRegistry;
 use Exception;
 use FeedIo\Feed\ItemInterface;
 use FeedIo\FeedIo;
+use FeedIo\Reader\ReadErrorException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -106,7 +107,12 @@ class GetRailNewsCommand extends Command implements ScheduledJobInterface
             /**
              * @var ItemInterface[] $items
              */
-            $items = $this->feedIo->read($feed->url, null, new DateTime('-1 day'))->getFeed();
+            try {
+                $items = $this->feedIo->read($feed->url, null, new DateTime('-1 day'))->getFeed();
+            } catch (ReadErrorException $exception) {
+                $output->writeln($exception->getMessage());
+                continue;
+            }
             foreach ($items as $item) {
                 if (!$feed->filterResults || $this->isArticleMatch($item)) {
                     $description = trim(strip_tags(str_replace('?', '', $item->getDescription())));
