@@ -1,9 +1,9 @@
-<picture><source srcset="{{ asset('images/logos-somda/logo-1.webp') }}" /><img alt="Somda" src="{{ asset('images/logos-somda/logo-1.png') }}" /></picture>
+<picture><source srcset="{{ absolute_url(asset('images/logos-somda/logo-1.webp')) }}" /><img alt="Somda" src="{{ absolute_url(asset('images/logos-somda/logo-1.png')) }}" /></picture>
 <br />
-<br />Onderstaande e-mail is via <a href="{{ path('home') }}">Somda</a> verzonden door "{{ sender.username }}".
+<br />Onderstaande e-mail is via <a href="{{ absolute_url(path('home')) }}">Somda</a> verzonden door "{{ sender.username }}".
 <br />
 <br />LET OP: De gebruiker heeft bij het verzenden zijn/haar e-mailadres niet vrijgegeven,
-<br />gebruik om deze e-mail te beantwoorden <a href="{{ path('profile_mail', { 'id': sender.id }) }}">het formulier op Somda</a>.
+<br />gebruik om deze e-mail te beantwoorden <a href="{{ absolute_url(path('profile_mail', { 'id': sender.id })) }}">het formulier op Somda</a>.
 <br />
 <br />Somda neemt geen enkele verantwoordelijkheid voor de inhoud van deze e-mail!
 <br />Misbruik kunt u melden via abuse@somda.nl.

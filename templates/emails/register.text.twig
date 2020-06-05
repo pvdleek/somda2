@@ -1,5 +1,5 @@
-Jouw registratie bij Somda ({{ path('home') }})
+Jouw registratie bij Somda ({{ absolute_url(path('home')) }})
 
 Jij of iemand anders heeft jouw e-mailadres gebruikt voor een registratie bij Somda.
 Om deze registratie te voltooien dien je naar de volgende link te gaan:
-{{ path('activate_with_key', { 'id': userId, 'key': activationKey }) }}
+{{ absolute_url(path('activate_with_key', { 'id': userId, 'key': activationKey })) }}

@@ -1,7 +1,7 @@
-<picture><source srcset="{{ asset('images/logos-somda/logo-1.webp') }}" /><img alt="Somda" src="{{ asset('images/logos-somda/logo-1.png') }}" /></picture>
+<picture><source srcset="{{ absolute_url(asset('images/logos-somda/logo-1.webp')) }}" /><img alt="Somda" src="{{ absolute_url(asset('images/logos-somda/logo-1.png')) }}" /></picture>
 <br />
-<br /><strong>Jouw registratie bij <a href="{{ path('home') }}">Somda</a></strong>
+<br /><strong>Jouw registratie bij <a href="{{ absolute_url(path('home')) }}">Somda</a></strong>
 <br />
 <br />Jij of iemand anders heeft jouw e-mailadres gebruikt voor een registratie bij Somda.
 <br />Om deze registratie te voltooien dien je op de volgende link te klikken:
-<br /><a href="{{ path('activate_with_key', { 'id': userId, 'key': activationKey }) }}">Account activeren</a>
+<br /><a href="{{ absolute_url(path('activate_with_key', { 'id': userId, 'key': activationKey })) }}">Account activeren</a>

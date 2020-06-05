@@ -1,8 +1,8 @@
-<picture><source srcset="{{ asset('images/logos-somda/logo-1.webp') }}" /><img alt="Somda" src="{{ asset('images/logos-somda/logo-1.png') }}" /></picture>
+<picture><source srcset="{{ absolute_url(asset('images/logos-somda/logo-1.webp')) }}" /><img alt="Somda" src="{{ absolute_url(asset('images/logos-somda/logo-1.png')) }}" /></picture>
 <br />
 <br />Beste {{ user.username }},
 <br />
-<br />Recent heb je een melding gedaan bij de moderators over <a href="{{ path('forum_discussion_post', { 'id': post.discussion.id, 'postId': post.id, 'name': (post.discussion.title | url_encode) }) }}">dit bericht</a> in de discussie "{{ post.discussion.title }}"
+<br />Recent heb je een melding gedaan bij de moderators over <a href="{{ absolute_url(path('forum_discussion_post', { 'id': post.discussion.id, 'postId': post.id, 'name': (post.discussion.title | url_encode) })) }}">dit bericht</a> in de discussie "{{ post.discussion.title }}"
 <br />
 <br />Een moderator heeft hier naar gekeken en jou deze reactie gestuurd:
 <br />{{ note.text }}
