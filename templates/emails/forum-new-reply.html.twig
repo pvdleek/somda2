@@ -1,5 +1,5 @@
 <picture><source srcset="{{ absolute_url(asset('images/logos-somda/logo-1.webp')) }}" /><img alt="Somda" src="{{ absolute_url(asset('images/logos-somda/logo-1.png')) }}" /></picture>
 <br />
-<br />Op het forum van <a href="{{ url('home') }}">Somda</a> is een reactie geplaatst in de discussie "{{ discussion.title | url_encode }}".
+<br />Op het forum van <a href="{{ url('home') }}">Somda</a> is een reactie geplaatst in de discussie "{{ discussion.title }}".
 <br />
 <br /><a href="{{ url('forum_discussion', { 'id': discussion.id, 'name': (discussion.title | url_encode) }) }}">Ga direct naar de forumdiscussie</a>.
