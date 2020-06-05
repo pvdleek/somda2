@@ -6,52 +6,55 @@
         {% if not alert.closed %}{% set alertIsClosed = false %}{% endif %}
     {% endfor %}
 
-    <br />
-    <a class="somda-button" href="{{ path('forum_discussion_post_alerts_overview') }}">Naar overzicht van alle meldingen</a>
-    <br />
+    <div class="panel">
+        <div class="panel-title"><i class="fas fa-comments"></i> Meldingen over bericht uit de discussie "{{ post.discussion.title }}"</div>
+        <div class="panel-content panel-no-background">
+            <a class="somda-button" href="{{ path('forum_discussion_post_alerts_overview') }}">Naar overzicht van alle meldingen</a>
 
-    {% if alertIsClosed %}
-        <p class="alert">Deze melding is gesloten</p>
-    {% else %}
-        <a class="somda-button" href="{{ path('forum_discussion_post_alerts_close', { 'id': post.id }) }}">Sluit melding</a>
-        <br /><br />
-    {% endif %}
+            {% if alertIsClosed %}
+                <p class="alert">Deze melding is gesloten</p>
+            {% else %}
+                <a class="somda-button" href="{{ path('forum_discussion_post_alerts_close', { 'id': post.id }) }}">Sluit melding</a>
+                <br />
+            {% endif %}
+            <br />
 
-    {% for alert in post.alerts %}
-        <p class="info">Commentaar van melder <a href="{{ path('profile_view', { 'id': alert.sender.id }) }}">{{ alert.sender.username }}</a> op {{ alert.timestamp | date('d-m-Y') }} om {{ alert.timestamp | date('H:i:s') }}: <strong>{{ alert.comment }}</strong></p>
-    {% endfor %}
-
-    <table align="center">
-        <tr><th colspan="3">{{ post.discussion.title }}</th></tr>
-        {% include 'forum/post.html.twig' with { 'mayPost': false, 'userIsModerator': false, 'postIsUnread': false } %}
-    </table>
-    <br />
-    <table>
-        <tr><th colspan="4">Commentaar door moderators bij deze melding</th></tr>
-        {% for alert in post.alerts %}
-            {% for note in alert.notes %}
-                <tr>
-                    <td>{{ note.author.id | displayUser(note.author.username) | raw }}</td>
-                    <td>{{ note.timestamp | date('d-m-Y H:i:s') }}</td>
-                    <td>{{ note.text }}</td>
-                    <td>{{ note.sentToReporter ? 'Ja' : 'Nee' }}</td>
-                </tr>
+            {% for alert in post.alerts %}
+                <p class="info">Commentaar van melder <a href="{{ path('profile_view', { 'id': alert.sender.id }) }}">{{ alert.sender.username }}</a> op {{ alert.timestamp | date('d-m-Y') }} om {{ alert.timestamp | date('H:i:s') }}: <strong>{{ alert.comment }}</strong></p>
             {% endfor %}
-        {% endfor %}
-    </table>
-    <br />
-    {{ form_start(form, { 'attr': { 'id': 'alert_note_form' } }) }}
-        <table>
-            {{ form_row(form.text) }}
-            {{ form_row(form.sentToReporter) }}
-            <tr>
-                <td>&nbsp;</td>
-                <td>
-                    <a class="somda-button" href="#" onclick="$('#alert_note_form').submit(); return false;">Voeg toe</a>
-                    <a class="somda-button" href="{{ path('forum_discussion_post', { 'id': post.discussion.id, 'postId': post.id, 'name': (post.discussion.title | url_encode )}) }}">Terug naar het bericht</a>
-                </td>
-            </tr>
-        </table>
-    {{ form_end(form) }}
-    <br />
+
+            <table>
+                <tr><th colspan="3">{{ post.discussion.title }}</th></tr>
+                {% include 'forum/post.html.twig' with { 'mayPost': false, 'userIsModerator': false, 'postIsUnread': false } %}
+            </table>
+            <br />
+            <table>
+                <tr><th colspan="4">Commentaar door moderators bij deze melding</th></tr>
+                {% for alert in post.alerts %}
+                    {% for note in alert.notes %}
+                        <tr>
+                            <td>{{ note.author.id | displayUser(note.author.username) | raw }}</td>
+                            <td>{{ note.timestamp | date('d-m-Y H:i:s') }}</td>
+                            <td>{{ note.text }}</td>
+                            <td>{{ note.sentToReporter ? 'Ja' : 'Nee' }}</td>
+                        </tr>
+                    {% endfor %}
+                {% endfor %}
+            </table>
+            <br />
+            {{ form_start(form, { 'attr': { 'id': 'alert_note_form' } }) }}
+                <table>
+                    {{ form_row(form.text) }}
+                    {{ form_row(form.sentToReporter) }}
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td>
+                            <a class="somda-button" href="#" onclick="$('#alert_note_form').submit(); return false;">Voeg toe</a>
+                            <a class="somda-button" href="{{ path('forum_discussion_post', { 'id': post.discussion.id, 'postId': post.id, 'name': (post.discussion.title | url_encode )}) }}">Terug naar het bericht</a>
+                        </td>
+                    </tr>
+                </table>
+            {{ form_end(form) }}
+        </div>
+    </div>
 {% endblock %}
