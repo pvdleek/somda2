@@ -220,6 +220,7 @@ class ForumDiscussionController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->formHelper->addPost($form, $forumDiscussion, $this->userHelper->getUser());
             $this->formHelper->getDoctrine()->getManager()->persist($forumDiscussion);
+            $this->formHelper->getDoctrine()->getManager()->flush();
 
             return $this->formHelper->finishFormHandling('', RouteGenerics::ROUTE_FORUM_DISCUSSION, [
                 'id' => $forumDiscussion->getId(),
