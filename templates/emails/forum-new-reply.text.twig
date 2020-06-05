@@ -1,3 +1,3 @@
-Op het forum van Somda ({{ path('home') }}) is een reactie geplaatst in de discussie "{{ discussion.title | url_encode }}".
+Op het forum van Somda ({{ url('home') }}) is een reactie geplaatst in de discussie "{{ discussion.title | url_encode }}".
 
-Bekijk hier naar de forumdiscussie: {{ path('forum_discussion', { 'id': discussion.id, 'name': (discussion.title | url_encode) }) }}
+Bekijk hier naar de forumdiscussie: {{ url('forum_discussion', { 'id': discussion.id, 'name': (discussion.title | url_encode) }) }}

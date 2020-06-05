@@ -15,12 +15,13 @@ if ($_SERVER['APP_DEBUG']) {
     Debug::enable();
 }
 
-if ($trustedProxies = $_SERVER['TRUSTED_PROXIES'] ?? false) {
-    Request::setTrustedProxies(
-        explode(',', $trustedProxies),
-        Request::HEADER_X_FORWARDED_ALL ^ Request::HEADER_X_FORWARDED_HOST
-    );
-}
+Request::setTrustedProxies(['10.62.81.0/24'], Request::HEADER_X_FORWARDED_ALL);
+//if ($trustedProxies = $_SERVER['TRUSTED_PROXIES'] ?? false) {
+//    Request::setTrustedProxies(
+//        explode(',', $trustedProxies),
+//        Request::HEADER_X_FORWARDED_ALL ^ Request::HEADER_X_FORWARDED_HOST
+//    );
+//}
 
 if ($trustedHosts = $_SERVER['TRUSTED_HOSTS'] ?? false) {
     Request::setTrustedHosts([$trustedHosts]);
