@@ -1,10 +1,10 @@
 <picture><source srcset="{{ absolute_url(asset('images/logos-somda/logo-1.webp')) }}" /><img alt="Somda" src="{{ absolute_url(asset('images/logos-somda/logo-1.png')) }}" /></picture>
 <br />
-<br /><strong>Bij deze willen wij je namens het beheer hartelijk welkom heten op <a href="{{ absolute_url(path('home')) }}">Somda</a>!</strong>
+<br /><strong>Bij deze willen wij je namens het beheer hartelijk welkom heten op <a href="{{ url('home') }}">Somda</a>!</strong>
 <br />
 <br />Somda staat voor Spots en OMlopen DAtabase. Somda kan spots opslaan en aan de hand hiervan worden omlopen berekend.
-<br />Hieronder volgt een korte inleiding. De rest van de tekst kan je <a href="{{ absolute_url(path('help_text', { 'id': 10000 })) }}">hier</a> vinden.
-<br />Voor overige hulp met Somda kan je <a href="{{ absolute_url(path('help')) }}">hier</a> terecht.
+<br />Hieronder volgt een korte inleiding. De rest van de tekst kan je <a href="{{ url('help_text', { 'id': 10000 }) }}">hier</a> vinden.
+<br />Voor overige hulp met Somda kan je <a href="{{ url('help') }}">hier</a> terecht.
 <br />
 <br /><i>Interessante functies</i>
 <br />Uitvoer - Dienstregeling - Geeft de dienstregeling van een bepaalde trein.
@@ -12,7 +12,7 @@
 <br />
 <br /><i>Spots invoeren</i>
 <br />Als je mee wilt helpen aan meer actuele informatie in Somda dan kan je ook de door jou gespotte treinen invoeren.
-<br />Bekijk voor je gaat invoeren de <a href="{{ absolute_url(path('news', {'id': 25})) }}">richtlijnen voor het invoeren van spots</a>.
+<br />Bekijk voor je gaat invoeren de <a href="{{ url('news', {'id': 25}) }}">richtlijnen voor het invoeren van spots</a>.
 <br />Bezoek vervolgens de functie Spots Invoeren en ook de bijbehorende help.
 <br />De mogelijk foute spots worden besproken in het forum, en wel in de "Foute spots"-discussies. Het is dan ook aan te raden om die discussies van de dagen dat je iets hebt ingevoerd te volgen. De nog openstaande foute zaken waarop niet gereageerd is, worden na enige tijd verwijderd om de informatie in de database zo correct mogelijk te houden.
 <br />
