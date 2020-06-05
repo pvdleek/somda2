@@ -68,11 +68,14 @@ class MenuHelper implements RuntimeExtensionInterface
      */
     private function isAuthorizedForBlock(array $block): bool
     {
-        if (is_null($block['role']) || $this->authorizationHelper->isGranted(RoleGenerics::ROLE_ADMIN)) {
+        if (is_null($block['role'])) {
             return true;
         }
         if ($block['role'] === 'IS_AUTHENTICATED_ANONYMOUSLY') {
             return is_null($this->authorizationHelper->getUser());
+        }
+        if ($this->authorizationHelper->isGranted(RoleGenerics::ROLE_ADMIN)) {
+            return true;
         }
         return substr($block['role'], 0, 11) !== 'ROLE_ADMIN_' || $this->authorizationHelper->isGranted($block['role']);
     }
