@@ -34,17 +34,16 @@ class ForumHelper implements RuntimeExtensionInterface
 
     /**
      * @param ForumPost $post
-     * @param string|null $highlight
      * @return string
      * @throws Exception
      */
-    public function getDisplayForumPost(ForumPost $post, string $highlight = null): string
+    public function getDisplayForumPost(ForumPost $post): string
     {
         if ($post->text->newStyle) {
-            $text = strip_tags(
+            $text = $this->replaceLinks(strip_tags(
                 str_replace(['&nbsp;', "\r\n", '<p>&nbsp;</p>'], ' ', $post->text->text),
                 '<p><a><img><ul><ol><li><blockquote><strong><em><s><hr>'
-            );
+            ));
         } else {
             $text = $this->doSpecialText($post->text->text);
         }
@@ -56,25 +55,10 @@ class ForumHelper implements RuntimeExtensionInterface
                 (strlen($post->editReason) > 0 ? ', reden: ' . $post->editReason : '') . '</span></i>';
         }
         if ($post->signatureOn && strlen($post->author->info->info) > 0) {
-            $text .= '<br /><hr style="margin-left:0; width:15%;" />' . $post->author->info->info;
-        }
-        if (!is_null($highlight) && strlen($highlight) > 0) {
-            $text = $this->doHighlight($text, $highlight);
+            $text .= '<br /><br /><hr style="margin-left:0; width:15%;" />' . $post->author->info->info;
         }
 
         return $text;
-    }
-
-    /**
-     * @param string $text
-     * @param string $needle
-     * @return string
-     */
-    private function doHighlight(string $text, string $needle): string
-    {
-        // Note the single quotes, they are necessary because of the usage of a backslash
-        $regex = sprintf('#(?!<.*?)(%s)(?![^<>]*?>)#i', preg_quote($needle));
-        return preg_replace($regex, '<strong>\1</strong>', $text);
     }
 
     /**
