@@ -123,6 +123,7 @@ class TrainController
      * @param Request $request
      * @param TrainComposition $trainComposition
      * @return RedirectResponse|Response
+     * @throws Exception
      */
     private function editAsManager(Request $request, TrainComposition $trainComposition)
     {
@@ -133,6 +134,7 @@ class TrainController
         );
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            $trainComposition->lastUpdateTimestamp = new DateTime();
             return $this->formHelper->finishFormHandling(
                 'Materieelsamenstelling bijgewerkt',
                 RouteGenerics::TRAIN_COMPOSITIONS_TYPE,
@@ -221,6 +223,7 @@ class TrainController
                 $trainComposition->{'car' . $car} = $trainProposition->{'car' . $car};
             }
             $trainComposition->note = $trainProposition->note;
+            $trainComposition->lastUpdateTimestamp = $trainProposition->timestamp;
 
             $this->formHelper->getDoctrine()->getManager()->remove($trainProposition);
             $this->formHelper->getDoctrine()->getManager()->flush();
