@@ -364,7 +364,7 @@ help_text:
 ########
 settings:
   path: /instellingen/
-  methods: [GET]
+  methods: [GET, POST]
   controller: App\Controller\SettingsController::indexAction
 profile:
   path: /profiel/
