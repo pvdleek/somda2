@@ -443,6 +443,9 @@ span.edit_text {
     padding: 8px;
     font-size: 13pt;
 }
+.wiki-block table, .wiki-block table td {
+    border: none;
+}
 
 /**********************/
 /*** Special routes ***/

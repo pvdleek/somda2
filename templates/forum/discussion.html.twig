@@ -5,11 +5,12 @@
     {% block wiki %}
         {% if discussion.wikis | length > 0 %}
             <div class="wiki-block">
-                <table border="0" width="100%">
+                <table>
                     <tr>
                         <td align="center">
-                            Deze forumdiscussie is gekoppeld aan de <a href="http://www.railwiki.nl/" rel="noopener" target="_blank">RailWiki.nl</a> pagina('s):
                             <br />
+                            Deze forumdiscussie is gekoppeld aan de <a href="http://www.railwiki.nl/" rel="noopener" target="_blank">RailWiki.nl</a> pagina{% if discussion.wikis | length > 1 %}'s{% endif %}):
+                            <br /><br />
                             {% for wiki in discussion.wikis %}
                                 <a href="http://www.railwiki.nl/index.php/{{ wiki.wiki }}" rel="noopener" target="_blank">{{ wiki.title ? wiki.title : wiki.wiki }}</a>
                                 {% if not loop.last %} - {% endif %}
@@ -109,11 +110,11 @@
 
             {% if not firstUnreadAnchorDone %}<a id="new_post"></a>{% endif %}
 
-            {{ block('wiki') }}
-
             {{ block('paginator') }}
         </div>
     </div>
+
+    {{ block('wiki') }}
 
 {% endblock %}
 
@@ -163,5 +164,4 @@
             $('#favorite_box').html('Deze discussie staat in <a href="{{ path('forum_favorites') }}">jouw favorieten</a>');
         }
     </script>
-
 {% endblock %}
