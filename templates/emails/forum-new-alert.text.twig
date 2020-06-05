@@ -1,8 +1,8 @@
-Dit Somda forum-bericht is gemeld: {{ url('forum_discussion_post', { 'id': post.discussion.id, 'postId': post.id, 'name': (post.discussion.title | url_encode) }) }}
+Dit Somda forum-bericht is gemeld: {{ path('forum_discussion_post', { 'id': post.discussion.id, 'postId': post.id, 'name': (post.discussion.title | url_encode) }) }}
 
 De melder is {{ user.username }} ({{ user.email }})
 
 De gebruiker heeft dit commentaar opgegeven:
 {{ comment }}
 
-Ga naar de pagina over deze melding: {{ url('forum_discussion_post_alerts', { 'id': post.id }) }}
+Ga naar de pagina over deze melding: {{ path('forum_discussion_post_alerts', { 'id': post.id }) }}

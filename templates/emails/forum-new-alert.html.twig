@@ -1,10 +1,10 @@
 <picture><source srcset="{{ absolute_url(asset('images/logos-somda/logo-1.webp')) }}" /><img alt="Somda" src="{{ absolute_url(asset('images/logos-somda/logo-1.png')) }}" /></picture>
 <br />
-<br />Dit <a href="{{ url('forum_discussion_post', { 'id': post.discussion.id, 'postId': post.id, 'name': (post.discussion.title | url_encode) }) }}">Somda forum-bericht</a> is gemeld.
+<br />Dit <a href="{{ path('forum_discussion_post', { 'id': post.discussion.id, 'postId': post.id, 'name': (post.discussion.title | url_encode) }) }}">Somda forum-bericht</a> is gemeld.
 <br />
 <br />De melder is {{ user.username }} ({{ user.email }})
 <br />
 <br />De gebruiker heeft dit commentaar opgegeven:
 <br />{{ comment }}
 <br />
-<br />Ga naar de <a href="{{ url('forum_discussion_post_alerts', { 'id': post.id }) }}">pagina over deze melding</a>
+<br />Ga naar de <a href="{{ path('forum_discussion_post_alerts', { 'id': post.id }) }}">pagina over deze melding</a>
