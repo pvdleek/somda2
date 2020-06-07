@@ -118,7 +118,7 @@ class ProfileController
         return $this->templateHelper->render('somda/profile.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Profiel van ' . $user->username,
             'user' => $user,
-            'form' => $form ? $form->createView() : null
+            TemplateHelper::PARAMETER_FORM => $form ? $form->createView() : null
         ]);
     }
 

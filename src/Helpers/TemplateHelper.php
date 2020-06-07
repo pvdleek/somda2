@@ -20,10 +20,14 @@ use Twig\Environment;
 
 class TemplateHelper
 {
-    public const PARAMETER_PAGE_TITLE = 'pageTitle';
+    public const PARAMETER_DAY_NUMBER = 'dayNumber';
+    public const PARAMETER_DISCUSSION = 'discussion';
     public const PARAMETER_FORM = 'form';
     public const PARAMETER_FORUM = 'forum';
-    public const PARAMETER_DISCUSSION = 'discussion';
+    public const PARAMETER_PAGE_TITLE = 'pageTitle';
+    public const PARAMETER_TRAIN_TABLE_INDICES = 'trainTableIndices';
+    public const PARAMETER_TRAIN_TABLE_INDEX = 'trainTableIndex';
+    public const PARAMETER_TRAIN_TABLE_INDEX_NUMBER = 'trainTableIndexNumber';
 
     /**
      * @var RequestStack

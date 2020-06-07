@@ -84,8 +84,9 @@ class TrainTableController
 
         return $this->templateHelper->render('trainTable/index.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Dienstregeling van een trein',
-            'trainTableIndices' => $this->doctrine->getRepository(TrainTableYear::class)->findAll(),
-            'trainTableIndexNumber' => $trainTableYearId,
+            TemplateHelper::PARAMETER_TRAIN_TABLE_INDICES =>
+                $this->doctrine->getRepository(TrainTableYear::class)->findAll(),
+            TemplateHelper::PARAMETER_TRAIN_TABLE_INDEX_NUMBER => $trainTableYearId,
             'routeNumber' => $routeNumber,
             'trainTableLines' => $trainTableLines,
             'routePredictions' => $routePredictions,
@@ -133,11 +134,12 @@ class TrainTableController
 
         return $this->templateHelper->render('trainTable/passingRoutes.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Doorkomststaat',
-            'trainTableIndices' => $this->doctrine->getRepository(TrainTableYear::class)->findAll(),
-            'trainTableIndexNumber' => $trainTableYearId,
-            'trainTableIndex' => $this->trainTableHelper->getTrainTableYear(),
+            TemplateHelper::PARAMETER_TRAIN_TABLE_INDICES =>
+                $this->doctrine->getRepository(TrainTableYear::class)->findAll(),
+            TemplateHelper::PARAMETER_TRAIN_TABLE_INDEX_NUMBER => $trainTableYearId,
+            TemplateHelper::PARAMETER_TRAIN_TABLE_INDEX => $this->trainTableHelper->getTrainTableYear(),
             'locationName' => $locationName,
-            'dayNumber' => $dayNumber,
+            TemplateHelper::PARAMETER_DAY_NUMBER => $dayNumber,
             'startTime' => $startTime,
             'endTime' => $endTime,
             'passingRoutes' => $passingRoutes,
@@ -168,12 +170,10 @@ class TrainTableController
         $passingRoutes = $this->trainTableHelper->getPassingRoutes($dayNumber, $startTime, $endTime);
 
         $html = $this->templateHelper->render('trainTable/passingRoutesExport.html.twig', [
-            TemplateHelper::PARAMETER_PAGE_TITLE => 'Doorkomststaat',
-            'trainTableIndices' => $this->doctrine->getRepository(TrainTableYear::class)->findAll(),
-            'trainTableIndexNumber' => $trainTableYearId,
-            'trainTableIndex' => $this->trainTableHelper->getTrainTableYear(),
+            TemplateHelper::PARAMETER_TRAIN_TABLE_INDEX_NUMBER => $trainTableYearId,
+            TemplateHelper::PARAMETER_TRAIN_TABLE_INDEX => $this->trainTableHelper->getTrainTableYear(),
             'locationName' => $locationName,
-            'dayNumber' => $dayNumber,
+            TemplateHelper::PARAMETER_DAY_NUMBER => $dayNumber,
             'startTime' => $startTime,
             'endTime' => $endTime,
             'passingRoutes' => $passingRoutes,

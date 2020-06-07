@@ -58,7 +58,7 @@ class ForumSearchController
 
             return $this->templateHelper->render('forum/search.html.twig', [
                 TemplateHelper::PARAMETER_PAGE_TITLE => 'Zoeken in het forum',
-                'form' => $form->createView(),
+                TemplateHelper::PARAMETER_FORM => $form->createView(),
                 'results' => array_slice($results, 0, self::MAX_RESULTS),
                 'moreResults' => count($results) > self::MAX_RESULTS,
             ]);
@@ -66,7 +66,7 @@ class ForumSearchController
 
         return $this->templateHelper->render('forum/search.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Zoeken in het forum',
-            'form' => $form->createView(),
+            TemplateHelper::PARAMETER_FORM => $form->createView(),
         ]);
     }
 

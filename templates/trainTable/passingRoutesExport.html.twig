@@ -1,14 +1,7 @@
 {% extends('baseExport.html.twig') %}
 
 {% block content %}
-    {% set trainTableName = '' %}
-    {% for trainTableIndex in trainTableIndices %}
-        {% if trainTableIndexNumber == trainTableIndex.id %}
-            {% set trainTableName = trainTableIndex.name %}
-        {% endif %}
-    {% endfor %}
-
-    Doorkomststaat voor {{ trainTableName }} van {{ locationName }} op {{ ('general.date.days.' ~ dayNumber) | trans | lower }} van {{ startTime }} tot {{ endTime }}
+    Doorkomststaat voor {{ trainTableIndex.name }} van {{ locationName }} op {{ ('general.date.days.' ~ dayNumber) | trans | lower }} van {{ startTime }} tot {{ endTime }}
     <br />
     <br />
 

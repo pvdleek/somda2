@@ -90,7 +90,7 @@ class SpotController
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Recente spots',
             'maxYears' => $maxYears,
             'location' => $location,
-            'dayNumber' => $dayNumber,
+            TemplateHelper::PARAMETER_DAY_NUMBER => $dayNumber,
             'trainNumber' => $trainNumber,
             'routeNumber' => $routeNumber,
             'spots' => $spots,

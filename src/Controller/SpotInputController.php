@@ -103,7 +103,7 @@ class SpotInputController
 
         return $this->templateHelper->render('spots/input.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Spots invoeren',
-            'form' => $form->createView(),
+            TemplateHelper::PARAMETER_FORM => $form->createView(),
         ]);
     }
 
