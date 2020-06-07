@@ -1,0 +1,20 @@
+{% extends('baseExport.html.twig') %}
+
+{% block content %}
+    {% set trainTableName = '' %}
+    {% for trainTableIndex in trainTableIndices %}
+        {% if trainTableIndexNumber == trainTableIndex.id %}
+            {% set trainTableName = trainTableIndex.name %}
+        {% endif %}
+    {% endfor %}
+
+    Doorkomststaat voor {{ trainTableName }} van {{ locationName }} op {{ ('general.date.days.' ~ dayNumber) | trans | lower }} van {{ startTime }} tot {{ endTime }}
+    <br />
+    <br />
+
+    {% if passingRoutes | length %}
+        {% include 'trainTable/passingRoutesTable.html.twig' %}
+    {% else %}
+        Er zijn geen passerende treinen gevonden
+    {% endif %}
+{% endblock %}

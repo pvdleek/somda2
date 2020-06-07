@@ -121,6 +121,9 @@
     "doctrine/sql-formatter": {
         "version": "1.0.1"
     },
+    "dompdf/dompdf": {
+        "version": "v0.8.5"
+    },
     "dragonmantank/cron-expression": {
         "version": "v2.3.0"
     },
@@ -181,6 +184,12 @@
     "pdepend/pdepend": {
         "version": "2.7.1"
     },
+    "phenx/php-font-lib": {
+        "version": "0.5.2"
+    },
+    "phenx/php-svg-lib": {
+        "version": "v0.3.3"
+    },
     "php": {
         "version": "7.4"
     },
@@ -216,6 +225,9 @@
     },
     "ralouphie/getallheaders": {
         "version": "3.0.3"
+    },
+    "sabberworm/php-css-parser": {
+        "version": "8.3.1"
     },
     "sensio/framework-extra-bundle": {
         "version": "5.2",

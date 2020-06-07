@@ -46,26 +46,14 @@
         <br />
 
         {% if passingRoutes | length %}
-            <table>
+            <table class="design">
                 <tr>
-                    <th>{{ 'general.output.time' | trans }}</th>
-                    <th>{{ 'general.output.route' | trans }}</th>
-                    <th>{{ 'general.output.characteristic' | trans }}</th>
-                    <th>{{ 'general.output.startLocation' | trans }}</th>
-                    <th>{{ 'general.output.action' | trans }}</th>
-                    <th>{{ 'general.output.endLocation' | trans }}</th>
+                    <td><a href="{{ path('passing_routes_export', { 'trainTableYearId': trainTableIndexNumber, 'locationName': locationName, 'dayNumber': dayNumber, 'startTime': startTime, 'endTime': endTime, 'spotterVersion': 0 }) }}"><img alt="" height="25" src="{{ asset('images/pdf-icon.png') }}" width="25" /> Exporteer doorkomststaat naar PDF</a></td>
+                    <td><a href="{{ path('passing_routes_export', { 'trainTableYearId': trainTableIndexNumber, 'locationName': locationName, 'dayNumber': dayNumber, 'startTime': startTime, 'endTime': endTime, 'spotterVersion': 1 }) }}"><img alt="" height="25" src="{{ asset('images/pdf-icon.png') }}" width="25" /> Exporteer spotters doorkomststaat naar PDF</a></td>
                 </tr>
-                {% for trainTable in passingRoutes %}
-                    <tr>
-                        <td>{{ trainTable['time'] | displayTime }}</td>
-                        <td><a href="{{ path('train_table_search', {'trainTableYearId': trainTableIndexNumber, 'routeNumber': trainTable['route_number'] }) }}">{{ trainTable['route_number'] }}</a></td>
-                        <td>{{ trainTable[constant('App\\Repository\\TrainTable::FIELD_TRANSPORTER_NAME')] }} - {{ trainTable[constant('App\\Repository\\TrainTable::FIELD_CHARACTERISTIC_DESCRIPTION')] }}</td>
-                        <td><span title="{{ trainTable['fl_first_description'] }}">{{ trainTable['fl_first_name'] }}</span></td>
-                        <td>{{ ("general.action." ~ trainTable['action']) | trans }}</td>
-                        <td><span title="{{ trainTable['fl_last_description'] }}">{{ trainTable['fl_last_name'] }}</span></td>
-                    </tr>
-                {% endfor %}
             </table>
+
+            {% include 'trainTable/passingRoutesTable.html.twig' %}
         {% endif %}
     </div>
 {% endblock %}

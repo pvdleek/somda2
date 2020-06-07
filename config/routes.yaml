@@ -108,6 +108,11 @@ passing_routes_search:
   methods: [GET]
   requirements: { trainTableYearId: \d+, dayNumber: \d+ }
   controller: App\Controller\TrainTableController::passingRoutesAction
+passing_routes_export:
+  path: /doorkomststaat/{trainTableYearId}/{locationName}/{dayNumber}/{startTime}/{endTime}/exporteren/{spotterVersion}/
+  methods: [GET]
+  requirements: { trainTableYearId: \d+, dayNumber: \d+ }
+  controller: App\Controller\TrainTableController::passingRoutesExportAction
 special_routes:
   path: /drgl/
   methods: [GET]

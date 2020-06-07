@@ -11,6 +11,7 @@
         "aurimasniekis/scheduler-bundle": "^1.0",
         "beberlei/doctrineextensions": "^1.2",
         "debril/rss-atom-bundle": "^5.0",
+        "dompdf/dompdf": "^0.8.5",
         "friendsofsymfony/ckeditor-bundle": "^2.2",
         "mobiledetect/mobiledetectlib": "^2.8",
         "nelmio/security-bundle": "^2.9",
