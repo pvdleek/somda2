@@ -47,20 +47,20 @@ class User extends Entity implements UserInterface
 
     /**
      * @var string
-     * @ORM\Column(name="username", type="string", length=10, nullable=false)
+     * @ORM\Column(name="username", type="string", length=20, nullable=false)
      * @Assert\NotBlank()
      * @Assert\Length(
      *     min = 2,
-     *     max = 10,
+     *     max = 20,
      *     minMessage = "De gebruikersnaam moet minimaal 2 karakters lang zijn",
-     *     maxMessage = "De gebruikersnaam mag maximaal 10 karakters lang zijn"
+     *     maxMessage = "De gebruikersnaam mag maximaal 20 karakters lang zijn"
      * )
      */
     public string $username = '';
 
     /**
      * @var string|null
-     * @ORM\Column(name="name", type="string", length=40, nullable=true)
+     * @ORM\Column(name="name", type="string", length=100, nullable=true)
      */
     public ?string $name;
 
@@ -72,9 +72,13 @@ class User extends Entity implements UserInterface
 
     /**
      * @var string
-     * @ORM\Column(name="email", type="string", length=60, nullable=false)
+     * @ORM\Column(name="email", type="string", length=100, nullable=false)
      * @Assert\NotBlank()
      * @Assert\Email(message="Dit is geen geldig e-mailadres")
+     * @Assert\Length(
+     *     max = 100,
+     *     maxMessage = "Het e-mailadres mag maximaal 100 karakters lang zijn"
+     * )
      */
     public string $email = '';
 
