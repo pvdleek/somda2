@@ -167,41 +167,30 @@ class ForumHelper implements RuntimeExtensionInterface
         $users = $this->staticDataHelper->getUsers();
         $routes = $this->staticDataHelper->getRoutes();
 
-        $locationsDone = [];
-        $usersDone = [];
-        $routesDone = [];
-
-        $textChunks = array_diff(str_word_count(strip_tags($text), 2, '@0123456789'), ['nbsp']);
+        $textChunks = array_unique(array_diff(str_word_count(strip_tags($text), 2, '@0123456789'), ['nbsp']));
         foreach ($textChunks as $chunk) {
             $word = trim($chunk);
-            if (preg_match('/^[A-Z][A-Za-z]*$/', $word)) {
-                // Match on an abbreviation (uppercase character followed by a 0 or more lowercase characters)
-                if (!isset($locationsDone[$word]) && isset($locations[$word])) {
-                    $text = preg_replace(
-                        self::REPLACE_WORD_START . $word . self::REPLACE_WORD_END,
-                        '\\1<!-- s\\2 --><span class="tooltip" title="' .
-                            strtolower(htmlspecialchars($locations[$word])) . '">\\2<!-- s\\2 --></span>\\3',
-                        $text
-                    );
-                    $locationsDone[$word] = true;
-                }
-            } elseif (!isset($usersDone[$word]) && isset($users[$word])) {
+            if (isset($locations[$word])) {
+                $text = preg_replace(
+                    self::REPLACE_WORD_START . $word . self::REPLACE_WORD_END,
+                    '\\1<!-- s\\2 --><span class="tooltip" title="' .
+                        strtolower(htmlspecialchars($locations[$word])) . '">\\2<!-- s\\2 --></span>\\3',
+                    $text
+                );
+            } elseif (isset($users[$word])) {
                 $text = preg_replace(
                     self::REPLACE_WORD_START . $word . self::REPLACE_WORD_END,
                     '\\1<!-- s\\2 --><span class="tooltip" title="Somda gebruiker ' .
                         htmlspecialchars($users[$word]) . '">' . substr($word, 1) . '<!-- \\2 --></span>\\3',
                     $text
                 );
-                $usersDone[$word] = true;
-            } elseif (!isset($routesDone[$word]) && isset($routes[$word])) {
+            } elseif (isset($routes[$word])) {
                 $text = preg_replace(
                     self::REPLACE_WORD_START . $word . self::REPLACE_WORD_END,
                     '\\1<!-- s\\2 --><span class="tooltip" title="' . htmlspecialchars($routes[$word]) .
                         '">\\2<!-- s\\2 --></span>\\3',
-                    $text,
-                    1
+                    $text
                 );
-                $routesDone[$word] = true;
             }
         }
 
