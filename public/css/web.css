@@ -412,7 +412,7 @@ td.text {
     font-size: 12px;
     overflow: auto;
     text-align: left;
-    width: 760px;
+    width: 100%
 }
 td.text ul {
     list-style: disc;
