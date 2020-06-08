@@ -24,7 +24,6 @@
     <meta name="generator" content="Peter van der Leek" />
 
     <meta name="HandheldFriendly" content="true" />
-    <meta http-equiv="Cache-Control" content="no-cache"/>
     <meta name="format-detection" content="telephone=yes" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
 
@@ -32,6 +31,10 @@
 
     <link rel="stylesheet" href="{{ asset('css/base.css') }}" type="text/css" />
     <link rel="stylesheet" href="{{ asset('css/mobile.css') }}" type="text/css" />
+    <link href="{{ asset('css/font-awesome-5.13.0-min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('css/font-awesome-brands-5.13.0-min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('css/font-awesome-solid-5.13.0-min.css') }}" rel="stylesheet" type="text/css" />
+
     <style type="text/css">
         #header_image {
             background: url('{{ asset('images/logos-somda/logo-' ~ imageNumber ~ '.png') }}') no-repeat;
@@ -65,7 +68,6 @@
     </div>
 
     <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
-    <script async src="https://kit.fontawesome.com/be43109115.js" crossorigin="anonymous"></script>
 
     {# If applicable, jump to the requested forum-post #}
     {% if forumJump is defined and forumJump is not null %}

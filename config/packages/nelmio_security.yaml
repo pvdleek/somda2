@@ -22,6 +22,8 @@ nelmio_security:
         - 'none'
       connect-src:
         - 'self'
+      font-src:
+        - 'self'
       script-src:
         - 'self'
         - 'unsafe-inline'
