@@ -14,7 +14,7 @@
         <th>
             <a href="{{ path('forum_discussion_post_alert', { 'id': post.id }) }}" rel="nofollow" title="Klik hier om dit bericht aan de beheerders te melden. Gebruik dit voor bijvoorbeeld overtredingen van forumregels"><font color="#FFFFFF">Meld bericht</font></a>
             {% if userIsModerator and (post.alerts | length) > 0 %}
-                <br /><a href="{{ path('forum_discussion_post_alerts', { 'id': post.id }) }}" title="Er zijn meldingen gedaan over dit bericht, klik om ze te bekijken"><font color="#DD1111">Meldingen</font></a>
+                <br /><a href="{{ path('forum_discussion_post_alerts', { 'id': post.id }) }}" title="Er zijn meldingen gedaan over dit bericht, klik om ze te bekijken"><span color="#DD1111">Meldingen</span></a>
             {% endif %}
         </th>
     {% endif %}
