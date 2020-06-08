@@ -33,6 +33,7 @@
         "symfony/process": "5.1.*",
         "symfony/security-bundle": "5.1.*",
         "symfony/serializer-pack": "*",
+        "symfony/stopwatch": "5.1.*",
         "symfony/string": "5.1.*",
         "symfony/translation": "5.1.*",
         "symfony/twig-pack": "*",

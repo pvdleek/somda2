@@ -44,6 +44,18 @@ class Log extends Entity
     public array $routeParameters = [];
 
     /**
+     * @var float
+     * @ORM\Column(name="duration", type="float", precision=5, scale=2, nullable=true)
+     */
+    public ?float $duration;
+
+    /**
+     * @var float
+     * @ORM\Column(name="memory_usage", type="float", precision=8, scale=3, nullable=true)
+     */
+    public ?float $memoryUsage;
+
+    /**
      * @var User|null
      * @ORM\ManyToOne(targetEntity="App\Entity\User")
      * @ORM\JoinColumn(name="uid", referencedColumnName="uid")
