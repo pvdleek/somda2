@@ -9,7 +9,13 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Table(name="somda_users", indexes={@ORM\Index(name="idx_49053_uname", columns={"username"})})
+ * @ORM\Table(
+ *     name="somda_users",
+ *     indexes={
+ *         @ORM\Index(name="idx_49053_uname", columns={"username"}),
+ *         @ORM\Index(name="idx_49076_active", columns={"active"}),
+ *     }
+ * )
  * @ORM\Entity(repositoryClass="App\Repository\User")
  */
 class User extends Entity implements UserInterface

@@ -22,8 +22,7 @@ class TrainTableYear extends EntityRepository
             ->createQueryBuilder()
             ->select('t')
             ->from(TrainTableYearEntity::class, 't')
-            ->andWhere('t.startDate <= :checkDate')
-            ->andWhere('t.endDate > :checkDate')
+            ->andWhere(':checkDate BETWEEN t.startDate AND t.endDate')
             ->setParameter('checkDate', $checkDate)
             ->setMaxResults(1);
         try {

@@ -110,17 +110,18 @@ class StaticDataHelper implements RuntimeExtensionInterface
             $this->locations[$jargon->term] = $jargon->description;
         }
 
-        $userArray = $this->doctrine->getRepository(User::class)->findBy(['active' => true]);
+        $userArray = $this->doctrine->getRepository(User::class)->findActiveForStaticData();
         foreach ($userArray as $user) {
-            $this->users['@' . $user->username] = strlen($user->name) > 0 ? $user->name : $user->username;
+            $this->users['@' . $user['username']] = strlen($user['name']) > 0 ? $user['name'] : $user['username'];
         }
 
         $routeArray = $this->doctrine->getRepository(TrainTable::class)->findAllTrainTablesForForum(
             $this->doctrine->getRepository(TrainTableYear::class)->findTrainTableYearByDate(new DateTime())
         );
+        $routeTranslation = $this->translator->trans('trainTable.forum.route');
         foreach ($routeArray as $route) {
             $this->routes[$route[TrainTableRepository::FIELD_ROUTE_NUMBER]] = sprintf(
-                $this->translator->trans('trainTable.forum.route'),
+                $routeTranslation,
                 $route[TrainTableRepository::FIELD_ROUTE_NUMBER],
                 $route[TrainTableRepository::FIELD_CHARACTERISTIC_NAME],
                 $route[TrainTableRepository::FIELD_CHARACTERISTIC_DESCRIPTION],

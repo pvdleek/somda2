@@ -12,6 +12,20 @@ use Exception;
 class User extends EntityRepository
 {
     /**
+     * @return array
+     */
+    public function findActiveForStaticData(): array
+    {
+        $queryBuilder = $this->getEntityManager()
+            ->createQueryBuilder()
+            ->select('u.username')
+            ->addSelect('u.name')
+            ->from(UserEntity::class, 'u')
+            ->andWhere('u.active = TRUE');
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
      * @return int
      */
     public function countActive(): int
