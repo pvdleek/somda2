@@ -31,9 +31,9 @@ class KernelListener implements EventSubscriberInterface
     private UserHelper $userHelper;
 
     /**
-     * @var Stopwatch
+     * @var Stopwatch|null
      */
-    private Stopwatch $stopwatch;
+    private ?Stopwatch $stopwatch;
 
     /**
      * @param ManagerRegistry $doctrine
