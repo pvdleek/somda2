@@ -43,6 +43,9 @@ class KernelListener implements EventSubscriberInterface
     {
         $this->doctrine = $doctrine;
         $this->userHelper = $userHelper;
+
+        $this->stopwatch = new Stopwatch(true);
+        $this->stopwatch->start(self::STOPWATCH_NAME);
     }
 
     /**
@@ -74,9 +77,6 @@ class KernelListener implements EventSubscriberInterface
                 ' geen gebruik maken van Somda'
             );
         }
-
-        $this->stopwatch = new Stopwatch(true);
-        $this->stopwatch->start(self::STOPWATCH_NAME);
     }
 
     /**
