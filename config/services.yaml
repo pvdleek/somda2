@@ -1,6 +1,7 @@
 parameters:
   router.request_context.scheme: 'https'
   asset.request_context.secure: true
+  container.dumper.inline_factories: true
 
 services:
   _defaults:

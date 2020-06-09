@@ -1,6 +1,22 @@
 <project name="Somda" basedir=".">
     <description>Somda</description>
 
+    <target name="deploy">
+        <exec executable="git">
+            <arg value="pull" />
+        </exec>
+        <exec executable="php">
+            <arg value="composer.phar" />
+            <arg value="install" />
+        </exec>
+        <exec executable="php">
+            <arg value="composer.phar" />
+            <arg value="dump-autoload" />
+            <arg value="--no-dev" />
+            <arg value="--classmap-authoritative" />
+        </exec>
+    </target>
+
     <target name="phpmd">
         <exec executable="vendor/bin/phpmd">
             <arg value="src/" />
