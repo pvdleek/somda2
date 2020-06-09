@@ -77,17 +77,6 @@ class UserHelper implements RuntimeExtensionInterface
     }
 
     /**
-     * @throws Exception
-     */
-    public function saveVisit(): void
-    {
-        if ($this->userIsLoggedIn()) {
-            $this->getUser()->lastVisit = new DateTime();
-            $this->doctrine->getManager()->flush();
-        }
-    }
-
-    /**
      * @param string $key
      * @return UserPreferenceValue
      * @throws Exception

@@ -9,7 +9,7 @@
         <form method="post">
             <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}" />
             <table>
-                <tr><th><label for="username">Geef je gebruikersnaam</label></th><td><input id="username" maxlength="10" name="username" size="20" type="text" value="{{ lastUsername }}" /></td></tr>
+                <tr><th><label for="username">Geef je gebruikersnaam</label></th><td><input id="username" maxlength="20" name="username" size="20" type="text" value="{{ lastUsername }}" /></td></tr>
                 <tr><th><label for="password">Geef je wachtwoord</label></th><td><input id="password" name="password" size="20" type="password" /></td></tr>
                 <tr><th>&nbsp;</th><td><label for="remember_me"><input id="remember_me" name="_remember_me" type="checkbox" /> Blijf ingelogd</label></td></tr>
                 <tr><td colspan="2"><input class="somda-button" type="submit" value="Inloggen bij Somda "/></td></tr>
