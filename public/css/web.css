@@ -106,9 +106,9 @@ input.with-error {
     border: 1px solid red;
 }
 
-/****************************/
-/*** Generic table design ***/
-/****************************/
+/********************/
+/*** Table design ***/
+/********************/
 table {
     border: 1px solid #C2D2E1;
     border-collapse: collapse;
@@ -132,11 +132,26 @@ table th a:hover {
     color: #fff;
 }
 table td {
-    background-color: #D2E2F1;
-    border: 1px solid #C2D2E1;
+    background-color: #d2e2f1;
+    border: 1px solid #c2d2e1;
     color: #515151;
     padding: 5px;
     vertical-align: top;
+}
+
+table.dataTable tr.odd td {
+    background-color: #c2d2e1;
+    border: 1px solid #d2e2f1;
+}
+table.dataTable tr:hover td {
+    background-color: #2b84c8;
+    color: #fff;
+}
+table.dataTable tr td a:hover {
+    color: #fff;
+}
+table.dataTable tr td span[title]:hover {
+    color: #515151;
 }
 
 /**************/

@@ -4,7 +4,7 @@
     <div class="panel">
         <div class="panel-title">Mijn spots</div>
         <div class="panel-content">
-            <table id="my_spots_table">
+            <table class="nowrap" id="my_spots_table">
                 <thead>
                     <tr>
                         <th>Spot-datum</th>
@@ -34,7 +34,7 @@
 {% endblock %}
 
 {% block javascripts %}
-    <script src="//cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
     <script src="{{ asset('js/dateFormat-2019-08-01.js') }}"></script>
     <script>
         /**
@@ -110,7 +110,7 @@
                     { 'data': null },
                 ],
                 initComplete: function () {
-                    this.api().columns().every( function () {
+                    this.api().columns().every(function () {
                         let that = this;
                         $('input', this.footer()).on('keyup change clear', function () {
                             if (that.search() !== this.value) {
@@ -144,10 +144,22 @@
                 'serverSide': true,
                 'stateSave': true,
             });
+
+            // Restore the saved state for the individual columns
+            let state = mySpotsTable.state.loaded();
+            if (state) {
+                mySpotsTable.columns().eq(0).each(function (colIdx) {
+                    const columnSearch = state.columns[colIdx].search;
+                    if (columnSearch.search) {
+                        $('input', mySpotsTable.column(colIdx).footer()).val(columnSearch.search);
+                    }
+                });
+                mySpotsTable.draw();
+            }
         });
     </script>
 {% endblock %}
 
 {% block stylesheets %}
-    <link rel="stylesheet" href="//cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css" type="text/css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css" type="text/css" />
 {% endblock %}

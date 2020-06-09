@@ -28,6 +28,7 @@ nelmio_security:
         - 'self'
         - 'unsafe-inline'
         - 'code.jquery.com'
+        - '*.datatables.net'
         - '*.fontawesome.com'
         - '*.googletagmanager.com'
         - '*.google-analytics.com'
@@ -35,11 +36,13 @@ nelmio_security:
         - 'self'
         - 'unsafe-inline'
         - 'code.jquery.com'
+        - '*.datatables.net'
       img-src:
         - 'self'
         - 'data:'
         - 'code.jquery.com'
         - '*.buienradar.nl'
+        - '*.datatables.net'
         - '*.google-analytics.com'
       block-all-mixed-content: true
       upgrade-insecure-requests: true
