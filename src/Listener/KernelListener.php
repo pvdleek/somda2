@@ -9,21 +9,30 @@ use DateTime;
 use Exception;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\Event\KernelEvent;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\Event\TerminateEvent;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\KernelEvents;
+use Symfony\Component\Security\Http\Util\TargetPathTrait;
 use Symfony\Component\Stopwatch\Stopwatch;
 
 class KernelListener implements EventSubscriberInterface
 {
+    use TargetPathTrait;
+
     private const STOPWATCH_NAME = 'main';
 
     /**
      * @var ManagerRegistry
      */
     private ManagerRegistry $doctrine;
+
+    /**
+     * @var SessionInterface
+     */
+    private SessionInterface $session;
 
     /**
      * @var UserHelper
@@ -37,11 +46,13 @@ class KernelListener implements EventSubscriberInterface
 
     /**
      * @param ManagerRegistry $doctrine
+     * @param SessionInterface $session
      * @param UserHelper $userHelper
      */
-    public function __construct(ManagerRegistry $doctrine, UserHelper $userHelper)
+    public function __construct(ManagerRegistry $doctrine, SessionInterface $session, UserHelper $userHelper)
     {
         $this->doctrine = $doctrine;
+        $this->session = $session;
         $this->userHelper = $userHelper;
 
         $this->stopwatch = new Stopwatch(true);
@@ -54,8 +65,8 @@ class KernelListener implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            KernelEvents::REQUEST => ['onKernelRequest', -255],
-            KernelEvents::TERMINATE => ['onKernelTerminate', -255]
+            KernelEvents::REQUEST => ['onKernelRequest', -10],
+            KernelEvents::TERMINATE => ['onKernelTerminate', -10],
         ];
     }
 
@@ -68,6 +79,8 @@ class KernelListener implements EventSubscriberInterface
         if (!$this->isShouldExecuteEventHandler($event)) {
             return;
         }
+
+        $this->saveTargetPath($this->session, 'main', $event->getRequest()->getUri());
 
         if (!is_null($this->userHelper->getUser())
             && $this->userHelper->getUser()->banExpireTimestamp >= new DateTime()

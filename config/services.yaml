@@ -15,3 +15,7 @@ services:
     tags: ['controller.service_arguments']
   debril.rss_atom.provider:
     class: App\Feed\FeedProvider
+  Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler:
+    arguments:
+      - '%env(DATABASE_URL)%'
+      - { db_table: 'somda_session' }

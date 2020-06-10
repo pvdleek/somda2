@@ -2,11 +2,13 @@ security:
   encoders:
     App\Entity\User:
       algorithm: auto
+
   providers:
     app_user_provider:
       entity:
         class: App\Entity\User
         property: username
+
   firewalls:
     dev:
       pattern: ^/(_(profiler|wdt)|css|images|js|webfonts)/
@@ -14,6 +16,7 @@ security:
     main:
       anonymous: true
       lazy: true
+      stateless: true
       provider: app_user_provider
       guard:
         authenticators:
@@ -22,10 +25,13 @@ security:
         path: logout
         target: home
       remember_me:
-        secret: '%kernel.secret%'
+        secret: '%env(APP_SECRET)%'
+        httponly: false
+        always_remember_me: true
         lifetime: 604800
         secure: true
         samesite: 'strict'
+
   role_hierarchy:
     ROLE_ADMIN:
       - ROLE_USER
@@ -46,5 +52,6 @@ security:
       - ROLE_ADMIN_SPECIAL_ROUTES
       - ROLE_ADMIN_TRAINTABLE_EDIT
       - ROLE_ADMIN_WIKI
+
   access_control:
     - { path: ^/inloggen, roles: IS_AUTHENTICATED_ANONYMOUSLY }
