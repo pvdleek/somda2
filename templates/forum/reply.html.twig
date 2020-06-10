@@ -8,6 +8,7 @@
                 <table>
                     {{ form_row(form.text) }}
                     {{ form_row(form.signatureOn) }}
+                    {% if form.postAsModerator is defined %}{{ form_row(form.postAsModerator) }}{% endif %}
                     <tr>
                         <td>&nbsp;</td>
                         <td>

@@ -92,12 +92,26 @@ class ForumPostController
             throw new AccessDeniedHttpException();
         }
 
+        $userIsModerator = $this->forumAuthHelper->userIsModerator(
+            $quotedPost->discussion,
+            $this->userHelper->getUser()
+        );
+
         $form = $this->formHelper
             ->getFactory()
             ->create(ForumPostForm::class, null, [ForumPostForm::OPTION_QUOTED_POST => $quotedPost]);
+        if ($userIsModerator) {
+            $form->add('postAsModerator', CheckboxType::class, [
+                BaseForm::KEY_LABEL => 'Plaatsen als moderator',
+                BaseForm::KEY_MAPPED => false,
+            ]);
+        }
+
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->formHelper->addPost($form, $quotedPost->discussion, $this->userHelper->getUser());
+            $user = $userIsModerator && $form->get('postAsModerator')->getData() ?
+                $this->userHelper->getModeratorUser() : $this->userHelper->getUser();
+            $this->formHelper->addPost($form, $quotedPost->discussion, $user);
             $this->handleFavoritesForAddedPost($quotedPost->discussion);
 
             return $this->formHelper->finishFormHandling('', RouteGenerics::ROUTE_FORUM_DISCUSSION, [

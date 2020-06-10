@@ -22,7 +22,7 @@ class BaseForm extends AbstractType
     protected const KEY_HTML5 = 'html5';
     protected const KEY_INVALID_MESSAGE = 'invalid_message';
     public const KEY_LABEL = 'label';
-    protected const KEY_MAPPED = 'mapped';
+    public const KEY_MAPPED = 'mapped';
     protected const KEY_PREFERRED_CHOICES = 'preferred_choices';
     protected const KEY_QUERY_BUILDER = 'query_builder';
     public const KEY_REQUIRED = 'required';
