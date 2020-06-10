@@ -15,6 +15,15 @@
             <arg value="--no-dev" />
             <arg value="--classmap-authoritative" />
         </exec>
+        <exec executable="chown">
+            <arg value="-R" />
+            <arg value="nginx:nginx" />
+            <arg value="." />
+        </exec>
+        <exec executable="service">
+            <arg value="php-fpm" />
+            <arg value="restart" />
+        </exec>
     </target>
 
     <target name="phpmd">
