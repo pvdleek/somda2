@@ -10,7 +10,8 @@
 - Alle commands draaien
 - Links in nieuwsbericht 126 naar "het beheer" fixen
 
-- Nieuwsbericht plaatsen:
+- Nieuwsbericht plaatsen en link hiernaar aanpassen in home.html.twig:
+
 Zojuist is er een nieuw versie van Somda live gegaan. Op het oog zal je hier niet zoveel nieuws aan zien, maar er is veel veranderd.
 Somda is van de grond af aan opnieuw opgebouwd. De oude code stamt nog uit 2004 en is daarna regelmatig aangepast en aangevuld. Inmiddels verworden tot een spaghetti met enkele half geimplementeerde frameworks, het was hoog tijd voor vernieuwing.
 
