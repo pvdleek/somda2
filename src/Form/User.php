@@ -33,8 +33,8 @@ class User extends BaseForm
                 self::KEY_ATTRIBUTES => [self::KEY_ATTRIBUTES_MAX_LENGTH => 10],
                 self::KEY_CONSTRAINTS => [
                     new Length([
-                        ConstraintGenerics::MAX => 10,
-                        ConstraintGenerics::MAX_MESSAGE => 'De gebruikersnaam mag maximaal 10 karakters lang zijn',
+                        ConstraintGenerics::MAX => 20,
+                        ConstraintGenerics::MAX_MESSAGE => 'De gebruikersnaam mag maximaal 20 karakters lang zijn',
                         ConstraintGenerics::MIN => 3,
                         ConstraintGenerics::MIN_MESSAGE => 'De gebruikersnaam moet minimaal 3 karakters lang zijn',
                     ]),
@@ -44,7 +44,7 @@ class User extends BaseForm
                             'De gebruikersnaam mag alleen letters, cijfers of een liggend streepje bevatten',
                     ])
                 ],
-                self::KEY_LABEL => 'Kies een gebruikersnaam (maximaal 10 karakters)',
+                self::KEY_LABEL => 'Kies een gebruikersnaam (maximaal 20 karakters)',
                 self::KEY_REQUIRED => true,
             ])
             ->add(self::FIELD_PLAIN_PASSWORD, PasswordType::class, [

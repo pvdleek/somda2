@@ -38,7 +38,7 @@ activate:
   controller: App\Controller\SecurityController::activateAction
 activate_with_key:
   path: /activeren/{id}/{key}/
-  methods: [GET]
+  methods: [GET, POST]
   requirements: { id: \d+ }
   controller: App\Controller\SecurityController::activateAction
 change_password:
