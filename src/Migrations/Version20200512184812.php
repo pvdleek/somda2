@@ -24,10 +24,6 @@ final class Version20200512184812 extends AbstractMigration
     {
         $this->addSql('ALTER TABLE `somda_verk` CHANGE `route_overstaptijd` `route_overstaptijd` INT DEFAULT NULL');
         $this->addSql('
-            ALTER TABLE `somda_banner_hits` ADD CONSTRAINT `FK_8610F3216BBC5658`
-            FOREIGN KEY (`bannerid`) REFERENCES `somda_banner` (`bannerid`)
-        ');
-        $this->addSql('
             ALTER TABLE `somda_api_logging`
             CHANGE `dagnr` `dagnr` INT DEFAULT NULL,
             CHANGE `resultaat_id` `resultaat_id` INT DEFAULT NULL
