@@ -102,17 +102,19 @@ class KernelListener implements EventSubscriberInterface
             return;
         }
 
-        $stopwatchEvent = $this->stopwatch->stop(self::STOPWATCH_NAME);
+        if ($this->stopwatch->isStarted(self::STOPWATCH_NAME)) {
+            $stopwatchEvent = $this->stopwatch->stop(self::STOPWATCH_NAME);
 
-        $log = new Log();
-        $log->user = $this->userHelper->getUser();
-        $log->timestamp = new DateTime();
-        $log->ipAddress = ip2long($event->getRequest()->getClientIp());
-        $log->route = (string)$event->getRequest()->attributes->get('_route');
-        $log->routeParameters = (array)$event->getRequest()->attributes->get('_route_params');
-        $log->duration = $stopwatchEvent->getDuration() / 1000;
-        $log->memoryUsage = floatval(sprintf('%+08.3f', $stopwatchEvent->getMemory())) / 1024 / 1024;
-        $this->doctrine->getManager()->persist($log);
+            $log = new Log();
+            $log->user = $this->userHelper->getUser();
+            $log->timestamp = new DateTime();
+            $log->ipAddress = ip2long($event->getRequest()->getClientIp());
+            $log->route = (string)$event->getRequest()->attributes->get('_route');
+            $log->routeParameters = (array)$event->getRequest()->attributes->get('_route_params');
+            $log->duration = $stopwatchEvent->getDuration() / 1000;
+            $log->memoryUsage = floatval(sprintf('%+08.3f', $stopwatchEvent->getMemory())) / 1024 / 1024;
+            $this->doctrine->getManager()->persist($log);
+        }
 
         $this->saveVisit();
 
@@ -140,6 +142,6 @@ class KernelListener implements EventSubscriberInterface
         }
 
         $route = (string)$event->getRequest()->attributes->get('_route');
-        return substr($route, 0, 1) !== '_' && substr($route, -5) !== '_json';
+        return substr($route, 0, 1) !== '_' && substr($route, -5) !== '_json' && $route !== 'logout';
     }
 }
