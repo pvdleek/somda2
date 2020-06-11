@@ -45,11 +45,6 @@ final class Version20200307111309 extends AbstractMigration
         $this->addSql('ALTER TABLE somda_stats CHANGE datum datum DATE NOT NULL');
 
         $this->addSql('ALTER TABLE somda_groups CHANGE roles roles LONGTEXT NOT NULL COMMENT \'(DC2Type:array)\'');
-
-        $this->addSql('
-            ALTER TABLE somda_blokken ADD CONSTRAINT FK_B4865B064F2A0381
-            FOREIGN KEY (parent_block) REFERENCES somda_blokken (blokid)
-        ');
     }
 
     /**
