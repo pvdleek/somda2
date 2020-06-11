@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <div class="panel">
+        <div class="panel-title">Pagina niet gevonden</div>
+        <div class="panel-content">
+            <br />
+            <img alt="404" height="350" src="{{ asset('images/error/404.png') }}" />
+            <h1>Oeps!</h1>
+            <p>De pagina die je hebt opgevraagd kon niet worden gevonden. Probeer het opnieuw via de <a href="{{ path('home') }}">homepagina van Somda</a>.</p>
+        </div>
+    </div>
+{% endblock %}

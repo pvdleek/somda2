@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <div class="panel">
+        <div class="panel-title">Niet toegestaan</div>
+        <div class="panel-content">
+            <br />
+            <img alt="403" height="350" src="{{ asset('images/error/403.png') }}" />
+            <h1>Oeps!</h1>
+            <p>Je hebt onvoldoende rechten om deze pagina te bekijken. Probeer het opnieuw via de <a href="{{ path('home') }}">homepagina van Somda</a>.</p>
+        </div>
+    </div>
+{% endblock %}

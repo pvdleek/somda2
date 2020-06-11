@@ -3,28 +3,32 @@
 		<h1><a href="{{ path('home') }}" id="header_image" title="Somda - Voor en door treinspotters">Somda</a></h1>
 		<h2>Voor en door treinspotters</h2>
 	</div>
-	<div class="news-flash">
-		{% if headerType == 'banner' %}
-			<a href="{{ path('banner_click_out', { 'id': headerContent.id }) }}" rel="noopener sponsored" target="_blank">
-				<img alt="{{ headerContent.customer.name }} {{ headerContent.description }}" height="100" src="{{ asset('images/banners/' ~ headerContent.image) }}" />
-			</a>
-		{% else %}
-			<div class="news-flash-title"><a href="{{ headerContent.url }}" rel="noopener" target="_blank">{{ headerContent.title }}</a></div>
-			{{ headerContent.introduction }}
-		{% endif %}
-	</div>
+	{% if headerType is defined %}
+		<div class="news-flash">
+			{% if headerType == 'banner' %}
+				<a href="{{ path('banner_click_out', { 'id': headerContent.id }) }}" rel="noopener sponsored" target="_blank">
+					<img alt="{{ headerContent.customer.name }} {{ headerContent.description }}" height="100" src="{{ asset('images/banners/' ~ headerContent.image) }}" />
+				</a>
+			{% else %}
+				<div class="news-flash-title"><a href="{{ headerContent.url }}" rel="noopener" target="_blank">{{ headerContent.title }}</a></div>
+				{{ headerContent.introduction }}
+			{% endif %}
+		</div>
+	{% endif %}
 </div>
 <nav class="menu">
 	<ol>
 		<li class="menu-item"><a href="{{ path('home') }}">Home</a></li>
-		{% set lastParentId = 0 %}
-		{% for block in menuStructure %}
-			{% if block['parent_id'] != lastParentId %}
-				{% if lastParentId > 0 %}</ol></li>{% endif %}
-				<li class="menu-item"><span>{{ block['parent_name'] }}</span><ol class="sub-menu">
-				{% set lastParentId = block['parent_id'] %}
-			{% endif %}
-			<li class="menu-item"><a href="{{ path(block['route']) }}">{{ block['name'] }}{{ block['route'] == 'forum_discussion_post_alerts_overview' and is_granted(constant('App\\Generics\\RoleGenerics::ROLE_ADMIN')) ? ' (' ~ nrOfOpenForumAlerts ~ ')' }}</a></li>
-		{% endfor %}
+		{% if menuStructure is defined %}
+			{% set lastParentId = 0 %}
+			{% for block in menuStructure %}
+				{% if block['parent_id'] != lastParentId %}
+					{% if lastParentId > 0 %}</ol></li>{% endif %}
+					<li class="menu-item"><span>{{ block['parent_name'] }}</span><ol class="sub-menu">
+					{% set lastParentId = block['parent_id'] %}
+				{% endif %}
+				<li class="menu-item"><a href="{{ path(block['route']) }}">{{ block['name'] }}{{ block['route'] == 'forum_discussion_post_alerts_overview' and is_granted(constant('App\\Generics\\RoleGenerics::ROLE_ADMIN')) ? ' (' ~ nrOfOpenForumAlerts ~ ')' }}</a></li>
+			{% endfor %}
+		{% endif %}
 	</ol>
 </nav>

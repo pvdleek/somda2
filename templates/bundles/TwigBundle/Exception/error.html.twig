@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <div class="panel">
+        <div class="panel-title">Er is iets fout gegaan</div>
+        <div class="panel-content">
+            <br />
+            <img alt="500" height="350" src="{{ asset('images/error/500.png') }}" />
+            <h1>Oeps!</h1>
+            <p>Somda kon jouw verzoek niet verwerken. Probeer het opnieuw via de <a href="{{ path('home') }}">homepagina van Somda</a>.</p>
+        </div>
+    </div>
+{% endblock %}
