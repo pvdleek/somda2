@@ -33,7 +33,7 @@
                     <a href="{{ path('forum_discussion', { 'id': discussion['id'], 'name': (discussion['title'] | url_encode) }) }}">{{ discussion['title'] }}</a>
                     {% if not discussion['discussion_read'] %} <i class="fas fa-comment-dots"></i>{% endif %}
 
-                    <br />Laatste op {{ discussion['max_post_timestamp'] | displayDateTime(true, true) }} door {{ discussion['author_id'] | displayUser(discussion['author_username']) | raw }}
+                    <br />Laatste op {{ discussion['max_post_timestamp'] | displayDateTime(true, true) }}
                 </td>
             </tr>
         {% endfor %}
