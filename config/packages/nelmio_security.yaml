@@ -7,7 +7,7 @@ nelmio_security:
       '^/.*': DENY
   # Prevent re-directions outside the website's domain
   external_redirects:
-    abort: true
+    abort: false
     log: true
 
   # Prevent inline scripts, unsafe eval, external scripts/images/styles/frames, etc
