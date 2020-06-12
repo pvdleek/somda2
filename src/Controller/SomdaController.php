@@ -3,11 +3,13 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Form\BaseForm;
 use App\Form\Contact;
 use App\Helpers\EmailHelper;
 use App\Helpers\FormHelper;
 use App\Helpers\TemplateHelper;
 use App\Helpers\UserHelper;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -79,13 +81,24 @@ class SomdaController
     public function contactAction(Request $request)
     {
         $form = $this->formHelper->getFactory()->create(Contact::class);
+        if (!$this->userHelper->userIsLoggedIn()) {
+            $form->add('email', TextType::class, [
+                BaseForm::KEY_LABEL => 'Jouw e-mailadres',
+                BaseForm::KEY_REQUIRED => true,
+            ]);
+        }
+
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $this->emailHelper->sendEmail(
                 $this->userHelper->getAdministratorUser(),
                 '[Somda-feedback] ' . $form->get('subject')->getData(),
                 'contact',
-                ['text' => $form->get('text')->getData(), 'user' => $this->userHelper->getUser()]
+                [
+                    'text' => $form->get('text')->getData(),
+                    'user' => $this->userHelper->getUser(),
+                    'emailAddress' => $form->has('email') ? $form->get('email')->getData() : null,
+                ]
             );
 
             return $this->formHelper->finishFormHandling('Je bericht is naar de beheerder verzonden', 'home');

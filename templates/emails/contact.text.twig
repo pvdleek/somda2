@@ -1,4 +1,4 @@
-Feedback van {{ user.username }} ({{ user.email }})
+Feedback van {% if user is not null %}{{ user.username }} ({{ user.email }}){% else %}{{ emailAddress }}{% endif %}
 
 De gebruiker heeft dit bericht opgegeven:
 {{ text }}

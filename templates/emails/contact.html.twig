@@ -1,6 +1,6 @@
 <picture><source srcset="{{ absolute_url(asset('images/logos-somda/logo-1.webp')) }}" /><img alt="Somda" src="{{ absolute_url(asset('images/logos-somda/logo-1.png')) }}" /></picture>
 <br />
-<br />Feedback van {{ user.username }} ({{ user.email }})
+<br />Feedback van {% if user is not null %}{{ user.username }} ({{ user.email }}){% else %}{{ emailAddress }}{% endif %}
 <br />
 <br />De gebruiker heeft dit bericht opgegeven:
 <br />{{ text }}
