@@ -8,6 +8,7 @@ use App\Entity\UserPreference;
 use App\Exception\UnknownUserPreferenceTable;
 use App\Exception\UnknownUserPreferenceType;
 use App\Helpers\UserHelper;
+use Doctrine\ORM\EntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -97,6 +98,12 @@ class UserPreferences extends BaseForm
                             ),
                             self::KEY_LABEL => $setting->description,
                             self::KEY_MAPPED => false,
+                            self::KEY_QUERY_BUILDER => function (EntityRepository $repository) {
+                                return $repository
+                                    ->createQueryBuilder('l')
+                                    ->andWhere('l.spotAllowed = TRUE')
+                                    ->orderBy('l.name', 'ASC');
+                            },
                             self::KEY_REQUIRED => true,
                         ]);
                         break;
