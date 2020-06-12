@@ -75,21 +75,19 @@ class ProcessForumLogCommand extends Command implements ScheduledJobInterface
             }
 
             $words = $this->getCleanWordsFromText($forumLog->post->text->text);
-            $this->processWords($words, $forumLog->post);
-
-            $this->doctrine->getManager()->flush();
-
             $postNrInDiscussion = $this->doctrine
                 ->getRepository('App:ForumDiscussion')
                 ->getPostNumberInDiscussion($forumLog->post->discussion, $forumLog->post->getId());
             if ($postNrInDiscussion === 0) {
                 // This is the first post in the discussion, we need to include the title
-                $words = $this->getCleanWordsFromText($forumLog->post->discussion->title);
-                $this->processWords($words, $forumLog->post, true);
+                $titleWords = $this->getCleanWordsFromText($forumLog->post->discussion->title);
+                $this->processWords($titleWords, $forumLog->post, true);
+
+                $words = array_diff($words, $titleWords);
             }
+            $this->processWords($words, $forumLog->post);
 
             $this->doctrine->getManager()->remove($forumLog);
-
             $this->doctrine->getManager()->flush();
         }
 
