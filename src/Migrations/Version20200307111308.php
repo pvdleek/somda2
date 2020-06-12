@@ -851,17 +851,17 @@ final class Version20200307111308 extends AbstractMigration
 
         $table = 3;
 //        for ($table = 3; $table <= 9; ++$table) {
-            $this->addSql('ALTER TABLE somda_forum_read_' . $table . ' DROP PRIMARY KEY');
-            $this->addSql('
-                ALTER TABLE somda_forum_read_' . $table . ' ADD CONSTRAINT FK_forum_read_post_' . $table . '
-                FOREIGN KEY (postid) REFERENCES somda_forum_posts (postid)
-            ');
-            $this->addSql('DELETE FROM somda_forum_read_' . $table . ' WHERE uid NOT IN (SELECT uid FROM somda_users)');
-            $this->addSql('
-                ALTER TABLE somda_forum_read_' . $table . ' ADD CONSTRAINT FK_forum_read_user_' . $table . '
-                FOREIGN KEY (uid) REFERENCES somda_users (uid)
-            ');
-            $this->addSql('CREATE INDEX IDX_forum_read_' . $table . ' ON somda_forum_read_' . $table . ' (postid)');
+//            $this->addSql('ALTER TABLE somda_forum_read_' . $table . ' DROP PRIMARY KEY');
+//            $this->addSql('
+//                ALTER TABLE somda_forum_read_' . $table . ' ADD CONSTRAINT FK_forum_read_post_' . $table . '
+//                FOREIGN KEY (postid) REFERENCES somda_forum_posts (postid)
+//            ');
+//            $this->addSql('DELETE FROM somda_forum_read_' . $table . ' WHERE uid NOT IN (SELECT uid FROM somda_users)');
+//            $this->addSql('
+//                ALTER TABLE somda_forum_read_' . $table . ' ADD CONSTRAINT FK_forum_read_user_' . $table . '
+//                FOREIGN KEY (uid) REFERENCES somda_users (uid)
+//            ');
+//            $this->addSql('CREATE INDEX IDX_forum_read_' . $table . ' ON somda_forum_read_' . $table . ' (postid)');
             $this->addSql('ALTER TABLE somda_forum_read_' . $table . ' ADD PRIMARY KEY (postid, uid)');
 //        }
     }
