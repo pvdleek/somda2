@@ -24,7 +24,7 @@ class ForumSearchWord extends Entity
 
     /**
      * @var string
-     * @ORM\Column(name="woord", type="string", length=20, nullable=false)
+     * @ORM\Column(name="woord", type="string", length=50, nullable=false)
      */
     public string $word;
 

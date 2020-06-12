@@ -19,6 +19,8 @@ class UserPreference extends Entity
     public const KEY_HOME_MAX_FORUM_POSTS_WRONG_SPOTS = 'max_foutespots';
     public const KEY_HOME_DISPLAY_POLL_AFTER_VOTING = 'display_poll';
 
+    public const KEY_FORCE_DESKTOP = 'force_desktop';
+
     public const KEY_MY_SPOTS_DEFAULT_NUMBER = 'myspots_default_nr';
     public const KEY_MY_SPOTS_DEFAULT_OFFSET = 'myspots_default_start';
     public const KEY_MY_SPOTS_SORT_ORDER_1 = 'myspots_sort';

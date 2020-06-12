@@ -7,6 +7,7 @@ use App\Entity\BannerView;
 use App\Entity\Block;
 use App\Entity\BlockHelp;
 use App\Entity\RailNews;
+use App\Entity\UserPreference;
 use App\Form\RailNews as RailNewsForm;
 use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
@@ -55,24 +56,32 @@ class TemplateHelper
     private MenuHelper $menuHelper;
 
     /**
+     * @var UserHelper
+     */
+    private UserHelper $userHelper;
+
+    /**
      * @param RequestStack $requestStack
      * @param ManagerRegistry $registry
      * @param LoggerInterface $logger
      * @param Environment $environment
      * @param MenuHelper $menuHelper
+     * @param UserHelper $userHelper
      */
     public function __construct(
         RequestStack $requestStack,
         ManagerRegistry $registry,
         LoggerInterface $logger,
         Environment $environment,
-        MenuHelper $menuHelper
+        MenuHelper $menuHelper,
+        UserHelper $userHelper
     ) {
         $this->requestStack = $requestStack;
         $this->doctrine = $registry;
         $this->logger = $logger;
         $this->twig = $environment;
         $this->menuHelper = $menuHelper;
+        $this->userHelper = $userHelper;
     }
 
     /**
@@ -83,13 +92,8 @@ class TemplateHelper
      */
     public function render(string $view, array $parameters = [], Response $response = null): Response
     {
-        $detect = new Mobile_Detect();
-        if ($detect->isMobile() && file_exists(__DIR__ . '/../../templates/mobile/' . $view)) {
-            $view = 'mobile/' . $view;
-        }
-
         try {
-            $content = $this->twig->render($view, $this->getParameters($parameters));
+            $content = $this->twig->render($this->getCorrectView($view), $this->getParameters($parameters));
         } catch (Exception $exception) {
             $this->logger->addRecord(
                 Logger::CRITICAL,
@@ -104,6 +108,26 @@ class TemplateHelper
 
         $response->setContent($content);
         return $response;
+    }
+
+    /**
+     * @param string $view
+     * @return string
+     * @throws Exception
+     */
+    private function getCorrectView(string $view): string
+    {
+        if ($this->userHelper->userIsLoggedIn()
+            && $this->userHelper->getPreferenceByKey(UserPreference::KEY_FORCE_DESKTOP)->value === '1'
+        ) {
+            return $view;
+        }
+
+        $detect = new Mobile_Detect();
+        if ($detect->isMobile() && file_exists(__DIR__ . '/../../templates/mobile/' . $view)) {
+            $view = 'mobile/' . $view;
+        }
+        return $view;
     }
 
     /**
