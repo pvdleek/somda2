@@ -79,12 +79,9 @@ class ManageNewsController
         if ($form->isSubmitted() && $form->isValid()) {
             if (is_null($news->getId())) {
                 $this->doctrine->getManager()->persist($news);
-                return $this->formHelper->finishFormHandling(
-                    'Bericht toegevoegd',
-                    RouteGenerics::ROUTE_MANAGE_RAIL_NEWS
-                );
+                return $this->formHelper->finishFormHandling('Bericht toegevoegd', RouteGenerics::ROUTE_MANAGE_NEWS);
             }
-            return $this->formHelper->finishFormHandling('Bericht bijgewerkt', RouteGenerics::ROUTE_MANAGE_RAIL_NEWS);
+            return $this->formHelper->finishFormHandling('Bericht bijgewerkt', RouteGenerics::ROUTE_MANAGE_NEWS);
         }
 
         return $this->templateHelper->render('manageNews/item.html.twig', [
@@ -124,6 +121,7 @@ class ManageNewsController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            $railNews->approved = true;
             return $this->formHelper->finishFormHandling('Bericht bijgewerkt', RouteGenerics::ROUTE_MANAGE_RAIL_NEWS);
         }
 

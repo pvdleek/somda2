@@ -9,5 +9,6 @@ final class RouteGenerics
 
     public const TRAIN_COMPOSITIONS_TYPE = 'train_compositions_type';
 
+    public const ROUTE_MANAGE_NEWS = 'manage_news';
     public const ROUTE_MANAGE_RAIL_NEWS = 'manage_rail_news';
 }

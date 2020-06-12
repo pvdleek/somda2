@@ -117,6 +117,9 @@ class GetRailNewsCommand extends Command implements ScheduledJobInterface
                 if (!$feed->filterResults || $this->isArticleMatch($item)) {
                     $description = trim(strip_tags(str_replace('?', '', $item->getDescription())));
                     $description = preg_replace('/\s\s+/', ' ', $description);
+                    if (strlen($description) < 1) {
+                        $description = $item->getTitle();
+                    }
 
                     /**
                      * @var RailNews $railNews

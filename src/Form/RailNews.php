@@ -30,7 +30,7 @@ class RailNews extends BaseForm
                 self::KEY_LABEL => 'Koptekst van het bericht',
                 self::KEY_REQUIRED => true,
             ])
-            ->add('approved', CheckboxType::class, [
+            ->add('active', CheckboxType::class, [
                 self::KEY_LABEL => 'Bericht goedgekeurd',
             ])
             ->add('automaticUpdates', CheckboxType::class, [
