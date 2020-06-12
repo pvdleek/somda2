@@ -10,6 +10,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 class ForumPostFavoriteController
 {
@@ -40,7 +41,11 @@ class ForumPostFavoriteController
         $this->templateHelper = $templateHelper;
     }
 
-    public function indexAction()
+    /**
+     * @IsGranted("ROLE_USER")
+     * @return Response
+     */
+    public function indexAction(): Response
     {
         return $this->templateHelper->render('forum/favorites.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Forum favorieten',
