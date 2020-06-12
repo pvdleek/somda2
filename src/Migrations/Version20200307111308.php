@@ -704,156 +704,154 @@ final class Version20200307111308 extends AbstractMigration
 //            ALTER TABLE somda_help_text ADD CONSTRAINT FK_397D7775711B2385
 //            FOREIGN KEY (blokid) REFERENCES somda_blokken (blokid)
 //        ');
+//
+//        $this->addSql('
+//            ALTER TABLE somda_stats_blokken ADD CONSTRAINT FK_7FAF7B1A711B2385
+//            FOREIGN KEY (blokid) REFERENCES somda_blokken (blokid)
+//        ');
+//
+//        $this->addSql('
+//            ALTER TABLE somda_logging ADD CONSTRAINT FK_8127138D711B2385
+//            FOREIGN KEY (blokid) REFERENCES somda_blokken (blokid)
+//        ');
+//
+//        $this->addSql('
+//             ALTER TABLE somda_mat_types
+//             CHANGE typeid typeid BIGINT AUTO_INCREMENT NOT NULL,
+//             CHANGE omschrijving omschrijving VARCHAR(25) NOT NULL
+//         ');
+//
+//        $this->addSql('
+//            ALTER TABLE somda_mat_sms ADD CONSTRAINT FK_2FC3E54DE70B032
+//            FOREIGN KEY (typeid) REFERENCES somda_mat_types (typeid)
+//        ');
+//
+//        $this->addSql('ALTER TABLE somda_trein CHANGE treinnr treinnr VARCHAR(15) NOT NULL');
+//
+//        $this->addSql('ALTER TABLE somda_sht_shout CHANGE sht_uid sht_uid BIGINT DEFAULT NULL');
+//        $this->addSql('
+//            ALTER TABLE somda_sht_shout ADD CONSTRAINT FK_88E10AFB97AD1E10
+//            FOREIGN KEY (sht_uid) REFERENCES somda_users (uid)
+//        ');
+//        $this->addSql('CREATE INDEX IDX_88E10AFB97AD1E10 ON somda_sht_shout (sht_uid)');
+//
+//        $this->addSql('
+//            ALTER TABLE somda_forum_posts
+//            CHANGE authorid authorid BIGINT DEFAULT NULL,
+//            CHANGE discussionid discussionid BIGINT DEFAULT NULL,
+//            CHANGE wiki_check wiki_check TINYINT(1) NOT NULL,
+//            CHANGE sign_on sign_on TINYINT(1) NOT NULL,
+//            CHANGE `timestamp` `timestamp` DATETIME NOT NULL,
+//            CHANGE edit_timestamp edit_timestamp DATETIME DEFAULT NULL
+//        ');
+//        $this->addSql('
+//            ALTER TABLE somda_forum_posts ADD CONSTRAINT FK_40FD24D3412DD5F
+//            FOREIGN KEY (authorid) REFERENCES somda_users (uid)
+//        ');
+//        $this->addSql('
+//            ALTER TABLE somda_forum_posts ADD CONSTRAINT FK_40FD24DFCC0F19E
+//            FOREIGN KEY (discussionid) REFERENCES somda_forum_discussion (discussionid)
+//        ');
+//        $this->addSql('
+//            ALTER TABLE somda_forum_posts ADD CONSTRAINT FK_40FD24D9ECDC13D
+//            FOREIGN KEY (edit_uid) REFERENCES somda_users (uid)
+//        ');
+//        $this->addSql('
+//            ALTER TABLE somda_forum_posts ADD CONSTRAINT FK_40FD24D143C6493
+//            FOREIGN KEY (wiki_uid) REFERENCES somda_users (uid)
+//        ');
+//        $this->addSql('CREATE INDEX IDX_40FD24D9ECDC13D ON somda_forum_posts (edit_uid)');
+//        $this->addSql('CREATE INDEX IDX_40FD24D143C6493 ON somda_forum_posts (wiki_uid)');
+//        $this->addSql('CREATE INDEX idx_47961_timestamp ON somda_forum_posts (timestamp)');
+//
+//        $this->addSql('ALTER TABLE somda_banner_views CHANGE bannerid bannerid BIGINT DEFAULT NULL');
+//        $this->addSql('
+//            ALTER TABLE somda_banner_views ADD CONSTRAINT FK_F1B9EA066BBC5658
+//            FOREIGN KEY (bannerid) REFERENCES somda_banner (bannerid)
+//        ');
+//
+//        $this->addSql('
+//             ALTER TABLE somda_forum_forums
+//             CHANGE catid catid BIGINT DEFAULT NULL,
+//             CHANGE `name` `name` VARCHAR(40) NOT NULL,
+//             CHANGE description description VARCHAR(100) NOT NULL
+//         ');
+//        $this->addSql('
+//            ALTER TABLE somda_forum_forums ADD CONSTRAINT FK_ABD72EFF3632DFC5
+//            FOREIGN KEY (catid) REFERENCES somda_forum_cats (catid)
+//        ');
+//        $this->addSql('
+//            ALTER TABLE somda_forum_mods ADD CONSTRAINT FK_E20AB6A4EDB4D5F3
+//            FOREIGN KEY (forumid) REFERENCES somda_forum_forums (forumid)
+//        ');
+//        $this->addSql('
+//            ALTER TABLE somda_forum_mods ADD CONSTRAINT FK_E20AB6A4539B0606
+//            FOREIGN KEY (uid) REFERENCES somda_users (uid)
+//        ');
+//        $this->addSql('CREATE INDEX IDX_E20AB6A4EDB4D5F3 ON somda_forum_mods (forumid)');
+//        $this->addSql('CREATE INDEX IDX_E20AB6A4539B0606 ON somda_forum_mods (uid)');
+//
+//        $this->addSql('
+//            ALTER TABLE somda_drgl
+//            CHANGE title title VARCHAR(75) NOT NULL,
+//            CHANGE image image VARCHAR(20) NOT NULL,
+//            CHANGE werkzaamheden werkzaamheden TINYINT(1) NOT NULL,
+//            CHANGE `public` `public` TINYINT(1) NOT NULL
+//        ');
+//
+//        $this->addSql('
+//             ALTER TABLE somda_drgl_read ADD CONSTRAINT FK_7CF8CCE9B869D711
+//             FOREIGN KEY (drglid) REFERENCES somda_drgl (drglid)
+//         ');
+//        $this->addSql('
+//            ALTER TABLE somda_drgl_read ADD CONSTRAINT FK_7CF8CCE9539B0606
+//            FOREIGN KEY (uid) REFERENCES somda_users (uid)
+//        ');
+//        $this->addSql('CREATE INDEX IDX_7CF8CCE9B869D711 ON somda_drgl_read (drglid)');
+//        $this->addSql('CREATE INDEX IDX_7CF8CCE9539B0606 ON somda_drgl_read (uid)');
+//
+//        $this->addSql('ALTER TABLE somda_tdr_trein_mat DROP PRIMARY KEY');
+//        $this->addSql('
+//            ALTER TABLE somda_tdr_trein_mat
+//            CHANGE tdr_nr tdr_nr BIGINT NOT NULL,
+//            CHANGE mat_type_id mat_type_id BIGINT DEFAULT NULL,
+//            CHANGE spots spots BIGINT NOT NULL
+//        ');
+//        $this->addSql('
+//            ALTER TABLE somda_tdr_trein_mat ADD CONSTRAINT FK_C2BF79AAAE60685A
+//            FOREIGN KEY (tdr_nr) REFERENCES somda_tdr_drgl (tdr_nr)
+//        ');
+//        $this->addSql('DELETE FROM somda_tdr_trein_mat WHERE treinid NOT IN (SELECT treinid FROM somda_trein)');
+//        $this->addSql('
+//            ALTER TABLE somda_tdr_trein_mat ADD CONSTRAINT FK_C2BF79AA68F454BD
+//            FOREIGN KEY (treinid) REFERENCES somda_trein (treinid)
+//        ');
+//        $this->addSql('UPDATE somda_tdr_trein_mat SET posid = 1 WHERE posid NOT IN (SELECT posid FROM somda_positie)');
+//        $this->addSql('
+//            ALTER TABLE somda_tdr_trein_mat ADD CONSTRAINT FK_C2BF79AAF4E25321
+//            FOREIGN KEY (posid) REFERENCES somda_positie (posid)
+//        ');
+//        $this->addSql('
+//            ALTER TABLE somda_tdr_trein_mat ADD CONSTRAINT FK_C2BF79AA394F068
+//            FOREIGN KEY (mat_naam_id) REFERENCES somda_mat_naam (id)
+//        ');
+//        $this->addSql(
+//            'DELETE FROM somda_tdr_trein_mat WHERE mat_type_id NOT IN (SELECT id FROM somda_mat_type_patterns)'
+//        );
+//        $this->addSql('
+//            ALTER TABLE somda_tdr_trein_mat ADD CONSTRAINT FK_C2BF79AAB78B25C3
+//            FOREIGN KEY (mat_type_id) REFERENCES somda_mat_type_patterns (id)
+//        ');
+//        $this->addSql('CREATE INDEX IDX_C2BF79AAAE60685A ON somda_tdr_trein_mat (tdr_nr)');
+//        $this->addSql('CREATE INDEX IDX_C2BF79AA68F454BD ON somda_tdr_trein_mat (treinid)');
+//        $this->addSql('CREATE INDEX IDX_C2BF79AAF4E25321 ON somda_tdr_trein_mat (posid)');
+//        $this->addSql('CREATE INDEX IDX_C2BF79AA394F068 ON somda_tdr_trein_mat (mat_naam_id)');
+//        $this->addSql('CREATE INDEX IDX_C2BF79AAB78B25C3 ON somda_tdr_trein_mat (mat_type_id)');
+//        $this->addSql('ALTER TABLE somda_tdr_trein_mat ADD PRIMARY KEY (tdr_nr, treinid, posid, dag)');
 
-        $this->addSql('
-            ALTER TABLE somda_stats_blokken ADD CONSTRAINT FK_7FAF7B1A711B2385
-            FOREIGN KEY (blokid) REFERENCES somda_blokken (blokid)
-        ');
-
-        $this->addSql('
-            ALTER TABLE somda_logging ADD CONSTRAINT FK_8127138D711B2385
-            FOREIGN KEY (blokid) REFERENCES somda_blokken (blokid)
-        ');
-
-        $this->addSql('
-             ALTER TABLE somda_mat_types
-             CHANGE typeid typeid BIGINT AUTO_INCREMENT NOT NULL,
-             CHANGE omschrijving omschrijving VARCHAR(25) NOT NULL
-         ');
-
-        $this->addSql('
-            ALTER TABLE somda_mat_sms ADD CONSTRAINT FK_2FC3E54DE70B032
-            FOREIGN KEY (typeid) REFERENCES somda_mat_types (typeid)
-        ');
-
-        $this->addSql('ALTER TABLE somda_trein CHANGE treinnr treinnr VARCHAR(15) NOT NULL');
-
-        $this->addSql('ALTER TABLE somda_sht_shout CHANGE sht_uid sht_uid BIGINT DEFAULT NULL');
-        $this->addSql('
-            ALTER TABLE somda_sht_shout ADD CONSTRAINT FK_88E10AFB97AD1E10
-            FOREIGN KEY (sht_uid) REFERENCES somda_users (uid)
-        ');
-        $this->addSql('CREATE INDEX IDX_88E10AFB97AD1E10 ON somda_sht_shout (sht_uid)');
-
-        $this->addSql('
-            ALTER TABLE somda_forum_posts
-            CHANGE authorid authorid BIGINT DEFAULT NULL,
-            CHANGE discussionid discussionid BIGINT DEFAULT NULL,
-            CHANGE wiki_check wiki_check TINYINT(1) NOT NULL,
-            CHANGE sign_on sign_on TINYINT(1) NOT NULL,
-            CHANGE `timestamp` `timestamp` DATETIME NOT NULL,
-            CHANGE edit_timestamp edit_timestamp DATETIME DEFAULT NULL
-        ');
-        $this->addSql('
-            ALTER TABLE somda_forum_posts ADD CONSTRAINT FK_40FD24D3412DD5F
-            FOREIGN KEY (authorid) REFERENCES somda_users (uid)
-        ');
-        $this->addSql('
-            ALTER TABLE somda_forum_posts ADD CONSTRAINT FK_40FD24DFCC0F19E
-            FOREIGN KEY (discussionid) REFERENCES somda_forum_discussion (discussionid)
-        ');
-        $this->addSql('
-            ALTER TABLE somda_forum_posts ADD CONSTRAINT FK_40FD24D9ECDC13D
-            FOREIGN KEY (edit_uid) REFERENCES somda_users (uid)
-        ');
-        $this->addSql('
-            ALTER TABLE somda_forum_posts ADD CONSTRAINT FK_40FD24D143C6493
-            FOREIGN KEY (wiki_uid) REFERENCES somda_users (uid)
-        ');
-        $this->addSql('CREATE INDEX IDX_40FD24D9ECDC13D ON somda_forum_posts (edit_uid)');
-        $this->addSql('CREATE INDEX IDX_40FD24D143C6493 ON somda_forum_posts (wiki_uid)');
-        $this->addSql('CREATE INDEX idx_47961_timestamp ON somda_forum_posts (timestamp)');
-
-        $this->addSql('ALTER TABLE somda_banner_views CHANGE bannerid bannerid BIGINT DEFAULT NULL');
-        $this->addSql('
-            ALTER TABLE somda_banner_views ADD CONSTRAINT FK_F1B9EA066BBC5658
-            FOREIGN KEY (bannerid) REFERENCES somda_banner (bannerid)
-        ');
-
-        $this->addSql('
-             ALTER TABLE somda_forum_forums
-             CHANGE catid catid BIGINT DEFAULT NULL,
-             CHANGE `name` `name` VARCHAR(40) NOT NULL,
-             CHANGE description description VARCHAR(100) NOT NULL
-         ');
-        $this->addSql('
-            ALTER TABLE somda_forum_forums ADD CONSTRAINT FK_ABD72EFF3632DFC5
-            FOREIGN KEY (catid) REFERENCES somda_forum_cats (catid)
-        ');
-        $this->addSql('
-            ALTER TABLE somda_forum_mods ADD CONSTRAINT FK_E20AB6A4EDB4D5F3
-            FOREIGN KEY (forumid) REFERENCES somda_forum_forums (forumid)
-        ');
-        $this->addSql('
-            ALTER TABLE somda_forum_mods ADD CONSTRAINT FK_E20AB6A4539B0606
-            FOREIGN KEY (uid) REFERENCES somda_users (uid)
-        ');
-        $this->addSql('CREATE INDEX IDX_E20AB6A4EDB4D5F3 ON somda_forum_mods (forumid)');
-        $this->addSql('CREATE INDEX IDX_E20AB6A4539B0606 ON somda_forum_mods (uid)');
-
-        $this->addSql('
-            ALTER TABLE somda_drgl
-            CHANGE title title VARCHAR(75) NOT NULL,
-            CHANGE image image VARCHAR(20) NOT NULL,
-            CHANGE werkzaamheden werkzaamheden TINYINT(1) NOT NULL,
-            CHANGE `public` `public` TINYINT(1) NOT NULL
-        ');
-
-        $this->addSql('
-             ALTER TABLE somda_drgl_read ADD CONSTRAINT FK_7CF8CCE9B869D711
-             FOREIGN KEY (drglid) REFERENCES somda_drgl (drglid)
-         ');
-        $this->addSql('
-            ALTER TABLE somda_drgl_read ADD CONSTRAINT FK_7CF8CCE9539B0606
-            FOREIGN KEY (uid) REFERENCES somda_users (uid)
-        ');
-        $this->addSql('CREATE INDEX IDX_7CF8CCE9B869D711 ON somda_drgl_read (drglid)');
-        $this->addSql('CREATE INDEX IDX_7CF8CCE9539B0606 ON somda_drgl_read (uid)');
-
-        $this->addSql('ALTER TABLE somda_tdr_trein_mat DROP PRIMARY KEY');
-        $this->addSql('
-            ALTER TABLE somda_tdr_trein_mat
-            CHANGE tdr_nr tdr_nr BIGINT NOT NULL,
-            CHANGE mat_type_id mat_type_id BIGINT DEFAULT NULL,
-            CHANGE spots spots BIGINT NOT NULL
-        ');
-        $this->addSql('
-            ALTER TABLE somda_tdr_trein_mat ADD CONSTRAINT FK_C2BF79AAAE60685A
-            FOREIGN KEY (tdr_nr) REFERENCES somda_tdr_drgl (tdr_nr)
-        ');
-        $this->addSql('DELETE FROM somda_tdr_trein_mat WHERE treinid NOT IN (SELECT treinid FROM somda_trein)');
-        $this->addSql('
-            ALTER TABLE somda_tdr_trein_mat ADD CONSTRAINT FK_C2BF79AA68F454BD
-            FOREIGN KEY (treinid) REFERENCES somda_trein (treinid)
-        ');
-        $this->addSql('UPDATE somda_tdr_trein_mat SET posid = 1 WHERE posid NOT IN (SELECT posid FROM somda_positie)');
-        $this->addSql('
-            ALTER TABLE somda_tdr_trein_mat ADD CONSTRAINT FK_C2BF79AAF4E25321
-            FOREIGN KEY (posid) REFERENCES somda_positie (posid)
-        ');
-        $this->addSql('
-            ALTER TABLE somda_tdr_trein_mat ADD CONSTRAINT FK_C2BF79AA394F068
-            FOREIGN KEY (mat_naam_id) REFERENCES somda_mat_naam (id)
-        ');
-        $this->addSql(
-            'DELETE FROM somda_tdr_trein_mat WHERE mat_type_id NOT IN (SELECT id FROM somda_mat_type_patterns)'
-        );
-        $this->addSql('
-            ALTER TABLE somda_tdr_trein_mat ADD CONSTRAINT FK_C2BF79AAB78B25C3
-            FOREIGN KEY (mat_type_id) REFERENCES somda_mat_type_patterns (id)
-        ');
-        $this->addSql('CREATE INDEX IDX_C2BF79AAAE60685A ON somda_tdr_trein_mat (tdr_nr)');
-        $this->addSql('CREATE INDEX IDX_C2BF79AA68F454BD ON somda_tdr_trein_mat (treinid)');
-        $this->addSql('CREATE INDEX IDX_C2BF79AAF4E25321 ON somda_tdr_trein_mat (posid)');
-        $this->addSql('CREATE INDEX IDX_C2BF79AA394F068 ON somda_tdr_trein_mat (mat_naam_id)');
-        $this->addSql('CREATE INDEX IDX_C2BF79AAB78B25C3 ON somda_tdr_trein_mat (mat_type_id)');
-        $this->addSql('ALTER TABLE somda_tdr_trein_mat ADD PRIMARY KEY (tdr_nr, treinid, posid, dag)');
-
-        for ($table = 0; $table <= 9; ++$table) {
+        $table = 3;
+//        for ($table = 3; $table <= 9; ++$table) {
             $this->addSql('ALTER TABLE somda_forum_read_' . $table . ' DROP PRIMARY KEY');
-            $this->addSql(
-                'DELETE FROM somda_forum_read_' . $table . ' WHERE postid NOT IN (SELECT postid FROM somda_forum_posts)'
-            );
             $this->addSql('
                 ALTER TABLE somda_forum_read_' . $table . ' ADD CONSTRAINT FK_forum_read_post_' . $table . '
                 FOREIGN KEY (postid) REFERENCES somda_forum_posts (postid)
@@ -865,7 +863,7 @@ final class Version20200307111308 extends AbstractMigration
             ');
             $this->addSql('CREATE INDEX IDX_forum_read_' . $table . ' ON somda_forum_read_' . $table . ' (postid)');
             $this->addSql('ALTER TABLE somda_forum_read_' . $table . ' ADD PRIMARY KEY (postid, uid)');
-        }
+//        }
     }
 
     /**
