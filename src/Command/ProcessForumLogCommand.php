@@ -120,6 +120,7 @@ class ProcessForumLogCommand extends Command implements ScheduledJobInterface
 
         $text = strip_tags(strtolower($text));
         // Replace line-endings by spaces
+        $text = str_replace(['<br>', '<br />'], ' ', $text);
         $text = preg_replace('/[\n\r]/is', ' ', $text);
         // Remove HTML entities
         $text = preg_replace('/\b&[a-z]+;\b/', ' ', $text);
