@@ -82,6 +82,7 @@ class ProcessForumLogCommand extends Command implements ScheduledJobInterface
                 // This is the first post in the discussion, we need to include the title
                 $titleWords = $this->getCleanWordsFromText($forumLog->post->discussion->title);
                 $this->processWords($titleWords, $forumLog->post, true);
+                $this->doctrine->getManager()->flush();
 
                 $words = array_diff($words, $titleWords);
             }
