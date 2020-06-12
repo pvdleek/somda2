@@ -34,11 +34,12 @@ class ForumDiscussion extends EntityRepository
                     `a`.`username` AS `author_username`, `d`.`locked` AS `locked`, `d`.`viewed` AS `viewed`,
                     TRUE AS `discussion_read`, `p_max`.`timestamp` AS `max_post_timestamp`, COUNT(*) AS `posts`
                 FROM somda_forum_discussion d
+                JOIN somda_forum_forums f ON f.forumid = d.forumid
                 JOIN somda_users a ON a.uid = d.authorid
                 JOIN somda_forum_posts p_max ON p_max.discussionid = d.discussionid
                 JOIN somda_forum_posts p_count ON p_count.discussionid = d.discussionid
                 INNER JOIN (' . $maxQuery . ') m ON m.disc_id = d.discussionid
-                WHERE p_max.timestamp = m.max_date_time
+                WHERE p_max.timestamp = m.max_date_time AND f.type != :moderatorForumType
                 GROUP BY id, title, author_id, viewed, m.max_date_time, max_post_timestamp
                 ORDER BY m.max_date_time DESC
                 LIMIT 0, ' . $limit;
@@ -49,13 +50,14 @@ class ForumDiscussion extends EntityRepository
                     IF(`r`.`postid` IS NULL, FALSE, TRUE) AS `discussion_read`,
                     `p_max`.`timestamp` AS `max_post_timestamp`, COUNT(*) AS `posts`
                 FROM somda_forum_discussion d
+                JOIN somda_forum_forums f ON f.forumid = d.forumid
                 JOIN somda_users a ON a.uid = d.authorid
                 JOIN somda_forum_posts p_max ON p_max.discussionid = d.discussionid
                 LEFT JOIN somda_forum_read_' . substr($user->getId(), -1) . ' r
                     ON r.uid = ' . $user->getId() . ' AND r.postid = p_max.postid
                 JOIN somda_forum_posts p_count ON p_count.discussionid = d.discussionid
                 INNER JOIN (' . $maxQuery . ') m ON m.disc_id = d.discussionid
-                WHERE p_max.timestamp = m.max_date_time
+                WHERE p_max.timestamp = m.max_date_time AND f.type != :moderatorForumType
                 GROUP BY `id`, `title`, `author_id`, `viewed`, m.max_date_time, `discussion_read`, `max_post_timestamp`
                 ORDER BY m.max_date_time DESC
                 LIMIT 0, ' . $limit;
@@ -68,6 +70,7 @@ class ForumDiscussion extends EntityRepository
                 'minDate',
                 date(DateGenerics::DATE_FORMAT_DATABASE, mktime(0, 0, 0, date('m'), date('d') - 100, date('Y')))
             );
+            $statement->bindValue('moderatorForumType', ForumForum::TYPE_MODERATORS_ONLY);
             $statement->execute();
             return $statement->fetchAll();
         } catch (DBALException $exception) {
