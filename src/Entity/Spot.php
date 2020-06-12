@@ -93,7 +93,7 @@ class Spot extends Entity
      * @var SpotExtra|null
      * @ORM\OneToOne(targetEntity="App\Entity\SpotExtra", mappedBy="spot")
      */
-    public ?SpotExtra $extra;
+    public ?SpotExtra $extra = null;
 
     /**
      *

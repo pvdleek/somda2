@@ -164,11 +164,11 @@ class SpotInputHelper
                 $spotExtra = $spot->extra;
             } else {
                 $spotExtra = new SpotExtra();
+                $spotExtra->spot = $spot;
                 $this->doctrine->getManager()->persist($spotExtra);
             }
             $spotExtra->extra = $spotInput->extra;
             $spotExtra->userExtra = $spotInput->userExtra ?? '';
-            $spotExtra->spot = $spot;
             $spot->extra = $spotExtra;
         }
 
