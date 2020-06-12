@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: /bundles/
+Disallow: /css/
+Disallow: /webfonts/
