@@ -40,10 +40,11 @@ class ForumHelper implements RuntimeExtensionInterface
     public function getDisplayForumPost(ForumPost $post): string
     {
         if ($post->text->newStyle) {
-            $text = $this->replaceLinks(strip_tags(
+            $text = strip_tags(
                 str_replace(['&nbsp;', "\r\n", '<p>&nbsp;</p>'], ' ', $post->text->text),
                 '<p><a><img><ul><ol><li><blockquote><strong><em><s><hr>'
-            ));
+            );
+            $text = $this->replaceLinks(str_replace('</p>', ' </p>', $text));
         } else {
             $text = $this->doSpecialText($post->text->text);
         }
