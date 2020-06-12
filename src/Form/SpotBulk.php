@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Location;
 use DateTime;
+use Doctrine\ORM\EntityRepository;
 use Exception;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
@@ -29,6 +30,12 @@ class SpotBulk extends BaseForm
                 self::KEY_CLASS => Location::class,
                 self::KEY_PREFERRED_CHOICES => [$options['defaultLocation']],
                 self::KEY_LABEL => 'Spot-locatie',
+                self::KEY_QUERY_BUILDER => function (EntityRepository $repository) {
+                    return $repository
+                        ->createQueryBuilder('l')
+                        ->andWhere('l.spotAllowed = TRUE')
+                        ->orderBy('l.name', 'ASC');
+                },
                 self::KEY_REQUIRED => true,
             ])
             ->add('date', DateType::class, [
