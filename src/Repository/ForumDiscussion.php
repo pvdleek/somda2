@@ -239,6 +239,7 @@ class ForumDiscussion extends EntityRepository
      */
     public function markPostsAsRead(User $user, array $posts): void
     {
+        return;
         $query = 'INSERT IGNORE INTO `somda_forum_read_'  . substr($user->getId(), -1) . '` (postid, uid) VALUES ';
         foreach ($posts as $post) {
             $query .= '(' . $post->getId() . ',' . $user->getId() . '),';
