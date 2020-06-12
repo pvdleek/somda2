@@ -122,6 +122,13 @@ class TrainTableController
 
             $passingRoutes = [];
         } else {
+            if ($trainTableYearId === 0) {
+                $trainTableYearId = $this->doctrine
+                    ->getRepository(TrainTableYear::class)
+                    ->findTrainTableYearByDate(new DateTime())
+                    ->getId();
+            }
+
             $this->trainTableHelper->setTrainTableYear($trainTableYearId);
             $this->trainTableHelper->setLocation($locationName);
 
