@@ -9,6 +9,7 @@ use DateTime;
 use Exception;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\Event\KernelEvent;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
@@ -98,7 +99,9 @@ class KernelListener implements EventSubscriberInterface
      */
     public function onKernelTerminate(TerminateEvent $event)
     {
-        if (!$this->isShouldExecuteEventHandler($event)) {
+        if (!$this->isShouldExecuteEventHandler($event)
+            || $event->getResponse()->getStatusCode() !== Response::HTTP_OK
+        ) {
             return;
         }
 
