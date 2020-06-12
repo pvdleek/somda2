@@ -129,7 +129,7 @@ class ForumDiscussionController
                 $this->userHelper->getUser(),
                 $posts
             );
-        } elseif (!is_null($postId)) {
+        } elseif (is_null($pageNumber) && !is_null($postId)) {
             // A specific post was requested, so we go to this post
             $postNumber = $this->formHelper
                 ->getDoctrine()
@@ -140,7 +140,7 @@ class ForumDiscussionController
         }
 
         if (count($posts) < 1) {
-            if (is_null($pageNumber)) {
+            if (is_null($pageNumber) || $pageNumber < 1) {
                 $pageNumber = 1;
             }
             $posts = $this->formHelper->getDoctrine()->getRepository(ForumPost::class)->findBy(
