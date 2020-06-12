@@ -37,7 +37,7 @@ class DateHelper implements RuntimeExtensionInterface
 
         $output = '';
         if (!$shortDate) {
-            $output .= $this->translator->trans('general.date.days.' . $date->format('w')) . ' ';
+            $output .= $this->translator->trans('general.date.days.' . ($date->format('N') - 1)) . ' ';
         }
         $output .= $date->format('j') . ' ';
 
