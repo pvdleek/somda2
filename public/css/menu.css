@@ -60,7 +60,7 @@
     color: #FFF;
 }
 .sub-menu .menu-item {
-    padding: 0.75rem 0;
+    padding: 0.25rem 0;
     background: #246da5;
     opacity: 0;
     transform-origin: bottom;
@@ -70,7 +70,7 @@
     background: #2b84c8;
 }
 .sub-menu .menu-item a {
-    padding: 0 0.75rem;
+    padding: 0 0.25rem;
 }
 @media screen and (max-width: 600px) {
     .sub-menu .menu-item {
@@ -103,7 +103,7 @@
         opacity: 0;
     }
     .menu > ol > .menu-item + .menu-item {
-        margin-top: 0.75rem;
+        margin-top: 0.25rem;
     }
     .menu > ol > .menu-item:after {
         left: auto;
