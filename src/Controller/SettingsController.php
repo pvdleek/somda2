@@ -71,7 +71,7 @@ class SettingsController
                     if (is_object($form->get($setting->key)->getData())) {
                         $userPreference->value = $form->get($setting->key)->getData()->name;
                     } else {
-                        $userPreference->value = $form->get($setting->key)->getData();
+                        $userPreference->value = $form->get($setting->key)->getData() ?? '';
                     }
                 }
             }
