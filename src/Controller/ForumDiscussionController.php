@@ -111,7 +111,9 @@ class ForumDiscussionController
         if (is_null($pageNumber) && is_null($postId) && $this->userHelper->userIsLoggedIn()) {
             // Neither a specific page or post were requested but the user is logged in,
             // so we will go to the first unread post in the discussion
-            if ($discussion->forum->type !== ForumForum::TYPE_ARCHIVE) {
+            if ($discussion->forum->type === ForumForum::TYPE_ARCHIVE) {
+                $pageNumber = 1;
+            } else {
                 $numberOfReadPosts = $this->formHelper
                     ->getDoctrine()
                     ->getRepository(ForumDiscussion::class)
