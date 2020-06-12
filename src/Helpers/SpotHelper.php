@@ -51,7 +51,7 @@ class SpotHelper implements RuntimeExtensionInterface
         return sprintf(
             $this->translator->trans($translation),
             $this->getDisplayTrain($spot->train),
-            $this->getDisplayDate($spot->timestamp),
+            $this->getDisplayDate($spot->spotDate),
             $this->getDisplayLocation($spot->location, $noHtml),
             $this->getDisplayRoute($spot->route, $spot->position)
         );
