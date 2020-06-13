@@ -65,7 +65,7 @@ table.forum-overview td {
     padding-bottom: 0.5rem;
     padding-top: 0.5rem;
 }
-#moderator_icons {
+.moderator-icons {
     float: right;
     padding-left: 20px;
     padding-right: 10px;

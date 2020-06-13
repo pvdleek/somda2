@@ -37,7 +37,7 @@
     {% endif %}
 
     {% if userIsModerator %}
-        <span id="moderator_icons">
+        <span class="moderator-icons">
             {% if discussion.locked %}
                 <a href="{{ path('forum_discussion_moderate', { 'id': discussion.id, 'action': constant('App\\Controller\\ForumModerateController::ACTION_OPEN') }) }}"><i class="fas fa-lock-open" title="Open discussie"></i></a>
             {% else %}

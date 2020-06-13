@@ -25,34 +25,36 @@
 
     <div class="panel">
         <div class="panel-title">
-            {% if userIsModerator %}
-                <span id="moderator_icons">
-                    {% if discussion.locked %}
-                        <a href="{{ path('forum_discussion_moderate', { 'id': discussion.id, 'action': constant('App\\Controller\\ForumModerateController::ACTION_OPEN') }) }}"><i class="fas fa-lock-open" title="Open discussie"></i></a>
-                    {% else %}
-                        <a href="{{ path('forum_discussion_moderate', { 'id': discussion.id, 'action': constant('App\\Controller\\ForumModerateController::ACTION_CLOSE') }) }}"><i class="fas fa-lock" title="Sluit discussie"></i></a>
-                    {% endif %}
-                    <a href="{{ path('forum_discussion_moderate', { 'id': discussion.id, 'action': constant('App\\Controller\\ForumModerateController::ACTION_MOVE') }) }}"><i class="fas fa-angle-double-right" title="Verplaats discussie"></i></a>
-                </span>
-             {% endif %}
-            {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-                <span id="favorite_box">
-                    {% if app.user and app.user.forumFavorite(discussion) %}
-                        Deze discussie staat in <a href="{{ path('forum_favorites') }}">jouw favorieten</a>
-                    {% else %}
-                        <a href="#" onclick="favoriteAdd(); return false;">Voeg discussie toe</a> aan <a href="{{ path('forum_favorites') }}">jouw favorieten</a>
-                    {% endif %}
-                </span>
-            {% endif %}
-            {% if discussion.locked %}
-                <i class="fas fa-lock"></i>
-            {% elseif posts | length > 1 %}
-                <i class="fas fa-comments"></i>
-            {% else %}
-                <i class="fas fa-comment"></i>
-            {% endif %}
-            {{ discussion.title }}
-            <br />Forum: <a href="{{ path('forum_forum', { 'id': discussion.forum.id, 'name': discussion.forum.name | url_encode }) }}">{{ discussion.forum.category.name }} - {{ discussion.forum.name }}</a>
+            {% block discussionHeader %}
+                {% if userIsModerator %}
+                    <span class="moderator-icons">
+                        {% if discussion.locked %}
+                            <a href="{{ path('forum_discussion_moderate', { 'id': discussion.id, 'action': constant('App\\Controller\\ForumModerateController::ACTION_OPEN') }) }}"><i class="fas fa-lock-open" title="Open discussie"></i></a>
+                        {% else %}
+                            <a href="{{ path('forum_discussion_moderate', { 'id': discussion.id, 'action': constant('App\\Controller\\ForumModerateController::ACTION_CLOSE') }) }}"><i class="fas fa-lock" title="Sluit discussie"></i></a>
+                        {% endif %}
+                        <a href="{{ path('forum_discussion_moderate', { 'id': discussion.id, 'action': constant('App\\Controller\\ForumModerateController::ACTION_MOVE') }) }}"><i class="fas fa-angle-double-right" title="Verplaats discussie"></i></a>
+                    </span>
+                 {% endif %}
+                {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                    <span class="favorite-box">
+                        {% if app.user and app.user.forumFavorite(discussion) %}
+                            Deze discussie staat in <a href="{{ path('forum_favorites') }}">jouw favorieten</a>
+                        {% else %}
+                            <a href="#" onclick="favoriteAdd(); return false;">Voeg discussie toe</a> aan <a href="{{ path('forum_favorites') }}">jouw favorieten</a>
+                        {% endif %}
+                    </span>
+                {% endif %}
+                {% if discussion.locked %}
+                    <i class="fas fa-lock"></i>
+                {% elseif posts | length > 1 %}
+                    <i class="fas fa-comments"></i>
+                {% else %}
+                    <i class="fas fa-comment"></i>
+                {% endif %}
+                {{ discussion.title }}
+                <br />Forum: <a href="{{ path('forum_forum', { 'id': discussion.forum.id, 'name': discussion.forum.name | url_encode }) }}">{{ discussion.forum.category.name }} - {{ discussion.forum.name }}</a>
+            {% endblock %}
         </div>
         <div class="panel-content panel-no-background">
             {% block paginator %}
@@ -112,6 +114,9 @@
 
             {{ block('paginator') }}
         </div>
+        <div class="panel-footer">
+            {{ block('discussionHeader') }}
+        </div>
     </div>
 
     {{ block('wiki') }}
@@ -161,7 +166,7 @@
             $.ajax({
                 url: '{{ path('forum_favorite_add', { 'id': discussion.id }) }}',
             });
-            $('#favorite_box').html('Deze discussie staat in <a href="{{ path('forum_favorites') }}">jouw favorieten</a>');
+            $('.favorite-box').html('Deze discussie staat in <a href="{{ path('forum_favorites') }}">jouw favorieten</a>');
         }
     </script>
 {% endblock %}
