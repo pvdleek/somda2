@@ -327,7 +327,7 @@ a.rail-news-title:hover {
 .home-news-container {
     display: grid;
     grid-column-gap: 10px;
-    grid-template-columns: 1fr 10px 2fr;
+    grid-template-columns: 2fr 10px 3fr;
 }
 .home-rail-news-headline {
     display: grid;
