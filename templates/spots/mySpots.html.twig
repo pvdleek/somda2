@@ -35,7 +35,7 @@
 
 {% block javascripts %}
     <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
-    <script src="{{ asset('js/dateFormat-2019-08-01.js') }}"></script>
+    <script src="{{ asset('js/dateFormat-2019-08-01.js') }}?version={{ 'js/dateFormat-2019-08-01.js' | fileTimestamp }}"></script>
     <script>
         /**
          * @param {int} id

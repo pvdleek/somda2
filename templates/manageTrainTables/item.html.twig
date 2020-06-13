@@ -63,7 +63,7 @@
 {% endblock %}
 
 {% block javascripts %}
-    <script src="{{ asset('js/jquery.clockpicker-0.0.7.js') }}"></script>
+    <script src="{{ asset('js/jquery.clockpicker-0.0.7.js') }}?version={{ 'js/jquery.clockpicker-0.0.7.js' | fileTimestamp }}"></script>
     <script>
         /**
          * @param {int} dayNumber
