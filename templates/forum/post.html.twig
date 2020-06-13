@@ -7,7 +7,7 @@
             {% set firstUnreadAnchorDone = true %}
         {% endif %}
         <a href="{{ path('forum_discussion_post', { 'id': post.discussion.id, 'name': (post.discussion.title | url_encode), 'postId': post.id }) }}">
-            {% if postIsUnread %}<i class="fas fa-comment-dots"></i>{% else %}<i class="fas fa-comment"></i>{% endif %}
+            {% if postIsUnread %}<i class="color-orange fas fa-comment-dots"></i>{% else %}<i class="fas fa-comment"></i>{% endif %}
         </a> {{ post.timestamp | date('d-m-Y H:i:s') }}
     </th>
     {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}

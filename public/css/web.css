@@ -80,6 +80,9 @@ span[title]:hover:after {
 /**************/
 /*** Colors ***/
 /**************/
+.color-orange {
+    color: orange;
+}
 .background-color-orange {
     background-color: orange;
 }

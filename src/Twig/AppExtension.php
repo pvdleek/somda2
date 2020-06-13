@@ -30,6 +30,16 @@ class AppExtension extends AbstractExtension
             new TwigFilter('displaySpot', [SpotHelper::class, 'getDisplaySpot']),
             new TwigFilter('displayRouteOperationDays', [RouteOperationDaysHelper::class, 'getDisplay']),
             new TwigFilter('sortByField', [SortHelper::class, 'sortByFieldFilter']),
+            new TwigFilter('fileTimestamp', [$this, 'fileTimestampFilter']),
         ];
+    }
+
+    /**
+     * @param string $filename
+     * @return string
+     */
+    public function fileTimestampFilter(string $filename): string
+    {
+        return (string)filemtime(__DIR__ . '/../../public/' . $filename);
     }
 }
