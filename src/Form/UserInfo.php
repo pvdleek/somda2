@@ -54,7 +54,7 @@ class UserInfo extends BaseForm
                 self::KEY_REQUIRED => false,
             ])
             ->add('website', TextType::class, [
-                self::KEY_LABEL => 'Jouw Skype account',
+                self::KEY_LABEL => 'Jouw website',
                 self::KEY_REQUIRED => false,
             ])
             ->add('facebookAccount', TextType::class, [
