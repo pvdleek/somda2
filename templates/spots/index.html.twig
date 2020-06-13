@@ -69,14 +69,14 @@
                             </td>
                             <td>
                                 {% if spot.route.number matches '/^\\d+$/' %}
-                                    <a href="{{ path('spots_to_train_table', { 'routeNumber': spot.route.number, 'date': spot.timestamp | date('Y-m-d') }) }}" title="Bekijk de dienstregeling van trein {{ spot.route.number }}">{{ spot.route.number }}</a>
+                                    <a href="{{ path('spots_to_train_table', { 'routeNumber': spot.route.number, 'date': spot.spotDate | date('Y-m-d') }) }}" title="Bekijk de dienstregeling van trein {{ spot.route.number }}">{{ spot.route.number }}</a>
                                 {% else %}
                                     {{ spot.route.number }}
                                 {% endif %}
                             </td>
                             <td>{{ spot.position.name }}</td>
                             <td>{{ spot.extra ? spot.extra.extra }}</td>
-                            <td>{{ spot.timestamp | displayDateTime }}</td>
+                            <td>{{ spot.spotDate | displayDateTime }}</td>
                             <td>{{ spot.user.id | displayUser(spot.user.username) | raw }}</td>
                             <td><span title="{{ spot.location.description }}">{{ spot.location.name }}</span></td>
                         </tr>
