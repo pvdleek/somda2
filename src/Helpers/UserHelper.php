@@ -110,4 +110,19 @@ class UserHelper implements RuntimeExtensionInterface
 
         return $userPreferenceValue;
     }
+
+    /**
+     * @param User $user
+     * @return string
+     * @throws Exception
+     */
+    public function getSignatureForUser(User $user): string
+    {
+        foreach ($user->getPreferences() as $preference) {
+            if ($preference->preference->key === UserPreference::KEY_FORUM_SIGNATURE) {
+                return $preference->value;
+            }
+        }
+        return '';
+    }
 }

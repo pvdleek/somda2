@@ -66,8 +66,7 @@ class ForumHelper implements RuntimeExtensionInterface
                 ' op ' . $post->editTimestamp->format('d-m-Y H:i').
                 (strlen($post->editReason) > 0 ? ', reden: ' . $post->editReason : '') . '</span></i>';
         }
-        $signature = $this->userHelper->getPreferenceByKey(UserPreference::KEY_FORUM_SIGNATURE)->value;
-        if ($post->signatureOn && strlen($signature) > 0) {
+        if ($post->signatureOn && strlen($signature = $this->userHelper->getSignatureForUser($post->author)) > 0) {
             $text .= '<br /><br /><hr style="margin-left:0; width:15%;" />' . $signature;
         }
 
