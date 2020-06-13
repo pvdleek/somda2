@@ -81,8 +81,6 @@ class KernelListener implements EventSubscriberInterface
             return;
         }
 
-        $this->saveTargetPath($this->session, 'main', $event->getRequest()->getUri());
-
         if (!is_null($this->userHelper->getUser())
             && $this->userHelper->getUser()->banExpireTimestamp >= new DateTime()
         ) {
