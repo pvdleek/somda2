@@ -119,12 +119,6 @@ class UserInfo
     public ?string $youtubeAccount;
 
     /**
-     * @var string|null
-     * @ORM\Column(name="info", type="text", length=0, nullable=true)
-     */
-    public ?string $info;
-
-    /**
      * @var UserCompany|null
      * @ORM\ManyToOne(targetEntity="App\Entity\UserCompany")
      * @ORM\JoinColumn(name="bedrijf_id", referencedColumnName="bedrijf_id")

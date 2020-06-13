@@ -45,10 +45,6 @@ class UserInfo extends BaseForm
                 self::KEY_LABEL => 'Jouw geslacht',
                 self::KEY_REQUIRED => true,
             ])
-            ->add('info', TextType::class, [
-                self::KEY_LABEL => 'Jouw handtekening in het forum',
-                self::KEY_REQUIRED => false,
-            ])
             ->add('mobilePhone', TextType::class, [
                 self::KEY_LABEL => 'Jouw mobiele nummer',
                 self::KEY_REQUIRED => false,
