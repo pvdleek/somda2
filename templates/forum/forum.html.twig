@@ -1,45 +1,49 @@
 {% extends('base.html.twig') %}
 
 {% block content %}
-    <br />
-    <a class="somda-button" href="{{ path('forum') }}">Terug naar het forum-overzicht</a>
-    {% if is_granted('IS_AUTHENTICATED_REMEMBERED') and forum.type != constant('App\\Entity\\ForumForum::TYPE_ARCHIVE') %}
-        <a class="somda-button" href="{{ path('forum_forum_new_discussion', { 'id': forum.id }) }}">{{ 'forum.newDiscussion' | trans }}</a>
-        <br /><br />
-    {% endif %}
+    <div class="panel">
+        <div class="panel-title">Forum: <a href="{{ path('forum_forum', { 'id': forum.id, 'name': forum.name | url_encode }) }}">{{ forum.category.name }} - {{ forum.name }}</a></div>
+        <div class="panel-content">
+            <a class="somda-button" href="{{ path('forum') }}">Terug naar het forum-overzicht</a>
+            {% if is_granted('IS_AUTHENTICATED_REMEMBERED') and forum.type != constant('App\\Entity\\ForumForum::TYPE_ARCHIVE') %}
+                <a class="somda-button" href="{{ path('forum_forum_new_discussion', { 'id': forum.id }) }}">{{ 'forum.newDiscussion' | trans }}</a>
+                <br /><br />
+            {% endif %}
 
-    <table>
-        <tr>
-            {% if userIsModerator %}<th><a href="#" onclick="moderateCombine(); return false;"><i class="fas fa-compress-alt" title="Combineer discussies"></i></a></th>{% endif %}
-            <th colspan="2">{{ 'forum.discussion.subject' | trans }}</th>
-            <th>{{ 'forum.number.posts' | trans }}</th>
-            <th>{{ 'forum.author' | trans }}</th>
-            <th>{{ 'forum.number.viewed' | trans }}</th>
-            <th>{{ 'forum.lastPost' | trans }}</th>
-        </tr>
-        {% for discussion in discussions %}
-            <tr>
-                {% if userIsModerator %}<td><input name="sel{{ discussion.id }}" type="checkbox" /></td>{% endif %}
-                <td>
-                    {% if discussion['locked'] %}
-                        <i class="fas fa-lock"></i>
-                    {% elseif discussion['posts'] > 1 %}
-                        <i class="fas fa-comments"></i>
-                    {% else %}
-                        <i class="fas fa-comment"></i>
-                    {% endif %}
-                </td>
-                <td>
-                    <a href="{{ path('forum_discussion', { 'id': discussion['id'], 'name': (discussion['title'] | url_encode) }) }}">{{ discussion['title'] }}</a>
-                    {% if not discussion['discussion_read'] %} <i class="fas fa-comment-dots"></i>{% endif %}
-                </td>
-                <td>{{ discussion['posts'] }}</td>
-                <td>{{ discussion['author_id'] | displayUser(discussion['author_username']) | raw }}</td>
-                <td>{{ discussion['viewed'] }}</td>
-                <td>{{ discussion['max_post_timestamp'] | displayDateTime(true) }}</td>
-            </tr>
-        {% endfor %}
-    </table>
+            <table>
+                <tr>
+                    {% if userIsModerator %}<th><a href="#" onclick="moderateCombine(); return false;"><i class="fas fa-compress-alt" title="Combineer discussies"></i></a></th>{% endif %}
+                    <th colspan="2">{{ 'forum.discussion.subject' | trans }}</th>
+                    <th>{{ 'forum.number.posts' | trans }}</th>
+                    <th>{{ 'forum.author' | trans }}</th>
+                    <th>{{ 'forum.number.viewed' | trans }}</th>
+                    <th>{{ 'forum.lastPost' | trans }}</th>
+                </tr>
+                {% for discussion in discussions %}
+                    <tr>
+                        {% if userIsModerator %}<td><input name="sel{{ discussion.id }}" type="checkbox" /></td>{% endif %}
+                        <td>
+                            {% if discussion['locked'] %}
+                                <i class="fas fa-lock"></i>
+                            {% elseif discussion['posts'] > 1 %}
+                                <i class="fas fa-comments"></i>
+                            {% else %}
+                                <i class="fas fa-comment"></i>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a href="{{ path('forum_discussion', { 'id': discussion['id'], 'name': (discussion['title'] | url_encode) }) }}">{{ discussion['title'] }}</a>
+                            {% if not discussion['discussion_read'] %} <i class="fas fa-comment-dots"></i>{% endif %}
+                        </td>
+                        <td>{{ discussion['posts'] }}</td>
+                        <td>{{ discussion['author_id'] | displayUser(discussion['author_username']) | raw }}</td>
+                        <td>{{ discussion['viewed'] }}</td>
+                        <td>{{ discussion['max_post_timestamp'] | displayDateTime(true) }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
 {% endblock %}
 
 {% block javascripts %}
