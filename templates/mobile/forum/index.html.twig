@@ -1,6 +1,9 @@
 {% extends('mobile/base.html.twig') %}
 
 {% block content %}
+    <a class="somda-button" href="{{ path('forum_unread') }}">Alle ongelezen berichten</a>
+    <br /><br />
+
     <table>
         {% for category in categories %}
             {% if category['forums'] | length > 0 %}

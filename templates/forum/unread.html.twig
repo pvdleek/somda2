@@ -1,0 +1,41 @@
+{% extends('base.html.twig') %}
+
+{% block content %}
+    <div class="panel">
+        <div class="panel-title">Ongelezen forum-berichten</div>
+        <div class="panel-content">
+            <a class="somda-button" href="{{ path('forum') }}">Naar het forum-overzicht</a>
+            <a class="somda-button" href="{{ path('forum_unread_mark_read') }}">Markeer alle forumberichten als gelezen</a>
+
+            <table>
+                <tr>
+                    <th colspan="2">{{ 'forum.discussion.subject' | trans }}</th>
+                    <th>{{ 'forum.number.posts' | trans }}</th>
+                    <th>{{ 'forum.author' | trans }}</th>
+                    <th>{{ 'forum.number.viewed' | trans }}</th>
+                    <th>{{ 'forum.lastPost' | trans }}</th>
+                </tr>
+                {% for discussion in discussions %}
+                    <tr>
+                        <td>
+                            {% if discussion['locked'] %}
+                                <i class="fas fa-lock"></i>
+                            {% elseif discussion['posts'] > 1 %}
+                                <i class="fas fa-comments"></i>
+                            {% else %}
+                                <i class="fas fa-comment"></i>
+                            {% endif %}
+                        </td>
+                        <td><a href="{{ path('forum_discussion', { 'id': discussion['id'], 'name': (discussion['title'] | url_encode) }) }}">{{ discussion['title'] }}</a> <i class="fas fa-comment-dots"></i></td>
+                        <td>{{ discussion['posts'] }}</td>
+                        <td>{{ discussion['author_id'] | displayUser(discussion['author_username']) | raw }}</td>
+                        <td>{{ discussion['viewed'] }}</td>
+                        <td>{{ discussion['max_post_timestamp'] | displayDateTime(true) }}</td>
+                    </tr>
+                {% else %}
+                    <tr><td colspan="6">Er zijn ongelezen forum-berichten</td></tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+{% endblock %}

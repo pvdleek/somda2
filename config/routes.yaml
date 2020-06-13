@@ -322,6 +322,15 @@ forum_noteworthy_stuff:
   methods: [GET]
   controller: App\Controller\ForumSearchController::noteworthyStuffAction
 
+forum_unread:
+  path: /ongelezen-berichten/
+  methods: [GET]
+  controller: App\Controller\ForumUnreadController::indexAction
+forum_unread_mark_read:
+  path: /ongelezen-berichten/gelezen/
+  methods: [GET]
+  controller: App\Controller\ForumUnreadController::markReadAction
+
 #########
 # Somda #
 #########
