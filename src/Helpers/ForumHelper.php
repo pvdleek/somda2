@@ -3,6 +3,7 @@
 namespace App\Helpers;
 
 use App\Entity\ForumPost;
+use App\Entity\UserPreference;
 use Exception;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Extension\RuntimeExtensionInterface;
@@ -18,17 +19,27 @@ class ForumHelper implements RuntimeExtensionInterface
     private TranslatorInterface $translator;
 
     /**
+     * @var UserHelper
+     */
+    private UserHelper $userHelper;
+
+    /**
      * @var StaticDataHelper
      */
     private StaticDataHelper $staticDataHelper;
 
     /**
      * @param TranslatorInterface $translator
+     * @param UserHelper $userHelper
      * @param StaticDataHelper $staticDataHelper
      */
-    public function __construct(TranslatorInterface $translator, StaticDataHelper $staticDataHelper)
-    {
+    public function __construct(
+        TranslatorInterface $translator,
+        UserHelper $userHelper,
+        StaticDataHelper $staticDataHelper
+    ) {
         $this->translator = $translator;
+        $this->userHelper = $userHelper;
         $this->staticDataHelper = $staticDataHelper;
     }
 
@@ -55,8 +66,9 @@ class ForumHelper implements RuntimeExtensionInterface
                 ' op ' . $post->editTimestamp->format('d-m-Y H:i').
                 (strlen($post->editReason) > 0 ? ', reden: ' . $post->editReason : '') . '</span></i>';
         }
-        if ($post->signatureOn && strlen($post->author->info->info) > 0) {
-            $text .= '<br /><br /><hr style="margin-left:0; width:15%;" />' . $post->author->info->info;
+        $signature = $this->userHelper->getPreferenceByKey(UserPreference::KEY_FORUM_SIGNATURE)->value;
+        if ($post->signatureOn && strlen($signature) > 0) {
+            $text .= '<br /><br /><hr style="margin-left:0; width:15%;" />' . $signature;
         }
 
         return $text;
