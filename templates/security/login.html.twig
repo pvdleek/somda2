@@ -6,6 +6,9 @@
         {% if error %}
             <p class="alert">{{ error.messageKey | trans(error.messageData, 'security') }}</p>
         {% endif %}
+
+        <p class="warn">LET OP: Op vrijdag 12 juni heeft Somda een update gehad. Je oude wachtwoord werkt niet meer.<br />Heb je na 12 juni nog niet ingelogd? <a href="{{ path('lost_password') }}">Vraag dan eerst een nieuw wachtwoord aan</a></p>
+
         <form method="post">
             <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}" />
             <table>
