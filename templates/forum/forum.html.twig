@@ -5,10 +5,13 @@
         <div class="panel-title">Forum: <a href="{{ path('forum_forum', { 'id': forum.id, 'name': forum.name | url_encode }) }}">{{ forum.category.name }} - {{ forum.name }}</a></div>
         <div class="panel-content">
             <a class="somda-button" href="{{ path('forum') }}">Terug naar het forum-overzicht</a>
-            {% if is_granted('IS_AUTHENTICATED_REMEMBERED') and forum.type != constant('App\\Entity\\ForumForum::TYPE_ARCHIVE') %}
-                <a class="somda-button" href="{{ path('forum_forum_new_discussion', { 'id': forum.id }) }}">{{ 'forum.newDiscussion' | trans }}</a>
-                <br /><br />
+            {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                <a class="somda-button" href="{{ path('forum_unread') }}">Ongelezen berichten</a>
+                {% if forum.type != constant('App\\Entity\\ForumForum::TYPE_ARCHIVE') %}
+                    <a class="somda-button" href="{{ path('forum_forum_new_discussion', { 'id': forum.id }) }}">{{ 'forum.newDiscussion' | trans }}</a>
+                {% endif %}
             {% endif %}
+            <br /><br />
 
             <table>
                 <tr>

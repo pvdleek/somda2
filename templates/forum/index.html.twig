@@ -3,6 +3,9 @@
 {% block content %}
     <br />
     <a class="somda-button" href="{{ path('forum_search') }}">{{ 'forum.search' | trans }}</a>
+    {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+        <a class="somda-button" href="{{ path('forum_unread') }}">Ongelezen berichten</a>
+    {% endif %}
     <br />
     <br />
 
