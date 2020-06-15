@@ -64,18 +64,29 @@
     text-align: center;
 }
 .menu-item a, .menu-item span {
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    display: block;
     color: #FFF;
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.sub-menu {
+    display: none;
+    left: 0;
+    min-width: 200px;
+    position: absolute;
+    top: 100%;
+    z-index: 1;
+}
+.menu-item:hover .sub-menu {
+    display: block;
 }
 .sub-menu .menu-item {
-    padding: 0.25rem 0;
+    animation: enter 0s ease forwards;
     background: #246da5;
     opacity: 0;
+    padding: 0.25rem 0;
     transform-origin: bottom;
-    animation: enter 0s ease forwards;
 }
 .sub-menu .menu-item:hover {
     background: #2b84c8;
@@ -83,6 +94,7 @@
 .sub-menu .menu-item a {
     padding: 0 0.25rem;
 }
+
 @media screen and (max-width: 600px) {
     .sub-menu .menu-item {
         background: #C06C84;
@@ -132,17 +144,6 @@
     }
 }
 
-.sub-menu {
-    display: none;
-    left: 0;
-    min-width: 200px;
-    position: absolute;
-    top: 100%;
-    z-index: 1;
-}
-.menu-item:hover > .sub-menu {
-    display: block;
-}
 @media screen and (max-width: 600px) {
     .sub-menu {
         left: -2rem;
