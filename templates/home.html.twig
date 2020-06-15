@@ -76,7 +76,8 @@
             $(document).ready(function() {
                 $('.home-container').sortable({
                     cursor: 'move',
-                }).disableSelection().on('sortupdate', updateLayout());
+                    handle: '.panel-title',
+                }).on('sortupdate', updateLayout());
             });
 
             function togglePanel(panelId)
