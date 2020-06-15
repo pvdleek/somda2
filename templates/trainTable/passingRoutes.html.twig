@@ -9,7 +9,7 @@
                 <td>
                     <select id="trainTableIndex" name="trainTableIndex">
                         {% for trainTableIndex in trainTableIndices %}
-                            <option {{ trainTableIndexNumber == trainTableIndex.id ? "selected=\"selected\"" : '' }} value="{{ trainTableIndex.id }}">{{ trainTableIndex.name }}</option>
+                            <option {{ trainTableIndexNumber == trainTableIndex.id ? 'selected="selected"' : '' }} value="{{ trainTableIndex.id }}">{{ trainTableIndex.name }}</option>
                         {% endfor %}
                     </select>
                 </td>

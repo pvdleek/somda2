@@ -1,0 +1,74 @@
+{% extends('base.html.twig') %}
+
+{% block content %}
+    <div class="panel">
+        <div class="panel-title">Overzicht treinnummers</div>
+        <div class="panel-content">
+            <label for="trainTableYear">Selecteer het dienstregelings-jaar</label>
+            <select id="trainTableYear" name="trainTableYear">
+                {% for trainTableIndex in trainTableIndices %}
+                    <option {{ trainTableIndexNumber == trainTableIndex.id ? 'selected="selected"' : '' }} value="{{ trainTableIndex.id }}">{{ trainTableIndex.name }}</option>
+                {% endfor %}
+            </select>
+            <a class="somda-button" href="#" onclick="viewTrainTableYear(); return false;">Toon treinseries</a>
+
+            {% if routeLists | length %}
+                <br /><br />
+                <label for="routeList">Selecteer de serie</label>
+                <select id="routeList" name="routeList">
+                    {% for routeList in routeLists %}
+                        <option {% if routeList == selectedRouteList %}selected="selected" {% endif %}value="{{ routeList.id }}">
+                            {{ routeList.firstNumber }}-{{ routeList.lastNumber }} - {{ routeList.characteristic.name }} - {{ routeList.transporter.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+                <a class="somda-button" href="#" onclick="viewTrainTableYearRouteList(); return false;">Toon treinen</a>
+
+                {% if routes | length %}
+                    <br /><br />
+                    <table>
+                        <tr>
+                            <th>Treinnummer</th>
+                            {% for dayNumber in 1..7 %}
+                                <th>{{ ('general.date.days.' ~ (dayNumber - 1)) | trans }}</th>
+                            {% endfor %}
+                        </tr>
+                        {% for route in routes %}
+                            <tr>
+                                <td><a href="{{ path('train_table_search', { 'trainTableYearId': trainTableIndexNumber, 'routeNumber': route.number }) }}">{{ route.number }}</a></td>
+                                {% for dayNumber in 1..7 %}
+                                    <td>
+                                        {% if route.trainTableFirstLastByDay(dayNumber) %}
+                                            <span title="{{ route.trainTableFirstLastByDay(dayNumber).firstLocation.description }}">{{ route.trainTableFirstLastByDay(dayNumber).firstLocation.name }}</span>
+                                            - <span title="{{ route.trainTableFirstLastByDay(dayNumber).lastLocation.description }}">{{ route.trainTableFirstLastByDay(dayNumber).lastLocation.name }}</span>
+                                        {% else %}
+                                            &nbsp;
+                                        {% endif %}
+                                    </td>
+                                {% endfor %}
+                            </tr>
+                        {% endfor %}
+                    </table>
+                {% else %}
+                    <p class="info">Geen dienstregelingen gevonden</p>
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        function viewTrainTableYear() {
+            let location = '{{ path('route_overview_year', { 'trainTableYearId': 9999 }) }}';
+            location = location.replace('9999', $('#trainTableYear').val());
+            document.location = location;
+        }
+        function viewTrainTableYearRouteList() {
+            let location = '{{ path('route_overview_year_route_list', { 'trainTableYearId': 1234, 'routeListId': 5678 }) }}';
+            location = location.replace('1234', $('#trainTableYear').val());
+            location = location.replace('5678', $('#routeList').val());
+            document.location = location;
+        }
+    </script>
+{% endblock %}

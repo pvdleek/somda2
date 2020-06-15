@@ -113,6 +113,20 @@ passing_routes_export:
   methods: [GET]
   requirements: { trainTableYearId: \d+, dayNumber: \d+ }
   controller: App\Controller\TrainTableController::passingRoutesExportAction
+route_overview:
+  path: /overzicht-treinnummers/
+  methods: [GET]
+  controller: App\Controller\TrainTableController::routeOverviewAction
+route_overview_year:
+  path: /overzicht-treinnummers/{trainTableYearId}/
+  methods: [GET]
+  requirements: { trainTableYearId: \d+ }
+  controller: App\Controller\TrainTableController::routeOverviewAction
+route_overview_year_route_list:
+  path: /overzicht-treinnummers/{trainTableYearId}/{routeListId}/
+  methods: [GET]
+  requirements: { trainTableYearId: \d+, routeListId: \d+ }
+  controller: App\Controller\TrainTableController::routeOverviewAction
 special_routes:
   path: /drgl/
   methods: [GET]
