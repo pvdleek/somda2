@@ -13,6 +13,7 @@ use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -103,6 +104,22 @@ class ManageNewsController
                 ->getRepository(RailNews::class)
                 ->findBy([], ['approved' => 'ASC', RailNewsForm::FIELD_TIMESTAMP => 'DESC'], 100),
         ]);
+    }
+
+    /**
+     * @IsGranted("ROLE_ADMIN_RAIL_NEWS")
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function railNewsDisapproveAction(Request $request): JsonResponse
+    {
+        $ids = array_filter(explode(',', array_keys($request->request->all())[0]));
+        foreach ($ids as $id) {
+            $railNews = $this->doctrine->getRepository(RailNews::class)->find($id);
+            $railNews->approved = true;
+        }
+
+        return new JsonResponse();
     }
 
     /**

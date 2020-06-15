@@ -469,6 +469,10 @@ manage_rail_news:
   path: /beheer-spoor-nieuws/
   methods: [GET]
   controller: App\Controller\ManageNewsController::railNewsAction
+manage_rail_news_disapprove:
+  path: /beheer-spoor-nieuws/bulk-afkeuren/
+  methods: [POST]
+  controller: App\Controller\ManageNewsController::railNewsDisapproveAction
 manage_rail_news_edit:
   path: /beheer-spoor-nieuws-item/{id}/
   methods: [GET, POST]

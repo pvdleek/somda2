@@ -6,6 +6,7 @@
         <div class="panel-content">
             <table>
                 <tr>
+                    <th><a href="#" onclick="disapprove(); return false;">afkeuren</a></th>
                     <th>Datum</th>
                     <th>Bron</th>
                     <th>Titel</th>
@@ -14,6 +15,7 @@
                 </tr>
                 {% for item in railNews %}
                     <tr>
+                        <td class="news-checkbox"><input id="item_{{ item.id }}" type="checkbox" /></td>
                         <td>{{ item.timestamp | displayDateTime(true) }}</td>
                         <td><img alt="{{ item.source.name }}" class="rail-news-logo-overview" src="{{ asset('images/news-logos/' ~ item.source.logo) }}" /></td>
                         <td>{{ item.title }}</td>
@@ -24,4 +26,35 @@
             </table>
         </div>
     </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        $('.news-checkbox').on('click', function (event) {
+            let checkbox = $(this).find('input:checkbox');
+            if (!$(event.target).is(':checkbox')) {
+                checkbox.prop('checked', !checkbox.is(':checked'));
+            }
+        });
+
+        /**
+         *
+         */
+        function disapprove()
+        {
+            let idList = '';
+            $('.news-checkbox input:checkbox:checked').each(function () {
+                idList += $(this).attr('id').substring(5) + ',';
+            });
+
+            $.ajax({
+                type: 'POST',
+                url: '{{ path('manage_rail_news_disapprove') }}',
+                data: idList,
+                success: function () {
+                    location.reload();
+                },
+            });
+        }
+    </script>
 {% endblock %}
