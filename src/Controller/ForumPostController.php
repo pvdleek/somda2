@@ -77,10 +77,11 @@ class ForumPostController
      * @IsGranted("ROLE_USER")
      * @param Request $request
      * @param int $id
+     * @param bool $quote
      * @return Response|RedirectResponse
      * @throws Exception
      */
-    public function replyAction(Request $request, int $id)
+    public function replyAction(Request $request, int $id, bool $quote = false)
     {
         /**
          * @var ForumPost $quotedPost
@@ -99,7 +100,7 @@ class ForumPostController
 
         $form = $this->formHelper
             ->getFactory()
-            ->create(ForumPostForm::class, null, [ForumPostForm::OPTION_QUOTED_POST => $quotedPost]);
+            ->create(ForumPostForm::class, null, [ForumPostForm::OPTION_QUOTED_POST => $quote ? $quotedPost : null]);
         if ($userIsModerator) {
             $form->add('postAsModerator', CheckboxType::class, [
                 BaseForm::KEY_LABEL => 'Plaatsen als moderator',

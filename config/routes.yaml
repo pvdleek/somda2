@@ -274,6 +274,12 @@ forum_discussion_post_reply:
   methods: [GET, POST]
   requirements: { id: \d+ }
   controller: App\Controller\ForumPostController::replyAction
+forum_discussion_post_quote:
+  path: /forum/p{id}/quoten/
+  methods: [GET, POST]
+  requirements: { id: \d+ }
+  defaults: { 'quote': true }
+  controller: App\Controller\ForumPostController::replyAction
 forum_discussion_post_edit:
   path: /forum/p{id}/bewerken/
   methods: [GET, POST]
