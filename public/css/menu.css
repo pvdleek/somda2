@@ -41,10 +41,21 @@
     left: calc(50% - 25px);
     background: #fff;
     will-change: transform;
+    -webkit-transform: scale(0);
+    -moz-transform: scale(0);
+    -ms-transform: scale(0);
+    -o-transform: scale(0);
     transform: scale(0);
+    -webkit-transition: transform 0.2s ease;
+    -moz-transition: transform 0.2s ease;
+    -o-transition: transform 0.2s ease;
     transition: transform 0.2s ease;
 }
 .menu > ol > .menu-item:hover:after {
+    -webkit-transform: scale(1);
+    -moz-transform: scale(1);
+    -ms-transform: scale(1);
+    -o-transform: scale(1);
     transform: scale(1);
 }
 .menu-item {
@@ -136,6 +147,10 @@
     .sub-menu {
         left: -2rem;
         top: 50%;
+        -webkit-transform: translateY(-50%);
+        -moz-transform: translateY(-50%);
+        -ms-transform: translateY(-50%);
+        -o-transform: translateY(-50%);
         transform: translateY(-50%);
         width: 100vw;
     }
@@ -144,10 +159,18 @@
 @keyframes enter {
     from {
         opacity: 0;
+        -webkit-transform: scaleY(0.98) translateY(10px);
+        -moz-transform: scaleY(0.98) translateY(10px);
+        -ms-transform: scaleY(0.98) translateY(10px);
+        -o-transform: scaleY(0.98) translateY(10px);
         transform: scaleY(0.98) translateY(10px);
     }
     to {
         opacity: 1;
+        -webkit-transform: none;
+        -moz-transform: none;
+        -ms-transform: none;
+        -o-transform: none;
         transform: none;
     }
 }
