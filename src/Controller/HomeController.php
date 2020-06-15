@@ -181,7 +181,7 @@ class HomeController
         if (in_array(self::KEY_SPOTS, $layout) || in_array(self::KEY_SPOTS_MINIMIZED, $layout)) {
             $limit = $this->userHelper->getPreferenceByKey(UserPreference::KEY_HOME_MAX_SPOTS)->value;
             $layoutData[self::KEY_SPOTS] =
-                $this->doctrine->getRepository(Spot::class)->findBy([], ['timestamp' => 'DESC'], $limit);
+                $this->doctrine->getRepository(Spot::class)->findBy([], ['spotDate' => 'DESC'], $limit);
         }
     }
 
