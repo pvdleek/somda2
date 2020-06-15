@@ -76,8 +76,6 @@ class Spot extends EntityRepository
             ->from(SpotEntity::class, 's')
             ->join('s.train', 't')
             ->join('s.route', 'r')
-            ->andWhere('s.timestamp > :minDate')
-            ->setParameter('minDate', new DateTime('-' . $maxYears . ' years'))
             ->addOrderBy('s.timestamp', 'DESC');
 
         if (!is_null($location)) {
@@ -89,7 +87,11 @@ class Spot extends EntityRepository
         if ($dayNumber > 0) {
             $queryBuilder->andWhere('DAYOFWEEK(s.spotDate) = :dayNumber')->setParameter('dayNumber', $dayNumber);
         }
-        if (!is_null($spotDate)) {
+        if (is_null($spotDate)) {
+            $queryBuilder
+                ->andWhere('s.timestamp > :minDate')
+                ->setParameter('minDate', new DateTime('-' . $maxYears . ' years'));
+        } else {
             $queryBuilder
                 ->andWhere('DATE(s.spotDate) = :spotDate')
                 ->setParameter('spotDate', $spotDate->format('Y-m-d'));
@@ -97,9 +99,6 @@ class Spot extends EntityRepository
         $this->filterOnTrainNumber($queryBuilder, true, $trainNumber);
         $this->filterOnRouteNumber($queryBuilder, true, $routeNumber);
 
-//        echo $queryBuilder->getQuery()->getSQL();
-//        var_dump($queryBuilder->getParameter('spotDate'));
-//        die();
         return $queryBuilder->getQuery()->getResult();
     }
 
