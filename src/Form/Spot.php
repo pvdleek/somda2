@@ -5,8 +5,6 @@ namespace App\Form;
 use App\Entity\Location;
 use App\Entity\Position;
 use App\Entity\Spot as SpotEntity;
-use DateTime;
-use Exception;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -18,14 +16,12 @@ class Spot extends BaseForm
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
-     * @throws Exception
      */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add('spotDate', DateType::class, [
                 self::KEY_ATTRIBUTES => [self::KEY_CLASS=> 'datepicker'],
-                self::KEY_DATA => new DateTime(),
                 self::KEY_FORMAT=> 'dd-MM-yyyy',
                 self::KEY_HTML5 => false,
                 self::KEY_LABEL => 'Datum van de spot(s)',
