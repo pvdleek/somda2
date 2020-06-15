@@ -11,11 +11,6 @@ a:link {
     color: #0033CC;
 }
 
-p {
-    margin: 2px;
-    text-align: center;
-}
-
 #container {
     width: 320px;
     margin-left: auto;
@@ -144,8 +139,15 @@ img#logo {
 /*** Forum ***/
 /*************/
 table.forum-post {
+    text-align: left;
     width: 100%;
 }
 .forum-spacer-row {
     height: 0.5rem;
+}
+blockquote {
+    margin-inline-start: 1rem;
+    margin-block-start: 1rem;
+    margin-block-end: 0;
+    margin-inline-end: 0;
 }
