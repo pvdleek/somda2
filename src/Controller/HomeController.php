@@ -133,7 +133,7 @@ class HomeController
         if (in_array(self::KEY_FORUM, $layout) || in_array('forum-min', $layout)) {
             $layoutData[self::KEY_FORUM] = $this->doctrine
                 ->getRepository(ForumDiscussion::class)
-                ->findForDashboard($limit, $this->userHelper->getUser());
+                ->findForDashboard($limit, [$_ENV['WRONG_SPOTS_FORUM_ID']], $this->userHelper->getUser());
         }
         if (in_array('foutespots', $layout) || in_array('foutespots-min', $layout)) {
             /**
