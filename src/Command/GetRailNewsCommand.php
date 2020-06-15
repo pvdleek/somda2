@@ -21,23 +21,25 @@ class GetRailNewsCommand extends Command implements ScheduledJobInterface
     private const POSITIVE_WORD = 'positiveWord';
     private const NEGATIVE_WORD = 'negativeWord';
 
-    private static $wordMatches = [
-        [self::TITLE_ONLY => false, self::POSITIVE_WORD => 'spoor', self::NEGATIVE_WORD => 'opgespoord'],
-        [self::TITLE_ONLY => false, self::POSITIVE_WORD => 'rail', self::NEGATIVE_WORD => 'vangrail'],
-        [self::TITLE_ONLY => false, self::POSITIVE_WORD => 'station', self::NEGATIVE_WORD => 'tankstation'],
-        [self::TITLE_ONLY => false, self::POSITIVE_WORD => 'trein'],
-        [self::TITLE_ONLY => false, self::POSITIVE_WORD => 'machinist'],
-        [self::TITLE_ONLY => false, self::POSITIVE_WORD => 'conducteur'],
-        [self::TITLE_ONLY => false, self::POSITIVE_WORD => 'chipkaart'],
-        [self::TITLE_ONLY => false, self::POSITIVE_WORD => 'hispeed'],
-        [self::TITLE_ONLY => false, self::POSITIVE_WORD => 'HSL'],
-        [self::TITLE_ONLY => false, self::POSITIVE_WORD => 'fyra'],
-        [self::TITLE_ONLY => false, self::POSITIVE_WORD => 'syntus'],
-        [self::TITLE_ONLY => false, self::POSITIVE_WORD => 'noordned'],
-        [self::TITLE_ONLY => false, self::POSITIVE_WORD => 'veolia'],
-        [self::TITLE_ONLY => false, self::POSITIVE_WORD => 'acts'],
-        [self::TITLE_ONLY => false, self::POSITIVE_WORD => 'railion'],
-        [self::TITLE_ONLY => true, self::POSITIVE_WORD => 'NS', self::NEGATIVE_WORD => 'SNS'],
+    private static array $wordMatches = [
+        [self::TITLE_ONLY => false, self::POSITIVE_WORD => ' spoor ', self::NEGATIVE_WORD => 'opgespoord'],
+        [self::TITLE_ONLY => false, self::POSITIVE_WORD => ' rail ', self::NEGATIVE_WORD => 'vangrail'],
+        [self::TITLE_ONLY => false, self::POSITIVE_WORD => ' station ', self::NEGATIVE_WORD => 'tankstation'],
+        [self::TITLE_ONLY => false, self::POSITIVE_WORD => ' rails '],
+        [self::TITLE_ONLY => false, self::POSITIVE_WORD => ' trein '],
+        [self::TITLE_ONLY => false, self::POSITIVE_WORD => ' machinist '],
+        [self::TITLE_ONLY => false, self::POSITIVE_WORD => ' conducteur '],
+        [self::TITLE_ONLY => false, self::POSITIVE_WORD => ' chipkaart '],
+        [self::TITLE_ONLY => false, self::POSITIVE_WORD => ' ov-chipkaart '],
+        [self::TITLE_ONLY => false, self::POSITIVE_WORD => ' hispeed '],
+        [self::TITLE_ONLY => false, self::POSITIVE_WORD => ' HSL '],
+        [self::TITLE_ONLY => false, self::POSITIVE_WORD => ' fyra '],
+        [self::TITLE_ONLY => false, self::POSITIVE_WORD => ' syntus '],
+        [self::TITLE_ONLY => false, self::POSITIVE_WORD => ' noordned '],
+        [self::TITLE_ONLY => false, self::POSITIVE_WORD => ' veolia '],
+        [self::TITLE_ONLY => false, self::POSITIVE_WORD => ' acts '],
+        [self::TITLE_ONLY => false, self::POSITIVE_WORD => ' railion '],
+        [self::TITLE_ONLY => true, self::POSITIVE_WORD => ' NS ', self::NEGATIVE_WORD => 'SNS'],
     ];
 
     /**
