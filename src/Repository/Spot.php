@@ -56,6 +56,7 @@ class Spot extends EntityRepository
      * @param int $maxYears
      * @param string|null $location
      * @param int|null $dayNumber
+     * @param DateTime|null $spotDate
      * @param string|null $trainNumber
      * @param string|null $routeNumber
      * @return SpotEntity[]
@@ -65,6 +66,7 @@ class Spot extends EntityRepository
         ?int $maxYears,
         ?string $location = null,
         ?int $dayNumber = 0,
+        ?DateTime $spotDate = null,
         ?string $trainNumber = null,
         ?string $routeNumber = null
     ): array {
@@ -85,11 +87,19 @@ class Spot extends EntityRepository
                 ->setParameter(self::FIELD_LOCATION, $location);
         }
         if ($dayNumber > 0) {
-            $queryBuilder->andWhere('DAYOFWEEK(s.timestamp) = :dayNumber')->setParameter('dayNumber', $dayNumber);
+            $queryBuilder->andWhere('DAYOFWEEK(s.spotDate) = :dayNumber')->setParameter('dayNumber', $dayNumber);
+        }
+        if (!is_null($spotDate)) {
+            $queryBuilder
+                ->andWhere('DATE(s.spotDate) = :spotDate')
+                ->setParameter('spotDate', $spotDate->format('Y-m-d'));
         }
         $this->filterOnTrainNumber($queryBuilder, true, $trainNumber);
         $this->filterOnRouteNumber($queryBuilder, true, $routeNumber);
 
+//        echo $queryBuilder->getQuery()->getSQL();
+//        var_dump($queryBuilder->getParameter('spotDate'));
+//        die();
         return $queryBuilder->getQuery()->getResult();
     }
 

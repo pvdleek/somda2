@@ -17,7 +17,10 @@
         </tr>
         <tr>
             <th><label for="location">Filter op locatie</label></th>
-            <td><input id="location" maxlength="8" name="location" size="10" type="text" value="{{ location }}" /></td>
+            <td>
+                <input id="location" maxlength="8" name="location" size="10" type="text" value="{{ location }}" /> <a href="#" onclick="$('#location').val(''); return false;"><i class="fas fa-trash-alt"></i></a>
+                <span id="location_description"></span>
+            </td>
         </tr>
         <tr>
             <th><label for="day_number">Filter op weekdag</label></th>
@@ -28,15 +31,20 @@
                         <option {{ dayNumber == dayNumberSelect ? 'selected="selected" ' }}value="{{ dayNumberSelect }}">{{ ('general.date.days.' ~ (dayNumberSelect - 1)) | trans }}</option>
                     {% endfor %}
                 </select>
+                <a href="#" onclick="$('#day_number').val('0'); return false;"><i class="fas fa-trash-alt"></i></a>
             </td>
         </tr>
         <tr>
+            <th><label for="spot_date">Filter op datum</label></th>
+            <td><input class="datepicker" id="spot_date" name="spot_date" size="10" type="text" value="{{ spotDate }}"/> <a href="#" onclick="$('#spot_date').val(''); return false;"><i class="fas fa-trash-alt"></i></a></td>
+        </tr>
+        <tr>
             <th><label for="train_number">Filter op materieelnummer</label></th>
-            <td><input id="train_number" name="train_number" size="10" type="text" value="{{ trainNumber }}"/></td>
+            <td><input id="train_number" name="train_number" size="10" type="text" value="{{ trainNumber }}"/> <a href="#" onclick="$('#train_number').val(''); return false;"><i class="fas fa-trash-alt"></i></a></td>
         </tr>
         <tr>
             <th><label for="route_number">Filter op treinnummer</label></th>
-            <td><input id="route_number" name="route_number" size="10" type="text" value="{{ routeNumber }}" /></td>
+            <td><input id="route_number" name="route_number" size="10" type="text" value="{{ routeNumber }}" /> <a href="#" onclick="$('#route_number').val(''); return false;"><i class="fas fa-trash-alt"></i></a></td>
         </tr>
         <tr>
             <th>&nbsp;</th>
@@ -91,10 +99,12 @@
 
 {% block javascripts %}
     <script>
+        {{ include('partials/locationAutoComplete.js.twig') }}
+
         function searchSpots() {
             let location = '{{ path('spots_search', { 'maxYears': 1, 'searchParameters': 'myParameters' }) }}';
             location = location.replace('/1/', '/' + $('#max_years').val() + '/');
-            location = location.replace('myParameters', $('#location').val() + '/' + $('#day_number').val() + '/' + $('#train_number').val() + '/' + $('#route_number').val());
+            location = location.replace('myParameters', $('#location').val() + '/' + $('#day_number').val() + '/' + $('#spot_date').val() + '/' + $('#train_number').val() + '/' + $('#route_number').val());
             document.location = location;
         }
     </script>

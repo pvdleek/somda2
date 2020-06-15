@@ -15,6 +15,7 @@ doctrine:
         alias: App
     dql:
       datetime_functions:
+        date: DoctrineExtensions\Query\Mysql\Date
         dayofweek: DoctrineExtensions\Query\Mysql\DayOfWeek
         month: DoctrineExtensions\Query\Mysql\Month
         year: DoctrineExtensions\Query\Mysql\Year

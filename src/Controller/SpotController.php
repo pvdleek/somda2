@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Spot;
 use App\Entity\TrainTableYear;
+use App\Helpers\FlashHelper;
 use App\Helpers\RedirectHelper;
 use App\Helpers\TemplateHelper;
 use DateTime;
@@ -31,18 +32,26 @@ class SpotController
     private RedirectHelper $redirectHelper;
 
     /**
+     * @var FlashHelper
+     */
+    private FlashHelper $flashHelper;
+
+    /**
      * @param ManagerRegistry $doctrine
      * @param TemplateHelper $templateHelper
      * @param RedirectHelper $redirectHelper
+     * @param FlashHelper $flashHelper
      */
     public function __construct(
         ManagerRegistry $doctrine,
         TemplateHelper $templateHelper,
-        RedirectHelper $redirectHelper
+        RedirectHelper $redirectHelper,
+        FlashHelper $flashHelper
     ) {
         $this->doctrine = $doctrine;
         $this->templateHelper = $templateHelper;
         $this->redirectHelper = $redirectHelper;
+        $this->flashHelper = $flashHelper;
     }
 
     /**
@@ -72,18 +81,33 @@ class SpotController
     {
         $location = $trainNumber = $routeNumber = null;
         $dayNumber = 0;
+        $spotDate = null;
         $spots = null;
 
         if (!is_null($searchParameters)) {
             $parameters = explode('/', $searchParameters);
             $location = strlen($parameters[0]) > 0 ? $parameters[0] : null;
             $dayNumber = (int)$parameters[1];
-            $trainNumber = strlen($parameters[2]) > 0 ? $parameters[2] : null;
-            $routeNumber = strlen($parameters[3]) > 0 ? $parameters[3] : null;
+            try {
+                $spotDate = strlen($parameters[2] > 0) ? DateTime::createFromFormat('d-m-Y', $parameters[2]) : null;
+            } catch (Exception $exception) {
+                $spotDate = null;
+            }
+            $trainNumber = strlen($parameters[3]) > 0 ? $parameters[3] : null;
+            $routeNumber = strlen($parameters[4]) > 0 ? $parameters[4] : null;
 
-            $spots = $this->doctrine
-                ->getRepository(Spot::class)
-                ->findWithFilters($maxYears, $location, $dayNumber, $trainNumber, $routeNumber);
+            if (is_null($location) && $dayNumber === 0 && is_null($spotDate)
+                && is_null($trainNumber) && is_null($routeNumber)
+            ) {
+                $this->flashHelper->add(
+                    FlashHelper::FLASH_TYPE_WARNING,
+                    'Het is niet mogelijk om spots te bekijken zonder filter, kies minimaal 1 filter'
+                );
+            } else {
+                $spots = $this->doctrine
+                    ->getRepository(Spot::class)
+                    ->findWithFilters($maxYears, $location, $dayNumber, $spotDate, $trainNumber, $routeNumber);
+            }
         }
 
         return $this->templateHelper->render('spots/index.html.twig', [
@@ -91,6 +115,7 @@ class SpotController
             'maxYears' => $maxYears,
             'location' => $location,
             TemplateHelper::PARAMETER_DAY_NUMBER => $dayNumber,
+            'spotDate' => !is_null($spotDate) ? $spotDate->format('d-m-Y') : null,
             'trainNumber' => $trainNumber,
             'routeNumber' => $routeNumber,
             'spots' => $spots,

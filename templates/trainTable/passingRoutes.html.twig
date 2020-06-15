@@ -60,35 +60,7 @@
 
 {% block javascripts %}
     <script>
-        $(document).ready(function() {
-            $('#location').autocomplete({
-                source: function(request, response) {
-                    $.ajax({
-                        url: '{{ path('location_json', { 'search': '1234' }) }}'.replace('1234', request.term),
-                        dataType: 'json',
-                        success: function(data) {
-                            response(data);
-                        }
-                    });
-                },
-                minLength: 2,
-                select: function (event, ui) {
-                    $('#location_description').html(ui.item.description);
-                }
-            }).on('change', function () {
-                $.ajax({
-                    url: '{{ path('location_json', { 'search': '1234' }) }}'.replace('1234', $(this).val()),
-                    dataType: 'json',
-                    success: function(data) {
-                        if (data.length === 1) {
-                            $('#location_description').html(data[0].description);
-                        } else {
-                            $('#location_description').html('Locatie niet gevonden');
-                        }
-                    },
-                });
-            });
-        });
+        {{ include('partials/locationAutoComplete.js.twig') }}
 
         function searchPassingRoutes() {
             let location = '{{ path('passing_routes_search', { 'trainTableYearId': 9999, 'locationName': 'locationName', 'dayNumber': 1234, 'startTime': 'startTime', 'endTime': 'endTime' }) }}';
