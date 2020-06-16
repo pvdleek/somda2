@@ -281,7 +281,7 @@ class SecurityController
 
                 $this->flashHelper->add(
                     FlashHelper::FLASH_TYPE_INFORMATION,
-                    'Jouw account is geactiveerd, je kunt hieronder inloggen'
+                    'Jouw account is geactiveerd, je kunt nu inloggen'
                 );
                 return $this->redirectHelper->redirectToRoute(
                     'login_with_username',
