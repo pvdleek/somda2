@@ -2,59 +2,59 @@ nelmio_security:
 #  signed_cookie:
 #    names: ['*']
   # Prevent framing of the entire site
-  clickjacking:
-    paths:
-      '^/.*': DENY
+#  clickjacking:
+#    paths:
+#      '^/.*': DENY
   # Prevent re-directions outside the website's domain
-  external_redirects:
-    abort: false
-    log: true
+#  external_redirects:
+#    abort: false
+#    log: true
 
   # Prevent inline scripts, unsafe eval, external scripts/images/styles/frames, etc
-  csp:
-    hosts: []
-    content_types: []
-    enforce:
-      level1_fallback: false
-      browser_adaptive:
-        enabled: false
-      default-src:
-        - 'none'
-      connect-src:
-        - 'self'
-      font-src:
-        - 'self'
-      script-src:
-        - 'self'
-        - 'unsafe-inline'
-        - 'code.jquery.com'
-        - '*.datatables.net'
-        - '*.fontawesome.com'
-        - '*.googletagmanager.com'
-        - '*.google-analytics.com'
-      style-src:
-        - 'self'
-        - 'unsafe-inline'
-        - 'code.jquery.com'
-        - '*.datatables.net'
-      img-src:
-        - 'self'
-        - 'data:'
-        - 'code.jquery.com'
-        - '*.buienradar.nl'
-        - '*.datatables.net'
-        - '*.google-analytics.com'
-      block-all-mixed-content: true
-      upgrade-insecure-requests: true
+#  csp:
+#    hosts: []
+#    content_types: []
+#    enforce:
+#      level1_fallback: false
+#      browser_adaptive:
+#        enabled: false
+#      default-src:
+#        - 'none'
+#      connect-src:
+#        - 'self'
+#      font-src:
+#        - 'self'
+#      script-src:
+#        - 'self'
+#        - 'unsafe-inline'
+#        - 'code.jquery.com'
+#        - '*.datatables.net'
+#        - '*.fontawesome.com'
+#        - '*.googletagmanager.com'
+#        - '*.google-analytics.com'
+#      style-src:
+#        - 'self'
+#        - 'unsafe-inline'
+#        - 'code.jquery.com'
+#        - '*.datatables.net'
+#      img-src:
+#        - 'self'
+#        - 'data:'
+#        - 'code.jquery.com'
+#        - '*.buienradar.nl'
+#        - '*.datatables.net'
+#        - '*.google-analytics.com'
+#      block-all-mixed-content: true
+#      upgrade-insecure-requests: true
 
   # Disable content type sniffing for script resources
-  content_type:
-    nosniff: true
+#  content_type:
+#    nosniff: true
 
   # Force Microsoft's XSS-Protection with its block mode
-  xss_protection:
-    enabled: true
-    mode_block: true
+#  xss_protection:
+#    enabled: true
+#    mode_block: true
 
 #  referrer_policy:
 #    enabled: true
