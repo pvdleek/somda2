@@ -30,7 +30,7 @@ security:
         always_remember_me: true
         lifetime: 604800
         secure: true
-        samesite: 'strict'
+        samesite: null
 
   role_hierarchy:
     ROLE_ADMIN:
