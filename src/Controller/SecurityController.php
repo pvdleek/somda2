@@ -257,9 +257,6 @@ class SecurityController
         }
 
         $form = $this->formFactory->create(UserActivate::class, $user);
-        if (!is_null($key)) {
-            $form->submit([UserActivate::FIELD_KEY => $key]);
-        }
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
