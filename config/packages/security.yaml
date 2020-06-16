@@ -26,10 +26,10 @@ security:
         target: home
       remember_me:
         secret: '%env(APP_SECRET)%'
-        httponly: false
+        httponly: true
         always_remember_me: true
         lifetime: 604800
-        secure: true
+        secure: false
         samesite: null
 
   role_hierarchy:
