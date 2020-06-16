@@ -29,7 +29,7 @@ security:
         httponly: true
         always_remember_me: true
         lifetime: 604800
-        secure: false
+        secure: true
         samesite: null
 
   role_hierarchy:
