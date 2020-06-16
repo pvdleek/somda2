@@ -3,7 +3,6 @@
 namespace App\Helpers;
 
 use App\Entity\ForumPost;
-use App\Entity\UserPreference;
 use Exception;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Extension\RuntimeExtensionInterface;
@@ -186,10 +185,14 @@ class ForumHelper implements RuntimeExtensionInterface
                 $text = preg_replace(
                     self::REPLACE_WORD_START . $word . self::REPLACE_WORD_END,
                     '\\1<!-- s\\2 --><span class="tooltip" title="' .
-                        strtolower(htmlspecialchars($locations[$word])) . '">\\2<!-- s\\2 --></span>\\3',
+                    strtolower(htmlspecialchars($locations[$word])) . '">\\2<!-- s\\2 --></span>\\3',
                     $text
                 );
-            } elseif (isset($users[$word])) {
+            }
+        }
+        foreach ($textChunks as $chunk) {
+            $word = trim($chunk);
+            if (isset($users[$word])) {
                 $text = preg_replace(
                     self::REPLACE_WORD_START . $word . self::REPLACE_WORD_END,
                     '\\1<!-- s\\2 --><span class="tooltip" title="Somda gebruiker ' .
