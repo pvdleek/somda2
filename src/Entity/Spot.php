@@ -110,7 +110,7 @@ class Spot extends Entity
     {
         return [
             'id' => $this->getId(),
-            'timestamp' => $this->spotDate,
+            'spotDate' => $this->spotDate,
             'train' => $this->train->number,
             'route' => $this->route->number,
             'position' => $this->position->name,

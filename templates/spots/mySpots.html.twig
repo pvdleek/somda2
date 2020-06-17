@@ -19,8 +19,8 @@
                 <tbody></tbody>
                 <tfoot>
                     <tr>
-                        <th>&nbsp;</th>
-                        <th>trein</th>
+                        <th>datum</th>
+                        <th>materieel</th>
                         <th>trein</th>
                         <th>locatie</th>
                         <th>&nbsp;</th>
@@ -59,8 +59,24 @@
             $('#my_spots_table tfoot th').each(function () {
                 const title = $(this).text();
                 if (title.length > 1) {
-                    $(this).html('<input placeholder="Zoek een ' + title + '" size="10" type="text" />');
+                    $(this).html('<input id="filter_' + title + '" placeholder="Zoek een ' + title + '" size="10" type="text" />');
                 }
+            });
+            $('#filter_datum').datepicker({
+                closeText: 'Sluiten',
+                constrainInput: true,
+                currentText: 'Vandaag',
+                dateFormat: 'dd-mm-yy',
+                dayNames: ['Zondag', 'Maandag', 'Dinsdag', 'Woensdag', 'Donderdag', 'Vrijdag', 'Zaterdag'],
+                dayNamesMin: ['zo', 'ma', 'di', 'wo', 'do', 'vr', 'za'],
+                dayNamesShort: ['Zon', 'Maa', 'Din', 'Woe', 'Don', 'Vri', 'Zat'],
+                firstDay: 1,
+                maxDate: '+0',
+                monthNames: ['januari', 'februari', 'maart', 'april', 'mei', 'juni', 'juli', 'augustus', 'september', 'oktober', 'november', 'december'],
+                monthNamesShort: ['jan', 'feb', 'mar', 'apr', 'mei', 'jun', 'jul', 'aug', 'sep', 'okt', 'nov', 'dec'],
+                nextText: 'Volgende maand',
+                prevText: 'Vorige maand',
+                showButtonPanel: true,
             });
 
             let mySpotsTable = $('#my_spots_table').DataTable({
@@ -101,7 +117,7 @@
                     }
                 ],
                 'columns': [
-                    { 'data': 'timestamp' },
+                    { 'data': 'spotDate' },
                     { 'data': 'train' },
                     { 'data': 'route' },
                     { 'data': 'location' },

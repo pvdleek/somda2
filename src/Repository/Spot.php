@@ -22,7 +22,7 @@ class Spot extends EntityRepository
      * @var string[]
      */
     private static array $orderColumn = [
-        'timestamp' => 's.spotDate',
+        'spotDate' => 's.spotDate',
         self::FIELD_LOCATION => 'l.name',
         'train' => 't.number',
         'route' => 'r.number',
@@ -104,6 +104,7 @@ class Spot extends EntityRepository
 
     /**
      * @param User $user
+     * @param DateTime|null $spotDate
      * @param string|null $location
      * @param string|null $trainNumber
      * @param string|null $routeNumber
@@ -114,6 +115,7 @@ class Spot extends EntityRepository
      */
     public function findForMySpots(
         User $user,
+        ?DateTime $spotDate,
         ?string $location,
         ?string $trainNumber,
         ?string $routeNumber,
@@ -134,6 +136,11 @@ class Spot extends EntityRepository
             ->setMaxResults($numberOfRecords)
             ->setFirstResult($offset);
 
+        if (!is_null($spotDate)) {
+            $queryBuilder
+                ->andWhere('DATE(s.spotDate) = :spotDate')
+                ->setParameter('spotDate', $spotDate->format('Y-m-d'));
+        }
         if (!is_null($location)) {
             $queryBuilder->andWhere('l.name LIKE :location')->setParameter(self::FIELD_LOCATION, '%' . $location . '%');
         }
@@ -151,13 +158,19 @@ class Spot extends EntityRepository
 
     /**
      * @param User $user
+     * @param DateTime|null $spotDate,
      * @param string|null $location
      * @param string|null $trainNumber
      * @param string|null $routeNumber
      * @return int
      */
-    public function countForMySpots(User $user, ?string $location, ?string $trainNumber, ?string $routeNumber): int
-    {
+    public function countForMySpots(
+        User $user,
+        ?DateTime $spotDate,
+        ?string $location,
+        ?string $trainNumber,
+        ?string $routeNumber
+    ): int {
         $queryBuilder = $this->getEntityManager()
             ->createQueryBuilder()
             ->select('COUNT(s.id)')
@@ -169,6 +182,11 @@ class Spot extends EntityRepository
             ->andWhere('s.user = :user')
             ->setParameter('user', $user);
 
+        if (!is_null($spotDate)) {
+            $queryBuilder
+                ->andWhere('DATE(s.spotDate) = :spotDate')
+                ->setParameter('spotDate', $spotDate->format('Y-m-d'));
+        }
         if (!is_null($location)) {
             $queryBuilder->andWhere('l.name LIKE :location')->setParameter(self::FIELD_LOCATION, '%' . $location . '%');
         }

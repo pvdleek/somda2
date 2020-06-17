@@ -10,6 +10,7 @@ use App\Helpers\TemplateHelper;
 use App\Helpers\UserHelper;
 use App\Model\DataTableOrder;
 use App\Model\SpotInput;
+use DateTime;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -81,10 +82,13 @@ class MySpotsController
     {
         $columns = $request->get('columns');
 
-        $locationSearch = $trainNumberSearch = $routeNumberSearch = null;
+        $dateSearch = $locationSearch = $trainNumberSearch = $routeNumberSearch = null;
         foreach ($columns as $column) {
             if (strlen($column[self::COLUMN_SEARCH][self::COLUMN_SEARCH_VALUE]) > 0) {
-                if ($column[self::COLUMN_DATA] === 'location') {
+                if ($column[self::COLUMN_DATA] === 'spotDate') {
+                    $dateSearch =
+                        DateTime::createFromFormat('d-m-Y', $column[self::COLUMN_SEARCH][self::COLUMN_SEARCH_VALUE]);
+                } elseif ($column[self::COLUMN_DATA] === 'location') {
                     $locationSearch = $column[self::COLUMN_SEARCH][self::COLUMN_SEARCH_VALUE];
                 } elseif ($column[self::COLUMN_DATA] === 'train') {
                     $trainNumberSearch = $column[self::COLUMN_SEARCH][self::COLUMN_SEARCH_VALUE];
@@ -105,6 +109,7 @@ class MySpotsController
 
         $spots = $this->formHelper->getDoctrine()->getRepository(Spot::class)->findForMySpots(
             $this->userHelper->getUser(),
+            $dateSearch,
             $locationSearch,
             $trainNumberSearch,
             $routeNumberSearch,
@@ -114,6 +119,7 @@ class MySpotsController
         );
         $filteredRecords = $this->formHelper->getDoctrine()->getRepository(Spot::class)->countForMySpots(
             $this->userHelper->getUser(),
+            $dateSearch,
             $locationSearch,
             $trainNumberSearch,
             $routeNumberSearch
