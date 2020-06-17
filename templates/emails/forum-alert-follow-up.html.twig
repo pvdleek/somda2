@@ -2,7 +2,7 @@
 <br />
 <br />Beste {{ user.username }},
 <br />
-<br />Recent heb je een melding gedaan bij de moderators over <a href="{{ url('forum_discussion_post', { 'id': post.discussion.id, 'postId': post.id, 'name': (post.discussion.title | url_encode) }) }}">dit bericht</a> in de discussie "{{ post.discussion.title }}"
+<br />Recent heb je een melding gedaan bij de moderators over <a href="{{ url('forum_discussion_post', { 'id': post.discussion.id, 'postId': post.id, 'name': (post.discussion.title | slugify) }) }}">dit bericht</a> in de discussie "{{ post.discussion.title }}"
 <br />
 <br />Een moderator heeft hier naar gekeken en jou deze reactie gestuurd:
 <br />{{ note.text }}

@@ -26,7 +26,7 @@
                                 <i class="fas fa-comment"></i>
                             {% endif %}
                         </td>
-                        <td><a href="{{ path('forum_discussion', { 'id': discussion['id'], 'name': (discussion['title'] | url_encode) }) }}">{{ discussion['title'] }}</a> <i class="fas fa-comment-dots"></i></td>
+                        <td><a href="{{ path('forum_discussion', { 'id': discussion['id'], 'name': (discussion['title'] | slugify) }) }}">{{ discussion['title'] }}</a> <i class="fas fa-comment-dots"></i></td>
                         <td>{{ discussion['posts'] }}</td>
                         <td>{{ discussion['author_id'] | displayUser(discussion['author_username']) | raw }}</td>
                         <td>{{ discussion['viewed'] }}</td>

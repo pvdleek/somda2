@@ -45,10 +45,10 @@
                             {% endif %}
                         </td>
                         {% if result.titleMatch %}
-                            <td colspan="2"><a href="{{ path('forum_discussion', { 'id': result.discussionId, 'name': (result.discussionTitle | url_encode) }) }}">{{ result.discussionTitle }}</a></td>
+                            <td colspan="2"><a href="{{ path('forum_discussion', { 'id': result.discussionId, 'name': (result.discussionTitle | slugify) }) }}">{{ result.discussionTitle }}</a></td>
                         {% else %}
                             <td>&nbsp;</td>
-                            <td><a href="{{ path('forum_discussion_post', { 'id': result.discussionId, 'name': (result.discussionTitle | url_encode), 'postId': result.postId }) }}">Re: {{ result.discussionTitle }}</a></td>
+                            <td><a href="{{ path('forum_discussion_post', { 'id': result.discussionId, 'name': (result.discussionTitle | slugify), 'postId': result.postId }) }}">Re: {{ result.discussionTitle }}</a></td>
                         {% endif %}
                         <td>{{ result.authorId | displayUser(result.authorUsername) | raw }}</td>
                         <td>{{ result.postTimestamp | displayDateTime(true) }}</td>

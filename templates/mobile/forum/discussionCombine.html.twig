@@ -18,8 +18,8 @@
                 <td>
                     <a class="somda-button" href="#" onclick="$('#combine_form').submit(); return false;">Combineer discussies</a>
                     <br /><br />
-                    <a class="somda-button" href="{{ path('forum_discussion', { 'id': discussion1.id, 'name': (discussion1.title | url_encode )}) }}">Terug naar de discussie "{{ discussion1.title }}"</a>
-                    <a class="somda-button" href="{{ path('forum_discussion', { 'id': discussion2.id, 'name': (discussion2.title | url_encode )}) }}">Terug naar de discussie "{{ discussion2.title }}"</a>
+                    <a class="somda-button" href="{{ path('forum_discussion', { 'id': discussion1.id, 'name': (discussion1.title | slugify )}) }}">Terug naar de discussie "{{ discussion1.title }}"</a>
+                    <a class="somda-button" href="{{ path('forum_discussion', { 'id': discussion2.id, 'name': (discussion2.title | slugify )}) }}">Terug naar de discussie "{{ discussion2.title }}"</a>
                 </td>
             </tr>
         </table>

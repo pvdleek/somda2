@@ -10,6 +10,7 @@
         "ext-json": "*",
         "aurimasniekis/scheduler-bundle": "^1.0",
         "beberlei/doctrineextensions": "^1.2",
+        "cocur/slugify": "^4.0",
         "debril/rss-atom-bundle": "^5.0",
         "dompdf/dompdf": "^0.8.5",
         "friendsofsymfony/ckeditor-bundle": "^2.2",

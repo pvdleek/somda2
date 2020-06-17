@@ -36,7 +36,7 @@
                     {% endif %}
                 </td>
                 <td>
-                    <a href="{{ path('forum_discussion', { 'id': favorite['id'], 'name': (favorite['title'] | url_encode) }) }}">{{ favorite['title'] }}</a>
+                    <a href="{{ path('forum_discussion', { 'id': favorite['id'], 'name': (favorite['title'] | slugify) }) }}">{{ favorite['title'] }}</a>
                     {% if not favorite['discussion_read'] %} <i class="fas fa-comment-dots"></i>{% endif %}
                 </td>
                 <td>{{ favorite['posts'] }}</td>

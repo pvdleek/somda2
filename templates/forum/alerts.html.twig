@@ -25,7 +25,7 @@
                         <td>{{ alert.numberOfAlerts }}</td>
                         <td>{{ alert.numberOfNotes }}</td>
                         <td>
-                            <a class="somda-button" href="{{ path('forum_discussion_post', { 'id': alert.discussionId, 'name': (alert.discussionTitle | url_encode), 'postId': alert.postId }) }}">Bekijk bericht</a>
+                            <a class="somda-button" href="{{ path('forum_discussion_post', { 'id': alert.discussionId, 'name': (alert.discussionTitle | slugify), 'postId': alert.postId }) }}">Bekijk bericht</a>
                             <a class="somda-button" href="{{ path('forum_discussion_post_alerts', { 'id': alert.postId }) }}">Bekijk melding</a>
                         </td>
                     </tr>

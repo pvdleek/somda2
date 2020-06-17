@@ -11,7 +11,7 @@
 			{% endif %}
 		</div>
 		<div>
-			<a href="{{ path('forum_discussion', { 'id': discussion['id'], 'name': (discussion['title'] | url_encode) }) }}">{{ discussion['title'] }}</a>
+			<a href="{{ path('forum_discussion', { 'id': discussion['id'], 'name': (discussion['title'] | slugify ) }) }}">{{ discussion['title'] }}</a>
 			{% if not discussion['discussion_read'] %} <i class="fas fa-comment-dots"></i>{% endif %}
 		</div>
 	{% endfor %}

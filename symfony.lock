@@ -5,6 +5,9 @@
     "beberlei/doctrineextensions": {
         "version": "v1.2.6"
     },
+    "cocur/slugify": {
+        "version": "v4.0.0"
+    },
     "composer/ca-bundle": {
         "version": "1.2.7"
     },
