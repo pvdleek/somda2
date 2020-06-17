@@ -77,7 +77,7 @@
 
             {% set firstUnreadAnchorDone = false %}
             {% for post in posts %}
-                {% set postIsUnread = loop.index > (constant('App\\Controller\\ForumDiscussionController::MAX_POSTS_PER_PAGE') * (pageNumber - 1) + numberOfReadPosts) %}
+                {% set postIsUnread = loop.index > (numberOfReadPosts - (constant('App\\Controller\\ForumDiscussionController::MAX_POSTS_PER_PAGE') * (pageNumber - 1))) %}
                 {% if loop.index == 5 or loop.index == 55 %}
                     {% if forumBanner is not null %}
                         <br /><table align="center"><tr>
