@@ -19,10 +19,19 @@
                 </table>
             {{ form_end(form) }}
         </div>
+
+        {# Example of the reply #}
+        {{ include('forum/example.html.twig') }}
+        <br />
+
         {% for post in lastPosts %}
             <table align="center">
                 {% include 'forum/post.html.twig' with { 'mayPost': false, 'userIsModerator': false, 'postIsUnread': false } %}
             </table>
         {% endfor %}
     </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ include('forum/example.js.html.twig') }}
 {% endblock %}

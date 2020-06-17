@@ -63,7 +63,7 @@ class ForumPost extends Entity
      * @var DateTime|null
      * @ORM\Column(name="edit_timestamp", type="datetime", nullable=true)
      */
-    public ?DateTime $editTimestamp;
+    public ?DateTime $editTimestamp = null;
 
     /**
      * @var User|null

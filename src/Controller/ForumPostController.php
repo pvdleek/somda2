@@ -6,12 +6,14 @@ use App\Entity\ForumDiscussion;
 use App\Entity\ForumFavorite;
 use App\Entity\ForumPost;
 use App\Entity\ForumPostLog;
+use App\Entity\ForumPostText;
 use App\Form\BaseForm;
 use App\Form\ForumPost as ForumPostForm;
 use App\Generics\RouteGenerics;
 use App\Helpers\EmailHelper;
 use App\Helpers\FormHelper;
 use App\Helpers\ForumAuthorizationHelper;
+use App\Helpers\ForumHelper;
 use App\Helpers\TemplateHelper;
 use App\Helpers\UserHelper;
 use DateTime;
@@ -20,6 +22,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -43,6 +46,11 @@ class ForumPostController
     private ForumAuthorizationHelper $forumAuthHelper;
 
     /**
+     * @var ForumHelper
+     */
+    private ForumHelper $forumHelper;
+
+    /**
      * @var TemplateHelper
      */
     private TemplateHelper $templateHelper;
@@ -56,6 +64,7 @@ class ForumPostController
      * @param UserHelper $userHelper
      * @param FormHelper $formHelper
      * @param ForumAuthorizationHelper $forumAuthHelper
+     * @param ForumHelper $forumHelper
      * @param TemplateHelper $templateHelper
      * @param EmailHelper $emailHelper
      */
@@ -63,12 +72,14 @@ class ForumPostController
         UserHelper $userHelper,
         FormHelper $formHelper,
         ForumAuthorizationHelper $forumAuthHelper,
+        ForumHelper $forumHelper,
         TemplateHelper $templateHelper,
         EmailHelper $emailHelper
     ) {
         $this->userHelper = $userHelper;
         $this->formHelper = $formHelper;
         $this->forumAuthHelper = $forumAuthHelper;
+        $this->forumHelper = $forumHelper;
         $this->templateHelper = $templateHelper;
         $this->emailHelper = $emailHelper;
     }
@@ -133,6 +144,22 @@ class ForumPostController
             'post' => $quotedPost,
             'lastPosts' => $lastPosts,
         ]);
+    }
+
+    /**
+     * @IsGranted("ROLE_USER")
+     * @param Request $request
+     * @return JsonResponse
+     * @throws Exception
+     */
+    public function replyExampleAction(Request $request): JsonResponse
+    {
+        $text = (string)$request->request->get('text');
+        $postText = new ForumPostText();
+        $postText->text = str_replace("\n", '', $text);
+        $post = new ForumPost();
+        $post->text = $postText;
+        return new JsonResponse(['data' => $this->forumHelper->getDisplayForumPost($post)]);
     }
 
     /**

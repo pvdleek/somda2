@@ -1,0 +1,28 @@
+<table align="center">
+    <tr><th class="left-align" colspan="2"><i class="color-orange fas fa-comment-dots"></i> {{ "now" | date('d-m-Y H:i:s') }}</th></tr>
+    <tr>
+        <td class="info" nowrap="nowrap">
+            {{ app.user.id | displayUser(app.user.username) | raw }}
+            {% if app.user.info.avatar | length > 0 %}
+                <br /><img alt="{{ app.user.username }}" src="{{ asset('images/avatar/' ~  app.user.info.avatar) }}" />
+            {% endif %}
+            {% if app.user.info.city | length > 0 %}<br />{{ app.user.info.city }}{% endif %}
+            <br />
+            {% if app.user.info.twitterAccount | length > 0 %}
+                <a href="https://twitter.com/#!/{{ app.user.info.twitterAccount }}" rel="ugc noopener" target="_blank"><i class="fab fa-twitter" title="Twitter {{ app.user.info.twitterAccount }}"></i></a>
+            {% endif %}
+            {% if app.user.info.facebookAccount | length > 0 %}
+                <a href="https://www.facebook.com/{{ app.user.info.facebookAccount }}" rel="ugc noopener" target="_blank"><i class="fab fa-facebook" title="Facebook {{ app.user.info.facebookAccount }}"></i></a>
+            {% endif %}
+            {% if app.user.info.youtubeAccount | length > 0 %}
+                <a href="https://www.youtube.com/user/{{ app.user.info.youtubeAccount }}" rel="ugc noopener" target="_blank"><i class="fab fa-youtube" title="Youtube {{ app.user.info.youtubeAccount }}"></i></a>
+            {% endif %}
+            {% if app.user.info.flickrAccount | length > 0 %}
+                <a href="https://www.flickr.com/photos/{{ app.user.info.flickrAccount }}" rel="ugc noopener" target="_blank"><i class="fab fa-flickr" title="Flickr {{ app.user.info.flickrAccount }}"></i></a>
+            {% endif %}
+        </td>
+        <td class="text" id="post_example">
+            <p class="info">Hier komt een voorbeeld van jouw reactie, dit wordt automatisch bijgewerkt als je even niet typt</p>
+        </td>
+    </tr>
+</table>

@@ -21,5 +21,17 @@
                 </table>
             {{ form_end(form) }}
         </div>
+
+        {{ include('forum/example.html.twig') }}
+
     </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ include('forum/example.js.html.twig') }}
+    <script>
+        $(document).ready(function() {
+            updateExample();
+        });
+    </script>
 {% endblock %}
