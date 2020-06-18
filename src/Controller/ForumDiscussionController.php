@@ -103,7 +103,7 @@ class ForumDiscussionController
         $numberOfPages = floor(($numberOfPosts - 1) / self::MAX_POSTS_PER_PAGE) + 1;
 
         $forumJump = $this->getForumJump($discussion, $pageNumber, $postId);
-        $pageNumber = $this->getPageNumber($discussion, $pageNumber, $postId);
+        $pageNumber = $pageNumber ?? $this->getPageNumber($discussion, $postId);
 
         /**
          * @var ForumPost[] $posts
@@ -163,16 +163,11 @@ class ForumDiscussionController
     /**
      * This function should always be called after getForumJump for this function modifies the pageNumber
      * @param ForumDiscussion $discussion
-     * @param int|null $pageNumber
      * @param int|null $postId
      * @return int
      */
-    private function getPageNumber(ForumDiscussion $discussion, int $pageNumber = null, int $postId = null): int
+    private function getPageNumber(ForumDiscussion $discussion, int $postId = null): int
     {
-        if (!is_null($pageNumber)) {
-            return $pageNumber;
-        }
-
         if (!is_null($postId)) {
             // A specific post was requested, so we go to this post
             $postNumber = $this->formHelper

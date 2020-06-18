@@ -3,6 +3,7 @@
 namespace App\Command;
 
 use App\Entity\RailNews;
+use App\Entity\RailNewsSource;
 use App\Entity\RailNewsSourceFeed;
 use AurimasNiekis\SchedulerBundle\ScheduledJobInterface;
 use DateTime;
@@ -116,42 +117,8 @@ class GetRailNewsCommand extends Command implements ScheduledJobInterface
                 continue;
             }
             foreach ($items as $item) {
-                if (!$feed->filterResults || $this->isArticleMatch($item)) {
-                    $railNewsByTitle = $this->doctrine->getRepository(RailNews::class)->findOneBy(
-                        ['title' => $item->getTitle()]
-                    );
-                    if (is_null($railNewsByTitle)) {
-                        $description = trim(strip_tags(str_replace('?', '', $item->getDescription())));
-                        $description = preg_replace('/\s\s+/', ' ', $description);
-                        if (strlen($description) < 1) {
-                            $description = $item->getTitle();
-                        }
-
-                        /**
-                         * @var RailNews $railNews
-                         */
-                        $railNews = $this->doctrine->getRepository(RailNews::class)->findOneBy(
-                            ['url' => $item->getLink()]
-                        );
-                        if (is_null($railNews)) {
-                            $railNews = new RailNews();
-                            $railNews->title = $item->getTitle();
-                            $railNews->url = $item->getLink();
-                            $railNews->introduction = $description;
-                            $railNews->timestamp = $item->getLastModified() ?? new DateTime();
-                            $railNews->approved = false;
-                            $railNews->active = false;
-                            $railNews->automaticUpdates = true;
-                            $railNews->source = $feed->source;
-
-                            $this->doctrine->getManager()->persist($railNews);
-                        } elseif ($railNews->automaticUpdates) {
-                            $railNews->title = $item->getTitle();
-                            $railNews->url = $item->getLink();
-                            $railNews->introduction = $description;
-                            $railNews->timestamp = $item->getLastModified() ?? new DateTime();
-                        }
-                    }
+                if ((!$feed->filterResults || $this->isArticleMatch($item)) && !$this->isItemExists($item)) {
+                    $this->saveItem($feed->source, $item, $this->getItemDescription($item));
                 }
             }
             $this->doctrine->getManager()->flush();
@@ -195,5 +162,64 @@ class GetRailNewsCommand extends Command implements ScheduledJobInterface
         }
         return stripos($item->getTitle(), $wordMatch[self::POSITIVE_WORD]) !== false
             || stripos($item->getDescription(), $wordMatch[self::POSITIVE_WORD]) !== false;
+    }
+
+    /**
+     * @param ItemInterface $item
+     * @return bool
+     */
+    private function isItemExists(ItemInterface $item): bool
+    {
+        $railNewsByTitle = $this->doctrine->getRepository(RailNews::class)->findOneBy(
+            ['title' => $item->getTitle()]
+        );
+        return !is_null($railNewsByTitle);
+    }
+
+    /**
+     * @param ItemInterface $item
+     * @return string
+     */
+    private function getItemDescription(ItemInterface $item): string
+    {
+        $description = trim(strip_tags(str_replace('?', '', $item->getDescription())));
+        $description = preg_replace('/\s\s+/', ' ', $description);
+        if (strlen($description) < 1) {
+            return $item->getTitle();
+        }
+        return $description;
+    }
+
+    /**
+     * @param RailNewsSource $source
+     * @param ItemInterface $item
+     * @param string $description
+     */
+    private function saveItem(RailNewsSource $source, ItemInterface $item, string $description): void
+    {
+        /**
+         * @var RailNews $railNews
+         */
+        $railNews = $this->doctrine->getRepository(RailNews::class)->findOneBy(
+            ['url' => $item->getLink()]
+        );
+        if (is_null($railNews)) {
+            $railNews = new RailNews();
+            $railNews->title = $item->getTitle();
+            $railNews->url = $item->getLink();
+            $railNews->introduction = $description;
+            $railNews->timestamp = $item->getLastModified() ?? new DateTime();
+            $railNews->approved = false;
+            $railNews->active = false;
+            $railNews->automaticUpdates = true;
+            $railNews->source = $source;
+
+            $this->doctrine->getManager()->persist($railNews);
+        } elseif ($railNews->automaticUpdates) {
+            $railNews->title = $item->getTitle();
+            $railNews->url = $item->getLink();
+            $railNews->introduction = $description;
+            $railNews->timestamp = $item->getLastModified() ?? new DateTime();
+        }
     }
 }

@@ -291,6 +291,8 @@ class SecurityController
             $form->get(UserActivate::FIELD_KEY)->addError(
                 new FormError('De activatie-sleutel is niet correct, probeer het opnieuw')
             );
+        } elseif (!is_null($key)) {
+            $form->get(UserActivate::FIELD_KEY)->setData($key);
         }
 
         return $this->templateHelper->render('security/activate.html.twig', [
