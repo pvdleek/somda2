@@ -105,7 +105,7 @@ class TrainTable extends EntityRepository
             ->join('rl.transporter', 'tr')
             ->join('rl.characteristic', 'c')
             ->andWhere('fl.trainTableYear = :' . self::PARAMETER_TRAIN_TABLE_YEAR)
-            ->andWhere('fl.dayNumber = 1')
+            ->addGroupBy('r.number')
             ->setParameter(self::PARAMETER_TRAIN_TABLE_YEAR, $trainTableYear);
         return $queryBuilder->getQuery()->getArrayResult();
     }
