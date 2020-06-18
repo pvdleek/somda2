@@ -2,12 +2,11 @@
 
 namespace App\Controller;
 
-use App\Entity\RouteList;
 use App\Entity\SpecialRoute;
 use App\Entity\TrainTableYear;
 use App\Helpers\Controller\TrainTableHelper;
 use App\Helpers\FlashHelper;
-use App\Helpers\SortHelper;
+use App\Helpers\RoutesDisplayHelper;
 use App\Helpers\TemplateHelper;
 use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
@@ -16,7 +15,6 @@ use Dompdf\Options;
 use Exception;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class TrainTableController
 {
@@ -36,34 +34,34 @@ class TrainTableController
     private TrainTableHelper $trainTableHelper;
 
     /**
+     * @var RoutesDisplayHelper
+     */
+    private RoutesDisplayHelper $routesDisplayHelper;
+
+    /**
      * @var FlashHelper
      */
     private FlashHelper $flashHelper;
 
     /**
-     * @var SortHelper
-     */
-    private SortHelper $sortHelper;
-
-    /**
      * @param ManagerRegistry $doctrine
      * @param TemplateHelper $templateHelper
      * @param TrainTableHelper $trainTableHelper
+     * @param RoutesDisplayHelper $routesDisplayHelper
      * @param FlashHelper $flashHelper
-     * @param SortHelper $sortHelper
      */
     public function __construct(
         ManagerRegistry $doctrine,
         TemplateHelper $templateHelper,
         TrainTableHelper $trainTableHelper,
-        FlashHelper $flashHelper,
-        SortHelper $sortHelper
+        RoutesDisplayHelper $routesDisplayHelper,
+        FlashHelper $flashHelper
     ) {
         $this->doctrine = $doctrine;
         $this->templateHelper = $templateHelper;
         $this->trainTableHelper = $trainTableHelper;
+        $this->routesDisplayHelper = $routesDisplayHelper;
         $this->flashHelper = $flashHelper;
-        $this->sortHelper = $sortHelper;
     }
 
     /**
@@ -217,47 +215,16 @@ class TrainTableController
      */
     public function routeOverviewAction(int $trainTableYearId = null, int $routeListId = null): Response
     {
-        $routeLists = [];
-        $selectedRouteList = null;
-        $routes = [];
-
-        /**
-         * @var TrainTableYear $trainTableYear
-         * @var RouteList $selectedRouteList
-         */
-        if (is_null($trainTableYearId)) {
-            $trainTableYearId = $this->doctrine
-                ->getRepository(TrainTableYear::class)
-                ->findTrainTableYearByDate(new DateTime())
-                ->getId();
-        } else {
-            $trainTableYear = $this->doctrine->getRepository(TrainTableYear::class)->find($trainTableYearId);
-            if (is_null($trainTableYear)) {
-                throw new AccessDeniedHttpException();
-            }
-
-            $routeLists = $this->doctrine
-                ->getRepository(RouteList::class)
-                ->findBy(['trainTableYear' => $trainTableYear], ['firstNumber' => 'ASC']);
-            if (!is_null($routeListId)) {
-                $selectedRouteList = $this->doctrine->getRepository(RouteList::class)->find($routeListId);
-                if (is_null($selectedRouteList)) {
-                    throw new AccessDeniedHttpException();
-                }
-
-                $routes = $selectedRouteList->getRoutes();
-                $routes = $this->sortHelper->sortByFieldFilter($routes, 'number');
-            }
-        }
+        $routesDisplay = $this->routesDisplayHelper->getRoutesDisplay($trainTableYearId, $routeListId);
 
         return $this->templateHelper->render('trainTable/routeOverview.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Overzicht treinnummers',
             TemplateHelper::PARAMETER_TRAIN_TABLE_INDICES =>
                 $this->doctrine->getRepository(TrainTableYear::class)->findAll(),
-            TemplateHelper::PARAMETER_TRAIN_TABLE_INDEX_NUMBER => $trainTableYearId,
-            'routeLists' => $routeLists,
-            'selectedRouteList' => $selectedRouteList,
-            'routes' => $routes,
+            TemplateHelper::PARAMETER_TRAIN_TABLE_INDEX_NUMBER => $routesDisplay->trainTableYear->getId(),
+            'routeLists' => $routesDisplay->routeLists,
+            'selectedRouteList' => $routesDisplay->selectedRouteList,
+            'routes' => $routesDisplay->routes,
         ]);
     }
 

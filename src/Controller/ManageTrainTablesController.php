@@ -11,10 +11,9 @@ use App\Entity\TrainTableFirstLast;
 use App\Entity\TrainTableYear;
 use App\Helpers\FlashHelper;
 use App\Helpers\FormHelper;
-use App\Helpers\SortHelper;
+use App\Helpers\RoutesDisplayHelper;
 use App\Helpers\TemplateHelper;
 use App\Traits\DateTrait;
-use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -49,26 +48,26 @@ class ManageTrainTablesController
     private TemplateHelper $templateHelper;
 
     /**
-     * @var SortHelper
+     * @var RoutesDisplayHelper
      */
-    private SortHelper $sortHelper;
+    private RoutesDisplayHelper $routesDisplayHelper;
 
     /**
      * @param ManagerRegistry $doctrine
      * @param FormHelper $formHelper
      * @param TemplateHelper $templateHelper
-     * @param SortHelper $sortHelper
+     * @param RoutesDisplayHelper $routesDisplayHelper
      */
     public function __construct(
         ManagerRegistry $doctrine,
         FormHelper $formHelper,
         TemplateHelper $templateHelper,
-        SortHelper $sortHelper
+        RoutesDisplayHelper $routesDisplayHelper
     ) {
         $this->doctrine = $doctrine;
         $this->formHelper = $formHelper;
         $this->templateHelper = $templateHelper;
-        $this->sortHelper = $sortHelper;
+        $this->routesDisplayHelper = $routesDisplayHelper;
     }
 
     /**
@@ -80,48 +79,17 @@ class ManageTrainTablesController
      */
     public function manageAction(int $yearId = null, int $routeListId = null): Response
     {
-        $routeLists = [];
-        $selectedRouteList = null;
-        $routes = [];
-
-        /**
-         * @var TrainTableYear $trainTableYear
-         * @var RouteList $selectedRouteList
-         */
-        if (is_null($yearId)) {
-            $trainTableYear = $this->doctrine
-                ->getRepository(TrainTableYear::class)
-                ->findTrainTableYearByDate(new DateTime());
-        } else {
-            $trainTableYear = $this->doctrine->getRepository(TrainTableYear::class)->find($yearId);
-            if (is_null($trainTableYear)) {
-                throw new AccessDeniedHttpException();
-            }
-
-            $routeLists = $this->doctrine
-                ->getRepository(RouteList::class)
-                ->findBy(['trainTableYear' => $trainTableYear], ['firstNumber' => 'ASC']);
-
-            if (!is_null($routeListId)) {
-                $selectedRouteList = $this->doctrine->getRepository(RouteList::class)->find($routeListId);
-                if (is_null($selectedRouteList)) {
-                    throw new AccessDeniedHttpException();
-                }
-
-                $routes = $selectedRouteList->getRoutes();
-                $routes = $this->sortHelper->sortByFieldFilter($routes, 'number');
-            }
-        }
+        $routesDisplay = $this->routesDisplayHelper->getRoutesDisplay($yearId, $routeListId);
 
         return $this->templateHelper->render('manageTrainTables/index.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Beheer dienstregelingen',
             'trainTableYears' => $this->doctrine
                 ->getRepository(TrainTableYear::class)
                 ->findBy([], ['startDate' => 'DESC']),
-            'selectedTrainTableYear' => $trainTableYear,
-            'routeLists' => $routeLists,
-            'selectedRouteList' => $selectedRouteList,
-            'routes' => $routes,
+            'selectedTrainTableYear' => $routesDisplay->trainTableYear,
+            'routeLists' => $routesDisplay->routeLists,
+            'selectedRouteList' => $routesDisplay->selectedRouteList,
+            'routes' => $routesDisplay->routes,
         ]);
     }
 
