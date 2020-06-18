@@ -7,6 +7,7 @@ use App\Entity\TrainTableYear;
 use App\Helpers\FlashHelper;
 use App\Helpers\RedirectHelper;
 use App\Helpers\TemplateHelper;
+use App\Model\SpotFilter;
 use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
@@ -79,45 +80,30 @@ class SpotController
      */
     public function indexAction(int $maxYears = 1, string $searchParameters = null): Response
     {
-        $location = $trainNumber = $routeNumber = null;
-        $dayNumber = 0;
-        $spotDate = null;
+        $spotFilter = new SpotFilter();
         $spots = null;
 
         if (!is_null($searchParameters)) {
-            $parameters = explode('/', $searchParameters);
-            $location = strlen($parameters[0]) > 0 ? $parameters[0] : null;
-            $dayNumber = (int)$parameters[1];
-            try {
-                $spotDate = strlen($parameters[2] > 0) ? DateTime::createFromFormat('d-m-Y', $parameters[2]) : null;
-            } catch (Exception $exception) {
-                $spotDate = null;
-            }
-            $trainNumber = strlen($parameters[3]) > 0 ? $parameters[3] : null;
-            $routeNumber = strlen($parameters[4]) > 0 ? $parameters[4] : null;
+            $spotFilter->createFromSearchParameters(explode('/', $searchParameters));
 
-            if (is_null($location) && $dayNumber === 0 && is_null($spotDate)
-                && is_null($trainNumber) && is_null($routeNumber)
-            ) {
+            if (!$spotFilter->isValid()) {
                 $this->flashHelper->add(
                     FlashHelper::FLASH_TYPE_WARNING,
                     'Het is niet mogelijk om spots te bekijken zonder filter, kies minimaal 1 filter'
                 );
             } else {
-                $spots = $this->doctrine
-                    ->getRepository(Spot::class)
-                    ->findWithFilters($maxYears, $location, $dayNumber, $spotDate, $trainNumber, $routeNumber);
+                $spots = $this->doctrine->getRepository(Spot::class)->findWithSpotFilter($maxYears, $spotFilter);
             }
         }
 
         return $this->templateHelper->render('spots/index.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Recente spots',
             'maxYears' => $maxYears,
-            'location' => $location,
-            TemplateHelper::PARAMETER_DAY_NUMBER => $dayNumber,
-            'spotDate' => !is_null($spotDate) ? $spotDate->format('d-m-Y') : null,
-            'trainNumber' => $trainNumber,
-            'routeNumber' => $routeNumber,
+            'location' => $spotFilter->location,
+            TemplateHelper::PARAMETER_DAY_NUMBER => $spotFilter->dayNumber,
+            'spotDate' => !is_null($spotFilter->spotDate) ? $spotFilter->spotDate->format('d-m-Y') : null,
+            'trainNumber' => $spotFilter->trainNumber,
+            'routeNumber' => $spotFilter->routeNumber,
             'spots' => $spots,
         ]);
     }

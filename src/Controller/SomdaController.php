@@ -82,7 +82,7 @@ class SomdaController
     {
         $form = $this->formHelper->getFactory()->create(Contact::class);
         if (!$this->userHelper->userIsLoggedIn()) {
-            $form->add('email', TextType::class, [
+            $form->add(Contact::FIELD_EMAIL, TextType::class, [
                 BaseForm::KEY_LABEL => 'Jouw e-mailadres',
                 BaseForm::KEY_REQUIRED => true,
             ]);
@@ -97,7 +97,8 @@ class SomdaController
                 [
                     'text' => $form->get('text')->getData(),
                     'user' => $this->userHelper->getUser(),
-                    'emailAddress' => $form->has('email') ? $form->get('email')->getData() : null,
+                    'emailAddress' => $form->has(Contact::FIELD_EMAIL) ?
+                        $form->get(Contact::FIELD_EMAIL)->getData() : null,
                 ]
             );
 

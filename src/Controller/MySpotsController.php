@@ -9,6 +9,7 @@ use App\Helpers\SpotInputHelper;
 use App\Helpers\TemplateHelper;
 use App\Helpers\UserHelper;
 use App\Model\DataTableOrder;
+use App\Model\SpotFilter;
 use App\Model\SpotInput;
 use DateTime;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -81,22 +82,7 @@ class MySpotsController
     public function jsonAction(Request $request): JsonResponse
     {
         $columns = $request->get('columns');
-
-        $dateSearch = $locationSearch = $trainNumberSearch = $routeNumberSearch = null;
-        foreach ($columns as $column) {
-            if (strlen($column[self::COLUMN_SEARCH][self::COLUMN_SEARCH_VALUE]) > 0) {
-                if ($column[self::COLUMN_DATA] === 'spotDate') {
-                    $dateSearch =
-                        DateTime::createFromFormat('d-m-Y', $column[self::COLUMN_SEARCH][self::COLUMN_SEARCH_VALUE]);
-                } elseif ($column[self::COLUMN_DATA] === 'location') {
-                    $locationSearch = $column[self::COLUMN_SEARCH][self::COLUMN_SEARCH_VALUE];
-                } elseif ($column[self::COLUMN_DATA] === 'train') {
-                    $trainNumberSearch = $column[self::COLUMN_SEARCH][self::COLUMN_SEARCH_VALUE];
-                } elseif ($column[self::COLUMN_DATA] === 'route') {
-                    $routeNumberSearch = $column[self::COLUMN_SEARCH][self::COLUMN_SEARCH_VALUE];
-                }
-            }
-        }
+        $spotFilter = $this->getSpotFilterFromRequest($columns);
 
         $orderArray = $request->get('order');
         $spotOrder = [];
@@ -107,37 +93,57 @@ class MySpotsController
             );
         }
 
-        $spots = $this->formHelper->getDoctrine()->getRepository(Spot::class)->findForMySpots(
-            $this->userHelper->getUser(),
-            $dateSearch,
-            $locationSearch,
-            $trainNumberSearch,
-            $routeNumberSearch,
-            (int)$request->get('length'),
-            (int)$request->get('start'),
-            $spotOrder
-        );
-        $filteredRecords = $this->formHelper->getDoctrine()->getRepository(Spot::class)->countForMySpots(
-            $this->userHelper->getUser(),
-            $dateSearch,
-            $locationSearch,
-            $trainNumberSearch,
-            $routeNumberSearch
-        );
-
         $response = [
             'draw' => $request->get('draw'),
             'recordsTotal' => $this->formHelper->getDoctrine()->getRepository(Spot::class)->countAll(
                 $this->userHelper->getUser()
             ),
-            'recordsFiltered' => $filteredRecords,
+            'recordsFiltered' => $this->formHelper->getDoctrine()->getRepository(Spot::class)->countForMySpots(
+                $this->userHelper->getUser(),
+                $spotFilter
+            ),
             self::COLUMN_DATA => [],
         ];
+
+        $spots = $this->formHelper->getDoctrine()->getRepository(Spot::class)->findForMySpots(
+            $this->userHelper->getUser(),
+            $spotFilter,
+            (int)$request->get('length'),
+            (int)$request->get('start'),
+            $spotOrder
+        );
         foreach ($spots as $spot) {
             $response[self::COLUMN_DATA][] = $spot->toArray();
         }
 
         return new JsonResponse($response);
+    }
+
+    /**
+     * @param array $columns
+     * @return SpotFilter
+     */
+    private function getSpotFilterFromRequest(array $columns): SpotFilter
+    {
+        $spotFilter = new SpotFilter();
+        foreach ($columns as $column) {
+            if (strlen($column[self::COLUMN_SEARCH][self::COLUMN_SEARCH_VALUE]) > 0) {
+                if ($column[self::COLUMN_DATA] === 'spotDate') {
+                    $spotFilter->spotDate = DateTime::createFromFormat(
+                        'd-m-Y',
+                        $column[self::COLUMN_SEARCH][self::COLUMN_SEARCH_VALUE]
+                    );
+                } elseif ($column[self::COLUMN_DATA] === 'location') {
+                    $spotFilter->location = $column[self::COLUMN_SEARCH][self::COLUMN_SEARCH_VALUE];
+                } elseif ($column[self::COLUMN_DATA] === 'train') {
+                    $spotFilter->trainNumber = $column[self::COLUMN_SEARCH][self::COLUMN_SEARCH_VALUE];
+                } elseif ($column[self::COLUMN_DATA] === 'route') {
+                    $spotFilter->routeNumber = $column[self::COLUMN_SEARCH][self::COLUMN_SEARCH_VALUE];
+                }
+            }
+        }
+
+        return $spotFilter;
     }
 
     /**

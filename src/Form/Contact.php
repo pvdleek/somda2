@@ -8,6 +8,8 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 class Contact extends BaseForm
 {
+    public const FIELD_EMAIL = 'email';
+
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
