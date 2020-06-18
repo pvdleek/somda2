@@ -198,7 +198,7 @@ class SpotInputHelper
         if (count($spotPart) > 0) {
             $nextPart = $this->getNextLineItem($spotPart, $spotInput);
 
-            if (in_array(strtoupper($nextPart), $this->positionArray)) {
+            if (in_array(strtoupper($nextPart), $this->positionArray, true)) {
                 // The argument is a position
                 $spotInput->positionId = array_search(strtoupper($nextPart), $this->positionArray);
                 $nextPart = trim(array_shift($spotPart));
