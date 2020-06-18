@@ -71,16 +71,20 @@ class ProcessForumLogCommand extends Command implements ScheduledJobInterface
         $forumLogs = $this->doctrine->getRepository(ForumPostLog::class)->findAll();
         foreach ($forumLogs as $forumLog) {
             if ($forumLog->action === ForumPostLog::ACTION_POST_EDIT) {
+                var_dump('Remove all');
                 $this->removeAllWordsForPost($forumLog->post);
             }
 
             $words = $this->getCleanWordsFromText($forumLog->post->text->text);
+            var_dump($words);
             $postNrInDiscussion = $this->doctrine
                 ->getRepository('App:ForumDiscussion')
                 ->getPostNumberInDiscussion($forumLog->post->discussion, $forumLog->post->getId());
+            var_dump($postNrInDiscussion);
             if ($postNrInDiscussion === 0) {
                 // This is the first post in the discussion, we need to include the title
                 $titleWords = $this->getCleanWordsFromText($forumLog->post->discussion->title);
+                var_dump($titleWords);
                 $this->processWords($titleWords, $forumLog->post, true);
                 $this->doctrine->getManager()->flush();
 
@@ -128,7 +132,7 @@ class ProcessForumLogCommand extends Command implements ScheduledJobInterface
         // Remove URL's
         $text = preg_replace('/\b[a-z0-9]+:\/\/[a-z0-9.\-]+(\/[a-z0-9?.%_\-+=&\/]+)?/', ' ', $text);
         // Normalize and filter strange characters such as ^, $, &
-        $text = $this->normalizeText(str_replace($strangeCharacters, ' ', $text));
+        $text = strtolower($this->normalizeText(str_replace($strangeCharacters, ' ', $text)));
 
         return array_unique(array_filter(explode(' ', $text), function ($value) {
             return strlen($value) > 2;
