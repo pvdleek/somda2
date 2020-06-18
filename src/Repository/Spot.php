@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Route;
 use App\Entity\Spot as SpotEntity;
 use App\Entity\User;
+use App\Generics\DateGenerics;
 use App\Model\DataTableOrder;
 use App\Model\SpotFilter;
 use DateTime;
@@ -17,13 +18,14 @@ use Exception;
 
 class Spot extends EntityRepository
 {
+    private const FIELD_SPOT_DATE = 'spotDate';
     private const FIELD_LOCATION = 'location';
 
     /**
      * @var string[]
      */
     private static array $orderColumn = [
-        'spotDate' => 's.spotDate',
+        self::FIELD_SPOT_DATE => 's.spotDate',
         self::FIELD_LOCATION => 'l.name',
         'train' => 't.number',
         'route' => 'r.number',
@@ -86,8 +88,11 @@ class Spot extends EntityRepository
                 ->setParameter('minDate', new DateTime('-' . $maxYears . ' years'));
         } else {
             $queryBuilder
-                ->andWhere('DATE(s.spotDate) = :spotDate')
-                ->setParameter('spotDate', $spotFilter->spotDate->format('Y-m-d'));
+                ->andWhere('DATE(s.spotDate) = :' . self::FIELD_SPOT_DATE)
+                ->setParameter(
+                    self::FIELD_SPOT_DATE,
+                    $spotFilter->spotDate->format(DateGenerics::DATE_FORMAT_DATABASE)
+                );
         }
         $this->filterOnTrainNumber($queryBuilder, true, $spotFilter->trainNumber);
         $this->filterOnRouteNumber($queryBuilder, true, $spotFilter->routeNumber);
@@ -125,8 +130,11 @@ class Spot extends EntityRepository
 
         if (!is_null($spotFilter->spotDate)) {
             $queryBuilder
-                ->andWhere('DATE(s.spotDate) = :spotDate')
-                ->setParameter('spotDate', $spotFilter->spotDate->format('Y-m-d'));
+                ->andWhere('DATE(s.spotDate) = :' . self::FIELD_SPOT_DATE)
+                ->setParameter(
+                    self::FIELD_SPOT_DATE,
+                    $spotFilter->spotDate->format(DateGenerics::DATE_FORMAT_DATABASE)
+                );
         }
         if (!is_null($spotFilter->location)) {
             $queryBuilder
@@ -165,8 +173,11 @@ class Spot extends EntityRepository
 
         if (!is_null($spotFilter->spotDate)) {
             $queryBuilder
-                ->andWhere('DATE(s.spotDate) = :spotDate')
-                ->setParameter('spotDate', $spotFilter->spotDate->format('Y-m-d'));
+                ->andWhere('DATE(s.spotDate) = :' . self::FIELD_SPOT_DATE)
+                ->setParameter(
+                    self::FIELD_SPOT_DATE,
+                    $spotFilter->spotDate->format(DateGenerics::DATE_FORMAT_DATABASE)
+                );
         }
         if (!is_null($spotFilter->location)) {
             $queryBuilder
