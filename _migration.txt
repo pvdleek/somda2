@@ -1,2 +1,0 @@
-- ForumLog vullen met alle posts en dan app:process-forum-log draaien
-- Alle commands draaien
