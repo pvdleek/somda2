@@ -4,25 +4,33 @@
     <br />
     <a class="somda-button" href="{{ path('forum_search') }}">{{ 'forum.search' | trans }}</a>
     {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-        <a class="somda-button" href="{{ path('forum_unread') }}">Ongelezen berichten</a>
+        <a class="somda-button" href="{{ path('forum_unread') }}">Alle ongelezen berichten</a>
     {% endif %}
     <br />
-    <br />
 
-    <table>
-        <tr><th colspan="2">{{ 'forum.category' | trans }}</th><th>{{ 'forum.number.discussions' | trans }}</th></tr>
-        {% for category in categories %}
-            {% if category['forums'] | length > 0 %}
-                <tr><th colspan="3">{{ category['category'].name }}</th></tr>
-                {% for forum in category['forums'] %}
-                    <tr>
-                        <td><i class="fas fa-comments"></i></td>
-                        <td><a href="{{ path('forum_forum', { 'id': forum['id'], 'name': forum['name'] }) }}">{{ forum['name'] }}</a></td>
-                        <td>{{ forum['numberOfDiscussions'] }}</td>
-                    </tr>
+    <div class="panel">
+        <div class="panel-title">Forum overzicht</div>
+        <div class="panel-content">
+            <table>
+                <tr>
+                    <th colspan="2">{{ 'forum.category' | trans }}</th>
+                    <th>{{ 'forum.number.discussions' | trans }}</th>
+                    {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}<th>Ongelezen berichten</th>{% endif %}
+                </tr>
+                {% for category in categories %}
+                    {% if category['forums'] | length > 0 %}
+                        <tr><th colspan="4">{{ category['category'].name }}</th></tr>
+                        {% for forum in category['forums'] %}
+                            <tr>
+                                <td><i class="fas fa-comments"></i></td>
+                                <td><a href="{{ path('forum_forum', { 'id': forum['id'], 'name': forum['name'] }) }}">{{ forum['name'] }}</a></td>
+                                <td>{{ forum['numberOfDiscussions'] }}</td>
+                                {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}<td>{{ forum['forum_read'] == 1 ? 'Nee' : 'Ja' }}</td>{% endif %}
+                            </tr>
+                        {% endfor %}
+                    {% endif %}
                 {% endfor %}
-            {% endif %}
-        {% endfor %}
-    </table>
-    <br />
+            </table>
+        </div>
+    </div>
 {% endblock %}

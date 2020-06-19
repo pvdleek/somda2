@@ -74,7 +74,9 @@ class ForumForumController
         $categories = [];
         foreach ($forumCategories as $category) {
             $categoryItem = ['category' => $category, 'forums' => []];
-            $forums = $this->doctrine->getRepository(ForumForum::class)->findByCategory($category);
+            $forums = $this->doctrine
+                ->getRepository(ForumForum::class)
+                ->findByCategory($category, $this->userHelper->getUser());
             foreach ($forums as $forum) {
                 $forumEntity = $this->doctrine->getRepository(ForumForum::class)->find($forum['id']);
                 if ($this->forumAuthHelper->mayView($forumEntity, $this->userHelper->getUser())) {
