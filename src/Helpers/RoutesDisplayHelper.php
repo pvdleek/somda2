@@ -5,30 +5,26 @@ namespace App\Helpers;
 use App\Entity\RouteList;
 use App\Entity\TrainTableYear;
 use App\Model\RoutesDisplay;
+use App\Traits\SortTrait;
 use DateTime;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class RoutesDisplayHelper
 {
+    use SortTrait;
+
     /**
      * @var ManagerRegistry
      */
     private ManagerRegistry $doctrine;
 
     /**
-     * @var SortHelper
-     */
-    private SortHelper $sortHelper;
-
-    /**
      * @param ManagerRegistry $doctrine
-     * @param SortHelper $sortHelper
      */
-    public function __construct(ManagerRegistry $doctrine, SortHelper $sortHelper)
+    public function __construct(ManagerRegistry $doctrine)
     {
         $this->doctrine = $doctrine;
-        $this->sortHelper = $sortHelper;
     }
 
     /**
@@ -65,7 +61,7 @@ class RoutesDisplayHelper
                 }
 
                 $routes = $routesDisplay->selectedRouteList->getRoutes();
-                $routesDisplay->routes = $this->sortHelper->sortByFieldFilter($routes, 'number');
+                $routesDisplay->routes = $this->sortByFieldFilter($routes, 'number');
             }
         }
 
