@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Entity\ForumCategory;
 use App\Entity\ForumDiscussion;
 use App\Entity\ForumForum;
 use App\Generics\RouteGenerics;
@@ -10,12 +9,15 @@ use App\Helpers\ForumAuthorizationHelper;
 use App\Helpers\RedirectHelper;
 use App\Helpers\TemplateHelper;
 use App\Helpers\UserHelper;
+use App\Traits\SortTrait;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 class ForumForumController
 {
+    use SortTrait;
+
     /**
      * @var ManagerRegistry
      */
@@ -67,29 +69,44 @@ class ForumForumController
      */
     public function indexAction(): Response
     {
-        /**
-         * @var ForumCategory[] $forumCategories
-         */
-        $forumCategories = $this->doctrine->getRepository(ForumCategory::class)->findBy([], ['order' => 'ASC']);
-        $categories = [];
-        foreach ($forumCategories as $category) {
-            $categoryItem = ['category' => $category, 'forums' => []];
-            $forums = $this->doctrine
-                ->getRepository(ForumForum::class)
-                ->findByCategory($category, $this->userHelper->getUser());
-            foreach ($forums as $forum) {
-                $forumEntity = $this->doctrine->getRepository(ForumForum::class)->find($forum['id']);
-                if ($this->forumAuthHelper->mayView($forumEntity, $this->userHelper->getUser())) {
-                    $categoryItem['forums'][] = $forum;
-                }
-            }
-            $categories[] = $categoryItem;
+        $categories = $this->getCategoryArray();
+
+        foreach ($categories as $id => $category) {
+            $categories[$id]['forums'] = $this->sortByFieldFilter($category['forums'], 'order');
         }
+        $categories = $this->sortByFieldFilter($categories, 'order');
 
         return $this->templateHelper->render('forum/index.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Forum - Overzicht',
             'categories' => $categories
         ]);
+    }
+
+    /**
+     * @return array
+     */
+    private function getCategoryArray(): array
+    {
+        $categories = [];
+        $forums = $this->doctrine->getRepository(ForumForum::class)->findAll($this->userHelper->getUser());
+        foreach ($forums as $forum) {
+            if (!isset($categories[$forum['categoryId']])) {
+                $categories[$forum['categoryId']] = [
+                    'id' => $forum['categoryId'],
+                    'name' => $forum['categoryName'],
+                    'order' => $forum['categoryOrder'],
+                ];
+            }
+
+            $categories[$forum['categoryId']]['forums'][] = [
+                'id' => $forum['id'],
+                'name' => $forum['name'],
+                'order' => $forum['order'],
+                'numberOfDiscussions' => $forum['numberOfDiscussions'],
+                'forum_read' => $forum['forum_read'],
+            ];
+        }
+        return $categories;
     }
 
     /**
