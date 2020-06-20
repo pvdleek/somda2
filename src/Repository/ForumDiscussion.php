@@ -33,7 +33,8 @@ class ForumDiscussion extends EntityRepository
             $query = '
                 SELECT `d`.`discussionid` AS `id`, `d`.`title` AS `title`, `a`.`uid` AS `author_id`,
                     `a`.`username` AS `author_username`, `d`.`locked` AS `locked`, `d`.`viewed` AS `viewed`,
-                    TRUE AS `discussion_read`, `p_max`.`timestamp` AS `max_post_timestamp`, COUNT(*) AS `posts`
+                    `f`.`type` AS `forum_type`, TRUE AS `discussion_read`, `p_max`.`timestamp` AS `max_post_timestamp`,
+                    COUNT(*) AS `posts`
                 FROM somda_forum_discussion d
                 JOIN somda_forum_forums f ON f.forumid = d.forumid
                 JOIN somda_users a ON a.uid = d.authorid
@@ -50,7 +51,7 @@ class ForumDiscussion extends EntityRepository
             $query = '
                 SELECT `d`.`discussionid` AS `id`, `d`.`title` AS `title`, `a`.`uid` AS `author_id`,
                     `a`.`username` AS `author_username`, `d`.`locked` AS `locked`, `d`.`viewed` AS `viewed`,
-                    IF(`r`.`postid` IS NULL, FALSE, TRUE) AS `discussion_read`,
+                    `f`.`type` AS `forum_type`, IF(`r`.`postid` IS NULL, FALSE, TRUE) AS `discussion_read`,
                     `p_max`.`timestamp` AS `max_post_timestamp`, COUNT(*) AS `posts`
                 FROM somda_forum_discussion d
                 JOIN somda_forum_forums f ON f.forumid = d.forumid

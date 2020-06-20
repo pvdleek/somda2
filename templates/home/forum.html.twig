@@ -2,7 +2,7 @@
 	{% for discussion in layoutData['forum'] %}
 		<div>{{ discussion['max_post_timestamp'] | displayDateTime(true, true) }}</div>
 		<div>
-			{% if discussion.forum.type == constant('App\\Entity\\ForumForum::TYPE_ARCHIVE') %}
+			{% if discussion['forum_type'] == constant('App\\Entity\\ForumForum::TYPE_ARCHIVE') %}
 				<i class="fas fa-archive"></i>
 			{% elseif discussion['locked'] %}
 				<i class="fas fa-lock"></i>
