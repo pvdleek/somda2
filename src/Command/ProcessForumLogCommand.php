@@ -131,7 +131,7 @@ class ProcessForumLogCommand extends Command implements ScheduledJobInterface
         $text = strtolower($this->normalizeText(str_replace($strangeCharacters, ' ', $text)));
 
         return array_unique(array_filter(explode(' ', $text), function ($value) {
-            return strlen($value) > 2;
+            return strlen($value) > 2 && strlen($value) <= 50;
         }));
     }
 
