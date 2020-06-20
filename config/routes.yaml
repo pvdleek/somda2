@@ -503,12 +503,12 @@ manage_train_tables:
   methods: [GET]
   controller: App\Controller\ManageTrainTablesController::manageAction
 manage_train_tables_year:
-  path: /beheer-dienstregelingen-invoer/{yearId}/
+  path: /beheer-dienstregelingen/{yearId}/
   methods: [GET]
   requirements: { yearId: \d+ }
   controller: App\Controller\ManageTrainTablesController::manageAction
 manage_train_tables_year_route_list:
-  path: /beheer-dienstregelingen-invoer/{yearId}/{routeListId}/
+  path: /beheer-dienstregelingen/{yearId}/{routeListId}/
   methods: [GET]
   requirements: { yearId: \d+, routeListId: \d+ }
   controller: App\Controller\ManageTrainTablesController::manageAction
@@ -516,6 +516,11 @@ manage_train_table:
   path: /beheer-dienstregeling/{routeListId}/{routeId}/
   methods: [GET, POST]
   requirements: { routeListId: \d+, routeId: \d+ }
+  controller: App\Controller\ManageTrainTablesController::manageRouteAction
+manage_train_table_add:
+  path: /beheer-dienstregeling/{routeListId}/{routeId}/{routeNumber}/
+  methods: [GET, POST]
+  requirements: { routeListId: \d+, routeId: \d+, routeNumber: \d+ }
   controller: App\Controller\ManageTrainTablesController::manageRouteAction
 
 manage_pois:

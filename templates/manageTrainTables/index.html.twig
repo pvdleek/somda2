@@ -37,7 +37,7 @@
                         <th>Vrijdag</th>
                         <th>Zaterdag</th>
                         <th>Zondag</th>
-{#                        <th><a href="{{ path('manage_route_list', { 'yearId': trainTableYear.id, 'id': 0 }) }}">Voeg een serie toe</a></th>#}
+                        <th><a href="#" onclick="addTrainTable(); return false;">Voeg toe</a></th>
                     </tr>
                     {% for route in routes %}
                         <tr>
@@ -60,16 +60,25 @@
 
 {% block javascripts %}
     <script>
-        function manageTrainTableYear() {
+        function manageTrainTableYear()
+        {
             let location = '{{ path('manage_train_tables_year', { 'yearId': 9999 }) }}';
             location = location.replace('9999', $('#trainTableYear').val());
             document.location = location;
         }
-        function manageTrainTableYearRouteList() {
+
+        function manageTrainTableYearRouteList()
+        {
             let location = '{{ path('manage_train_tables_year_route_list', { 'yearId': 1234, 'routeListId': 5678 }) }}';
             location = location.replace('1234', $('#trainTableYear').val());
             location = location.replace('5678', $('#routeList').val());
             document.location = location;
+        }
+
+        function addTrainTable()
+        {
+            const trainNumber = prompt('Geef het treinnummer:', '{{ selectedRouteList.firstNumber | slice(0, 2) }}');
+            document.location = '{{ path('manage_train_table_add', { 'routeListId': selectedRouteList.id, 'routeId': 0, 'routeNumber': 1234 }) }}'.replace('1234', trainNumber);
         }
     </script>
 {% endblock %}

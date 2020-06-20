@@ -98,9 +98,10 @@ class ManageTrainTablesController
      * @param Request $request
      * @param int $routeListId
      * @param int $routeId
+     * @param int|null $routeNumber
      * @return RedirectResponse|Response
      */
-    public function manageRouteAction(Request $request, int $routeListId, int $routeId)
+    public function manageRouteAction(Request $request, int $routeListId, int $routeId, int $routeNumber = null)
     {
         /**
          * @var RouteList $routeList
@@ -110,15 +111,32 @@ class ManageTrainTablesController
             throw new AccessDeniedHttpException();
         }
 
-        /**
-         * @var Route $route
-         */
-        $route = $this->doctrine->getRepository(Route::class)->find($routeId);
-        if (is_null($route)) {
-            throw new AccessDeniedHttpException();
+        if ($routeId === 0) {
+            if (is_null($routeNumber)) {
+                throw new AccessDeniedHttpException();
+            }
+            $route = $this->doctrine->getRepository(Route::class)->findOneBy(['number' => $routeNumber]);
+            if (is_null($route)) {
+                $route = new Route();
+                $route->number = $routeNumber;
+            }
+        } else {
+            /**
+             * @var Route $route
+             */
+            $route = $this->doctrine->getRepository(Route::class)->find($routeId);
+            if (is_null($route)) {
+                throw new AccessDeniedHttpException();
+            }
         }
 
         if ($request->getMethod() === Request::METHOD_POST) {
+            if ($routeId === 0) {
+                $route->addRouteList($routeList);
+                $routeList->addRoute($route);
+                $this->doctrine->getManager()->persist($route);
+            }
+
             $routeDayArray = $this->getUniqueRouteDayArray($this->getRouteDayArrayFromRequest($request));
             $this->removeExistingTrainTablesFromRoute($route);
             if ($this->saveRouteDay($routeDayArray, $routeList->trainTableYear, $route)) {
