@@ -68,7 +68,7 @@ class ProcessForumLogCommand extends Command implements ScheduledJobInterface
         /**
          * @var ForumPostLog[] $forumLogs
          */
-        $forumLogs = $this->doctrine->getRepository(ForumPostLog::class)->findAll();
+        $forumLogs = $this->doctrine->getRepository(ForumPostLog::class)->findBy([], ['id' => 'DESC']);
         foreach ($forumLogs as $forumLog) {
             if ($forumLog->action === ForumPostLog::ACTION_POST_EDIT) {
                 $this->removeAllWordsForPost($forumLog->post);
