@@ -47,6 +47,15 @@
                         {% for dayNumber in 1..7 %}
                             <td>
                                 <a class="somda-button" href="#" onclick="addRow({{ dayNumber }}); return false;">Rij toevoegen</a>
+                                <br /><a class="somda-button" href="#" onclick="removeDay({{ dayNumber }}); return false;">Hele dag verwijderen</a>
+                                <br /><select class="copy-day" id="copy_day_{{ dayNumber }}">
+                                    <option disabled="disabled" selected="selected" value="0">Kopieer naar</option>
+                                    {% for copyToDayNumber in 1..7 %}
+                                        {% if copyToDayNumber != dayNumber %}
+                                            <option value="{{ copyToDayNumber }}">{{ ('general.date.days.' ~ (copyToDayNumber - 1)) | trans }}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
                             </td>
                         {% endfor %}
                     </tr>
@@ -96,11 +105,15 @@
                 $('#train_table_' + dayNumber).append(html);
             }
 
-            $('.time-picker').clockpicker({
-                donetext: 'Klaar',
-            }).on('change', function () {
-                verifyTimeRow(parseInt($(this).attr('name').substr(5, 1)));
-            });
+            initialize();
+        }
+
+        /**
+         * @param {int} dayNumber
+         */
+        function removeDay(dayNumber)
+        {
+            $('#train_table_' + dayNumber).empty();
         }
 
         /**
@@ -154,6 +167,8 @@
             row2.find('input[name="location_' + dayNumber + '_' + row2Number + '"]').attr('name', 'location_' + dayNumber + '_' + row1Number);
             row2.find('select[name="action_' + dayNumber + '_' + row2Number + '"]').attr('name', 'action_' + dayNumber + '_' + row1Number);
             row2.find('input[name="time_' + dayNumber + '_' + row2Number + '"]').attr('name', 'time_' + dayNumber + '_' + row1Number);
+
+            initialize();
         }
 
         /**
@@ -178,14 +193,38 @@
             });
         }
 
-        $(document).ready(function() {
+        function initialize()
+        {
             $('.location-picker').on('change', function () {
                 $(this).removeClass('with-error');
             });
+
             $('.time-picker').clockpicker({
                 donetext: 'Klaar',
             }).on('change', function () {
                 verifyTimeRow(parseInt($(this).attr('name').substr(5, 1)));
+            });
+        }
+
+        $(document).ready(function() {
+            initialize();
+
+            $('.copy-day').on('change', function () {
+                const dayNumberSource = $(this).attr('id').substr(9);
+                const dayNumberTarget = $(this).val();
+
+                let html = $('#train_table_' + dayNumberSource).html();
+                html = replaceAll(html, 'train_table_' + dayNumberSource, 'train_table_' + dayNumberTarget);
+                html = replaceAll(html, 'row_' + dayNumberSource + '_', 'row_' + dayNumberTarget + '_');
+                html = replaceAll(html, 'location_' + dayNumberSource + '_', 'location_' + dayNumberTarget + '_');
+                html = replaceAll(html, 'action_' + dayNumberSource + '_', 'action_' + dayNumberTarget + '_');
+                html = replaceAll(html, 'time_' + dayNumberSource + '_', 'time_' + dayNumberTarget + '_');
+                html = replaceAll(html, 'time-day-' + dayNumberSource, 'time-day-' + dayNumberTarget);
+
+                $('#train_table_' + dayNumberTarget).html(html);
+                $(this).val(0);
+
+                initialize();
             });
         });
     </script>

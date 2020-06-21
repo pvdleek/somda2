@@ -111,16 +111,8 @@ class ManageTrainTablesController
             throw new AccessDeniedHttpException();
         }
 
-        if ($routeId === 0) {
-            if (is_null($routeNumber)) {
-                throw new AccessDeniedHttpException();
-            }
-            $route = $this->doctrine->getRepository(Route::class)->findOneBy(['number' => $routeNumber]);
-            if (is_null($route)) {
-                $route = new Route();
-                $route->number = $routeNumber;
-            }
-        } else {
+        $route = null;
+        if (!is_null($routeId)) {
             /**
              * @var Route $route
              */
@@ -128,6 +120,21 @@ class ManageTrainTablesController
             if (is_null($route)) {
                 throw new AccessDeniedHttpException();
             }
+        }
+
+        if (!is_null($routeNumber)) {
+            $newRoute = $this->doctrine->getRepository(Route::class)->findOneBy(['number' => $routeNumber]);
+            if (is_null($newRoute)) {
+                if (is_null($route)) {
+                    $newRoute = new Route();
+                } else {
+                    $newRoute = clone($route);
+                }
+                $newRoute->number = $routeNumber;
+            }
+            unset($route);
+            $route = $newRoute;
+            unset($newRoute);
         }
 
         if ($request->getMethod() === Request::METHOD_POST) {

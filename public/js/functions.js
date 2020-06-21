@@ -1,19 +1,30 @@
 'use strict';
 
 /**
+ * @param {string} str
+ * @param {string} find
+ * @param {string} replace
+ * @returns {string}
+ */
+function replaceAll(str, find, replace)
+{
+    return str.replace(new RegExp(find, 'g'), replace);
+}
+
+/**
  * @param event
  * @param {string} button_id
  * @returns {boolean}
  */
 function checkEnter(event, button_id)
 {
-	// This function checks if the pressed key is the ENTER key and will than simulate a click for the given button
-	const key = document.layers ? event.which : document.all ? event.keyCode : event.keyCode;
-	if (key === 13) {
-		document.getElementById(button_id).click();
-		return false;
-	}
-	return true;
+    // This function checks if the pressed key is the ENTER key and will than simulate a click for the given button
+    const key = document.layers ? event.which : document.all ? event.keyCode : event.keyCode;
+    if (key === 13) {
+        document.getElementById(button_id).click();
+        return false;
+    }
+    return true;
 }
 
 // UIC

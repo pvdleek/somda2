@@ -49,7 +49,10 @@
                             <td>{{ route.trainTableFirstLastByDay(5) ? route.trainTableFirstLastByDay(5).firstLocation.name ~ ' - ' ~ route.trainTableFirstLastByDay(5).lastLocation.name }}</td>
                             <td>{{ route.trainTableFirstLastByDay(6) ? route.trainTableFirstLastByDay(6).firstLocation.name ~ ' - ' ~ route.trainTableFirstLastByDay(6).lastLocation.name }}</td>
                             <td>{{ route.trainTableFirstLastByDay(7) ? route.trainTableFirstLastByDay(7).firstLocation.name ~ ' - ' ~ route.trainTableFirstLastByDay(7).lastLocation.name }}</td>
-                            <td><a href="{{ path('manage_train_table', { 'routeListId': selectedRouteList.id, 'routeId': route.id }) }}">Bewerk</a></td>
+                            <td>
+                                <a href="{{ path('manage_train_table', { 'routeListId': selectedRouteList.id, 'routeId': route.id }) }}">Bewerk</a>
+                                <a href="#" onclick="addTrainTable({{ route.id }}); return false;">Kopieer</a>
+                            </td>
                         </tr>
                     {% endfor %}
                 </table>
@@ -75,10 +78,14 @@
             document.location = location;
         }
 
-        function addTrainTable()
-        {
-            const trainNumber = prompt('Geef het treinnummer:', '{{ selectedRouteList.firstNumber | slice(0, 2) }}');
-            document.location = '{{ path('manage_train_table_add', { 'routeListId': selectedRouteList.id, 'routeId': 0, 'routeNumber': 1234 }) }}'.replace('1234', trainNumber);
-        }
+        {% if selectedRouteList is not null %}
+            function addTrainTable(routeIdToCopy)
+            {
+                let location = '{{ path('manage_train_table_add', { 'routeListId': selectedRouteList.id, 'routeId': 1234, 'routeNumber': 5678 }) }}';
+                location = location.replace('1234', routeIdToCopy ? routeIdToCopy : 0);
+                location = location.replace('5678', prompt('Geef het treinnummer:', '{{ selectedRouteList.firstNumber | slice(0, 2) }}'));
+                document.location = location;
+            }
+        {% endif %}
     </script>
 {% endblock %}
