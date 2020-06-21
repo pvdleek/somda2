@@ -26,7 +26,9 @@ nelmio_security:
         - 'self'
       script-src:
         - 'self'
+        - 'unsafe-eval'
         - 'unsafe-inline'
+        - 'unpkg.com'
         - 'code.jquery.com'
         - '*.datatables.net'
         - '*.fontawesome.com'
@@ -37,9 +39,12 @@ nelmio_security:
         - 'unsafe-inline'
         - 'code.jquery.com'
         - '*.datatables.net'
+        - 'unpkg.com'
       img-src:
         - 'self'
         - 'data:'
+        - 'unpkg.com'
+        - 'api.mapbox.com'
         - 'code.jquery.com'
         - '*.buienradar.nl'
         - '*.datatables.net'
