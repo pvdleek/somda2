@@ -30,7 +30,7 @@ class ForumForum extends EntityRepository
                 SELECT `c`.`catid` AS `categoryId`, `c`.`name` AS `categoryName`, `c`.`volgorde` AS `categoryOrder`,
                     `f`.`forumid` AS `id`, `f`.`name` AS `name`, `f`.`volgorde` AS `order`,
                     COUNT(DISTINCT(`d`.`discussionid`)) AS `numberOfDiscussions`,
-                    IF(`r`.`postid` IS NULL, FALSE, TRUE) AS `forum_read`
+                    IF(SUM(`p`.`postid`) = SUM(`r`.`postid`), TRUE, FALSE) AS `forum_read`
                 FROM `somda_forum_forums` `f`
                 JOIN `somda_forum_cats` `c` ON `c`.`catid` = `f`.`catid`
                 JOIN `somda_forum_discussion` `d` ON `d`.`forumid` = `f`.`forumid`
