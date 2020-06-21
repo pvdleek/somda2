@@ -56,6 +56,9 @@
                         </tr>
                     {% endfor %}
                 </table>
+            {% elseif selectedRouteList is not null %}
+                <p class="info">Geen treinen gevonden</p>
+                <br /><a href="#" onclick="addTrainTable(); return false;">Voeg een trein toe</a>
             {% endif %}
         </div>
     </div>

@@ -112,7 +112,7 @@ class ManageTrainTablesController
         }
 
         $route = null;
-        if (!is_null($routeId)) {
+        if (!is_null($routeId) && $routeId > 0) {
             /**
              * @var Route $route
              */
