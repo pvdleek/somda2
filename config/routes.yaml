@@ -156,7 +156,7 @@ spots:
 spots_search:
   path: /spots/{maxYears}/{searchParameters}
   methods: [GET]
-  requirements: { maxYears: '1|2|3|4|5', searchParameters: .+ }
+  requirements: { maxYears: '1|2|3|4|5|99', searchParameters: .+ }
   controller: App\Controller\SpotController::indexAction
 spots_to_train_table:
   path: /spots/naar-dienstregeling/{routeNumber}/{date}/
