@@ -303,19 +303,21 @@ class SpotInputHelper
             return $route;
         }
 
-        if (is_null($route->getTrainTableFirstLastByDay($spotInput->spotDate->format('N')))) {
-            $spotInput->feedbackFlag += Spot::INPUT_FEEDBACK_ROUTE_NOT_ON_DAY;
-            return $route;
-        }
+        if (is_numeric($route->number)) {
+            if (is_null($route->getTrainTableFirstLastByDay($spotInput->spotDate->format('N')))) {
+                $spotInput->feedbackFlag += Spot::INPUT_FEEDBACK_ROUTE_NOT_ON_DAY;
+                return $route;
+            }
 
-        $trainTableExists = $this->doctrine->getRepository(TrainTable::class)->isExistingForSpot(
-            $this->trainTableYear,
-            $route,
-            $spotInput->location,
-            $spotInput->spotDate->format('N')
-        );
-        if (!$trainTableExists) {
-            $spotInput->feedbackFlag += Spot::INPUT_FEEDBACK_ROUTE_NOT_ON_LOCATION;
+            $trainTableExists = $this->doctrine->getRepository(TrainTable::class)->isExistingForSpot(
+                $this->trainTableYear,
+                $route,
+                $spotInput->location,
+                $spotInput->spotDate->format('N')
+            );
+            if (!$trainTableExists) {
+                $spotInput->feedbackFlag += Spot::INPUT_FEEDBACK_ROUTE_NOT_ON_LOCATION;
+            }
         }
 
         return $route;
