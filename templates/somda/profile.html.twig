@@ -44,10 +44,18 @@
                         <td align="left">{{ user.info.city }}</td>
                     </tr><tr>
                         <th align="right">{{ 'profile.gender' | trans }}</th>
-                        <td align="left">{{ user.info.gender }}</td>
+                        <td align="left">
+                            {% if user.info.gender == constant('App\\Entity\\UserInfo::GENDER_MALE') %}
+                                Man
+                            {% elseif user.info.gender == constant('App\\Entity\\UserInfo::GENDER_FEMALE') %}
+                                Vrouw
+                            {% else %}
+                                Niet opgegeven
+                            {% endif %}
+                        </td>
                     </tr><tr>
                         <th align="right">{{ 'profile.birthDate' | trans }}</th>
-                        <td align="left">{{ user.info.birthDate | displayDateTime | default('Onbekend') }}</td>
+                        <td align="left">{% if user.info.birthDate is not null %}{{ user.info.birthDate | displayDateTime }}{% else %}Onbekend{% endif %}</td>
                     </tr>
                     {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
                         <tr>
@@ -64,9 +72,6 @@
                     </tr><tr>
                         <th align="right">{{ 'profile.website' | trans }}</th>
                         <td align="left">{{ user.info.website }}</td>
-                    </tr><tr>
-                        <th align="right">{{ 'profile.info' | trans }}</th>
-                        <td align="left">{{ user.info.info }}</td>
                     </tr>
                 </table>
             </div>
