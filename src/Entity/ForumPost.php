@@ -16,7 +16,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *         @ORM\Index(name="idx_47961_discussionid", columns={"discussionid"})
  *     }
  * )
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\ForumPost")
  */
 class ForumPost extends Entity
 {
