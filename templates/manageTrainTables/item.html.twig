@@ -9,7 +9,11 @@
                     <tr><th colspan="7">Dienstregeling van trein {{ route.number }} beheren</th></tr>
                     <tr>
                         {% for dayNumber in 1..7 %}
-                            <th>{{ ('general.date.days.' ~ (dayNumber - 1)) | trans }}</th>
+                            <th>
+                                <span class="time-modify-control-left"><a href="#" onclick="modifyTimes({{ dayNumber }}, true); return false;">+30</a></span>
+                                {{ ('general.date.days.' ~ (dayNumber - 1)) | trans }}
+                                <span class="time-modify-control-right"><a href="#" onclick="modifyTimes({{ dayNumber }}, false); return false;">-30</a></span>
+                            </th>
                         {% endfor %}
                     </tr>
                     <tr>
@@ -193,6 +197,23 @@
             });
         }
 
+        /**
+         * @param {int} dayNumber
+         * @param {boolean} increase
+         */
+        function modifyTimes(dayNumber, increase)
+        {
+            $('.time-day-' + dayNumber).each(function () {
+                let newTime = new Date();
+                newTime.setHours(parseInt($(this).val().substr(0, 2)));
+                newTime.setMinutes(parseInt($(this).val().substr(3, 2))  + (increase ? 30 : -30));
+                $(this).val(newTime.toLocaleTimeString('nl-NL').substring(0, 5));
+            });
+        }
+
+        /**
+         *
+         */
         function initialize()
         {
             $('.location-picker').on('change', function () {

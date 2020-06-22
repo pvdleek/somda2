@@ -488,6 +488,14 @@ span.special-route-image {
     grid-gap: 0.4rem;
     grid-template-columns: 1fr 1fr 1fr;
 }
+.time-modify-control-left {
+    float: left;
+    padding-left: 0.5rem;
+}
+.time-modify-control-right {
+    float: right;
+    padding-right: 0.5rem;
+}
 
 /************************/
 /*** Manage rail-news ***/
