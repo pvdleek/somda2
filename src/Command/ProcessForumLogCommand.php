@@ -11,6 +11,8 @@ use Doctrine\Common\Persistence\ManagerRegistry;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Lock\LockFactory;
+use Symfony\Component\Lock\Store\SemaphoreStore;
 
 class ProcessForumLogCommand extends Command implements ScheduledJobInterface
 {
@@ -65,29 +67,36 @@ class ProcessForumLogCommand extends Command implements ScheduledJobInterface
      */
     protected function execute(InputInterface $input = null, OutputInterface $output = null): int
     {
-        /**
-         * @var ForumPostLog[] $forumLogs
-         */
-        $forumLogs = $this->doctrine->getRepository(ForumPostLog::class)->findBy([], ['id' => 'DESC']);
-        foreach ($forumLogs as $forumLog) {
-            $this->removeAllWordsForPost($forumLog->post);
+        $store = new SemaphoreStore();
+        $factory = new LockFactory($store);
+        $lock = $factory->createLock(self::$defaultName);
 
-            $words = $this->getCleanWordsFromText($forumLog->post->text->text);
-            $postNrInDiscussion = $this->doctrine
-                ->getRepository('App:ForumDiscussion')
-                ->getPostNumberInDiscussion($forumLog->post->discussion, $forumLog->post->getId());
-            if ($postNrInDiscussion === 0) {
-                // This is the first post in the discussion, we need to include the title
-                $titleWords = $this->getCleanWordsFromText($forumLog->post->discussion->title);
-                $this->processWords($titleWords, $forumLog->post, true);
+        if ($lock->acquire()) {
+            /**
+             * @var ForumPostLog[] $forumLogs
+             */
+            $forumLogs = $this->doctrine->getRepository(ForumPostLog::class)->findBy([], ['id' => 'DESC']);
+            foreach ($forumLogs as $forumLog) {
+                $this->removeAllWordsForPost($forumLog->post);
+
+                $words = $this->getCleanWordsFromText($forumLog->post->text->text);
+                $postNrInDiscussion = $this->doctrine
+                    ->getRepository('App:ForumDiscussion')
+                    ->getPostNumberInDiscussion($forumLog->post->discussion, $forumLog->post->getId());
+                if ($postNrInDiscussion === 0) {
+                    // This is the first post in the discussion, we need to include the title
+                    $titleWords = $this->getCleanWordsFromText($forumLog->post->discussion->title);
+                    $this->processWords($titleWords, $forumLog->post, true);
+                    $this->doctrine->getManager()->flush();
+
+                    $words = array_diff($words, $titleWords);
+                }
+                $this->processWords($words, $forumLog->post);
+
+                $this->doctrine->getManager()->remove($forumLog);
                 $this->doctrine->getManager()->flush();
-
-                $words = array_diff($words, $titleWords);
             }
-            $this->processWords($words, $forumLog->post);
-
-            $this->doctrine->getManager()->remove($forumLog);
-            $this->doctrine->getManager()->flush();
+            $lock->release();
         }
 
         return 0;
