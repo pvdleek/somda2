@@ -47,7 +47,6 @@ class ProcessForumLogCommand extends Command implements ScheduledJobInterface
      */
     public function getSchedulerExpresion(): string
     {
-        return '';
         return '4,19,34,49 * * * *';
     }
 
