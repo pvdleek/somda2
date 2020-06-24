@@ -132,6 +132,12 @@ class ManageTrainTablesController
                 }
                 $newRoute->number = $routeNumber;
             }
+
+            $trainTableLines = $this->doctrine->getRepository(TrainTable::class)->findBy(
+                ['trainTableYear' => $routeList->trainTableYear, 'route' => $route],
+                ['order' => 'ASC']
+            );
+
             unset($route);
             $route = $newRoute;
             unset($newRoute);
@@ -160,10 +166,12 @@ class ManageTrainTablesController
             );
         }
 
-        $trainTableLines = $this->doctrine->getRepository(TrainTable::class)->findBy(
-            ['trainTableYear' => $routeList->trainTableYear, 'route' => $route],
-            ['order' => 'ASC']
-        );
+        if (!isset($trainTableLines)) {
+            $trainTableLines = $this->doctrine->getRepository(TrainTable::class)->findBy(
+                ['trainTableYear' => $routeList->trainTableYear, 'route' => $route],
+                ['order' => 'ASC']
+            );
+        }
 
         return $this->templateHelper->render('manageTrainTables/item.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Beheer dienstregeling',
