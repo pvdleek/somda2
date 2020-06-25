@@ -2,13 +2,12 @@
 
 namespace App\Command;
 
-use AurimasNiekis\SchedulerBundle\ScheduledJobInterface;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class UpdateRouteListsCommand extends Command implements ScheduledJobInterface
+class UpdateRouteListsCommand extends Command
 {
     /**
      * @var string
@@ -28,22 +27,6 @@ class UpdateRouteListsCommand extends Command implements ScheduledJobInterface
         parent::__construct(self::$defaultName);
 
         $this->doctrine = $doctrine;
-    }
-
-    /**
-     *
-     */
-    public function __invoke()
-    {
-        $this->execute();
-    }
-
-    /**
-     * @return string
-     */
-    public function getSchedulerExpresion(): string
-    {
-        return '30 1 * * *';
     }
 
     /**

@@ -3,7 +3,6 @@
 namespace App\Command;
 
 use App\Entity\Banner;
-use AurimasNiekis\SchedulerBundle\ScheduledJobInterface;
 use DateTime;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Exception;
@@ -11,7 +10,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class UpdateBannerStatisticsCommand extends Command implements ScheduledJobInterface
+class UpdateBannerStatisticsCommand extends Command
 {
     /**
      * @var string
@@ -31,22 +30,6 @@ class UpdateBannerStatisticsCommand extends Command implements ScheduledJobInter
         parent::__construct(self::$defaultName);
 
         $this->doctrine = $doctrine;
-    }
-
-    /**
-     *
-     */
-    public function __invoke()
-    {
-        $this->execute();
-    }
-
-    /**
-     * @return string
-     */
-    public function getSchedulerExpresion(): string
-    {
-        return '3,18,33,48 * * * *';
     }
 
     /**

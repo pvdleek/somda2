@@ -4,66 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a91926bc257c0c70094a44c2320f4fac",
+    "content-hash": "c65ab07ec473350c8aa884e550d9c645",
     "packages": [
-        {
-            "name": "aurimasniekis/scheduler-bundle",
-            "version": "1.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/aurimasniekis/scheduler-bundle.git",
-                "reference": "36809e4e201ddff65e8ab12f9ac141f0700b2a0b"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/aurimasniekis/scheduler-bundle/zipball/36809e4e201ddff65e8ab12f9ac141f0700b2a0b",
-                "reference": "36809e4e201ddff65e8ab12f9ac141f0700b2a0b",
-                "shasum": ""
-            },
-            "require": {
-                "dragonmantank/cron-expression": "^2.3",
-                "php": "^7.4||^8.0",
-                "psr/log": "^1.1",
-                "symfony/console": "~4.0||~5.0",
-                "symfony/framework-bundle": "~4.0||~5.0"
-            },
-            "require-dev": {
-                "friendsofphp/php-cs-fixer": "^2",
-                "phpunit/phpunit": "^9.0"
-            },
-            "type": "symfony-bundle",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.0-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "AurimasNiekis\\SchedulerBundle\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Aurimas Niekis",
-                    "email": "aurimas@niekis.lt",
-                    "homepage": "https://aurimas.niekis.lt"
-                }
-            ],
-            "description": "A simple Symfony Job Scheduling Bundle",
-            "homepage": "https://github.com/aurimasniekis/scheduler-bundle",
-            "keywords": [
-                "cron",
-                "cronjob",
-                "job",
-                "scheduler",
-                "symfony"
-            ],
-            "time": "2020-03-22T06:14:17+00:00"
-        },
         {
             "name": "beberlei/doctrineextensions",
             "version": "v1.2.6",
@@ -1793,60 +1735,6 @@
             "description": "DOMPDF is a CSS 2.1 compliant HTML to PDF converter",
             "homepage": "https://github.com/dompdf/dompdf",
             "time": "2020-02-20T03:52:51+00:00"
-        },
-        {
-            "name": "dragonmantank/cron-expression",
-            "version": "v2.3.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/dragonmantank/cron-expression.git",
-                "reference": "72b6fbf76adb3cf5bc0db68559b33d41219aba27"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/dragonmantank/cron-expression/zipball/72b6fbf76adb3cf5bc0db68559b33d41219aba27",
-                "reference": "72b6fbf76adb3cf5bc0db68559b33d41219aba27",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^7.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^6.4|^7.0"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.3-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Cron\\": "src/Cron/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Michael Dowling",
-                    "email": "mtdowling@gmail.com",
-                    "homepage": "https://github.com/mtdowling"
-                },
-                {
-                    "name": "Chris Tankersley",
-                    "email": "chris@ctankersley.com",
-                    "homepage": "https://github.com/dragonmantank"
-                }
-            ],
-            "description": "CRON for PHP: Calculate the next or previous run date and determine if a CRON expression is due",
-            "keywords": [
-                "cron",
-                "schedule"
-            ],
-            "time": "2019-03-31T00:38:28+00:00"
         },
         {
             "name": "egulias/email-validator",

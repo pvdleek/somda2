@@ -1,0 +1,7 @@
+7 * * * * php /data/web/somda.nl/bin/console app:update-statistics
+4,19,34,49 * * * * php /data/web/somda.nl/bin/console app:process-forum-log
+14,29,44,59 * * * * php /data/web/somda.nl/bin/console app:get-rail-news
+3,18,33,48 * * * * php /data/web/somda.nl/bin/console app:update-banner-statistics
+3 0 * * 0 php /data/web/somda.nl/bin/console app:update-locations
+30 1 * * * php /data/web/somda.nl/bin/console app:update-route-lists
+32 1 * * * php /data/web/somda.nl/bin/console app:update-route-trains

@@ -8,7 +8,6 @@ use App\Entity\RouteTrain;
 use App\Entity\Spot;
 use App\Entity\TrainNamePattern;
 use App\Entity\TrainTableYear;
-use AurimasNiekis\SchedulerBundle\ScheduledJobInterface;
 use DateTime;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Exception;
@@ -16,7 +15,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class UpdateRouteTrainsCommand extends Command implements ScheduledJobInterface
+class UpdateRouteTrainsCommand extends Command
 {
     private const CHECK_DATE_DAYS = 300;
 
@@ -38,22 +37,6 @@ class UpdateRouteTrainsCommand extends Command implements ScheduledJobInterface
         parent::__construct(self::$defaultName);
 
         $this->doctrine = $doctrine;
-    }
-
-    /**
-     *
-     */
-    public function __invoke()
-    {
-        $this->execute();
-    }
-
-    /**
-     * @return string
-     */
-    public function getSchedulerExpresion(): string
-    {
-        return '32 1 * * *';
     }
 
     /**

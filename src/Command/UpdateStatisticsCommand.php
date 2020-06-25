@@ -3,7 +3,6 @@
 namespace App\Command;
 
 use App\Generics\DateGenerics;
-use AurimasNiekis\SchedulerBundle\ScheduledJobInterface;
 use DateTime;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Exception;
@@ -11,7 +10,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class UpdateStatisticsCommand extends Command implements ScheduledJobInterface
+class UpdateStatisticsCommand extends Command
 {
     private const DATE_PERIOD_YEAR_AGO = 'yearAgo';
     private const DATE_PERIOD_WEEK_AGO = 'weekAgo';
@@ -36,22 +35,6 @@ class UpdateStatisticsCommand extends Command implements ScheduledJobInterface
         parent::__construct(self::$defaultName);
 
         $this->doctrine = $doctrine;
-    }
-
-    /**
-     *
-     */
-    public function __invoke()
-    {
-        $this->execute();
-    }
-
-    /**
-     * @return string
-     */
-    public function getSchedulerExpresion(): string
-    {
-        return '7 * * * *';
     }
 
     /**

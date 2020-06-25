@@ -6,7 +6,6 @@ use App\Entity\ForumPost;
 use App\Entity\ForumPostLog;
 use App\Entity\ForumSearchList;
 use App\Entity\ForumSearchWord;
-use AurimasNiekis\SchedulerBundle\ScheduledJobInterface;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -14,7 +13,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Lock\LockFactory;
 use Symfony\Component\Lock\Store\SemaphoreStore;
 
-class ProcessForumLogCommand extends Command implements ScheduledJobInterface
+class ProcessForumLogCommand extends Command
 {
     /**
      * @var string
@@ -34,23 +33,6 @@ class ProcessForumLogCommand extends Command implements ScheduledJobInterface
         parent::__construct(self::$defaultName);
 
         $this->doctrine = $doctrine;
-    }
-
-    /**
-     *
-     */
-    public function __invoke()
-    {
-        $this->execute();
-    }
-
-    /**
-     * @return string
-     */
-    public function getSchedulerExpresion(): string
-    {
-        return '';
-        return '4,19,34,49 * * * *';
     }
 
     /**

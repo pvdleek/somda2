@@ -5,7 +5,6 @@ namespace App\Command;
 use App\Entity\RailNews;
 use App\Entity\RailNewsSource;
 use App\Entity\RailNewsSourceFeed;
-use AurimasNiekis\SchedulerBundle\ScheduledJobInterface;
 use DateTime;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Exception;
@@ -16,7 +15,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class GetRailNewsCommand extends Command implements ScheduledJobInterface
+class GetRailNewsCommand extends Command
 {
     private const TITLE_ONLY = 'titleOnly';
     private const POSITIVE_WORD = 'positiveWord';
@@ -68,22 +67,6 @@ class GetRailNewsCommand extends Command implements ScheduledJobInterface
 
         $this->doctrine = $doctrine;
         $this->feedIo = $feedIo;
-    }
-
-    /**
-     *
-     */
-    public function __invoke()
-    {
-        $this->execute();
-    }
-
-    /**
-     * @return string
-     */
-    public function getSchedulerExpresion(): string
-    {
-        return '14,29,44,59 * * * *';
     }
 
     /**

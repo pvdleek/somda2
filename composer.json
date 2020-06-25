@@ -8,7 +8,6 @@
         "ext-gd": "*",
         "ext-iconv": "*",
         "ext-json": "*",
-        "aurimasniekis/scheduler-bundle": "^1.0",
         "beberlei/doctrineextensions": "^1.2",
         "cocur/slugify": "^4.0",
         "debril/rss-atom-bundle": "^5.0",
