@@ -13,6 +13,10 @@ security:
     dev:
       pattern: ^/(_(profiler|wdt)|css|images|js|webfonts)/
       security: false
+    api:
+      pattern: ^/api
+      stateless: true
+      anonymous: true
     main:
       anonymous: true
       lazy: true

@@ -1,0 +1,9 @@
+api:
+  path: /api/dienstregeling/
+  methods: [GET]
+  controller: App\Controller\ApiController::trainTableAction
+api_search:
+  path: /api/dienstregeling/{trainTableYearId}/{routeNumber}/
+  methods: [GET]
+  requirements: { trainTableYearId: \d+ }
+  controller: App\Controller\ApiController::trainTableAction

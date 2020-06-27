@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as JMS;
 
 /**
  * @ORM\Table(name="somda_verk_cats")
@@ -36,6 +37,7 @@ class LocationCategory extends Entity
     /**
      * @var Location[]
      * @ORM\OneToMany(targetEntity="App\Entity\Location", mappedBy="category")
+     * @JMS\Exclude()
      */
     private $locations;
 

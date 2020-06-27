@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as JMS;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -64,6 +65,7 @@ class TrainTable extends Entity
      * @var Route
      * @ORM\ManyToOne(targetEntity="App\Entity\Route", inversedBy="trainTables")
      * @ORM\JoinColumn(name="treinid", referencedColumnName="treinid")
+     * @JMS\Exclude()
      */
     public Route $route;
 

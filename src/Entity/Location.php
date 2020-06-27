@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as JMS;
 
 /**
  * @ORM\Table(
@@ -80,12 +81,14 @@ class Location extends Entity
     /**
      * @var TrainTable[]
      * @ORM\OneToMany(targetEntity="App\Entity\TrainTable", mappedBy="location")
+     * @JMS\Exclude()
      */
     private $trainTables;
 
     /**
      * @var Spot[]
      * @ORM\OneToMany(targetEntity="App\Entity\Spot", mappedBy="location")
+     * @JMS\Exclude()
      */
     private $spots;
 
