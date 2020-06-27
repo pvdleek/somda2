@@ -19,18 +19,21 @@ class LocationCategory extends Entity
      * @ORM\Column(name="verk_catid", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @JMS\Expose()
      */
     protected ?int $id = null;
 
     /**
      * @var string
      * @ORM\Column(name="code", type="string", length=5, nullable=false)
+     * @JMS\Exclude()
      */
     public string $code = '';
 
     /**
      * @var string
      * @ORM\Column(name="name", type="string", length=20, nullable=false)
+     * @JMS\Expose()
      */
     public string $name = '';
 

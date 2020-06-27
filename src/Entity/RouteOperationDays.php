@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as JMS;
 
 /**
  * @ORM\Table(name="somda_rijdagen")
@@ -15,48 +16,56 @@ class RouteOperationDays extends Entity
      * @ORM\Column(name="rijdagenid", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @JMS\Expose()
      */
     protected ?int $id = null;
 
     /**
      * @var bool
      * @ORM\Column(name="ma", type="boolean", nullable=false)
+     * @JMS\Expose()
      */
     public bool $monday = false;
 
     /**
      * @var bool
      * @ORM\Column(name="di", type="boolean", nullable=false)
+     * @JMS\Expose()
      */
     public bool $tuesday = false;
 
     /**
      * @var bool
      * @ORM\Column(name="wo", type="boolean", nullable=false)
+     * @JMS\Expose()
      */
     public bool $wednesday = false;
 
     /**
      * @var bool
      * @ORM\Column(name="do", type="boolean", nullable=false)
+     * @JMS\Expose()
      */
     public bool $thursday = false;
 
     /**
      * @var bool
      * @ORM\Column(name="vr", type="boolean", nullable=false)
+     * @JMS\Expose()
      */
     public bool $friday = false;
 
     /**
      * @var bool
      * @ORM\Column(name="za", type="boolean", nullable=false)
+     * @JMS\Expose()
      */
     public bool $saturday = false;
 
     /**
      * @var bool
      * @ORM\Column(name="zf", type="boolean", nullable=false)
+     * @JMS\Expose()
      */
     public bool $sunday = false;
 

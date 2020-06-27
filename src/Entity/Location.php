@@ -26,48 +26,56 @@ class Location extends Entity
      * @ORM\Column(name="afkid", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @JMS\Expose()
      */
     protected ?int $id = null;
 
     /**
      * @var string
      * @ORM\Column(name="afkorting", type="string", length=10, nullable=false)
+     * @JMS\Expose()
      */
     public string $name = '';
 
     /**
      * @var float|null
      * @ORM\Column(name="latitude", type="float", precision=10, scale=0, nullable=true)
+     * @JMS\Expose()
      */
     public ?float $latitude;
 
     /**
      * @var float|null
      * @ORM\Column(name="longitude", type="float", precision=10, scale=0, nullable=true)
+     * @JMS\Expose()
      */
     public ?float $longitude;
 
     /**
      * @var string
      * @ORM\Column(name="description", type="string", length=100, nullable=false)
+     * @JMS\Expose()
      */
     public string $description;
 
     /**
      * @var string|null
      * @ORM\Column(name="traject", type="string", length=15, nullable=true)
+     * @JMS\Expose()
      */
     public ?string $routeDescription;
 
     /**
      * @var bool
      * @ORM\Column(name="spot_allowed", type="boolean", nullable=false)
+     * @JMS\Exclude()
      */
     public bool $spotAllowed = true;
 
     /**
      * @var int|null
      * @ORM\Column(name="route_overstaptijd", type="integer", nullable=true)
+     * @JMS\Exclude()
      */
     public ?int $transferTime;
 
@@ -75,6 +83,7 @@ class Location extends Entity
      * @var LocationCategory
      * @ORM\ManyToOne(targetEntity="App\Entity\LocationCategory", inversedBy="locations")
      * @ORM\JoinColumn(name="landid", referencedColumnName="verk_catid")
+     * @JMS\Expose()
      */
     public LocationCategory $category;
 
