@@ -1,15 +1,6 @@
 api:
-  path: /api/
-  methods: [GET]
-  controller: App\Controller\ApiController::trainTableAction
-api_search:
-  path: /api/{trainTableYearId}/{routeNumber}/
-  methods: [GET]
-  requirements: { trainTableYearId: \d+ }
-  controller: App\Controller\ApiController::trainTableAction
-
-
-
+  resource: routes_api.yaml
+  prefix: /api
 
 home:
   path: /
