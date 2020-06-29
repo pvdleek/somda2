@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as JMS;
+use Swagger\Annotations as SWG;
 
 /**
  * @ORM\Table(name="somda_verk_cats")
@@ -20,6 +21,7 @@ class LocationCategory extends Entity
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @JMS\Expose()
+     * @SWG\Property(description="Unique identifier", type="integer")
      */
     protected ?int $id = null;
 
@@ -34,6 +36,7 @@ class LocationCategory extends Entity
      * @var string
      * @ORM\Column(name="name", type="string", length=20, nullable=false)
      * @JMS\Expose()
+     * @SWG\Property(description="Name of the location-category", maxLength=20, type="string")
      */
     public string $name = '';
 

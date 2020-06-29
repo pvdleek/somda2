@@ -5,6 +5,8 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as JMS;
+use Nelmio\ApiDocBundle\Annotation\Model;
+use Swagger\Annotations as SWG;
 
 /**
  * @ORM\Table(
@@ -27,6 +29,7 @@ class Location extends Entity
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @JMS\Expose()
+     * @SWG\Property(description="Unique identifier", type="integer")
      */
     protected ?int $id = null;
 
@@ -34,6 +37,7 @@ class Location extends Entity
      * @var string
      * @ORM\Column(name="afkorting", type="string", length=10, nullable=false)
      * @JMS\Expose()
+     * @SWG\Property(description="Abbreviation of the location", maxLength=10, type="string")
      */
     public string $name = '';
 
@@ -41,6 +45,7 @@ class Location extends Entity
      * @var float|null
      * @ORM\Column(name="latitude", type="float", precision=10, scale=0, nullable=true)
      * @JMS\Expose()
+     * @SWG\Property(description="Latitude of the location", type="float")
      */
     public ?float $latitude;
 
@@ -48,6 +53,7 @@ class Location extends Entity
      * @var float|null
      * @ORM\Column(name="longitude", type="float", precision=10, scale=0, nullable=true)
      * @JMS\Expose()
+     * @SWG\Property(description="Longitude of the location", type="float")
      */
     public ?float $longitude;
 
@@ -55,6 +61,7 @@ class Location extends Entity
      * @var string
      * @ORM\Column(name="description", type="string", length=100, nullable=false)
      * @JMS\Expose()
+     * @SWG\Property(description="Description of the location", maxLength=100, type="string")
      */
     public string $description;
 
@@ -62,6 +69,7 @@ class Location extends Entity
      * @var string|null
      * @ORM\Column(name="traject", type="string", length=15, nullable=true)
      * @JMS\Expose()
+     * @SWG\Property(description="Route where this location is located", maxLength=15, type="string")
      */
     public ?string $routeDescription;
 
@@ -84,6 +92,10 @@ class Location extends Entity
      * @ORM\ManyToOne(targetEntity="App\Entity\LocationCategory", inversedBy="locations")
      * @ORM\JoinColumn(name="landid", referencedColumnName="verk_catid")
      * @JMS\Expose()
+     * @SWG\Property(
+     *     description="The category to which this location belongs",
+     *     ref=@Model(type=LocationCategory::class),
+     * )
      */
     public LocationCategory $category;
 
