@@ -4,20 +4,20 @@ api_documentation:
   defaults: { _controller: nelmio_api_doc.controller.swagger_ui }
 
 api_locations:
-  path: /locations/
+  path: /{version}/locations/
   methods: [GET]
   controller: App\Controller\Api\LocationController::indexAction
 api_locations_search:
-  path: /locations/{searchMethod}/{search}/
+  path: /{version}/locations/{searchMethod}/{search}/
   methods: [GET]
   controller: App\Controller\Api\LocationController::indexAction
 
 api_train_table_years:
-  path: /train-table-years/
+  path: /{version}/train-table-years/
   methods: [GET]
   controller: App\Controller\Api\TrainTableYearController::indexAction
 
 api_train_table:
-  path: /train-table/
+  path: /{version}/train-table/
   methods: [GET]
   controller: App\Controller\Api\TrainTableController::indexAction

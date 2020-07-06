@@ -4,6 +4,7 @@ namespace App\Controller\Api;
 
 use App\Controller\LocationController as WebLocationController;
 use App\Entity\Location;
+use App\Entity\LocationCategory;
 use Doctrine\Persistence\ManagerRegistry;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use Nelmio\ApiDocBundle\Annotation\Model;
@@ -59,6 +60,17 @@ class LocationController extends AbstractFOSRestController
                 break;
         }
 
-        return $this->handleView($this->view($locations, 200));
+        $categories = [];
+        $locationCategories = $this->doctrine->getRepository(LocationCategory::class)->findAll();
+        foreach ($locationCategories as $category) {
+            $categories[$category->getId()] = $category->name;
+        }
+
+        return $this->handleView(
+            $this->view([
+                'filters' => ['category' => $categories],
+                'data' => $locations,
+            ], 200)
+        );
     }
 }
