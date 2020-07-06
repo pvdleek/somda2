@@ -63,7 +63,7 @@ class LocationController extends AbstractFOSRestController
         $categories = [];
         $locationCategories = $this->doctrine->getRepository(LocationCategory::class)->findAll();
         foreach ($locationCategories as $category) {
-            $categories[$category->getId()] = $category->name;
+            $categories[] = $category->name;
         }
 
         return $this->handleView(
