@@ -76,7 +76,8 @@ class Location extends Entity
     /**
      * @var bool
      * @ORM\Column(name="spot_allowed", type="boolean", nullable=false)
-     * @JMS\Exclude()
+     * @JMS\Expose()
+     * @SWG\Property(description="Is the location currently active (allowed to add spots)", type="boolean")
      */
     public bool $spotAllowed = true;
 

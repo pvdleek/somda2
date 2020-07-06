@@ -3,12 +3,21 @@ api_documentation:
   methods: GET
   defaults: { _controller: nelmio_api_doc.controller.swagger_ui }
 
+api_locations:
+  path: /locations/
+  methods: [GET]
+  controller: App\Controller\Api\LocationController::indexAction
+api_locations_search:
+  path: /locations/{searchMethod}/{search}/
+  methods: [GET]
+  controller: App\Controller\Api\LocationController::indexAction
+
 api_train_table_years:
-  path: /dienstregelingen/
+  path: /train-table-years/
   methods: [GET]
   controller: App\Controller\Api\TrainTableYearController::indexAction
 
 api_train_table:
-  path: /dienstregeling/
+  path: /train-table/
   methods: [GET]
   controller: App\Controller\Api\TrainTableController::indexAction
