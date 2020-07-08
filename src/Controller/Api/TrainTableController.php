@@ -104,7 +104,7 @@ class TrainTableController extends AbstractFOSRestController
         $routeOperationDays = $this->doctrine->getRepository(RouteOperationDays::class)->findAll();
         foreach ($routeOperationDays as $routeOperationDay) {
             $routeOperationDaysArray[$routeOperationDay->getId()] =
-                $this->routeOperationDaysHelper->getDisplay($routeOperationDay);
+                $this->routeOperationDaysHelper->getDisplay($routeOperationDay, true);
         }
 
         return $this->handleView(

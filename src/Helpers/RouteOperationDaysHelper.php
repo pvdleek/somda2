@@ -23,14 +23,17 @@ class RouteOperationDaysHelper implements RuntimeExtensionInterface
 
     /**
      * @param RouteOperationDays $routeOperationDays
+     * @param bool $short
      * @return string
      */
-    public function getDisplay(RouteOperationDays $routeOperationDays): string
+    public function getDisplay(RouteOperationDays $routeOperationDays, bool $short = false): string
     {
         $daysArray = [];
         for ($day = 0; $day < 7; ++$day) {
             if ($routeOperationDays->isRunningOnDay($day)) {
-                $daysArray[] = strtolower($this->translator->trans('general.date.days.' . $day));
+                $daysArray[] = strtolower(
+                    $this->translator->trans('general.date.days' . ($short ? 'Short' : '') . '.' . $day)
+                );
             }
         }
 
