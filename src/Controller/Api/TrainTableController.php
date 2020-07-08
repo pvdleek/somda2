@@ -2,6 +2,7 @@
 
 namespace App\Controller\Api;
 
+use App\Entity\RouteOperationDays;
 use App\Entity\TrainTable;
 use App\Entity\TrainTableYear;
 use App\Helpers\Controller\TrainTableHelper;
@@ -93,20 +94,23 @@ class TrainTableController extends AbstractFOSRestController
         }
 
         $days = [];
-        $routeOperationDaysIdArray = [];
         foreach ($trainTableLines as $trainTableLine) {
             if (!isset($routeOperationDaysIdArray[$trainTableLine->routeOperationDays->getId()])) {
-                $days[] = [
-                    'id' => $trainTableLine->routeOperationDays->getId(),
-                    'name' => $this->routeOperationDaysHelper->getDisplay($trainTableLine->routeOperationDays),
-                ];
-                $routeOperationDaysIdArray[$trainTableLine->routeOperationDays->getId()] = true;
+                $days[] = $trainTableLine->routeOperationDays->getId();
             }
+        }
+
+        $routeOperationDaysArray = [];
+        $routeOperationDays = $this->doctrine->getRepository(RouteOperationDays::class)->findAll();
+        foreach ($routeOperationDays as $routeOperationDay) {
+            $routeOperationDaysArray[$routeOperationDay->getId()] =
+                $this->routeOperationDaysHelper->getDisplay($routeOperationDay);
         }
 
         return $this->handleView(
             $this->view([
-                'filters' => ['days' => $days],
+                'filters' => ['days' => array_unique($days)],
+                'legend' => ['days' => $routeOperationDaysArray],
                 'data' => $trainTableLines,
             ], 200)
         );
