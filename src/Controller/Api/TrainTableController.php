@@ -5,6 +5,7 @@ namespace App\Controller\Api;
 use App\Entity\TrainTable;
 use App\Entity\TrainTableYear;
 use App\Helpers\Controller\TrainTableHelper;
+use App\Helpers\RouteOperationDaysHelper;
 use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
@@ -27,13 +28,23 @@ class TrainTableController extends AbstractFOSRestController
     private TrainTableHelper $trainTableHelper;
 
     /**
+     * @var RouteOperationDaysHelper
+     */
+    private RouteOperationDaysHelper $routeOperationDaysHelper;
+
+    /**
      * @param ManagerRegistry $doctrine
      * @param TrainTableHelper $trainTableHelper
+     * @param RouteOperationDaysHelper $routeOperationDaysHelper
      */
-    public function __construct(ManagerRegistry $doctrine, TrainTableHelper $trainTableHelper)
-    {
+    public function __construct(
+        ManagerRegistry $doctrine,
+        TrainTableHelper $trainTableHelper,
+        RouteOperationDaysHelper $routeOperationDaysHelper
+    ) {
         $this->doctrine = $doctrine;
         $this->trainTableHelper = $trainTableHelper;
+        $this->routeOperationDaysHelper = $routeOperationDaysHelper;
     }
 
     /**
@@ -81,6 +92,23 @@ class TrainTableController extends AbstractFOSRestController
             $trainTableLines = $this->trainTableHelper->getTrainTableLines();
         }
 
-        return $this->handleView($this->view($trainTableLines, 200));
+        $days = [];
+        $routeOperationDaysIdArray = [];
+        foreach ($trainTableLines as $trainTableLine) {
+            if (!isset($routeOperationDaysIdArray[$trainTableLine->routeOperationDays->getId()])) {
+                $days[] = [
+                    'id' => $trainTableLine->routeOperationDays->getId(),
+                    'name' => $this->routeOperationDaysHelper->getDisplay($trainTableLine->routeOperationDays),
+                ];
+                $routeOperationDaysIdArray[$trainTableLine->routeOperationDays->getId()] = true;
+            }
+        }
+
+        return $this->handleView(
+            $this->view([
+                'filters' => ['days' => $days],
+                'data' => $trainTableLines,
+            ], 200)
+        );
     }
 }
