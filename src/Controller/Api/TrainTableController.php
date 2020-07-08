@@ -109,7 +109,7 @@ class TrainTableController extends AbstractFOSRestController
 
         return $this->handleView(
             $this->view([
-                'filters' => ['days' => array_unique($days)],
+                'filters' => ['days' => array_values(array_unique($days))],
                 'legend' => ['days' => $routeOperationDaysArray],
                 'data' => $trainTableLines,
             ], 200)
