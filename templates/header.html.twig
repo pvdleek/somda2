@@ -16,19 +16,3 @@
 		</div>
 	{% endif %}
 </div>
-<nav class="menu">
-	<ol>
-		<li class="menu-item"><a href="{{ path('home') }}">Home</a></li>
-		{% if menuStructure is defined %}
-			{% set lastParentId = 0 %}
-			{% for block in menuStructure %}
-				{% if block['parent_id'] != lastParentId %}
-					{% if lastParentId > 0 %}</ol></li>{% endif %}
-					<li class="menu-item"><span>{{ block['parent_name'] }}</span><ol class="sub-menu">
-					{% set lastParentId = block['parent_id'] %}
-				{% endif %}
-				<li class="menu-item"><a href="{{ path(block['route']) }}">{{ block['name'] }}{{ block['route'] == 'forum_discussion_post_alerts_overview' and is_granted(constant('App\\Generics\\RoleGenerics::ROLE_ADMIN')) ? ' (' ~ nrOfOpenForumAlerts ~ ')' }}</a></li>
-			{% endfor %}
-		{% endif %}
-	</ol>
-</nav>
