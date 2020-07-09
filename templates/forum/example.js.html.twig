@@ -1,6 +1,9 @@
 <script type="text/javascript">
     let timer, runningRequest;
     let editor = CKEDITOR.instances['forum_post_text'];
+    if (!editor) {
+        editor = CKEDITOR.instances['forum_discussion_text'];
+    }
 
     function updateExample()
     {
