@@ -1,22 +1,30 @@
 {% extends('base.html.twig') %}
 
 {% block content %}
-    <br />
-    <center>
-        {{ form_start(form, { 'attr': { 'id': 'discussion_form' } }) }}
-        <table>
-            {{ form_row(form.title) }}
-            {{ form_row(form.text) }}
-            {{ form_row(form.signatureOn) }}
-            <tr>
-                <td>&nbsp;</td>
-                <td>
-                    <a class="somda-button" href="#" onclick="$('#discussion_form').submit(); return false;">Start nieuwe discussie</a>
-                    <a class="somda-button" href="{{ path('forum_forum', { 'id': forum.id, 'name': (forum.name | slugify) }) }}">Terug naar de forum-categorie</a>
-                </td>
-            </tr>
-        </table>
-        {{ form_end(form) }}
-    </center>
-    <br />
+    <div class="panel">
+        <div class="panel-title"><i class="fas fa-comments"></i> Nieuwe discussie</div>
+        <div class="panel-content panel-no-background">
+            {{ form_start(form, { 'attr': { 'id': 'discussion_form' } }) }}
+            <table>
+                {{ form_row(form.title) }}
+                {{ form_row(form.text) }}
+                {{ form_row(form.signatureOn) }}
+                <tr>
+                    <td>&nbsp;</td>
+                    <td>
+                        <a class="somda-button" href="#" onclick="$('#discussion_form').submit(); return false;">Start nieuwe discussie</a>
+                        <a class="somda-button" href="{{ path('forum_forum', { 'id': forum.id, 'name': (forum.name | slugify) }) }}">Terug naar de forum-categorie</a>
+                    </td>
+                </tr>
+            </table>
+            {{ form_end(form) }}
+        </div>
+
+        {# Example of the reply #}
+        {{ include('forum/example.html.twig') }}
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ include('forum/example.js.html.twig') }}
 {% endblock %}
