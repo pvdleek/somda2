@@ -1,21 +1,19 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Api;
 
 use App\Entity\ForumDiscussion;
 use App\Entity\ForumForum;
-use App\Generics\RouteGenerics;
 use App\Helpers\ForumAuthorizationHelper;
 use App\Helpers\ForumOverviewHelper;
-use App\Helpers\RedirectHelper;
-use App\Helpers\TemplateHelper;
 use App\Helpers\UserHelper;
 use App\Traits\SortTrait;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\HttpFoundation\RedirectResponse;
+use FOS\RestBundle\Controller\AbstractFOSRestController;
+use Swagger\Annotations as SWG;
 use Symfony\Component\HttpFoundation\Response;
 
-class ForumForumController
+class ForumForumController extends AbstractFOSRestController
 {
     use SortTrait;
 
@@ -30,16 +28,6 @@ class ForumForumController
     private UserHelper $userHelper;
 
     /**
-     * @var TemplateHelper
-     */
-    private TemplateHelper $templateHelper;
-
-    /**
-     * @var RedirectHelper
-     */
-    private RedirectHelper $redirectHelper;
-
-    /**
      * @var ForumAuthorizationHelper
      */
     private ForumAuthorizationHelper $forumAuthHelper;
@@ -52,29 +40,32 @@ class ForumForumController
     /**
      * @param ManagerRegistry $doctrine
      * @param UserHelper $userHelper
-     * @param TemplateHelper $templateHelper
-     * @param RedirectHelper $redirectHelper
      * @param ForumAuthorizationHelper $forumAuthHelper
      * @param ForumOverviewHelper $forumOverviewHelper
      */
     public function __construct(
         ManagerRegistry $doctrine,
         UserHelper $userHelper,
-        TemplateHelper $templateHelper,
-        RedirectHelper $redirectHelper,
         ForumAuthorizationHelper $forumAuthHelper,
         ForumOverviewHelper $forumOverviewHelper
     ) {
         $this->doctrine = $doctrine;
         $this->userHelper = $userHelper;
-        $this->templateHelper = $templateHelper;
-        $this->redirectHelper = $redirectHelper;
         $this->forumAuthHelper = $forumAuthHelper;
         $this->forumOverviewHelper = $forumOverviewHelper;
     }
 
     /**
      * @return Response
+     * @SWG\Response(
+     *     response=200,
+     *     description="Returns all categories and forums",
+     *     @SWG\Schema(
+     *         type="array",
+     *         @SWG\Items()
+     *     )
+     * )
+     * @SWG\Tag(name="forum")
      */
     public function indexAction(): Response
     {
@@ -85,15 +76,21 @@ class ForumForumController
         }
         $categories = $this->sortByFieldFilter($categories, 'order');
 
-        return $this->templateHelper->render('forum/index.html.twig', [
-            TemplateHelper::PARAMETER_PAGE_TITLE => 'Forum - Overzicht',
-            'categories' => $categories
-        ]);
+        return $this->handleView($this->view(['data' => $categories], 200));
     }
 
     /**
      * @param int $id
-     * @return Response|RedirectResponse
+     * @return Response
+     * @SWG\Response(
+     *     response=200,
+     *     description="Returns all discussions in a forum",
+     *     @SWG\Schema(
+     *         type="array",
+     *         @SWG\Items()
+     *     )
+     * )
+     * @SWG\Tag(name="forum")
      */
     public function forumAction(int $id): Response
     {
@@ -102,20 +99,16 @@ class ForumForumController
          */
         $forum = $this->doctrine->getRepository(ForumForum::class)->find($id);
         if (is_null($forum)) {
-            return $this->redirectHelper->redirectToRoute(RouteGenerics::ROUTE_FORUM);
+            return $this->indexAction();
         }
 
         $discussions = $this->doctrine
             ->getRepository(ForumDiscussion::class)
             ->findByForum($forum, $this->userHelper->getUser());
-        return $this->templateHelper->render('forum/forum.html.twig', [
-            TemplateHelper::PARAMETER_PAGE_TITLE => 'Forum - ' . $forum->name,
-            TemplateHelper::PARAMETER_FORUM => $forum,
-            'userIsModerator' => $this->forumAuthHelper->userIsModerator(
-                $forum->getDiscussions()[0],
-                $this->userHelper->getUser()
-            ),
-            'discussions' => $discussions,
-        ]);
+        return $this->handleView($this->view(['data' => $discussions], 200));
+//            'userIsModerator' => $this->forumAuthHelper->userIsModerator(
+//                $forum->getDiscussions()[0],
+//                $this->userHelper->getUser()
+//            ),
     }
 }
