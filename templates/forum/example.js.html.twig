@@ -7,7 +7,7 @@
 
     function updateExample()
     {
-        $('#post_example').html('<img alt="Je bericht wordt bijgewerkt" height="100" src="{{ asset('images/spinner.gif') }}" />');
+        $('#post_example').html('<img alt="Je bericht wordt bijgewerkt" height="40" src="{{ asset('images/spinner.gif') }}" />');
         if (runningRequest && runningRequest.readyState !== 4) {
             runningRequest.abort();
         }
