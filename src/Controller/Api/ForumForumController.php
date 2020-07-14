@@ -69,14 +69,18 @@ class ForumForumController extends AbstractFOSRestController
      */
     public function indexAction(): Response
     {
-        $categories = $this->forumOverviewHelper->getCategoryArray();
-
+        $categories = $this->sortByFieldFilter($this->forumOverviewHelper->getCategoryArray(), 'order');
+        
+        $forums = [];
         foreach ($categories as $id => $category) {
-            $categories[$id]['forums'] = $this->sortByFieldFilter($category['forums'], 'order');
+            $categoryForums = $this->sortByFieldFilter($category['forums'], 'order');
+            foreach ($categoryForums as $key => $categoryForum) {
+                $categoryForums[$key]['category'] = ['id' => $id, 'name' => $category['name']];
+            }
+            $forums = array_merge($forums, $categoryForums);
         }
-        $categories = $this->sortByFieldFilter($categories, 'order');
 
-        return $this->handleView($this->view(['data' => $categories], 200));
+        return $this->handleView($this->view(['data' => $forums], 200));
     }
 
     /**
