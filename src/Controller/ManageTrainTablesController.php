@@ -11,6 +11,7 @@ use App\Entity\TrainTableFirstLast;
 use App\Entity\TrainTableYear;
 use App\Helpers\FlashHelper;
 use App\Helpers\FormHelper;
+use App\Helpers\RedirectHelper;
 use App\Helpers\RoutesDisplayHelper;
 use App\Helpers\TemplateHelper;
 use App\Traits\DateTrait;
@@ -48,6 +49,11 @@ class ManageTrainTablesController
     private TemplateHelper $templateHelper;
 
     /**
+     * @var RedirectHelper
+     */
+    private RedirectHelper $redirectHelper;
+
+    /**
      * @var RoutesDisplayHelper
      */
     private RoutesDisplayHelper $routesDisplayHelper;
@@ -56,17 +62,20 @@ class ManageTrainTablesController
      * @param ManagerRegistry $doctrine
      * @param FormHelper $formHelper
      * @param TemplateHelper $templateHelper
+     * @param RedirectHelper $redirectHelper
      * @param RoutesDisplayHelper $routesDisplayHelper
      */
     public function __construct(
         ManagerRegistry $doctrine,
         FormHelper $formHelper,
         TemplateHelper $templateHelper,
+        RedirectHelper $redirectHelper,
         RoutesDisplayHelper $routesDisplayHelper
     ) {
         $this->doctrine = $doctrine;
         $this->formHelper = $formHelper;
         $this->templateHelper = $templateHelper;
+        $this->redirectHelper = $redirectHelper;
         $this->routesDisplayHelper = $routesDisplayHelper;
     }
 
@@ -133,6 +142,27 @@ class ManageTrainTablesController
                 $newRoute->number = $routeNumber;
             }
 
+            // Check if the new route-number is in the correct range of the routeList
+            if ($routeNumber < $routeList->firstNumber || $routeNumber > $routeList->lastNumber) {
+                $originalRouteList = $routeList;
+                // Find the correct routeList
+                $routeList = $this->doctrine
+                    ->getRepository(RouteList::class)
+                    ->findForRouteNumber($routeList->trainTableYear, $routeNumber);
+                if (is_null($routeList)) {
+                    $this->formHelper->getFlashHelper()->add(
+                        FlashHelper::FLASH_TYPE_ERROR,
+                        'Het door jou opgegeven treinnummer ' . $routeNumber .
+                        ' past niet in de vastgelegde treinnummerlijst, neem contact op met het beheer'
+                    );
+
+                    return $this->redirectHelper->redirectToRoute(
+                        'manage_train_tables_year_route_list',
+                        ['yearId' => $originalRouteList->trainTableYear->getId(), 'routeListId' => $routeListId]
+                    );
+                }
+            }
+
             $trainTableLines = $this->doctrine->getRepository(TrainTable::class)->findBy(
                 ['trainTableYear' => $routeList->trainTableYear, 'route' => $route],
                 ['order' => 'ASC']
@@ -141,6 +171,10 @@ class ManageTrainTablesController
             unset($route);
             $route = $newRoute;
             unset($newRoute);
+
+            $route->addRouteList($routeList);
+            $routeList->addRoute($route);
+            $this->doctrine->getManager()->persist($route);
         }
 
         if ($request->getMethod() === Request::METHOD_POST) {
