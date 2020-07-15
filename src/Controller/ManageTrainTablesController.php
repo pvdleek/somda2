@@ -112,6 +112,8 @@ class ManageTrainTablesController
      */
     public function manageRouteAction(Request $request, int $routeListId, int $routeId, int $routeNumber = null)
     {
+        //TODO: this function needs refactoring, it's way too long
+
         /**
          * @var RouteList $routeList
          */
