@@ -108,7 +108,7 @@ class ForumForumController extends AbstractFOSRestController
 
         $discussions = $this->doctrine
             ->getRepository(ForumDiscussion::class)
-            ->findByForum($forum, $this->userHelper->getUser());
+            ->findByForum($forum, $this->userHelper->getUser(), 50);
         return $this->handleView($this->view(['data' => $discussions], 200));
 //            'userIsModerator' => $this->forumAuthHelper->userIsModerator(
 //                $forum->getDiscussions()[0],

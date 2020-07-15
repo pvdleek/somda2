@@ -90,7 +90,7 @@ class ForumDiscussion extends EntityRepository
      * @param User|null $user
      * @return array
      */
-    public function findByForum(ForumForum $forum, User $user = null): array
+    public function findByForum(ForumForum $forum, User $user = null, int $limit = null): array
     {
         $maxQuery = '
             SELECT p.discussionid AS disc_id, MAX(p.timestamp) AS max_date_time
@@ -127,6 +127,9 @@ class ForumDiscussion extends EntityRepository
                 WHERE d.forumid = :forumid AND p_max.timestamp = m.max_date_time
                 GROUP BY `id`, `title`, `author_id`, `viewed`, m.max_date_time, `discussion_read`, `max_post_timestamp`
                 ORDER BY m.max_date_time DESC';
+        }
+        if (!is_null($limit)) {
+            $query .= ' LIMIT 0, ' . $limit;
         }
         $connection = $this->getEntityManager()->getConnection();
         try {
