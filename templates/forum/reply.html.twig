@@ -20,8 +20,7 @@
             {{ form_end(form) }}
         </div>
 
-        {# Example of the reply #}
-        {{ include('forum/example.html.twig') }}
+        {% include 'forum/example.html.twig' with { 'user': app.user } only %}
         <br />
 
         {% for post in lastPosts %}
