@@ -2,23 +2,23 @@
     <tr><th class="left-align" colspan="2"><i class="color-orange fas fa-comment-dots"></i> {{ "now" | date('d-m-Y H:i:s') }}</th></tr>
     <tr>
         <td class="info" nowrap="nowrap">
-            {{ app.user.id | displayUser(app.user.username) | raw }}
-            {% if app.user.info.avatar | length > 0 %}
-                <br /><img alt="{{ app.user.username }}" src="{{ asset('images/avatar/' ~  app.user.info.avatar) }}" />
+            {{ user.id | displayUser(user.username) | raw }}
+            {% if user.info.avatar | length > 0 %}
+                <br /><img alt="{{ user.username }}" src="{{ asset('images/avatar/' ~  user.info.avatar) }}" />
             {% endif %}
-            {% if app.user.info.city | length > 0 %}<br />{{ app.user.info.city }}{% endif %}
+            {% if user.info.city | length > 0 %}<br />{{ user.info.city }}{% endif %}
             <br />
-            {% if app.user.info.twitterAccount | length > 0 %}
-                <a href="https://twitter.com/#!/{{ app.user.info.twitterAccount }}" rel="ugc noopener" target="_blank"><i class="fab fa-twitter" title="Twitter {{ app.user.info.twitterAccount }}"></i></a>
+            {% if user.info.twitterAccount | length > 0 %}
+                <a href="https://twitter.com/#!/{{ user.info.twitterAccount }}" rel="ugc noopener" target="_blank"><i class="fab fa-twitter" title="Twitter {{ user.info.twitterAccount }}"></i></a>
             {% endif %}
-            {% if app.user.info.facebookAccount | length > 0 %}
-                <a href="https://www.facebook.com/{{ app.user.info.facebookAccount }}" rel="ugc noopener" target="_blank"><i class="fab fa-facebook" title="Facebook {{ app.user.info.facebookAccount }}"></i></a>
+            {% if user.info.facebookAccount | length > 0 %}
+                <a href="https://www.facebook.com/{{ user.info.facebookAccount }}" rel="ugc noopener" target="_blank"><i class="fab fa-facebook" title="Facebook {{ user.info.facebookAccount }}"></i></a>
             {% endif %}
-            {% if app.user.info.youtubeAccount | length > 0 %}
-                <a href="https://www.youtube.com/user/{{ app.user.info.youtubeAccount }}" rel="ugc noopener" target="_blank"><i class="fab fa-youtube" title="Youtube {{ app.user.info.youtubeAccount }}"></i></a>
+            {% if user.info.youtubeAccount | length > 0 %}
+                <a href="https://www.youtube.com/user/{{ user.info.youtubeAccount }}" rel="ugc noopener" target="_blank"><i class="fab fa-youtube" title="Youtube {{ user.info.youtubeAccount }}"></i></a>
             {% endif %}
-            {% if app.user.info.flickrAccount | length > 0 %}
-                <a href="https://www.flickr.com/photos/{{ app.user.info.flickrAccount }}" rel="ugc noopener" target="_blank"><i class="fab fa-flickr" title="Flickr {{ app.user.info.flickrAccount }}"></i></a>
+            {% if user.info.flickrAccount | length > 0 %}
+                <a href="https://www.flickr.com/photos/{{ user.info.flickrAccount }}" rel="ugc noopener" target="_blank"><i class="fab fa-flickr" title="Flickr {{ user.info.flickrAccount }}"></i></a>
             {% endif %}
         </td>
         <td class="text" id="post_example">

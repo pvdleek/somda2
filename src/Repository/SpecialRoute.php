@@ -16,6 +16,8 @@ class SpecialRoute extends EntityRepository
      */
     public function findForDashboard(bool $construction): array
     {
+        $today = new DateTime();
+        $today->setTime(0, 0, 0);
         $queryBuilder = $this->getEntityManager()
             ->createQueryBuilder()
             ->select('s')
@@ -24,7 +26,7 @@ class SpecialRoute extends EntityRepository
             ->andWhere('s.construction = :construction')
             ->setParameter('construction', $construction)
             ->andWhere('(s.startDate >= :today AND s.endDate IS NULL) OR s.endDate >= :today')
-            ->setParameter('today', new DateTime())
+            ->setParameter('today', $today)
             ->addOrderBy('s.startDate', 'ASC');
         return $queryBuilder->getQuery()->getResult();
     }

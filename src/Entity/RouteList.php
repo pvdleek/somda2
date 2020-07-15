@@ -14,7 +14,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *         @ORM\Index(name="idx_48381_nr_eind", columns={"nr_eind"})
  *     }
  * )
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\RouteList")
  */
 class RouteList extends Entity
 {
