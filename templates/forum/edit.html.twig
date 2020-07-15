@@ -22,7 +22,7 @@
             {{ form_end(form) }}
         </div>
 
-        {{ include('forum/example.html.twig') }}
+        {% include 'forum/example.html.twig' with { 'user': post.author } only %}
 
     </div>
 {% endblock %}
