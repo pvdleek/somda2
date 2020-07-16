@@ -2,9 +2,9 @@ nelmio_security:
   signed_cookie:
     names: ['*']
   # Prevent framing of the entire site
-  clickjacking:
-    paths:
-      '^/.*': DENY
+#  clickjacking:
+#    paths:
+#      '^/.*': DENY
   # Prevent re-directions outside the website's domain
   external_redirects:
     abort: false
