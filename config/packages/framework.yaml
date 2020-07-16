@@ -9,7 +9,7 @@ framework:
     handler_id: Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler
     cookie_secure: true
     cookie_samesite: strict
-    cookie_lifetime: 604800
+    cookie_lifetime: 8640000
     use_cookies: true
 
   php_errors:
