@@ -62,7 +62,7 @@ nelmio_security:
     mode_block: true
 
   referrer_policy:
-    enabled: true
-    policies:
-      - 'no-referrer'
-      - 'strict-origin-when-cross-origin'
+    enabled: false
+#    policies:
+#      - 'no-referrer'
+#      - 'strict-origin-when-cross-origin'
