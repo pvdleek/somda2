@@ -149,7 +149,7 @@ class ForumHelper implements RuntimeExtensionInterface
         for ($smileyNumber = 1; $smileyNumber <= 18; ++$smileyNumber) {
             $text = str_replace(
                 '%' . sprintf('%2d', $smileyNumber) . '%',
-                '<img alt="" src="/images/smileys/' . sprintf('%2d', $smileyNumber) . '.gif" />',
+                '<img alt="" src="/images/smileys/' . sprintf('%2d', $smileyNumber) . '.png" />',
                 $text
             );
         }
@@ -161,7 +161,7 @@ class ForumHelper implements RuntimeExtensionInterface
             ' :O' => '16', ' :-O' => '16', ' ;)' => '17', ' ;-)' => '17',
         ];
         foreach ($smileys as $smileyCode => $smileyNumber) {
-            $text = str_replace($smileyCode, '<img alt="" src="/images/smileys/' . $smileyNumber . '.gif" />', $text);
+            $text = str_replace($smileyCode, '<img alt="" src="/images/smileys/' . $smileyNumber . '.png" />', $text);
         }
 
         return $text;
