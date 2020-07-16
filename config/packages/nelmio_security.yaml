@@ -2,9 +2,9 @@ nelmio_security:
   signed_cookie:
     names: ['*']
   # Prevent framing of the entire site
-#  clickjacking:
-#    paths:
-#      '^/.*': DENY
+  clickjacking:
+    paths:
+      '^/.*': DENY
   # Prevent re-directions outside the website's domain
   external_redirects:
     abort: false
@@ -53,8 +53,8 @@ nelmio_security:
       upgrade-insecure-requests: true
 
   # Disable content type sniffing for script resources
-  content_type:
-    nosniff: true
+#  content_type:
+#    nosniff: true
 
   # Force Microsoft's XSS-Protection with its block mode
   xss_protection:
@@ -62,7 +62,7 @@ nelmio_security:
     mode_block: true
 
   referrer_policy:
-    enabled: false
-#    policies:
-#      - 'no-referrer'
-#      - 'strict-origin-when-cross-origin'
+    enabled: true
+    policies:
+      - 'no-referrer'
+      - 'strict-origin-when-cross-origin'
