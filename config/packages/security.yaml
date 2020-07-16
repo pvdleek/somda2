@@ -32,7 +32,7 @@ security:
         secret: '%env(APP_SECRET)%'
         httponly: true
         always_remember_me: true
-        lifetime: 604800
+        lifetime: 8640000
         secure: true
         samesite: null
 
