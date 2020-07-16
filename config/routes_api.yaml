@@ -22,11 +22,26 @@ api_train_table:
   methods: [GET]
   controller: App\Controller\Api\TrainTableController::indexAction
 
-api_forum_forums:
+api_forum:
   path: /{version}/forum-forums/
   methods: [GET]
   controller: App\Controller\Api\ForumForumController::indexAction
-api_forum_discussions:
+api_forum_forum:
   path: /{version}/forum-discussions/{id}/
   methods: [GET]
   controller: App\Controller\Api\ForumForumController::forumAction
+
+api_forum_discussion:
+  path: /{version}/forum-discussion/{id}/
+  methods: [GET]
+  controller: App\Controller\Api\ForumDiscussionController::indexAction
+api_forum_discussion_page:
+  path: /{version}/forum-discussion/{id}/{pageNumber}/
+  methods: [GET]
+  requirements: { id: \d+, pageNumber: \d+ }
+  controller: App\Controller\Api\ForumDiscussionController::indexAction
+api_forum_discussion_post:
+  path: /{version}/forum-discussion/{id}/p{postId}/
+  methods: [GET]
+  requirements: { id: \d+, postId: \d+ }
+  controller: App\Controller\Api\ForumDiscussionController::indexAction

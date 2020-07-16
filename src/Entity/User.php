@@ -5,6 +5,8 @@ namespace App\Entity;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as JMS;
+use Swagger\Annotations as SWG;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -30,18 +32,23 @@ class User extends Entity implements UserInterface
      * @ORM\Column(name="uid", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @JMS\Expose()
+     * @SWG\Property(description="Unique identifier", type="integer")
      */
     protected ?int $id = null;
 
     /**
      * @var bool
      * @ORM\Column(name="active", type="boolean", nullable=false)
+     * @JMS\Expose()
+     * @SWG\Property(description="Is the user active", type="boolean")
      */
     public bool $active = false;
 
     /**
      * @var int
      * @ORM\Column(name="spots_ok", type="integer", nullable=false)
+     * @JMS\Exclude()
      */
     public int $spotsOk = 0;
 
@@ -55,18 +62,23 @@ class User extends Entity implements UserInterface
      *     minMessage = "De gebruikersnaam moet minimaal 2 karakters lang zijn",
      *     maxMessage = "De gebruikersnaam mag maximaal 20 karakters lang zijn"
      * )
+     * @JMS\Expose()
+     * @SWG\Property(description="Username", maxLength=20, type="string")
      */
     public string $username = '';
 
     /**
      * @var string|null
      * @ORM\Column(name="name", type="string", length=100, nullable=true)
+     * @JMS\Expose()
+     * @SWG\Property(description="Real name of the user", maxLength=100, type="string")
      */
     public ?string $name;
 
     /**
      * @var string
      * @ORM\Column(name="password", type="string", length=255, nullable=false)
+     * @JMS\Exclude()
      */
     public string $password = '';
 
@@ -79,6 +91,8 @@ class User extends Entity implements UserInterface
      *     max = 100,
      *     maxMessage = "Het e-mailadres mag maximaal 100 karakters lang zijn"
      * )
+     * @JMS\Expose()
+     * @SWG\Property(description="Email address of the user", maxLength=100, type="string")
      */
     public string $email = '';
 
@@ -86,72 +100,86 @@ class User extends Entity implements UserInterface
      * @var string
      * @ORM\Column(name="cookie_ok", type="string", length=3, nullable=false)
      * @Assert\Choice(choices=User::COOKIE_VALUES)
+     * @JMS\Exclude()
      */
     public string $cookieOk = self::COOKIE_UNKNOWN;
 
     /**
      * @var string|null
      * @ORM\Column(name="actkey", type="string", length=13, nullable=true)
+     * @JMS\Exclude()
      */
     public ?string $activationKey;
 
     /**
      * @var DateTime
      * @ORM\Column(name="regdate", type="datetime", nullable=false)
+     * @JMS\Expose()
+     * @SWG\Property(description="Timestamp of registration of the user", type="datetime")
      */
     public DateTime $registerTimestamp;
 
     /**
      * @var DateTime|null
      * @ORM\Column(name="ban_expire_timestamp", type="datetime", nullable=true)
+     * @JMS\Exclude()
      */
     public ?DateTime $banExpireTimestamp;
 
     /**
      * @var DateTime|null
      * @ORM\Column(name="last_visit", type="datetime", nullable=true)
+     * @JMS\Expose()
+     * @SWG\Property(description="Timestamp of the last visit of the user", type="datetime")
      */
     public ?DateTime $lastVisit;
 
     /**
      * @var array
      * @ORM\Column(name="roles", type="array", nullable=false)
+     * @JMS\Exclude()
      */
     public array $roles = [];
 
     /**
      * @var UserInfo
      * @ORM\OneToOne(targetEntity="App\Entity\UserInfo", mappedBy="user")
+     * @JMS\Expose()
      */
     public UserInfo $info;
 
     /**
      * @var Group[]
      * @ORM\ManyToMany(targetEntity="App\Entity\Group", mappedBy="users")
+     * @JMS\Exclude()
      */
     private $groups;
 
     /**
      * @var ForumFavorite[]
      * @ORM\OneToMany(targetEntity="App\Entity\ForumFavorite", mappedBy="user")
+     * @JMS\Exclude()
      */
     private $forumFavorites;
 
     /**
      * @var ForumForum[]
      * @ORM\ManyToMany(targetEntity="App\Entity\ForumForum", mappedBy="moderators")
+     * @JMS\Exclude()
      */
     private $moderatedForums;
 
     /**
      * @var Spot[]
      * @ORM\OneToMany(targetEntity="App\Entity\Spot", mappedBy="user")
+     * @JMS\Exclude()
      */
     private $spots;
 
     /**
      * @var UserPreferenceValue[]
      * @ORM\OneToMany(targetEntity="App\Entity\UserPreferenceValue", mappedBy="user")
+     * @JMS\Exclude()
      */
     private $preferences;
 
@@ -333,5 +361,19 @@ class User extends Entity implements UserInterface
     public function getPreferences(): array
     {
         return $this->preferences->toArray();
+    }
+
+    /**
+     * @return string
+     * @JMS\VirtualProperty(name="signature")
+     */
+    public function getSignature(): string
+    {
+        foreach ($this->getPreferences() as $preference) {
+            if ($preference->preference->key === UserPreference::KEY_FORUM_SIGNATURE) {
+                return $preference->value;
+            }
+        }
+        return '';
     }
 }
