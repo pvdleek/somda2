@@ -217,9 +217,9 @@ class SecurityController
      */
     public function validatePassword(FormInterface $form): void
     {
-        $plainPassword = $form->get(UserForm::FIELD_PLAIN_PASSWORD)->getData();
+        $plainPassword = (string)$form->get(UserForm::FIELD_PLAIN_PASSWORD)->getData();
 
-        $username = $form->get(UserForm::FIELD_USERNAME)->getData();
+        $username = (string)$form->get(UserForm::FIELD_USERNAME)->getData();
         if (stristr($plainPassword, $username) || stristr($username, $plainPassword)
             || stristr(strrev($username), $plainPassword) || stristr($plainPassword, strrev($username))
         ) {
@@ -229,7 +229,7 @@ class SecurityController
             );
         }
 
-        $email = $form->get(UserForm::FIELD_EMAIL)->getData();
+        $email = (string)$form->get(UserForm::FIELD_EMAIL)->getData();
         if (stristr($plainPassword, $email) || stristr($email, $plainPassword)
             || stristr(strrev($email), $plainPassword) || stristr($plainPassword, strrev($email))
         ) {
