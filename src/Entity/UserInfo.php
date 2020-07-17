@@ -26,9 +26,9 @@ class UserInfo
 
     /**
      * @var string
-     * @ORM\Column(name="avatar", type="string", length=30, nullable=false, options={"default"="_blank.gif"})
+     * @ORM\Column(name="avatar", type="string", length=30, nullable=false, options={"default"="_blank.png"})
      */
-    public string $avatar = '_blank.gif';
+    public string $avatar = '_blank.png';
 
     /**
      * @var string|null
