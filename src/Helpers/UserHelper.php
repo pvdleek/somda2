@@ -2,6 +2,7 @@
 
 namespace App\Helpers;
 
+use App\Entity\User;
 use App\Entity\UserPreference;
 use App\Entity\UserPreferenceValue;
 use App\Exception\UnknownUserPreferenceKey;
@@ -48,7 +49,8 @@ class UserHelper implements RuntimeExtensionInterface
              */
             $user = $this->security->getUser();
         }
-        return $user;
+
+        return $user instanceof User ? $user : null;
     }
 
     /**
