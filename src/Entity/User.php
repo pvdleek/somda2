@@ -27,6 +27,8 @@ class User extends Entity implements UserInterface
     public const COOKIE_OK = 'ok';
     public const COOKIE_VALUES = [self::COOKIE_UNKNOWN, self::COOKIE_NOT_OK, self::COOKIE_OK];
 
+    public const API_TOKEN_VALIDITY = '+1 year';
+
     /**
      * @var int
      * @ORM\Column(name="uid", type="bigint", nullable=false)
@@ -133,6 +135,21 @@ class User extends Entity implements UserInterface
      * @SWG\Property(description="Timestamp of the last visit of the user", type="datetime")
      */
     public ?DateTime $lastVisit;
+
+    /**
+     * @var string|null
+     * @ORM\Column(name="api_token", type="string", length=23, nullable=true)
+     * @JMS\Expose()
+     * @SWG\Property(description="Token of the user, if logged in", maxLength=23, type="string")
+     */
+    public ?string $apiToken = null;
+
+    /**
+     * @var DateTime|null
+     * @ORM\Column(name="api_token_expiry_timestamp", type="datetime", nullable=true)
+     * @JMS\Exclude()
+     */
+    public ?DateTime $apiTokenExpiryTimestamp = null;
 
     /**
      * @var array

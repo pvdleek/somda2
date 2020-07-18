@@ -10,6 +10,7 @@ use App\Helpers\UserHelper;
 use App\Traits\SortTrait;
 use Doctrine\Persistence\ManagerRegistry;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Swagger\Annotations as SWG;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -56,6 +57,7 @@ class ForumForumController extends AbstractFOSRestController
     }
 
     /**
+     * @IsGranted("ROLE_API_USER")
      * @return Response
      * @SWG\Response(
      *     response=200,
@@ -84,6 +86,7 @@ class ForumForumController extends AbstractFOSRestController
     }
 
     /**
+     * @IsGranted("ROLE_API_USER")
      * @param int $id
      * @return Response
      * @SWG\Response(

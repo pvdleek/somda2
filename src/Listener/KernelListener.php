@@ -3,6 +3,7 @@
 namespace App\Listener;
 
 use App\Entity\Log;
+use App\Entity\User;
 use App\Generics\DateGenerics;
 use App\Helpers\UserHelper;
 use DateTime;
@@ -16,6 +17,8 @@ use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\Event\TerminateEvent;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\KernelEvents;
+use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
+use Symfony\Component\Security\Http\SecurityEvents;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
 use Symfony\Component\Stopwatch\Stopwatch;
 
@@ -68,6 +71,7 @@ class KernelListener implements EventSubscriberInterface
         return [
             KernelEvents::REQUEST => ['onKernelRequest', -10],
             KernelEvents::TERMINATE => ['onKernelTerminate', -10],
+            SecurityEvents::INTERACTIVE_LOGIN => ['onInteractiveLogin', -10],
         ];
     }
 
@@ -123,6 +127,22 @@ class KernelListener implements EventSubscriberInterface
     }
 
     /**
+     * @param InteractiveLoginEvent $event
+     */
+    public function onInteractiveLogin(InteractiveLoginEvent $event)
+    {
+        /**
+         * @var User $user
+         */
+        $user = $event->getAuthenticationToken()->getUser();
+        if (is_null($user->apiToken)) {
+            // Generate an API token for this user
+            $user->apiToken = uniqid('', true);
+        }
+        $user->apiTokenExpiryTimestamp = new DateTime(User::API_TOKEN_VALIDITY);
+    }
+
+    /**
      * @throws Exception
      */
     private function saveVisit(): void
@@ -143,6 +163,9 @@ class KernelListener implements EventSubscriberInterface
         }
 
         $route = (string)$event->getRequest()->attributes->get('_route');
-        return substr($route, 0, 1) !== '_' && substr($route, -5) !== '_json' && $route !== 'logout';
+        return substr($route, 0, 1) !== '_'
+            && substr($route, -5) !== '_json'
+            && $route !== 'logout'
+            && $route !== 'api_authenticate_token';
     }
 }

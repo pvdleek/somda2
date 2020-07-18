@@ -3,6 +3,15 @@ api_documentation:
   methods: GET
   defaults: { _controller: nelmio_api_doc.controller.swagger_ui }
 
+api_authenticate:
+  path: /{version}/authenticate/
+  methods: [POST]
+  controller: App\Controller\Api\SecurityController::loginAction
+api_authenticate_token:
+  path: /{version}/authenticate-token/{id}/{token}/
+  methods: [GET]
+  controller: App\Controller\Api\SecurityController::verifyAction
+
 api_locations:
   path: /{version}/locations/
   methods: [GET]

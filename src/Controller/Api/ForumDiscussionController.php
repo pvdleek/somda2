@@ -11,6 +11,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use Nelmio\ApiDocBundle\Annotation\Model;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Swagger\Annotations as SWG;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -56,6 +57,7 @@ class ForumDiscussionController extends AbstractFOSRestController
     }
 
     /**
+     * @IsGranted("ROLE_API_USER")
      * @param int $id
      * @param int|null $pageNumber
      * @param int|null $postId
