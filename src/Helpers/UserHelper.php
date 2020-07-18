@@ -38,9 +38,9 @@ class UserHelper implements RuntimeExtensionInterface
     }
 
     /**
-     * @return UserInterface
+     * @return User|null
      */
-    public function getUser(): ?UserInterface
+    public function getUser(): ?User
     {
         $user = null;
         if ($this->userIsLoggedIn()) {
@@ -74,7 +74,7 @@ class UserHelper implements RuntimeExtensionInterface
      */
     public function userIsLoggedIn(): bool
     {
-        return $this->security->isGranted('IS_AUTHENTICATED_REMEMBERED');
+        return $this->security->getUser() instanceof User && $this->security->isGranted('IS_AUTHENTICATED_REMEMBERED');
     }
 
     /**
