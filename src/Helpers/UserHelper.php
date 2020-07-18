@@ -2,14 +2,13 @@
 
 namespace App\Helpers;
 
-use App\Entity\User;
 use App\Entity\UserPreference;
 use App\Entity\UserPreferenceValue;
 use App\Exception\UnknownUserPreferenceKey;
-use DateTime;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Exception;
 use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Twig\Extension\RuntimeExtensionInterface;
 
 class UserHelper implements RuntimeExtensionInterface
@@ -38,14 +37,14 @@ class UserHelper implements RuntimeExtensionInterface
     }
 
     /**
-     * @return User
+     * @return UserInterface
      */
-    public function getUser(): ?User
+    public function getUser(): ?UserInterface
     {
         $user = null;
         if ($this->userIsLoggedIn()) {
             /**
-             * @var User $user
+             * @var UserInterface $user
              */
             $user = $this->security->getUser();
         }
@@ -53,17 +52,17 @@ class UserHelper implements RuntimeExtensionInterface
     }
 
     /**
-     * @return User
+     * @return UserInterface
      */
-    public function getAdministratorUser(): User
+    public function getAdministratorUser(): UserInterface
     {
         return $this->doctrine->getRepository(User::class)->find(self::ADMINISTRATOR_UID);
     }
 
     /**
-     * @return User
+     * @return UserInterface
      */
-    public function getModeratorUser(): User
+    public function getModeratorUser(): UserInterface
     {
         return $this->doctrine->getRepository(User::class)->find(self::MODERATOR_UID);
     }
@@ -112,11 +111,11 @@ class UserHelper implements RuntimeExtensionInterface
     }
 
     /**
-     * @param User $user
+     * @param UserInterface $user
      * @return string
      * @throws Exception
      */
-    public function getSignatureForUser(User $user): string
+    public function getSignatureForUser(UserInterface $user): string
     {
         foreach ($user->getPreferences() as $preference) {
             if ($preference->preference->key === UserPreference::KEY_FORUM_SIGNATURE) {
