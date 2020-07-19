@@ -8,6 +8,7 @@ use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use Monolog\Logger;
+use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -30,7 +31,7 @@ class SecurityController extends AbstractFOSRestController
      * @param ManagerRegistry $doctrine
      * @param UserHelper $userHelper
      */
-    public function __construct(ManagerRegistry $doctrine, UserHelper $userHelper, Logger $logger)
+    public function __construct(ManagerRegistry $doctrine, UserHelper $userHelper, LoggerInterface $logger)
     {
         $this->doctrine = $doctrine;
         $this->userHelper = $userHelper;
