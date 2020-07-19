@@ -43,7 +43,8 @@ class SecurityController extends AbstractFOSRestController
      */
     public function loginAction(Request $request): Response
     {
-        $this->logger->addRecord(Logger::ERROR, "Request for login " . $request->getContent());
+        $this->logger->error("Request for login " . $request->getContent());
+        $this->logger->error("User returned with id " . $this->userHelper->getUser()->getId());
 
         return $this->handleView($this->view(['data' => $this->userHelper->getUser()], 200));
     }
