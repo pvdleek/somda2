@@ -7,7 +7,9 @@ use App\Helpers\UserHelper;
 use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
+use Monolog\Logger;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class SecurityController extends AbstractFOSRestController
@@ -22,21 +24,26 @@ class SecurityController extends AbstractFOSRestController
      */
     private UserHelper $userHelper;
 
+    private $logger;
+
     /**
      * @param ManagerRegistry $doctrine
      * @param UserHelper $userHelper
      */
-    public function __construct(ManagerRegistry $doctrine, UserHelper $userHelper)
+    public function __construct(ManagerRegistry $doctrine, UserHelper $userHelper, Logger $logger)
     {
         $this->doctrine = $doctrine;
         $this->userHelper = $userHelper;
+        $this->logger = $logger;
     }
 
     /**
      * @return Response
      */
-    public function loginAction(): Response
+    public function loginAction(Request $request): Response
     {
+        $this->logger->addRecord(Logger::ERROR, "Request for login " . $request->getContent());
+
         return $this->handleView($this->view(['data' => $this->userHelper->getUser()], 200));
     }
 
