@@ -44,7 +44,8 @@ class SecurityController extends AbstractFOSRestController
     public function loginAction(Request $request): Response
     {
         // If we reach this point, the user was successfully logged in, so we look the user up and return it
-        $user = $this->doctrine->getRepository(User::class)->findOneBy(['username' => $request->get('username')]);
+        $userInformation = json_decode($request->getContent(), true);
+        $user = $this->doctrine->getRepository(User::class)->findOneBy(['username' => $userInformation['username']]);
         $this->logger->error("Request for login " . $request->getContent());
         $this->logger->error("User returned with id " . $user->getId());
 
