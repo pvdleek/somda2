@@ -17,6 +17,9 @@ class UserHelper implements RuntimeExtensionInterface
     private const ADMINISTRATOR_UID = 1;
     private const MODERATOR_UID = 2;
 
+    public const KEY_API_USER_ID = 'userId';
+    public const KEY_API_TOKEN = 'apiToken';
+
     /**
      * @var ManagerRegistry
      */
@@ -26,6 +29,11 @@ class UserHelper implements RuntimeExtensionInterface
      * @var Security
      */
     private Security $security;
+
+    /**
+     * @var UserInterface|null
+     */
+    private ?UserInterface $user = null;
 
     /**
      * @param ManagerRegistry $doctrine
@@ -42,15 +50,25 @@ class UserHelper implements RuntimeExtensionInterface
      */
     public function getUser(): ?User
     {
-        $user = null;
-        if ($this->userIsLoggedIn()) {
-            /**
-             * @var UserInterface $user
-             */
-            $user = $this->security->getUser();
+        if (is_null($this->user)) {
+            $this->user = $this->security->getUser();
         }
 
-        return $user instanceof User ? $user : null;
+        return $this->user instanceof User ? $this->user : null;
+    }
+
+    /**
+     * @param int $userId
+     * @param string $apiToken
+     */
+    public function setFromApiRequest(int $userId, string $apiToken): void
+    {
+        $user = $this->doctrine->getRepository(User::class)->findOneBy(
+            ['id' => $userId, 'active' => true, 'apiToken' => $apiToken]
+        );
+        if (!is_null($user)) {
+            $this->user = $user;
+        }
     }
 
     /**
@@ -74,7 +92,7 @@ class UserHelper implements RuntimeExtensionInterface
      */
     public function userIsLoggedIn(): bool
     {
-        return $this->security->getUser() instanceof User && $this->security->isGranted('IS_AUTHENTICATED_REMEMBERED');
+        return $this->user instanceof User && $this->security->isGranted('IS_AUTHENTICATED_REMEMBERED');
     }
 
     /**

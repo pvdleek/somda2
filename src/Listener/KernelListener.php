@@ -85,6 +85,16 @@ class KernelListener implements EventSubscriberInterface
             return;
         }
 
+        if ($this->isApiRequest($event)
+            && $event->getRequest()->headers->has(UserHelper::KEY_API_USER_ID)
+            && $event->getRequest()->headers->has(UserHelper::KEY_API_TOKEN)
+        ) {
+            $this->userHelper->setFromApiRequest(
+                (int)$event->getRequest()->headers->has(UserHelper::KEY_API_USER_ID),
+                $event->getRequest()->headers->has(UserHelper::KEY_API_TOKEN)
+            );
+        }
+
         if (!is_null($this->userHelper->getUser())
             && $this->userHelper->getUser()->banExpireTimestamp >= new DateTime()
         ) {
@@ -167,5 +177,15 @@ class KernelListener implements EventSubscriberInterface
             && substr($route, -5) !== '_json'
             && $route !== 'logout'
             && $route !== 'api_authenticate_token';
+    }
+
+    /**
+     * @param KernelEvent $event
+     * @return bool
+     */
+    private function isApiRequest(KernelEvent $event): bool
+    {
+        $route = (string)$event->getRequest()->attributes->get('_route');
+        return substr($route, 0, 4) === 'api_';
     }
 }

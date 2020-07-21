@@ -7,8 +7,6 @@ use App\Helpers\UserHelper;
 use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
-use Monolog\Logger;
-use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -25,20 +23,18 @@ class SecurityController extends AbstractFOSRestController
      */
     private UserHelper $userHelper;
 
-    private $logger;
-
     /**
      * @param ManagerRegistry $doctrine
      * @param UserHelper $userHelper
      */
-    public function __construct(ManagerRegistry $doctrine, UserHelper $userHelper, LoggerInterface $logger)
+    public function __construct(ManagerRegistry $doctrine, UserHelper $userHelper)
     {
         $this->doctrine = $doctrine;
         $this->userHelper = $userHelper;
-        $this->logger = $logger;
     }
 
     /**
+     * @param Request $request
      * @return Response
      */
     public function loginAction(Request $request): Response
@@ -46,8 +42,6 @@ class SecurityController extends AbstractFOSRestController
         // If we reach this point, the user was successfully logged in, so we look the user up and return it
         $userInformation = json_decode($request->getContent(), true);
         $user = $this->doctrine->getRepository(User::class)->findOneBy(['username' => $userInformation['username']]);
-        $this->logger->error("Request for login " . $request->getContent());
-        $this->logger->error("User returned with id " . $user->getId());
 
         return $this->handleView($this->view(['data' => $user], 200));
     }
