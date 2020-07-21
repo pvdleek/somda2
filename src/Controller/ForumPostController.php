@@ -26,7 +26,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class ForumPostController
 {
@@ -101,7 +101,7 @@ class ForumPostController
         if (!$this->forumAuthHelper->mayPost($quotedPost->discussion->forum, $this->userHelper->getUser())
             || $quotedPost->discussion->locked
         ) {
-            throw new AccessDeniedHttpException();
+            throw new AccessDeniedException();
         }
 
         $userIsModerator = $this->forumAuthHelper->userIsModerator(
@@ -201,7 +201,7 @@ class ForumPostController
             || $post->discussion->locked
             || ($post->author !== $this->userHelper->getUser() && !$userIsModerator)
         ) {
-            throw new AccessDeniedHttpException();
+            throw new AccessDeniedException();
         }
 
         $form = $this->formHelper

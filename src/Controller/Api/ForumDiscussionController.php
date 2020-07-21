@@ -14,7 +14,7 @@ use Nelmio\ApiDocBundle\Annotation\Model;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Swagger\Annotations as SWG;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class ForumDiscussionController extends AbstractFOSRestController
 {
@@ -94,7 +94,7 @@ class ForumDiscussionController extends AbstractFOSRestController
          */
         $discussion = $this->doctrine->getRepository(ForumDiscussion::class)->find($id);
         if (is_null($discussion)) {
-            throw new AccessDeniedHttpException();
+            throw new AccessDeniedException();
         }
 
         $this->forumDiscussionHelper->setDiscussion($discussion);

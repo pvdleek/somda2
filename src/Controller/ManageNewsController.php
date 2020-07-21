@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class ManageNewsController
 {
@@ -132,7 +132,7 @@ class ManageNewsController
     {
         $railNews = $this->doctrine->getRepository(RailNews::class)->find($id);
         if (is_null($railNews)) {
-            throw new AccessDeniedHttpException();
+            throw new AccessDeniedException();
         }
         $form = $this->formHelper->getFactory()->create(RailNewsForm::class, $railNews);
 

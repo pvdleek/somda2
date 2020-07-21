@@ -16,7 +16,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class ForumModerateController
 {
@@ -119,7 +119,7 @@ class ForumModerateController
         $discussion2 = $this->getDiscussion($id2);
 
         if ($discussion1->forum !== $discussion2->forum) {
-            throw new AccessDeniedHttpException();
+            throw new AccessDeniedException();
         }
 
         $newDiscussion = new ForumDiscussion();
@@ -245,7 +245,7 @@ class ForumModerateController
         if (is_null($discussion)
             || !$this->forumAuthHelper->userIsModerator($discussion, $this->userHelper->getUser())
         ) {
-            throw new AccessDeniedHttpException();
+            throw new AccessDeniedException();
         }
         return $discussion;
     }

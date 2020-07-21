@@ -7,7 +7,7 @@ use App\Helpers\UserHelper;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class ForumPostWikiController
 {
@@ -44,7 +44,7 @@ class ForumPostWikiController
          */
         $post = $this->doctrine->getRepository(ForumPost::class)->find($id);
         if (is_null($post)) {
-            throw new AccessDeniedHttpException();
+            throw new AccessDeniedException();
         }
 
         $post->wikiCheck = $operation === 'ok' ? ForumPost::WIKI_CHECK_OK : ForumPost::WIKI_CHECK_N_A;

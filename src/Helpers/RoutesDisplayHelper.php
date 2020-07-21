@@ -8,7 +8,7 @@ use App\Model\RoutesDisplay;
 use App\Traits\SortTrait;
 use DateTime;
 use Doctrine\Common\Persistence\ManagerRegistry;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class RoutesDisplayHelper
 {
@@ -45,7 +45,7 @@ class RoutesDisplayHelper
                 $trainTableYearId
             );
             if (is_null($routesDisplay->trainTableYear)) {
-                throw new AccessDeniedHttpException();
+                throw new AccessDeniedException();
             }
 
             $routesDisplay->routeLists = $this->doctrine
@@ -57,7 +57,7 @@ class RoutesDisplayHelper
                     $routeListId
                 );
                 if (is_null($routesDisplay->selectedRouteList)) {
-                    throw new AccessDeniedHttpException();
+                    throw new AccessDeniedException();
                 }
 
                 $routes = $routesDisplay->selectedRouteList->getRoutes();

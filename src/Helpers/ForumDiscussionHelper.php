@@ -9,7 +9,7 @@ use App\Exception\WrongMethodError;
 use App\Form\ForumPost as ForumPostForm;
 use App\Generics\ForumGenerics;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class ForumDiscussionHelper
 {
@@ -77,7 +77,7 @@ class ForumDiscussionHelper
         $this->discussion = $discussion;
 
         if (!$this->forumAuthHelper->mayView($discussion->forum, $this->userHelper->getUser())) {
-            throw new AccessDeniedHttpException();
+            throw new AccessDeniedException();
         }
 
         return $this;

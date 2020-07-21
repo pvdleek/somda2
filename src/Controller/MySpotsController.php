@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class MySpotsController
 {
@@ -156,7 +156,7 @@ class MySpotsController
     {
         $spot = $this->formHelper->getDoctrine()->getRepository(Spot::class)->find($id);
         if (is_null($spot) || $spot->user !== $this->userHelper->getUser()) {
-            throw new AccessDeniedHttpException();
+            throw new AccessDeniedException();
         }
         $form = $this->formHelper->getFactory()->create(SpotForm::class, $spot);
 
@@ -192,7 +192,7 @@ class MySpotsController
     {
         $spot = $this->formHelper->getDoctrine()->getRepository(Spot::class)->find($id);
         if (is_null($spot) || $spot->user !== $this->userHelper->getUser()) {
-            throw new AccessDeniedHttpException();
+            throw new AccessDeniedException();
         }
 
         if (!is_null($spot->extra)) {

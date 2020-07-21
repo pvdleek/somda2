@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\Event\KernelEvent;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\Event\TerminateEvent;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 use Symfony\Component\Security\Http\SecurityEvents;
@@ -88,7 +88,7 @@ class KernelListener implements EventSubscriberInterface
         if (!is_null($this->userHelper->getUser())
             && $this->userHelper->getUser()->banExpireTimestamp >= new DateTime()
         ) {
-            throw new AccessDeniedHttpException(
+            throw new AccessDeniedException(
                 'Je kunt tot ' . $this->userHelper->getUser()->banExpireTimestamp->format(DateGenerics::DATE_FORMAT) .
                 ' geen gebruik maken van Somda'
             );
