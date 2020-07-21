@@ -95,16 +95,21 @@ class ForumForumController
                     'id' => $forum['categoryId'],
                     'name' => $forum['categoryName'],
                     'order' => $forum['categoryOrder'],
+                    'forums' => [],
                 ];
             }
 
-            $categories[$forum['categoryId']]['forums'][] = [
-                'id' => $forum['id'],
-                'name' => $forum['name'],
-                'order' => $forum['order'],
-                'numberOfDiscussions' => $forum['numberOfDiscussions'],
-                'forum_read' => $forum['forum_read'],
-            ];
+            if ($forum->type !== ForumForum::TYPE_MODERATORS_ONLY
+                || $this->forumAuthHelper->userIsModerator($forum, $this->userHelper->getUser())
+            ) {
+                $categories[$forum['categoryId']]['forums'][] = [
+                    'id' => $forum['id'],
+                    'name' => $forum['name'],
+                    'order' => $forum['order'],
+                    'numberOfDiscussions' => $forum['numberOfDiscussions'],
+                    'forum_read' => $forum['forum_read'],
+                ];
+            }
         }
         return $categories;
     }
@@ -129,10 +134,7 @@ class ForumForumController
         return $this->templateHelper->render('forum/forum.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Forum - ' . $forum->name,
             TemplateHelper::PARAMETER_FORUM => $forum,
-            'userIsModerator' => $this->forumAuthHelper->userIsModerator(
-                $forum->getDiscussions()[0],
-                $this->userHelper->getUser()
-            ),
+            'userIsModerator' => $this->forumAuthHelper->userIsModerator($forum, $this->userHelper->getUser()),
             'discussions' => $discussions,
         ]);
     }

@@ -126,7 +126,8 @@ class ForumDiscussionController
 
         return $this->templateHelper->render('forum/discussion.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Forum - ' . $discussion->title,
-            'userIsModerator' => $this->forumAuthHelper->userIsModerator($discussion, $this->userHelper->getUser()),
+            'userIsModerator' =>
+                $this->forumAuthHelper->userIsModerator($discussion->forum, $this->userHelper->getUser()),
             TemplateHelper::PARAMETER_DISCUSSION => $discussion,
             'numberOfPages' => $numberOfPages,
             'pageNumber' => $pageNumber,

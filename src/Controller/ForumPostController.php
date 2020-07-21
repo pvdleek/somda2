@@ -105,7 +105,7 @@ class ForumPostController
         }
 
         $userIsModerator = $this->forumAuthHelper->userIsModerator(
-            $quotedPost->discussion,
+            $quotedPost->discussion->forum,
             $this->userHelper->getUser()
         );
 
@@ -194,7 +194,7 @@ class ForumPostController
          */
         $post = $this->formHelper->getDoctrine()->getRepository(ForumPost::class)->find($id);
         $userIsModerator = $this->forumAuthHelper->userIsModerator(
-            $post->discussion,
+            $post->discussion->forum,
             $this->userHelper->getUser()
         );
         if (!$this->forumAuthHelper->mayPost($post->discussion->forum, $this->userHelper->getUser())
