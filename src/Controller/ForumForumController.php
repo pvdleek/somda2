@@ -99,7 +99,7 @@ class ForumForumController
                 ];
             }
 
-            if ($forum['type'] === ForumForum::TYPE_MODERATORS_ONLY) {
+            if ((int)$forum['type'] === ForumForum::TYPE_MODERATORS_ONLY) {
                 if (!$this->userHelper->userIsLoggedIn()) {
                     continue;
                 }
