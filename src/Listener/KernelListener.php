@@ -90,8 +90,8 @@ class KernelListener implements EventSubscriberInterface
             && $event->getRequest()->headers->has(UserHelper::KEY_API_TOKEN)
         ) {
             $this->userHelper->setFromApiRequest(
-                (int)$event->getRequest()->headers->has(UserHelper::KEY_API_USER_ID),
-                $event->getRequest()->headers->has(UserHelper::KEY_API_TOKEN)
+                (int)$event->getRequest()->headers->get(UserHelper::KEY_API_USER_ID),
+                $event->getRequest()->headers->get(UserHelper::KEY_API_TOKEN)
             );
         }
 
