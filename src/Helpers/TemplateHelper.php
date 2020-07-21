@@ -13,7 +13,6 @@ use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 use Mobile_Detect;
-use Monolog\Logger;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
@@ -95,10 +94,7 @@ class TemplateHelper
         try {
             $content = $this->twig->render($this->getCorrectView($view), $this->getParameters($parameters));
         } catch (Exception $exception) {
-            $this->logger->addRecord(
-                Logger::CRITICAL,
-                'Error when rendering view "' . $view . '": "' . $exception->getMessage() . '"'
-            );
+            $this->logger->critical('Error when rendering view "' . $view . '": "' . $exception->getMessage() . '"');
             $content = '';
         }
 
