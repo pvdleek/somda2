@@ -123,7 +123,12 @@ class ForumPostController
         if ($form->isSubmitted() && $form->isValid()) {
             $user = $userIsModerator && $form->get('postAsModerator')->getData() ?
                 $this->userHelper->getModeratorUser() : $this->userHelper->getUser();
-            $this->formHelper->addPost($form, $quotedPost->discussion, $user);
+            $this->formHelper->addPost(
+                $quotedPost->discussion,
+                $user,
+                $form->get('signatureOn')->getData(),
+                $form->get('text')->getData()
+            );
             $this->handleFavoritesForAddedPost($quotedPost->discussion);
 
             return $this->formHelper->finishFormHandling('', RouteGenerics::ROUTE_FORUM_DISCUSSION, [

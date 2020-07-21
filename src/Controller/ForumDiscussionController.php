@@ -166,7 +166,12 @@ class ForumDiscussionController
         $form = $this->formHelper->getFactory()->create(ForumDiscussionForm::class, $forumDiscussion);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->formHelper->addPost($form, $forumDiscussion, $this->userHelper->getUser());
+            $this->formHelper->addPost(
+                $forumDiscussion,
+                $this->userHelper->getUser(),
+                $form->get('signatureOn')->getData(),
+                $form->get('text')->getData()
+            );
             $this->formHelper->getDoctrine()->getManager()->persist($forumDiscussion);
             $this->formHelper->getDoctrine()->getManager()->flush();
 
