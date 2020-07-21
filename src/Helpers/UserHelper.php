@@ -8,6 +8,7 @@ use App\Entity\UserPreferenceValue;
 use App\Exception\UnknownUserPreferenceKey;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Exception;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Twig\Extension\RuntimeExtensionInterface;
@@ -35,14 +36,18 @@ class UserHelper implements RuntimeExtensionInterface
      */
     private ?UserInterface $user = null;
 
+
+    private $logger;
+
     /**
      * @param ManagerRegistry $doctrine
      * @param Security $security
      */
-    public function __construct(ManagerRegistry $doctrine, Security $security)
+    public function __construct(ManagerRegistry $doctrine, Security $security, LoggerInterface $logger)
     {
         $this->doctrine = $doctrine;
         $this->security = $security;
+        $this->logger = $logger;
     }
 
     /**
@@ -63,11 +68,13 @@ class UserHelper implements RuntimeExtensionInterface
      */
     public function setFromApiRequest(int $userId, string $apiToken): void
     {
+        $this->logger->error('Looking up user for API with ID ' . $userId . ' and token ' . $apiToken);
         $user = $this->doctrine->getRepository(User::class)->findOneBy(
             ['id' => $userId, 'active' => true, 'apiToken' => $apiToken]
         );
         if (!is_null($user)) {
             $this->user = $user;
+            $this->logger->error('Found user for API with username ' . $user->username);
         }
     }
 
