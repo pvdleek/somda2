@@ -56,7 +56,7 @@ api_forum_discussion_post:
   controller: App\Controller\Api\ForumDiscussionController::indexAction
 
 api_forum_discussion_post_reply:
-  path: /{version}/forum-discussion/{discussionId}/reageren/
+  path: /{version}/forum-discussion/{discussionId}/reply/
   methods: [POST]
   requirements: { discussionId: \d+ }
   controller: App\Controller\Api\ForumPostController::replyAction

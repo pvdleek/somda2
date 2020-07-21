@@ -4,6 +4,7 @@ namespace App\Controller\Api;
 
 use App\Entity\ForumDiscussion;
 use App\Entity\ForumFavorite;
+use App\Entity\ForumPost;
 use App\Form\ForumPost as ForumPostForm;
 use App\Helpers\EmailHelper;
 use App\Helpers\FormHelper;
@@ -11,8 +12,9 @@ use App\Helpers\ForumAuthorizationHelper;
 use App\Helpers\UserHelper;
 use Exception;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
+use Nelmio\ApiDocBundle\Annotation\Model;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use Symfony\Component\HttpFoundation\Request;
+use Swagger\Annotations as SWG;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
@@ -58,14 +60,26 @@ class ForumPostController extends AbstractFOSRestController
 
     /**
      * @IsGranted("ROLE_API_USER")
-     * @IsGranted("ROLE_USER")
-     * @param Request $request
      * @param int $discussionId
      * @return Response
      * @throws Exception
+     * @SWG\Post(
+     *     @SWG\Parameter(in="formData", name="signatureOn", type="integer", enum={0,1}),
+     *     @SWG\Parameter(in="formData", name="text", type="string")
+     * )
+     * @SWG\Response(
+     *     response=200,
+     *     description="Returns the new forum-post",
+     *     @SWG\Schema(ref=@Model(type=ForumPost::class))
+     * )
+     * @SWG\Tag(name="forum")
      */
-    public function replyAction(Request $request, int $discussionId): Response
+    public function replyAction(int $discussionId): Response
     {
+        if (!$this->userHelper->userIsLoggedIn()) {
+            throw new AccessDeniedException();
+        }
+
         /**
          * @var ForumDiscussion $discussion
          */
@@ -79,10 +93,12 @@ class ForumPostController extends AbstractFOSRestController
         $post = $this->formHelper->addPost(
             $discussion,
             $this->userHelper->getUser(),
-            $request->get('signatureOn'),
-            $request->get('text')
+            (bool)$_POST['signatureOn'],
+            $_POST['text']
         );
         $this->handleFavoritesForAddedPost($discussion);
+
+        $this->formHelper->getDoctrine()->getManager()->flush();
 
         return $this->handleView($this->view(['data' => $post], 200));
     }

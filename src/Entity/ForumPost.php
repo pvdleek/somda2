@@ -86,7 +86,7 @@ class ForumPost extends Entity
      * @JMS\Expose()
      * @SWG\Property(description="The user that edited the post", ref=@Model(type=User::class))
      */
-    public ?User $editor;
+    public ?User $editor = null;
 
     /**
      * @var string|null
@@ -94,7 +94,7 @@ class ForumPost extends Entity
      * @JMS\Expose()
      * @SWG\Property(description="Reason for editing the post", maxLength=50, type="string")
      */
-    public ?string $editReason;
+    public ?string $editReason = null;
 
     /**
      * @var bool
