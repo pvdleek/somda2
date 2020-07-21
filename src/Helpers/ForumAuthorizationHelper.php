@@ -2,7 +2,6 @@
 
 namespace App\Helpers;
 
-use App\Entity\ForumDiscussion;
 use App\Entity\ForumForum;
 use App\Entity\User;
 use App\Generics\RoleGenerics;
@@ -42,13 +41,13 @@ class ForumAuthorizationHelper
     }
 
     /**
-     * @param ForumDiscussion $discussion
+     * @param ForumForum $forum
      * @param User|null $user
      * @return bool
      */
-    public function userIsModerator(ForumDiscussion $discussion, User $user = null): bool
+    public function userIsModerator(ForumForum $forum, User $user = null): bool
     {
         return !is_null($user)
-            && (in_array($user, $discussion->forum->getModerators()) || $user->hasRole(RoleGenerics::ROLE_ADMIN));
+            && (in_array($user, $forum->getModerators()) || $user->hasRole(RoleGenerics::ROLE_ADMIN));
     }
 }

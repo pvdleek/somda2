@@ -111,10 +111,7 @@ class ForumForumController
         return $this->templateHelper->render('forum/forum.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Forum - ' . $forum->name,
             TemplateHelper::PARAMETER_FORUM => $forum,
-            'userIsModerator' => $this->forumAuthHelper->userIsModerator(
-                $forum->getDiscussions()[0],
-                $this->userHelper->getUser()
-            ),
+            'userIsModerator' => $this->forumAuthHelper->userIsModerator($forum, $this->userHelper->getUser()),
             'discussions' => $discussions,
         ]);
     }

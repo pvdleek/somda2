@@ -29,11 +29,11 @@ class UserInfo
 
     /**
      * @var string
-     * @ORM\Column(name="avatar", type="string", length=30, nullable=false, options={"default"="_blank.gif"})
+     * @ORM\Column(name="avatar", type="string", length=30, nullable=false, options={"default"="_blank.png"})
      * @JMS\Expose()
      * @SWG\Property(description="Avatar of the user", maxLength=30, type="string")
      */
-    public string $avatar = '_blank.gif';
+    public string $avatar = '_blank.png';
 
     /**
      * @var string|null

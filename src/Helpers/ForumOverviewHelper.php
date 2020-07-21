@@ -21,13 +21,23 @@ class ForumOverviewHelper
     private UserHelper $userHelper;
 
     /**
+     * @var ForumAuthorizationHelper
+     */
+    private ForumAuthorizationHelper $forumAuthHelper;
+
+    /**
      * @param ManagerRegistry $doctrine
      * @param UserHelper $userHelper
+     * @param ForumAuthorizationHelper $forumAuthHelper
      */
-    public function __construct(ManagerRegistry $doctrine, UserHelper $userHelper)
-    {
+    public function __construct(
+        ManagerRegistry $doctrine,
+        UserHelper $userHelper,
+        ForumAuthorizationHelper $forumAuthHelper
+    ) {
         $this->doctrine = $doctrine;
         $this->userHelper = $userHelper;
+        $this->forumAuthHelper = $forumAuthHelper;
     }
 
     /**
@@ -43,7 +53,21 @@ class ForumOverviewHelper
                     'id' => $forum['categoryId'],
                     'name' => $forum['categoryName'],
                     'order' => $forum['categoryOrder'],
+                    'forums' => [],
                 ];
+            }
+
+            if ((int)$forum['type'] === ForumForum::TYPE_MODERATORS_ONLY) {
+                if (!$this->userHelper->userIsLoggedIn()) {
+                    continue;
+                }
+                /**
+                 * @var ForumForum $forumEntity
+                 */
+                $forumEntity = $this->doctrine->getRepository(ForumForum::class)->find($forum['id']);
+                if (!$this->forumAuthHelper->userIsModerator($forumEntity, $this->userHelper->getUser())) {
+                    continue;
+                }
             }
 
             $categories[$forum['categoryId']]['forums'][] = [
