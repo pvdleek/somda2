@@ -99,17 +99,23 @@ class ForumForumController
                 ];
             }
 
-            if ($forum->type !== ForumForum::TYPE_MODERATORS_ONLY
-                || $this->forumAuthHelper->userIsModerator($forum, $this->userHelper->getUser())
-            ) {
-                $categories[$forum['categoryId']]['forums'][] = [
-                    'id' => $forum['id'],
-                    'name' => $forum['name'],
-                    'order' => $forum['order'],
-                    'numberOfDiscussions' => $forum['numberOfDiscussions'],
-                    'forum_read' => $forum['forum_read'],
-                ];
+            if ($forum['type'] === ForumForum::TYPE_MODERATORS_ONLY) {
+                if (!$this->userHelper->userIsLoggedIn()) {
+                    continue;
+                }
+                $forumEntity = $this->doctrine->getRepository(ForumForum::class)->find($forum['id']);
+                if (!$this->forumAuthHelper->userIsModerator($forumEntity, $this->userHelper->getUser())) {
+                    continue;
+                }
             }
+
+            $categories[$forum['categoryId']]['forums'][] = [
+                'id' => $forum['id'],
+                'name' => $forum['name'],
+                'order' => $forum['order'],
+                'numberOfDiscussions' => $forum['numberOfDiscussions'],
+                'forum_read' => $forum['forum_read'],
+            ];
         }
         return $categories;
     }

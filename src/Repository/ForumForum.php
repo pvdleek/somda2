@@ -17,7 +17,7 @@ class ForumForum extends EntityRepository
         if (is_null($user)) {
             $query = '
                 SELECT `c`.`catid` AS `categoryId`, `c`.`name` AS `categoryName`, `c`.`volgorde` AS `categoryOrder`,
-                    `f`.`forumid` AS `id`, `f`.`name` AS `name`, `f`.`volgorde` AS `order`,
+                    `f`.`forumid` AS `id`, `f`.`name` AS `name`, `f`.`type` AS `type`, `f`.`volgorde` AS `order`,
                     COUNT(DISTINCT(`d`.`discussionid`)) AS `numberOfDiscussions`,
                     TRUE AS `forum_read`
                 FROM `somda_forum_forums` `f`
@@ -28,7 +28,7 @@ class ForumForum extends EntityRepository
         } else {
             $query = '
                 SELECT `c`.`catid` AS `categoryId`, `c`.`name` AS `categoryName`, `c`.`volgorde` AS `categoryOrder`,
-                    `f`.`forumid` AS `id`, `f`.`name` AS `name`, `f`.`volgorde` AS `order`,
+                    `f`.`forumid` AS `id`, `f`.`name` AS `name`, `f`.`type` AS `type`, `f`.`volgorde` AS `order`,
                     COUNT(DISTINCT(`d`.`discussionid`)) AS `numberOfDiscussions`,
                     IF(SUM(`p`.`postid`) = SUM(`r`.`postid`), TRUE, FALSE) AS `forum_read`
                 FROM `somda_forum_forums` `f`
