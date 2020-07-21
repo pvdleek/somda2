@@ -17,8 +17,8 @@ class UserHelper implements RuntimeExtensionInterface
     private const ADMINISTRATOR_UID = 1;
     private const MODERATOR_UID = 2;
 
-    public const KEY_API_USER_ID = 'userId';
-    public const KEY_API_TOKEN = 'apiToken';
+    public const KEY_API_USER_ID = 'SomdaUserId';
+    public const KEY_API_TOKEN = 'SomdaApiToken';
 
     /**
      * @var ManagerRegistry
