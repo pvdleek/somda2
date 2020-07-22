@@ -15,6 +15,7 @@ use FOS\RestBundle\Controller\AbstractFOSRestController;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Swagger\Annotations as SWG;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
@@ -60,6 +61,7 @@ class ForumPostController extends AbstractFOSRestController
 
     /**
      * @IsGranted("ROLE_API_USER")
+     * @param Request $request
      * @param int $discussionId
      * @return Response
      * @throws Exception
@@ -74,7 +76,7 @@ class ForumPostController extends AbstractFOSRestController
      * )
      * @SWG\Tag(name="forum")
      */
-    public function replyAction(int $discussionId): Response
+    public function replyAction(Request $request, int $discussionId): Response
     {
         if (!$this->userHelper->userIsLoggedIn()) {
             throw new AccessDeniedException();
@@ -90,11 +92,12 @@ class ForumPostController extends AbstractFOSRestController
             throw new AccessDeniedException();
         }
 
+        $postInformation = json_decode($request->getContent(), true);
         $post = $this->formHelper->addPost(
             $discussion,
             $this->userHelper->getUser(),
-            (bool)$_POST['signatureOn'],
-            $_POST['text']
+            (bool)$postInformation['signatureOn'],
+            $postInformation['text']
         );
         $this->handleFavoritesForAddedPost($discussion);
 
