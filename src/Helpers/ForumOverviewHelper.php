@@ -39,14 +39,13 @@ class ForumOverviewHelper
         $this->userHelper = $userHelper;
         $this->forumAuthHelper = $forumAuthHelper;
     }
-
     /**
      * @return array
      */
     public function getCategoryArray(): array
     {
         $categories = [];
-        $forums = $this->doctrine->getRepository(ForumForum::class)->findAll($this->userHelper->getUser());
+        $forums = $this->doctrine->getRepository(ForumForum::class)->findAll();
         foreach ($forums as $forum) {
             if (!isset($categories[$forum['categoryId']])) {
                 $categories[$forum['categoryId']] = [
@@ -57,25 +56,37 @@ class ForumOverviewHelper
                 ];
             }
 
-            if ((int)$forum['type'] === ForumForum::TYPE_MODERATORS_ONLY) {
-                if (!$this->userHelper->userIsLoggedIn()) {
-                    continue;
-                }
+            $numberOfUnreadDiscussions = 0;
+            if ($this->userHelper->userIsLoggedIn()) {
                 /**
                  * @var ForumForum $forumEntity
                  */
                 $forumEntity = $this->doctrine->getRepository(ForumForum::class)->find($forum['id']);
-                if (!$this->forumAuthHelper->userIsModerator($forumEntity, $this->userHelper->getUser())) {
+
+                if ((int)$forum['type'] === ForumForum::TYPE_MODERATORS_ONLY
+                    && !$this->forumAuthHelper->userIsModerator($forumEntity, $this->userHelper->getUser())
+                ) {
+                    // The user is not allowed to view this category
                     continue;
                 }
+
+                if ((int)$forum['type'] !== ForumForum::TYPE_ARCHIVE) {
+                    $numberOfUnreadDiscussions = $this->doctrine
+                        ->getRepository(ForumForum::class)
+                        ->getNumberOfUnreadPostsInForum($forumEntity, $this->userHelper->getUser());
+                }
+            } elseif ((int)$forum['type'] === ForumForum::TYPE_MODERATORS_ONLY) {
+                // Guest is not allowed to view this category
+                continue;
             }
 
             $categories[$forum['categoryId']]['forums'][] = [
                 'id' => $forum['id'],
+                'type' => $forum['type'],
                 'name' => $forum['name'],
                 'order' => $forum['order'],
                 'numberOfDiscussions' => $forum['numberOfDiscussions'],
-                'forum_read' => $forum['forum_read'],
+                'numberOfUnreadDiscussions' => $numberOfUnreadDiscussions,
             ];
         }
         return $categories;
