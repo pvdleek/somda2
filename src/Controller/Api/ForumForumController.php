@@ -115,7 +115,7 @@ class ForumForumController extends AbstractFOSRestController
         return $this->handleView($this->view([
             'data' => $discussions,
             'meta' => ['user_is_moderator' =>
-                $this->forumAuthHelper->userIsModerator($discussions[0], $this->userHelper->getUser()),
+                $this->forumAuthHelper->userIsModerator($forum, $this->userHelper->getUser()),
             ],
         ], 200));
     }
