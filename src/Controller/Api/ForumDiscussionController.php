@@ -104,7 +104,7 @@ class ForumDiscussionController extends AbstractFOSRestController
             'data' => $posts,
             'meta' => [
                 'user_is_moderator' =>
-                    $this->forumAuthHelper->userIsModerator($discussion, $this->userHelper->getUser()),
+                    $this->forumAuthHelper->userIsModerator($discussion->forum, $this->userHelper->getUser()),
                 'number_of_pages' => $this->forumDiscussionHelper->getNumberOfPages(),
                 'page_number' => $this->forumDiscussionHelper->getPageNumber(),
                 'may_post' => $this->forumAuthHelper->mayPost($discussion->forum, $this->userHelper->getUser()),
