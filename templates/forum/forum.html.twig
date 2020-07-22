@@ -36,7 +36,7 @@
                         </td>
                         <td>
                             <a href="{{ path('forum_discussion', { 'id': discussion['id'], 'name': (discussion['title'] | slugify) }) }}">{{ discussion['title'] }}</a>
-                            {% if not discussion['discussion_read'] %} <i class="color-orange fas fa-comment-dots"></i>{% endif %}
+                            {% if forum.type != constant('App\\Entity\\ForumForum::TYPE_ARCHIVE') and not discussion['discussion_read'] %} <i class="color-orange fas fa-comment-dots"></i>{% endif %}
                         </td>
                         <td>{{ discussion['posts'] }}</td>
                         <td>{{ discussion['author_id'] | displayUser(discussion['author_username']) | raw }}</td>
