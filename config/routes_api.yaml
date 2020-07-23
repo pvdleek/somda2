@@ -31,6 +31,21 @@ api_train_table:
   methods: [GET]
   controller: App\Controller\Api\TrainTableController::indexAction
 
+api_route_overview:
+  path: /{version}/overzicht-treinnummers/
+  methods: [GET]
+  controller: App\Controller\Api\TrainTableController::routeOverviewAction
+api_route_overview_year:
+  path: /{version}/overzicht-treinnummers/{trainTableYearId}/
+  methods: [GET]
+  requirements: { trainTableYearId: \d+ }
+  controller: App\Controller\Api\TrainTableController::routeOverviewAction
+api_route_overview_year_route_list:
+  path: /{version}/overzicht-treinnummers/{trainTableYearId}/{routeListId}/
+  methods: [GET]
+  requirements: { trainTableYearId: \d+, routeListId: \d+ }
+  controller: App\Controller\Api\TrainTableController::routeOverviewAction
+
 api_forum:
   path: /{version}/forum-forums/
   methods: [GET]

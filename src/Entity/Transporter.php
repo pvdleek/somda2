@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as JMS;
+use Swagger\Annotations as SWG;
 
 /**
  * @ORM\Table(
@@ -19,28 +21,35 @@ class Transporter extends Entity
      * @ORM\Column(name="vervoerder_id", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @JMS\Expose()
+     * @SWG\Property(description="Unique identifier", type="integer")
      */
     protected ?int $id = null;
 
     /**
      * @var string
      * @ORM\Column(name="omschrijving", type="string", length=35, nullable=false)
+     * @JMS\Expose()
+     * @SWG\Property(description="Name of the transporter", maxLength=35, type="string")
      */
     public string $name = '';
 
     /**
      * @var string|null
      * @ORM\Column(name="prorail_desc", type="string", length=35, nullable=true)
+     * @JMS\Exclude()
      */
     public ?string $proRailDescription = '';
 
     /**
      * @var Train[]
+     * @JMS\Exclude()
      */
     private $trains;
 
     /**
      * @var RouteList[]
+     * @JMS\Exclude()
      */
     private $routeLists;
 

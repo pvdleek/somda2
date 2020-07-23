@@ -7,6 +7,7 @@ use App\Entity\TrainTable;
 use App\Entity\TrainTableYear;
 use App\Helpers\Controller\TrainTableHelper;
 use App\Helpers\RouteOperationDaysHelper;
+use App\Helpers\RoutesDisplayHelper;
 use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
@@ -35,18 +36,26 @@ class TrainTableController extends AbstractFOSRestController
     private RouteOperationDaysHelper $routeOperationDaysHelper;
 
     /**
+     * @var RoutesDisplayHelper
+     */
+    private RoutesDisplayHelper $routesDisplayHelper;
+
+    /**
      * @param ManagerRegistry $doctrine
      * @param TrainTableHelper $trainTableHelper
      * @param RouteOperationDaysHelper $routeOperationDaysHelper
+     * @param RoutesDisplayHelper $routesDisplayHelper
      */
     public function __construct(
         ManagerRegistry $doctrine,
         TrainTableHelper $trainTableHelper,
-        RouteOperationDaysHelper $routeOperationDaysHelper
+        RouteOperationDaysHelper $routeOperationDaysHelper,
+        RoutesDisplayHelper $routesDisplayHelper
     ) {
         $this->doctrine = $doctrine;
         $this->trainTableHelper = $trainTableHelper;
         $this->routeOperationDaysHelper = $routeOperationDaysHelper;
+        $this->routesDisplayHelper = $routesDisplayHelper;
     }
 
     /**
@@ -114,6 +123,22 @@ class TrainTableController extends AbstractFOSRestController
                 'filters' => ['days' => array_values(array_unique($days))],
                 'legend' => ['days' => $routeOperationDaysArray],
                 'data' => $trainTableLines,
+            ], 200)
+        );
+    }
+
+    public function routeOverviewAction(int $trainTableYearId = null, int $routeListId = null): Response
+    {
+        $routesDisplay = $this->routesDisplayHelper->getRoutesDisplay($trainTableYearId, $routeListId);
+
+        return $this->handleView(
+            $this->view([
+                'filters' => ['trainTableYears' => $this->doctrine->getRepository(TrainTableYear::class)->findAll()],
+                'data' => [
+                    'routeLists' => $routesDisplay->routeLists,
+                    'selectedRouteList' => $routesDisplay->selectedRouteList,
+                    'routes' => $routesDisplay->routes,
+                ],
             ], 200)
         );
     }
