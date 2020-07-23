@@ -4,6 +4,7 @@ namespace App\Controller\Api;
 
 use App\Entity\ForumDiscussion;
 use App\Entity\ForumPost;
+use App\Generics\ForumGenerics;
 use App\Helpers\ForumAuthorizationHelper;
 use App\Helpers\ForumDiscussionHelper;
 use App\Helpers\UserHelper;
@@ -105,6 +106,7 @@ class ForumDiscussionController extends AbstractFOSRestController
             'meta' => [
                 'user_is_moderator' =>
                     $this->forumAuthHelper->userIsModerator($discussion->forum, $this->userHelper->getUser()),
+                'posts_per_page' => ForumGenerics::MAX_POSTS_PER_PAGE,
                 'number_of_pages' => $this->forumDiscussionHelper->getNumberOfPages(),
                 'page_number' => $this->forumDiscussionHelper->getPageNumber(),
                 'may_post' => $this->forumAuthHelper->mayPost($discussion->forum, $this->userHelper->getUser()),
