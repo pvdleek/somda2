@@ -119,7 +119,7 @@ class SpotInputController
             /**
              * @var Location $location
              */
-            $location = $this->doctrine->getRepository(Location::class)->findOneBy(['name' => 'Amf']);
+            $location = $this->doctrine->getRepository(Location::class)->findOneBy(['name' => $defaultLocation->value]);
         }
         return $location;
     }
