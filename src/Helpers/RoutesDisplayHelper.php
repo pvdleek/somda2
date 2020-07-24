@@ -9,8 +9,9 @@ use App\Traits\SortTrait;
 use DateTime;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Twig\Extension\RuntimeExtensionInterface;
 
-class RoutesDisplayHelper
+class RoutesDisplayHelper implements RuntimeExtensionInterface
 {
     use SortTrait;
 
