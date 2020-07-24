@@ -19,6 +19,9 @@ small, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, field
 iframe {
     border: none;
 }
+p {
+    margin: 10px 0;
+}
 ol, ul {
     list-style: none;
 }
