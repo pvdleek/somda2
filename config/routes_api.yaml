@@ -75,3 +75,8 @@ api_forum_discussion_post_reply:
   methods: [POST]
   requirements: { discussionId: \d+ }
   controller: App\Controller\Api\ForumPostController::replyAction
+
+api_forum_favorites:
+  path: /{version}/forum-favorites/
+  methods: [GET]
+  controller: App\Controller\Api\ForumDiscussionController::favoritesAction
