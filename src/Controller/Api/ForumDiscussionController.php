@@ -140,4 +140,27 @@ class ForumDiscussionController extends AbstractFOSRestController
         );
         return $this->handleView($this->view(['data' => $discussions], 200));
     }
+
+    /**
+     * @IsGranted("ROLE_API_USER")
+     * @return Response
+     * @SWG\Response(
+     *     response=200,
+     *     description="Returns all unread discussions of the user",
+     *     @SWG\Schema(
+     *         type="array",
+     *         @SWG\Items(ref=@Model(type=ForumDiscussion::class))
+     *     )
+     * )
+     * @SWG\Tag(name="forum")
+     */
+    public function unreadAction(): Response
+    {
+        if (!$this->userHelper->userIsLoggedIn()) {
+            throw new AccessDeniedException();
+        }
+
+        $discussions = $this->doctrine->getRepository(ForumDiscussion::class)->findUnread($this->userHelper->getUser());
+        return $this->handleView($this->view(['data' => $discussions], 200));
+    }
 }

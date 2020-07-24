@@ -80,3 +80,8 @@ api_forum_favorites:
   path: /{version}/forum-favorites/
   methods: [GET]
   controller: App\Controller\Api\ForumDiscussionController::favoritesAction
+
+api_forum_unread:
+  path: /{version}/forum-unread/
+  methods: [GET]
+  controller: App\Controller\Api\ForumDiscussionController::unreadAction
