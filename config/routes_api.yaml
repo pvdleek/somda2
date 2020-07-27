@@ -27,8 +27,9 @@ api_train_table_years:
   controller: App\Controller\Api\TrainTableYearController::indexAction
 
 api_train_table:
-  path: /{version}/train-table/
+  path: /{version}/train-table/{trainTableYearId}/{routeNumber}/
   methods: [GET]
+  requirements: { trainTableYearId: \d+, routeNumber: \d+ }
   controller: App\Controller\Api\TrainTableController::indexAction
 
 api_route_overview:
@@ -87,7 +88,7 @@ api_forum_unread:
   controller: App\Controller\Api\ForumDiscussionController::unreadAction
 
 api_forum_search:
-  path: /{version}/forum-search/{method}/{terms}/
+  path: /{version}/forum-search/{searchMethod}/{terms}/
   methods: [GET]
-  requirements: { method: 'all|some' }
+  requirements: { searchMethod: 'all|some' }
   controller: App\Controller\Api\ForumSearchController::indexAction

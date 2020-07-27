@@ -15,7 +15,6 @@ use FOS\RestBundle\Controller\AbstractFOSRestController;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Swagger\Annotations as SWG;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class TrainTableController extends AbstractFOSRestController
@@ -60,19 +59,20 @@ class TrainTableController extends AbstractFOSRestController
 
     /**
      * @IsGranted("ROLE_API_USER")
-     * @param Request $request
+     * @param int $trainTableYearId
+     * @param int $routeNumber
      * @return Response
      * @throws Exception
      * @SWG\Parameter(
-     *     default="The current trainTableYear",
+     *     default="Provide 0 to get the current trainTableYear",
      *     description="The unique identifier of the trainTableYear",
-     *     in="query",
+     *     in="path",
      *     name="trainTableYearId",
      *     type="integer",
      * )
      * @SWG\Parameter(
      *     description="The routeNumber",
-     *     in="query",
+     *     in="path",
      *     name="routeNumber",
      *     type="integer",
      * )
@@ -86,23 +86,18 @@ class TrainTableController extends AbstractFOSRestController
      * )
      * @SWG\Tag(name="trainTable")
      */
-    public function indexAction(Request $request): Response
+    public function indexAction(int $trainTableYearId, int $routeNumber): Response
     {
-        $trainTableLines = [];
-        $routeNumber = $request->get('routeNumber');
-        $trainTableYearId = $request->get('trainTableYearId');
-
-        if (!is_null($routeNumber)) {
-            if (!is_numeric($trainTableYearId)) {
-                $trainTableYearId = $this->doctrine
-                    ->getRepository(TrainTableYear::class)
-                    ->findTrainTableYearByDate(new DateTime())
-                    ->getId();
-            }
-            $this->trainTableHelper->setTrainTableYear($trainTableYearId);
-            $this->trainTableHelper->setRoute($routeNumber);
-            $trainTableLines = $this->trainTableHelper->getTrainTableLines();
+        if ($trainTableYearId === 0) {
+            $trainTableYearId = $this->doctrine
+                ->getRepository(TrainTableYear::class)
+                ->findTrainTableYearByDate(new DateTime())
+                ->getId();
         }
+
+        $this->trainTableHelper->setTrainTableYear($trainTableYearId);
+        $this->trainTableHelper->setRoute($routeNumber);
+        $trainTableLines = $this->trainTableHelper->getTrainTableLines();
 
         $days = [];
         foreach ($trainTableLines as $trainTableLine) {
