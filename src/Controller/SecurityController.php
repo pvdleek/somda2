@@ -253,7 +253,7 @@ class SecurityController
          */
         $user = $this->doctrine->getRepository(User::class)->find($id);
         if (is_null($user)) {
-            throw new AccessDeniedException();
+            throw new AccessDeniedException('This user does not exist');
         }
 
         $form = $this->formFactory->create(UserActivate::class, $user);

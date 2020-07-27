@@ -1,7 +1,12 @@
 fos_rest:
-  param_fetcher_listener: true
   allowed_methods_listener: true
-  routing_loader: false
+  body_listener:
+    enabled: true
+    default_format: json
+  format_listener:
+    rules:
+      - { path: ^/api/, prefer_extension: true, fallback_format: json, priorities: [ json ] }
+  param_fetcher_listener: true
   serializer:
     serialize_null: true
   versioning: true
@@ -9,8 +14,5 @@ fos_rest:
     formats:
       json: true
     view_response_listener:  true
-  format_listener:
-    rules:
-      - { path: ^/api/, prefer_extension: false, fallback_format: json, priorities: [ json ] }
   zone:
     - { path: ^/api/ }

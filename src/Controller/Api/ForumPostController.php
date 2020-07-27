@@ -74,12 +74,12 @@ class ForumPostController extends AbstractFOSRestController
      *     description="Returns the new forum-post",
      *     @SWG\Schema(ref=@Model(type=ForumPost::class))
      * )
-     * @SWG\Tag(name="forum")
+     * @SWG\Tag(name="Forum")
      */
     public function replyAction(Request $request, int $discussionId): Response
     {
         if (!$this->userHelper->userIsLoggedIn()) {
-            throw new AccessDeniedException();
+            throw new AccessDeniedException('The user is not logged in');
         }
 
         /**
@@ -89,7 +89,7 @@ class ForumPostController extends AbstractFOSRestController
         if (is_null($discussion)
             || !$this->forumAuthHelper->mayPost($discussion->forum, $this->userHelper->getUser())
         ) {
-            throw new AccessDeniedException();
+            throw new AccessDeniedException('This discussion does not exist or the user may not post');
         }
 
         $postInformation = json_decode($request->getContent(), true);

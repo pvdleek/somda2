@@ -33,11 +33,11 @@ class RoutesDisplayHelper implements RuntimeExtensionInterface
      * @param int|null $routeListId
      * @return RoutesDisplay
      */
-    public function getRoutesDisplay(?int $trainTableYearId = null, int $routeListId = null): RoutesDisplay
+    public function getRoutesDisplay(int $trainTableYearId = null, int $routeListId = null): RoutesDisplay
     {
         $routesDisplay = new RoutesDisplay();
 
-        if (is_null($trainTableYearId)) {
+        if (is_null($trainTableYearId) || $trainTableYearId === 0) {
             $routesDisplay->trainTableYear = $this->doctrine
                 ->getRepository(TrainTableYear::class)
                 ->findTrainTableYearByDate(new DateTime());
@@ -46,7 +46,7 @@ class RoutesDisplayHelper implements RuntimeExtensionInterface
                 $trainTableYearId
             );
             if (is_null($routesDisplay->trainTableYear)) {
-                throw new AccessDeniedException();
+                throw new AccessDeniedException('This trainTableYear does not exist');
             }
 
             $routesDisplay->routeLists = $this->doctrine
@@ -58,7 +58,7 @@ class RoutesDisplayHelper implements RuntimeExtensionInterface
                     $routeListId
                 );
                 if (is_null($routesDisplay->selectedRouteList)) {
-                    throw new AccessDeniedException();
+                    throw new AccessDeniedException("This routeList does not exist");
                 }
 
                 $routes = $routesDisplay->selectedRouteList->getRoutes();

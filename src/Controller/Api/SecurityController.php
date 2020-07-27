@@ -7,7 +7,9 @@ use App\Helpers\UserHelper;
 use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
+use Nelmio\ApiDocBundle\Annotation\Model;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Swagger\Annotations as SWG;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -36,6 +38,37 @@ class SecurityController extends AbstractFOSRestController
     /**
      * @param Request $request
      * @return Response
+     * @SWG\Post(
+     *     description="Authenticates a user",
+     *     @SWG\Parameter(
+     *         in="body",
+     *         name="body",
+     *         @SWG\Schema(
+     *             @SWG\Property(property="username", type="string", description="The username to authenticate"),
+     *             @SWG\Property(property="password", type="string", description="The password to authenticate"),
+     *         )
+     *     )
+     * )
+     * @SWG\Response(
+     *     response=200,
+     *     description="The user is authenticated",
+     *     @SWG\Schema(
+     *         @SWG\Property(
+     *             property="data",
+     *             type="object",
+     *             ref=@Model(type=User::class),
+     *         )
+     *     )
+     * )
+     * @SWG\Response(response=400, description="The request is malformed")
+     * @SWG\Response(
+     *     response=401,
+     *     description="Authentication failed",
+     *     @SWG\Schema(
+     *         @SWG\Property(description="Description of the error", property="error", type="string"),
+     *     ),
+     * )
+     * @SWG\Tag(name="Security")
      */
     public function loginAction(Request $request): Response
     {
@@ -51,20 +84,37 @@ class SecurityController extends AbstractFOSRestController
      * @param int $id
      * @param string $token
      * @return Response
+     * @SWG\Parameter(description="ID of the user to verify", in="path", name="id", type="integer")
+     * @SWG\Parameter(description="Token of the user to verify", in="path", name="token", type="string")
+     * @SWG\Response(
+     *     response=200,
+     *     description="Verifies an existing user-token",
+     *     @SWG\Schema(
+     *         @SWG\Property(
+     *             property="data",
+     *             type="object",
+     *             ref=@Model(type=User::class),
+     *         )
+     *     )
+     * )
+     * @SWG\Response(
+     *     response=401,
+     *     description="Verification ot the token failed",
+     *     @SWG\Schema(@SWG\Property(description="Description of the error", property="error", type="string")),
+     * )
+     * @SWG\Tag(name="Security")
      */
     public function verifyAction(int $id, string $token): Response
     {
         $user = $this->doctrine->getRepository(User::class)->findOneBy(
             ['id' => $id, 'active' => true, 'apiToken' => $token]
         );
-        if (!is_null($user)) {
-            if ($user->apiTokenExpiryTimestamp > new DateTime()) {
-                $user->apiTokenExpiryTimestamp = new DateTime(User::API_TOKEN_VALIDITY);
-                $this->doctrine->getManager()->flush();
-            } else {
-                $user = null;
-            }
+        if (is_null($user) || $user->apiTokenExpiryTimestamp <= new DateTime()) {
+            return $this->handleView($this->view(['error' => 'This token is not valid'], 401));
         }
+
+        $user->apiTokenExpiryTimestamp = new DateTime(User::API_TOKEN_VALIDITY);
+        $this->doctrine->getManager()->flush();
 
         return $this->handleView($this->view(['data' => $user], 200));
     }

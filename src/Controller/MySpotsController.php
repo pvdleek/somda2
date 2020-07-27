@@ -156,7 +156,7 @@ class MySpotsController
     {
         $spot = $this->formHelper->getDoctrine()->getRepository(Spot::class)->find($id);
         if (is_null($spot) || $spot->user !== $this->userHelper->getUser()) {
-            throw new AccessDeniedException();
+            throw new AccessDeniedException('This spot does not exist or does not belong to the user');
         }
         $form = $this->formHelper->getFactory()->create(SpotForm::class, $spot);
 
@@ -192,7 +192,7 @@ class MySpotsController
     {
         $spot = $this->formHelper->getDoctrine()->getRepository(Spot::class)->find($id);
         if (is_null($spot) || $spot->user !== $this->userHelper->getUser()) {
-            throw new AccessDeniedException();
+            throw new AccessDeniedException('This spot does not exist or does not belong to the user');
         }
 
         if (!is_null($spot->extra)) {

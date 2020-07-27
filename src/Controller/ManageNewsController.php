@@ -132,7 +132,7 @@ class ManageNewsController
     {
         $railNews = $this->doctrine->getRepository(RailNews::class)->find($id);
         if (is_null($railNews)) {
-            throw new AccessDeniedException();
+            throw new AccessDeniedException('This rail-news item does not exist');
         }
         $form = $this->formHelper->getFactory()->create(RailNewsForm::class, $railNews);
 

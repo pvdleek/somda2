@@ -63,7 +63,7 @@ class ManageRouteListsController
         } else {
             $trainTableYear = $this->doctrine->getRepository(TrainTableYear::class)->find($id);
             if (is_null($trainTableYear)) {
-                throw new AccessDeniedException();
+                throw new AccessDeniedException('This trainTableYear does not exist');
             }
 
             $routeLists = $this->doctrine->getRepository(RouteList::class)->findBy(
@@ -130,7 +130,7 @@ class ManageRouteListsController
              */
             $routeList = $this->doctrine->getRepository(RouteList::class)->find($id);
             if (is_null($routeList)) {
-                throw new AccessDeniedException();
+                throw new AccessDeniedException('This routeList does not exist');
             }
 
             return $routeList;
@@ -138,7 +138,7 @@ class ManageRouteListsController
 
         $trainTableYear = $this->doctrine->getRepository(TrainTableYear::class)->find($yearId);
         if (is_null($trainTableYear)) {
-            throw new AccessDeniedException();
+            throw new AccessDeniedException('This trainTableYear does not exist');
         }
 
         $routeList = new RouteList();

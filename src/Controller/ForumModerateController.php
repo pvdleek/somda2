@@ -119,7 +119,7 @@ class ForumModerateController
         $discussion2 = $this->getDiscussion($id2);
 
         if ($discussion1->forum !== $discussion2->forum) {
-            throw new AccessDeniedException();
+            throw new AccessDeniedException("The forums of the discussions to be combined do not match");
         }
 
         $newDiscussion = new ForumDiscussion();
@@ -245,7 +245,7 @@ class ForumModerateController
         if (is_null($discussion)
             || !$this->forumAuthHelper->userIsModerator($discussion->forum, $this->userHelper->getUser())
         ) {
-            throw new AccessDeniedException();
+            throw new AccessDeniedException('The discussion does not exist of the user cannot moderate it');
         }
         return $discussion;
     }

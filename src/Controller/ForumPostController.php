@@ -99,9 +99,11 @@ class ForumPostController
          */
         $quotedPost = $this->formHelper->getDoctrine()->getRepository(ForumPost::class)->find($id);
         if (!$this->forumAuthHelper->mayPost($quotedPost->discussion->forum, $this->userHelper->getUser())
-            || $quotedPost->discussion->locked
+            || is_null($quotedPost) || $quotedPost->discussion->locked
         ) {
-            throw new AccessDeniedException();
+            throw new AccessDeniedException(
+                'The quoted post does not exist, the discussion is locked or the user may not view the discussion'
+            );
         }
 
         $userIsModerator = $this->forumAuthHelper->userIsModerator(
@@ -206,7 +208,9 @@ class ForumPostController
             || $post->discussion->locked
             || ($post->author !== $this->userHelper->getUser() && !$userIsModerator)
         ) {
-            throw new AccessDeniedException();
+            throw new AccessDeniedException(
+                'The user may not post, the discussion is locked or the author is not the user'
+            );
         }
 
         $form = $this->formHelper

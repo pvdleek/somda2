@@ -119,7 +119,7 @@ class ManageTrainTablesController
          */
         $routeList = $this->doctrine->getRepository(RouteList::class)->find($routeListId);
         if (is_null($routeList)) {
-            throw new AccessDeniedException();
+            throw new AccessDeniedException('This routeList does not exist');
         }
 
         $route = null;
@@ -129,7 +129,7 @@ class ManageTrainTablesController
              */
             $route = $this->doctrine->getRepository(Route::class)->find($routeId);
             if (is_null($route)) {
-                throw new AccessDeniedException();
+                throw new AccessDeniedException('This route does not exist');
             }
         }
 

@@ -77,7 +77,7 @@ class ForumDiscussionHelper
         $this->discussion = $discussion;
 
         if (!$this->forumAuthHelper->mayView($discussion->forum, $this->userHelper->getUser())) {
-            throw new AccessDeniedException();
+            throw new AccessDeniedException('The user may not view this discussion');
         }
 
         return $this;

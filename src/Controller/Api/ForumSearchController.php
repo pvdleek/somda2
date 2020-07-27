@@ -66,21 +66,21 @@ class ForumSearchController extends AbstractFOSRestController
      *                 type="object",
      *                 @SWG\Property(
      *                     description="Indicates if the search-term was found in the title",
-     *                     property="titleMatch",
+     *                     property="title_match",
      *                     type="boolean"
      *                 ),
-     *                 @SWG\Property(property="discussionId", type="integer"),
-     *                 @SWG\Property(property="discussionTitle", type="string"),
-     *                 @SWG\Property(property="discussionLocked", type="boolean"),
-     *                 @SWG\Property(property="authorId", type="integer"),
-     *                 @SWG\Property(property="authorUsername", type="string"),
-     *                 @SWG\Property(property="postId", type="integer"),
-     *                 @SWG\Property(format="date-time", property="postTimestamp", type="string"),
+     *                 @SWG\Property(property="discussion_id", type="integer"),
+     *                 @SWG\Property(property="discussion_title", type="string"),
+     *                 @SWG\Property(property="discussion_locked", type="boolean"),
+     *                 @SWG\Property(property="author_id", type="integer"),
+     *                 @SWG\Property(property="author_username", type="string"),
+     *                 @SWG\Property(property="post_id", type="integer"),
+     *                 @SWG\Property(format="date-time", property="post_timestamp", type="string"),
      *             )
      *         )
      *     )
      * )
-     * @SWG\Tag(name="forum")
+     * @SWG\Tag(name="Forum")
      */
     public function indexAction(string $searchMethod, string $terms): Response
     {

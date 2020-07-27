@@ -67,7 +67,7 @@ class ForumForumController extends AbstractFOSRestController
      *         @SWG\Items()
      *     )
      * )
-     * @SWG\Tag(name="forum")
+     * @SWG\Tag(name="Forum")
      */
     public function indexAction(): Response
     {
@@ -97,7 +97,7 @@ class ForumForumController extends AbstractFOSRestController
      *         @SWG\Items()
      *     )
      * )
-     * @SWG\Tag(name="forum")
+     * @SWG\Tag(name="Forum")
      */
     public function forumAction(int $id): Response
     {

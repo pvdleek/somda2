@@ -32,11 +32,10 @@ class TrainTableYearController extends AbstractFOSRestController
      *     response=200,
      *     description="Returns all trainTableYears in the Somda database",
      *     @SWG\Schema(
-     *         type="array",
-     *         @SWG\Items(ref=@Model(type=TrainTableYear::class))
+     *         @SWG\Property(property="data", type="array", @SWG\Items(ref=@Model(type=TrainTableYear::class)))
      *     )
      * )
-     * @SWG\Tag(name="trainTable")
+     * @SWG\Tag(name="Train-tables")
      */
     public function indexAction(): Response
     {

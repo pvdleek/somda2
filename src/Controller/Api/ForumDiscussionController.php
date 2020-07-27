@@ -86,7 +86,7 @@ class ForumDiscussionController extends AbstractFOSRestController
      *         @SWG\Items(ref=@Model(type=ForumPost::class))
      *     )
      * )
-     * @SWG\Tag(name="forum")
+     * @SWG\Tag(name="Forum")
      */
     public function indexAction(int $id, int $pageNumber = null, int $postId = null): Response
     {
@@ -95,7 +95,7 @@ class ForumDiscussionController extends AbstractFOSRestController
          */
         $discussion = $this->doctrine->getRepository(ForumDiscussion::class)->find($id);
         if (is_null($discussion)) {
-            throw new AccessDeniedException();
+            throw new AccessDeniedException('This discussion does not exist');
         }
 
         $this->forumDiscussionHelper->setDiscussion($discussion);
@@ -127,12 +127,12 @@ class ForumDiscussionController extends AbstractFOSRestController
      *         @SWG\Items(ref=@Model(type=ForumDiscussion::class))
      *     )
      * )
-     * @SWG\Tag(name="forum")
+     * @SWG\Tag(name="Forum")
      */
     public function favoritesAction(): Response
     {
         if (!$this->userHelper->userIsLoggedIn()) {
-            throw new AccessDeniedException();
+            throw new AccessDeniedException('The user is not logged in');
         }
 
         $discussions = $this->doctrine->getRepository(ForumDiscussion::class)->findByFavorites(
@@ -152,12 +152,12 @@ class ForumDiscussionController extends AbstractFOSRestController
      *         @SWG\Items(ref=@Model(type=ForumDiscussion::class))
      *     )
      * )
-     * @SWG\Tag(name="forum")
+     * @SWG\Tag(name="Forum")
      */
     public function unreadAction(): Response
     {
         if (!$this->userHelper->userIsLoggedIn()) {
-            throw new AccessDeniedException();
+            throw new AccessDeniedException('The user is not logged in');
         }
 
         $discussions = $this->doctrine->getRepository(ForumDiscussion::class)->findUnread($this->userHelper->getUser());

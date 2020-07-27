@@ -51,7 +51,7 @@ class NewsController
              */
             $news = $this->doctrine->getRepository(News::class)->find($id);
             if (is_null($news)) {
-                throw new AccessDeniedException();
+                throw new AccessDeniedException('This news-item does not exist');
             }
 
             if ($this->userHelper->userIsLoggedIn() && !in_array($this->userHelper->getUser(), $news->getUserReads())) {

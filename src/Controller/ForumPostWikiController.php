@@ -44,7 +44,7 @@ class ForumPostWikiController
          */
         $post = $this->doctrine->getRepository(ForumPost::class)->find($id);
         if (is_null($post)) {
-            throw new AccessDeniedException();
+            throw new AccessDeniedException('This post does not exist');
         }
 
         $post->wikiCheck = $operation === 'ok' ? ForumPost::WIKI_CHECK_OK : ForumPost::WIKI_CHECK_N_A;

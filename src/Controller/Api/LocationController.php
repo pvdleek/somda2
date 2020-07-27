@@ -32,6 +32,19 @@ class LocationController extends AbstractFOSRestController
      * @param string $searchMethod
      * @param string $search
      * @return Response
+     * @SWG\Parameter(
+     *     description="The search-method",
+     *     enum={"letter","specifiek","naam","omschrijving"},
+     *     in="path",
+     *     name="searchMethod",
+     *     type="string",
+     * )
+     * @SWG\Parameter(
+     *     description="The search-string",
+     *     in="path",
+     *     name="search",
+     *     type="string",
+     * )
      * @SWG\Response(
      *     response=200,
      *     description="Returns all locations in the Somda database",
@@ -40,7 +53,7 @@ class LocationController extends AbstractFOSRestController
      *         @SWG\Items(ref=@Model(type=Location::class))
      *     )
      * )
-     * @SWG\Tag(name="location")
+     * @SWG\Tag(name="Locations")
      */
     public function indexAction(string $searchMethod = null, string $search = null): Response
     {

@@ -10,7 +10,6 @@ use App\Helpers\RouteOperationDaysHelper;
 use App\Helpers\RoutesDisplayHelper;
 use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
-use Exception;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -62,29 +61,42 @@ class TrainTableController extends AbstractFOSRestController
      * @param int $trainTableYearId
      * @param int $routeNumber
      * @return Response
-     * @throws Exception
      * @SWG\Parameter(
-     *     default="Provide 0 to get the current trainTableYear",
-     *     description="The unique identifier of the trainTableYear",
+     *     default="0",
+     *     description="The unique identifier of the trainTableYear, 0 for the current trainTableYear",
      *     in="path",
      *     name="trainTableYearId",
      *     type="integer",
      * )
-     * @SWG\Parameter(
-     *     description="The routeNumber",
-     *     in="path",
-     *     name="routeNumber",
-     *     type="integer",
-     * )
+     * @SWG\Parameter(description="The routeNumber", in="path", name="routeNumber", type="integer")
      * @SWG\Response(
      *     response=200,
-     *     description="Returns the trainTable for a specific routeNumber",
+     *     description="The train-table for the requested routeNumber",
      *     @SWG\Schema(
-     *         type="array",
-     *         @SWG\Items(ref=@Model(type=TrainTable::class))
-     *     )
+     *         @SWG\Property(
+     *             property="filters",
+     *             type="object",
+     *             @SWG\Property(property="days", type="array", @SWG\Items(type="integer")),
+     *         ),
+     *         @SWG\Property(
+     *             property="legend",
+     *             type="object",
+     *             @SWG\Property(
+     *                 property="days",
+     *                 type="array",
+     *                 @SWG\Items(
+     *                     @SWG\Property(
+     *                         property="The day-identification (integer) as defined in the filters property",
+     *                         description="Visual representation of the days the route runs",
+     *                         type="string"
+     *                     ),
+     *                 ),
+     *             ),
+     *         ),
+     *         @SWG\Property(property="data", type="array", @SWG\Items(ref=@Model(type=TrainTable::class))),
+     *     ),
      * )
-     * @SWG\Tag(name="trainTable")
+     * @SWG\Tag(name="Train-tables")
      */
     public function indexAction(int $trainTableYearId, int $routeNumber): Response
     {
@@ -122,6 +134,58 @@ class TrainTableController extends AbstractFOSRestController
         );
     }
 
+    /**
+     * @IsGranted("ROLE_API_USER")
+     * @param int|null $trainTableYearId
+     * @param int|null $routeListId
+     * @return Response
+     * @SWG\Parameter(
+     *     default="0",
+     *     description="The unique identifier of the trainTableYear, 0 for the current trainTableYear",
+     *     in="path",
+     *     name="trainTableYearId",
+     *     type="integer",
+     * )
+     * @SWG\Parameter(
+     *     description="The unique identifier of the routeListId",
+     *     in="path",
+     *     name="routeListId",
+     *     type="integer",
+     * )
+     * @SWG\Response(
+     *     response=200,
+     *     description="Overview of routes in the requested trainTableYear and routeList",
+     *     @SWG\Schema(
+     *         @SWG\Property(
+     *             property="filters",
+     *             type="object",
+     *             @SWG\Property(property="days", type="array", @SWG\Items(type="integer")),
+     *         ),
+     *         @SWG\Property(
+     *             property="legend",
+     *             type="object",
+     *             @SWG\Property(
+     *                 property="days",
+     *                 type="array",
+     *                 @SWG\Items(
+     *                     @SWG\Property(
+     *                         property="The day-identification (integer) as defined in the filters property",
+     *                         description="Visual representation of the days the route runs",
+     *                         type="string"
+     *                     ),
+     *                 ),
+     *             ),
+     *         ),
+     *         @SWG\Property(property="data", type="array", @SWG\Items(ref=@Model(type=TrainTable::class))),
+     *     ),
+     * )
+     * @SWG\Response(
+     *     response=403,
+     *     description="The request failed",
+     *     @SWG\Schema(@SWG\Property(description="Description of the error", property="error", type="string")),
+     * )
+     * @SWG\Tag(name="Train-tables")
+     */
     public function routeOverviewAction(int $trainTableYearId = null, int $routeListId = null): Response
     {
         $routesDisplay = $this->routesDisplayHelper->getRoutesDisplay($trainTableYearId, $routeListId);

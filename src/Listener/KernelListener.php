@@ -12,6 +12,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Event\KernelEvent;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\Event\TerminateEvent;
@@ -69,6 +70,7 @@ class KernelListener implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
+            KernelEvents::EXCEPTION => ['onKernelException', -10],
             KernelEvents::REQUEST => ['onKernelRequest', -10],
             KernelEvents::TERMINATE => ['onKernelTerminate', -10],
             SecurityEvents::INTERACTIVE_LOGIN => ['onInteractiveLogin', -10],
@@ -76,10 +78,20 @@ class KernelListener implements EventSubscriberInterface
     }
 
     /**
+     * @param ExceptionEvent $event
+     */
+    public function onKernelException(ExceptionEvent $event): void
+    {
+        if ($this->isApiRequest($event)) {
+            $event->setResponse(new Response('{ "error": "' . $event->getThrowable()->getMessage() . '" }'));
+        }
+    }
+
+    /**
      * @param RequestEvent $event
      * @throws Exception
      */
-    public function onKernelRequest(RequestEvent $event)
+    public function onKernelRequest(RequestEvent $event): void
     {
         if (!$this->isShouldExecuteEventHandler($event)) {
             return;
@@ -109,7 +121,7 @@ class KernelListener implements EventSubscriberInterface
      * @param TerminateEvent $event
      * @throws Exception
      */
-    public function onKernelTerminate(TerminateEvent $event)
+    public function onKernelTerminate(TerminateEvent $event): void
     {
         if (!$this->isShouldExecuteEventHandler($event)
             || $event->getResponse()->getStatusCode() !== Response::HTTP_OK
@@ -139,7 +151,7 @@ class KernelListener implements EventSubscriberInterface
     /**
      * @param InteractiveLoginEvent $event
      */
-    public function onInteractiveLogin(InteractiveLoginEvent $event)
+    public function onInteractiveLogin(InteractiveLoginEvent $event): void
     {
         /**
          * @var User $user
