@@ -174,8 +174,10 @@ class ManageTrainTablesController
             $route = $newRoute;
             unset($newRoute);
 
-            $route->addRouteList($routeList);
-            $routeList->addRoute($route);
+            if (!in_array($routeList, $route->getRouteLists())) {
+                $route->addRouteList($routeList);
+                $routeList->addRoute($route);
+            }
             $this->doctrine->getManager()->persist($route);
         }
 
