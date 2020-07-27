@@ -6,8 +6,9 @@ use App\Entity\ForumSearchWord;
 use App\Form\ForumSearch;
 use App\Model\ForumSearchResult;
 use Doctrine\Persistence\ManagerRegistry;
+use Twig\Extension\RuntimeExtensionInterface;
 
-class ForumSearchHelper
+class ForumSearchHelper implements RuntimeExtensionInterface
 {
     public const MAX_RESULTS = 100;
 
