@@ -79,4 +79,22 @@ class User extends EntityRepository
             ->andWhere('u.banExpireTimestamp IS NOT NULL');
         return $queryBuilder->getQuery()->getResult();
     }
+
+    /**
+     * @return UserEntity[]
+     */
+    public function findNonActivated(): array
+    {
+        $queryBuilder = $this->getEntityManager()
+            ->createQueryBuilder()
+            ->select('u')
+            ->from(UserEntity::class, 'u')
+            ->andWhere('u.active = FALSE')
+            ->andWhere('u.activationKey IS NOT NULL')
+            ->andWhere('u.registerTimestamp >= :minimumDate')
+            ->andWhere('u.registerTimestamp < :maximumDate')
+            ->setParameter('minimumDate', new DateTime('2016-01-01'))
+            ->setParameter('maximumDate', new DateTime('-5 days'));
+        return $queryBuilder->getQuery()->getResult();
+    }
 }
