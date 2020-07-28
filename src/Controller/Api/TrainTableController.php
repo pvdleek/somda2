@@ -188,6 +188,13 @@ class TrainTableController extends AbstractFOSRestController
      */
     public function routeOverviewAction(int $trainTableYearId = null, int $routeListId = null): Response
     {
+        if ($trainTableYearId === 0) {
+            $trainTableYearId = $this->doctrine
+                ->getRepository(TrainTableYear::class)
+                ->findTrainTableYearByDate(new DateTime())
+                ->getId();
+        }
+
         $routesDisplay = $this->routesDisplayHelper->getRoutesDisplay($trainTableYearId, $routeListId);
 
         return $this->handleView(

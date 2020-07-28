@@ -33,16 +33,16 @@ api_train_table:
   controller: App\Controller\Api\TrainTableController::indexAction
 
 api_route_overview:
-  path: /{version}/overview-train-tables/
+  path: /{version}/route-overview/
   methods: [GET]
   controller: App\Controller\Api\TrainTableController::routeOverviewAction
 api_route_overview_year:
-  path: /{version}/overview-train-tables/{trainTableYearId}/
+  path: /{version}/route-overview/{trainTableYearId}/
   methods: [GET]
   requirements: { trainTableYearId: \d+ }
   controller: App\Controller\Api\TrainTableController::routeOverviewAction
 api_route_overview_year_route_list:
-  path: /{version}/overview-train-tables/{trainTableYearId}/{routeListId}/
+  path: /{version}/route-overview/{trainTableYearId}/{routeListId}/
   methods: [GET]
   requirements: { trainTableYearId: \d+, routeListId: \d+ }
   controller: App\Controller\Api\TrainTableController::routeOverviewAction
