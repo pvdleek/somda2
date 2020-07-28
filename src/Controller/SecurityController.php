@@ -240,6 +240,7 @@ class SecurityController
         if ($form->isSubmitted() && $form->isValid()) {
             if ($form->get(UserActivate::FIELD_KEY)->getData() === $user->activationKey) {
                 $userGroup = $this->formHelper->getDoctrine()->getRepository(Group::class)->find(4);
+                $userGroup->addUser($user);
                 
                 $user->active = true;
                 $user->activationKey = null;
