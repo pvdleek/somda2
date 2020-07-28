@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Group;
 use App\Entity\User;
 use App\Entity\UserInfo;
 use App\Form\User as UserForm;
@@ -10,15 +11,13 @@ use App\Form\UserLostPassword;
 use App\Form\UserPassword;
 use App\Helpers\EmailHelper;
 use App\Helpers\FlashHelper;
-use App\Helpers\RedirectHelper;
+use App\Helpers\FormHelper;
 use App\Helpers\TemplateHelper;
 use App\Helpers\UserHelper;
 use DateTime;
 use Exception;
-use Doctrine\Persistence\ManagerRegistry;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Form\FormError;
-use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,9 +28,9 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 class SecurityController
 {
     /**
-     * @var ManagerRegistry
+     * @var FormHelper
      */
-    private ManagerRegistry $doctrine;
+    private FormHelper $formHelper;
 
     /**
      * @var UserHelper
@@ -39,24 +38,9 @@ class SecurityController
     private UserHelper $userHelper;
 
     /**
-     * @var RedirectHelper
-     */
-    private RedirectHelper $redirectHelper;
-
-    /**
-     * @var FormFactoryInterface
-     */
-    private FormFactoryInterface $formFactory;
-
-    /**
      * @var TemplateHelper
      */
     private TemplateHelper $templateHelper;
-
-    /**
-     * @var FlashHelper
-     */
-    private FlashHelper $flashHelper;
 
     /**
      * @var EmailHelper
@@ -64,29 +48,20 @@ class SecurityController
     private EmailHelper $emailHelper;
 
     /**
-     * @param ManagerRegistry $doctrine
+     * @param FormHelper $formHelper
      * @param UserHelper $userHelper
-     * @param RedirectHelper $redirectHelper
-     * @param FormFactoryInterface $formFactory
      * @param TemplateHelper $templateHelper
-     * @param FlashHelper $flashHelper
      * @param EmailHelper $emailHelper
      */
     public function __construct(
-        ManagerRegistry $doctrine,
+        FormHelper $formHelper,
         UserHelper $userHelper,
-        RedirectHelper $redirectHelper,
-        FormFactoryInterface $formFactory,
         TemplateHelper $templateHelper,
-        FlashHelper $flashHelper,
         EmailHelper $emailHelper
     ) {
-        $this->doctrine = $doctrine;
+        $this->formHelper = $formHelper;
         $this->userHelper = $userHelper;
-        $this->redirectHelper = $redirectHelper;
-        $this->formFactory = $formFactory;
         $this->templateHelper = $templateHelper;
-        $this->flashHelper = $flashHelper;
         $this->emailHelper = $emailHelper;
     }
 
@@ -99,7 +74,7 @@ class SecurityController
     public function loginAction(AuthenticationUtils $authenticationUtils, string $username = null): Response
     {
         if ($this->userHelper->userIsLoggedIn()) {
-            return $this->redirectHelper->redirectToRoute('home');
+            return $this->formHelper->getRedirectHelper()->redirectToRoute('home');
         }
 
         return $this->templateHelper->render('security/login.html.twig', [
@@ -117,7 +92,7 @@ class SecurityController
     public function registerAction(Request $request)
     {
         $user = new User();
-        $form = $this->formFactory->create(UserForm::class, $user);
+        $form = $this->formHelper->getFactory()->create(UserForm::class, $user);
 
         $form->handleRequest($request);
         if ($form->isSubmitted()) {
@@ -133,15 +108,15 @@ class SecurityController
                 );
                 $user->activationKey = uniqid();
                 $user->registerTimestamp = new DateTime();
-                $this->doctrine->getManager()->persist($user);
+                $this->formHelper->getDoctrine()->getManager()->persist($user);
 
                 $userInfo = new UserInfo();
                 $userInfo->user = $user;
-                $this->doctrine->getManager()->persist($userInfo);
+                $this->formHelper->getDoctrine()->getManager()->persist($userInfo);
 
                 $user->info = $userInfo;
 
-                $this->doctrine->getManager()->flush();
+                $this->formHelper->getDoctrine()->getManager()->flush();
 
                 if ($this->emailHelper->sendEmail(
                     $user,
@@ -149,19 +124,22 @@ class SecurityController
                     'register',
                     ['userId' => $user->getId(), 'activationKey' => $user->activationKey]
                 )) {
-                    $this->flashHelper->add(
+                    $this->formHelper->getFlashHelper()->add(
                         FlashHelper::FLASH_TYPE_INFORMATION,
                         'Je registratie is geslaagd! Er is een e-mail gestuurd met daarin een link en een ' .
                         'activatiecode. Je kunt op de link klikken of de code op onderstaand scherm invoeren ' .
                         'om jouw account direct actief te maken.'
                     );
 
-                    return $this->redirectHelper->redirectToRoute('activate', ['id' => $user->getId()]);
+                    return $this->formHelper->getRedirectHelper()->redirectToRoute(
+                        'activate',
+                        ['id' => $user->getId()]
+                    );
                 } else {
-                    $this->doctrine->getManager()->remove($user);
-                    $this->doctrine->getManager()->flush();
+                    $this->formHelper->getDoctrine()->getManager()->remove($user);
+                    $this->formHelper->getDoctrine()->getManager()->flush();
 
-                    $this->flashHelper->add(
+                    $this->formHelper->getFlashHelper()->add(
                         FlashHelper::FLASH_TYPE_ERROR,
                         'Het is niet gelukt een e-mail naar het door jou opgegeven e-mailadres te sturen, ' .
                         'controleer het e-mailadres.'
@@ -181,7 +159,7 @@ class SecurityController
      */
     private function validateUsername(FormInterface $form): void
     {
-        $existingUsername = $this->doctrine->getRepository(User::class)->findOneBy(
+        $existingUsername = $this->formHelper->getDoctrine()->getRepository(User::class)->findOneBy(
             [UserForm::FIELD_USERNAME => $form->get(UserForm::FIELD_USERNAME)->getData()]
         );
         if (!is_null($existingUsername)) {
@@ -202,7 +180,7 @@ class SecurityController
             );
         }
 
-        $existingEmail = $this->doctrine->getRepository(User::class)->findOneBy(
+        $existingEmail = $this->formHelper->getDoctrine()->getRepository(User::class)->findOneBy(
             [UserForm::FIELD_EMAIL => $form->get(UserForm::FIELD_EMAIL)->getData()]
         );
         if (!is_null($existingEmail)) {
@@ -251,25 +229,27 @@ class SecurityController
         /**
          * @var User $user
          */
-        $user = $this->doctrine->getRepository(User::class)->find($id);
+        $user = $this->formHelper->getDoctrine()->getRepository(User::class)->find($id);
         if (is_null($user)) {
             throw new AccessDeniedHttpException();
         }
 
-        $form = $this->formFactory->create(UserActivate::class, $user);
+        $form = $this->formHelper->getFactory()->create(UserActivate::class, $user);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             if ($form->get(UserActivate::FIELD_KEY)->getData() === $user->activationKey) {
+                $userGroup = $this->formHelper->getDoctrine()->getRepository(Group::class)->find(4);
+                
                 $user->active = true;
                 $user->activationKey = null;
-                $user->addRole('ROLE_USER');
-                $this->doctrine->getManager()->flush();
+                $user->addRole('ROLE_USER')->addGroup($userGroup);
+                $this->formHelper->getDoctrine()->getManager()->flush();
 
                 $this->emailHelper->sendEmail($user, 'Welkom op Somda -- Belangrijke informatie', 'new-account');
 
                 // Send the email to the admin account
-                $samePasswordUsers = $this->doctrine->getRepository(User::class)->findBy(
+                $samePasswordUsers = $this->formHelper->getDoctrine()->getRepository(User::class)->findBy(
                     ['password' => $user->getPassword()]
                 );
                 $this->emailHelper->sendEmail(
@@ -279,11 +259,11 @@ class SecurityController
                     ['user' => $user, 'samePasswordUsers' => $samePasswordUsers]
                 );
 
-                $this->flashHelper->add(
+                $this->formHelper->getFlashHelper()->add(
                     FlashHelper::FLASH_TYPE_INFORMATION,
                     'Jouw account is geactiveerd, je kunt nu inloggen'
                 );
-                return $this->redirectHelper->redirectToRoute(
+                return $this->formHelper->getRedirectHelper()->redirectToRoute(
                     'login_with_username',
                     ['username' => $user->getUsername()]
                 );
@@ -308,19 +288,19 @@ class SecurityController
      */
     public function lostPasswordAction(Request $request)
     {
-        $form = $this->formFactory->create(UserLostPassword::class);
+        $form = $this->formHelper->getFactory()->create(UserLostPassword::class);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             /**
              * @var User $user
              */
-            $user = $this->doctrine->getRepository(User::class)->findOneBy(
+            $user = $this->formHelper->getDoctrine()->getRepository(User::class)->findOneBy(
                 [UserForm::FIELD_EMAIL => $form->get(UserForm::FIELD_EMAIL)->getData()]
             );
             if (!is_null($user)) {
                 $newPassword = $this->getRandomPassword(12);
                 $user->password = password_hash($newPassword, PASSWORD_DEFAULT);
-                $this->doctrine->getManager()->flush();
+                $this->formHelper->getDoctrine()->getManager()->flush();
 
                 $this->emailHelper->sendEmail(
                     $user,
@@ -330,12 +310,12 @@ class SecurityController
                 );
             }
 
-            $this->flashHelper->add(
+            $this->formHelper->getFlashHelper()->add(
                 FlashHelper::FLASH_TYPE_INFORMATION,
                 'Er is een e-mail gestuurd met een nieuw wachtwoord'
             );
 
-            return $this->redirectHelper->redirectToRoute('lost_password');
+            return $this->formHelper->getRedirectHelper()->redirectToRoute('lost_password');
         }
 
         return $this->templateHelper->render('security/lostPassword.html.twig', [
@@ -366,16 +346,19 @@ class SecurityController
      */
     public function changePasswordAction(Request $request)
     {
-        $form = $this->formFactory->create(UserPassword::class);
+        $form = $this->formHelper->getFactory()->create(UserPassword::class);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $this->userHelper->getUser()->password =
                 password_hash($form->get('newPassword')->getData(), PASSWORD_DEFAULT);
-            $this->doctrine->getManager()->flush();
+            $this->formHelper->getDoctrine()->getManager()->flush();
 
-            $this->flashHelper->add(FlashHelper::FLASH_TYPE_INFORMATION, 'Jouw wachtwoord is gewijzigd');
+            $this->formHelper->getFlashHelper()->add(
+                FlashHelper::FLASH_TYPE_INFORMATION,
+                'Jouw wachtwoord is gewijzigd'
+            );
 
-            return $this->redirectHelper->redirectToRoute('home');
+            return $this->formHelper->getRedirectHelper()->redirectToRoute('home');
         }
 
         return $this->templateHelper->render('security/changePassword.html.twig', [
