@@ -2,6 +2,8 @@
 
 namespace App\Controller\Api;
 
+use App\Entity\Route;
+use App\Entity\RouteList;
 use App\Entity\RouteOperationDays;
 use App\Entity\TrainTable;
 use App\Entity\TrainTableYear;
@@ -159,24 +161,23 @@ class TrainTableController extends AbstractFOSRestController
      *         @SWG\Property(
      *             property="filters",
      *             type="object",
-     *             @SWG\Property(property="days", type="array", @SWG\Items(type="integer")),
-     *         ),
-     *         @SWG\Property(
-     *             property="legend",
-     *             type="object",
      *             @SWG\Property(
-     *                 property="days",
+     *                 property="trainTableYears",
      *                 type="array",
-     *                 @SWG\Items(
-     *                     @SWG\Property(
-     *                         property="The day-identification (integer) as defined in the filters property",
-     *                         description="Visual representation of the days the route runs",
-     *                         type="string"
-     *                     ),
-     *                 ),
+     *                 @SWG\Items(ref=@Model(type=TrainTableYear::class)),
+     *             ),
+     *             @SWG\Property(
+     *                 property="routeLists",
+     *                 type="array",
+     *                 @SWG\Items(ref=@Model(type=RouteList::class)),
+     *             ),
+     *             @SWG\Property(
+     *                 property="selectedRouteList",
+     *                 ref=@Model(type=RouteList::class),
+     *                 type="object",
      *             ),
      *         ),
-     *         @SWG\Property(property="data", type="array", @SWG\Items(ref=@Model(type=TrainTable::class))),
+     *         @SWG\Property(property="data", type="array", @SWG\Items(ref=@Model(type=Route::class))),
      *     ),
      * )
      * @SWG\Response(
@@ -199,12 +200,12 @@ class TrainTableController extends AbstractFOSRestController
 
         return $this->handleView(
             $this->view([
-                'filters' => ['trainTableYears' => $this->doctrine->getRepository(TrainTableYear::class)->findAll()],
-                'data' => [
+                'filters' => [
+                    'trainTableYears' => $this->doctrine->getRepository(TrainTableYear::class)->findAll(),
                     'routeLists' => $routesDisplay->routeLists,
                     'selectedRouteList' => $routesDisplay->selectedRouteList,
-                    'routes' => $routesDisplay->routes,
                 ],
+                'data' => $routesDisplay->routes,
             ], 200)
         );
     }
