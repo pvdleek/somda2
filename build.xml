@@ -21,6 +21,10 @@
             <arg value="bin/console" />
             <arg value="ckeditor:install" />
         </exec>
+        <exec executable="php">
+            <arg value="bin/console" />
+            <arg value="cache:clear" />
+        </exec>
         <exec executable="chown">
             <arg value="-R" />
             <arg value="nginx:nginx" />
