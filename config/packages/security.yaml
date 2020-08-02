@@ -14,6 +14,7 @@ security:
       memory:
         users:
           'nl.somda.somda.app': { password: '$argon2id$v=19$m=65536,t=4,p=1$79JQAdFwBv6M6e+C098Z+Q$l+L4HEmPpy3B8KRx9M2yEmrfORbgRU33IKiKaWDVOHI', roles: 'ROLE_API_USER' }
+          'aar.claij.nl': { password: '$argon2id$v=19$m=65536,t=4,p=1$ek13WTRSQjBJRTYzVjdNcg$t7+BabVXHW/AiRrs/2F2h8NzCEMYwGzGyXnECkjmneY', roles: 'ROLE_API_USER' }
     all_users:
       chain:
         providers: ['api_user_provider', 'app_user_provider']
