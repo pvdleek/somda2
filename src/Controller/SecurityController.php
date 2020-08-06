@@ -239,6 +239,9 @@ class SecurityController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             if ($form->get(UserActivate::FIELD_KEY)->getData() === $user->activationKey) {
+                /**
+                 * @var Group $userGroup
+                 */
                 $userGroup = $this->formHelper->getDoctrine()->getRepository(Group::class)->find(4);
                 $userGroup->addUser($user);
                 

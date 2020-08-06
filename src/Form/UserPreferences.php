@@ -23,7 +23,7 @@ class UserPreferences extends BaseForm
     /**
      * @var ManagerRegistry
      */
-    private $doctrine;
+    private ManagerRegistry $doctrine;
 
     /**
      * @param ManagerRegistry $doctrine

@@ -121,6 +121,9 @@ class TrainTableController extends AbstractFOSRestController
         }
 
         $routeOperationDaysArray = [];
+        /**
+         * @var RouteOperationDays[] $routeOperationDays
+         */
         $routeOperationDays = $this->doctrine->getRepository(RouteOperationDays::class)->findAll();
         foreach ($routeOperationDays as $routeOperationDay) {
             $routeOperationDaysArray[$routeOperationDay->getId()] =

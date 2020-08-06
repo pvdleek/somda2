@@ -5,9 +5,7 @@ namespace App\Helpers\Controller;
 use App\Entity\Location;
 use App\Entity\Route;
 use App\Entity\TrainTableYear;
-use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
-use Exception;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class BaseControllerHelper
