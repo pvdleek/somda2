@@ -14,6 +14,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     name="ott_official_train_table",
  *     indexes={
  *         @ORM\Index(name="idx_ott_time", columns={"ott_time"}),
+ *         @ORM\Index(name="idx_ott_ofo_footnote_id", columns={"ott_ofo_footnote_id"}),
  *         @ORM\Index(name="idx_ott_location_id", columns={"ott_location_id"}),
  *         @ORM\Index(name="idx_ott_route_id", columns={"ott_route_id"})
  *     }

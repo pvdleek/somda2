@@ -177,6 +177,7 @@ class OfficialTrainTableHelper
         $handle = fopen($this->directory . '/timetbls.dat', 'r');
         if ($handle) {
             while (($line = fgets($handle)) !== false) {
+                var_dump('Found line ' . $line);
                 switch (substr($line, 0, 1)) {
                     case '#': // Unique identification
                         break;
@@ -298,6 +299,9 @@ class OfficialTrainTableHelper
             throw new Exception('Location not found when saving train-table');
         }
 
+        var_dump('Will save train-table with location ' . $location->name . ', action ' . $action . ', time ' . $time);
+
+
         foreach ($this->routes as $route) {
             if ($route->firstStopNumber <= $this->currentStopNumber
                 && $route->lastStopNumber >= $this->currentStopNumber
@@ -305,7 +309,7 @@ class OfficialTrainTableHelper
                 $trainTable = new OfficialTrainTable();
                 $trainTable->order = $route->order;
                 $trainTable->location = $location;
-                $trainTable->time = is_null($time) ? null : $trainTable->timeDisplayToDatabase($time);
+                $trainTable->time = is_null($time) ? null : $trainTable->timeDisplayToDatabase(trim($time));
                 $trainTable->action = $action;
                 $trainTable->route = $route->route;
                 $trainTable->transporter = $route->transporter;
@@ -313,10 +317,10 @@ class OfficialTrainTableHelper
                 $trainTable->characteristic = $this->characteristic;
 
                 $this->doctrine->getManager()->persist($trainTable);
+                $this->doctrine->getManager()->flush();
+
                 ++$route->order;
             }
         }
-
-        $this->doctrine->getManager()->flush();
     }
 }
