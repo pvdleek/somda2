@@ -17,7 +17,7 @@ use Swagger\Annotations as SWG;
 class Transporter extends Entity
 {
     /**
-     * @var int
+     * @var int|null
      * @ORM\Column(name="vervoerder_id", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -35,11 +35,12 @@ class Transporter extends Entity
     public string $name = '';
 
     /**
-     * @var string|null
-     * @ORM\Column(name="prorail_desc", type="string", length=35, nullable=true)
-     * @JMS\Exclude()
+     * @var int
+     * @ORM\Column(name="iff_code", type="integer", nullable=false, options={"default"=0})
+     * @JMS\Expose()
+     * @SWG\Property(description="Official IFF code", type="integer")
      */
-    public ?string $proRailDescription = '';
+    public int $iffCode = 0;
 
     /**
      * @var Train[]
