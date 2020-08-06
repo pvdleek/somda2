@@ -35,12 +35,12 @@ class Transporter extends Entity
     public string $name = '';
 
     /**
-     * @var int
-     * @ORM\Column(name="iff_code", type="integer", nullable=false, options={"default"=0})
+     * @var int|null
+     * @ORM\Column(name="iff_code", type="integer", nullable=true)
      * @JMS\Expose()
      * @SWG\Property(description="Official IFF code", type="integer")
      */
-    public int $iffCode = 0;
+    public ?int $iffCode = null;
 
     /**
      * @var Train[]

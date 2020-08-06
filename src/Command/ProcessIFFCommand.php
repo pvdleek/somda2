@@ -7,6 +7,7 @@ use Exception;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class ProcessIFFCommand extends Command
@@ -38,6 +39,10 @@ class ProcessIFFCommand extends Command
     {
         $this
             ->addArgument('directory', InputArgument::REQUIRED)
+            ->addOption('footnotes', 'f', InputOption::VALUE_OPTIONAL, 'Process the footnotes')
+            ->addOption('companies', 'c', InputOption::VALUE_OPTIONAL, 'Process the companies')
+            ->addOption('characteristics', 'ch', InputOption::VALUE_OPTIONAL, 'Process the characteristics')
+            ->addOption('train-tables', 't', InputOption::VALUE_OPTIONAL, 'Process the train-tables')
             ->setDescription('Process the IFF files from NS');
     }
 
@@ -50,7 +55,19 @@ class ProcessIFFCommand extends Command
     protected function execute(InputInterface $input = null, OutputInterface $output = null): int
     {
         $this->trainTableHelper->setDirectory($input->getArgument('directory'));
-        $this->trainTableHelper->processIffFiles();
+
+        if ($input->hasOption('footnotes')) {
+            $this->trainTableHelper->processFootnotes();
+        }
+        if ($input->hasOption('companies')) {
+            $this->trainTableHelper->processCompanies();
+        }
+        if ($input->hasOption('characteristics')) {
+            $this->trainTableHelper->processCharacteristics();
+        }
+        if ($input->hasOption('train-tables')) {
+            $this->trainTableHelper->processTrainTables();
+        }
 
         return 0;
     }

@@ -64,12 +64,114 @@ class OfficialTrainTableHelper
     /**
      * @throws Exception
      */
-    public function processIffFiles(): void
+    public function processFootnotes(): void
     {
-        $this->readFootnotes();
-        $this->readCompanies();
-        $this->readCharacteristics();
+        $firstDate = null;
+        $handle = fopen($this->directory . '/footnote.dat', 'r');
+        if ($handle) {
+            while (($line = fgets($handle)) !== false) {
+                switch (substr($line, 0, 1)) {
+                    case '@': // Validity
+                        $firstDate = DateTime::createFromFormat('dmY', substr($line, 5, 8));
+                        break;
+                    case '#': // Unique identification, followed by the valid days
+                        if (is_null($firstDate)) {
+                            throw new Exception('No validity record found before footnote');
+                        }
+                        $footnoteId = (int)substr($line, 1);
+                        $validDays = str_split(fgets($handle), 1);
+                        foreach ($validDays as $position => $validDay) {
+                            if ($validDay === '1') {
+                                $date = clone($firstDate);
+                                $date->modify('+' . $position . ' days');
 
+                                $footnote = new OfficialFootnote();
+                                $footnote->date = $date;
+                                $footnote->footnoteId = $footnoteId;
+
+                                $this->doctrine->getManager()->persist($footnote);
+                                $this->doctrine->getManager()->flush();
+                                $this->doctrine->getManager()->clear();
+                            }
+                        }
+                        break;
+                }
+            }
+        }
+    }
+
+    /**
+     *
+     */
+    public function processCompanies(): void
+    {
+        $firstDate = null;
+        $handle = fopen($this->directory . '/company.dat', 'r');
+        if ($handle) {
+            while (($line = fgets($handle)) !== false) {
+                switch (substr($line, 0, 1)) {
+                    case '@': // Validity
+                        break;
+                    default: // Company
+                        $iffCode = (int)substr($line, 0, 3);
+                        $description = trim(substr($line, 15, 30));
+
+                        $transporter = $this->doctrine->getRepository(Transporter::class)->findOneBy(
+                            ['iffCode' => $iffCode]
+                        );
+                        if (is_null($transporter)) {
+                            $transporter = new Transporter();
+                            $transporter->iffCode = $iffCode;
+                            $transporter->name = $description;
+
+                            $this->doctrine->getManager()->persist($transporter);
+                            $this->doctrine->getManager()->flush();
+                        }
+
+                        break;
+                }
+            }
+        }
+    }
+
+    /**
+     *
+     */
+    public function processCharacteristics(): void
+    {
+        $handle = fopen($this->directory . '/trnsmode.dat', 'r');
+        if ($handle) {
+            while (($line = fgets($handle)) !== false) {
+                switch (substr($line, 0, 1)) {
+                    case '@': // Validity
+                        break;
+                    default: // Characteristic
+                        $name = substr($line, 0, 4);
+                        $description = trim(substr($line, 5));
+
+                        $characteristic = $this->doctrine->getRepository(Characteristic::class)->findOneBy(
+                            ['name' => $name]
+                        );
+                        if (is_null($characteristic)) {
+                            $characteristic = new Characteristic();
+                            $characteristic->name = $name;
+                            $characteristic->description = $description;
+
+                            $this->doctrine->getManager()->persist($characteristic);
+                            $this->doctrine->getManager()->flush();
+                        }
+
+                        break;
+                }
+            }
+        }
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function processTrainTables(): void
+    {
         $this->resetForNewRoutes();
 
         $handle = fopen($this->directory . '/timetbls.dat', 'r');
@@ -215,112 +317,5 @@ class OfficialTrainTableHelper
         }
 
         $this->doctrine->getManager()->flush();
-    }
-
-
-    /**
-     * @throws Exception
-     */
-    private function readFootnotes(): void
-    {
-        $firstDate = null;
-        $handle = fopen($this->directory . '/footnote.dat', 'r');
-        if ($handle) {
-            while (($line = fgets($handle)) !== false) {
-                switch (substr($line, 0, 1)) {
-                    case '@': // Validity
-                        $firstDate = DateTime::createFromFormat('dmY', substr($line, 5, 8));
-                        break;
-                    case '#': // Unique identification, followed by the valid days
-                        if (is_null($firstDate)) {
-                            throw new Exception('No validity record found before footnote');
-                        }
-                        $footnoteId = (int)substr($line, 1);
-                        $validDays = str_split(fgets($handle), 1);
-                        foreach ($validDays as $position => $validDay) {
-                            if ($validDay === '1') {
-                                $date = clone($firstDate);
-                                $date->modify('+' . $position . ' days');
-
-                                $footnote = new OfficialFootnote();
-                                $footnote->date = $date;
-                                $footnote->footnoteId = $footnoteId;
-
-                                $this->doctrine->getManager()->persist($footnote);
-                                $this->doctrine->getManager()->flush();
-                                $this->doctrine->getManager()->clear();
-                            }
-                        }
-                        break;
-                }
-            }
-        }
-    }
-
-    /**
-     *
-     */
-    private function readCompanies(): void
-    {
-        $firstDate = null;
-        $handle = fopen($this->directory . '/company.dat', 'r');
-        if ($handle) {
-            while (($line = fgets($handle)) !== false) {
-                switch (substr($line, 0, 1)) {
-                    case '@': // Validity
-                        break;
-                    default: // Company
-                        $iffCode = (int)substr($line, 0, 3);
-                        $description = trim(substr($line, 15, 30));
-
-                        $transporter = $this->doctrine->getRepository(Transporter::class)->findOneBy(
-                            ['iffCode' => $iffCode]
-                        );
-                        if (is_null($transporter)) {
-                            $transporter = new Transporter();
-                            $transporter->iffCode = $iffCode;
-                            $transporter->name = $description;
-
-                            $this->doctrine->getManager()->persist($transporter);
-                            $this->doctrine->getManager()->flush();
-                        }
-
-                        break;
-                }
-            }
-        }
-    }
-
-    /**
-     *
-     */
-    private function readCharacteristics(): void
-    {
-        $handle = fopen($this->directory . '/trnsmode.dat', 'r');
-        if ($handle) {
-            while (($line = fgets($handle)) !== false) {
-                switch (substr($line, 0, 1)) {
-                    case '@': // Validity
-                        break;
-                    default: // Characteristic
-                        $name = substr($line, 0, 4);
-                        $description = trim(substr($line, 5));
-
-                        $characteristic = $this->doctrine->getRepository(Characteristic::class)->findOneBy(
-                            ['name' => $name]
-                        );
-                        if (is_null($characteristic)) {
-                            $characteristic = new Characteristic();
-                            $characteristic->name = $name;
-                            $characteristic->description = $description;
-
-                            $this->doctrine->getManager()->persist($characteristic);
-                            $this->doctrine->getManager()->flush();
-                        }
-
-                        break;
-                }
-            }
-        }
     }
 }

@@ -22,9 +22,9 @@ final class Version20200804134855 extends AbstractMigration
      */
     public function up(Schema $schema) : void
     {
-        $this->addSql('ALTER TABLE `somda_vervoerder` ADD `iff_code` INT DEFAULT 0 NOT NULL');
+        $this->addSql('ALTER TABLE `somda_vervoerder` ADD `iff_code` INT DEFAULT NULL');
 
-        $this->addSql('UPDATE `somda_vervoerder` SET `iff_code` = 803 WHERE `vervoerder_id` = 2');
+        $this->addSql('UPDATE `somda_vervoerder` SET `iff_code` = 500 WHERE `vervoerder_id` = 2');
         $this->addSql('UPDATE `somda_vervoerder` SET `iff_code` = 600 WHERE `vervoerder_id` = 10');
         $this->addSql('UPDATE `somda_vervoerder` SET `iff_code` = 310 WHERE `vervoerder_id` = 54');
         $this->addSql('UPDATE `somda_vervoerder` SET `iff_code` = 911 WHERE `vervoerder_id` = 45');
