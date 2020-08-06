@@ -44,6 +44,7 @@ final class Version20200804134855 extends AbstractMigration
                 `ofo_id` BIGINT AUTO_INCREMENT NOT NULL,
                 `ofo_footnote_id` BIGINT NOT NULL,
                 `ofo_date` DATE NOT NULL,
+                INDEX `idx_ofo_footnote_id` (`ofo_footnote_id`),
                 UNIQUE INDEX `idx_ofo_footnote` (`ofo_footnote_id`, `ofo_date`),
                 PRIMARY KEY(`ofo_id`)
             ) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB
@@ -51,7 +52,7 @@ final class Version20200804134855 extends AbstractMigration
         $this->addSql('
             CREATE TABLE `ott_official_train_table` (
                 `ott_id` BIGINT AUTO_INCREMENT NOT NULL,
-                `ott_ofo_footnote_id` BIGINT DEFAULT NULL,
+                `ott_ofo_id` BIGINT DEFAULT NULL,
                 `ott_transporter_id` BIGINT DEFAULT NULL,
                 `ott_characteristic_id` BIGINT DEFAULT NULL,
                 `ott_route_id` BIGINT DEFAULT NULL,
@@ -60,7 +61,7 @@ final class Version20200804134855 extends AbstractMigration
                 `ott_action` VARCHAR(1) DEFAULT \'-\' NOT NULL,
                 `ott_time` INT DEFAULT NULL,
                 `ott_track` VARCHAR(3) DEFAULT NULL, 
-                INDEX `idx_ott_ofo_footnote_id` (`ott_ofo_footnote_id`),
+                INDEX `idx_ott_ofo_id` (`ott_ofo_id`),
                 INDEX `IDX_4577F52E2EDDB7B4` (`ott_transporter_id`),
                 INDEX `IDX_4577F52EBE696BF` (`ott_characteristic_id`),
                 INDEX `idx_ott_time` (`ott_time`),
@@ -70,8 +71,8 @@ final class Version20200804134855 extends AbstractMigration
            ) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB
        ');
         $this->addSql('
-            ALTER TABLE `ott_official_train_table` ADD CONSTRAINT `FK_ott_ofo_footnote_id`
-            FOREIGN KEY (`ott_ofo_footnote_id`) REFERENCES `ofo_official_footnote` (`ofo_footnote_id`)
+            ALTER TABLE `ott_official_train_table` ADD CONSTRAINT `FK_ott_ofo_id`
+            FOREIGN KEY (`ott_ofo_id`) REFERENCES `ofo_official_footnote` (`ofo_id`)
         ');
         $this->addSql('
             ALTER TABLE `ott_official_train_table` ADD CONSTRAINT `FK_ott_transporter_id`

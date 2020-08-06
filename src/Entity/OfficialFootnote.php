@@ -10,6 +10,7 @@ use Swagger\Annotations as SWG;
 /**
  * @ORM\Table(
  *     name="ofo_official_footnote",
+ *     indexes={@ORM\Index(name="idx_ofo_footnote_id", columns={"ofo_footnote_id"})},
  *     uniqueConstraints={@ORM\UniqueConstraint(name="idx_ofo_footnote", columns={"ofo_footnote_id", "ofo_date"})}
  * )
  * @ORM\Entity
