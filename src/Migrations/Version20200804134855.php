@@ -58,7 +58,7 @@ final class Version20200804134855 extends AbstractMigration
                 `ott_location_id` BIGINT DEFAULT NULL,
                 `ott_order` INT DEFAULT 1 NOT NULL,
                 `ott_action` VARCHAR(1) DEFAULT \'-\' NOT NULL,
-                `ott_time` INT DEFAULT 0 NOT NULL,
+                `ott_time` INT DEFAULT NULL,
                 `ott_track` VARCHAR(3) DEFAULT NULL, 
                 INDEX `IDX_4577F52EECDD4D74` (`ott_ofo_footnote_id`),
                 INDEX `IDX_4577F52E2EDDB7B4` (`ott_transporter_id`),

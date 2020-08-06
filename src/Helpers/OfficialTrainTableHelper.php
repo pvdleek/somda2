@@ -201,22 +201,23 @@ class OfficialTrainTableHelper
                         break;
                     case '>': // Departure location
                         ++$this->currentStopNumber;
-                        $this->saveTrainTable(trim(substr($line, 1, 7)), substr($line, 9), 'v');
+                        $this->saveTrainTable(trim(substr($line, 1, 7)), 'v', substr($line, 9));
                         break;
                     case ';': // Passing location
+                        $this->saveTrainTable(trim(substr($line, 1, 7)), '-');
                         break;
                     case '.': // Short stop
                         ++$this->currentStopNumber;
-                        $this->saveTrainTable(trim(substr($line, 1, 7)), substr($line, 9), '-');
+                        $this->saveTrainTable(trim(substr($line, 1, 7)), '+', substr($line, 9));
                         break;
                     case '+': // Long stop
                         ++$this->currentStopNumber;
-                        $this->saveTrainTable(trim(substr($line, 1, 7)), substr($line, 9, 4), 'a');
-                        $this->saveTrainTable(trim(substr($line, 1, 7)), substr($line, 14, 4), 'v');
+                        $this->saveTrainTable(trim(substr($line, 1, 7)), 'a', substr($line, 9, 4));
+                        $this->saveTrainTable(trim(substr($line, 1, 7)), 'v', substr($line, 14, 4));
                         break;
                     case '<': // Arrival location
                         ++$this->currentStopNumber;
-                        $this->saveTrainTable(trim(substr($line, 1, 7)), substr($line, 9), 'a');
+                        $this->saveTrainTable(trim(substr($line, 1, 7)), 'a', substr($line, 9));
 
                         $this->resetForNewRoutes();
                         break;
@@ -279,11 +280,11 @@ class OfficialTrainTableHelper
 
     /**
      * @param string $locationName
-     * @param string $time
      * @param string $action
+     * @param string|null $time
      * @throws Exception
      */
-    private function saveTrainTable(string $locationName, string $time, string $action): void
+    private function saveTrainTable(string $locationName, string $action, string $time = null): void
     {
         if (is_null($this->footnote)) {
             throw new Exception('Footnote is missing for saving train-table');
@@ -299,12 +300,12 @@ class OfficialTrainTableHelper
 
         foreach ($this->routes as $route) {
             if ($route->firstStopNumber <= $this->currentStopNumber
-                && $route->lastStopNumber <= $this->currentStopNumber
+                && $route->lastStopNumber >= $this->currentStopNumber
             ) {
                 $trainTable = new OfficialTrainTable();
                 $trainTable->order = $route->order;
                 $trainTable->location = $location;
-                $trainTable->time = $trainTable->timeDisplayToDatabase($time);
+                $trainTable->time = is_null($time) ? null : $trainTable->timeDisplayToDatabase($time);
                 $trainTable->action = $action;
                 $trainTable->route = $route->route;
                 $trainTable->transporter = $route->transporter;

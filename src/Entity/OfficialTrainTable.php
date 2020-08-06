@@ -58,8 +58,8 @@ class OfficialTrainTable extends Entity
     public string $action = '-';
 
     /**
-     * @var int
-     * @ORM\Column(name="ott_time", type="integer", nullable=false, options={"default"="0"})
+     * @var int|null
+     * @ORM\Column(name="ott_time", type="integer", nullable=true)
      * @JMS\Exclude()
      * @SWG\Property(
      *     description="The time of the trainTable action (hh:mm, 24-hour clock, GMT+1 Amsterdam timezone)",
@@ -67,7 +67,7 @@ class OfficialTrainTable extends Entity
      *     type="string",
      * )
      */
-    public int $time = 0;
+    public ?int $time = null;
 
     /**
      * @var string|null
