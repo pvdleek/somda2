@@ -220,7 +220,6 @@ class OfficialTrainTableHelper
         $handle = fopen($this->directory . '/timetbls.dat', 'r');
         if ($handle) {
             while (($line = fgets($handle)) !== false) {
-                var_dump('Found line ' . $line);
                 switch (substr($line, 0, 1)) {
                     case '#': // Unique identification
                         break;
@@ -341,9 +340,6 @@ class OfficialTrainTableHelper
         if (is_null($location)) {
             throw new Exception('Location not found when saving train-table');
         }
-
-        var_dump('Will save train-table with location ' . $location->name . ', action ' . $action . ', time ' . $time);
-
 
         foreach ($this->routes as $route) {
             if ($route->firstStopNumber <= $this->currentStopNumber
