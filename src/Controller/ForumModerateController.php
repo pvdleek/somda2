@@ -243,7 +243,7 @@ class ForumModerateController
          */
         $discussion = $this->formHelper->getDoctrine()->getRepository(ForumDiscussion::class)->find($id);
         if (is_null($discussion)
-            || !$this->forumAuthHelper->userIsModerator($discussion, $this->userHelper->getUser())
+            || !$this->forumAuthHelper->userIsModerator($discussion->forum, $this->userHelper->getUser())
         ) {
             throw new AccessDeniedHttpException();
         }
