@@ -42,6 +42,7 @@ class ProcessIFFCommand extends Command
             ->addOption('footnotes', 'f', InputOption::VALUE_NONE, 'Process the footnotes')
             ->addOption('companies', 'c', InputOption::VALUE_NONE, 'Process the companies')
             ->addOption('characteristics', 'ch', InputOption::VALUE_NONE, 'Process the characteristics')
+            ->addOption('stations', 's', InputOption::VALUE_NONE, 'Process the stations')
             ->addOption('train-tables', 't', InputOption::VALUE_NONE, 'Process the train-tables')
             ->setDescription('Process the IFF files from NS');
     }
@@ -56,7 +57,7 @@ class ProcessIFFCommand extends Command
     {
         $this->trainTableHelper->setDirectory($input->getArgument('directory'));
 
-        if ($input->getOption('footnotes')) {
+        if ($input->getOption('footnotes') === true) {
             $this->trainTableHelper->processFootnotes();
         }
         if ($input->getOption('companies') === true) {
@@ -64,6 +65,9 @@ class ProcessIFFCommand extends Command
         }
         if ($input->getOption('characteristics') === true) {
             $this->trainTableHelper->processCharacteristics();
+        }
+        if ($input->getOption('stations') === true) {
+            $this->trainTableHelper->processStations();
         }
         if ($input->getOption('train-tables') === true) {
             $this->trainTableHelper->processTrainTables();

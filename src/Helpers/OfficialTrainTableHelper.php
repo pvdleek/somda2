@@ -4,6 +4,7 @@ namespace App\Helpers;
 
 use App\Entity\Characteristic;
 use App\Entity\Location;
+use App\Entity\LocationCategory;
 use App\Entity\OfficialFootnote;
 use App\Entity\OfficialTrainTable;
 use App\Entity\Route;
@@ -158,6 +159,48 @@ class OfficialTrainTableHelper
                             $characteristic->description = $description;
 
                             $this->doctrine->getManager()->persist($characteristic);
+                            $this->doctrine->getManager()->flush();
+                        }
+
+                        break;
+                }
+            }
+        }
+    }
+
+    /**
+     *
+     */
+    public function processStations(): void
+    {
+        $handle = fopen($this->directory . '/stations.dat', 'r');
+        if ($handle) {
+            while (($line = fgets($handle)) !== false) {
+                switch (substr($line, 0, 1)) {
+                    case '@': // Validity
+                        break;
+                    default: // Station
+                        $abbreviation = trim(substr($line, 2, 7));
+                        $countryCode = trim(substr($line, 16, 4));
+                        $description = trim(substr($line, 43));
+
+                        $locationCategory = $this->doctrine->getRepository(LocationCategory::class)->findOneBy(
+                            ['code' => $countryCode]
+                        );
+                        if (is_null($locationCategory)) {
+                            throw new Exception('Country with code ' . $countryCode . ' not found');
+                        }
+
+                        $location = $this->doctrine->getRepository(Location::class)->findOneBy(
+                            ['name' => $abbreviation]
+                        );
+                        if (is_null($location)) {
+                            $location = new Location();
+                            $location->name = $abbreviation;
+                            $location->description = $description;
+                            $location->category = $locationCategory;
+
+                            $this->doctrine->getManager()->persist($location);
                             $this->doctrine->getManager()->flush();
                         }
 
