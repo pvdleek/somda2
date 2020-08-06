@@ -36,7 +36,7 @@ class InformationController
     {
         return $this->templateHelper->render('information/jargon.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Jargon',
-            'jargons' => $this->doctrine->getRepository(Jargon::class)->findAll()
+            'jargons' => $this->doctrine->getRepository(Jargon::class)->findBy([], ['term' => 'ASC']),
         ]);
     }
 
