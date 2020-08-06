@@ -54,6 +54,9 @@ class LocationController
     {
         switch ($searchMethod) {
             case self::SEARCH_METHOD_CHARACTER:
+                if ($search === '*') {
+                    $search = '%';
+                }
                 $locations = $this->doctrine->getRepository(Location::class)->findByName($search . '%');
                 break;
             case self::SEARCH_METHOD_SINGLE:
