@@ -36,7 +36,7 @@ class OfficialFootnote extends Entity
 
     /**
      * @var DateTime
-     * @ORM\Column(name="ofo_date", type="datetime", nullable=false)
+     * @ORM\Column(name="ofo_date", type="date", nullable=false)
      * @JMS\Expose()
      * @SWG\Property(description="A date on which the route runs", type="date")
      */

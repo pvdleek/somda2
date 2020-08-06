@@ -56,16 +56,16 @@ class ProcessIFFCommand extends Command
     {
         $this->trainTableHelper->setDirectory($input->getArgument('directory'));
 
-        if ($input->hasOption('footnotes')) {
+        if ($input->getOption('footnotes') === true) {
             $this->trainTableHelper->processFootnotes();
         }
-        if ($input->hasOption('companies')) {
+        if ($input->getOption('companies') === true) {
             $this->trainTableHelper->processCompanies();
         }
-        if ($input->hasOption('characteristics')) {
+        if ($input->getOption('characteristics') === true) {
             $this->trainTableHelper->processCharacteristics();
         }
-        if ($input->hasOption('train-tables')) {
+        if ($input->getOption('train-tables') === true) {
             $this->trainTableHelper->processTrainTables();
         }
 

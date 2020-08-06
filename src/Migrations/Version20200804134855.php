@@ -43,7 +43,7 @@ final class Version20200804134855 extends AbstractMigration
              CREATE TABLE `ofo_official_footnote` (
                 `ofo_id` BIGINT AUTO_INCREMENT NOT NULL,
                 `ofo_footnote_id` BIGINT NOT NULL,
-                `ofo_date` DATETIME NOT NULL,
+                `ofo_date` DATE NOT NULL,
                 UNIQUE INDEX `idx_ofo_footnote` (`ofo_footnote_id`, `ofo_date`),
                 PRIMARY KEY(`ofo_id`)
             ) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB
