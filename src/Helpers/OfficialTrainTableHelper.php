@@ -196,7 +196,7 @@ class OfficialTrainTableHelper
                         break;
                     case '&': // Characteristic
                         $this->characteristic = $this->doctrine->getRepository(Characteristic::class)->findOneBy(
-                            ['name' => trim(substr($line, 1, 5))]
+                            ['name' => trim(substr($line, 1, 4))]
                         );
                         break;
                     case '>': // Departure location
