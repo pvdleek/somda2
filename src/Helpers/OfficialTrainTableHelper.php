@@ -211,7 +211,7 @@ class OfficialTrainTableHelper
     }
 
     /**
-     * @throws Exception
+     *
      */
     public function processTrainTables(): void
     {
@@ -244,23 +244,53 @@ class OfficialTrainTableHelper
                         break;
                     case '>': // Departure location
                         ++$this->currentStopNumber;
-                        $this->saveTrainTable(trim(substr($line, 1, 7)), 'v', substr($line, 9));
+                        try {
+                            $this->saveTrainTable(trim(substr($line, 1, 7)), 'v', substr($line, 9));
+                        } catch (Exception $exception) {
+                            echo 'Exception: ' . $exception->getMessage();
+                            $this->scrollToNextIdentificationLine($handle);
+                            $this->resetForNewRoutes();
+                        }
                         break;
                     case ';': // Passing location
-                        $this->saveTrainTable(trim(substr($line, 1, 7)), '-');
+                        try {
+                            $this->saveTrainTable(trim(substr($line, 1, 7)), '-');
+                        } catch (Exception $exception) {
+                            echo 'Exception: ' . $exception->getMessage();
+                            $this->scrollToNextIdentificationLine($handle);
+                            $this->resetForNewRoutes();
+                        }
                         break;
                     case '.': // Short stop
                         ++$this->currentStopNumber;
-                        $this->saveTrainTable(trim(substr($line, 1, 7)), '+', substr($line, 9));
+                        try {
+                            $this->saveTrainTable(trim(substr($line, 1, 7)), '+', substr($line, 9));
+                        } catch (Exception $exception) {
+                            echo 'Exception: ' . $exception->getMessage();
+                            $this->scrollToNextIdentificationLine($handle);
+                            $this->resetForNewRoutes();
+                        }
                         break;
                     case '+': // Long stop
                         ++$this->currentStopNumber;
-                        $this->saveTrainTable(trim(substr($line, 1, 7)), 'a', substr($line, 9, 4));
-                        $this->saveTrainTable(trim(substr($line, 1, 7)), 'v', substr($line, 14, 4));
+                        try {
+                            $this->saveTrainTable(trim(substr($line, 1, 7)), 'a', substr($line, 9, 4));
+                            $this->saveTrainTable(trim(substr($line, 1, 7)), 'v', substr($line, 14, 4));
+                        } catch (Exception $exception) {
+                            echo 'Exception: ' . $exception->getMessage();
+                            $this->scrollToNextIdentificationLine($handle);
+                            $this->resetForNewRoutes();
+                        }
                         break;
                     case '<': // Arrival location
                         ++$this->currentStopNumber;
-                        $this->saveTrainTable(trim(substr($line, 1, 7)), 'a', substr($line, 9));
+                        try {
+                            $this->saveTrainTable(trim(substr($line, 1, 7)), 'a', substr($line, 9));
+                        } catch (Exception $exception) {
+                            echo 'Exception: ' . $exception->getMessage();
+                            $this->scrollToNextIdentificationLine($handle);
+                            $this->resetForNewRoutes();
+                        }
 
                         $this->resetForNewRoutes();
                         break;
@@ -270,6 +300,18 @@ class OfficialTrainTableHelper
             }
 
             fclose($handle);
+        }
+    }
+
+    /**
+     * @param $handle
+     */
+    private function scrollToNextIdentificationLine($handle)
+    {
+        while (($line = fgets($handle)) !== false) {
+            if (substr($line, 0, 1) === '#') {
+                return;
+            }
         }
     }
 
@@ -330,15 +372,24 @@ class OfficialTrainTableHelper
     private function saveTrainTable(string $locationName, string $action, string $time = null): void
     {
         if (is_null($this->footnote)) {
-            throw new Exception('Footnote is missing for saving train-table');
+            throw new Exception(
+                'Footnote is missing for saving train-table, location ' . $locationName . ', action '. $action .
+                ', time ' . $time . ', first route ' . $this->routes[0]->route->number
+            );
         }
         if (is_null($this->characteristic)) {
-            throw new Exception('Characteristic is missing for saving train-table');
+            throw new Exception(
+                'Characteristic is missing for saving train-table, location ' . $locationName . ', action '. $action .
+                ', time ' . $time . ', first route ' . $this->routes[0]->route->number
+            );
         }
 
         $location = $this->doctrine->getRepository(Location::class)->findOneBy(['name' => $locationName]);
         if (is_null($location)) {
-            throw new Exception('Location not found when saving train-table');
+            throw new Exception(
+                'Location not found when saving train-table, location ' . $locationName . ', action '. $action .
+                ', time ' . $time . ', first route ' . $this->routes[0]->route->number
+            );
         }
 
         foreach ($this->routes as $route) {
