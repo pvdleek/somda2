@@ -147,7 +147,7 @@ class OfficialTrainTableHelper
                     case '@': // Validity
                         break;
                     default: // Characteristic
-                        $name = substr($line, 0, 4);
+                        $name = trim(substr($line, 0, 4));
                         $description = trim(substr($line, 5));
 
                         $characteristic = $this->doctrine->getRepository(Characteristic::class)->findOneBy(

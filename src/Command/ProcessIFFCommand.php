@@ -41,7 +41,7 @@ class ProcessIFFCommand extends Command
             ->addArgument('directory', InputArgument::REQUIRED)
             ->addOption('footnotes', 'f', InputOption::VALUE_NONE, 'Process the footnotes')
             ->addOption('companies', 'c', InputOption::VALUE_NONE, 'Process the companies')
-            ->addOption('characteristics', 'ch', InputOption::VALUE_NONE, 'Process the characteristics')
+            ->addOption('characteristics', 'a', InputOption::VALUE_NONE, 'Process the characteristics')
             ->addOption('stations', 's', InputOption::VALUE_NONE, 'Process the stations')
             ->addOption('train-tables', 't', InputOption::VALUE_NONE, 'Process the train-tables')
             ->setDescription('Process the IFF files from NS');
