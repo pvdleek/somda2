@@ -32,6 +32,12 @@ api_train_table:
   requirements: { trainTableYearId: \d+, routeNumber: \d+ }
   controller: App\Controller\Api\TrainTableController::indexAction
 
+api_passing_routes:
+  path: /{version}/passing-routes/{trainTableYearId}/{locationName}/{dayNumber}/{startTime}/{endTime}/
+  methods: [GET]
+  requirements: { trainTableYearId: \d+, dayNumber: \d+ }
+  controller: App\Controller\Api\TrainTableController::passingRoutesAction
+
 api_route_overview:
   path: /{version}/route-overview/
   methods: [GET]

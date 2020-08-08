@@ -53,9 +53,9 @@ class TrainTableHelper extends BaseControllerHelper
     }
 
     /**
-     * @param int $dayNumber
-     * @param string $startTime
-     * @param string $endTime
+     * @param int|null $dayNumber
+     * @param string|null $startTime
+     * @param string|null $endTime
      * @return array
      */
     public function getPassingRoutes(int $dayNumber = null, string $startTime = null, string $endTime = null): array
