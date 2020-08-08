@@ -255,9 +255,9 @@ class TrainTableController extends AbstractFOSRestController
      *     ),
      * )
      * @SWG\Response(
-     *     response=403,
+     *     response=400,
      *     description="The request failed",
-     *     @SWG\Schema(@SWG\Property(description="Description of the error", property="error", type="string")),
+     *     @SWG\Schema(@SWG\Property(property="errors", type="array", @SWG\Items(type="string")),
      * )
      * @SWG\Tag(name="Train-tables")
      */
@@ -279,6 +279,11 @@ class TrainTableController extends AbstractFOSRestController
         $this->trainTableHelper->setLocation($locationName);
 
         $passingRoutes = $this->trainTableHelper->getPassingRoutes($dayNumber, $startTime, $endTime);
+
+        if (count($messages = $this->trainTableHelper->getErrorMessages()) > 0) {
+            return $this->handleView($this->view(['errors' => $messages], 400));
+        }
+
         foreach ($passingRoutes as $index => $passingRoute) {
             $passingRoutes[$index]['time'] = $this->timeDatabaseToDisplay($passingRoute['time']);
         }
