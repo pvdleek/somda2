@@ -257,7 +257,7 @@ class TrainTableController extends AbstractFOSRestController
      * @SWG\Response(
      *     response=400,
      *     description="The request failed",
-     *     @SWG\Schema(@SWG\Property(property="errors", type="array", @SWG\Items(type="string")),
+     *     @SWG\Schema(@SWG\Property(property="errors", type="array", @SWG\Items(type="string"))),
      * )
      * @SWG\Tag(name="Train-tables")
      */
