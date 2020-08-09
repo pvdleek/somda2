@@ -88,7 +88,7 @@ class NewsController extends AbstractFOSRestController
      * @param int|null $limit
      * @return Response
      * @SWG\Parameter(
-     *     default="25"
+     *     default="25",
      *     description="The maximum number of items to return (limited to 100)",
      *     in="path",
      *     name="limit",
@@ -99,7 +99,7 @@ class NewsController extends AbstractFOSRestController
      *     description="Returns all rail-news-items",
      *     @SWG\Schema(
      *         type="array",
-     *         @SWG\Items(ref=@Model(type=RailNews::class))
+     *         @SWG\Items(ref=@Model(type=RailNews::class)),
      *     )
      * )
      * @SWG\Tag(name="News")
