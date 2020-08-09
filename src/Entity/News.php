@@ -28,7 +28,7 @@ class News extends Entity
      * @var DateTime
      * @ORM\Column(name="timestamp", type="datetime", nullable=false)
      * @JMS\Expose()
-     * @SWG\Property(description="Timestamp of the news-item", type="datetime")
+     * @SWG\Property(description="ISO-8601 timestamp of the news-item (Y-m-dTH:i:sP)", type="string")
      */
     public DateTime $timestamp;
 

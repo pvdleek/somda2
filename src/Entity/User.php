@@ -117,7 +117,7 @@ class User extends Entity implements UserInterface
      * @var DateTime
      * @ORM\Column(name="regdate", type="datetime", nullable=false)
      * @JMS\Expose()
-     * @SWG\Property(description="Timestamp of registration of the user", type="datetime")
+     * @SWG\Property(description="ISO-8601 timestamp of the registration of the user (Y-m-dTH:i:sP)", type="string")
      */
     public DateTime $registerTimestamp;
 
@@ -132,7 +132,7 @@ class User extends Entity implements UserInterface
      * @var DateTime|null
      * @ORM\Column(name="last_visit", type="datetime", nullable=true)
      * @JMS\Expose()
-     * @SWG\Property(description="Timestamp of the last visit of the user", type="datetime")
+     * @SWG\Property(description="ISO-8601 timestamp of the last visit of the user (Y-m-dTH:i:sP)", type="string")
      */
     public ?DateTime $lastVisit;
 

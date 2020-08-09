@@ -59,7 +59,7 @@ class ForumPost extends Entity
      * @var DateTime
      * @ORM\Column(name="timestamp", type="datetime", nullable=false)
      * @JMS\Expose()
-     * @SWG\Property(description="Timestamp of the post", type="datetime")
+     * @SWG\Property(description="ISO-8601 timestamp of the post (Y-m-dTH:i:sP)", type="string")
      */
     public DateTime $timestamp;
 
@@ -75,7 +75,7 @@ class ForumPost extends Entity
      * @var DateTime|null
      * @ORM\Column(name="edit_timestamp", type="datetime", nullable=true)
      * @JMS\Expose()
-     * @SWG\Property(description="Timestamp the post was edited", type="datetime")
+     * @SWG\Property(description="ISO-8601 timestamp of the post edit (Y-m-dTH:i:sP)", type="string")
      */
     public ?DateTime $editTimestamp = null;
 
