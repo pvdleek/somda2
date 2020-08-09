@@ -29,8 +29,8 @@ class LocationController extends AbstractFOSRestController
 
     /**
      * @IsGranted("ROLE_API_USER")
-     * @param string $searchMethod
-     * @param string $search
+     * @param string|null $searchMethod
+     * @param string|null $search
      * @return Response
      * @SWG\Parameter(
      *     description="The search-method",

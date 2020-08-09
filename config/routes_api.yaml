@@ -3,6 +3,9 @@ api_documentation:
   methods: GET
   defaults: { _controller: nelmio_api_doc.controller.swagger_ui }
 
+###################
+# User management #
+###################
 api_authenticate:
   path: /{version}/authenticate/
   methods: [POST]
@@ -12,6 +15,26 @@ api_authenticate_token:
   methods: [GET]
   controller: App\Controller\Api\SecurityController::verifyAction
 
+########
+# News #
+########
+api_news:
+  path: /{version}/news/
+  methods: [GET]
+  controller: App\Controller\Api\NewsController::indexAction
+api_news_text:
+  path: /{version}/news/{id}/
+  methods: [GET]
+  requirements: { id: \d+ }
+  controller: App\Controller\Api\NewsController::indexAction
+api_rail_news:
+  path: /{version}/rail-news/
+  methods: [GET]
+  controller: App\Controller\Api\NewsController::railNewsAction
+
+###############
+# Information #
+###############
 api_locations:
   path: /{version}/locations/
   methods: [GET]
@@ -21,6 +44,9 @@ api_locations_search:
   methods: [GET]
   controller: App\Controller\Api\LocationController::indexAction
 
+###############
+# Train table #
+###############
 api_train_table_years:
   path: /{version}/train-table-years/
   methods: [GET]
@@ -53,6 +79,9 @@ api_route_overview_year_route_list:
   requirements: { trainTableYearId: \d+, routeListId: \d+ }
   controller: App\Controller\Api\TrainTableController::routeOverviewAction
 
+#########
+# Forum #
+#########
 api_forum:
   path: /{version}/forum-forums/
   methods: [GET]

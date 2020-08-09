@@ -27,7 +27,7 @@ class TrainTable extends Entity
     public const ACTION_VALUES = ['v', '-', '+', 'a'];
 
     /**
-     * @var int
+     * @var int|null
      * @ORM\Column(name="tdrid", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
