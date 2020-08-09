@@ -111,7 +111,11 @@ class NewsController extends AbstractFOSRestController
         /**
          * @var RailNews[] $news
          */
-        $news = $this->doctrine->getRepository(RailNews::class)->findBy([], ['timestamp' => 'DESC'], $limit);
+        $news = $this->doctrine->getRepository(RailNews::class)->findBy(
+            ['active' => true, 'approved' => true],
+            ['timestamp' => 'DESC'],
+            $limit
+        );
         return $this->handleView($this->view(['data' => $news], 200));
     }
 }
