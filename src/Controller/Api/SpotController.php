@@ -39,34 +39,16 @@ class SpotController extends AbstractFOSRestController
      *     type="integer",
      * )
      * @SWG\Parameter(
-     *     description="The location to filter on",
+     *     description="A slash separated list of search-parameters, being: \
+     *         The location to filter on,\
+     *         The dayNumber to filter on (1,2,3,4,5,6,7),\
+     *         The spot-date to filter on (d-m-Y),\
+     *         The train-number to filter on, use * for wildcard-positions,\
+     *         The route-number to filter on, use * for wildcard-positions.\
+     *         At least one filter is required, the others can be left blank,\
+     *         but 4 slashes need to be present in the path",
      *     in="path",
-     *     name="location",
-     *     type="string",
-     * )
-     * @SWG\Parameter(
-     *     description="The dayNumber to filter on",
-     *     enum={1,2,3,4,5,6,7},
-     *     in="path",
-     *     name="dayNumber",
-     *     type="integer",
-     * )
-     * @SWG\Parameter(
-     *     description="The spot-date to filter on (d-m-Y)",
-     *     in="path",
-     *     name="spotDate",
-     *     type="string",
-     * )
-     * @SWG\Parameter(
-     *     description="The train-number to filter on, use * for wildcard-positions",
-     *     in="path",
-     *     name="trainNumber",
-     *     type="string",
-     * )
-     * @SWG\Parameter(
-     *     description="The route-number to filter on, use * for wildcard-positions",
-     *     in="path",
-     *     name="routeNumber",
+     *     name="searchParameters",
      *     type="string",
      * )
      * @SWG\Response(
