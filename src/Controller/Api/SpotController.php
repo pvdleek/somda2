@@ -33,7 +33,7 @@ class SpotController extends AbstractFOSRestController
      * @return Response
      * @SWG\Parameter(
      *     description="The maximum number of months to search for",
-     *     enum="{1,3,6,12,24,36,48,60,99}"
+     *     enum="{1,3,6,12,24,36,48,60,99}",
      *     in="path",
      *     name="maxMonths",
      *     type="integer",
