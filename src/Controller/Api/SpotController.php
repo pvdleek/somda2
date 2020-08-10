@@ -39,7 +39,7 @@ class SpotController extends AbstractFOSRestController
      *     type="integer",
      * )
      * @SWG\Parameter(
-     *     default="////"
+     *     default="////",
      *     description="A slash separated list of search-parameters, being: \
      *         The location to filter on,\
      *         The dayNumber to filter on (1,2,3,4,5,6,7),\
