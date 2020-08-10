@@ -13,7 +13,7 @@
                                 {% if ((i / 8) | round) == i / 8 and i != 0 %}</tr><tr>{% endif %}
                                 <td>&nbsp;<a href="#" onclick="searchCharacter('{{ (i + 65) | chr }}'); return false;">{{ (i + 65) | chr }}</a>&nbsp;</td>
                             {% endfor %}
-                            <td colspan="6">&nbsp;<a href="#" onclick="searchCharacter('%'); return false;">{{ 'location.search.characterAll' | trans }}</a></td>
+                            <td colspan="6">&nbsp;<a href="#" onclick="searchCharacter('*'); return false;">{{ 'location.search.characterAll' | trans }}</a></td>
                         </tr>
                     </table>
                     <br />

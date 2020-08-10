@@ -66,6 +66,10 @@ news_text:
   methods: [GET]
   requirements: { id: \d+ }
   controller: App\Controller\NewsController::indexAction
+rail_news:
+  path: /spoornieuws/
+  methods: [GET]
+  controller: App\Controller\NewsController::railNewsAction
 
 ###############
 # Information #

@@ -230,7 +230,17 @@ class Spot extends EntityRepository
     {
         if (!is_null($trainNumber)) {
             if ($exact) {
-                $queryBuilder->andWhere('t.number = :trainNumber')->setParameter('trainNumber', $trainNumber);
+                if (strpos($trainNumber, '*') !== false) {
+                    var_dump($trainNumber);
+                    // The train-number contains a wildcard
+                    $queryBuilder
+                        ->andWhere('t.number LIKE :trainNumber')
+                        ->setParameter('trainNumber', str_replace('*', '%', $trainNumber))
+                        ->andWhere('LENGTH(t.number) = :trainNumberLength')
+                        ->setParameter('trainNumberLength', strlen($trainNumber));
+                } else {
+                    $queryBuilder->andWhere('t.number = :trainNumber')->setParameter('trainNumber', $trainNumber);
+                }
             } else {
                 $queryBuilder
                     ->andWhere('t.number LIKE :trainNumber')
@@ -248,7 +258,16 @@ class Spot extends EntityRepository
     {
         if (!is_null($routeNumber)) {
             if ($exact) {
-                $queryBuilder->andWhere('r.number = :routeNumber')->setParameter('routeNumber', $routeNumber);
+                if (strpos($routeNumber, '*') !== false) {
+                    // The route-number contains a wildcard
+                    $queryBuilder
+                        ->andWhere('r.number LIKE :routeNumber')
+                        ->setParameter('trainNumber', str_replace('*', '%', $routeNumber))
+                        ->andWhere('LENGTH(r.number) = :routeNumberLength')
+                        ->setParameter('routeNumberLength', strlen($routeNumber));
+                } else {
+                    $queryBuilder->andWhere('r.number = :routeNumber')->setParameter('routeNumber', $routeNumber);
+                }
             } else {
                 $queryBuilder
                     ->andWhere('r.number LIKE :routeNumber')

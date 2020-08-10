@@ -3,7 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\News;
+use App\Entity\RailNews;
 use App\Form\News as NewsForm;
+use App\Form\RailNews as RailNewsForm;
 use App\Helpers\TemplateHelper;
 use App\Helpers\UserHelper;
 use Doctrine\Persistence\ManagerRegistry;
@@ -71,6 +73,25 @@ class NewsController
         $news = $this->doctrine->getRepository(News::class)->findBy([], [NewsForm::FIELD_TIMESTAMP => 'DESC']);
         return $this->templateHelper->render('news/index.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Nieuws',
+            'news' => $news,
+        ]);
+    }
+
+    /**
+     * @return Response
+     */
+    public function railNewsAction(): Response
+    {
+        /**
+         * @var RailNews[] $news
+         */
+        $news = $this->doctrine->getRepository(RailNews::class)->findBy(
+            ['active' => true, 'approved' => true],
+            [RailNewsForm::FIELD_TIMESTAMP => 'DESC'],
+            250
+        );
+        return $this->templateHelper->render('news/railNews.html.twig', [
+            TemplateHelper::PARAMETER_PAGE_TITLE => 'Spoornieuws',
             'news' => $news,
         ]);
     }
