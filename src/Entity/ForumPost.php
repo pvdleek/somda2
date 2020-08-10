@@ -29,7 +29,7 @@ class ForumPost extends Entity
     public const WIKI_CHECK_VALUES = [self::WIKI_CHECK_NOT_CHECKED, self::WIKI_CHECK_OK, self::WIKI_CHECK_N_A];
 
     /**
-     * @var int
+     * @var int|null
      * @ORM\Column(name="postid", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")

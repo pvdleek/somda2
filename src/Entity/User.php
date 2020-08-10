@@ -30,7 +30,7 @@ class User extends Entity implements UserInterface
     public const API_TOKEN_VALIDITY = '+1 year';
 
     /**
-     * @var int
+     * @var int|null
      * @ORM\Column(name="uid", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
