@@ -231,6 +231,7 @@ class Spot extends EntityRepository
         if (!is_null($trainNumber)) {
             if ($exact) {
                 if (strpos($trainNumber, '*') !== false) {
+                    var_dump($trainNumber);
                     // The train-number contains a wildcard
                     $queryBuilder
                         ->andWhere('t.number LIKE :trainNumber')
