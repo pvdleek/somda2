@@ -54,12 +54,21 @@ class SpotController extends AbstractFOSRestController
      * )
      * @SWG\Response(
      *     response=200,
-     *     description="Returns the filtered spots",
+     *     description="Returns the filtered spots, this can be a potentially slow call, \
+     *         especially with little filtering. If a 504 timeout is generated, try extra filters.",
      *     @SWG\Schema(
      *         @SWG\Property(property="filters", type="array", @SWG\Items(ref=@Model(type=SpotFilter::class))),
      *         @SWG\Property(property="data", type="array", @SWG\Items(ref=@Model(type=Spot::class))),
      *     ),
      * )
+     * @SWG\Response(
+     *     response=404,
+     *     description="The request failed",
+     *     @SWG\Schema(
+     *         @SWG\Property(description="Description of the error", property="error", type="string"),
+     *     ),
+     * )
+     * @SWG\Response(response=504, description="The request timed out, try again with extra filters")
      * @SWG\Tag(name="Spots")
      */
     public function indexAction(int $maxMonths = 1, string $searchParameters = null): Response
