@@ -46,7 +46,7 @@ class SpotController extends AbstractFOSRestController
      * )
      * @SWG\Parameter(
      *     description="The dayNumber to filter on",
-     *     enum={1,2,3,4,5,6,7}
+     *     enum={1,2,3,4,5,6,7},
      *     in="path",
      *     name="dayNumber",
      *     type="integer",
