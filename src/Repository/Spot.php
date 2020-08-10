@@ -56,12 +56,12 @@ class Spot extends EntityRepository
     }
 
     /**
-     * @param int $maxYears
+     * @param int $maxMonths
      * @param SpotFilter $spotFilter
      * @return SpotEntity[]
      * @throws Exception
      */
-    public function findWithSpotFilter(int $maxYears, SpotFilter $spotFilter): array
+    public function findWithSpotFilter(int $maxMonths, SpotFilter $spotFilter): array
     {
         $queryBuilder = $this->getEntityManager()
             ->createQueryBuilder()
@@ -85,7 +85,7 @@ class Spot extends EntityRepository
         if (is_null($spotFilter->spotDate)) {
             $queryBuilder
                 ->andWhere('s.timestamp > :minDate')
-                ->setParameter('minDate', new DateTime('-' . $maxYears . ' years'));
+                ->setParameter('minDate', new DateTime('-' . $maxMonths . ' months'));
         } else {
             $queryBuilder
                 ->andWhere('DATE(s.spotDate) = :' . self::FIELD_SPOT_DATE)

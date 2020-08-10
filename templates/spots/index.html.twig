@@ -2,17 +2,25 @@
 
 {% block content %}
     <br />
+    <p class="info">
+        Bij materieelnummer en treinnummer is het mogelijk om wildcards te gebruiken.
+        <br />Zoek naar een willekeurig getal door op deze plaats een sterretje te zetten.
+        <br />Let op: een sterretje staat voor 1 willekeurig getal, 95* geeft dus alleen 950 t/m 959 en niet bijvoorbeeld 9594.
+    </p>
     <table>
         <tr>
-            <th><label for="max_years">Bekijk spots van maximaal</label></th>
+            <th><label for="max_months">Bekijk spots van maximaal</label></th>
             <td>
-                <select id="max_years" name="max_years">
-                    <option {{ maxYears == 1 ? 'selected="selected" ' }}value="1">1 jaar oud</option>
-                    <option {{ maxYears == 2 ? 'selected="selected" ' }}value="2">2 jaar oud</option>
-                    <option {{ maxYears == 3 ? 'selected="selected" ' }}value="3">3 jaar oud</option>
-                    <option {{ maxYears == 4 ? 'selected="selected" ' }}value="4">4 jaar oud</option>
-                    <option {{ maxYears == 5 ? 'selected="selected" ' }}value="5">5 jaar oud</option>
-                    <option {{ maxYears == 99 ? 'selected="selected" ' }}value="99">onbeperkt</option>
+                <select id="max_months" name="max_months">
+                    <option {{ maxMonths == 1 ? 'selected="selected" ' }}value="1">1 maand oud</option>
+                    <option {{ maxMonths == 3 ? 'selected="selected" ' }}value="3">3 maanden oud</option>
+                    <option {{ maxMonths == 6 ? 'selected="selected" ' }}value="6">6 maanden oud</option>
+                    <option {{ maxMonths == 12 ? 'selected="selected" ' }}value="12">1 jaar oud</option>
+                    <option {{ maxMonths == 24 ? 'selected="selected" ' }}value="24">2 jaar oud</option>
+                    <option {{ maxMonths == 36 ? 'selected="selected" ' }}value="36">3 jaar oud</option>
+                    <option {{ maxMonths == 48 ? 'selected="selected" ' }}value="48">4 jaar oud</option>
+                    <option {{ maxMonths == 60 ? 'selected="selected" ' }}value="60">5 jaar oud</option>
+                    <option {{ maxMonths == 99 ? 'selected="selected" ' }}value="99">onbeperkt</option>
                 </select>
             </td>
         </tr>
@@ -103,8 +111,8 @@
         {{ include('partials/locationAutoComplete.js.twig') }}
 
         function searchSpots() {
-            let location = '{{ path('spots_search', { 'maxYears': 1, 'searchParameters': 'myParameters' }) }}';
-            location = location.replace('/1/', '/' + $('#max_years').val() + '/');
+            let location = '{{ path('spots_search', { 'maxMonths': 1, 'searchParameters': 'myParameters' }) }}';
+            location = location.replace('/1/', '/' + $('#max_months').val() + '/');
             location = location.replace('myParameters', $('#location').val() + '/' + $('#day_number').val() + '/' + $('#spot_date').val() + '/' + $('#train_number').val() + '/' + $('#route_number').val());
             document.location = location;
         }

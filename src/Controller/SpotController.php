@@ -74,11 +74,11 @@ class SpotController
 
     /**
      * @IsGranted("ROLE_SPOTS_RECENT")
-     * @param int $maxYears
+     * @param int $maxMonths
      * @param string|null $searchParameters
      * @return Response
      */
-    public function indexAction(int $maxYears = 1, string $searchParameters = null): Response
+    public function indexAction(int $maxMonths = 1, string $searchParameters = null): Response
     {
         $spotFilter = new SpotFilter();
         $spots = null;
@@ -92,13 +92,13 @@ class SpotController
                     'Het is niet mogelijk om spots te bekijken zonder filter, kies minimaal 1 filter'
                 );
             } else {
-                $spots = $this->doctrine->getRepository(Spot::class)->findWithSpotFilter($maxYears, $spotFilter);
+                $spots = $this->doctrine->getRepository(Spot::class)->findWithSpotFilter($maxMonths, $spotFilter);
             }
         }
 
         return $this->templateHelper->render('spots/index.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Recente spots',
-            'maxYears' => $maxYears,
+            'maxMonths' => $maxMonths,
             'location' => $spotFilter->location,
             TemplateHelper::PARAMETER_DAY_NUMBER => $spotFilter->dayNumber,
             'spotDate' => !is_null($spotFilter->spotDate) ? $spotFilter->spotDate->format('d-m-Y') : null,
