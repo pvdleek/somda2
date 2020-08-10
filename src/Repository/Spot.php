@@ -97,9 +97,6 @@ class Spot extends EntityRepository
         $this->filterOnTrainNumber($queryBuilder, true, $spotFilter->trainNumber);
         $this->filterOnRouteNumber($queryBuilder, true, $spotFilter->routeNumber);
 
-        echo $queryBuilder->getQuery()->getSQL();
-        var_dump($queryBuilder->getParameters());
-
         return $queryBuilder->getQuery()->getResult();
     }
 
@@ -231,7 +228,6 @@ class Spot extends EntityRepository
      */
     private function filterOnTrainNumber(QueryBuilder $queryBuilder, bool $exact, ?string $trainNumber = null): void
     {
-        var_dump($trainNumber);
         if (!is_null($trainNumber)) {
             if ($exact) {
                 if (strpos($trainNumber, '*') !== false) {
@@ -265,7 +261,7 @@ class Spot extends EntityRepository
                     // The route-number contains a wildcard
                     $queryBuilder
                         ->andWhere('r.number LIKE :routeNumber')
-                        ->setParameter('trainNumber', str_replace('*', '%', $routeNumber))
+                        ->setParameter('routeNumber', str_replace('*', '%', $routeNumber))
                         ->andWhere('LENGTH(r.number) = :routeNumberLength')
                         ->setParameter('routeNumberLength', strlen($routeNumber));
                 } else {
