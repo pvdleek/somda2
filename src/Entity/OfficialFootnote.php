@@ -39,7 +39,7 @@ class OfficialFootnote extends Entity
      * @var DateTime
      * @ORM\Column(name="ofo_date", type="date", nullable=false)
      * @JMS\Expose()
-     * @SWG\Property(description="A date on which the route runs", type="date")
+     * @SWG\Property(description="ISO-8601 timestamp of the date on which the route runs (Y-m-dTH:i:sP)", type="string")
      */
     public DateTime $date;
 }

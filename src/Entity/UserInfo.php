@@ -82,7 +82,7 @@ class UserInfo
      * @var DateTime|null
      * @ORM\Column(name="gebdatum", type="date", nullable=true)
      * @JMS\Expose()
-     * @SWG\Property(description="Birth-date of the user", type="date")
+     * @SWG\Property(description="ISO-8601 timestamp of the birth-date (Y-m-dTH:i:sP)", type="string")
      */
     public ?DateTime $birthDate;
 
