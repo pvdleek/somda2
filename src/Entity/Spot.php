@@ -60,6 +60,7 @@ class Spot extends Entity
     /**
      * @var integer
      * @ORM\Column(name="input_feedback_flag", type="integer", nullable=false)
+     * @JMS\Exclude()
      */
     public int $inputFeedbackFlag = 0;
 
