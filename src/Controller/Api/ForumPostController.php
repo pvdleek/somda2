@@ -72,7 +72,9 @@ class ForumPostController extends AbstractFOSRestController
      * @SWG\Response(
      *     response=200,
      *     description="Returns the new forum-post",
-     *     @SWG\Property(property="data", type="object", ref=@Model(type=ForumPost::class)),
+     *     @SWG\Schema(
+     *         @SWG\Property(property="data", type="object", ref=@Model(type=ForumPost::class)),
+     *     ),
      * )
      * @SWG\Tag(name="Forum")
      */

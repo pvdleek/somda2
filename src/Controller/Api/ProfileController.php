@@ -44,7 +44,9 @@ class ProfileController extends AbstractFOSRestController
      * @SWG\Response(
      *     response=200,
      *     description="Returns the user profile",
-     *     @SWG\Property(property="data", type="array", @SWG\Items(ref=@Model(type=User::class))),
+     *     @SWG\Schema(
+     *         @SWG\Property(property="data", type="array", @SWG\Items(ref=@Model(type=User::class))),
+     *     ),
      * )
      * @SWG\Tag(name="Profile")
      */
@@ -94,7 +96,9 @@ class ProfileController extends AbstractFOSRestController
      * @SWG\Response(
      *     response=200,
      *     description="Returns the updated user profile",
-     *     @SWG\Property(property="data", type="array", @SWG\Items(ref=@Model(type=User::class))),
+     *     @SWG\Schema(
+     *         @SWG\Property(property="data", type="array", @SWG\Items(ref=@Model(type=User::class))),
+     *     ),
      * )
      * @SWG\Tag(name="Profile")
      */

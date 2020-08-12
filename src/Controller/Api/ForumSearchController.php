@@ -76,9 +76,9 @@ class ForumSearchController extends AbstractFOSRestController
      *                 @SWG\Property(property="author_username", type="string"),
      *                 @SWG\Property(property="post_id", type="integer"),
      *                 @SWG\Property(format="date-time", property="post_timestamp", type="string"),
-     *             )
-     *         )
-     *     )
+     *             ),
+     *         ),
+     *     ),
      * )
      * @SWG\Tag(name="Forum")
      */

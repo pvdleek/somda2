@@ -64,40 +64,42 @@ class ForumForumController extends AbstractFOSRestController
      * @SWG\Response(
      *     response=200,
      *     description="Returns all categories and forums",
-     *     @SWG\Property(property="data", type="array", @SWG\Items(
-     *         @SWG\Property(description="Unique identifier", property="id", type="integer"),
-     *         @SWG\Property(
-     *             description="The forum-type:\
-     *                 0 for publicly accessible,
-     *                 1 for logged-in users only,
-     *                 3 for moderators only,
-     *                 4 for archived forums (no recording of read/unread posts)",
-     *             enum={0,1,3,4},
-     *             property="type",
-     *             type="integer",
-     *         ),
-     *         @SWG\Property(description="Name of the forum", maxLength=40, property="name", type="string"),
-     *         @SWG\Property(
-     *             description="The order in which to display the forums",
-     *             property="order",
-     *             type="integer",
-     *         ),
-     *         @SWG\Property(
-     *             description="The total number of discussions in this forum",
-     *             property="numberOfDiscussions",
-     *             type="integer",
-     *         ),
-     *         @SWG\Property(
-     *             description="The total number of unread discussions in this forum",
-     *             property="numberOfUnreadDiscussions",
-     *             type="integer",
-     *         ),
-     *         @SWG\Property(
-     *             description="Unique identifier",
-     *             property="category",
-     *             ref=@Model(type=ForumCategory::class),
-     *         ),
-     *     ))
+     *     @SWG\Schema(
+     *         @SWG\Property(property="data", type="array", @SWG\Items(
+     *             @SWG\Property(description="Unique identifier", property="id", type="integer"),
+     *             @SWG\Property(
+     *                 description="The forum-type:\
+     *                     0 for publicly accessible,
+     *                     1 for logged-in users only,
+     *                     3 for moderators only,
+     *                     4 for archived forums (no recording of read/unread posts)",
+     *                 enum={0,1,3,4},
+     *                 property="type",
+     *                 type="integer",
+     *             ),
+     *             @SWG\Property(description="Name of the forum", maxLength=40, property="name", type="string"),
+     *             @SWG\Property(
+     *                 description="The order in which to display the forums",
+     *                 property="order",
+     *                 type="integer",
+     *             ),
+     *             @SWG\Property(
+     *                 description="The total number of discussions in this forum",
+     *                 property="numberOfDiscussions",
+     *                 type="integer",
+     *             ),
+     *             @SWG\Property(
+     *                 description="The total number of unread discussions in this forum",
+     *                 property="numberOfUnreadDiscussions",
+     *                 type="integer",
+     *             ),
+     *             @SWG\Property(
+     *                 description="Unique identifier",
+     *                 property="category",
+     *                 ref=@Model(type=ForumCategory::class),
+     *             ),
+     *         )),
+     *     ),
      * )
      * @SWG\Tag(name="Forum")
      */
@@ -179,8 +181,8 @@ class ForumForumController extends AbstractFOSRestController
      *                 property="posts",
      *                 type="integer",
      *             ),
-     *         ))
-     *     )
+     *         )),
+     *     ),
      * )
      * @SWG\Tag(name="Forum")
      */
