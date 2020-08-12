@@ -169,7 +169,7 @@ class OfficialTrainTableHelper
     }
 
     /**
-     *
+     * @throws Exception
      */
     public function processStations(): void
     {
@@ -211,7 +211,7 @@ class OfficialTrainTableHelper
     }
 
     /**
-     *
+     * @throws Exception
      */
     public function processTrainTables(): void
     {

@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Help extends Entity
 {
     /**
-     * @var int
+     * @var int|null
      * @ORM\Column(name="contentid", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")

@@ -15,7 +15,7 @@ use Swagger\Annotations as SWG;
 class TrainTableYear extends Entity
 {
     /**
-     * @var int
+     * @var int|null
      * @ORM\Column(name="tdr_nr", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")

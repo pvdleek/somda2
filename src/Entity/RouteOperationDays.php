@@ -13,7 +13,7 @@ use Swagger\Annotations as SWG;
 class RouteOperationDays extends Entity
 {
     /**
-     * @var int
+     * @var int|null
      * @ORM\Column(name="rijdagenid", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")

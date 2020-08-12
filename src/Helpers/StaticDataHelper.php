@@ -30,17 +30,17 @@ class StaticDataHelper implements RuntimeExtensionInterface
     private TranslatorInterface $translator;
 
     /**
-     * @var array
+     * @var array|null
      */
     private ?array $locations = null;
 
     /**
-     * @var array
+     * @var array|null
      */
     private ?array $users = null;
 
     /**
-     * @var array
+     * @var array|null
      */
     private ?array $routes = null;
 

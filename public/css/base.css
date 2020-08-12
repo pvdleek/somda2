@@ -1,9 +1,9 @@
 /*
 Basic color usage:
-	text: #515151
-	dark blue: #246da5
-	light blue (hover): #2b84c8
-	light blue (background): #d2e2f1;
+    text: #515151
+    dark blue: #246da5
+    light blue (hover): #2b84c8
+    light blue (background): #d2e2f1;
 */
 
 /***************/
@@ -24,6 +24,9 @@ p {
 }
 ol, ul {
     list-style: none;
+}
+div.center {
+    text-align: center;
 }
 
 /**************/

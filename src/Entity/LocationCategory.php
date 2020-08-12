@@ -16,7 +16,7 @@ class LocationCategory extends Entity
     public const NO_LONGER_VALID_ID = 50;
 
     /**
-     * @var int
+     * @var int|null
      * @ORM\Column(name="verk_catid", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")

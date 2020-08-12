@@ -24,7 +24,7 @@ class Location extends Entity
     public const UNKNOWN_NAME = 'Fout!';
 
     /**
-     * @var int
+     * @var int|null
      * @ORM\Column(name="afkid", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")

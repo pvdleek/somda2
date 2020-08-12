@@ -23,7 +23,7 @@ class Route extends Entity
     public const SPECIAL_CHECKING = 'SCHOUW';
 
     /**
-     * @var int
+     * @var int|null
      * @ORM\Column(name="treinid", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")

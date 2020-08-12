@@ -2,7 +2,7 @@
 
 {% block content %}
     <br />
-    <center>
+    <div class="center">
         {% if error %}
             <p class="alert">{{ error.messageKey | trans(error.messageData, 'security') }}</p>
         {% endif %}
@@ -20,6 +20,6 @@
         </form>
         <br /><p class="info info-max-width">Neem <a href="{{ path('contact') }}">contact op</a> als je jouw gebruikersnaam niet meer weet.</p>
         <br /><p class="info info-max-width">Nog geen gebruikersnaam en wachtwoord? <a href="{{ path('register') }}">Registreer je gratis en vrijblijvend</a><br />Wachtwoord vergeten? <a href="{{ path('lost_password') }}">Vraag een nieuw wachtwoord aan</a></p>
-    </center>
+    </div>
     <br />
 {% endblock %}

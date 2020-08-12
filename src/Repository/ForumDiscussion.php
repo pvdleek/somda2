@@ -88,6 +88,7 @@ class ForumDiscussion extends EntityRepository
     /**
      * @param ForumForum $forum
      * @param User|null $user
+     * @param int|null $limit
      * @return array
      */
     public function findByForum(ForumForum $forum, User $user = null, int $limit = null): array

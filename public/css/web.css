@@ -501,6 +501,13 @@ span.special-route-image {
     max-height: 25px;
 }
 
+/*******************/
+/*** Advertising ***/
+/*******************/
+table.advertise td {
+    text-align: center;
+}
+
 /************/
 /*** Help ***/
 /************/

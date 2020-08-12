@@ -128,19 +128,8 @@ class Spot extends EntityRepository
             ->setMaxResults($numberOfRecords)
             ->setFirstResult($offset);
 
-        if (!is_null($spotFilter->spotDate)) {
-            $queryBuilder
-                ->andWhere('DATE(s.spotDate) = :' . self::FIELD_SPOT_DATE)
-                ->setParameter(
-                    self::FIELD_SPOT_DATE,
-                    $spotFilter->spotDate->format(DateGenerics::DATE_FORMAT_DATABASE)
-                );
-        }
-        if (!is_null($spotFilter->location)) {
-            $queryBuilder
-                ->andWhere('l.name LIKE :location')
-                ->setParameter(self::FIELD_LOCATION, '%' . $spotFilter->location . '%');
-        }
+        $this->filterOnSpotDate($queryBuilder, $spotFilter->spotDate);
+        $this->filterOnLocation($queryBuilder, $spotFilter->location);
         $this->filterOnTrainNumber($queryBuilder, false, $spotFilter->trainNumber);
         $this->filterOnRouteNumber($queryBuilder, false, $spotFilter->routeNumber);
 
@@ -171,19 +160,8 @@ class Spot extends EntityRepository
             ->andWhere('s.user = :user')
             ->setParameter('user', $user);
 
-        if (!is_null($spotFilter->spotDate)) {
-            $queryBuilder
-                ->andWhere('DATE(s.spotDate) = :' . self::FIELD_SPOT_DATE)
-                ->setParameter(
-                    self::FIELD_SPOT_DATE,
-                    $spotFilter->spotDate->format(DateGenerics::DATE_FORMAT_DATABASE)
-                );
-        }
-        if (!is_null($spotFilter->location)) {
-            $queryBuilder
-                ->andWhere('l.name LIKE :location')
-                ->setParameter(self::FIELD_LOCATION, '%' . $spotFilter->location . '%');
-        }
+        $this->filterOnSpotDate($queryBuilder, $spotFilter->spotDate);
+        $this->filterOnLocation($queryBuilder, $spotFilter->location);
         $this->filterOnTrainNumber($queryBuilder, false, $spotFilter->trainNumber);
         $this->filterOnRouteNumber($queryBuilder, false, $spotFilter->routeNumber);
 
@@ -219,6 +197,32 @@ class Spot extends EntityRepository
             ->addGroupBy('n.id')
             ->addGroupBy('dayOfWeek');
         return $queryBuilder->getQuery()->getArrayResult();
+    }
+
+    /**
+     * @param QueryBuilder $queryBuilder
+     * @param DateTime|null $spotDate
+     */
+    private function filterOnSpotDate(QueryBuilder $queryBuilder, ?DateTime $spotDate = null)
+    {
+        if (!is_null($spotDate)) {
+            $queryBuilder
+                ->andWhere('DATE(s.spotDate) = :' . self::FIELD_SPOT_DATE)
+                ->setParameter(self::FIELD_SPOT_DATE, $spotDate->format(DateGenerics::DATE_FORMAT_DATABASE));
+        }
+    }
+
+    /**
+     * @param QueryBuilder $queryBuilder
+     * @param string|null $location
+     */
+    private function filterOnLocation(QueryBuilder $queryBuilder, ?string $location = null)
+    {
+        if (!is_null($location)) {
+            $queryBuilder
+                ->andWhere('l.name LIKE :location')
+                ->setParameter(self::FIELD_LOCATION, '%' . $location . '%');
+        }
     }
 
     /**

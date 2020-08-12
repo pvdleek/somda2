@@ -59,7 +59,7 @@ class Train extends Entity
      * @ORM\JoinColumn(name="pattern_id", referencedColumnName="id")
      * @JMS\Exclude()
      */
-    public ?TrainNamePattern $namePattern;
+    public ?TrainNamePattern $namePattern = null;
 
     /**
      * @var Spot[]

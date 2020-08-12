@@ -187,7 +187,6 @@ class ForumDiscussionHelper
             return;
         }
         if (is_null($requestedPageNumber)
-            && is_null($requestedPostId)
             && $this->discussion->forum->type !== ForumForum::TYPE_ARCHIVE
             && $this->userHelper->userIsLoggedIn()
         ) {

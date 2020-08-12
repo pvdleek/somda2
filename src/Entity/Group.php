@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Group extends Entity
 {
     /**
-     * @var int
+     * @var int|null
      * @ORM\Column(name="groupid", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")

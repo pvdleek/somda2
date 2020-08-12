@@ -16,7 +16,7 @@ class Banner extends Entity
     const LOCATION_FORUM = 'forum';
 
     /**
-     * @var int
+     * @var int|null
      * @ORM\Column(name="bannerid", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")

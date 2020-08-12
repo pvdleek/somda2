@@ -21,17 +21,17 @@ class BaseControllerHelper
     protected TranslatorInterface $translator;
 
     /**
-     * @var TrainTableYear
+     * @var TrainTableYear|null
      */
     private ?TrainTableYear $trainTableYear = null;
 
     /**
-     * @var Route
+     * @var Route|null
      */
     private ?Route $route = null;
 
     /**
-     * @var Location
+     * @var Location|null
      */
     private ?Location $location = null;
 

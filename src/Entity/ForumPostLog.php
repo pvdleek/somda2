@@ -16,7 +16,7 @@ class ForumPostLog extends Entity
     public const ACTION_VALUES = [self::ACTION_POST_NEW, self::ACTION_POST_EDIT];
 
     /**
-     * @var int
+     * @var int|null
      * @ORM\Column(name="id", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")

@@ -5,7 +5,7 @@ namespace App\Entity;
 abstract class Entity
 {
     /**
-     * @var int
+     * @var int|null
      */
     protected ?int $id = null;
 

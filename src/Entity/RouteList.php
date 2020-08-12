@@ -22,7 +22,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class RouteList extends Entity
 {
     /**
-     * @var int
+     * @var int|null
      * @ORM\Column(name="id", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
