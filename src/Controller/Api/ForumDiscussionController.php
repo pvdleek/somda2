@@ -81,10 +81,7 @@ class ForumDiscussionController extends AbstractFOSRestController
      * @SWG\Response(
      *     response=200,
      *     description="Returns paginated posts in a discussion",
-     *     @SWG\Schema(
-     *         type="array",
-     *         @SWG\Items(ref=@Model(type=ForumPost::class))
-     *     )
+     *     @SWG\Property(property="data", type="array", @SWG\Items(ref=@Model(type=ForumPost::class))),
      * )
      * @SWG\Tag(name="Forum")
      */
@@ -122,10 +119,7 @@ class ForumDiscussionController extends AbstractFOSRestController
      * @SWG\Response(
      *     response=200,
      *     description="Returns the favorite discussions of the user",
-     *     @SWG\Schema(
-     *         type="array",
-     *         @SWG\Items(ref=@Model(type=ForumDiscussion::class))
-     *     )
+     *     @SWG\Property(property="data", type="array", @SWG\Items(ref=@Model(type=ForumDiscussion::class))),
      * )
      * @SWG\Tag(name="Forum")
      */
@@ -147,10 +141,7 @@ class ForumDiscussionController extends AbstractFOSRestController
      * @SWG\Response(
      *     response=200,
      *     description="Returns all unread discussions of the user",
-     *     @SWG\Schema(
-     *         type="array",
-     *         @SWG\Items(ref=@Model(type=ForumDiscussion::class))
-     *     )
+     *     @SWG\Property(property="data", type="array", @SWG\Items(ref=@Model(type=ForumDiscussion::class))),
      * )
      * @SWG\Tag(name="Forum")
      */

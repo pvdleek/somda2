@@ -52,13 +52,7 @@ class SecurityController extends AbstractFOSRestController
      * @SWG\Response(
      *     response=200,
      *     description="The user is authenticated",
-     *     @SWG\Schema(
-     *         @SWG\Property(
-     *             property="data",
-     *             type="object",
-     *             ref=@Model(type=User::class),
-     *         )
-     *     )
+     *     @SWG\Property(property="data", type="array", @SWG\Items(ref=@Model(type=User::class))),
      * )
      * @SWG\Response(response=400, description="The request is malformed")
      * @SWG\Response(
@@ -89,13 +83,7 @@ class SecurityController extends AbstractFOSRestController
      * @SWG\Response(
      *     response=200,
      *     description="Verifies an existing user-token",
-     *     @SWG\Schema(
-     *         @SWG\Property(
-     *             property="data",
-     *             type="object",
-     *             ref=@Model(type=User::class),
-     *         )
-     *     )
+     *     @SWG\Property(property="data", type="array", @SWG\Items(ref=@Model(type=User::class))),
      * )
      * @SWG\Response(
      *     response=401,

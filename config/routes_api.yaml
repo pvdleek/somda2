@@ -136,3 +136,15 @@ api_forum_search:
   methods: [GET]
   requirements: { searchMethod: 'all|some' }
   controller: App\Controller\Api\ForumSearchController::indexAction
+
+########
+# User #
+########
+api_profile:
+  path: /profile/
+  methods: [GET]
+  controller: App\Controller\Api\ProfileController::indexAction
+api_profile_update:
+  path: /profile/
+  methods: [POST]
+  controller: App\Controller\Api\ProfileController::updateAction

@@ -50,10 +50,7 @@ class NewsController extends AbstractFOSRestController
      * @SWG\Response(
      *     response=200,
      *     description="Returns a single or all Somda news-items",
-     *     @SWG\Schema(
-     *         type="array",
-     *         @SWG\Items(ref=@Model(type=News::class))
-     *     )
+     *     @SWG\Property(property="data", type="array", @SWG\Items(ref=@Model(type=News::class))),
      * )
      * @SWG\Tag(name="News")
      */
@@ -97,10 +94,7 @@ class NewsController extends AbstractFOSRestController
      * @SWG\Response(
      *     response=200,
      *     description="Returns all rail-news-items",
-     *     @SWG\Schema(
-     *         type="array",
-     *         @SWG\Items(ref=@Model(type=RailNews::class)),
-     *     )
+     *     @SWG\Property(property="data", type="array", @SWG\Items(ref=@Model(type=RailNews::class))),
      * )
      * @SWG\Tag(name="News")
      */

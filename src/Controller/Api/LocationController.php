@@ -48,10 +48,12 @@ class LocationController extends AbstractFOSRestController
      * @SWG\Response(
      *     response=200,
      *     description="Returns all locations in the Somda database",
-     *     @SWG\Schema(
-     *         type="array",
-     *         @SWG\Items(ref=@Model(type=Location::class))
-     *     )
+     *     @SWG\Property(
+     *         property="filters",
+     *         type="object",
+     *         @SWG\Property(property="categories", type="array", @SWG\Items(type="string")),
+     *     ),
+     *     @SWG\Property(property="data", type="array", @SWG\Items(ref=@Model(type=Location::class))),
      * )
      * @SWG\Tag(name="Locations")
      */
