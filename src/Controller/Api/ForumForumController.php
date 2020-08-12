@@ -97,7 +97,7 @@ class ForumForumController extends AbstractFOSRestController
      *             property="category",
      *             ref=@Model(type=ForumCategory::class),
      *         ),
-     *     )
+     *     ))
      * )
      * @SWG\Tag(name="Forum")
      */
@@ -178,7 +178,7 @@ class ForumForumController extends AbstractFOSRestController
      *             property="posts",
      *             type="integer",
      *         ),
-     *     )
+     *     ))
      * )
      * @SWG\Tag(name="Forum")
      */
