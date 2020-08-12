@@ -128,57 +128,59 @@ class ForumForumController extends AbstractFOSRestController
      * @SWG\Response(
      *     response=200,
      *     description="Returns all discussions in a forum",
-     *     @SWG\Property(
-     *         property="meta",
-     *         type="object",
+     *     @SWG\Schema(
      *         @SWG\Property(
-     *             description="Whether the user is a moderator for this forum",
-     *             property="user_is_moderator",
-     *             type="boolean",
+     *             property="meta",
+     *             type="object",
+     *             @SWG\Property(
+     *                 description="Whether the user is a moderator for this forum",
+     *                 property="user_is_moderator",
+     *                 type="boolean",
+     *             ),
      *         ),
-     *     ),
-     *     @SWG\Property(property="data", type="array", @SWG\Items(
-     *         @SWG\Property(description="Unique identifier", property="id", type="integer"),
-     *         @SWG\Property(description="Title of the discussion", maxLength=50, property="title", type="string"),
-     *         @SWG\Property(
-     *             description="Unique identifier of the user that started the discussion",
-     *              property="author_id",
-     *            type="integer",
-     *         ),
-     *         @SWG\Property(
-     *             description="Username of the user that started the discussion",
-     *             maxLength=20,
-     *             property="author_username",
-     *             type="string",
-     *         ),
-     *         @SWG\Property(
-     *             description="Whether the discussion is locked",
-     *             enum={"0","1"},
-     *             property="locked",
-     *             type="string",
-     *         ),
-     *         @SWG\Property(
-     *             description="The number of times the discussion has been viewed",
-     *             property="viewed",
-     *             type="integer",
-     *         ),
-     *         @SWG\Property(
-     *             description="Whether the discussion is fully read by the user",
-     *             enum={"0","1"},
-     *             property="discussion_read",
-     *             type="string",
-     *         ),
-     *         @SWG\Property(
-     *             description="Timestamp of the last post in this discussion (Y-m-d H:i:s)",
-     *             property="max_post_timestamp",
-     *             type="string",
-     *         ),
-     *         @SWG\Property(
-     *             description="The number of posts in this discussion",
-     *             property="posts",
-     *             type="integer",
-     *         ),
-     *     ))
+     *         @SWG\Property(property="data", type="array", @SWG\Items(
+     *             @SWG\Property(description="Unique identifier", property="id", type="integer"),
+     *             @SWG\Property(description="Title of the discussion", maxLength=50, property="title", type="string"),
+     *             @SWG\Property(
+     *                 description="Unique identifier of the user that started the discussion",
+     *                  property="author_id",
+     *                type="integer",
+     *             ),
+     *             @SWG\Property(
+     *                 description="Username of the user that started the discussion",
+     *                 maxLength=20,
+     *                 property="author_username",
+     *                 type="string",
+     *             ),
+     *             @SWG\Property(
+     *                 description="Whether the discussion is locked",
+     *                 enum={"0","1"},
+     *                 property="locked",
+     *                 type="string",
+     *             ),
+     *            @SWG\Property(
+     *                 description="The number of times the discussion has been viewed",
+     *                 property="viewed",
+     *                 type="integer",
+     *             ),
+     *             @SWG\Property(
+     *                 description="Whether the discussion is fully read by the user",
+     *                 enum={"0","1"},
+     *                 property="discussion_read",
+     *                 type="string",
+     *             ),
+     *             @SWG\Property(
+     *                 description="Timestamp of the last post in this discussion (Y-m-d H:i:s)",
+     *                 property="max_post_timestamp",
+     *                 type="string",
+     *             ),
+     *             @SWG\Property(
+     *                 description="The number of posts in this discussion",
+     *                 property="posts",
+     *                 type="integer",
+     *             ),
+     *         ))
+     *     )
      * )
      * @SWG\Tag(name="Forum")
      */
