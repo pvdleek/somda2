@@ -56,7 +56,7 @@ class ForumOverviewHelper
                 ];
             }
 
-            $numberOfUnreadDiscussions = 0;
+            $unreadDiscussions = 0;
             if ($this->userHelper->userIsLoggedIn()) {
                 /**
                  * @var ForumForum $forumEntity
@@ -71,7 +71,7 @@ class ForumOverviewHelper
                 }
 
                 if ((int)$forum['type'] !== ForumForum::TYPE_ARCHIVE) {
-                    $numberOfUnreadDiscussions = $this->doctrine
+                    $unreadDiscussions = $this->doctrine
                         ->getRepository(ForumForum::class)
                         ->getNumberOfUnreadPostsInForum($forumEntity, $this->userHelper->getUser());
                 }
@@ -86,7 +86,7 @@ class ForumOverviewHelper
                 'name' => $forum['name'],
                 'order' => $forum['order'],
                 'numberOfDiscussions' => $forum['numberOfDiscussions'],
-                'numberOfUnreadDiscussions' => $numberOfUnreadDiscussions,
+                'numberOfUnreadDiscussions' => $unreadDiscussions,
             ];
         }
         return $categories;

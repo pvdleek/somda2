@@ -36,7 +36,7 @@ class TrainTableController extends AbstractFOSRestController
     /**
      * @var RouteOperationDaysHelper
      */
-    private RouteOperationDaysHelper $routeOperationDaysHelper;
+    private RouteOperationDaysHelper $daysHelper;
 
     /**
      * @var RoutesDisplayHelper
@@ -46,18 +46,18 @@ class TrainTableController extends AbstractFOSRestController
     /**
      * @param ManagerRegistry $doctrine
      * @param TrainTableHelper $trainTableHelper
-     * @param RouteOperationDaysHelper $routeOperationDaysHelper
+     * @param RouteOperationDaysHelper $daysHelper
      * @param RoutesDisplayHelper $routesDisplayHelper
      */
     public function __construct(
         ManagerRegistry $doctrine,
         TrainTableHelper $trainTableHelper,
-        RouteOperationDaysHelper $routeOperationDaysHelper,
+        RouteOperationDaysHelper $daysHelper,
         RoutesDisplayHelper $routesDisplayHelper
     ) {
         $this->doctrine = $doctrine;
         $this->trainTableHelper = $trainTableHelper;
-        $this->routeOperationDaysHelper = $routeOperationDaysHelper;
+        $this->daysHelper = $daysHelper;
         $this->routesDisplayHelper = $routesDisplayHelper;
     }
 
@@ -116,27 +116,28 @@ class TrainTableController extends AbstractFOSRestController
         $this->trainTableHelper->setRoute($routeNumber);
         $trainTableLines = $this->trainTableHelper->getTrainTableLines();
 
-        $days = [];
+        $daysFilter = [];
         foreach ($trainTableLines as $trainTableLine) {
-            if (!isset($routeOperationDaysIdArray[$trainTableLine->routeOperationDays->getId()])) {
-                $days[] = $trainTableLine->routeOperationDays->getId();
+            if (array_search($trainTableLine->routeOperationDays->getId(), $daysFilter) === false) {
+                $daysFilter[] = $trainTableLine->routeOperationDays->getId();
             }
         }
+        $daysFilter = array_values(array_unique($daysFilter));
 
-        $routeOperationDaysArray = [];
+        $daysLegend = [];
         /**
          * @var RouteOperationDays[] $routeOperationDays
          */
         $routeOperationDays = $this->doctrine->getRepository(RouteOperationDays::class)->findAll();
         foreach ($routeOperationDays as $routeOperationDay) {
-            $routeOperationDaysArray[$routeOperationDay->getId()] =
-                $this->routeOperationDaysHelper->getDisplay($routeOperationDay, true);
+            $daysLegend[$routeOperationDay->getId()] =
+                $this->daysHelper->getDisplay($routeOperationDay, true);
         }
 
         return $this->handleView(
             $this->view([
-                'filters' => ['days' => array_values(array_unique($days))],
-                'legend' => ['days' => $routeOperationDaysArray],
+                'filters' => ['days' => $daysFilter],
+                'legend' => ['days' => $daysLegend],
                 'data' => $trainTableLines,
             ], 200)
         );

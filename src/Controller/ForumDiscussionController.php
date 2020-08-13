@@ -41,7 +41,7 @@ class ForumDiscussionController
     /**
      * @var ForumDiscussionHelper
      */
-    private ForumDiscussionHelper $forumDiscussionHelper;
+    private ForumDiscussionHelper $discussionHelper;
 
     /**
      * @var RedirectHelper
@@ -57,7 +57,7 @@ class ForumDiscussionController
      * @param UserHelper $userHelper
      * @param FormHelper $formHelper
      * @param ForumAuthorizationHelper $forumAuthHelper
-     * @param ForumDiscussionHelper $forumDiscussionHelper
+     * @param ForumDiscussionHelper $discussionHelper
      * @param RedirectHelper $redirectHelper
      * @param TemplateHelper $templateHelper
      */
@@ -65,14 +65,14 @@ class ForumDiscussionController
         UserHelper $userHelper,
         FormHelper $formHelper,
         ForumAuthorizationHelper $forumAuthHelper,
-        ForumDiscussionHelper $forumDiscussionHelper,
+        ForumDiscussionHelper $discussionHelper,
         RedirectHelper $redirectHelper,
         TemplateHelper $templateHelper
     ) {
         $this->userHelper = $userHelper;
         $this->formHelper = $formHelper;
         $this->forumAuthHelper = $forumAuthHelper;
-        $this->forumDiscussionHelper = $forumDiscussionHelper;
+        $this->discussionHelper = $discussionHelper;
         $this->redirectHelper = $redirectHelper;
         $this->templateHelper = $templateHelper;
     }
@@ -95,21 +95,21 @@ class ForumDiscussionController
             return $this->redirectHelper->redirectToRoute(RouteGenerics::ROUTE_FORUM);
         }
 
-        $this->forumDiscussionHelper->setDiscussion($discussion);
-        $posts = $this->forumDiscussionHelper->getPosts($pageNumber, $postId);
+        $this->discussionHelper->setDiscussion($discussion);
+        $posts = $this->discussionHelper->getPosts($pageNumber, $postId);
 
         return $this->templateHelper->render('forum/discussion.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Forum - ' . $discussion->title,
             'userIsModerator' =>
                 $this->forumAuthHelper->userIsModerator($discussion->forum, $this->userHelper->getUser()),
             TemplateHelper::PARAMETER_DISCUSSION => $discussion,
-            'numberOfPages' => $this->forumDiscussionHelper->getNumberOfPages(),
-            'pageNumber' => $this->forumDiscussionHelper->getPageNumber(),
+            'numberOfPages' => $this->discussionHelper->getNumberOfPages(),
+            'pageNumber' => $this->discussionHelper->getPageNumber(),
             'posts' => $posts,
             'mayPost' => $this->forumAuthHelper->mayPost($discussion->forum, $this->userHelper->getUser()),
-            'numberOfReadPosts' => $this->forumDiscussionHelper->getNumberOfReadPosts(),
+            'numberOfReadPosts' => $this->discussionHelper->getNumberOfReadPosts(),
             'forumBanner' => $this->getForumBanner($request),
-            'forumJump' => $this->forumDiscussionHelper->getForumJump(),
+            'forumJump' => $this->discussionHelper->getForumJump(),
         ]);
     }
 

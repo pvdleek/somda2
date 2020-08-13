@@ -37,24 +37,24 @@ class ForumDiscussionController extends AbstractFOSRestController
     /**
      * @var ForumDiscussionHelper
      */
-    private ForumDiscussionHelper $forumDiscussionHelper;
+    private ForumDiscussionHelper $discussionHelper;
 
     /**
      * @param ManagerRegistry $doctrine
      * @param UserHelper $userHelper
      * @param ForumAuthorizationHelper $forumAuthHelper
-     * @param ForumDiscussionHelper $forumDiscussionHelper
+     * @param ForumDiscussionHelper $discussionHelper
      */
     public function __construct(
         ManagerRegistry $doctrine,
         UserHelper $userHelper,
         ForumAuthorizationHelper $forumAuthHelper,
-        ForumDiscussionHelper $forumDiscussionHelper
+        ForumDiscussionHelper $discussionHelper
     ) {
         $this->doctrine = $doctrine;
         $this->userHelper = $userHelper;
         $this->forumAuthHelper = $forumAuthHelper;
-        $this->forumDiscussionHelper = $forumDiscussionHelper;
+        $this->discussionHelper = $discussionHelper;
     }
 
     /**
@@ -97,8 +97,8 @@ class ForumDiscussionController extends AbstractFOSRestController
             throw new AccessDeniedException('This discussion does not exist');
         }
 
-        $this->forumDiscussionHelper->setDiscussion($discussion);
-        $posts = $this->forumDiscussionHelper->getPosts($pageNumber, $postId);
+        $this->discussionHelper->setDiscussion($discussion);
+        $posts = $this->discussionHelper->getPosts($pageNumber, $postId);
 
         return $this->handleView($this->view([
             'data' => $posts,
@@ -106,11 +106,11 @@ class ForumDiscussionController extends AbstractFOSRestController
                 'user_is_moderator' =>
                     $this->forumAuthHelper->userIsModerator($discussion->forum, $this->userHelper->getUser()),
                 'posts_per_page' => ForumGenerics::MAX_POSTS_PER_PAGE,
-                'number_of_pages' => $this->forumDiscussionHelper->getNumberOfPages(),
-                'page_number' => $this->forumDiscussionHelper->getPageNumber(),
+                'number_of_pages' => $this->discussionHelper->getNumberOfPages(),
+                'page_number' => $this->discussionHelper->getPageNumber(),
                 'may_post' => $this->forumAuthHelper->mayPost($discussion->forum, $this->userHelper->getUser()),
-                'number_of_read_posts' => $this->forumDiscussionHelper->getNumberOfReadPosts(),
-                'forum_jump' => $this->forumDiscussionHelper->getForumJump(),
+                'number_of_read_posts' => $this->discussionHelper->getNumberOfReadPosts(),
+                'forum_jump' => $this->discussionHelper->getForumJump(),
             ]
         ], 200));
     }
