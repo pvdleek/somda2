@@ -34,6 +34,6 @@ final class Version20200717165055 extends AbstractMigration
      */
     public function down(Schema $schema) : void
     {
-        // Not applicable
+        $this->addSql('ALTER TABLE `somda_users` DROP COLUMN `api_token`, DROP COLUMN `api_token_expiry_timestamp`');
     }
 }

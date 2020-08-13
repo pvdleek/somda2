@@ -64,4 +64,4 @@ Somda uses a Model - View - Controller architecture following these guidelines:
 Somda is not the best code out there. Some of the principles as described are not followed or only halfway.
 With each update there will be refactoring to make things better. If you decide to contribute, please make better code than what you found... 
 
-Pull-requests at Github are highly encouraged and will always be reviewed and considered.
+Pull-requests at Github are highly encouraged and will always be reviewed and considered. Please always base them on the develop branch.

@@ -97,6 +97,9 @@ final class Version20200804134855 extends AbstractMigration
      */
     public function down(Schema $schema) : void
     {
-        // Not applicable
+        $this->addSql('ALTER TABLE `somda_vervoerder` DROP COLUMN `iff_code`');
+
+        $this->addSql('DROP TABLE IF EXISTS `ott_official_train_table`');
+        $this->addSql('DROP TABLE IF EXISTS `ofo_official_footnote`');
     }
 }
