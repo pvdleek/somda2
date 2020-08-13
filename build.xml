@@ -1,7 +1,7 @@
 <project name="Somda" basedir=".">
     <description>Somda</description>
 
-    <target name="deploy">
+    <target name="setup">
         <exec executable="git">
             <arg value="pull" />
         </exec>
@@ -25,6 +25,9 @@
             <arg value="bin/console" />
             <arg value="cache:clear" />
         </exec>
+    </target>
+
+    <target name="deploy" depends="setup">
         <exec executable="chown">
             <arg value="-R" />
             <arg value="nginx:nginx" />
@@ -33,6 +36,13 @@
         <exec executable="service">
             <arg value="php-fpm" />
             <arg value="restart" />
+        </exec>
+    </target>
+
+    <target name="update-database">
+        <exec executable="php">
+            <arg value="bin/console" />
+            <arg value="doctrine:migrations:migrate" />
         </exec>
     </target>
 
