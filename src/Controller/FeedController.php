@@ -4,8 +4,8 @@ namespace App\Controller;
 
 use App\Entity\Location;
 use App\Entity\TrainTableYear;
-use App\Helpers\Controller\TrainTableHelper;
 use App\Helpers\TemplateHelper;
+use App\Helpers\TrainTableHelper;
 use App\Repository\TrainTable;
 use App\Traits\DateTrait;
 use DateTime;
