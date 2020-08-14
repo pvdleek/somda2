@@ -256,6 +256,9 @@
     "phpmd/phpmd": {
         "version": "2.8.2"
     },
+    "phpspec/prophecy": {
+        "version": "1.11.1"
+    },
     "psr/cache": {
         "version": "1.0.1"
     },
@@ -282,6 +285,18 @@
     },
     "sabberworm/php-css-parser": {
         "version": "8.3.1"
+    },
+    "sebastian/comparator": {
+        "version": "4.0.3"
+    },
+    "sebastian/diff": {
+        "version": "4.0.2"
+    },
+    "sebastian/exporter": {
+        "version": "4.0.2"
+    },
+    "sebastian/recursion-context": {
+        "version": "4.0.2"
     },
     "sensio/framework-extra-bundle": {
         "version": "5.2",

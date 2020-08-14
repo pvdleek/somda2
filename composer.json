@@ -47,11 +47,14 @@
     "require-dev": {
         "doctrine/doctrine-fixtures-bundle": "^3.3",
         "phpmd/phpmd": "^2.8",
+        "phpspec/prophecy": "~1.0",
         "squizlabs/php_codesniffer": "*",
+        "symfony/browser-kit": "^5.1",
+        "symfony/css-selector": "^5.1",
         "symfony/debug-pack": "*",
         "symfony/maker-bundle": "^1.0",
-        "symfony/profiler-pack": "*",
-        "symfony/test-pack": "*"
+        "symfony/phpunit-bridge": "^5.1",
+        "symfony/profiler-pack": "*"
     },
     "config": {
         "platform": {
