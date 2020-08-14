@@ -59,6 +59,10 @@ Somda uses a Model - View - Controller architecture following these guidelines:
 - Views contain as little business logic as possible, they basically only display what the controllers give them.
 - Controllers contain as little business logic as possible, they only process forms, collect data and hand data to the views. If you need business logic, consider a helper or service.
 
+### Unit-testing
+
+Before running the unit tests, execute `php composer.phar dump-env test`
+
 ## Contributing
 
 Somda is not the best code out there. Some of the principles as described are not followed or only halfway.
