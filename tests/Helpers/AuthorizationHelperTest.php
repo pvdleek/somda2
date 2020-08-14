@@ -67,4 +67,25 @@ class AuthorizationHelperTest extends BaseTestCase
         );
         $this->assertSame($user, $this->object->getUser());
     }
+
+    /**
+     *
+     */
+    public function testIsGranted(): void
+    {
+        $user = new User();
+        $tokenMock = $this->prophet->prophesize(TokenInterface::class);
+        $tokenMock->getUser()->willReturn($user);
+
+        $tokenStorageMock = $this->prophet->prophesize(TokenStorageInterface::class);
+        $tokenStorageMock->getToken()->willReturn($tokenMock->reveal());
+
+        $securityCheckerMock = $this->prophet->prophesize(AuthorizationCheckerInterface::class);
+        $securityCheckerMock->isGranted('myRole1', $user)->willReturn(false);
+        $securityCheckerMock->isGranted('myRole2', $user)->willReturn(true);
+
+        $this->object = new AuthorizationHelper($tokenStorageMock->reveal(), $securityCheckerMock->reveal());
+        $this->assertFalse($this->object->isGranted('myRole1'));
+        $this->assertTrue($this->object->isGranted('myRole2'));
+    }
 }
