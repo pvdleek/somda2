@@ -2,12 +2,12 @@
 
 {% block content %}
     <div class="panel">
-        <div class="panel-title">Er is iets fout gegaan</div>
+        <div class="panel-title">{{ 'general.error.generic.title' | trans }}</div>
         <div class="panel-content">
             <br />
             <img alt="500" height="350" src="{{ asset('images/error/500.png') }}" />
-            <h1>Oeps!</h1>
-            <p>Somda kon jouw verzoek niet verwerken. Probeer het opnieuw via de <a href="{{ path('home') }}">homepagina van Somda</a>.</p>
+            <h1>{{ 'general.error.generic.header' | trans }}</h1>
+            <p>{{ 'general.error.generic.info' | trans | format(path('home')) }}</p>
         </div>
     </div>
 {% endblock %}
