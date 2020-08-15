@@ -61,7 +61,12 @@ Somda uses a Model - View - Controller architecture following these guidelines:
 
 ### Unit-testing
 
-Before running the unit tests, execute `php composer.phar dump-env test`
+To start running unit tests, execute the following steps:
+- Copy _phpunit.xml.dist_ in the root to _phpunit.xml_.
+- Adjust the value for _DATABASE_URL_ to your needs, this should be a separate database from your local environment.
+- Execute `bin/phpunit`
+- Execute `php composer.phar dump-env test`
+Now you can execute the unit tests with the use of _phpunit.xml_.
 
 ## Contributing
 

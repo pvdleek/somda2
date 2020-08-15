@@ -1,5 +1,5 @@
 --
--- Table structure for table `migration_versions`
+-- Tabelstructuur voor tabel `migration_versions`
 --
 
 CREATE TABLE IF NOT EXISTS `migration_versions` (
@@ -12,7 +12,48 @@ CREATE TABLE IF NOT EXISTS `migration_versions` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `somda_api_logging`
+-- Tabelstructuur voor tabel `ofo_official_footnote`
+--
+
+CREATE TABLE IF NOT EXISTS `ofo_official_footnote` (
+  `ofo_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `ofo_footnote_id` bigint(20) NOT NULL,
+  `ofo_date` date NOT NULL,
+  PRIMARY KEY (`ofo_id`),
+  UNIQUE KEY `idx_ofo_footnote` (`ofo_footnote_id`,`ofo_date`) USING BTREE,
+  KEY `idx_ofo_footnote_id` (`ofo_footnote_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Tabelstructuur voor tabel `ott_official_train_table`
+--
+
+CREATE TABLE IF NOT EXISTS `ott_official_train_table` (
+  `ott_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `ott_ofo_id` bigint(20) DEFAULT NULL,
+  `ott_transporter_id` bigint(20) DEFAULT NULL,
+  `ott_characteristic_id` bigint(20) DEFAULT NULL,
+  `ott_route_id` bigint(20) DEFAULT NULL,
+  `ott_location_id` bigint(20) DEFAULT NULL,
+  `ott_order` int(11) NOT NULL DEFAULT '1',
+  `ott_action` varchar(1) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '-',
+  `ott_time` int(11) DEFAULT NULL,
+  `ott_track` varchar(3) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`ott_id`),
+  KEY `IDX_4577F52E2EDDB7B4` (`ott_transporter_id`),
+  KEY `IDX_4577F52EBE696BF` (`ott_characteristic_id`),
+  KEY `idx_ott_time` (`ott_time`),
+  KEY `idx_ott_location_id` (`ott_location_id`),
+  KEY `idx_ott_route_id` (`ott_route_id`),
+  KEY `idx_ott_ofo_id` (`ott_ofo_id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Tabelstructuur voor tabel `somda_api_logging`
 --
 
 CREATE TABLE IF NOT EXISTS `somda_api_logging` (
@@ -28,7 +69,7 @@ CREATE TABLE IF NOT EXISTS `somda_api_logging` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `somda_banner`
+-- Tabelstructuur voor tabel `somda_banner`
 --
 
 CREATE TABLE IF NOT EXISTS `somda_banner` (
@@ -36,7 +77,7 @@ CREATE TABLE IF NOT EXISTS `somda_banner` (
   `code` varchar(6) DEFAULT NULL,
   `location` varchar(6) NOT NULL DEFAULT 'header',
   `description` longtext,
-  `link` varchar(255) NOT NULL,
+  `link` varchar(100) NOT NULL,
   `image` varchar(100) DEFAULT NULL,
   `customerid` bigint(20) DEFAULT NULL,
   `email` varchar(50) NOT NULL,
@@ -52,7 +93,7 @@ CREATE TABLE IF NOT EXISTS `somda_banner` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `somda_banner_customer`
+-- Tabelstructuur voor tabel `somda_banner_customer`
 --
 
 CREATE TABLE IF NOT EXISTS `somda_banner_customer` (
@@ -67,7 +108,7 @@ CREATE TABLE IF NOT EXISTS `somda_banner_customer` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `somda_banner_customer_user`
+-- Tabelstructuur voor tabel `somda_banner_customer_user`
 --
 
 CREATE TABLE IF NOT EXISTS `somda_banner_customer_user` (
@@ -86,7 +127,7 @@ CREATE TABLE IF NOT EXISTS `somda_banner_customer_user` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `somda_banner_hits`
+-- Tabelstructuur voor tabel `somda_banner_hits`
 --
 
 CREATE TABLE IF NOT EXISTS `somda_banner_hits` (
@@ -95,13 +136,13 @@ CREATE TABLE IF NOT EXISTS `somda_banner_hits` (
   `timestamp` datetime NOT NULL,
   `ip_address` bigint(20) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `idx_47823_bannerid` (`bannerid`)
+  KEY `bannerid` (`bannerid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `somda_banner_views`
+-- Tabelstructuur voor tabel `somda_banner_views`
 --
 
 CREATE TABLE IF NOT EXISTS `somda_banner_views` (
@@ -116,7 +157,7 @@ CREATE TABLE IF NOT EXISTS `somda_banner_views` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `somda_blokken`
+-- Tabelstructuur voor tabel `somda_blokken`
 --
 
 CREATE TABLE IF NOT EXISTS `somda_blokken` (
@@ -124,9 +165,9 @@ CREATE TABLE IF NOT EXISTS `somda_blokken` (
   `name` varchar(55) NOT NULL DEFAULT '',
   `route` varchar(45) NOT NULL DEFAULT '',
   `menu_volgorde` int(11) NOT NULL DEFAULT '1',
+  `parent_block` bigint(20) DEFAULT NULL,
   `do_separator` tinyint(1) NOT NULL,
   `role` varchar(50) DEFAULT NULL,
-  `parent_block` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`blokid`),
   KEY `FK_B4865B064F2A0381` (`parent_block`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -134,7 +175,7 @@ CREATE TABLE IF NOT EXISTS `somda_blokken` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `somda_ddar`
+-- Tabelstructuur voor tabel `somda_ddar`
 --
 
 CREATE TABLE IF NOT EXISTS `somda_ddar` (
@@ -155,7 +196,7 @@ CREATE TABLE IF NOT EXISTS `somda_ddar` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `somda_don_donatie`
+-- Tabelstructuur voor tabel `somda_don_donatie`
 --
 
 CREATE TABLE IF NOT EXISTS `somda_don_donatie` (
@@ -172,7 +213,7 @@ CREATE TABLE IF NOT EXISTS `somda_don_donatie` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `somda_drgl`
+-- Tabelstructuur voor tabel `somda_drgl`
 --
 
 CREATE TABLE IF NOT EXISTS `somda_drgl` (
@@ -191,7 +232,7 @@ CREATE TABLE IF NOT EXISTS `somda_drgl` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `somda_drgl_read`
+-- Tabelstructuur voor tabel `somda_drgl_read`
 --
 
 CREATE TABLE IF NOT EXISTS `somda_drgl_read` (
@@ -205,7 +246,7 @@ CREATE TABLE IF NOT EXISTS `somda_drgl_read` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `somda_forum_alerts`
+-- Tabelstructuur voor tabel `somda_forum_alerts`
 --
 
 CREATE TABLE IF NOT EXISTS `somda_forum_alerts` (
@@ -223,7 +264,7 @@ CREATE TABLE IF NOT EXISTS `somda_forum_alerts` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `somda_forum_alerts_notes`
+-- Tabelstructuur voor tabel `somda_forum_alerts_notes`
 --
 
 CREATE TABLE IF NOT EXISTS `somda_forum_alerts_notes` (
@@ -241,7 +282,7 @@ CREATE TABLE IF NOT EXISTS `somda_forum_alerts_notes` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `somda_forum_cats`
+-- Tabelstructuur voor tabel `somda_forum_cats`
 --
 
 CREATE TABLE IF NOT EXISTS `somda_forum_cats` (
@@ -254,7 +295,7 @@ CREATE TABLE IF NOT EXISTS `somda_forum_cats` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `somda_forum_discussion`
+-- Tabelstructuur voor tabel `somda_forum_discussion`
 --
 
 CREATE TABLE IF NOT EXISTS `somda_forum_discussion` (
@@ -272,7 +313,7 @@ CREATE TABLE IF NOT EXISTS `somda_forum_discussion` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `somda_forum_discussion_wiki`
+-- Tabelstructuur voor tabel `somda_forum_discussion_wiki`
 --
 
 CREATE TABLE IF NOT EXISTS `somda_forum_discussion_wiki` (
@@ -287,7 +328,7 @@ CREATE TABLE IF NOT EXISTS `somda_forum_discussion_wiki` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `somda_forum_favorites`
+-- Tabelstructuur voor tabel `somda_forum_favorites`
 --
 
 CREATE TABLE IF NOT EXISTS `somda_forum_favorites` (
@@ -302,7 +343,7 @@ CREATE TABLE IF NOT EXISTS `somda_forum_favorites` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `somda_forum_forums`
+-- Tabelstructuur voor tabel `somda_forum_forums`
 --
 
 CREATE TABLE IF NOT EXISTS `somda_forum_forums` (
@@ -319,7 +360,7 @@ CREATE TABLE IF NOT EXISTS `somda_forum_forums` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `somda_forum_log`
+-- Tabelstructuur voor tabel `somda_forum_log`
 --
 
 CREATE TABLE IF NOT EXISTS `somda_forum_log` (
@@ -333,7 +374,7 @@ CREATE TABLE IF NOT EXISTS `somda_forum_log` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `somda_forum_mods`
+-- Tabelstructuur voor tabel `somda_forum_mods`
 --
 
 CREATE TABLE IF NOT EXISTS `somda_forum_mods` (
@@ -347,7 +388,7 @@ CREATE TABLE IF NOT EXISTS `somda_forum_mods` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `somda_forum_posts`
+-- Tabelstructuur voor tabel `somda_forum_posts`
 --
 
 CREATE TABLE IF NOT EXISTS `somda_forum_posts` (
@@ -372,7 +413,7 @@ CREATE TABLE IF NOT EXISTS `somda_forum_posts` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `somda_forum_posts_text`
+-- Tabelstructuur voor tabel `somda_forum_posts_text`
 --
 
 CREATE TABLE IF NOT EXISTS `somda_forum_posts_text` (
@@ -385,13 +426,13 @@ CREATE TABLE IF NOT EXISTS `somda_forum_posts_text` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `somda_forum_read_0`
+-- Tabelstructuur voor tabel `somda_forum_read_0`
 --
 
 CREATE TABLE IF NOT EXISTS `somda_forum_read_0` (
   `uid` bigint(20) NOT NULL,
   `postid` bigint(20) NOT NULL,
-  PRIMARY KEY (`postid`,`uid`),
+  PRIMARY KEY (`uid`,`postid`),
   KEY `somda_forum_read_0_idx_uid` (`uid`),
   KEY `IDX_forum_read_0` (`postid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -399,7 +440,7 @@ CREATE TABLE IF NOT EXISTS `somda_forum_read_0` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `somda_forum_read_1`
+-- Tabelstructuur voor tabel `somda_forum_read_1`
 --
 
 CREATE TABLE IF NOT EXISTS `somda_forum_read_1` (
@@ -413,7 +454,7 @@ CREATE TABLE IF NOT EXISTS `somda_forum_read_1` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `somda_forum_read_2`
+-- Tabelstructuur voor tabel `somda_forum_read_2`
 --
 
 CREATE TABLE IF NOT EXISTS `somda_forum_read_2` (
@@ -427,7 +468,7 @@ CREATE TABLE IF NOT EXISTS `somda_forum_read_2` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `somda_forum_read_3`
+-- Tabelstructuur voor tabel `somda_forum_read_3`
 --
 
 CREATE TABLE IF NOT EXISTS `somda_forum_read_3` (
@@ -441,85 +482,91 @@ CREATE TABLE IF NOT EXISTS `somda_forum_read_3` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `somda_forum_read_4`
+-- Tabelstructuur voor tabel `somda_forum_read_4`
 --
 
 CREATE TABLE IF NOT EXISTS `somda_forum_read_4` (
   `uid` bigint(20) NOT NULL,
   `postid` bigint(20) NOT NULL,
-  PRIMARY KEY (`uid`,`postid`),
-  KEY `somda_forum_read_4_idx_uid` (`uid`)
+  PRIMARY KEY (`postid`,`uid`),
+  KEY `somda_forum_read_4_idx_uid` (`uid`),
+  KEY `IDX_forum_read_4` (`postid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `somda_forum_read_5`
+-- Tabelstructuur voor tabel `somda_forum_read_5`
 --
 
 CREATE TABLE IF NOT EXISTS `somda_forum_read_5` (
   `uid` bigint(20) NOT NULL,
   `postid` bigint(20) NOT NULL,
-  PRIMARY KEY (`uid`,`postid`),
-  KEY `somda_forum_read_5_idx_uid` (`uid`)
+  PRIMARY KEY (`postid`,`uid`),
+  KEY `somda_forum_read_5_idx_uid` (`uid`),
+  KEY `IDX_forum_read_5` (`postid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `somda_forum_read_6`
+-- Tabelstructuur voor tabel `somda_forum_read_6`
 --
 
 CREATE TABLE IF NOT EXISTS `somda_forum_read_6` (
   `uid` bigint(20) NOT NULL,
   `postid` bigint(20) NOT NULL,
-  PRIMARY KEY (`uid`,`postid`),
-  KEY `somda_forum_read_6_idx_uid` (`uid`)
+  PRIMARY KEY (`postid`,`uid`),
+  KEY `somda_forum_read_6_idx_uid` (`uid`),
+  KEY `IDX_forum_read_6` (`postid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `somda_forum_read_7`
+-- Tabelstructuur voor tabel `somda_forum_read_7`
 --
 
 CREATE TABLE IF NOT EXISTS `somda_forum_read_7` (
   `uid` bigint(20) NOT NULL,
   `postid` bigint(20) NOT NULL,
-  PRIMARY KEY (`uid`,`postid`),
-  KEY `somda_forum_read_7_idx_uid` (`uid`)
+  PRIMARY KEY (`postid`,`uid`),
+  KEY `somda_forum_read_7_idx_uid` (`uid`),
+  KEY `IDX_forum_read_7` (`postid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `somda_forum_read_8`
+-- Tabelstructuur voor tabel `somda_forum_read_8`
 --
 
 CREATE TABLE IF NOT EXISTS `somda_forum_read_8` (
   `uid` bigint(20) NOT NULL,
   `postid` bigint(20) NOT NULL,
-  PRIMARY KEY (`uid`,`postid`),
-  KEY `somda_forum_read_8_idx_uid` (`uid`)
+  PRIMARY KEY (`postid`,`uid`),
+  KEY `somda_forum_read_8_idx_uid` (`uid`),
+  KEY `IDX_forum_read_8` (`postid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `somda_forum_read_9`
+-- Tabelstructuur voor tabel `somda_forum_read_9`
 --
 
 CREATE TABLE IF NOT EXISTS `somda_forum_read_9` (
   `uid` bigint(20) NOT NULL,
   `postid` bigint(20) NOT NULL,
-  PRIMARY KEY (`uid`,`postid`),
-  KEY `somda_forum_read_9_idx_uid` (`uid`)
+  PRIMARY KEY (`postid`,`uid`),
+  KEY `somda_forum_read_9_idx_uid` (`uid`),
+  KEY `IDX_forum_read_9` (`postid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `somda_forum_zoeken_lijst`
+-- Tabelstructuur voor tabel `somda_forum_zoeken_lijst`
 --
 
 CREATE TABLE IF NOT EXISTS `somda_forum_zoeken_lijst` (
@@ -534,7 +581,7 @@ CREATE TABLE IF NOT EXISTS `somda_forum_zoeken_lijst` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `somda_forum_zoeken_woorden`
+-- Tabelstructuur voor tabel `somda_forum_zoeken_woorden`
 --
 
 CREATE TABLE IF NOT EXISTS `somda_forum_zoeken_woorden` (
@@ -547,7 +594,7 @@ CREATE TABLE IF NOT EXISTS `somda_forum_zoeken_woorden` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `somda_groups`
+-- Tabelstructuur voor tabel `somda_groups`
 --
 
 CREATE TABLE IF NOT EXISTS `somda_groups` (
@@ -560,7 +607,7 @@ CREATE TABLE IF NOT EXISTS `somda_groups` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `somda_help`
+-- Tabelstructuur voor tabel `somda_help`
 --
 
 CREATE TABLE IF NOT EXISTS `somda_help` (
@@ -573,7 +620,7 @@ CREATE TABLE IF NOT EXISTS `somda_help` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `somda_help_text`
+-- Tabelstructuur voor tabel `somda_help_text`
 --
 
 CREATE TABLE IF NOT EXISTS `somda_help_text` (
@@ -587,7 +634,7 @@ CREATE TABLE IF NOT EXISTS `somda_help_text` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `somda_jargon`
+-- Tabelstructuur voor tabel `somda_jargon`
 --
 
 CREATE TABLE IF NOT EXISTS `somda_jargon` (
@@ -601,7 +648,7 @@ CREATE TABLE IF NOT EXISTS `somda_jargon` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `somda_karakteristiek`
+-- Tabelstructuur voor tabel `somda_karakteristiek`
 --
 
 CREATE TABLE IF NOT EXISTS `somda_karakteristiek` (
@@ -615,7 +662,7 @@ CREATE TABLE IF NOT EXISTS `somda_karakteristiek` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `somda_logging`
+-- Tabelstructuur voor tabel `somda_logging`
 --
 
 CREATE TABLE IF NOT EXISTS `somda_logging` (
@@ -634,7 +681,7 @@ CREATE TABLE IF NOT EXISTS `somda_logging` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `somda_mat`
+-- Tabelstructuur voor tabel `somda_mat`
 --
 
 CREATE TABLE IF NOT EXISTS `somda_mat` (
@@ -652,7 +699,7 @@ CREATE TABLE IF NOT EXISTS `somda_mat` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `somda_mat_changes`
+-- Tabelstructuur voor tabel `somda_mat_changes`
 --
 
 CREATE TABLE IF NOT EXISTS `somda_mat_changes` (
@@ -681,7 +728,7 @@ CREATE TABLE IF NOT EXISTS `somda_mat_changes` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `somda_mat_patterns`
+-- Tabelstructuur voor tabel `somda_mat_patterns`
 --
 
 CREATE TABLE IF NOT EXISTS `somda_mat_patterns` (
@@ -697,7 +744,7 @@ CREATE TABLE IF NOT EXISTS `somda_mat_patterns` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `somda_mat_sms`
+-- Tabelstructuur voor tabel `somda_mat_sms`
 --
 
 CREATE TABLE IF NOT EXISTS `somda_mat_sms` (
@@ -727,7 +774,7 @@ CREATE TABLE IF NOT EXISTS `somda_mat_sms` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `somda_mat_types`
+-- Tabelstructuur voor tabel `somda_mat_types`
 --
 
 CREATE TABLE IF NOT EXISTS `somda_mat_types` (
@@ -752,7 +799,7 @@ CREATE TABLE IF NOT EXISTS `somda_mat_types` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `somda_news`
+-- Tabelstructuur voor tabel `somda_news`
 --
 
 CREATE TABLE IF NOT EXISTS `somda_news` (
@@ -767,7 +814,7 @@ CREATE TABLE IF NOT EXISTS `somda_news` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `somda_news_read`
+-- Tabelstructuur voor tabel `somda_news_read`
 --
 
 CREATE TABLE IF NOT EXISTS `somda_news_read` (
@@ -781,7 +828,7 @@ CREATE TABLE IF NOT EXISTS `somda_news_read` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `somda_poll`
+-- Tabelstructuur voor tabel `somda_poll`
 --
 
 CREATE TABLE IF NOT EXISTS `somda_poll` (
@@ -799,7 +846,7 @@ CREATE TABLE IF NOT EXISTS `somda_poll` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `somda_poll_votes`
+-- Tabelstructuur voor tabel `somda_poll_votes`
 --
 
 CREATE TABLE IF NOT EXISTS `somda_poll_votes` (
@@ -814,7 +861,7 @@ CREATE TABLE IF NOT EXISTS `somda_poll_votes` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `somda_positie`
+-- Tabelstructuur voor tabel `somda_positie`
 --
 
 CREATE TABLE IF NOT EXISTS `somda_positie` (
@@ -826,7 +873,7 @@ CREATE TABLE IF NOT EXISTS `somda_positie` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `somda_prefs`
+-- Tabelstructuur voor tabel `somda_prefs`
 --
 
 CREATE TABLE IF NOT EXISTS `somda_prefs` (
@@ -843,7 +890,7 @@ CREATE TABLE IF NOT EXISTS `somda_prefs` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `somda_rechten`
+-- Tabelstructuur voor tabel `somda_rechten`
 --
 
 CREATE TABLE IF NOT EXISTS `somda_rechten` (
@@ -855,7 +902,7 @@ CREATE TABLE IF NOT EXISTS `somda_rechten` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `somda_rijdagen`
+-- Tabelstructuur voor tabel `somda_rijdagen`
 --
 
 CREATE TABLE IF NOT EXISTS `somda_rijdagen` (
@@ -873,7 +920,7 @@ CREATE TABLE IF NOT EXISTS `somda_rijdagen` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `somda_session`
+-- Tabelstructuur voor tabel `somda_session`
 --
 
 CREATE TABLE IF NOT EXISTS `somda_session` (
@@ -887,7 +934,7 @@ CREATE TABLE IF NOT EXISTS `somda_session` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `somda_sht_shout`
+-- Tabelstructuur voor tabel `somda_sht_shout`
 --
 
 CREATE TABLE IF NOT EXISTS `somda_sht_shout` (
@@ -903,7 +950,7 @@ CREATE TABLE IF NOT EXISTS `somda_sht_shout` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `somda_snb_spoor_nieuws_bron`
+-- Tabelstructuur voor tabel `somda_snb_spoor_nieuws_bron`
 --
 
 CREATE TABLE IF NOT EXISTS `somda_snb_spoor_nieuws_bron` (
@@ -918,7 +965,7 @@ CREATE TABLE IF NOT EXISTS `somda_snb_spoor_nieuws_bron` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `somda_snf_spoor_nieuws_bron_feed`
+-- Tabelstructuur voor tabel `somda_snf_spoor_nieuws_bron_feed`
 --
 
 CREATE TABLE IF NOT EXISTS `somda_snf_spoor_nieuws_bron_feed` (
@@ -933,7 +980,7 @@ CREATE TABLE IF NOT EXISTS `somda_snf_spoor_nieuws_bron_feed` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `somda_sns_spoor_nieuws`
+-- Tabelstructuur voor tabel `somda_sns_spoor_nieuws`
 --
 
 CREATE TABLE IF NOT EXISTS `somda_sns_spoor_nieuws` (
@@ -953,7 +1000,7 @@ CREATE TABLE IF NOT EXISTS `somda_sns_spoor_nieuws` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `somda_spots`
+-- Tabelstructuur voor tabel `somda_spots`
 --
 
 CREATE TABLE IF NOT EXISTS `somda_spots` (
@@ -979,7 +1026,7 @@ CREATE TABLE IF NOT EXISTS `somda_spots` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `somda_spots_extra`
+-- Tabelstructuur voor tabel `somda_spots_extra`
 --
 
 CREATE TABLE IF NOT EXISTS `somda_spots_extra` (
@@ -992,7 +1039,7 @@ CREATE TABLE IF NOT EXISTS `somda_spots_extra` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `somda_spot_provincie`
+-- Tabelstructuur voor tabel `somda_spot_provincie`
 --
 
 CREATE TABLE IF NOT EXISTS `somda_spot_provincie` (
@@ -1004,7 +1051,7 @@ CREATE TABLE IF NOT EXISTS `somda_spot_provincie` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `somda_spot_punt`
+-- Tabelstructuur voor tabel `somda_spot_punt`
 --
 
 CREATE TABLE IF NOT EXISTS `somda_spot_punt` (
@@ -1032,7 +1079,7 @@ CREATE TABLE IF NOT EXISTS `somda_spot_punt` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `somda_spot_punt_text`
+-- Tabelstructuur voor tabel `somda_spot_punt_text`
 --
 
 CREATE TABLE IF NOT EXISTS `somda_spot_punt_text` (
@@ -1046,7 +1093,7 @@ CREATE TABLE IF NOT EXISTS `somda_spot_punt_text` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `somda_stats`
+-- Tabelstructuur voor tabel `somda_stats`
 --
 
 CREATE TABLE IF NOT EXISTS `somda_stats` (
@@ -1065,7 +1112,7 @@ CREATE TABLE IF NOT EXISTS `somda_stats` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `somda_stats_blokken`
+-- Tabelstructuur voor tabel `somda_stats_blokken`
 --
 
 CREATE TABLE IF NOT EXISTS `somda_stats_blokken` (
@@ -1079,7 +1126,7 @@ CREATE TABLE IF NOT EXISTS `somda_stats_blokken` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `somda_tdr`
+-- Tabelstructuur voor tabel `somda_tdr`
 --
 
 CREATE TABLE IF NOT EXISTS `somda_tdr` (
@@ -1103,7 +1150,7 @@ CREATE TABLE IF NOT EXISTS `somda_tdr` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `somda_tdr_drgl`
+-- Tabelstructuur voor tabel `somda_tdr_drgl`
 --
 
 CREATE TABLE IF NOT EXISTS `somda_tdr_drgl` (
@@ -1117,7 +1164,7 @@ CREATE TABLE IF NOT EXISTS `somda_tdr_drgl` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `somda_tdr_in`
+-- Tabelstructuur voor tabel `somda_tdr_in`
 --
 
 CREATE TABLE IF NOT EXISTS `somda_tdr_in` (
@@ -1141,7 +1188,7 @@ CREATE TABLE IF NOT EXISTS `somda_tdr_in` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `somda_tdr_in_s_e`
+-- Tabelstructuur voor tabel `somda_tdr_in_s_e`
 --
 
 CREATE TABLE IF NOT EXISTS `somda_tdr_in_s_e` (
@@ -1156,7 +1203,7 @@ CREATE TABLE IF NOT EXISTS `somda_tdr_in_s_e` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `somda_tdr_route`
+-- Tabelstructuur voor tabel `somda_tdr_route`
 --
 
 CREATE TABLE IF NOT EXISTS `somda_tdr_route` (
@@ -1174,7 +1221,7 @@ CREATE TABLE IF NOT EXISTS `somda_tdr_route` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `somda_tdr_s_e`
+-- Tabelstructuur voor tabel `somda_tdr_s_e`
 --
 
 CREATE TABLE IF NOT EXISTS `somda_tdr_s_e` (
@@ -1197,7 +1244,7 @@ CREATE TABLE IF NOT EXISTS `somda_tdr_s_e` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `somda_tdr_treinnummerlijst`
+-- Tabelstructuur voor tabel `somda_tdr_treinnummerlijst`
 --
 
 CREATE TABLE IF NOT EXISTS `somda_tdr_treinnummerlijst` (
@@ -1209,17 +1256,17 @@ CREATE TABLE IF NOT EXISTS `somda_tdr_treinnummerlijst` (
   `traject` varchar(75) DEFAULT NULL,
   `tdr_nr` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `idx_48442_nr_eind` (`nr_eind`),
-  KEY `idx_48442_nr_start` (`nr_start`),
   KEY `IDX_D7A60660AE60685A` (`tdr_nr`),
   KEY `IDX_D7A6066022A00C2` (`vervoerder_id`),
-  KEY `IDX_D7A60660FBDE844F` (`karakteristiek_id`)
+  KEY `IDX_D7A60660FBDE844F` (`karakteristiek_id`),
+  KEY `idx_48381_nr_start` (`nr_start`),
+  KEY `idx_48381_nr_eind` (`nr_eind`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `somda_tdr_trein_mat`
+-- Tabelstructuur voor tabel `somda_tdr_trein_mat`
 --
 
 CREATE TABLE IF NOT EXISTS `somda_tdr_trein_mat` (
@@ -1239,7 +1286,7 @@ CREATE TABLE IF NOT EXISTS `somda_tdr_trein_mat` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `somda_tdr_trein_treinnummerlijst`
+-- Tabelstructuur voor tabel `somda_tdr_trein_treinnummerlijst`
 --
 
 CREATE TABLE IF NOT EXISTS `somda_tdr_trein_treinnummerlijst` (
@@ -1253,7 +1300,7 @@ CREATE TABLE IF NOT EXISTS `somda_tdr_trein_treinnummerlijst` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `somda_trein`
+-- Tabelstructuur voor tabel `somda_trein`
 --
 
 CREATE TABLE IF NOT EXISTS `somda_trein` (
@@ -1266,7 +1313,7 @@ CREATE TABLE IF NOT EXISTS `somda_trein` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `somda_users`
+-- Tabelstructuur voor tabel `somda_users`
 --
 
 CREATE TABLE IF NOT EXISTS `somda_users` (
@@ -1279,10 +1326,12 @@ CREATE TABLE IF NOT EXISTS `somda_users` (
   `cookie_ok` varchar(3) NOT NULL,
   `actkey` varchar(13) DEFAULT NULL,
   `regdate` datetime NOT NULL,
-  `active` tinyint(1) NOT NULL,
   `roles` longtext NOT NULL COMMENT '(DC2Type:array)',
-  `ban_expire_timestamp` datetime DEFAULT NULL,
+  `active` tinyint(1) NOT NULL,
   `last_visit` datetime DEFAULT NULL,
+  `ban_expire_timestamp` datetime DEFAULT NULL,
+  `api_token` char(23) DEFAULT NULL,
+  `api_token_expiry_timestamp` datetime DEFAULT NULL,
   PRIMARY KEY (`uid`),
   KEY `idx_49053_uname` (`username`),
   KEY `idx_49076_active` (`active`)
@@ -1291,7 +1340,7 @@ CREATE TABLE IF NOT EXISTS `somda_users` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `somda_users_companies`
+-- Tabelstructuur voor tabel `somda_users_companies`
 --
 
 CREATE TABLE IF NOT EXISTS `somda_users_companies` (
@@ -1303,7 +1352,7 @@ CREATE TABLE IF NOT EXISTS `somda_users_companies` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `somda_users_groups`
+-- Tabelstructuur voor tabel `somda_users_groups`
 --
 
 CREATE TABLE IF NOT EXISTS `somda_users_groups` (
@@ -1317,12 +1366,12 @@ CREATE TABLE IF NOT EXISTS `somda_users_groups` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `somda_users_info`
+-- Tabelstructuur voor tabel `somda_users_info`
 --
 
 CREATE TABLE IF NOT EXISTS `somda_users_info` (
   `uid` bigint(20) NOT NULL,
-  `avatar` varchar(30) NOT NULL DEFAULT '_blank.png',
+  `avatar` varchar(30) NOT NULL DEFAULT '_blank.gif',
   `website` varchar(75) DEFAULT NULL,
   `city` varchar(50) DEFAULT NULL,
   `skype` varchar(60) DEFAULT NULL,
@@ -1342,7 +1391,7 @@ CREATE TABLE IF NOT EXISTS `somda_users_info` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `somda_users_prefs`
+-- Tabelstructuur voor tabel `somda_users_prefs`
 --
 
 CREATE TABLE IF NOT EXISTS `somda_users_prefs` (
@@ -1357,7 +1406,7 @@ CREATE TABLE IF NOT EXISTS `somda_users_prefs` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `somda_verk`
+-- Tabelstructuur voor tabel `somda_verk`
 --
 
 CREATE TABLE IF NOT EXISTS `somda_verk` (
@@ -1379,7 +1428,7 @@ CREATE TABLE IF NOT EXISTS `somda_verk` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `somda_verk_cats`
+-- Tabelstructuur voor tabel `somda_verk_cats`
 --
 
 CREATE TABLE IF NOT EXISTS `somda_verk_cats` (
@@ -1392,127 +1441,138 @@ CREATE TABLE IF NOT EXISTS `somda_verk_cats` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `somda_vervoerder`
+-- Tabelstructuur voor tabel `somda_vervoerder`
 --
 
 CREATE TABLE IF NOT EXISTS `somda_vervoerder` (
   `vervoerder_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `omschrijving` varchar(35) NOT NULL,
   `prorail_desc` varchar(35) DEFAULT NULL,
+  `iff_code` int(11) DEFAULT NULL,
   PRIMARY KEY (`vervoerder_id`),
   UNIQUE KEY `idx_49122_omschrijving` (`omschrijving`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Constraints for dumped tables
+-- Beperkingen voor geëxporteerde tabellen
 --
 
 --
--- Constraints for table `somda_banner`
+-- Beperkingen voor tabel `ott_official_train_table`
+--
+ALTER TABLE `ott_official_train_table`
+  ADD CONSTRAINT `FK_ott_characteristic_id` FOREIGN KEY (`ott_characteristic_id`) REFERENCES `somda_karakteristiek` (`karakteristiek_id`),
+  ADD CONSTRAINT `FK_ott_location_id` FOREIGN KEY (`ott_location_id`) REFERENCES `somda_verk` (`afkid`),
+  ADD CONSTRAINT `FK_ott_ofo_id` FOREIGN KEY (`ott_ofo_id`) REFERENCES `ofo_official_footnote` (`ofo_id`),
+  ADD CONSTRAINT `FK_ott_route_id` FOREIGN KEY (`ott_route_id`) REFERENCES `somda_trein` (`treinid`),
+  ADD CONSTRAINT `FK_ott_transporter_id` FOREIGN KEY (`ott_transporter_id`) REFERENCES `somda_vervoerder` (`vervoerder_id`);
+
+--
+-- Beperkingen voor tabel `somda_banner`
 --
 ALTER TABLE `somda_banner`
   ADD CONSTRAINT `FK_D93888C264FBF307` FOREIGN KEY (`customerid`) REFERENCES `somda_banner_customer` (`id`);
 
 --
--- Constraints for table `somda_banner_customer_user`
+-- Beperkingen voor tabel `somda_banner_customer_user`
 --
 ALTER TABLE `somda_banner_customer_user`
   ADD CONSTRAINT `FK_C9A88E10539B0606` FOREIGN KEY (`uid`) REFERENCES `somda_users` (`uid`),
   ADD CONSTRAINT `FK_C9A88E10BF396750` FOREIGN KEY (`id`) REFERENCES `somda_banner_customer` (`id`);
 
 --
--- Constraints for table `somda_banner_hits`
+-- Beperkingen voor tabel `somda_banner_hits`
 --
 ALTER TABLE `somda_banner_hits`
   ADD CONSTRAINT `FK_8610F3216BBC5658` FOREIGN KEY (`bannerid`) REFERENCES `somda_banner` (`bannerid`);
 
 --
--- Constraints for table `somda_banner_views`
+-- Beperkingen voor tabel `somda_banner_views`
 --
 ALTER TABLE `somda_banner_views`
   ADD CONSTRAINT `FK_F1B9EA066BBC5658` FOREIGN KEY (`bannerid`) REFERENCES `somda_banner` (`bannerid`);
 
 --
--- Constraints for table `somda_blokken`
+-- Beperkingen voor tabel `somda_blokken`
 --
 ALTER TABLE `somda_blokken`
   ADD CONSTRAINT `FK_B4865B064F2A0381` FOREIGN KEY (`parent_block`) REFERENCES `somda_blokken` (`blokid`);
 
 --
--- Constraints for table `somda_ddar`
+-- Beperkingen voor tabel `somda_ddar`
 --
 ALTER TABLE `somda_ddar`
   ADD CONSTRAINT `FK_9A508BF890261A4` FOREIGN KEY (`matid`) REFERENCES `somda_mat` (`matid`),
   ADD CONSTRAINT `FK_9A508BFC65F5051` FOREIGN KEY (`afkid`) REFERENCES `somda_verk` (`afkid`);
 
 --
--- Constraints for table `somda_don_donatie`
+-- Beperkingen voor tabel `somda_don_donatie`
 --
 ALTER TABLE `somda_don_donatie`
   ADD CONSTRAINT `FK_DE3B771128103CB` FOREIGN KEY (`don_uid`) REFERENCES `somda_users` (`uid`);
 
 --
--- Constraints for table `somda_drgl_read`
+-- Beperkingen voor tabel `somda_drgl_read`
 --
 ALTER TABLE `somda_drgl_read`
   ADD CONSTRAINT `FK_7CF8CCE9539B0606` FOREIGN KEY (`uid`) REFERENCES `somda_users` (`uid`),
   ADD CONSTRAINT `FK_7CF8CCE9B869D711` FOREIGN KEY (`drglid`) REFERENCES `somda_drgl` (`drglid`);
 
 --
--- Constraints for table `somda_forum_alerts`
+-- Beperkingen voor tabel `somda_forum_alerts`
 --
 ALTER TABLE `somda_forum_alerts`
   ADD CONSTRAINT `FK_A2F3B42C65525B5F` FOREIGN KEY (`senderid`) REFERENCES `somda_users` (`uid`),
   ADD CONSTRAINT `FK_A2F3B42C7510F6AF` FOREIGN KEY (`postid`) REFERENCES `somda_forum_posts` (`postid`);
 
 --
--- Constraints for table `somda_forum_alerts_notes`
+-- Beperkingen voor tabel `somda_forum_alerts_notes`
 --
 ALTER TABLE `somda_forum_alerts_notes`
   ADD CONSTRAINT `FK_502511CE3412DD5F` FOREIGN KEY (`authorid`) REFERENCES `somda_users` (`uid`),
   ADD CONSTRAINT `FK_502511CEF2677207` FOREIGN KEY (`alertid`) REFERENCES `somda_forum_alerts` (`id`);
 
 --
--- Constraints for table `somda_forum_discussion`
+-- Beperkingen voor tabel `somda_forum_discussion`
 --
 ALTER TABLE `somda_forum_discussion`
   ADD CONSTRAINT `FK_64C2DF7E3412DD5F` FOREIGN KEY (`authorid`) REFERENCES `somda_users` (`uid`),
   ADD CONSTRAINT `FK_64C2DF7EEDB4D5F3` FOREIGN KEY (`forumid`) REFERENCES `somda_forum_forums` (`forumid`);
 
 --
--- Constraints for table `somda_forum_discussion_wiki`
+-- Beperkingen voor tabel `somda_forum_discussion_wiki`
 --
 ALTER TABLE `somda_forum_discussion_wiki`
   ADD CONSTRAINT `FK_D487B7F1FCC0F19E` FOREIGN KEY (`discussionid`) REFERENCES `somda_forum_discussion` (`discussionid`);
 
 --
--- Constraints for table `somda_forum_favorites`
+-- Beperkingen voor tabel `somda_forum_favorites`
 --
 ALTER TABLE `somda_forum_favorites`
   ADD CONSTRAINT `FK_4E8B7C93539B0606` FOREIGN KEY (`uid`) REFERENCES `somda_users` (`uid`),
   ADD CONSTRAINT `FK_4E8B7C93FCC0F19E` FOREIGN KEY (`discussionid`) REFERENCES `somda_forum_discussion` (`discussionid`);
 
 --
--- Constraints for table `somda_forum_forums`
+-- Beperkingen voor tabel `somda_forum_forums`
 --
 ALTER TABLE `somda_forum_forums`
   ADD CONSTRAINT `FK_ABD72EFF3632DFC5` FOREIGN KEY (`catid`) REFERENCES `somda_forum_cats` (`catid`);
 
 --
--- Constraints for table `somda_forum_log`
+-- Beperkingen voor tabel `somda_forum_log`
 --
 ALTER TABLE `somda_forum_log`
   ADD CONSTRAINT `FK_256DFB117510F6AF` FOREIGN KEY (`postid`) REFERENCES `somda_forum_posts` (`postid`);
 
 --
--- Constraints for table `somda_forum_mods`
+-- Beperkingen voor tabel `somda_forum_mods`
 --
 ALTER TABLE `somda_forum_mods`
   ADD CONSTRAINT `FK_E20AB6A4539B0606` FOREIGN KEY (`uid`) REFERENCES `somda_users` (`uid`),
   ADD CONSTRAINT `FK_E20AB6A4EDB4D5F3` FOREIGN KEY (`forumid`) REFERENCES `somda_forum_forums` (`forumid`);
 
 --
--- Constraints for table `somda_forum_posts`
+-- Beperkingen voor tabel `somda_forum_posts`
 --
 ALTER TABLE `somda_forum_posts`
   ADD CONSTRAINT `FK_40FD24D143C6493` FOREIGN KEY (`wiki_uid`) REFERENCES `somda_users` (`uid`),
@@ -1521,112 +1581,155 @@ ALTER TABLE `somda_forum_posts`
   ADD CONSTRAINT `FK_40FD24DFCC0F19E` FOREIGN KEY (`discussionid`) REFERENCES `somda_forum_discussion` (`discussionid`);
 
 --
--- Constraints for table `somda_forum_posts_text`
+-- Beperkingen voor tabel `somda_forum_posts_text`
 --
 ALTER TABLE `somda_forum_posts_text`
   ADD CONSTRAINT `FK_25A0B80F7510F6AF` FOREIGN KEY (`postid`) REFERENCES `somda_forum_posts` (`postid`);
 
 --
--- Constraints for table `somda_forum_read_0`
+-- Beperkingen voor tabel `somda_forum_read_0`
 --
 ALTER TABLE `somda_forum_read_0`
+  ADD CONSTRAINT `FK_24CD03BE7510F6AF` FOREIGN KEY (`postid`) REFERENCES `somda_forum_posts` (`postid`),
   ADD CONSTRAINT `FK_forum_read_post_0` FOREIGN KEY (`postid`) REFERENCES `somda_forum_posts` (`postid`),
   ADD CONSTRAINT `FK_forum_read_user_0` FOREIGN KEY (`uid`) REFERENCES `somda_users` (`uid`);
 
 --
--- Constraints for table `somda_forum_read_1`
+-- Beperkingen voor tabel `somda_forum_read_1`
 --
 ALTER TABLE `somda_forum_read_1`
   ADD CONSTRAINT `FK_forum_read_post_1` FOREIGN KEY (`postid`) REFERENCES `somda_forum_posts` (`postid`),
   ADD CONSTRAINT `FK_forum_read_user_1` FOREIGN KEY (`uid`) REFERENCES `somda_users` (`uid`);
 
 --
--- Constraints for table `somda_forum_read_2`
+-- Beperkingen voor tabel `somda_forum_read_2`
 --
 ALTER TABLE `somda_forum_read_2`
   ADD CONSTRAINT `FK_forum_read_post_2` FOREIGN KEY (`postid`) REFERENCES `somda_forum_posts` (`postid`),
   ADD CONSTRAINT `FK_forum_read_user_2` FOREIGN KEY (`uid`) REFERENCES `somda_users` (`uid`);
 
 --
--- Constraints for table `somda_forum_read_3`
+-- Beperkingen voor tabel `somda_forum_read_3`
 --
 ALTER TABLE `somda_forum_read_3`
   ADD CONSTRAINT `FK_forum_read_post_3` FOREIGN KEY (`postid`) REFERENCES `somda_forum_posts` (`postid`),
   ADD CONSTRAINT `FK_forum_read_user_3` FOREIGN KEY (`uid`) REFERENCES `somda_users` (`uid`);
 
 --
--- Constraints for table `somda_forum_zoeken_lijst`
+-- Beperkingen voor tabel `somda_forum_read_4`
+--
+ALTER TABLE `somda_forum_read_4`
+  ADD CONSTRAINT `FK_forum_read_post_4` FOREIGN KEY (`postid`) REFERENCES `somda_forum_posts` (`postid`),
+  ADD CONSTRAINT `FK_forum_read_user_4` FOREIGN KEY (`uid`) REFERENCES `somda_users` (`uid`);
+
+--
+-- Beperkingen voor tabel `somda_forum_read_5`
+--
+ALTER TABLE `somda_forum_read_5`
+  ADD CONSTRAINT `FK_forum_read_post_5` FOREIGN KEY (`postid`) REFERENCES `somda_forum_posts` (`postid`),
+  ADD CONSTRAINT `FK_forum_read_user_5` FOREIGN KEY (`uid`) REFERENCES `somda_users` (`uid`);
+
+--
+-- Beperkingen voor tabel `somda_forum_read_6`
+--
+ALTER TABLE `somda_forum_read_6`
+  ADD CONSTRAINT `FK_forum_read_post_6` FOREIGN KEY (`postid`) REFERENCES `somda_forum_posts` (`postid`),
+  ADD CONSTRAINT `FK_forum_read_user_6` FOREIGN KEY (`uid`) REFERENCES `somda_users` (`uid`);
+
+--
+-- Beperkingen voor tabel `somda_forum_read_7`
+--
+ALTER TABLE `somda_forum_read_7`
+  ADD CONSTRAINT `FK_forum_read_post_7` FOREIGN KEY (`postid`) REFERENCES `somda_forum_posts` (`postid`),
+  ADD CONSTRAINT `FK_forum_read_user_7` FOREIGN KEY (`uid`) REFERENCES `somda_users` (`uid`);
+
+--
+-- Beperkingen voor tabel `somda_forum_read_8`
+--
+ALTER TABLE `somda_forum_read_8`
+  ADD CONSTRAINT `FK_forum_read_post_8` FOREIGN KEY (`postid`) REFERENCES `somda_forum_posts` (`postid`),
+  ADD CONSTRAINT `FK_forum_read_user_8` FOREIGN KEY (`uid`) REFERENCES `somda_users` (`uid`);
+
+--
+-- Beperkingen voor tabel `somda_forum_read_9`
+--
+ALTER TABLE `somda_forum_read_9`
+  ADD CONSTRAINT `FK_forum_read_post_9` FOREIGN KEY (`postid`) REFERENCES `somda_forum_posts` (`postid`),
+  ADD CONSTRAINT `FK_forum_read_user_9` FOREIGN KEY (`uid`) REFERENCES `somda_users` (`uid`);
+
+--
+-- Beperkingen voor tabel `somda_forum_zoeken_lijst`
 --
 ALTER TABLE `somda_forum_zoeken_lijst`
   ADD CONSTRAINT `FK_C9D9A41E7510F6AF` FOREIGN KEY (`postid`) REFERENCES `somda_forum_posts` (`postid`),
   ADD CONSTRAINT `FK_C9D9A41EE9BD09BA` FOREIGN KEY (`woord_id`) REFERENCES `somda_forum_zoeken_woorden` (`woord_id`);
 
 --
--- Constraints for table `somda_help_text`
+-- Beperkingen voor tabel `somda_help_text`
 --
 ALTER TABLE `somda_help_text`
   ADD CONSTRAINT `FK_397D7775711B2385` FOREIGN KEY (`blokid`) REFERENCES `somda_blokken` (`blokid`);
 
 --
--- Constraints for table `somda_logging`
+-- Beperkingen voor tabel `somda_logging`
 --
 ALTER TABLE `somda_logging`
   ADD CONSTRAINT `FK_8127138D539B0606` FOREIGN KEY (`uid`) REFERENCES `somda_users` (`uid`);
 
 --
--- Constraints for table `somda_mat`
+-- Beperkingen voor tabel `somda_mat`
 --
 ALTER TABLE `somda_mat`
   ADD CONSTRAINT `FK_355CF7922A00C2` FOREIGN KEY (`vervoerder_id`) REFERENCES `somda_vervoerder` (`vervoerder_id`),
   ADD CONSTRAINT `FK_355CF79F734A20F` FOREIGN KEY (`pattern_id`) REFERENCES `somda_mat_patterns` (`id`);
 
 --
--- Constraints for table `somda_mat_changes`
+-- Beperkingen voor tabel `somda_mat_changes`
 --
 ALTER TABLE `somda_mat_changes`
   ADD CONSTRAINT `FK_C6C1DF0D4CD774E2` FOREIGN KEY (`matsmsid`) REFERENCES `somda_mat_sms` (`matsmsid`),
   ADD CONSTRAINT `FK_C6C1DF0D539B0606` FOREIGN KEY (`uid`) REFERENCES `somda_users` (`uid`);
 
 --
--- Constraints for table `somda_mat_sms`
+-- Beperkingen voor tabel `somda_mat_sms`
 --
 ALTER TABLE `somda_mat_sms`
   ADD CONSTRAINT `FK_2FC3E54DE70B032` FOREIGN KEY (`typeid`) REFERENCES `somda_mat_types` (`typeid`);
 
 --
--- Constraints for table `somda_news_read`
+-- Beperkingen voor tabel `somda_news_read`
 --
 ALTER TABLE `somda_news_read`
   ADD CONSTRAINT `FK_AF652C5539B0606` FOREIGN KEY (`uid`) REFERENCES `somda_users` (`uid`),
   ADD CONSTRAINT `FK_AF652C58C510C37` FOREIGN KEY (`newsid`) REFERENCES `somda_news` (`newsid`);
 
 --
--- Constraints for table `somda_poll_votes`
+-- Beperkingen voor tabel `somda_poll_votes`
 --
 ALTER TABLE `somda_poll_votes`
   ADD CONSTRAINT `FK_75CFE387539B0606` FOREIGN KEY (`uid`) REFERENCES `somda_users` (`uid`),
   ADD CONSTRAINT `FK_75CFE3876F5F43AE` FOREIGN KEY (`pollid`) REFERENCES `somda_poll` (`pollid`);
 
 --
--- Constraints for table `somda_sht_shout`
+-- Beperkingen voor tabel `somda_sht_shout`
 --
 ALTER TABLE `somda_sht_shout`
   ADD CONSTRAINT `FK_88E10AFB97AD1E10` FOREIGN KEY (`sht_uid`) REFERENCES `somda_users` (`uid`);
 
 --
--- Constraints for table `somda_snf_spoor_nieuws_bron_feed`
+-- Beperkingen voor tabel `somda_snf_spoor_nieuws_bron_feed`
 --
 ALTER TABLE `somda_snf_spoor_nieuws_bron_feed`
   ADD CONSTRAINT `FK_8A257AA6AD7A950` FOREIGN KEY (`snf_snb_id`) REFERENCES `somda_snb_spoor_nieuws_bron` (`snb_id`);
 
 --
--- Constraints for table `somda_sns_spoor_nieuws`
+-- Beperkingen voor tabel `somda_sns_spoor_nieuws`
 --
 ALTER TABLE `somda_sns_spoor_nieuws`
   ADD CONSTRAINT `FRK_sns_snb_id` FOREIGN KEY (`sns_snb_id`) REFERENCES `somda_snb_spoor_nieuws_bron` (`snb_id`);
 
 --
--- Constraints for table `somda_spots`
+-- Beperkingen voor tabel `somda_spots`
 --
 ALTER TABLE `somda_spots`
   ADD CONSTRAINT `FK_11A6C5C8539B0606` FOREIGN KEY (`uid`) REFERENCES `somda_users` (`uid`),
@@ -1636,13 +1739,13 @@ ALTER TABLE `somda_spots`
   ADD CONSTRAINT `FK_11A6C5C8F4E25321` FOREIGN KEY (`posid`) REFERENCES `somda_positie` (`posid`);
 
 --
--- Constraints for table `somda_spots_extra`
+-- Beperkingen voor tabel `somda_spots_extra`
 --
 ALTER TABLE `somda_spots_extra`
   ADD CONSTRAINT `FK_6EAD9515BFB6C75` FOREIGN KEY (`spotid`) REFERENCES `somda_spots` (`spotid`);
 
 --
--- Constraints for table `somda_spot_punt`
+-- Beperkingen voor tabel `somda_spot_punt`
 --
 ALTER TABLE `somda_spot_punt`
   ADD CONSTRAINT `FK_6164DED2C0A1CCC` FOREIGN KEY (`afkid_traject_1`) REFERENCES `somda_verk` (`afkid`),
@@ -1652,19 +1755,19 @@ ALTER TABLE `somda_spot_punt`
   ADD CONSTRAINT `FK_6164DEDFA5300E5` FOREIGN KEY (`afkid_locatie`) REFERENCES `somda_verk` (`afkid`);
 
 --
--- Constraints for table `somda_spot_punt_text`
+-- Beperkingen voor tabel `somda_spot_punt_text`
 --
 ALTER TABLE `somda_spot_punt_text`
   ADD CONSTRAINT `FK_91652C16FD33F6CE` FOREIGN KEY (`puntid`) REFERENCES `somda_spot_punt` (`puntid`);
 
 --
--- Constraints for table `somda_stats_blokken`
+-- Beperkingen voor tabel `somda_stats_blokken`
 --
 ALTER TABLE `somda_stats_blokken`
   ADD CONSTRAINT `FK_7FAF7B1A711B2385` FOREIGN KEY (`blokid`) REFERENCES `somda_blokken` (`blokid`);
 
 --
--- Constraints for table `somda_tdr`
+-- Beperkingen voor tabel `somda_tdr`
 --
 ALTER TABLE `somda_tdr`
   ADD CONSTRAINT `FK_84B606F668F454BD` FOREIGN KEY (`treinid`) REFERENCES `somda_trein` (`treinid`),
@@ -1673,7 +1776,7 @@ ALTER TABLE `somda_tdr`
   ADD CONSTRAINT `FK_84B606F6D6E3DC6C` FOREIGN KEY (`locatieid`) REFERENCES `somda_verk` (`afkid`);
 
 --
--- Constraints for table `somda_tdr_route`
+-- Beperkingen voor tabel `somda_tdr_route`
 --
 ALTER TABLE `somda_tdr_route`
   ADD CONSTRAINT `FK_1A52615B9CBF59B5` FOREIGN KEY (`treinnummerlijst_id`) REFERENCES `somda_tdr_treinnummerlijst` (`id`),
@@ -1681,7 +1784,7 @@ ALTER TABLE `somda_tdr_route`
   ADD CONSTRAINT `FK_1A52615BD6E3DC6C` FOREIGN KEY (`locatieid`) REFERENCES `somda_verk` (`afkid`);
 
 --
--- Constraints for table `somda_tdr_s_e`
+-- Beperkingen voor tabel `somda_tdr_s_e`
 --
 ALTER TABLE `somda_tdr_s_e`
   ADD CONSTRAINT `FK_1BACB9635E53C5B` FOREIGN KEY (`v_locatieid`) REFERENCES `somda_verk` (`afkid`),
@@ -1690,7 +1793,7 @@ ALTER TABLE `somda_tdr_s_e`
   ADD CONSTRAINT `FK_1BACB963AE60685A` FOREIGN KEY (`tdr_nr`) REFERENCES `somda_tdr_drgl` (`tdr_nr`);
 
 --
--- Constraints for table `somda_tdr_treinnummerlijst`
+-- Beperkingen voor tabel `somda_tdr_treinnummerlijst`
 --
 ALTER TABLE `somda_tdr_treinnummerlijst`
   ADD CONSTRAINT `FK_D7A6066022A00C2` FOREIGN KEY (`vervoerder_id`) REFERENCES `somda_vervoerder` (`vervoerder_id`),
@@ -1698,7 +1801,7 @@ ALTER TABLE `somda_tdr_treinnummerlijst`
   ADD CONSTRAINT `FK_D7A60660FBDE844F` FOREIGN KEY (`karakteristiek_id`) REFERENCES `somda_karakteristiek` (`karakteristiek_id`);
 
 --
--- Constraints for table `somda_tdr_trein_mat`
+-- Beperkingen voor tabel `somda_tdr_trein_mat`
 --
 ALTER TABLE `somda_tdr_trein_mat`
   ADD CONSTRAINT `FK_C2BF79AA68F454BD` FOREIGN KEY (`treinid`) REFERENCES `somda_trein` (`treinid`),
@@ -1707,35 +1810,35 @@ ALTER TABLE `somda_tdr_trein_mat`
   ADD CONSTRAINT `FK_C2BF79AAF4E25321` FOREIGN KEY (`posid`) REFERENCES `somda_positie` (`posid`);
 
 --
--- Constraints for table `somda_tdr_trein_treinnummerlijst`
+-- Beperkingen voor tabel `somda_tdr_trein_treinnummerlijst`
 --
 ALTER TABLE `somda_tdr_trein_treinnummerlijst`
   ADD CONSTRAINT `FK_95ACCAE668F454BD` FOREIGN KEY (`treinid`) REFERENCES `somda_trein` (`treinid`),
   ADD CONSTRAINT `FK_95ACCAE69CBF59B5` FOREIGN KEY (`treinnummerlijst_id`) REFERENCES `somda_tdr_treinnummerlijst` (`id`);
 
 --
--- Constraints for table `somda_users_groups`
+-- Beperkingen voor tabel `somda_users_groups`
 --
 ALTER TABLE `somda_users_groups`
   ADD CONSTRAINT `FK_B2ACF076539B0606` FOREIGN KEY (`uid`) REFERENCES `somda_users` (`uid`),
   ADD CONSTRAINT `FK_B2ACF0767805AC12` FOREIGN KEY (`groupid`) REFERENCES `somda_groups` (`groupid`);
 
 --
--- Constraints for table `somda_users_info`
+-- Beperkingen voor tabel `somda_users_info`
 --
 ALTER TABLE `somda_users_info`
-  ADD CONSTRAINT `FK_46F59BD0539B0606` FOREIGN KEY (`uid`) REFERENCES `somda_users` (`uid`) ON DELETE CASCADE,
+  ADD CONSTRAINT `FK_46F59BD0539B0606` FOREIGN KEY (`uid`) REFERENCES `somda_users` (`uid`),
   ADD CONSTRAINT `FK_46F59BD0740E9210` FOREIGN KEY (`bedrijf_id`) REFERENCES `somda_users_companies` (`bedrijf_id`);
 
 --
--- Constraints for table `somda_users_prefs`
+-- Beperkingen voor tabel `somda_users_prefs`
 --
 ALTER TABLE `somda_users_prefs`
   ADD CONSTRAINT `FK_3920F080539B0606` FOREIGN KEY (`uid`) REFERENCES `somda_users` (`uid`),
   ADD CONSTRAINT `FK_3920F08087B0DAC1` FOREIGN KEY (`prefid`) REFERENCES `somda_prefs` (`prefid`);
 
 --
--- Constraints for table `somda_verk`
+-- Beperkingen voor tabel `somda_verk`
 --
 ALTER TABLE `somda_verk`
   ADD CONSTRAINT `FK_F7F314CE61A61C` FOREIGN KEY (`landid`) REFERENCES `somda_verk_cats` (`verk_catid`);

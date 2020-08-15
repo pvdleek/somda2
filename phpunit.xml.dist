@@ -1,0 +1,16 @@
+<phpunit bootstrap="tests/bootstrap.php" verbose="true">
+    <php>
+        <ini name="memory_limit" value="-1" />
+        <server name="DATABASE_URL" value="mysql://db_user:db_password@127.0.0.1:3306/db_name?serverVersion=5.7" />
+        <server name="KERNEL_CLASS" value="App\Kernel" />
+        <server name="SYMFONY_DEPRECATIONS_HELPER" value="weak" />
+    </php>
+
+    <testsuites>
+        <testsuite name="project.name">
+            <directory suffix=".php">./src/*Bundle</directory>
+            <directory suffix=".php">./src/AppBundle</directory>
+            <directory>./tests</directory>
+        </testsuite>
+    </testsuites>
+</phpunit>

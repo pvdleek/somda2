@@ -5,7 +5,7 @@ namespace App\Tests;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Prophet;
 
-class BaseTestCase extends TestCase
+abstract class BaseTestCase extends TestCase
 {
     /**
      * @var Prophet
