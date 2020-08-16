@@ -2,7 +2,7 @@
 
 {% block content %}
     <br />
-    <center>
+    <div class="center">
         {{ form_start(form, { 'attr': { 'id': 'user_form' } }) }}
             <table>
                 {{ form_row(form.email) }}
@@ -14,6 +14,6 @@
                 </tr>
             </table>
         {{ form_end(form) }}
-    </center>
+    </div>
     <br />
 {% endblock %}

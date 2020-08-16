@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Poll extends Entity
 {
     /**
-     * @var int
+     * @var int|null
      * @ORM\Column(name="pollid", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")

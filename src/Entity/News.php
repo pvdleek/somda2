@@ -5,6 +5,8 @@ namespace App\Entity;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as JMS;
+use Swagger\Annotations as SWG;
 
 /**
  * @ORM\Table(name="somda_news")
@@ -13,34 +15,44 @@ use Doctrine\ORM\Mapping as ORM;
 class News extends Entity
 {
     /**
-     * @var int
+     * @var int|null
      * @ORM\Column(name="newsid", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @JMS\Expose()
+     * @SWG\Property(description="Unique identifier", type="integer")
      */
     protected ?int $id = null;
 
     /**
      * @var DateTime
      * @ORM\Column(name="timestamp", type="datetime", nullable=false)
+     * @JMS\Expose()
+     * @SWG\Property(description="ISO-8601 timestamp of the news-item (Y-m-dTH:i:sP)", type="string")
      */
     public DateTime $timestamp;
 
     /**
      * @var string
      * @ORM\Column(name="title", type="string", length=50, nullable=false)
+     * @JMS\Expose()
+     * @SWG\Property(description="Title of the news-item", maxLength=50, type="string")
      */
     public string $title = '';
 
     /**
      * @var string
      * @ORM\Column(name="text", type="text", length=0, nullable=false)
+     * @JMS\Expose()
+     * @SWG\Property(description="Contents of the news-item", type="string")
      */
     public string $text = '';
 
     /**
      * @var bool
      * @ORM\Column(name="archief", type="boolean", nullable=false)
+     * @JMS\Expose()
+     * @SWG\Property(description="Whether the news-item is in the archive", type="boolean")
      */
     public bool $archived = false;
 
@@ -51,6 +63,7 @@ class News extends Entity
      *      joinColumns={@ORM\JoinColumn(name="newsid", referencedColumnName="newsid")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="uid", referencedColumnName="uid")}
      * )
+     * @JMS\Exclude()
      */
     private $userReads;
 

@@ -18,7 +18,7 @@ use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class ProfileController
 {
@@ -94,7 +94,7 @@ class ProfileController
     {
         if (is_null($id)) {
             if (!$this->userHelper->userIsLoggedIn()) {
-                throw new AccessDeniedHttpException();
+                throw new AccessDeniedException('The user is not logged in');
             }
             $user = $this->userHelper->getUser();
         } else {
@@ -135,7 +135,7 @@ class ProfileController
          */
         $user = $this->doctrine->getRepository(User::class)->find($id);
         if (is_null($user)) {
-            throw new AccessDeniedHttpException();
+            throw new AccessDeniedException('This user does not exist');
         }
 
         $form = $this->formFactory->create(
@@ -147,7 +147,7 @@ class ProfileController
         if ($form->isSubmitted() && $form->isValid()) {
             if ($form->get('senderOption')->getData() === 'moderator') {
                 if (!$this->userHelper->getUser()->hasRole(RoleGenerics::ROLE_ADMIN)) {
-                    throw new AccessDeniedHttpException();
+                    throw new AccessDeniedException('The user is not a moderator');
                 }
                 $from = ['mods@somda.nl', 'Somda moderator'];
                 $template = 'user-mail-moderator';

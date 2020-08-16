@@ -4,6 +4,9 @@ namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as JMS;
+use Nelmio\ApiDocBundle\Annotation\Model;
+use Swagger\Annotations as SWG;
 
 /**
  * @ORM\Table(
@@ -20,40 +23,49 @@ class Route extends Entity
     public const SPECIAL_CHECKING = 'SCHOUW';
 
     /**
-     * @var int
+     * @var int|null
      * @ORM\Column(name="treinid", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @JMS\Expose()
+     * @SWG\Property(description="Unique identifier", type="integer")
      */
     protected ?int $id = null;
 
     /**
      * @var string
      * @ORM\Column(name="treinnr", type="string", length=15, nullable=false)
+     * @JMS\Expose()
+     * @SWG\Property(description="The route-number", maxLength=15, type="string")
      */
     public string $number = '';
 
     /**
      * @var TrainTable[]
      * @ORM\OneToMany(targetEntity="App\Entity\TrainTable", mappedBy="route")
+     * @JMS\Exclude()
      */
     private $trainTables;
 
     /**
      * @var TrainTableFirstLast[]
      * @ORM\OneToMany(targetEntity="App\Entity\TrainTableFirstLast", mappedBy="route")
+     * @JMS\Expose()
+     * @SWG\Property(description="The days on which this route runs", ref=@Model(type=TrainTableFirstLast::class))
      */
     private $trainTableFirstLasts;
 
     /**
      * @var RouteList
      * @ORM\ManyToMany(targetEntity="App\Entity\RouteList", mappedBy="routes")
+     * @JMS\Exclude()
      */
     private $routeLists;
 
     /**
      * @var Spot[]
      * @ORM\OneToMany(targetEntity="App\Entity\Spot", mappedBy="route")
+     * @JMS\Exclude()
      */
     private $spots;
 

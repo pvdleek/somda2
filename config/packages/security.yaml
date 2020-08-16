@@ -2,17 +2,37 @@ security:
   encoders:
     App\Entity\User:
       algorithm: auto
+    Symfony\Component\Security\Core\User\User:
+      algorithm: auto
 
   providers:
     app_user_provider:
       entity:
         class: App\Entity\User
         property: username
+    api_user_provider:
+      memory:
+        users:
+          'nl.somda.somda.app': { password: '$argon2id$v=19$m=65536,t=4,p=1$79JQAdFwBv6M6e+C098Z+Q$l+L4HEmPpy3B8KRx9M2yEmrfORbgRU33IKiKaWDVOHI', roles: 'ROLE_API_USER' }
+          'aar.claij.nl': { password: '$argon2id$v=19$m=65536,t=4,p=1$ek13WTRSQjBJRTYzVjdNcg$t7+BabVXHW/AiRrs/2F2h8NzCEMYwGzGyXnECkjmneY', roles: 'ROLE_API_USER' }
+    all_users:
+      chain:
+        providers: ['api_user_provider', 'app_user_provider']
 
   firewalls:
     dev:
       pattern: ^/(_(profiler|wdt)|css|images|js|webfonts)/
       security: false
+    api:
+      anonymous: false
+      http_basic:
+        realm: Secured API
+      json_login:
+        check_path: api_authenticate
+      lazy: true
+      pattern: ^/api/
+      provider: all_users
+      stateless: true
     main:
       anonymous: true
       lazy: true

@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Block extends Entity
 {
     /**
-     * @var int
+     * @var int|null
      * @ORM\Column(name="blokid", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")

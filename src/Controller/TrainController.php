@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class TrainController
 {
@@ -60,7 +60,7 @@ class TrainController
         if (!is_null($typeId)) {
             $type = $this->formHelper->getDoctrine()->getRepository(TrainCompositionType::class)->find($typeId);
             if (is_null($type)) {
-                throw new AccessDeniedHttpException();
+                throw new AccessDeniedException('This trainCompositionType does not exist');
             }
 
             $trains = $this->formHelper->getDoctrine()->getRepository(TrainComposition::class)->findBy(
@@ -99,7 +99,7 @@ class TrainController
                 ->getRepository(TrainCompositionType::class)
                 ->find($typeId);
             if (is_null($trainCompositionType)) {
-                throw new AccessDeniedHttpException();
+                throw new AccessDeniedException('This trainCompositionType does not exist');
             }
 
             $trainComposition = new TrainComposition();
@@ -109,7 +109,7 @@ class TrainController
         } else {
             $trainComposition = $this->formHelper->getDoctrine()->getRepository(TrainComposition::class)->find($id);
             if (is_null($trainComposition)) {
-                throw new AccessDeniedHttpException();
+                throw new AccessDeniedException('This trainComposition does not exist');
             }
         }
 
@@ -202,12 +202,12 @@ class TrainController
          */
         $trainComposition = $this->formHelper->getDoctrine()->getRepository(TrainComposition::class)->find($trainId);
         if (is_null($trainComposition)) {
-            throw new AccessDeniedHttpException();
+            throw new AccessDeniedException('This trainComposition does not exist');
         }
 
         $user = $this->formHelper->getDoctrine()->getRepository(User::class)->find($userId);
         if (is_null($user)) {
-            throw new AccessDeniedHttpException();
+            throw new AccessDeniedException('This user does not exist');
         }
 
         $trainProposition = $this->formHelper
@@ -215,7 +215,7 @@ class TrainController
             ->getRepository(TrainCompositionProposition::class)
             ->findOneBy(['composition' => $trainComposition, 'user' => $user]);
         if (is_null($trainProposition)) {
-            throw new AccessDeniedHttpException();
+            throw new AccessDeniedException('This trainCompositionProposition does not exist');
         }
 
         if ($approved === 1) {

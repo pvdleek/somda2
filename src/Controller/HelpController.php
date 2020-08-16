@@ -21,6 +21,7 @@ class HelpController
 
     /**
      * @param ManagerRegistry $doctrine
+     * @param TemplateHelper $templateHelper
      */
     public function __construct(ManagerRegistry $doctrine, TemplateHelper $templateHelper)
     {

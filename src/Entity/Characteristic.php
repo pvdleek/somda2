@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as JMS;
+use Swagger\Annotations as SWG;
 
 /**
  * @ORM\Table(
@@ -14,22 +16,27 @@ use Doctrine\ORM\Mapping as ORM;
 class Characteristic extends Entity
 {
     /**
-     * @var int
+     * @var int|null
      * @ORM\Column(name="karakteristiek_id", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @JMS\Expose()
+     * @SWG\Property(description="Unique identifier", type="integer")
      */
     protected ?int $id = null;
 
     /**
      * @var string
      * @ORM\Column(name="naam", type="string", length=5, nullable=false)
+     * @JMS\Expose()
+     * @SWG\Property(description="Name of the characteristic", maxLength=5, type="string")
      */
     public string $name = '';
 
     /**
      * @var string
      * @ORM\Column(name="omschrijving", type="string", length=25, nullable=false)
+     * @SWG\Property(description="Description of the characteristic", maxLength=25, type="string")
      */
     public string $description;
 }

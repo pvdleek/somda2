@@ -6,6 +6,7 @@ use App\Entity\ForumDiscussion;
 use App\Entity\ForumForum;
 use App\Generics\RouteGenerics;
 use App\Helpers\ForumAuthorizationHelper;
+use App\Helpers\ForumOverviewHelper;
 use App\Helpers\RedirectHelper;
 use App\Helpers\TemplateHelper;
 use App\Helpers\UserHelper;
@@ -44,24 +45,32 @@ class ForumForumController
     private ForumAuthorizationHelper $forumAuthHelper;
 
     /**
+     * @var ForumOverviewHelper
+     */
+    private ForumOverviewHelper $forumOverviewHelper;
+
+    /**
      * @param ManagerRegistry $doctrine
      * @param UserHelper $userHelper
      * @param TemplateHelper $templateHelper
      * @param RedirectHelper $redirectHelper
      * @param ForumAuthorizationHelper $forumAuthHelper
+     * @param ForumOverviewHelper $forumOverviewHelper
      */
     public function __construct(
         ManagerRegistry $doctrine,
         UserHelper $userHelper,
         TemplateHelper $templateHelper,
         RedirectHelper $redirectHelper,
-        ForumAuthorizationHelper $forumAuthHelper
+        ForumAuthorizationHelper $forumAuthHelper,
+        ForumOverviewHelper $forumOverviewHelper
     ) {
         $this->doctrine = $doctrine;
         $this->userHelper = $userHelper;
         $this->templateHelper = $templateHelper;
         $this->redirectHelper = $redirectHelper;
         $this->forumAuthHelper = $forumAuthHelper;
+        $this->forumOverviewHelper = $forumOverviewHelper;
     }
 
     /**
@@ -69,7 +78,7 @@ class ForumForumController
      */
     public function indexAction(): Response
     {
-        $categories = $this->getCategoryArray();
+        $categories = $this->forumOverviewHelper->getCategoryArray();
 
         foreach ($categories as $id => $category) {
             $categories[$id]['forums'] = $this->sortByFieldFilter($category['forums'], 'order');
@@ -80,56 +89,6 @@ class ForumForumController
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Forum - Overzicht',
             'categories' => $categories
         ]);
-    }
-
-    /**
-     * @return array
-     */
-    private function getCategoryArray(): array
-    {
-        $categories = [];
-        $forums = $this->doctrine->getRepository(ForumForum::class)->findAll();
-        foreach ($forums as $forum) {
-            if (!isset($categories[$forum['categoryId']])) {
-                $categories[$forum['categoryId']] = [
-                    'id' => $forum['categoryId'],
-                    'name' => $forum['categoryName'],
-                    'order' => $forum['categoryOrder'],
-                    'forums' => [],
-                ];
-            }
-
-            $numberOfUnreadDiscussions = 0;
-            if ($this->userHelper->userIsLoggedIn()) {
-                $forumEntity = $this->doctrine->getRepository(ForumForum::class)->find($forum['id']);
-
-                if ((int)$forum['type'] === ForumForum::TYPE_MODERATORS_ONLY
-                    && !$this->forumAuthHelper->userIsModerator($forumEntity, $this->userHelper->getUser())
-                ) {
-                    // The user is not allowed to view this category
-                    continue;
-                }
-
-                if ((int)$forum['type'] !== ForumForum::TYPE_ARCHIVE) {
-                    $numberOfUnreadDiscussions = $this->doctrine
-                        ->getRepository(ForumForum::class)
-                        ->getNumberOfUnreadPostsInForum($forumEntity, $this->userHelper->getUser());
-                }
-            } elseif ((int)$forum['type'] === ForumForum::TYPE_MODERATORS_ONLY) {
-                // Guest is not allowed to view this category
-                continue;
-            }
-
-            $categories[$forum['categoryId']]['forums'][] = [
-                'id' => $forum['id'],
-                'type' => $forum['type'],
-                'name' => $forum['name'],
-                'order' => $forum['order'],
-                'numberOfDiscussions' => $forum['numberOfDiscussions'],
-                'numberOfUnreadDiscussions' => $numberOfUnreadDiscussions,
-            ];
-        }
-        return $categories;
     }
 
     /**

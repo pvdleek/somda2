@@ -8,9 +8,10 @@ use App\Model\RoutesDisplay;
 use App\Traits\SortTrait;
 use DateTime;
 use Doctrine\Common\Persistence\ManagerRegistry;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Twig\Extension\RuntimeExtensionInterface;
 
-class RoutesDisplayHelper
+class RoutesDisplayHelper implements RuntimeExtensionInterface
 {
     use SortTrait;
 
@@ -32,11 +33,11 @@ class RoutesDisplayHelper
      * @param int|null $routeListId
      * @return RoutesDisplay
      */
-    public function getRoutesDisplay(?int $trainTableYearId = null, int $routeListId = null): RoutesDisplay
+    public function getRoutesDisplay(int $trainTableYearId = null, int $routeListId = null): RoutesDisplay
     {
         $routesDisplay = new RoutesDisplay();
 
-        if (is_null($trainTableYearId)) {
+        if (is_null($trainTableYearId) || $trainTableYearId === 0) {
             $routesDisplay->trainTableYear = $this->doctrine
                 ->getRepository(TrainTableYear::class)
                 ->findTrainTableYearByDate(new DateTime());
@@ -45,7 +46,7 @@ class RoutesDisplayHelper
                 $trainTableYearId
             );
             if (is_null($routesDisplay->trainTableYear)) {
-                throw new AccessDeniedHttpException();
+                throw new AccessDeniedException('This trainTableYear does not exist');
             }
 
             $routesDisplay->routeLists = $this->doctrine
@@ -57,7 +58,7 @@ class RoutesDisplayHelper
                     $routeListId
                 );
                 if (is_null($routesDisplay->selectedRouteList)) {
-                    throw new AccessDeniedHttpException();
+                    throw new AccessDeniedException("This routeList does not exist");
                 }
 
                 $routes = $routesDisplay->selectedRouteList->getRoutes();

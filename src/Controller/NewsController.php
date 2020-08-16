@@ -10,7 +10,7 @@ use App\Helpers\TemplateHelper;
 use App\Helpers\UserHelper;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class NewsController
 {
@@ -53,7 +53,7 @@ class NewsController
              */
             $news = $this->doctrine->getRepository(News::class)->find($id);
             if (is_null($news)) {
-                throw new AccessDeniedHttpException();
+                throw new AccessDeniedException('This news-item does not exist');
             }
 
             if ($this->userHelper->userIsLoggedIn() && !in_array($this->userHelper->getUser(), $news->getUserReads())) {

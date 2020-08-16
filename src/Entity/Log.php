@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Log extends Entity
 {
     /**
-     * @var int
+     * @var int|null
      * @ORM\Column(name="logid", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -44,13 +44,13 @@ class Log extends Entity
     public array $routeParameters = [];
 
     /**
-     * @var float
+     * @var float|null
      * @ORM\Column(name="duration", type="float", precision=5, scale=2, nullable=true)
      */
     public ?float $duration;
 
     /**
-     * @var float
+     * @var float|null
      * @ORM\Column(name="memory_usage", type="float", precision=8, scale=3, nullable=true)
      */
     public ?float $memoryUsage;

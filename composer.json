@@ -13,7 +13,10 @@
         "debril/rss-atom-bundle": "^5.0",
         "dompdf/dompdf": "^0.8.5",
         "friendsofsymfony/ckeditor-bundle": "^2.2",
+        "friendsofsymfony/rest-bundle": "^3.0",
+        "jms/serializer-bundle": "^3.6",
         "mobiledetect/mobiledetectlib": "^2.8",
+        "nelmio/api-doc-bundle": "^3.6",
         "nelmio/security-bundle": "^2.9",
         "sensio/framework-extra-bundle": "^5.5",
         "symfony/asset": "5.1.*",
@@ -33,7 +36,6 @@
         "symfony/orm-pack": "*",
         "symfony/process": "5.1.*",
         "symfony/security-bundle": "5.1.*",
-        "symfony/serializer-pack": "*",
         "symfony/stopwatch": "5.1.*",
         "symfony/string": "5.1.*",
         "symfony/translation": "5.1.*",
@@ -43,13 +45,17 @@
         "symfony/yaml": "5.1.*"
     },
     "require-dev": {
+        "doctrine/data-fixtures": "^1.4",
         "doctrine/doctrine-fixtures-bundle": "^3.3",
         "phpmd/phpmd": "^2.8",
+        "phpspec/prophecy": "~1.0",
         "squizlabs/php_codesniffer": "*",
+        "symfony/browser-kit": "5.1.*",
+        "symfony/css-selector": "5.1.*",
         "symfony/debug-pack": "*",
         "symfony/maker-bundle": "^1.0",
-        "symfony/profiler-pack": "*",
-        "symfony/test-pack": "*"
+        "symfony/phpunit-bridge": "^5.1",
+        "symfony/profiler-pack": "*"
     },
     "config": {
         "platform": {
@@ -96,7 +102,7 @@
     },
     "extra": {
         "symfony": {
-            "allow-contrib": false,
+            "allow-contrib": true,
             "require": "5.1.*"
         }
     }

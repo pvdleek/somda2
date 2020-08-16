@@ -11,7 +11,6 @@ use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 use Symfony\Component\Form\FormFactoryInterface;
-use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class FormHelper
@@ -107,23 +106,25 @@ class FormHelper
     }
 
     /**
-     * @param FormInterface $form
      * @param ForumDiscussion $discussion
      * @param User $user
+     * @param bool $signatureOn
+     * @param string $text
+     * @return ForumPost
      * @throws Exception
      */
-    public function addPost(FormInterface $form, ForumDiscussion $discussion, User $user): void
+    public function addPost(ForumDiscussion $discussion, User $user, bool $signatureOn, string $text): ForumPost
     {
         $post = new ForumPost();
         $post->author = $user;
         $post->timestamp = new DateTime();
         $post->discussion = $discussion;
-        $post->signatureOn = $form->get('signatureOn')->getData();
+        $post->signatureOn = $signatureOn;
         $this->doctrine->getManager()->persist($post);
 
         $postText = new ForumPostText();
         $postText->post = $post;
-        $postText->text = $form->get('text')->getData();
+        $postText->text = $text;
         $this->doctrine->getManager()->persist($postText);
 
         $postLog = new ForumPostLog();
@@ -133,5 +134,7 @@ class FormHelper
         $post->addLog($postLog);
         $post->text = $postText;
         $discussion->addPost($post);
+
+        return $post;
     }
 }

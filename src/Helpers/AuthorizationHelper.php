@@ -41,6 +41,9 @@ class AuthorizationHelper
             return null;
         }
 
+        /**
+         * @var User $user
+         */
         return $user;
     }
 

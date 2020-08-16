@@ -56,7 +56,7 @@ class UserPreference extends Entity
     ];
 
     /**
-     * @var int
+     * @var int|null
      * @ORM\Column(name="prefid", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")

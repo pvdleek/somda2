@@ -6,12 +6,11 @@ use App\Entity\Banner;
 use App\Entity\BannerView;
 use App\Entity\ForumDiscussion;
 use App\Entity\ForumForum;
-use App\Entity\ForumPost;
 use App\Form\ForumDiscussion as ForumDiscussionForm;
-use App\Form\ForumPost as ForumPostForm;
 use App\Generics\RouteGenerics;
 use App\Helpers\FormHelper;
 use App\Helpers\ForumAuthorizationHelper;
+use App\Helpers\ForumDiscussionHelper;
 use App\Helpers\RedirectHelper;
 use App\Helpers\TemplateHelper;
 use App\Helpers\UserHelper;
@@ -21,12 +20,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class ForumDiscussionController
 {
-    public const MAX_POSTS_PER_PAGE = 100;
-
     /**
      * @var UserHelper
      */
@@ -43,6 +39,11 @@ class ForumDiscussionController
     private ForumAuthorizationHelper $forumAuthHelper;
 
     /**
+     * @var ForumDiscussionHelper
+     */
+    private ForumDiscussionHelper $discussionHelper;
+
+    /**
      * @var RedirectHelper
      */
     private RedirectHelper $redirectHelper;
@@ -56,6 +57,7 @@ class ForumDiscussionController
      * @param UserHelper $userHelper
      * @param FormHelper $formHelper
      * @param ForumAuthorizationHelper $forumAuthHelper
+     * @param ForumDiscussionHelper $discussionHelper
      * @param RedirectHelper $redirectHelper
      * @param TemplateHelper $templateHelper
      */
@@ -63,12 +65,14 @@ class ForumDiscussionController
         UserHelper $userHelper,
         FormHelper $formHelper,
         ForumAuthorizationHelper $forumAuthHelper,
+        ForumDiscussionHelper $discussionHelper,
         RedirectHelper $redirectHelper,
         TemplateHelper $templateHelper
     ) {
         $this->userHelper = $userHelper;
         $this->formHelper = $formHelper;
         $this->forumAuthHelper = $forumAuthHelper;
+        $this->discussionHelper = $discussionHelper;
         $this->redirectHelper = $redirectHelper;
         $this->templateHelper = $templateHelper;
     }
@@ -90,118 +94,23 @@ class ForumDiscussionController
         if (is_null($discussion)) {
             return $this->redirectHelper->redirectToRoute(RouteGenerics::ROUTE_FORUM);
         }
-        if (!$this->forumAuthHelper->mayView($discussion->forum, $this->userHelper->getUser())) {
-            throw new AccessDeniedHttpException();
-        }
 
-        $discussion->viewed = (int)$discussion->viewed + 1;
-        $this->formHelper->getDoctrine()->getManager()->flush();
-
-        $numberOfPosts = $this->formHelper->getDoctrine()->getRepository(ForumDiscussion::class)->getNumberOfPosts(
-            $discussion
-        );
-        $numberOfPages = floor(($numberOfPosts - 1) / self::MAX_POSTS_PER_PAGE) + 1;
-
-        $forumJump = $this->getForumJump($discussion, $pageNumber, $postId);
-        $pageNumber = $pageNumber ?? $this->getPageNumber($discussion, $postId);
-
-        /**
-         * @var ForumPost[] $posts
-         */
-        $posts = $this->formHelper->getDoctrine()->getRepository(ForumPost::class)->findBy(
-            [ForumPostForm::FIELD_DISCUSSION => $discussion],
-            [ForumPostForm::FIELD_TIMESTAMP => 'ASC'],
-            self::MAX_POSTS_PER_PAGE,
-            ($pageNumber - 1) * self::MAX_POSTS_PER_PAGE
-        );
-
-        $numberOfReadPosts = 0;
-        if ($this->userHelper->userIsLoggedIn()) {
-            $numberOfReadPosts = $this->getNumberOfReadPosts($discussion);
-            $this->formHelper->getDoctrine()->getRepository(ForumDiscussion::class)->markPostsAsRead(
-                $this->userHelper->getUser(),
-                $posts
-            );
-        }
+        $this->discussionHelper->setDiscussion($discussion);
+        $posts = $this->discussionHelper->getPosts($pageNumber, $postId);
 
         return $this->templateHelper->render('forum/discussion.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Forum - ' . $discussion->title,
             'userIsModerator' =>
                 $this->forumAuthHelper->userIsModerator($discussion->forum, $this->userHelper->getUser()),
             TemplateHelper::PARAMETER_DISCUSSION => $discussion,
-            'numberOfPages' => $numberOfPages,
-            'pageNumber' => $pageNumber,
+            'numberOfPages' => $this->discussionHelper->getNumberOfPages(),
+            'pageNumber' => $this->discussionHelper->getPageNumber(),
             'posts' => $posts,
             'mayPost' => $this->forumAuthHelper->mayPost($discussion->forum, $this->userHelper->getUser()),
-            'numberOfReadPosts' => $numberOfReadPosts,
+            'numberOfReadPosts' => $this->discussionHelper->getNumberOfReadPosts(),
             'forumBanner' => $this->getForumBanner($request),
-            'forumJump' => $forumJump,
+            'forumJump' => $this->discussionHelper->getForumJump(),
         ]);
-    }
-
-    /**
-     * This function should always be called before getPageNumber for that function modifies the pageNumber
-     * @param ForumDiscussion $discussion
-     * @param int|null $pageNumber
-     * @param int|null $postId
-     * @return string|null
-     */
-    private function getForumJump(ForumDiscussion $discussion, int $pageNumber = null, int $postId = null): ?string
-    {
-        if (!is_null($postId)) {
-            return 'p' . $postId;
-        }
-        if (is_null($pageNumber)
-            && is_null($postId)
-            && $discussion->forum->type !== ForumForum::TYPE_ARCHIVE
-            && $this->userHelper->userIsLoggedIn()
-        ) {
-            return 'new_post';
-        }
-        return null;
-    }
-
-    /**
-     * This function should always be called after getForumJump for this function modifies the pageNumber
-     * @param ForumDiscussion $discussion
-     * @param int|null $postId
-     * @return int
-     */
-    private function getPageNumber(ForumDiscussion $discussion, int $postId = null): int
-    {
-        if (!is_null($postId)) {
-            // A specific post was requested, so we go to this post
-            $postNumber = $this->formHelper
-                ->getDoctrine()
-                ->getRepository(ForumDiscussion::class)
-                ->getPostNumberInDiscussion($discussion, $postId);
-            return floor($postNumber / self::MAX_POSTS_PER_PAGE) + 1;
-        }
-
-        if ($discussion->forum->type !== ForumForum::TYPE_ARCHIVE && $this->userHelper->userIsLoggedIn()) {
-            // Neither a specific page or post were requested but the user is logged in,
-            // so we will go to the first unread post in the discussion
-            return floor($this->getNumberOfReadPosts($discussion) / self::MAX_POSTS_PER_PAGE) + 1;
-        }
-        return 1;
-    }
-
-    /**
-     * @param ForumDiscussion $discussion
-     * @return int
-     */
-    private function getNumberOfReadPosts(ForumDiscussion $discussion): int
-    {
-        if ($this->userHelper->userIsLoggedIn()) {
-            if ($discussion->forum->type === ForumForum::TYPE_ARCHIVE) {
-                return 9999999;
-            }
-            return $this->formHelper
-                ->getDoctrine()
-                ->getRepository(ForumDiscussion::class)
-                ->getNumberOfReadPosts($discussion, $this->userHelper->getUser());
-        }
-        return 0;
     }
 
     /**
@@ -257,7 +166,12 @@ class ForumDiscussionController
         $form = $this->formHelper->getFactory()->create(ForumDiscussionForm::class, $forumDiscussion);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->formHelper->addPost($form, $forumDiscussion, $this->userHelper->getUser());
+            $this->formHelper->addPost(
+                $forumDiscussion,
+                $this->userHelper->getUser(),
+                $form->get('signatureOn')->getData(),
+                $form->get('text')->getData()
+            );
             $this->formHelper->getDoctrine()->getManager()->persist($forumDiscussion);
             $this->formHelper->getDoctrine()->getManager()->flush();
 

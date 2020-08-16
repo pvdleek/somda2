@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 class RailNewsSourceFeed extends Entity
 {
     /**
-     * @var int
+     * @var int|null
      * @ORM\Column(name="snf_id", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")

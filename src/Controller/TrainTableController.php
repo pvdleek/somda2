@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Entity\SpecialRoute;
 use App\Entity\TrainTableYear;
-use App\Helpers\Controller\TrainTableHelper;
+use App\Helpers\TrainTableHelper;
 use App\Helpers\FlashHelper;
 use App\Helpers\RoutesDisplayHelper;
 use App\Helpers\TemplateHelper;

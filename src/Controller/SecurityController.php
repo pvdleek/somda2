@@ -22,7 +22,7 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class SecurityController
@@ -231,7 +231,7 @@ class SecurityController
          */
         $user = $this->formHelper->getDoctrine()->getRepository(User::class)->find($id);
         if (is_null($user)) {
-            throw new AccessDeniedHttpException();
+            throw new AccessDeniedException('This user does not exist');
         }
 
         $form = $this->formHelper->getFactory()->create(UserActivate::class, $user);
@@ -239,6 +239,9 @@ class SecurityController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             if ($form->get(UserActivate::FIELD_KEY)->getData() === $user->activationKey) {
+                /**
+                 * @var Group $userGroup
+                 */
                 $userGroup = $this->formHelper->getDoctrine()->getRepository(Group::class)->find(4);
                 $userGroup->addUser($user);
                 

@@ -15,7 +15,7 @@ trait DateTrait
         if (strlen($time) < 3) {
             $time .= '.00';
         }
-        if (strpos($time, '.') === false && strlen($time) == 4) {
+        if (strpos($time, '.') === false && strlen($time) === 4) {
             $time = substr($time, 0, 2) . '.' . substr($time, 2, 2);
         }
 

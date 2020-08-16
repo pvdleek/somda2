@@ -26,7 +26,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class ForumPostController
 {
@@ -99,9 +99,11 @@ class ForumPostController
          */
         $quotedPost = $this->formHelper->getDoctrine()->getRepository(ForumPost::class)->find($id);
         if (!$this->forumAuthHelper->mayPost($quotedPost->discussion->forum, $this->userHelper->getUser())
-            || $quotedPost->discussion->locked
+            || is_null($quotedPost) || $quotedPost->discussion->locked
         ) {
-            throw new AccessDeniedHttpException();
+            throw new AccessDeniedException(
+                'The quoted post does not exist, the discussion is locked or the user may not view the discussion'
+            );
         }
 
         $userIsModerator = $this->forumAuthHelper->userIsModerator(
@@ -123,7 +125,12 @@ class ForumPostController
         if ($form->isSubmitted() && $form->isValid()) {
             $user = $userIsModerator && $form->get('postAsModerator')->getData() ?
                 $this->userHelper->getModeratorUser() : $this->userHelper->getUser();
-            $this->formHelper->addPost($form, $quotedPost->discussion, $user);
+            $this->formHelper->addPost(
+                $quotedPost->discussion,
+                $user,
+                $form->get('signatureOn')->getData(),
+                $form->get('text')->getData()
+            );
             $this->handleFavoritesForAddedPost($quotedPost->discussion);
 
             return $this->formHelper->finishFormHandling('', RouteGenerics::ROUTE_FORUM_DISCUSSION, [
@@ -201,7 +208,9 @@ class ForumPostController
             || $post->discussion->locked
             || ($post->author !== $this->userHelper->getUser() && !$userIsModerator)
         ) {
-            throw new AccessDeniedHttpException();
+            throw new AccessDeniedException(
+                'The user may not post, the discussion is locked or the author is not the user'
+            );
         }
 
         $form = $this->formHelper

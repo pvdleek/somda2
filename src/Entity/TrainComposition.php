@@ -15,7 +15,7 @@ class TrainComposition extends TrainCompositionBase
     public const NUMBER_OF_CARS = 13;
 
     /**
-     * @var int
+     * @var int|null
      * @ORM\Column(name="matsmsid", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")

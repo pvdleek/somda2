@@ -2,12 +2,12 @@
 
 {% block content %}
     <div class="panel">
-        <div class="panel-title">Niet toegestaan</div>
+        <div class="panel-title">{{ 'general.error.generic.403' | trans }}</div>
         <div class="panel-content">
             <br />
             <img alt="403" height="350" src="{{ asset('images/error/403.png') }}" />
-            <h1>Oeps!</h1>
-            <p>Je hebt onvoldoende rechten om deze pagina te bekijken. Probeer het opnieuw via de <a href="{{ path('home') }}">homepagina van Somda</a>.</p>
+            <h1>{{ 'general.error.generic.header' | trans }}</h1>
+            <p>{{ 'general.error.generic.403info' | trans | format(path('home')) }}</p>
         </div>
     </div>
 {% endblock %}

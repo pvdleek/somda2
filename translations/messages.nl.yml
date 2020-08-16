@@ -30,6 +30,14 @@ general:
       4: 'Vrijdag'
       5: 'Zaterdag'
       6: 'Zondag'
+    daysShort:
+      0: 'Ma'
+      1: 'Di'
+      2: 'Wo'
+      3: 'Do'
+      4: 'Vr'
+      5: 'Za'
+      6: 'Zo'
     months:
       1: 'januari'
       2: 'februari'
@@ -77,6 +85,14 @@ general:
     a: 'Aankomst'
     v: 'Vertrek'
   error:
+    generic:
+      title: 'Er is iets fout gegaan'
+      header: 'Oeps!'
+      403: 'Niet toegestaan'
+      404: 'Pagina niet gevonden'
+      info: 'Somda kon jouw verzoek niet verwerken. Probeer het opnieuw via de <a href="%s">homepagina van Somda</a>.</p>'
+      403info: 'Je hebt onvoldoende rechten om deze pagina te bekijken. Probeer het opnieuw via de <a href="%s">homepagina van Somda</a>.'
+      404info: 'De pagina die je hebt opgevraagd kon niet worden gevonden. Probeer het opnieuw via de <a href="%s">homepagina van Somda</a>.'
     unknown: 'Onbekend'
     trainTableIndex: 'De door jou gekozen dienstregeling is niet gevonden'
     route: 'Het door jou ingegeven treinnummer is niet gevonden in onze dienstregelings-database'

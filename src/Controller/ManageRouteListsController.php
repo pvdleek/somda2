@@ -16,7 +16,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class ManageRouteListsController
 {
@@ -63,7 +63,7 @@ class ManageRouteListsController
         } else {
             $trainTableYear = $this->doctrine->getRepository(TrainTableYear::class)->find($id);
             if (is_null($trainTableYear)) {
-                throw new AccessDeniedHttpException();
+                throw new AccessDeniedException('This trainTableYear does not exist');
             }
 
             $routeLists = $this->doctrine->getRepository(RouteList::class)->findBy(
@@ -130,7 +130,7 @@ class ManageRouteListsController
              */
             $routeList = $this->doctrine->getRepository(RouteList::class)->find($id);
             if (is_null($routeList)) {
-                throw new AccessDeniedHttpException();
+                throw new AccessDeniedException('This routeList does not exist');
             }
 
             return $routeList;
@@ -138,7 +138,7 @@ class ManageRouteListsController
 
         $trainTableYear = $this->doctrine->getRepository(TrainTableYear::class)->find($yearId);
         if (is_null($trainTableYear)) {
-            throw new AccessDeniedHttpException();
+            throw new AccessDeniedException('This trainTableYear does not exist');
         }
 
         $routeList = new RouteList();

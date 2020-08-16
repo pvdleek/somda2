@@ -18,7 +18,7 @@ if (is_array($env = @include dirname(__DIR__).'/.env.local.php')
     );
 } else {
     // load all the .env files
-    (new Dotenv(false))->loadEnv(dirname(__DIR__).'/.env');
+    (new Dotenv())->loadEnv(dirname(__DIR__).'/.env');
 }
 
 $_SERVER += $_ENV;

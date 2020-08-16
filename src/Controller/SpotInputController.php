@@ -16,7 +16,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\RedirectResponse as RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response as Response;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class SpotInputController
 {
@@ -136,7 +136,7 @@ class SpotInputController
         foreach ($idArray as $id) {
             $spot = $this->doctrine->getRepository(Spot::class)->find($id);
             if (is_null($spot) || $spot->user !== $this->userHelper->getUser()) {
-                throw new AccessDeniedHttpException();
+                throw new AccessDeniedException('This spot does not exist or does not belong to the user');
             }
 
             $spots[] = $spot;

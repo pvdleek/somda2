@@ -31,17 +31,22 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
     /**
      * @var EntityManagerInterface
      */
-    private $entityManager;
+    private EntityManagerInterface $entityManager;
 
     /**
      * @var UrlGeneratorInterface
      */
-    private $urlGenerator;
+    private UrlGeneratorInterface $urlGenerator;
 
     /**
      * @var CsrfTokenManagerInterface
      */
-    private $csrfTokenManager;
+    private CsrfTokenManagerInterface $csrfTokenManager;
+
+    /**
+     * @var bool
+     */
+    private bool $isApiAuthentication = false;
 
     /**
      * @param EntityManagerInterface $entityManager
@@ -64,7 +69,10 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
      */
     public function supports(Request $request): bool
     {
-        return 'login' === $request->attributes->get('_route') && $request->isMethod('POST');
+        $this->isApiAuthentication = 'api_authenticate' === $request->attributes->get('_route');
+
+        return in_array($request->attributes->get('_route'), ['login', 'api_authenticate'])
+            && $request->isMethod('POST');
     }
 
     /**
@@ -90,9 +98,11 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
      */
     public function getUser($credentials, UserProviderInterface $userProvider): User
     {
-        $token = new CsrfToken('authenticate', $credentials['csrf_token']);
-        if (!$this->csrfTokenManager->isTokenValid($token)) {
-            throw new InvalidCsrfTokenException();
+        if (!$this->isApiAuthentication) {
+            $token = new CsrfToken('authenticate', $credentials['csrf_token']);
+            if (!$this->csrfTokenManager->isTokenValid($token)) {
+                throw new InvalidCsrfTokenException();
+            }
         }
 
         /**

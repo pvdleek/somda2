@@ -6,16 +6,19 @@ use App\Entity\User;
 use App\Entity\UserPreference;
 use App\Entity\UserPreferenceValue;
 use App\Exception\UnknownUserPreferenceKey;
-use DateTime;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Exception;
 use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Twig\Extension\RuntimeExtensionInterface;
 
 class UserHelper implements RuntimeExtensionInterface
 {
     private const ADMINISTRATOR_UID = 1;
     private const MODERATOR_UID = 2;
+
+    public const KEY_API_USER_ID = 'SomdaUserId';
+    public const KEY_API_TOKEN = 'SomdaApiToken';
 
     /**
      * @var ManagerRegistry
@@ -28,6 +31,11 @@ class UserHelper implements RuntimeExtensionInterface
     private Security $security;
 
     /**
+     * @var UserInterface|null
+     */
+    private ?UserInterface $user = null;
+
+    /**
      * @param ManagerRegistry $doctrine
      * @param Security $security
      */
@@ -38,32 +46,43 @@ class UserHelper implements RuntimeExtensionInterface
     }
 
     /**
-     * @return User
+     * @return User|null
      */
     public function getUser(): ?User
     {
-        $user = null;
-        if ($this->userIsLoggedIn()) {
-            /**
-             * @var User $user
-             */
-            $user = $this->security->getUser();
+        if (is_null($this->user)) {
+            $this->user = $this->security->getUser();
         }
-        return $user;
+
+        return $this->user instanceof User ? $this->user : null;
     }
 
     /**
-     * @return User
+     * @param int $userId
+     * @param string $apiToken
      */
-    public function getAdministratorUser(): User
+    public function setFromApiRequest(int $userId, string $apiToken): void
+    {
+        $user = $this->doctrine->getRepository(User::class)->findOneBy(
+            ['id' => $userId, 'active' => true, 'apiToken' => $apiToken]
+        );
+        if (!is_null($user)) {
+            $this->user = $user;
+        }
+    }
+
+    /**
+     * @return UserInterface
+     */
+    public function getAdministratorUser(): UserInterface
     {
         return $this->doctrine->getRepository(User::class)->find(self::ADMINISTRATOR_UID);
     }
 
     /**
-     * @return User
+     * @return UserInterface
      */
-    public function getModeratorUser(): User
+    public function getModeratorUser(): UserInterface
     {
         return $this->doctrine->getRepository(User::class)->find(self::MODERATOR_UID);
     }
@@ -73,7 +92,7 @@ class UserHelper implements RuntimeExtensionInterface
      */
     public function userIsLoggedIn(): bool
     {
-        return $this->security->isGranted('IS_AUTHENTICATED_REMEMBERED');
+        return $this->user instanceof User && $this->security->isGranted('IS_AUTHENTICATED_REMEMBERED');
     }
 
     /**
@@ -112,11 +131,11 @@ class UserHelper implements RuntimeExtensionInterface
     }
 
     /**
-     * @param User $user
+     * @param UserInterface $user
      * @return string
      * @throws Exception
      */
-    public function getSignatureForUser(User $user): string
+    public function getSignatureForUser(UserInterface $user): string
     {
         foreach ($user->getPreferences() as $preference) {
             if ($preference->preference->key === UserPreference::KEY_FORUM_SIGNATURE) {
