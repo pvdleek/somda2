@@ -6,12 +6,12 @@ use App\Entity\ForumDiscussion;
 use App\Entity\ForumPost;
 use App\Form\ForumDiscussionCombine;
 use App\Form\ForumDiscussionMove;
+use App\Generics\RoleGenerics;
 use App\Generics\RouteGenerics;
 use App\Helpers\FormHelper;
 use App\Helpers\ForumAuthorizationHelper;
 use App\Helpers\TemplateHelper;
 use App\Helpers\UserHelper;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -62,7 +62,6 @@ class ForumModerateController
     }
 
     /**
-     * @IsGranted("ROLE_USER")
      * @param Request $request
      * @param int $id
      * @param string $action
@@ -70,6 +69,8 @@ class ForumModerateController
      */
     public function indexAction(Request $request, int $id, string $action)
     {
+        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_USER);
+
         $discussion = $this->getDiscussion($id);
 
         if ($action === self::ACTION_CLOSE && !$discussion->locked) {
@@ -98,7 +99,6 @@ class ForumModerateController
     }
 
     /**
-     * @IsGranted("ROLE_USER")
      * @param Request $request
      * @param int $id1
      * @param int $id2
@@ -106,6 +106,8 @@ class ForumModerateController
      */
     public function combineAction(Request $request, int $id1, int $id2)
     {
+        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_USER);
+
         $discussion1 = $this->getDiscussion($id1);
         $discussion2 = $this->getDiscussion($id2);
 
@@ -191,13 +193,14 @@ class ForumModerateController
     }
 
     /**
-     * @IsGranted("ROLE_USER")
      * @param int $id
      * @param string $postIds
      * @return RedirectResponse
      */
     public function splitAction(int $id, string $postIds): RedirectResponse
     {
+        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_USER);
+
         $discussion = $this->getDiscussion($id);
 
         $postIds = array_filter(explode(',', $postIds));

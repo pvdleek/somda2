@@ -3,11 +3,12 @@
 namespace App\Controller\Api;
 
 use App\Entity\Spot;
+use App\Generics\RoleGenerics;
+use App\Helpers\UserHelper;
 use App\Model\SpotFilter;
 use Doctrine\Persistence\ManagerRegistry;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use Nelmio\ApiDocBundle\Annotation\Model;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Swagger\Annotations as SWG;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -19,15 +20,21 @@ class SpotController extends AbstractFOSRestController
     private ManagerRegistry $doctrine;
 
     /**
-     * @param ManagerRegistry $doctrine
+     * @var UserHelper
      */
-    public function __construct(ManagerRegistry $doctrine)
+    private UserHelper $userHelper;
+
+    /**
+     * @param ManagerRegistry $doctrine
+     * @param UserHelper $userHelper
+     */
+    public function __construct(ManagerRegistry $doctrine, UserHelper $userHelper)
     {
         $this->doctrine = $doctrine;
+        $this->userHelper = $userHelper;
     }
 
     /**
-     * @IsGranted("ROLE_API_USER")
      * @param int $maxMonths
      * @param string|null $searchParameters
      * @return Response
@@ -73,6 +80,8 @@ class SpotController extends AbstractFOSRestController
      */
     public function indexAction(int $maxMonths = 1, string $searchParameters = null): Response
     {
+        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_API_USER);
+
         $spotFilter = new SpotFilter();
         $spots = null;
 

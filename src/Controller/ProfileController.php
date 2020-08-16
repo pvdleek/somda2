@@ -13,7 +13,6 @@ use App\Helpers\TemplateHelper;
 use App\Helpers\UserHelper;
 use Exception;
 use Doctrine\Persistence\ManagerRegistry;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -123,13 +122,14 @@ class ProfileController
     }
 
     /**
-     * @IsGranted("ROLE_USER")
      * @param Request $request
      * @param int $id
      * @return Response|RedirectResponse
      */
     public function mailAction(Request $request, int $id)
     {
+        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_USER);
+
         /**
          * @var User $user
          */

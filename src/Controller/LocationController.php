@@ -2,11 +2,11 @@
 
 namespace App\Controller;
 
+use App\Generics\RoleGenerics;
 use App\Entity\Location;
 use App\Helpers\TemplateHelper;
 use App\Helpers\UserHelper;
 use Doctrine\Persistence\ManagerRegistry;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -45,13 +45,14 @@ class LocationController
     }
 
     /**
-     * @IsGranted("ROLE_ABBREVIATIONS")
      * @param string|null $searchMethod
      * @param string|null $search
      * @return Response
      */
     public function indexAction(string $searchMethod = null, string $search = null): Response
     {
+        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_ABBREVIATIONS);
+
         switch ($searchMethod) {
             case self::SEARCH_METHOD_CHARACTER:
                 if ($search === '*') {

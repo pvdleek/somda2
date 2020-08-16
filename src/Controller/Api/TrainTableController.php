@@ -7,9 +7,11 @@ use App\Entity\RouteList;
 use App\Entity\RouteOperationDays;
 use App\Entity\TrainTable;
 use App\Entity\TrainTableYear;
+use App\Generics\RoleGenerics;
 use App\Helpers\RouteOperationDaysHelper;
 use App\Helpers\RoutesDisplayHelper;
 use App\Helpers\TrainTableHelper;
+use App\Helpers\UserHelper;
 use App\Traits\DateTrait;
 use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
@@ -29,6 +31,11 @@ class TrainTableController extends AbstractFOSRestController
     private ManagerRegistry $doctrine;
 
     /**
+     * @var UserHelper
+     */
+    private UserHelper $userHelper;
+
+    /**
      * @var TrainTableHelper
      */
     private TrainTableHelper $trainTableHelper;
@@ -45,24 +52,26 @@ class TrainTableController extends AbstractFOSRestController
 
     /**
      * @param ManagerRegistry $doctrine
+     * @param UserHelper $userHelper
      * @param TrainTableHelper $trainTableHelper
      * @param RouteOperationDaysHelper $daysHelper
      * @param RoutesDisplayHelper $routesDisplayHelper
      */
     public function __construct(
         ManagerRegistry $doctrine,
+        UserHelper $userHelper,
         TrainTableHelper $trainTableHelper,
         RouteOperationDaysHelper $daysHelper,
         RoutesDisplayHelper $routesDisplayHelper
     ) {
         $this->doctrine = $doctrine;
         $this->trainTableHelper = $trainTableHelper;
+        $this->userHelper = $userHelper;
         $this->daysHelper = $daysHelper;
         $this->routesDisplayHelper = $routesDisplayHelper;
     }
 
     /**
-     * @IsGranted("ROLE_API_USER")
      * @param int $trainTableYearId
      * @param int $routeNumber
      * @return Response
@@ -105,6 +114,8 @@ class TrainTableController extends AbstractFOSRestController
      */
     public function indexAction(int $trainTableYearId, int $routeNumber): Response
     {
+        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_API_USER);
+
         if ($trainTableYearId === 0) {
             $trainTableYearId = $this->doctrine
                 ->getRepository(TrainTableYear::class)
@@ -144,7 +155,6 @@ class TrainTableController extends AbstractFOSRestController
     }
 
     /**
-     * @IsGranted("ROLE_API_USER")
      * @param int $trainTableYearId
      * @param string $locationName
      * @param int $dayNumber
@@ -270,6 +280,8 @@ class TrainTableController extends AbstractFOSRestController
         string $startTime,
         string $endTime
     ): Response {
+        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_API_USER);
+
         if ($trainTableYearId === 0) {
             $trainTableYearId = $this->doctrine
                 ->getRepository(TrainTableYear::class)
@@ -294,7 +306,6 @@ class TrainTableController extends AbstractFOSRestController
     }
 
     /**
-     * @IsGranted("ROLE_API_USER")
      * @param int|null $trainTableYearId
      * @param int|null $routeListId
      * @return Response
@@ -346,6 +357,8 @@ class TrainTableController extends AbstractFOSRestController
      */
     public function routeOverviewAction(int $trainTableYearId = null, int $routeListId = null): Response
     {
+        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_API_USER);
+
         if ($trainTableYearId === 0) {
             $trainTableYearId = $this->doctrine
                 ->getRepository(TrainTableYear::class)

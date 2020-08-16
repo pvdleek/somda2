@@ -6,12 +6,12 @@ use App\Entity\Location;
 use App\Entity\Spot;
 use App\Entity\UserPreference;
 use App\Form\SpotBulk;
+use App\Generics\RoleGenerics;
 use App\Helpers\FormHelper;
 use App\Helpers\SpotInputHelper;
 use App\Helpers\TemplateHelper;
 use App\Helpers\UserHelper;
 use Exception;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\RedirectResponse as RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response as Response;
@@ -58,13 +58,14 @@ class SpotInputController
     }
 
     /**
-     * @IsGranted("ROLE_SPOTS_NEW")
      * @param Request $request
      * @return RedirectResponse|Response
      * @throws Exception
      */
     public function indexAction(Request $request)
     {
+        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_SPOTS_NEW);
+
         $form = $this->formHelper->getFactory()->create(
             SpotBulk::class,
             null,
@@ -119,12 +120,13 @@ class SpotInputController
     }
 
     /**
-     * @IsGranted("ROLE_SPOTS_NEW")
      * @param string $idList
      * @return Response
      */
     public function feedbackAction(string $idList): Response
     {
+        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_SPOTS_NEW);
+
         $idArray = array_filter(explode('/', $idList));
         $spots = [];
         foreach ($idArray as $id) {

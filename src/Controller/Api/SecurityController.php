@@ -3,12 +3,12 @@
 namespace App\Controller\Api;
 
 use App\Entity\User;
+use App\Generics\RoleGenerics;
 use App\Helpers\UserHelper;
 use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use Nelmio\ApiDocBundle\Annotation\Model;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Swagger\Annotations as SWG;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -76,7 +76,6 @@ class SecurityController extends AbstractFOSRestController
     }
 
     /**
-     * @IsGranted("ROLE_API_USER")
      * @param int $id
      * @param string $token
      * @return Response
@@ -98,6 +97,8 @@ class SecurityController extends AbstractFOSRestController
      */
     public function verifyAction(int $id, string $token): Response
     {
+        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_API_USER);
+
         $user = $this->doctrine->getRepository(User::class)->findOneBy(
             ['id' => $id, 'active' => true, 'apiToken' => $token]
         );

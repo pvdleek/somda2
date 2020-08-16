@@ -4,17 +4,23 @@ namespace App\Controller;
 
 use App\Entity\SpecialRoute;
 use App\Form\SpecialRoute as SpecialRouteForm;
+use App\Generics\RoleGenerics;
 use App\Helpers\FormHelper;
 use App\Helpers\TemplateHelper;
+use App\Helpers\UserHelper;
 use DateTime;
 use Exception;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class ManageSpecialRoutesController
 {
+    /**
+     * @var UserHelper
+     */
+    private UserHelper $userHelper;
+
     /**
      * @var FormHelper
      */
@@ -26,21 +32,24 @@ class ManageSpecialRoutesController
     private TemplateHelper $templateHelper;
 
     /**
+     * @param UserHelper $userHelper
      * @param FormHelper $formHelper
      * @param TemplateHelper $templateHelper
      */
-    public function __construct(FormHelper $formHelper, TemplateHelper $templateHelper)
+    public function __construct(UserHelper $userHelper, FormHelper $formHelper, TemplateHelper $templateHelper)
     {
+        $this->userHelper = $userHelper;
         $this->formHelper = $formHelper;
         $this->templateHelper = $templateHelper;
     }
 
     /**
-     * @IsGranted("ROLE_ADMIN_SPECIAL_ROUTES")
      * @return Response
      */
     public function indexAction(): Response
     {
+        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_ADMIN_SPECIAL_ROUTES);
+
         return $this->templateHelper->render('manageSpecialRoutes/index.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Beheer bijzondere ritten',
             'specialRoutes' => $this->formHelper
@@ -51,7 +60,6 @@ class ManageSpecialRoutesController
     }
 
     /**
-     * @IsGranted("ROLE_ADMIN_SPECIAL_ROUTES")
      * @param Request $request
      * @param int $id
      * @return RedirectResponse|Response
@@ -59,6 +67,8 @@ class ManageSpecialRoutesController
      */
     public function editAction(Request $request, int $id)
     {
+        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_ADMIN_SPECIAL_ROUTES);
+
         $specialRoute = $this->formHelper->getDoctrine()->getRepository(SpecialRoute::class)->find($id);
         if (is_null($specialRoute)) {
             $specialRoute = new SpecialRoute();

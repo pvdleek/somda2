@@ -3,9 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\ForumPost;
+use App\Generics\RoleGenerics;
 use App\Helpers\UserHelper;
 use Doctrine\Common\Persistence\ManagerRegistry;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
@@ -32,13 +32,14 @@ class ForumPostWikiController
     }
 
     /**
-     * @IsGranted("ROLE_ADMIN_WIKI")
      * @param int $id
      * @param string $operation
      * @return JsonResponse
      */
     public function checkAction(int $id, string $operation)
     {
+        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_ADMIN_WIKI);
+
         /**
          * @var ForumPost $post
          */

@@ -8,13 +8,13 @@ use App\Entity\ForumPostAlert;
 use App\Entity\ForumPostAlertNote;
 use App\Form\ForumPostAlert as ForumPostAlertForm;
 use App\Form\ForumPostAlertNote as ForumPostAlertNoteForm;
+use App\Generics\RoleGenerics;
 use App\Helpers\EmailHelper;
 use App\Helpers\FormHelper;
 use App\Helpers\TemplateHelper;
 use App\Helpers\UserHelper;
 use DateTime;
 use Exception;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -61,11 +61,12 @@ class ForumPostAlertController
     }
 
     /**
-     * @IsGranted("ROLE_ADMIN")
      * @return Response
      */
     public function alertsAction(): Response
     {
+        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_ADMIN);
+
         $alerts = $this->formHelper->getDoctrine()->getRepository(ForumPostAlert::class)->findForOverview();
         return $this->templateHelper->render('forum/alerts.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Forum - Overzicht van meldingen',
@@ -76,7 +77,6 @@ class ForumPostAlertController
     /**
      * User can create a new alert for a post
      *
-     * @IsGranted("ROLE_USER")
      * @param Request $request
      * @param int $id
      * @return Response|RedirectResponse
@@ -84,6 +84,8 @@ class ForumPostAlertController
      */
     public function alertAction(Request $request, int $id)
     {
+        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_USER);
+
         /**
          * @var ForumPost $post
          */
@@ -130,7 +132,6 @@ class ForumPostAlertController
     /**
      * View alerts for a specific post and add a note
      *
-     * @IsGranted("ROLE_ADMIN")
      * @param Request $request
      * @param int $id
      * @return RedirectResponse|Response
@@ -138,6 +139,8 @@ class ForumPostAlertController
      */
     public function postAlertsAction(Request $request, int $id)
     {
+        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_ADMIN);
+
         /**
          * @var ForumPost $post
          */
@@ -214,12 +217,13 @@ class ForumPostAlertController
     }
 
     /**
-     * @IsGranted("ROLE_ADMIN")
      * @param int $id
      * @return RedirectResponse
      */
     public function alertsCloseAction(int $id): RedirectResponse
     {
+        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_ADMIN);
+
         /**
          * @var ForumPost $post
          */

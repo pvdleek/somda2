@@ -3,13 +3,13 @@
 namespace App\Controller\Api;
 
 use App\Entity\User;
+use App\Generics\RoleGenerics;
 use App\Helpers\UserHelper;
 use DateTime;
 use Exception;
 use Doctrine\Persistence\ManagerRegistry;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use Nelmio\ApiDocBundle\Annotation\Model;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Swagger\Annotations as SWG;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -38,7 +38,6 @@ class ProfileController extends AbstractFOSRestController
     }
 
     /**
-     * @IsGranted("ROLE_API_USER")
      * @return Response
      * @throws Exception
      * @SWG\Response(
@@ -52,6 +51,8 @@ class ProfileController extends AbstractFOSRestController
      */
     public function indexAction(): Response
     {
+        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_API_USER);
+
         if (!$this->userHelper->userIsLoggedIn()) {
             throw new AccessDeniedException('The user is not logged in');
         }
@@ -60,7 +61,6 @@ class ProfileController extends AbstractFOSRestController
     }
 
     /**
-     * @IsGranted("ROLE_API_USER")
      * @param Request $request
      * @return Response
      * @throws Exception
@@ -104,6 +104,8 @@ class ProfileController extends AbstractFOSRestController
      */
     public function updateAction(Request $request): Response
     {
+        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_API_USER);
+
         if (!$this->userHelper->userIsLoggedIn()) {
             throw new AccessDeniedException('The user is not logged in');
         }

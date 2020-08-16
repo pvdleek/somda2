@@ -7,13 +7,13 @@ use App\Entity\TrainCompositionProposition;
 use App\Entity\TrainCompositionType;
 use App\Entity\User;
 use App\Form\TrainComposition as TrainCompositionForm;
+use App\Generics\RoleGenerics;
 use App\Generics\RouteGenerics;
 use App\Helpers\FormHelper;
 use App\Helpers\TemplateHelper;
 use App\Helpers\UserHelper;
 use DateTime;
 use Exception;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -78,7 +78,6 @@ class TrainController
     }
 
     /**
-     * @IsGranted("ROLE_USER")
      * @param Request $request
      * @param int $id
      * @param int|null $typeId
@@ -87,6 +86,8 @@ class TrainController
      */
     public function editAction(Request $request, int $id, int $typeId = null)
     {
+        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_USER);
+
         $isAdministrator = $this->userHelper->getUser()->hasRole('ROLE_ADMIN_TRAIN_COMPOSITIONS');
 
         /**

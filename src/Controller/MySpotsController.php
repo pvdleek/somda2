@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Spot;
 use App\Form\Spot as SpotForm;
+use App\Generics\RoleGenerics;
 use App\Helpers\FormHelper;
 use App\Helpers\SpotInputHelper;
 use App\Helpers\TemplateHelper;
@@ -12,7 +13,6 @@ use App\Model\DataTableOrder;
 use App\Model\SpotFilter;
 use App\Model\SpotInput;
 use DateTime;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -64,23 +64,25 @@ class MySpotsController
     }
 
     /**
-     * @IsGranted("ROLE_SPOTS_EDIT")
      * @return Response
      */
     public function indexAction(): Response
     {
+        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_SPOTS_EDIT);
+
         return $this->templateHelper->render('spots/mySpots.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Mijn spots',
         ]);
     }
 
     /**
-     * @IsGranted("ROLE_SPOTS_EDIT")
      * @param Request $request
      * @return JsonResponse
      */
     public function jsonAction(Request $request): JsonResponse
     {
+        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_SPOTS_EDIT);
+
         $columns = $request->get('columns');
         $spotFilter = $this->getSpotFilterFromRequest($columns);
 
@@ -147,13 +149,14 @@ class MySpotsController
     }
 
     /**
-     * @IsGranted("ROLE_SPOTS_EDIT")
      * @param Request $request
      * @param int $id
      * @return RedirectResponse|Response
      */
     public function editAction(Request $request, int $id)
     {
+        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_SPOTS_EDIT);
+
         $spot = $this->formHelper->getDoctrine()->getRepository(Spot::class)->find($id);
         if (is_null($spot) || $spot->user !== $this->userHelper->getUser()) {
             throw new AccessDeniedException('This spot does not exist or does not belong to the user');

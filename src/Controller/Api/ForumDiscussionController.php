@@ -5,6 +5,7 @@ namespace App\Controller\Api;
 use App\Entity\ForumDiscussion;
 use App\Entity\ForumPost;
 use App\Generics\ForumGenerics;
+use App\Generics\RoleGenerics;
 use App\Helpers\ForumAuthorizationHelper;
 use App\Helpers\ForumDiscussionHelper;
 use App\Helpers\UserHelper;
@@ -12,7 +13,6 @@ use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use Nelmio\ApiDocBundle\Annotation\Model;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Swagger\Annotations as SWG;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -58,7 +58,6 @@ class ForumDiscussionController extends AbstractFOSRestController
     }
 
     /**
-     * @IsGranted("ROLE_API_USER")
      * @param int $id
      * @param int|null $pageNumber
      * @param int|null $postId
@@ -89,6 +88,8 @@ class ForumDiscussionController extends AbstractFOSRestController
      */
     public function indexAction(int $id, int $pageNumber = null, int $postId = null): Response
     {
+        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_API_USER);
+
         /**
          * @var ForumDiscussion $discussion
          */
@@ -116,7 +117,6 @@ class ForumDiscussionController extends AbstractFOSRestController
     }
 
     /**
-     * @IsGranted("ROLE_API_USER")
      * @return Response
      * @SWG\Response(
      *     response=200,
@@ -129,6 +129,8 @@ class ForumDiscussionController extends AbstractFOSRestController
      */
     public function favoritesAction(): Response
     {
+        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_API_USER);
+
         if (!$this->userHelper->userIsLoggedIn()) {
             throw new AccessDeniedException('The user is not logged in');
         }
@@ -140,7 +142,6 @@ class ForumDiscussionController extends AbstractFOSRestController
     }
 
     /**
-     * @IsGranted("ROLE_API_USER")
      * @return Response
      * @SWG\Response(
      *     response=200,
@@ -153,6 +154,8 @@ class ForumDiscussionController extends AbstractFOSRestController
      */
     public function unreadAction(): Response
     {
+        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_API_USER);
+
         if (!$this->userHelper->userIsLoggedIn()) {
             throw new AccessDeniedException('The user is not logged in');
         }

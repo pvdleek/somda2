@@ -7,11 +7,12 @@ use App\Entity\RouteList;
 use App\Entity\TrainTableYear;
 use App\Entity\Transporter;
 use App\Form\RouteList as RouteListForm;
+use App\Generics\RoleGenerics;
 use App\Helpers\FormHelper;
 use App\Helpers\TemplateHelper;
+use App\Helpers\UserHelper;
 use DateTime;
 use Exception;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,6 +20,11 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class ManageRouteListsController
 {
+    /**
+     * @var UserHelper
+     */
+    private UserHelper $userHelper;
+
     /**
      * @var FormHelper
      */
@@ -30,23 +36,26 @@ class ManageRouteListsController
     private TemplateHelper $templateHelper;
 
     /**
+     * @param UserHelper $userHelper
      * @param FormHelper $formHelper
      * @param TemplateHelper $templateHelper
      */
-    public function __construct(FormHelper $formHelper, TemplateHelper $templateHelper)
+    public function __construct(UserHelper $userHelper, FormHelper $formHelper, TemplateHelper $templateHelper)
     {
+        $this->userHelper = $userHelper;
         $this->formHelper = $formHelper;
         $this->templateHelper = $templateHelper;
     }
 
     /**
-     * @IsGranted("ROLE_ADMIN_ROUTE_NUMBER_LIST")
      * @param int|null $id
      * @return Response
      * @throws Exception
      */
     public function routeListsAction(int $id = null): Response
     {
+        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_ADMIN_ROUTE_NUMBER_LIST);
+
         if (is_null($id)) {
             $trainTableYear = $this->formHelper
                 ->getDoctrine()
@@ -77,7 +86,6 @@ class ManageRouteListsController
     }
 
     /**
-     * @IsGranted("ROLE_ADMIN_ROUTE_NUMBER_LIST")
      * @param Request $request
      * @param int $yearId
      * @param int $id
@@ -85,6 +93,8 @@ class ManageRouteListsController
      */
     public function routeListAction(Request $request, int $yearId, int $id)
     {
+        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_ADMIN_ROUTE_NUMBER_LIST);
+
         $routeList = $this->getOrCreateRouteList($yearId, $id);
         $form = $this->formHelper->getFactory()->create(RouteListForm::class, $routeList);
 

@@ -5,11 +5,11 @@ namespace App\Controller\Api;
 use App\Entity\News;
 use App\Entity\RailNews;
 use App\Form\News as NewsForm;
+use App\Generics\RoleGenerics;
 use App\Helpers\UserHelper;
 use Doctrine\Persistence\ManagerRegistry;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use Nelmio\ApiDocBundle\Annotation\Model;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Swagger\Annotations as SWG;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -36,7 +36,6 @@ class NewsController extends AbstractFOSRestController
     }
 
     /**
-     * @IsGranted("ROLE_API_USER")
      * @param int|null $id
      * @return Response
      * @SWG\Parameter(
@@ -58,6 +57,8 @@ class NewsController extends AbstractFOSRestController
      */
     public function indexAction(int $id = null): Response
     {
+        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_API_USER);
+
         if (!is_null($id)) {
             /**
              * @var News $news
@@ -83,7 +84,6 @@ class NewsController extends AbstractFOSRestController
     }
 
     /**
-     * @IsGranted("ROLE_API_USER")
      * @param int|null $limit
      * @return Response
      * @SWG\Parameter(
@@ -104,6 +104,8 @@ class NewsController extends AbstractFOSRestController
      */
     public function railNewsAction(int $limit = null): Response
     {
+        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_API_USER);
+
         $limit = is_null($limit) ? 25 : min($limit, 100);
 
         /**

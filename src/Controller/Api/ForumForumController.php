@@ -5,6 +5,7 @@ namespace App\Controller\Api;
 use App\Entity\ForumCategory;
 use App\Entity\ForumDiscussion;
 use App\Entity\ForumForum;
+use App\Generics\RoleGenerics;
 use App\Helpers\ForumAuthorizationHelper;
 use App\Helpers\ForumOverviewHelper;
 use App\Helpers\UserHelper;
@@ -12,7 +13,6 @@ use App\Traits\SortTrait;
 use Doctrine\Persistence\ManagerRegistry;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use Nelmio\ApiDocBundle\Annotation\Model;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Swagger\Annotations as SWG;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -59,7 +59,6 @@ class ForumForumController extends AbstractFOSRestController
     }
 
     /**
-     * @IsGranted("ROLE_API_USER")
      * @return Response
      * @SWG\Response(
      *     response=200,
@@ -105,6 +104,8 @@ class ForumForumController extends AbstractFOSRestController
      */
     public function indexAction(): Response
     {
+        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_API_USER);
+
         $categories = $this->sortByFieldFilter($this->forumOverviewHelper->getCategoryArray(), 'order');
         
         $forums = [];
@@ -124,7 +125,6 @@ class ForumForumController extends AbstractFOSRestController
     }
 
     /**
-     * @IsGranted("ROLE_API_USER")
      * @param int $id
      * @return Response
      * @SWG\Response(
@@ -188,6 +188,8 @@ class ForumForumController extends AbstractFOSRestController
      */
     public function forumAction(int $id): Response
     {
+        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_API_USER);
+
         /**
          * @var ForumForum $forum
          */

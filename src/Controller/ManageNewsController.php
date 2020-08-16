@@ -6,12 +6,13 @@ use App\Entity\News;
 use App\Entity\RailNews;
 use App\Form\RailNews as RailNewsForm;
 use App\Form\News as NewsForm;
+use App\Generics\RoleGenerics;
 use App\Generics\RouteGenerics;
 use App\Helpers\FormHelper;
 use App\Helpers\TemplateHelper;
+use App\Helpers\UserHelper;
 use DateTime;
 use Exception;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,6 +21,11 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class ManageNewsController
 {
+    /**
+     * @var UserHelper
+     */
+    private UserHelper $userHelper;
+
     /**
      * @var FormHelper
      */
@@ -31,21 +37,24 @@ class ManageNewsController
     private TemplateHelper $templateHelper;
 
     /**
+     * @param UserHelper $userHelper
      * @param FormHelper $formHelper
      * @param TemplateHelper $templateHelper
      */
-    public function __construct(FormHelper $formHelper, TemplateHelper $templateHelper)
+    public function __construct(UserHelper $userHelper, FormHelper $formHelper, TemplateHelper $templateHelper)
     {
+        $this->userHelper = $userHelper;
         $this->formHelper = $formHelper;
         $this->templateHelper = $templateHelper;
     }
 
     /**
-     * @IsGranted("ROLE_ADMIN_NEWS")
      * @return Response
      */
     public function indexAction(): Response
     {
+        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_ADMIN_NEWS);
+
         return $this->templateHelper->render('manageNews/index.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Beheer nieuws',
             'news' => $this->formHelper
@@ -56,7 +65,6 @@ class ManageNewsController
     }
 
     /**
-     * @IsGranted("ROLE_ADMIN_NEWS")
      * @param Request $request
      * @param int $id
      * @return RedirectResponse|Response
@@ -64,6 +72,8 @@ class ManageNewsController
      */
     public function editAction(Request $request, int $id)
     {
+        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_ADMIN_NEWS);
+
         $news = $this->formHelper->getDoctrine()->getRepository(News::class)->find($id);
         if (is_null($news)) {
             $news = new News();
@@ -88,11 +98,12 @@ class ManageNewsController
     }
 
     /**
-     * @IsGranted("ROLE_ADMIN_RAIL_NEWS")
      * @return Response
      */
     public function railNewsAction(): Response
     {
+        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_ADMIN_RAIL_NEWS);
+
         return $this->templateHelper->render('manageNews/railNews.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Beheer spoornieuws',
             'railNews' => $this->formHelper->getDoctrine()
@@ -102,12 +113,13 @@ class ManageNewsController
     }
 
     /**
-     * @IsGranted("ROLE_ADMIN_RAIL_NEWS")
      * @param Request $request
      * @return JsonResponse
      */
     public function railNewsDisapproveAction(Request $request): JsonResponse
     {
+        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_ADMIN_RAIL_NEWS);
+
         $ids = array_filter(explode(',', array_keys($request->request->all())[0]));
         foreach ($ids as $id) {
             $railNews = $this->formHelper->getDoctrine()->getRepository(RailNews::class)->find($id);
@@ -118,13 +130,14 @@ class ManageNewsController
     }
 
     /**
-     * @IsGranted("ROLE_ADMIN_RAIL_NEWS")
      * @param Request $request
      * @param int $id
      * @return RedirectResponse|Response
      */
     public function railNewsEditAction(Request $request, int $id)
     {
+        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_ADMIN_RAIL_NEWS);
+
         $railNews = $this->formHelper->getDoctrine()->getRepository(RailNews::class)->find($id);
         if (is_null($railNews)) {
             throw new AccessDeniedException('This rail-news item does not exist');

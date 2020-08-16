@@ -7,6 +7,7 @@ use App\Entity\BannerView;
 use App\Entity\ForumDiscussion;
 use App\Entity\ForumForum;
 use App\Form\ForumDiscussion as ForumDiscussionForm;
+use App\Generics\RoleGenerics;
 use App\Generics\RouteGenerics;
 use App\Helpers\FormHelper;
 use App\Helpers\ForumAuthorizationHelper;
@@ -15,7 +16,6 @@ use App\Helpers\TemplateHelper;
 use App\Helpers\UserHelper;
 use DateTime;
 use Exception;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -134,7 +134,6 @@ class ForumDiscussionController
     }
 
     /**
-     * @IsGranted("ROLE_USER")
      * @param Request $request
      * @param int $id
      * @return RedirectResponse|Response
@@ -142,6 +141,8 @@ class ForumDiscussionController
      */
     public function newAction(Request $request, int $id)
     {
+        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_USER);
+
         /**
          * @var ForumForum $forum
          */

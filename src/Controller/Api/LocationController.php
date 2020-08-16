@@ -5,10 +5,11 @@ namespace App\Controller\Api;
 use App\Controller\LocationController as WebLocationController;
 use App\Entity\Location;
 use App\Entity\LocationCategory;
+use App\Generics\RoleGenerics;
+use App\Helpers\UserHelper;
 use Doctrine\Persistence\ManagerRegistry;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use Nelmio\ApiDocBundle\Annotation\Model;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Swagger\Annotations as SWG;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -20,15 +21,21 @@ class LocationController extends AbstractFOSRestController
     private ManagerRegistry $doctrine;
 
     /**
+     * @var UserHelper
+     */
+    private UserHelper $userHelper;
+
+    /**
+     * @param UserHelper $userHelper
      * @param ManagerRegistry $doctrine
      */
-    public function __construct(ManagerRegistry $doctrine)
+    public function __construct(ManagerRegistry $doctrine, UserHelper $userHelper)
     {
         $this->doctrine = $doctrine;
+        $this->userHelper = $userHelper;
     }
 
     /**
-     * @IsGranted("ROLE_API_USER")
      * @param string|null $searchMethod
      * @param string|null $search
      * @return Response
@@ -59,6 +66,8 @@ class LocationController extends AbstractFOSRestController
      */
     public function indexAction(string $searchMethod = null, string $search = null): Response
     {
+        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_API_USER);
+
         switch ($searchMethod) {
             case WebLocationController::SEARCH_METHOD_CHARACTER:
                 $locations = $this->doctrine->getRepository(Location::class)->findByName($search . '%');

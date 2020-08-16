@@ -2,29 +2,36 @@
 
 namespace App\Controller\Api;
 
+use App\Generics\RoleGenerics;
 use App\Helpers\ForumSearchHelper;
+use App\Helpers\UserHelper;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Swagger\Annotations as SWG;
 use Symfony\Component\HttpFoundation\Response;
 
 class ForumSearchController extends AbstractFOSRestController
 {
     /**
+     * @var UserHelper
+     */
+    private UserHelper $userHelper;
+
+    /**
      * @var ForumSearchHelper
      */
     private ForumSearchHelper $forumSearchHelper;
 
     /**
+     * @param UserHelper $userHelper
      * @param ForumSearchHelper $forumSearchHelper
      */
-    public function __construct(ForumSearchHelper $forumSearchHelper)
+    public function __construct(UserHelper $userHelper, ForumSearchHelper $forumSearchHelper)
     {
+        $this->userHelper = $userHelper;
         $this->forumSearchHelper = $forumSearchHelper;
     }
 
     /**
-     * @IsGranted("ROLE_API_USER")
      * @param string $searchMethod
      * @param string $terms
      * @return Response
@@ -84,6 +91,8 @@ class ForumSearchController extends AbstractFOSRestController
      */
     public function indexAction(string $searchMethod, string $terms): Response
     {
+        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_API_USER);
+
         $results = $this->forumSearchHelper->getSearchResults(
             $searchMethod,
             $this->forumSearchHelper->getSearchWords($terms)

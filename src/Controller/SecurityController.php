@@ -9,6 +9,7 @@ use App\Form\User as UserForm;
 use App\Form\UserActivate;
 use App\Form\UserLostPassword;
 use App\Form\UserPassword;
+use App\Generics\RoleGenerics;
 use App\Helpers\EmailHelper;
 use App\Helpers\FlashHelper;
 use App\Helpers\FormHelper;
@@ -16,7 +17,6 @@ use App\Helpers\TemplateHelper;
 use App\Helpers\UserHelper;
 use DateTime;
 use Exception;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -344,12 +344,13 @@ class SecurityController
     }
 
     /**
-     * @IsGranted("ROLE_USER")
      * @param Request $request
      * @return RedirectResponse|Response
      */
     public function changePasswordAction(Request $request)
     {
+        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_USER);
+
         $form = $this->formHelper->getFactory()->create(UserPassword::class);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {

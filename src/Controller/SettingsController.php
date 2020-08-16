@@ -4,11 +4,11 @@ namespace App\Controller;
 
 use App\Entity\UserPreference;
 use App\Form\UserPreferences;
+use App\Generics\RoleGenerics;
 use App\Helpers\FormHelper;
 use App\Helpers\TemplateHelper;
 use App\Helpers\UserHelper;
 use Exception;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -43,13 +43,14 @@ class SettingsController
     }
 
     /**
-     * @IsGranted("ROLE_USER")
      * @param Request $request
      * @return Response|RedirectResponse
      * @throws Exception
      */
     public function indexAction(Request $request)
     {
+        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_USER);
+
         /**
          * @var UserPreference[] $allSettings
          */

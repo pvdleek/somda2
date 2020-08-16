@@ -4,15 +4,21 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\UserBan;
+use App\Generics\RoleGenerics;
 use App\Helpers\FormHelper;
 use App\Helpers\TemplateHelper;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use App\Helpers\UserHelper;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class ManageUsersController
 {
+    /**
+     * @var UserHelper
+     */
+    private UserHelper $userHelper;
+
     /**
      * @var FormHelper
      */
@@ -24,21 +30,24 @@ class ManageUsersController
     private TemplateHelper $templateHelper;
 
     /**
+     * @param UserHelper $userHelper
      * @param FormHelper $formHelper
      * @param TemplateHelper $templateHelper
      */
-    public function __construct(FormHelper $formHelper, TemplateHelper $templateHelper)
+    public function __construct(UserHelper $userHelper, FormHelper $formHelper, TemplateHelper $templateHelper)
     {
+        $this->userHelper = $userHelper;
         $this->formHelper = $formHelper;
         $this->templateHelper = $templateHelper;
     }
 
     /**
-     * @IsGranted("ROLE_ADMIN_BANS")
      * @return Response
      */
     public function bansAction(): Response
     {
+        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_ADMIN_BANS);
+
         return $this->templateHelper->render('manageUsers/bans.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Beheer bans',
             'users' => $this->formHelper->getDoctrine()->getRepository(User::class)->findBanned(),
@@ -46,13 +55,14 @@ class ManageUsersController
     }
 
     /**
-     * @IsGranted("ROLE_ADMIN_BANS")
      * @param Request $request
      * @param int $id
      * @return RedirectResponse|Response
      */
     public function banAction(Request $request, int $id)
     {
+        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_ADMIN_BANS);
+
         $user = $this->formHelper->getDoctrine()->getRepository(User::class)->find($id);
         $form = $this->formHelper->getFactory()->create(UserBan::class, $user);
 

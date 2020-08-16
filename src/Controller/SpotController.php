@@ -4,14 +4,15 @@ namespace App\Controller;
 
 use App\Entity\Spot;
 use App\Entity\TrainTableYear;
+use App\Generics\RoleGenerics;
 use App\Helpers\FlashHelper;
 use App\Helpers\RedirectHelper;
 use App\Helpers\TemplateHelper;
+use App\Helpers\UserHelper;
 use App\Model\SpotFilter;
 use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -21,6 +22,11 @@ class SpotController
      * @var ManagerRegistry
      */
     private ManagerRegistry $doctrine;
+
+    /**
+     * @var UserHelper
+     */
+    private UserHelper $userHelper;
 
     /**
      * @var TemplateHelper
@@ -39,17 +45,20 @@ class SpotController
 
     /**
      * @param ManagerRegistry $doctrine
+     * @param UserHelper $userHelper
      * @param TemplateHelper $templateHelper
      * @param RedirectHelper $redirectHelper
      * @param FlashHelper $flashHelper
      */
     public function __construct(
         ManagerRegistry $doctrine,
+        UserHelper $userHelper,
         TemplateHelper $templateHelper,
         RedirectHelper $redirectHelper,
         FlashHelper $flashHelper
     ) {
         $this->doctrine = $doctrine;
+        $this->userHelper = $userHelper;
         $this->templateHelper = $templateHelper;
         $this->redirectHelper = $redirectHelper;
         $this->flashHelper = $flashHelper;
@@ -73,13 +82,14 @@ class SpotController
     }
 
     /**
-     * @IsGranted("ROLE_SPOTS_RECENT")
      * @param int $maxMonths
      * @param string|null $searchParameters
      * @return Response
      */
     public function indexAction(int $maxMonths = 1, string $searchParameters = null): Response
     {
+        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_SPOTS_RECENT);
+
         $spotFilter = new SpotFilter();
         $spots = null;
 

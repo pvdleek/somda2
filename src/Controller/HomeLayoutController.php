@@ -3,10 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\UserPreference;
+use App\Generics\RoleGenerics;
 use App\Helpers\UserHelper;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 class HomeLayoutController
@@ -32,13 +32,14 @@ class HomeLayoutController
     }
 
     /**
-     * @IsGranted("ROLE_USER")
      * @param string $layout
      * @return JsonResponse
      * @throws Exception
      */
     public function updateAction(string $layout): JsonResponse
     {
+        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_USER);
+
         $userPreference = $this->userHelper->getPreferenceByKey(UserPreference::KEY_HOME_LAYOUT);
         $userPreference->value = $layout;
         $this->doctrine->getManager()->flush();

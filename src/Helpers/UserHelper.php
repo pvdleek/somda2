@@ -8,6 +8,7 @@ use App\Entity\UserPreferenceValue;
 use App\Exception\UnknownUserPreferenceKey;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Exception;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Twig\Extension\RuntimeExtensionInterface;
@@ -55,6 +56,17 @@ class UserHelper implements RuntimeExtensionInterface
         }
 
         return $this->user instanceof User ? $this->user : null;
+    }
+
+    /**
+     * @param string $role
+     * @throws AccessDeniedException
+     */
+    public function denyAccessUnlessGranted(string $role): void
+    {
+        if (!$this->security->isGranted($role)) {
+            throw new AccessDeniedException();
+        }
     }
 
     /**

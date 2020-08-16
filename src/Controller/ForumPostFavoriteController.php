@@ -4,11 +4,11 @@ namespace App\Controller;
 
 use App\Entity\ForumDiscussion;
 use App\Entity\ForumFavorite;
+use App\Generics\RoleGenerics;
 use App\Helpers\TemplateHelper;
 use App\Helpers\UserHelper;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -42,11 +42,12 @@ class ForumPostFavoriteController
     }
 
     /**
-     * @IsGranted("ROLE_USER")
      * @return Response
      */
     public function indexAction(): Response
     {
+        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_USER);
+
         return $this->templateHelper->render('forum/favorites.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Forum favorieten',
             'favorites' => $this->doctrine->getRepository(ForumDiscussion::class)->findByFavorites(
@@ -56,7 +57,6 @@ class ForumPostFavoriteController
     }
 
     /**
-     * @IsGranted("ROLE_USER")
      * @param int $id
      * @param int $alerting
      * @return JsonResponse
@@ -64,6 +64,8 @@ class ForumPostFavoriteController
      */
     public function toggleAction(int $id, int $alerting): JsonResponse
     {
+        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_USER);
+
         if (is_null($favorite = $this->getFavorite($id))) {
             return new JsonResponse();
         }
@@ -75,13 +77,14 @@ class ForumPostFavoriteController
     }
 
     /**
-     * @IsGranted("ROLE_USER")
      * @param int $id
      * @return JsonResponse
      * @throws Exception
      */
     public function addAction(int $id): JsonResponse
     {
+        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_USER);
+
         $discussion = $this->doctrine->getRepository(ForumDiscussion::class)->find($id);
         if (is_null($discussion)) {
             return new JsonResponse();
@@ -98,13 +101,14 @@ class ForumPostFavoriteController
     }
 
     /**
-     * @IsGranted("ROLE_USER")
      * @param int $id
      * @return JsonResponse
      * @throws Exception
      */
     public function removeAction(int $id): JsonResponse
     {
+        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_USER);
+
         if (is_null($favorite = $this->getFavorite($id))) {
             return new JsonResponse();
         }

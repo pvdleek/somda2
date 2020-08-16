@@ -9,6 +9,7 @@ use App\Entity\ForumPostLog;
 use App\Entity\ForumPostText;
 use App\Form\BaseForm;
 use App\Form\ForumPost as ForumPostForm;
+use App\Generics\RoleGenerics;
 use App\Generics\RouteGenerics;
 use App\Helpers\EmailHelper;
 use App\Helpers\FormHelper;
@@ -18,7 +19,6 @@ use App\Helpers\TemplateHelper;
 use App\Helpers\UserHelper;
 use DateTime;
 use Exception;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormInterface;
@@ -85,7 +85,6 @@ class ForumPostController
     }
 
     /**
-     * @IsGranted("ROLE_USER")
      * @param Request $request
      * @param int $id
      * @param bool $quote
@@ -94,6 +93,8 @@ class ForumPostController
      */
     public function replyAction(Request $request, int $id, bool $quote = false)
     {
+        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_USER);
+
         /**
          * @var ForumPost $quotedPost
          */
@@ -154,13 +155,14 @@ class ForumPostController
     }
 
     /**
-     * @IsGranted("ROLE_USER")
      * @param Request $request
      * @return JsonResponse
      * @throws Exception
      */
     public function replyExampleAction(Request $request): JsonResponse
     {
+        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_USER);
+
         $text = (string)$request->request->get('text');
         $postText = new ForumPostText();
         $postText->text = str_replace("\n", '', $text);
@@ -188,7 +190,6 @@ class ForumPostController
     }
 
     /**
-     * @IsGranted("ROLE_USER")
      * @param Request $request
      * @param int $id
      * @return Response|RedirectResponse
@@ -196,6 +197,8 @@ class ForumPostController
      */
     public function editAction(Request $request, int $id)
     {
+        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_USER);
+
         /**
          * @var ForumPost $post
          */

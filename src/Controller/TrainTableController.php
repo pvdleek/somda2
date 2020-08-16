@@ -4,16 +4,17 @@ namespace App\Controller;
 
 use App\Entity\SpecialRoute;
 use App\Entity\TrainTableYear;
+use App\Generics\RoleGenerics;
 use App\Helpers\TrainTableHelper;
 use App\Helpers\FlashHelper;
 use App\Helpers\RoutesDisplayHelper;
 use App\Helpers\TemplateHelper;
+use App\Helpers\UserHelper;
 use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
 use Dompdf\Dompdf;
 use Dompdf\Options;
 use Exception;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Response;
 
 class TrainTableController
@@ -22,6 +23,11 @@ class TrainTableController
      * @var ManagerRegistry
      */
     private ManagerRegistry $doctrine;
+
+    /**
+     * @var UserHelper
+     */
+    private UserHelper $userHelper;
 
     /**
      * @var TemplateHelper
@@ -45,6 +51,7 @@ class TrainTableController
 
     /**
      * @param ManagerRegistry $doctrine
+     * @param UserHelper $userHelper
      * @param TemplateHelper $templateHelper
      * @param TrainTableHelper $trainTableHelper
      * @param RoutesDisplayHelper $routesDisplayHelper
@@ -52,12 +59,14 @@ class TrainTableController
      */
     public function __construct(
         ManagerRegistry $doctrine,
+        UserHelper $userHelper,
         TemplateHelper $templateHelper,
         TrainTableHelper $trainTableHelper,
         RoutesDisplayHelper $routesDisplayHelper,
         FlashHelper $flashHelper
     ) {
         $this->doctrine = $doctrine;
+        $this->userHelper = $userHelper;
         $this->templateHelper = $templateHelper;
         $this->trainTableHelper = $trainTableHelper;
         $this->routesDisplayHelper = $routesDisplayHelper;
@@ -103,7 +112,6 @@ class TrainTableController
     }
 
     /**
-     * @IsGranted("ROLE_PASSING_ROUTES")
      * @param int|null $trainTableYearId
      * @param string|null $locationName
      * @param int|null $dayNumber
@@ -119,6 +127,8 @@ class TrainTableController
         string $startTime = null,
         string $endTime = null
     ): Response {
+        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_PASSING_ROUTES);
+
         if (is_null($dayNumber)) {
             $trainTableYearId = $this->doctrine
                 ->getRepository(TrainTableYear::class)
@@ -163,7 +173,6 @@ class TrainTableController
     }
 
     /**
-     * @IsGranted("ROLE_PASSING_ROUTES")
      * @param int $trainTableYearId
      * @param string $locationName
      * @param int $dayNumber
@@ -180,6 +189,8 @@ class TrainTableController
         string $endTime,
         int $spotterVersion
     ) {
+        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_PASSING_ROUTES);
+
         $this->trainTableHelper->setTrainTableYear($trainTableYearId);
         $this->trainTableHelper->setLocation($locationName);
 

@@ -3,19 +3,25 @@
 namespace App\Controller;
 
 use App\Entity\TrainTableYear;
+use App\Generics\RoleGenerics;
 use App\Helpers\FlashHelper;
 use App\Helpers\FormHelper;
 use App\Helpers\RouteManagementHelper;
 use App\Helpers\RoutesDisplayHelper;
 use App\Helpers\TemplateHelper;
+use App\Helpers\UserHelper;
 use Exception;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class ManageTrainTablesController
 {
+    /**
+     * @var UserHelper
+     */
+    private UserHelper $userHelper;
+
     /**
      * @var FormHelper
      */
@@ -37,17 +43,20 @@ class ManageTrainTablesController
     private RouteManagementHelper $routeManagementHelper;
 
     /**
+     * @param UserHelper $userHelper
      * @param FormHelper $formHelper
      * @param TemplateHelper $templateHelper
      * @param RoutesDisplayHelper $routesDisplayHelper
      * @param RouteManagementHelper $routeManagementHelper
      */
     public function __construct(
+        UserHelper $userHelper,
         FormHelper $formHelper,
         TemplateHelper $templateHelper,
         RoutesDisplayHelper $routesDisplayHelper,
         RouteManagementHelper $routeManagementHelper
     ) {
+        $this->userHelper = $userHelper;
         $this->formHelper = $formHelper;
         $this->templateHelper = $templateHelper;
         $this->routesDisplayHelper = $routesDisplayHelper;
@@ -55,7 +64,6 @@ class ManageTrainTablesController
     }
 
     /**
-     * @IsGranted("ROLE_ADMIN_TRAINTABLE_EDIT")
      * @param int|null $yearId
      * @param int|null $routeListId
      * @return Response
@@ -63,6 +71,8 @@ class ManageTrainTablesController
      */
     public function manageAction(int $yearId = null, int $routeListId = null): Response
     {
+        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_ADMIN_TRAINTABLE_EDIT);
+
         $routesDisplay = $this->routesDisplayHelper->getRoutesDisplay($yearId, $routeListId);
 
         return $this->templateHelper->render('manageTrainTables/index.html.twig', [
@@ -79,7 +89,6 @@ class ManageTrainTablesController
     }
 
     /**
-     * @IsGranted("ROLE_ADMIN_TRAINTABLE_EDIT")
      * @param Request $request
      * @param int $routeListId
      * @param int $routeId
@@ -88,6 +97,8 @@ class ManageTrainTablesController
      */
     public function manageRouteAction(Request $request, int $routeListId, int $routeId, int $routeNumber = null)
     {
+        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_ADMIN_TRAINTABLE_EDIT);
+
         $this->routeManagementHelper->setRouteListFromId($routeListId);
         $this->routeManagementHelper->setRouteFromId($routeId);
 
