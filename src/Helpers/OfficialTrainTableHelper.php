@@ -247,7 +247,6 @@ class OfficialTrainTableHelper
                         try {
                             $this->saveTrainTable(trim(substr($line, 1, 7)), 'v', substr($line, 9));
                         } catch (Exception $exception) {
-                            echo 'Exception: ' . $exception->getMessage();
                             $this->scrollToNextIdentificationLine($handle);
                             $this->resetForNewRoutes();
                         }
@@ -256,7 +255,6 @@ class OfficialTrainTableHelper
                         try {
                             $this->saveTrainTable(trim(substr($line, 1, 7)), '-');
                         } catch (Exception $exception) {
-                            echo 'Exception: ' . $exception->getMessage();
                             $this->scrollToNextIdentificationLine($handle);
                             $this->resetForNewRoutes();
                         }
@@ -266,7 +264,6 @@ class OfficialTrainTableHelper
                         try {
                             $this->saveTrainTable(trim(substr($line, 1, 7)), '+', substr($line, 9));
                         } catch (Exception $exception) {
-                            echo 'Exception: ' . $exception->getMessage();
                             $this->scrollToNextIdentificationLine($handle);
                             $this->resetForNewRoutes();
                         }
@@ -277,7 +274,6 @@ class OfficialTrainTableHelper
                             $this->saveTrainTable(trim(substr($line, 1, 7)), 'a', substr($line, 9, 4));
                             $this->saveTrainTable(trim(substr($line, 1, 7)), 'v', substr($line, 14, 4));
                         } catch (Exception $exception) {
-                            echo 'Exception: ' . $exception->getMessage();
                             $this->scrollToNextIdentificationLine($handle);
                             $this->resetForNewRoutes();
                         }
@@ -287,7 +283,6 @@ class OfficialTrainTableHelper
                         try {
                             $this->saveTrainTable(trim(substr($line, 1, 7)), 'a', substr($line, 9));
                         } catch (Exception $exception) {
-                            echo 'Exception: ' . $exception->getMessage();
                             $this->scrollToNextIdentificationLine($handle);
                             $this->resetForNewRoutes();
                         }
