@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Repository;
 
@@ -68,7 +69,7 @@ class TrainTable extends EntityRepository
             ->join('t.route', 'route')
             ->join('route.trainTableFirstLasts', 'trainTableFirstLasts')
             ->andWhere('trainTableFirstLasts.dayNumber = :dayNumber')
-            ->setParameter('dayNumber', $dayNumber + 1)
+            ->setParameter('dayNumber', $dayNumber)
             ->andWhere('trainTableFirstLasts.trainTableYear = :' . self::PARAMETER_TRAIN_TABLE_YEAR)
             ->join('trainTableFirstLasts.firstLocation', 'fl_first')
             ->join('trainTableFirstLasts.lastLocation', 'fl_last')
@@ -136,7 +137,7 @@ class TrainTable extends EntityRepository
             ->join('t.routeOperationDays', 'o')
             ->andWhere('o.' . $this->getDayName($dayNumber - 1) .' = TRUE');
         try {
-            return $queryBuilder->getQuery()->getSingleScalarResult() > 0;
+            return (int)$queryBuilder->getQuery()->getSingleScalarResult() > 0;
         } catch (NonUniqueResultException $exception) {
             return false;
         } catch (NoResultException $exception) {

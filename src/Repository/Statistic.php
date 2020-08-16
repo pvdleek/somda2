@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Repository;
 
@@ -22,7 +23,7 @@ class Statistic extends EntityRepository
             ->select('SUM(s.visitorsTotal)')
             ->from(StatisticEntity::class, 's');
         try {
-            return $queryBuilder->getQuery()->getSingleScalarResult();
+            return (int)$queryBuilder->getQuery()->getSingleScalarResult();
         } catch (NonUniqueResultException $exception) {
             return 0;
         } catch (NoResultException $exception) {

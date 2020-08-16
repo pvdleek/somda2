@@ -26,10 +26,10 @@ class Log
     public DateTime $timestamp;
 
     /**
-     * @var string
+     * @var int
      * @ORM\Column(name="ip", type="bigint", nullable=false)
      */
-    public string $ipAddress;
+    public int $ipAddress;
 
     /**
      * @var string

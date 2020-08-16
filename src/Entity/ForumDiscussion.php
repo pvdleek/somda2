@@ -26,10 +26,10 @@ class ForumDiscussion
     public string $title = '';
 
     /**
-     * @var string
+     * @var int
      * @ORM\Column(name="viewed", type="bigint", nullable=false)
      */
-    public string $viewed = '0';
+    public int $viewed = 0;
 
     /**
      * @var bool

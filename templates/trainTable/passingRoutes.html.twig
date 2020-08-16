@@ -18,8 +18,8 @@
                 <th><label for="dayNumber">{{ 'general.input.dayNumber' | trans }}</label></th>
                 <td>
                     <select id="dayNumber" name="dayNumber">
-                        {% for dayNumberSelect in 0..6 %}
-                            <option {{ dayNumber == dayNumberSelect ? 'selected="selected" ' }}value="{{ dayNumberSelect }}">{{ ('general.date.days.' ~ dayNumberSelect) | trans }}</option>
+                        {% for dayNumberSelect in 1..7 %}
+                            <option {{ dayNumber == dayNumberSelect ? 'selected="selected" ' }}value="{{ dayNumberSelect }}">{{ ('general.date.days.' ~ (dayNumberSelect - 1)) | trans }}</option>
                         {% endfor %}
                     </select>
                 </td>

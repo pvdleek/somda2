@@ -36,7 +36,7 @@ class User extends EntityRepository
             ->from(UserEntity::class, 'u')
             ->andWhere('u.active = TRUE');
         try {
-            return $queryBuilder->getQuery()->getSingleScalarResult();
+            return (int)$queryBuilder->getQuery()->getSingleScalarResult();
         } catch (NonUniqueResultException $exception) {
             return 0;
         } catch (NoResultException $exception) {
@@ -59,7 +59,7 @@ class User extends EntityRepository
             ->andWhere('i.birthDate = :today')
             ->setParameter('today', new DateTime());
         try {
-            return $queryBuilder->getQuery()->getSingleScalarResult();
+            return (int)$queryBuilder->getQuery()->getSingleScalarResult();
         } catch (NonUniqueResultException $exception) {
             return 0;
         } catch (NoResultException $exception) {

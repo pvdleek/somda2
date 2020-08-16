@@ -242,7 +242,7 @@ class ForumDiscussion extends EntityRepository
             ->setParameter(ForumPostForm::FIELD_DISCUSSION, $discussion)
             ->setMaxResults(1);
         try {
-            return $queryBuilder->getQuery()->getSingleScalarResult();
+            return (int)$queryBuilder->getQuery()->getSingleScalarResult();
         } catch (Exception $exception) {
             return 0;
         }
@@ -283,7 +283,7 @@ class ForumDiscussion extends EntityRepository
             ->andWhere('r.user = :user')
             ->setParameter('user', $user);
         try {
-            return $queryBuilder->getQuery()->getSingleScalarResult();
+            return (int)$queryBuilder->getQuery()->getSingleScalarResult();
         } catch (Exception $exception) {
             return 0;
         }

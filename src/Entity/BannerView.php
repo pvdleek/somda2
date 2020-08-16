@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Entity;
 
@@ -26,10 +27,10 @@ class BannerView
     public DateTime $timestamp;
 
     /**
-     * @var string
+     * @var int
      * @ORM\Column(name="ip", type="bigint", nullable=false)
      */
-    public string $ipAddress;
+    public int $ipAddress;
 
     /**
      * @var Banner

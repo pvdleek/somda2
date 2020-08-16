@@ -26,10 +26,10 @@ class BannerHit
     public DateTime $timestamp;
 
     /**
-     * @var string
+     * @var int
      * @ORM\Column(name="ip_address", type="bigint", nullable=false)
      */
-    public string $ipAddress;
+    public int $ipAddress;
 
     /**
      * @var Banner

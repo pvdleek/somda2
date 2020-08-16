@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Helpers;
 
@@ -172,7 +173,7 @@ class ForumDiscussionHelper
         $numberOfPosts = $this->doctrine->getRepository(ForumDiscussion::class)->getNumberOfPosts(
             $this->discussion
         );
-        $this->numberOfPages = floor(($numberOfPosts - 1) / ForumGenerics::MAX_POSTS_PER_PAGE) + 1;
+        $this->numberOfPages = (int)floor(($numberOfPosts - 1) / ForumGenerics::MAX_POSTS_PER_PAGE) + 1;
     }
 
     /**
@@ -219,9 +220,7 @@ class ForumDiscussionHelper
         if ($this->discussion->forum->type !== ForumForum::TYPE_ARCHIVE && $this->userHelper->userIsLoggedIn()) {
             // Neither a specific page or post were requested but the user is logged in,
             // so we will go to the first unread post in the discussion
-            $this->pageNumber =
-                floor($this->getNumberOfReadPosts() / ForumGenerics::MAX_POSTS_PER_PAGE)
-                + 1;
+            $this->pageNumber = (int)floor($this->getNumberOfReadPosts() / ForumGenerics::MAX_POSTS_PER_PAGE) + 1;
             return;
         }
 

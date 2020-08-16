@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Helpers;
 
@@ -112,7 +113,8 @@ class StaticDataHelper implements RuntimeExtensionInterface
 
         $userArray = $this->doctrine->getRepository(User::class)->findActiveForStaticData();
         foreach ($userArray as $user) {
-            $this->users['@' . $user['username']] = strlen($user['name']) > 0 ? $user['name'] : $user['username'];
+            $this->users['@' . $user['username']] =
+                !is_null($user['name']) && strlen($user['name']) > 0 ? $user['name'] : $user['username'];
         }
 
         $routeArray = $this->doctrine->getRepository(TrainTable::class)->findAllTrainTablesForForum(

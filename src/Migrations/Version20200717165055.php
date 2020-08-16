@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 namespace App\Migrations;
@@ -12,7 +11,7 @@ final class Version20200717165055 extends AbstractMigration
     /**
      * @return string
      */
-    public function getDescription() : string
+    public function getDescription(): string
     {
         return 'Add API-token to the user table';
     }
@@ -20,7 +19,7 @@ final class Version20200717165055 extends AbstractMigration
     /**
      * @param Schema $schema
      */
-    public function up(Schema $schema) : void
+    public function up(Schema $schema): void
     {
         $this->addSql('
             ALTER TABLE `somda_users`
@@ -32,7 +31,7 @@ final class Version20200717165055 extends AbstractMigration
     /**
      * @param Schema $schema
      */
-    public function down(Schema $schema) : void
+    public function down(Schema $schema): void
     {
         $this->addSql('ALTER TABLE `somda_users` DROP COLUMN `api_token`, DROP COLUMN `api_token_expiry_timestamp`');
     }

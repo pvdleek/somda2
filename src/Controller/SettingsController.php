@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Controller;
 
@@ -70,9 +71,9 @@ class SettingsController
                 if ($setting->order > 0) {
                     $userPreference = $this->userHelper->getPreferenceByKey($setting->key);
                     if (is_object($form->get($setting->key)->getData())) {
-                        $userPreference->value = $form->get($setting->key)->getData()->name;
+                        $userPreference->value = (string)$form->get($setting->key)->getData()->name;
                     } else {
-                        $userPreference->value = $form->get($setting->key)->getData() ?? '';
+                        $userPreference->value = (string)$form->get($setting->key)->getData() ?? '';
                     }
                 }
             }

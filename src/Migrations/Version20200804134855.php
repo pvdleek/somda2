@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 namespace App\Migrations;
@@ -12,7 +11,7 @@ final class Version20200804134855 extends AbstractMigration
     /**
      * @return string
      */
-    public function getDescription() : string
+    public function getDescription(): string
     {
         return 'Add tables for processing official train-tables (IFF)';
     }
@@ -20,7 +19,7 @@ final class Version20200804134855 extends AbstractMigration
     /**
      * @param Schema $schema
      */
-    public function up(Schema $schema) : void
+    public function up(Schema $schema): void
     {
         $this->addSql('ALTER TABLE `somda_vervoerder` ADD `iff_code` INT DEFAULT NULL');
 
@@ -95,7 +94,7 @@ final class Version20200804134855 extends AbstractMigration
     /**
      * @param Schema $schema
      */
-    public function down(Schema $schema) : void
+    public function down(Schema $schema): void
     {
         $this->addSql('ALTER TABLE `somda_vervoerder` DROP COLUMN `iff_code`');
 

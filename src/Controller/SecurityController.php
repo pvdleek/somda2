@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Controller;
 
@@ -102,7 +103,7 @@ class SecurityController
 
             if ($form->isValid()) {
                 $user->active = false;
-                $user->password = password_hash(
+                $user->password = (string)password_hash(
                     $form->get(UserForm::FIELD_PLAIN_PASSWORD)->getData(),
                     PASSWORD_DEFAULT
                 );
@@ -303,7 +304,7 @@ class SecurityController
             );
             if (!is_null($user)) {
                 $newPassword = $this->getRandomPassword(12);
-                $user->password = password_hash($newPassword, PASSWORD_DEFAULT);
+                $user->password = (string)password_hash($newPassword, PASSWORD_DEFAULT);
                 $this->formHelper->getDoctrine()->getManager()->flush();
 
                 $this->emailHelper->sendEmail(
@@ -355,7 +356,7 @@ class SecurityController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $this->userHelper->getUser()->password =
-                password_hash($form->get('newPassword')->getData(), PASSWORD_DEFAULT);
+                (string)password_hash($form->get('newPassword')->getData(), PASSWORD_DEFAULT);
             $this->formHelper->getDoctrine()->getManager()->flush();
 
             $this->formHelper->getFlashHelper()->add(

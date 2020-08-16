@@ -135,7 +135,7 @@ class TrainTableController
                 ->findTrainTableYearByDate(new DateTime())
                 ->id;
 
-            $dayNumber = date('N') - 1;
+            $dayNumber = date('N');
             $startTime = date('H:i', time() - (60 * 15));
             $endTime = date('H:i', time() + (60 * 45));
 
