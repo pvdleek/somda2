@@ -11,7 +11,6 @@ use App\Generics\RouteGenerics;
 use App\Helpers\FormHelper;
 use App\Helpers\ForumAuthorizationHelper;
 use App\Helpers\ForumDiscussionHelper;
-use App\Helpers\RedirectHelper;
 use App\Helpers\TemplateHelper;
 use App\Helpers\UserHelper;
 use DateTime;
@@ -44,11 +43,6 @@ class ForumDiscussionController
     private ForumDiscussionHelper $discussionHelper;
 
     /**
-     * @var RedirectHelper
-     */
-    private RedirectHelper $redirectHelper;
-
-    /**
      * @var TemplateHelper
      */
     private TemplateHelper $templateHelper;
@@ -58,7 +52,6 @@ class ForumDiscussionController
      * @param FormHelper $formHelper
      * @param ForumAuthorizationHelper $forumAuthHelper
      * @param ForumDiscussionHelper $discussionHelper
-     * @param RedirectHelper $redirectHelper
      * @param TemplateHelper $templateHelper
      */
     public function __construct(
@@ -66,14 +59,12 @@ class ForumDiscussionController
         FormHelper $formHelper,
         ForumAuthorizationHelper $forumAuthHelper,
         ForumDiscussionHelper $discussionHelper,
-        RedirectHelper $redirectHelper,
         TemplateHelper $templateHelper
     ) {
         $this->userHelper = $userHelper;
         $this->formHelper = $formHelper;
         $this->forumAuthHelper = $forumAuthHelper;
         $this->discussionHelper = $discussionHelper;
-        $this->redirectHelper = $redirectHelper;
         $this->templateHelper = $templateHelper;
     }
 
@@ -92,7 +83,7 @@ class ForumDiscussionController
          */
         $discussion = $this->formHelper->getDoctrine()->getRepository(ForumDiscussion::class)->find($id);
         if (is_null($discussion)) {
-            return $this->redirectHelper->redirectToRoute(RouteGenerics::ROUTE_FORUM);
+            return $this->formHelper->getRedirectHelper()->redirectToRoute(RouteGenerics::ROUTE_FORUM);
         }
 
         $this->discussionHelper->setDiscussion($discussion);
@@ -156,7 +147,7 @@ class ForumDiscussionController
          */
         $forum = $this->formHelper->getDoctrine()->getRepository(ForumForum::class)->find($id);
         if (is_null($forum) || !$this->forumAuthHelper->mayPost($forum, $this->userHelper->getUser())) {
-            return $this->redirectHelper->redirectToRoute(RouteGenerics::ROUTE_FORUM);
+            return $this->formHelper->getRedirectHelper()->redirectToRoute(RouteGenerics::ROUTE_FORUM);
         }
 
         $forumDiscussion = new ForumDiscussion();

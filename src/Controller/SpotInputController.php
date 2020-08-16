@@ -10,7 +10,6 @@ use App\Helpers\FormHelper;
 use App\Helpers\SpotInputHelper;
 use App\Helpers\TemplateHelper;
 use App\Helpers\UserHelper;
-use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\RedirectResponse as RedirectResponse;
@@ -20,11 +19,6 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class SpotInputController
 {
-    /**
-     * @var ManagerRegistry
-     */
-    private ManagerRegistry $doctrine;
-
     /**
      * @var FormHelper
      */
@@ -46,20 +40,17 @@ class SpotInputController
     private SpotInputHelper $spotInputHelper;
 
     /**
-     * @param ManagerRegistry $doctrine
      * @param FormHelper $formHelper
      * @param TemplateHelper $templateHelper
      * @param UserHelper $userHelper
      * @param SpotInputHelper $spotInputHelper
      */
     public function __construct(
-        ManagerRegistry $doctrine,
         FormHelper $formHelper,
         TemplateHelper $templateHelper,
         UserHelper $userHelper,
         SpotInputHelper $spotInputHelper
     ) {
-        $this->doctrine = $doctrine;
         $this->formHelper = $formHelper;
         $this->templateHelper = $templateHelper;
         $this->userHelper = $userHelper;
@@ -119,7 +110,10 @@ class SpotInputController
             /**
              * @var Location $location
              */
-            $location = $this->doctrine->getRepository(Location::class)->findOneBy(['name' => $defaultLocation->value]);
+            $location = $this->formHelper
+                ->getDoctrine()
+                ->getRepository(Location::class)
+                ->findOneBy(['name' => $defaultLocation->value]);
         }
         return $location;
     }
@@ -134,7 +128,7 @@ class SpotInputController
         $idArray = array_filter(explode('/', $idList));
         $spots = [];
         foreach ($idArray as $id) {
-            $spot = $this->doctrine->getRepository(Spot::class)->find($id);
+            $spot = $this->formHelper->getDoctrine()->getRepository(Spot::class)->find($id);
             if (is_null($spot) || $spot->user !== $this->userHelper->getUser()) {
                 throw new AccessDeniedException('This spot does not exist or does not belong to the user');
             }

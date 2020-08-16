@@ -9,7 +9,6 @@ use App\Form\ForumDiscussionMove;
 use App\Generics\RouteGenerics;
 use App\Helpers\FormHelper;
 use App\Helpers\ForumAuthorizationHelper;
-use App\Helpers\RedirectHelper;
 use App\Helpers\TemplateHelper;
 use App\Helpers\UserHelper;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -35,11 +34,6 @@ class ForumModerateController
     private UserHelper $userHelper;
 
     /**
-     * @var RedirectHelper
-     */
-    private RedirectHelper $redirectHelper;
-
-    /**
      * @var TemplateHelper
      */
     private TemplateHelper $templateHelper;
@@ -52,20 +46,17 @@ class ForumModerateController
     /**
      * @param FormHelper $formHelper
      * @param UserHelper $userHelper
-     * @param RedirectHelper $redirectHelper
      * @param TemplateHelper $templateHelper
      * @param ForumAuthorizationHelper $forumAuthHelper
      */
     public function __construct(
         FormHelper $formHelper,
         UserHelper $userHelper,
-        RedirectHelper $redirectHelper,
         TemplateHelper $templateHelper,
         ForumAuthorizationHelper $forumAuthHelper
     ) {
         $this->formHelper = $formHelper;
         $this->userHelper = $userHelper;
-        $this->redirectHelper = $redirectHelper;
         $this->templateHelper = $templateHelper;
         $this->forumAuthHelper = $forumAuthHelper;
     }
@@ -100,7 +91,7 @@ class ForumModerateController
             $this->formHelper->getDoctrine()->getManager()->flush();
         }
 
-        return $this->redirectHelper->redirectToRoute(
+        return $this->formHelper->getRedirectHelper()->redirectToRoute(
             RouteGenerics::ROUTE_FORUM_DISCUSSION,
             ['id' => $discussion->getId(), 'name' => urlencode($discussion->title)]
         );
@@ -226,7 +217,7 @@ class ForumModerateController
 
         $this->formHelper->getDoctrine()->getManager()->flush();
 
-        return $this->redirectHelper->redirectToRoute(
+        return $this->formHelper->getRedirectHelper()->redirectToRoute(
             RouteGenerics::ROUTE_FORUM_DISCUSSION,
             ['id' => $newDiscussion->getId(), 'name' => urlencode($newDiscussion->title)]
         );

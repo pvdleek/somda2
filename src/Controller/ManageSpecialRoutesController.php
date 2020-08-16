@@ -7,7 +7,6 @@ use App\Form\SpecialRoute as SpecialRouteForm;
 use App\Helpers\FormHelper;
 use App\Helpers\TemplateHelper;
 use DateTime;
-use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -16,11 +15,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ManageSpecialRoutesController
 {
-    /**
-     * @var ManagerRegistry
-     */
-    private ManagerRegistry $doctrine;
-
     /**
      * @var FormHelper
      */
@@ -32,13 +26,11 @@ class ManageSpecialRoutesController
     private TemplateHelper $templateHelper;
 
     /**
-     * @param ManagerRegistry $doctrine
      * @param FormHelper $formHelper
      * @param TemplateHelper $templateHelper
      */
-    public function __construct(ManagerRegistry $doctrine, FormHelper $formHelper, TemplateHelper $templateHelper)
+    public function __construct(FormHelper $formHelper, TemplateHelper $templateHelper)
     {
-        $this->doctrine = $doctrine;
         $this->formHelper = $formHelper;
         $this->templateHelper = $templateHelper;
     }
@@ -51,7 +43,10 @@ class ManageSpecialRoutesController
     {
         return $this->templateHelper->render('manageSpecialRoutes/index.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Beheer bijzondere ritten',
-            'specialRoutes' => $this->doctrine->getRepository(SpecialRoute::class)->findBy([], ['startDate' => 'DESC']),
+            'specialRoutes' => $this->formHelper
+                ->getDoctrine()
+                ->getRepository(SpecialRoute::class)
+                ->findBy([], ['startDate' => 'DESC']),
         ]);
     }
 
@@ -64,7 +59,7 @@ class ManageSpecialRoutesController
      */
     public function editAction(Request $request, int $id)
     {
-        $specialRoute = $this->doctrine->getRepository(SpecialRoute::class)->find($id);
+        $specialRoute = $this->formHelper->getDoctrine()->getRepository(SpecialRoute::class)->find($id);
         if (is_null($specialRoute)) {
             $specialRoute = new SpecialRoute();
             $specialRoute->startDate = new DateTime('+1 day');
@@ -75,7 +70,7 @@ class ManageSpecialRoutesController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             if (is_null($specialRoute->getId())) {
-                $this->doctrine->getManager()->persist($specialRoute);
+                $this->formHelper->getDoctrine()->getManager()->persist($specialRoute);
                 return $this->formHelper->finishFormHandling('Rit toegevoegd', 'manage_special_routes');
             }
             return $this->formHelper->finishFormHandling('Rit bijgewerkt', 'manage_special_routes');

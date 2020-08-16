@@ -5,11 +5,9 @@ namespace App\Controller;
 use App\Entity\TrainTableYear;
 use App\Helpers\FlashHelper;
 use App\Helpers\FormHelper;
-use App\Helpers\RedirectHelper;
 use App\Helpers\RouteManagementHelper;
 use App\Helpers\RoutesDisplayHelper;
 use App\Helpers\TemplateHelper;
-use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -19,11 +17,6 @@ use Symfony\Component\HttpFoundation\Response;
 class ManageTrainTablesController
 {
     /**
-     * @var ManagerRegistry
-     */
-    private ManagerRegistry $doctrine;
-
-    /**
      * @var FormHelper
      */
     private FormHelper $formHelper;
@@ -32,11 +25,6 @@ class ManageTrainTablesController
      * @var TemplateHelper
      */
     private TemplateHelper $templateHelper;
-
-    /**
-     * @var RedirectHelper
-     */
-    private RedirectHelper $redirectHelper;
 
     /**
      * @var RoutesDisplayHelper
@@ -49,25 +37,19 @@ class ManageTrainTablesController
     private RouteManagementHelper $routeManagementHelper;
 
     /**
-     * @param ManagerRegistry $doctrine
      * @param FormHelper $formHelper
      * @param TemplateHelper $templateHelper
-     * @param RedirectHelper $redirectHelper
      * @param RoutesDisplayHelper $routesDisplayHelper
      * @param RouteManagementHelper $routeManagementHelper
      */
     public function __construct(
-        ManagerRegistry $doctrine,
         FormHelper $formHelper,
         TemplateHelper $templateHelper,
-        RedirectHelper $redirectHelper,
         RoutesDisplayHelper $routesDisplayHelper,
         RouteManagementHelper $routeManagementHelper
     ) {
-        $this->doctrine = $doctrine;
         $this->formHelper = $formHelper;
         $this->templateHelper = $templateHelper;
-        $this->redirectHelper = $redirectHelper;
         $this->routesDisplayHelper = $routesDisplayHelper;
         $this->routeManagementHelper = $routeManagementHelper;
     }
@@ -85,7 +67,8 @@ class ManageTrainTablesController
 
         return $this->templateHelper->render('manageTrainTables/index.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Beheer dienstregelingen',
-            'trainTableYears' => $this->doctrine
+            'trainTableYears' => $this->formHelper
+                ->getDoctrine()
                 ->getRepository(TrainTableYear::class)
                 ->findBy([], ['startDate' => 'DESC']),
             'selectedTrainTableYear' => $routesDisplay->trainTableYear,
@@ -115,7 +98,7 @@ class ManageTrainTablesController
                 ' past niet in de vastgelegde treinnummerlijst, neem contact op met het beheer'
             );
 
-            return $this->redirectHelper->redirectToRoute('manage_train_tables_year_route_list', [
+            return $this->formHelper->getRedirectHelper()->redirectToRoute('manage_train_tables_year_route_list', [
                 'yearId' => $this->routeManagementHelper->getRouteList()->trainTableYear->getId(),
                 'routeListId' => $routeListId
             ]);

@@ -6,7 +6,6 @@ use App\Entity\User;
 use App\Form\UserBan;
 use App\Helpers\FormHelper;
 use App\Helpers\TemplateHelper;
-use Doctrine\Persistence\ManagerRegistry;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,11 +13,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ManageUsersController
 {
-    /**
-     * @var ManagerRegistry
-     */
-    private ManagerRegistry $doctrine;
-
     /**
      * @var FormHelper
      */
@@ -30,13 +24,11 @@ class ManageUsersController
     private TemplateHelper $templateHelper;
 
     /**
-     * @param ManagerRegistry $doctrine
      * @param FormHelper $formHelper
      * @param TemplateHelper $templateHelper
      */
-    public function __construct(ManagerRegistry $doctrine, FormHelper $formHelper, TemplateHelper $templateHelper)
+    public function __construct(FormHelper $formHelper, TemplateHelper $templateHelper)
     {
-        $this->doctrine = $doctrine;
         $this->formHelper = $formHelper;
         $this->templateHelper = $templateHelper;
     }
@@ -49,7 +41,7 @@ class ManageUsersController
     {
         return $this->templateHelper->render('manageUsers/bans.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Beheer bans',
-            'users' => $this->doctrine->getRepository(User::class)->findBanned(),
+            'users' => $this->formHelper->getDoctrine()->getRepository(User::class)->findBanned(),
         ]);
     }
 
@@ -61,7 +53,7 @@ class ManageUsersController
      */
     public function banAction(Request $request, int $id)
     {
-        $user = $this->doctrine->getRepository(User::class)->find($id);
+        $user = $this->formHelper->getDoctrine()->getRepository(User::class)->find($id);
         $form = $this->formHelper->getFactory()->create(UserBan::class, $user);
 
         $form->handleRequest($request);

@@ -10,7 +10,6 @@ use App\Form\RouteList as RouteListForm;
 use App\Helpers\FormHelper;
 use App\Helpers\TemplateHelper;
 use DateTime;
-use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -20,11 +19,6 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class ManageRouteListsController
 {
-    /**
-     * @var ManagerRegistry
-     */
-    private ManagerRegistry $doctrine;
-
     /**
      * @var FormHelper
      */
@@ -36,13 +30,11 @@ class ManageRouteListsController
     private TemplateHelper $templateHelper;
 
     /**
-     * @param ManagerRegistry $doctrine
      * @param FormHelper $formHelper
      * @param TemplateHelper $templateHelper
      */
-    public function __construct(ManagerRegistry $doctrine, FormHelper $formHelper, TemplateHelper $templateHelper)
+    public function __construct(FormHelper $formHelper, TemplateHelper $templateHelper)
     {
-        $this->doctrine = $doctrine;
         $this->formHelper = $formHelper;
         $this->templateHelper = $templateHelper;
     }
@@ -56,17 +48,18 @@ class ManageRouteListsController
     public function routeListsAction(int $id = null): Response
     {
         if (is_null($id)) {
-            $trainTableYear = $this->doctrine
+            $trainTableYear = $this->formHelper
+                ->getDoctrine()
                 ->getRepository(TrainTableYear::class)
                 ->findTrainTableYearByDate(new DateTime());
             $routeLists = [];
         } else {
-            $trainTableYear = $this->doctrine->getRepository(TrainTableYear::class)->find($id);
+            $trainTableYear = $this->formHelper->getDoctrine()->getRepository(TrainTableYear::class)->find($id);
             if (is_null($trainTableYear)) {
                 throw new AccessDeniedException('This trainTableYear does not exist');
             }
 
-            $routeLists = $this->doctrine->getRepository(RouteList::class)->findBy(
+            $routeLists = $this->formHelper->getDoctrine()->getRepository(RouteList::class)->findBy(
                 ['trainTableYear' => $trainTableYear],
                 ['firstNumber' => 'ASC']
             );
@@ -74,7 +67,8 @@ class ManageRouteListsController
 
         return $this->templateHelper->render('manageRouteLists/index.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Beheer treinnummerlijst',
-            'trainTableYears' => $this->doctrine
+            'trainTableYears' => $this->formHelper
+                ->getDoctrine()
                 ->getRepository(TrainTableYear::class)
                 ->findBy([], ['startDate' => 'DESC']),
             'trainTableYear' => $trainTableYear,
@@ -101,7 +95,7 @@ class ManageRouteListsController
             } else {
                 // New routeList
                 $message = 'Treinnummer toegevoegd';
-                $this->doctrine->getManager()->persist($routeList);
+                $this->formHelper->getDoctrine()->getManager()->persist($routeList);
             }
             return $this->formHelper->finishFormHandling(
                 $message,
@@ -128,7 +122,7 @@ class ManageRouteListsController
             /**
              * @var RouteList $routeList
              */
-            $routeList = $this->doctrine->getRepository(RouteList::class)->find($id);
+            $routeList = $this->formHelper->getDoctrine()->getRepository(RouteList::class)->find($id);
             if (is_null($routeList)) {
                 throw new AccessDeniedException('This routeList does not exist');
             }
@@ -136,15 +130,18 @@ class ManageRouteListsController
             return $routeList;
         }
 
-        $trainTableYear = $this->doctrine->getRepository(TrainTableYear::class)->find($yearId);
+        $trainTableYear = $this->formHelper->getDoctrine()->getRepository(TrainTableYear::class)->find($yearId);
         if (is_null($trainTableYear)) {
             throw new AccessDeniedException('This trainTableYear does not exist');
         }
 
         $routeList = new RouteList();
         $routeList->trainTableYear = $trainTableYear;
-        $routeList->transporter = $this->doctrine->getRepository(Transporter::class)->findOneBy([]);
-        $routeList->characteristic = $this->doctrine->getRepository(Characteristic::class)->findOneBy([]);
+        $routeList->transporter = $this->formHelper->getDoctrine()->getRepository(Transporter::class)->findOneBy([]);
+        $routeList->characteristic = $this->formHelper
+            ->getDoctrine()
+            ->getRepository(Characteristic::class)
+            ->findOneBy([]);
 
         return $routeList;
     }
