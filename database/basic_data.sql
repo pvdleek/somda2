@@ -1,5 +1,9 @@
+-- An export of somda_blokken, somda_forum_cats, somda_forum_forums, somda_groups, somda_help, somda_help_text,
+-- somda_jargon, somda_karakteristiek, somda_positie, somda_prefs, somda_rechten, somda_rijdagen,
+-- somda_snb_spoor_nieuws_bron, somda_snf_spoor_nieuws_bron_feed, somda_verk, somda_verk_cats and somda_vervoerder
+
 --
--- Dumping data for table `somda_blokken`
+-- Gegevens worden geëxporteerd voor tabel `somda_blokken`
 --
 
 INSERT INTO `somda_blokken` (`blokid`, `name`, `route`, `menu_volgorde`, `do_separator`, `role`, `parent_block`) VALUES
@@ -65,7 +69,7 @@ INSERT INTO `somda_blokken` (`blokid`, `name`, `route`, `menu_volgorde`, `do_sep
 (98, 'Beheer mat-samenstellingen', 'manage_train_compositions', 0, 0, 'ROLE_ADMIN_TRAIN_COMPOSITIONS', NULL);
 
 --
--- Dumping data for table `somda_forum_cats`
+-- Gegevens worden geëxporteerd voor tabel `somda_forum_cats`
 --
 
 INSERT INTO `somda_forum_cats` (`catid`, `name`, `volgorde`) VALUES
@@ -77,7 +81,7 @@ INSERT INTO `somda_forum_cats` (`catid`, `name`, `volgorde`) VALUES
 (6, 'Spotten', 2);
 
 --
--- Dumping data for table `somda_forum_forums`
+-- Gegevens worden geëxporteerd voor tabel `somda_forum_forums`
 --
 
 INSERT INTO `somda_forum_forums` (`forumid`, `catid`, `name`, `description`, `volgorde`, `type`) VALUES
@@ -118,7 +122,7 @@ INSERT INTO `somda_forum_forums` (`forumid`, `catid`, `name`, `description`, `vo
 (65, 3, 'Opvallende dingen 2020', 'Kleine dingen die je opvielen op het spoor', 2, 0);
 
 --
--- Dumping data for table `somda_groups`
+-- Gegevens worden geëxporteerd voor tabel `somda_groups`
 --
 
 INSERT INTO `somda_groups` (`groupid`, `name`, `roles`) VALUES
@@ -139,7 +143,7 @@ INSERT INTO `somda_groups` (`groupid`, `name`, `roles`) VALUES
 (23, 'MatSMS beheer', 'a:1:{i:0;s:29:\"ROLE_ADMIN_TRAIN_COMPOSITIONS\";}');
 
 --
--- Dumping data for table `somda_help`
+-- Gegevens worden geëxporteerd voor tabel `somda_help`
 --
 
 INSERT INTO `somda_help` (`contentid`, `titel`, `template`) VALUES
@@ -162,7 +166,7 @@ INSERT INTO `somda_help` (`contentid`, `titel`, `template`) VALUES
 (110000, 'Frequently Asked Questions', 'faq');
 
 --
--- Dumping data for table `somda_help_text`
+-- Gegevens worden geëxporteerd voor tabel `somda_help_text`
 --
 
 INSERT INTO `somda_help_text` (`blokid`, `text`, `google_channel`, `ad_code`) VALUES
@@ -177,7 +181,7 @@ INSERT INTO `somda_help_text` (`blokid`, `text`, `google_channel`, `ad_code`) VA
 (48, 'Hier krijg je een overzicht van de spots van de 1700-locs die aan een DDAR-<b>stam</b> zitten.<br />Omdat van de DDAR-stammen alleen het stamnummer ingevoerd wordt zijn deze locs niet op te vragen via <a href=\"/spots/\">recente spots</a>.<br />In het DDAR overzicht kan je zien in welke periode de <b>loc</b> aan welke stam zat.', '8195537679', '');
 
 --
--- Dumping data for table `somda_jargon`
+-- Gegevens worden geëxporteerd voor tabel `somda_jargon`
 --
 
 INSERT INTO `somda_jargon` (`jargonid`, `term`, `image`, `description`) VALUES
@@ -321,7 +325,7 @@ INSERT INTO `somda_jargon` (`jargonid`, `term`, `image`, `description`) VALUES
 (138, 'NOEK', '', 'Niet op eigen kracht');
 
 --
--- Dumping data for table `somda_karakteristiek`
+-- Gegevens worden geëxporteerd voor tabel `somda_karakteristiek`
 --
 
 INSERT INTO `somda_karakteristiek` (`karakteristiek_id`, `naam`, `omschrijving`) VALUES
@@ -349,7 +353,7 @@ INSERT INTO `somda_karakteristiek` (`karakteristiek_id`, `naam`, `omschrijving`)
 (24, 'HSN', 'Hogesnelheidstrein');
 
 --
--- Dumping data for table `somda_positie`
+-- Gegevens worden geëxporteerd voor tabel `somda_positie`
 --
 
 INSERT INTO `somda_positie` (`posid`, `positie`) VALUES
@@ -380,7 +384,7 @@ INSERT INTO `somda_positie` (`posid`, `positie`) VALUES
 (85, 'L');
 
 --
--- Dumping data for table `somda_prefs`
+-- Gegevens worden geëxporteerd voor tabel `somda_prefs`
 --
 
 INSERT INTO `somda_prefs` (`prefid`, `sleutel`, `type`, `description`, `default_value`, `volgorde`) VALUES
@@ -398,7 +402,7 @@ INSERT INTO `somda_prefs` (`prefid`, `sleutel`, `type`, `description`, `default_
 (32, 'force_desktop', 'boolean', 'Ga altijd naar de desktop versie, nooit de mobiele versie', '0', 80);
 
 --
--- Dumping data for table `somda_rechten`
+-- Gegevens worden geëxporteerd voor tabel `somda_rechten`
 --
 
 INSERT INTO `somda_rechten` (`blokid`, `groupid`) VALUES
@@ -560,7 +564,7 @@ INSERT INTO `somda_rechten` (`blokid`, `groupid`) VALUES
 (99, 7);
 
 --
--- Dumping data for table `somda_rijdagen`
+-- Gegevens worden geëxporteerd voor tabel `somda_rijdagen`
 --
 
 INSERT INTO `somda_rijdagen` (`rijdagenid`, `ma`, `di`, `wo`, `do`, `vr`, `za`, `zf`) VALUES
@@ -693,7 +697,7 @@ INSERT INTO `somda_rijdagen` (`rijdagenid`, `ma`, `di`, `wo`, `do`, `vr`, `za`, 
 (127, 1, 1, 1, 1, 1, 1, 1);
 
 --
--- Dumping data for table `somda_snb_spoor_nieuws_bron`
+-- Gegevens worden geëxporteerd voor tabel `somda_snb_spoor_nieuws_bron`
 --
 
 INSERT INTO `somda_snb_spoor_nieuws_bron` (`snb_id`, `snb_bron`, `snb_logo`, `snb_url`, `snb_description`) VALUES
@@ -751,7 +755,7 @@ INSERT INTO `somda_snb_spoor_nieuws_bron` (`snb_id`, `snb_bron`, `snb_logo`, `sn
 (52, 'tgraaf', 'telegraaf.gif', 'www.telegraaf.nl', 'Telegraaf');
 
 --
--- Dumping data for table `somda_snf_spoor_nieuws_bron_feed`
+-- Gegevens worden geëxporteerd voor tabel `somda_snf_spoor_nieuws_bron_feed`
 --
 
 INSERT INTO `somda_snf_spoor_nieuws_bron_feed` (`snf_id`, `snf_snb_id`, `snf_url`, `snf_filter_results`) VALUES
@@ -975,7 +979,7 @@ INSERT INTO `somda_snf_spoor_nieuws_bron_feed` (`snf_id`, `snf_snb_id`, `snf_url
 (218, 49, 'https://www.gic.nl/startpagina/rss', 1);
 
 --
--- Dumping data for table `somda_verk`
+-- Gegevens worden geëxporteerd voor tabel `somda_verk`
 --
 
 INSERT INTO `somda_verk` (`afkid`, `afkorting`, `landid`, `latitude`, `longitude`, `description`, `traject`, `route_overstaptijd`, `spot_allowed`) VALUES
@@ -2475,7 +2479,7 @@ INSERT INTO `somda_verk` (`afkid`, `afkorting`, `landid`, `latitude`, `longitude
 (1614, 'Lsw', 3, 51.143333, 4.068889, 'Sinaai', NULL, NULL, 1);
 
 --
--- Dumping data for table `somda_verk_cats`
+-- Gegevens worden geëxporteerd voor tabel `somda_verk_cats`
 --
 
 INSERT INTO `somda_verk_cats` (`verk_catid`, `name`, `code`) VALUES
@@ -2496,64 +2500,64 @@ INSERT INTO `somda_verk_cats` (`verk_catid`, `name`, `code`) VALUES
 (99, 'Speciale codes', '');
 
 --
--- Dumping data for table `somda_vervoerder`
+-- Gegevens worden geëxporteerd voor tabel `somda_vervoerder`
 --
 
-INSERT INTO `somda_vervoerder` (`vervoerder_id`, `omschrijving`, `prorail_desc`) VALUES
-(1, 'NSR', 'NSR'),
-(2, 'Arriva', 'Arriva'),
-(3, 'Thalys', 'Thalys NL'),
-(4, 'DB Regio', 'DB Regio'),
-(5, 'DB Cargo', 'DB Cargo'),
-(6, 'Herik Rail', 'Herik Rail'),
-(7, 'DB Regio NRW', 'DB Regionalbahn Westfalen GmbH'),
-(8, 'PEG', 'Prignitzer Eisenbahn GmbH (PEG)'),
-(9, 'Syntus', 'Syntus'),
-(10, 'Connexxion', 'Connexxion'),
-(11, 'Veolia', 'Veolia Transport Ned bv'),
-(12, 'VSM', 'VSM'),
-(13, 'ZLSM', 'ZLSM'),
-(14, 'HUSA', 'HUSA'),
-(15, 'R4C', 'Rail4Chem Benelux,Rail4Chem GmbH'),
-(16, 'ERS', 'ERS'),
-(18, 'Lineas', 'Lineas'),
-(20, 'SNCF Fret', 'SNCF Fret'),
-(21, 'Rheincargo', 'Rheincargo'),
-(22, 'Captrain Netherlands', 'Captrain Netherlands'),
-(23, 'RRF', 'RRF'),
-(24, 'Spitzke', 'Spitzke'),
-(25, 'VolkerRail', 'VolkerRail'),
-(26, 'NedTrain', 'NedTrain'),
-(27, 'Eurailscout', 'Eurailscout'),
-(28, 'BAM Rail', 'BAM Rail'),
-(29, 'Strukton', 'Strukton'),
-(31, 'NS International', 'NS International'),
-(32, 'CTL', 'CTL'),
-(33, 'DB Autozug', 'Deutsche Bahn AutoZug GmbH'),
-(35, 'ITL Benelux', 'ITL Benelux'),
-(36, 'Lloyds', 'Lloyds'),
-(37, 'Rurtalbahn', 'Rurtalbahn'),
-(38, 'Bentheimer Eisenbahn', 'Bentheimer Eisenbahn'),
-(39, 'Shunter', 'Shunter Tractie'),
-(40, 'HSA', 'HSA Beheer'),
-(42, 'Crossrail', 'Crossrail Benelux'),
-(43, 'TX Logistik', 'TX Logistik'),
-(45, 'Keolis', 'Keolis'),
-(46, 'Friese Stoomtrein Maatschappij', 'Friese Stoomtrein Maatschappij'),
-(47, 'Kombirail Europe', 'Kombirail Europe'),
-(48, 'Rail Transport Service', 'Rail Transport Service'),
-(49, 'Continental Rail Service', 'Continental Rail Service'),
-(50, 'Locon', 'Locon'),
-(51, 'Captrain Belgium', 'Captrain Belgium'),
-(52, 'HSL Logistik', 'HSL Logistik'),
-(53, 'Prorail', 'Prorail'),
-(54, 'EETC', 'EETC'),
-(55, 'NMBS', 'NMBS'),
-(56, 'Railpro', 'Railpro'),
-(57, 'Spoorwegmuseum', 'Spoorwegmuseum'),
-(58, 'LTE', 'LTE'),
-(59, 'Metrans', 'Metrans'),
-(60, 'SBB Cargo', 'SBB Cargo'),
-(61, 'Railtraxx', 'Railtraxx'),
-(62, 'St. Historisch Dieselmaterieel', 'SHD'),
-(63, 'Qbuzz', 'Qbuzz');
+INSERT INTO `somda_vervoerder` (`vervoerder_id`, `omschrijving`, `prorail_desc`, `iff_code`) VALUES
+(1, 'NSR', 'NSR', 100),
+(2, 'Arriva', 'Arriva', 500),
+(3, 'Thalys', 'Thalys NL', 300),
+(4, 'DB Regio', 'DB Regio', NULL),
+(5, 'DB Cargo', 'DB Cargo', NULL),
+(6, 'Herik Rail', 'Herik Rail', NULL),
+(7, 'DB Regio NRW', 'DB Regionalbahn Westfalen GmbH', NULL),
+(8, 'PEG', 'Prignitzer Eisenbahn GmbH (PEG)', NULL),
+(9, 'Syntus', 'Syntus', 400),
+(10, 'Connexxion', 'Connexxion', 600),
+(11, 'Veolia', 'Veolia Transport Ned bv', 700),
+(12, 'VSM', 'VSM', NULL),
+(13, 'ZLSM', 'ZLSM', NULL),
+(14, 'HUSA', 'HUSA', NULL),
+(15, 'R4C', 'Rail4Chem Benelux,Rail4Chem GmbH', NULL),
+(16, 'ERS', 'ERS', NULL),
+(18, 'Lineas', 'Lineas', NULL),
+(20, 'SNCF Fret', 'SNCF Fret', 980),
+(21, 'Rheincargo', 'Rheincargo', NULL),
+(22, 'Captrain Netherlands', 'Captrain Netherlands', NULL),
+(23, 'RRF', 'RRF', NULL),
+(24, 'Spitzke', 'Spitzke', NULL),
+(25, 'VolkerRail', 'VolkerRail', NULL),
+(26, 'NedTrain', 'NedTrain', NULL),
+(27, 'Eurailscout', 'Eurailscout', NULL),
+(28, 'BAM Rail', 'BAM Rail', NULL),
+(29, 'Strukton', 'Strukton', NULL),
+(31, 'NS International', 'NS International', 200),
+(32, 'CTL', 'CTL', NULL),
+(33, 'DB Autozug', 'Deutsche Bahn AutoZug GmbH', NULL),
+(35, 'ITL Benelux', 'ITL Benelux', NULL),
+(36, 'Lloyds', 'Lloyds', NULL),
+(37, 'Rurtalbahn', 'Rurtalbahn', NULL),
+(38, 'Bentheimer Eisenbahn', 'Bentheimer Eisenbahn', NULL),
+(39, 'Shunter', 'Shunter Tractie', NULL),
+(40, 'HSA', 'HSA Beheer', NULL),
+(42, 'Crossrail', 'Crossrail Benelux', NULL),
+(43, 'TX Logistik', 'TX Logistik', NULL),
+(45, 'Keolis', 'Keolis', 911),
+(46, 'Friese Stoomtrein Maatschappij', 'Friese Stoomtrein Maatschappij', NULL),
+(47, 'Kombirail Europe', 'Kombirail Europe', NULL),
+(48, 'Rail Transport Service', 'Rail Transport Service', NULL),
+(49, 'Continental Rail Service', 'Continental Rail Service', NULL),
+(50, 'Locon', 'Locon', 962),
+(51, 'Captrain Belgium', 'Captrain Belgium', NULL),
+(52, 'HSL Logistik', 'HSL Logistik', NULL),
+(53, 'Prorail', 'Prorail', NULL),
+(54, 'EETC', 'EETC', 310),
+(55, 'NMBS', 'NMBS', 920),
+(56, 'Railpro', 'Railpro', NULL),
+(57, 'Spoorwegmuseum', 'Spoorwegmuseum', NULL),
+(58, 'LTE', 'LTE', NULL),
+(59, 'Metrans', 'Metrans', NULL),
+(60, 'SBB Cargo', 'SBB Cargo', NULL),
+(61, 'Railtraxx', 'Railtraxx', NULL),
+(62, 'St. Historisch Dieselmaterieel', 'SHD', NULL),
+(63, 'Qbuzz', 'Qbuzz', 750);
