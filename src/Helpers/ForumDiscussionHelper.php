@@ -108,12 +108,12 @@ class ForumDiscussionHelper
             ForumGenerics::MAX_POSTS_PER_PAGE,
             ($this->pageNumber - 1) * ForumGenerics::MAX_POSTS_PER_PAGE
         );
-//        if ($this->userHelper->userIsLoggedIn()) {
-//            $this->doctrine->getRepository(ForumDiscussion::class)->markPostsAsRead(
-//                $this->userHelper->getUser(),
-//                $posts
-//            );
-//        }
+        if ($this->userHelper->userIsLoggedIn()) {
+            $this->doctrine->getRepository(ForumDiscussion::class)->markPostsAsRead(
+                $this->userHelper->getUser(),
+                $posts
+            );
+        }
 
         return $posts;
     }
