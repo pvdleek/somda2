@@ -199,8 +199,9 @@ class TrainTableController extends AbstractFOSRestController
      *                 @SWG\Property(
      *                     description="The action of the route: 'v' for departure, '-' for a drivethrough,\
                                         '+' for a short stop and 'a' for arrival",
-     *                     maxLength=1,
      *                     enum={"v","-","+","a"},
+     *                     maxLength=1,
+     *                     property="action",
      *                     type="string",
      *                 ),
      *                 @SWG\Property(
