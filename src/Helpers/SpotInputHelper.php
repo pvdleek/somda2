@@ -175,7 +175,7 @@ class SpotInputHelper
         $this->doctrine->getManager()->persist($spot);
         $this->doctrine->getManager()->flush();
 
-        return $spot->getId();
+        return $spot->id;
     }
 
     /**

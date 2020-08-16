@@ -79,7 +79,7 @@ class ManageSpecialRoutesController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            if (is_null($specialRoute->getId())) {
+            if (is_null($specialRoute->id)) {
                 $this->formHelper->getDoctrine()->getManager()->persist($specialRoute);
                 return $this->formHelper->finishFormHandling('Rit toegevoegd', 'manage_special_routes');
             }

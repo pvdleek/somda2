@@ -100,7 +100,7 @@ class ManageRouteListsController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            if ($routeList->getId() > 0) {
+            if ($routeList->id > 0) {
                 $message = 'Treinnummer bijgewerkt';
             } else {
                 // New routeList
@@ -110,7 +110,7 @@ class ManageRouteListsController
             return $this->formHelper->finishFormHandling(
                 $message,
                 'manage_route_lists_year',
-                ['id' => $routeList->trainTableYear->getId()]
+                ['id' => $routeList->trainTableYear->id]
             );
         }
 

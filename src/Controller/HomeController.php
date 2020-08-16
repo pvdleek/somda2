@@ -140,7 +140,7 @@ class HomeController
              * @var ForumForum $forum
              */
             $forum = $this->doctrine->getRepository(ForumForum::class)->find($_ENV['WRONG_SPOTS_FORUM_ID']);
-            $layoutData[self::KEY_FORUM_SPOTS]['id'] = $forum->getId();
+            $layoutData[self::KEY_FORUM_SPOTS]['id'] = $forum->id;
             $layoutData[self::KEY_FORUM_SPOTS]['name'] = $forum->name;
             $layoutData[self::KEY_FORUM_SPOTS]['discussions'] = $this->doctrine
                 ->getRepository(ForumDiscussion::class)

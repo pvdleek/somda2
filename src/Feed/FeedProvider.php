@@ -179,12 +179,12 @@ class FeedProvider implements FeedProviderInterface
                 ->setTitle($specialRoute->title . ' - ' . $date)
                 ->setPublicId($this->router->generate(
                     'special_route',
-                    ['id' => $specialRoute->getId()],
+                    ['id' => $specialRoute->id],
                     UrlGeneratorInterface::ABSOLUTE_URL
                 ))
                 ->setLink($this->router->generate(
                     'special_route',
-                    ['id' => $specialRoute->getId()],
+                    ['id' => $specialRoute->id],
                     UrlGeneratorInterface::ABSOLUTE_URL
                 ))
                 ->setLastModified($specialRoute->publicationTimestamp)

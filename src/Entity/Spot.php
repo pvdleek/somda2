@@ -131,7 +131,7 @@ class Spot
     public function toArray(): array
     {
         return [
-            'id' => $this->getId(),
+            'id' => $this->id,
             'spotDate' => $this->spotDate,
             'train' => $this->train->number,
             'route' => $this->route->number,

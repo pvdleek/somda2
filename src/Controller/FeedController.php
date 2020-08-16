@@ -171,7 +171,7 @@ class FeedController
         $trainTableYearId = $this->doctrine
             ->getRepository(TrainTableYear::class)
             ->findTrainTableYearByDate(new DateTime())
-            ->getId();
+            ->id;
         $this->trainTableHelper->setTrainTableYear($trainTableYearId);
         $this->trainTableHelper->setLocation($location->name);
 

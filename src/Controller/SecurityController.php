@@ -122,7 +122,7 @@ class SecurityController
                     $user,
                     'Jouw registratie bij Somda',
                     'register',
-                    ['userId' => $user->getId(), 'activationKey' => $user->activationKey]
+                    ['userId' => $user->id, 'activationKey' => $user->activationKey]
                 )) {
                     $this->formHelper->getFlashHelper()->add(
                         FlashHelper::FLASH_TYPE_INFORMATION,
@@ -133,7 +133,7 @@ class SecurityController
 
                     return $this->formHelper->getRedirectHelper()->redirectToRoute(
                         'activate',
-                        ['id' => $user->getId()]
+                        ['id' => $user->id]
                     );
                 } else {
                     $this->formHelper->getDoctrine()->getManager()->remove($user);

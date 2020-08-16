@@ -175,7 +175,7 @@ class ProfileController
 
             $this->flashHelper->add(FlashHelper::FLASH_TYPE_INFORMATION, 'Je bericht is verzonden');
 
-            return $this->redirectHelper->redirectToRoute('profile_view', ['id' => $user->getId()]);
+            return $this->redirectHelper->redirectToRoute('profile_view', ['id' => $user->id]);
         }
 
         return $this->templateHelper->render('somda/mail.html.twig', [

@@ -87,7 +87,7 @@ class TrainTableController
             $trainTableYearId = $this->doctrine
                 ->getRepository(TrainTableYear::class)
                 ->findTrainTableYearByDate(new DateTime())
-                ->getId();
+                ->id;
         } else {
             $submit = true;
             $this->trainTableHelper->setTrainTableYear($trainTableYearId);
@@ -133,7 +133,7 @@ class TrainTableController
             $trainTableYearId = $this->doctrine
                 ->getRepository(TrainTableYear::class)
                 ->findTrainTableYearByDate(new DateTime())
-                ->getId();
+                ->id;
 
             $dayNumber = date('N') - 1;
             $startTime = date('H:i', time() - (60 * 15));
@@ -145,7 +145,7 @@ class TrainTableController
                 $trainTableYearId = $this->doctrine
                     ->getRepository(TrainTableYear::class)
                     ->findTrainTableYearByDate(new DateTime())
-                    ->getId();
+                    ->id;
             }
 
             $this->trainTableHelper->setTrainTableYear($trainTableYearId);
@@ -232,7 +232,7 @@ class TrainTableController
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Overzicht treinnummers',
             TemplateHelper::PARAMETER_TRAIN_TABLE_INDICES =>
                 $this->doctrine->getRepository(TrainTableYear::class)->findAll(),
-            TemplateHelper::PARAMETER_TRAIN_TABLE_INDEX_NUMBER => $routesDisplay->trainTableYear->getId(),
+            TemplateHelper::PARAMETER_TRAIN_TABLE_INDEX_NUMBER => $routesDisplay->trainTableYear->id,
             'routeLists' => $routesDisplay->routeLists,
             'selectedRouteList' => $routesDisplay->selectedRouteList,
             'routes' => $routesDisplay->routes,

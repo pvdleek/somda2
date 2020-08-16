@@ -139,7 +139,7 @@ class TrainController
             return $this->formHelper->finishFormHandling(
                 'Materieelsamenstelling bijgewerkt',
                 RouteGenerics::TRAIN_COMPOSITIONS_TYPE,
-                ['typeId' => $trainComposition->getType()->getId()]
+                ['typeId' => $trainComposition->getType()->id]
             );
         }
 
@@ -178,7 +178,7 @@ class TrainController
             return $this->formHelper->finishFormHandling(
                 'Je voorstel is ingediend. Na goedkeuring door 1 van de beheerders wordt het overzicht aangepast',
                 RouteGenerics::TRAIN_COMPOSITIONS_TYPE,
-                ['typeId' => $trainComposition->getType()->getId()]
+                ['typeId' => $trainComposition->getType()->id]
             );
         }
 

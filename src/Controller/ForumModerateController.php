@@ -94,7 +94,7 @@ class ForumModerateController
 
         return $this->formHelper->getRedirectHelper()->redirectToRoute(
             RouteGenerics::ROUTE_FORUM_DISCUSSION,
-            ['id' => $discussion->getId(), 'name' => urlencode($discussion->title)]
+            ['id' => $discussion->id, 'name' => urlencode($discussion->title)]
         );
     }
 
@@ -132,7 +132,7 @@ class ForumModerateController
             $this->formHelper->getDoctrine()->getManager()->flush();
 
             return $this->formHelper->finishFormHandling('', RouteGenerics::ROUTE_FORUM_DISCUSSION, [
-                'id' => $newDiscussion->getId(),
+                'id' => $newDiscussion->id,
                 'name' => urlencode($newDiscussion->title)
             ]);
         }
@@ -222,7 +222,7 @@ class ForumModerateController
 
         return $this->formHelper->getRedirectHelper()->redirectToRoute(
             RouteGenerics::ROUTE_FORUM_DISCUSSION,
-            ['id' => $newDiscussion->getId(), 'name' => urlencode($newDiscussion->title)]
+            ['id' => $newDiscussion->id, 'name' => urlencode($newDiscussion->title)]
         );
     }
 

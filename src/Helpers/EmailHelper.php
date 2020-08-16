@@ -59,7 +59,7 @@ class EmailHelper
             return true;
         } catch (TransportExceptionInterface $exception) {
             $this->logger->critical(
-                'Failed to send email with subject "' . $subject . '" to user with id ' . $user->getId()
+                'Failed to send email with subject "' . $subject . '" to user with id ' . $user->id
             );
             $this->logger->critical($exception->getMessage());
         }

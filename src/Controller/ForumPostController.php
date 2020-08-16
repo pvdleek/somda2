@@ -135,7 +135,7 @@ class ForumPostController
             $this->handleFavoritesForAddedPost($quotedPost->discussion);
 
             return $this->formHelper->finishFormHandling('', RouteGenerics::ROUTE_FORUM_DISCUSSION, [
-                'id' => $quotedPost->discussion->getId(),
+                'id' => $quotedPost->discussion->id,
                 'name' => urlencode($quotedPost->discussion->title)
             ]);
         }
@@ -227,7 +227,7 @@ class ForumPostController
             );
             $postNrInDiscussion = $this->formHelper->getDoctrine()
                 ->getRepository('App:ForumDiscussion')
-                ->getPostNumberInDiscussion($post->discussion, $post->getId());
+                ->getPostNumberInDiscussion($post->discussion, $post->id);
             if ($postNrInDiscussion === 0) {
                 $form->add(ForumPostForm::FIELD_TITLE, TextType::class, [
                     BaseForm::KEY_DATA => $post->discussion->title,
@@ -241,7 +241,7 @@ class ForumPostController
             $this->editPost($form, $post);
 
             return $this->formHelper->finishFormHandling('', RouteGenerics::ROUTE_FORUM_DISCUSSION, [
-                'id' => $post->discussion->getId(),
+                'id' => $post->discussion->id,
                 'name' => urlencode($post->discussion->title)
             ]);
         }

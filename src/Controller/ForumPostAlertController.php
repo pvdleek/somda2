@@ -116,8 +116,8 @@ class ForumPostAlertController
             }
 
             return $this->formHelper->finishFormHandling('', 'forum_discussion_post', [
-                'id' => $post->discussion->getId(),
-                'postId' => $post->getId(),
+                'id' => $post->discussion->id,
+                'postId' => $post->id,
                 'name' => urlencode($post->discussion->title)
             ]);
         }
@@ -166,7 +166,7 @@ class ForumPostAlertController
                 $this->sendNoteToReporters($post, $forumPostAlertNote);
             }
 
-            return $this->formHelper->finishFormHandling('', 'forum_discussion_post_alerts', ['id' => $post->getId()]);
+            return $this->formHelper->finishFormHandling('', 'forum_discussion_post_alerts', ['id' => $post->id]);
         }
 
         return $this->templateHelper->render('forum/postAlerts.html.twig', [
@@ -232,6 +232,6 @@ class ForumPostAlertController
             $alert->closed = true;
         }
 
-        return $this->formHelper->finishFormHandling('', 'forum_discussion_post_alerts', ['id' => $post->getId()]);
+        return $this->formHelper->finishFormHandling('', 'forum_discussion_post_alerts', ['id' => $post->id]);
     }
 }

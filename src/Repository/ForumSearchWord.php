@@ -16,7 +16,7 @@ class ForumSearchWord extends EntityRepository
     {
         $wordIdList = [];
         foreach ($words as $word) {
-            $wordIdList[] = $word->getId();
+            $wordIdList[] = $word->id;
         }
 
         $queryBuilder = $this->getEntityManager()

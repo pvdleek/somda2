@@ -57,8 +57,8 @@ class ForumDiscussion extends EntityRepository
                 JOIN somda_forum_forums f ON f.forumid = d.forumid
                 JOIN somda_users a ON a.uid = d.authorid
                 JOIN somda_forum_posts p_max ON p_max.discussionid = d.discussionid
-                LEFT JOIN somda_forum_read_' . substr($user->getId(), -1) . ' r
-                    ON r.uid = ' . $user->getId() . ' AND r.postid = p_max.postid
+                LEFT JOIN somda_forum_read_' . substr($user->id, -1) . ' r
+                    ON r.uid = ' . $user->id . ' AND r.postid = p_max.postid
                 JOIN somda_forum_posts p_count ON p_count.discussionid = d.discussionid
                 INNER JOIN (' . $maxQuery . ') m ON m.disc_id = d.discussionid
                 WHERE p_max.timestamp = m.max_date_time
@@ -121,8 +121,8 @@ class ForumDiscussion extends EntityRepository
                 FROM somda_forum_discussion d
                 JOIN somda_users a ON a.uid = d.authorid
                 JOIN somda_forum_posts p_max ON p_max.discussionid = d.discussionid
-                LEFT JOIN somda_forum_read_' . substr($user->getId(), -1) . ' r
-                    ON r.uid = ' . $user->getId() . ' AND r.postid = p_max.postid
+                LEFT JOIN somda_forum_read_' . substr($user->id, -1) . ' r
+                    ON r.uid = ' . $user->id . ' AND r.postid = p_max.postid
                 JOIN somda_forum_posts p_count ON p_count.discussionid = d.discussionid
                 INNER JOIN (' . $maxQuery . ') m ON m.disc_id = d.discussionid
                 WHERE d.forumid = :forumid AND p_max.timestamp = m.max_date_time
@@ -135,7 +135,7 @@ class ForumDiscussion extends EntityRepository
         $connection = $this->getEntityManager()->getConnection();
         try {
             $statement = $connection->prepare($query);
-            $statement->bindValue('forumid', $forum->getId());
+            $statement->bindValue('forumid', $forum->id);
             $statement->execute();
             return $statement->fetchAll();
         } catch (DBALException $exception) {
@@ -165,7 +165,7 @@ class ForumDiscussion extends EntityRepository
             JOIN somda_users a ON a.uid = d.authorid
             JOIN somda_forum_posts p_max ON p_max.discussionid = d.discussionid
             INNER JOIN somda_forum_favorites f ON f.discussionid = d.discussionid AND f.uid = :userId
-            LEFT JOIN somda_forum_read_' . substr($user->getId(), -1) . ' r
+            LEFT JOIN somda_forum_read_' . substr($user->id, -1) . ' r
                 ON r.uid = :userId AND r.postid = p_max.postid
             JOIN somda_forum_posts p_count ON p_count.discussionid = d.discussionid
             INNER JOIN (' . $maxQuery . ') m ON m.disc_id = d.discussionid
@@ -175,7 +175,7 @@ class ForumDiscussion extends EntityRepository
         $connection = $this->getEntityManager()->getConnection();
         try {
             $statement = $connection->prepare($query);
-            $statement->bindValue('userId', $user->getId());
+            $statement->bindValue('userId', $user->id);
             $statement->execute();
             return $statement->fetchAll();
         } catch (DBALException $exception) {
@@ -205,8 +205,8 @@ class ForumDiscussion extends EntityRepository
             JOIN somda_forum_forums f ON f.forumid = d.forumid
             JOIN somda_users a ON a.uid = d.authorid
             JOIN somda_forum_posts p_max ON p_max.discussionid = d.discussionid
-            LEFT JOIN somda_forum_read_' . substr($user->getId(), -1) . ' r
-                ON r.uid = ' . $user->getId() . ' AND r.postid = p_max.postid
+            LEFT JOIN somda_forum_read_' . substr($user->id, -1) . ' r
+                ON r.uid = ' . $user->id . ' AND r.postid = p_max.postid
             JOIN somda_forum_posts p_count ON p_count.discussionid = d.discussionid
             INNER JOIN (' . $maxQuery . ') m ON m.disc_id = d.discussionid
             WHERE p_max.timestamp = m.max_date_time AND f.type != :moderatorForumType AND `r`.`postid` IS NULL
@@ -276,7 +276,7 @@ class ForumDiscussion extends EntityRepository
         $queryBuilder = $this->getEntityManager()
             ->createQueryBuilder()
             ->select('COUNT(p.id)')
-            ->from('App\Entity\ForumRead' . substr($user->getId(), -1), 'r')
+            ->from('App\Entity\ForumRead' . substr($user->id, -1), 'r')
             ->join('r.post', 'p')
             ->andWhere('p.discussion = :' . ForumPostForm::FIELD_DISCUSSION)
             ->setParameter(ForumPostForm::FIELD_DISCUSSION, $discussion)
@@ -295,9 +295,9 @@ class ForumDiscussion extends EntityRepository
      */
     public function markPostsAsRead(User $user, array $posts): void
     {
-        $query = 'INSERT IGNORE INTO `somda_forum_read_'  . substr($user->getId(), -1) . '` (postid, uid) VALUES ';
+        $query = 'INSERT IGNORE INTO `somda_forum_read_'  . substr($user->id, -1) . '` (postid, uid) VALUES ';
         foreach ($posts as $post) {
-            $query .= '(' . $post->getId() . ',' . $user->getId() . '),';
+            $query .= '(' . $post->id . ',' . $user->id . '),';
         }
 
         $connection = $this->getEntityManager()->getConnection();
@@ -314,8 +314,8 @@ class ForumDiscussion extends EntityRepository
      */
     public function markAllPostsAsRead(User $user): void
     {
-        $query = 'INSERT IGNORE INTO `somda_forum_read_'  . substr($user->getId(), -1) . '` (postid, uid) ' .
-            ' SELECT postid, ' . $user->getId() . ' FROM `somda_forum_posts`';
+        $query = 'INSERT IGNORE INTO `somda_forum_read_'  . substr($user->id, -1) . '` (postid, uid) ' .
+            ' SELECT postid, ' . $user->id . ' FROM `somda_forum_posts`';
 
         $connection = $this->getEntityManager()->getConnection();
         try {

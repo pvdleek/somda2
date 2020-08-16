@@ -102,7 +102,7 @@ class LocationController
         $json = [];
         foreach ($locations as $location) {
             $json[] = [
-                'id' => $location->getId(),
+                'id' => $location->id,
                 'label' => $location->name . ' - ' . $location->description,
                 'description' => $location->description,
                 'value' => $location->name

@@ -120,7 +120,7 @@ class TrainTableController extends AbstractFOSRestController
             $trainTableYearId = $this->doctrine
                 ->getRepository(TrainTableYear::class)
                 ->findTrainTableYearByDate(new DateTime())
-                ->getId();
+                ->id;
         }
 
         $this->trainTableHelper->setTrainTableYear($trainTableYearId);
@@ -129,8 +129,8 @@ class TrainTableController extends AbstractFOSRestController
 
         $daysFilter = [];
         foreach ($trainTableLines as $trainTableLine) {
-            if (array_search($trainTableLine->routeOperationDays->getId(), $daysFilter) === false) {
-                $daysFilter[] = $trainTableLine->routeOperationDays->getId();
+            if (array_search($trainTableLine->routeOperationDays->id, $daysFilter) === false) {
+                $daysFilter[] = $trainTableLine->routeOperationDays->id;
             }
         }
         $daysFilter = array_values(array_unique($daysFilter));
@@ -141,8 +141,7 @@ class TrainTableController extends AbstractFOSRestController
          */
         $routeOperationDays = $this->doctrine->getRepository(RouteOperationDays::class)->findAll();
         foreach ($routeOperationDays as $routeOperationDay) {
-            $daysLegend[$routeOperationDay->getId()] =
-                $this->daysHelper->getDisplay($routeOperationDay, true);
+            $daysLegend[$routeOperationDay->id] = $this->daysHelper->getDisplay($routeOperationDay, true);
         }
 
         return $this->handleView(
@@ -286,7 +285,7 @@ class TrainTableController extends AbstractFOSRestController
             $trainTableYearId = $this->doctrine
                 ->getRepository(TrainTableYear::class)
                 ->findTrainTableYearByDate(new DateTime())
-                ->getId();
+                ->id;
         }
 
         $this->trainTableHelper->setTrainTableYear($trainTableYearId);
@@ -363,7 +362,7 @@ class TrainTableController extends AbstractFOSRestController
             $trainTableYearId = $this->doctrine
                 ->getRepository(TrainTableYear::class)
                 ->findTrainTableYearByDate(new DateTime())
-                ->getId();
+                ->id;
         }
 
         $routesDisplay = $this->routesDisplayHelper->getRoutesDisplay($trainTableYearId, $routeListId);

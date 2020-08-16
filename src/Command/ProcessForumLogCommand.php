@@ -65,7 +65,7 @@ class ProcessForumLogCommand extends Command
                 $words = $this->getCleanWordsFromText($forumLog->post->text->text);
                 $postNrInDiscussion = $this->doctrine
                     ->getRepository('App:ForumDiscussion')
-                    ->getPostNumberInDiscussion($forumLog->post->discussion, $forumLog->post->getId());
+                    ->getPostNumberInDiscussion($forumLog->post->discussion, $forumLog->post->id);
                 if ($postNrInDiscussion === 0) {
                     // This is the first post in the discussion, we need to include the title
                     $titleWords = $this->getCleanWordsFromText($forumLog->post->discussion->title);

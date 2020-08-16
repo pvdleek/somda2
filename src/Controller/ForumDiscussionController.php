@@ -168,7 +168,7 @@ class ForumDiscussionController
             $this->formHelper->getDoctrine()->getManager()->flush();
 
             return $this->formHelper->finishFormHandling('', RouteGenerics::ROUTE_FORUM_DISCUSSION, [
-                'id' => $forumDiscussion->getId(),
+                'id' => $forumDiscussion->id,
                 'name' => urlencode($forumDiscussion->title)
             ]);
         }

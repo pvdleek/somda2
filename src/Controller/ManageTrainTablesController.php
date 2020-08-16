@@ -110,7 +110,7 @@ class ManageTrainTablesController
             );
 
             return $this->formHelper->getRedirectHelper()->redirectToRoute('manage_train_tables_year_route_list', [
-                'yearId' => $this->routeManagementHelper->getRouteList()->trainTableYear->getId(),
+                'yearId' => $this->routeManagementHelper->getRouteList()->trainTableYear->id,
                 'routeListId' => $routeListId
             ]);
         }
@@ -121,8 +121,8 @@ class ManageTrainTablesController
                     'Trein opgeslagen',
                     'manage_train_tables_year_route_list',
                     [
-                        'yearId' => $this->routeManagementHelper->getRouteList()->trainTableYear->getId(),
-                        'routeListId' => $this->routeManagementHelper->getRouteList()->getId(),
+                        'yearId' => $this->routeManagementHelper->getRouteList()->trainTableYear->id,
+                        'routeListId' => $this->routeManagementHelper->getRouteList()->id,
                     ]
                 );
             }

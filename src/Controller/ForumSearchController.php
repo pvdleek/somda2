@@ -81,7 +81,7 @@ class ForumSearchController
         );
         return $this->formHelper->getRedirectHelper()->redirectToRoute(
             'forum_forum',
-            ['id' => $forum->getId(), 'name' => $forum->name]
+            ['id' => $forum->id, 'name' => $forum->name]
         );
     }
 }

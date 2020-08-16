@@ -83,7 +83,7 @@ class ManageNewsController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            if (is_null($news->getId())) {
+            if (is_null($news->id)) {
                 $this->formHelper->getDoctrine()->getManager()->persist($news);
                 return $this->formHelper->finishFormHandling('Bericht toegevoegd', RouteGenerics::ROUTE_MANAGE_NEWS);
             }

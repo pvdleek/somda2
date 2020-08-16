@@ -52,15 +52,15 @@ class ForumForum extends EntityRepository
             FROM somda_forum_discussion d
             JOIN somda_users a ON a.uid = d.authorid
             JOIN somda_forum_posts p_max ON p_max.discussionid = d.discussionid
-            LEFT JOIN somda_forum_read_' . substr($user->getId(), -1) . ' r
-                ON r.uid = ' . $user->getId() . ' AND r.postid = p_max.postid
+            LEFT JOIN somda_forum_read_' . substr($user->id, -1) . ' r
+                ON r.uid = ' . $user->id . ' AND r.postid = p_max.postid
             INNER JOIN (' . $maxQuery . ') m ON m.disc_id = d.discussionid
             WHERE d.forumid = :forumid AND p_max.timestamp = m.max_date_time
             GROUP BY `d`.`forumid`';
         $connection = $this->getEntityManager()->getConnection();
         try {
             $statement = $connection->prepare($query);
-            $statement->bindValue('forumid', $forum->getId());
+            $statement->bindValue('forumid', $forum->id);
             $statement->execute();
             return (int)$statement->fetchColumn(0);
         } catch (DBALException $exception) {

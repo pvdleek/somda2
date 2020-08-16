@@ -77,7 +77,7 @@ class SpotController
 
         return $this->redirectHelper->redirectToRoute(
             'train_table_search',
-            ['trainTableYearId' => $trainTableYear->getId(), 'routeNumber' => $routeNumber]
+            ['trainTableYearId' => $trainTableYear->id, 'routeNumber' => $routeNumber]
         );
     }
 
