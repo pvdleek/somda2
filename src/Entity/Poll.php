@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="somda_poll", indexes={@ORM\Index(name="idx_48191_date", columns={"date"})})
  * @ORM\Entity
  */
-class Poll extends Entity
+class Poll
 {
     /**
      * @var int|null
@@ -18,7 +18,7 @@ class Poll extends Entity
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected ?int $id = null;
+    public ?int $id = null;
 
     /**
      * @var string

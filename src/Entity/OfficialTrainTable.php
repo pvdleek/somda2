@@ -21,7 +21,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * )
  * @ORM\Entity
  */
-class OfficialTrainTable extends Entity
+class OfficialTrainTable
 {
     use DateTrait;
 
@@ -33,7 +33,7 @@ class OfficialTrainTable extends Entity
      * @JMS\Expose()
      * @SWG\Property(description="Unique identifier", type="integer")
      */
-    protected ?int $id = null;
+    public ?int $id = null;
 
     /**
      * @var int

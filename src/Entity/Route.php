@@ -15,7 +15,7 @@ use Swagger\Annotations as SWG;
  * )
  * @ORM\Entity
  */
-class Route extends Entity
+class Route
 {
     public const SPECIAL_NO_SERVICE = 'GDST';
     public const SPECIAL_EXTRA_SERVICE = ['LLT', 'LM', 'CARGO', 'REIZ', 'RG', 'WTR'];
@@ -30,7 +30,7 @@ class Route extends Entity
      * @JMS\Expose()
      * @SWG\Property(description="Unique identifier", type="integer")
      */
-    protected ?int $id = null;
+    public ?int $id = null;
 
     /**
      * @var string

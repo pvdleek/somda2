@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  * )
  * @ORM\Entity(repositoryClass="App\Repository\ForumSearchWord")
  */
-class ForumSearchWord extends Entity
+class ForumSearchWord
 {
     /**
      * @var int|null
@@ -20,7 +20,7 @@ class ForumSearchWord extends Entity
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected ?int $id = null;
+    public ?int $id = null;
 
     /**
      * @var string

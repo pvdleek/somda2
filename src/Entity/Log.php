@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="somda_logging")
  * @ORM\Entity
  */
-class Log extends Entity
+class Log
 {
     /**
      * @var int|null
@@ -17,7 +17,7 @@ class Log extends Entity
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected ?int $id = null;
+    public ?int $id = null;
 
     /**
      * @var DateTime

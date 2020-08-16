@@ -23,7 +23,7 @@ use Swagger\Annotations as SWG;
  * )
  * @ORM\Entity(repositoryClass="App\Repository\Spot")
  */
-class Spot extends Entity
+class Spot
 {
     public const INPUT_FEEDBACK_TRAIN_NEW = 1;
     public const INPUT_FEEDBACK_TRAIN_NEW_NO_PATTERN = 2;
@@ -39,7 +39,7 @@ class Spot extends Entity
      * @JMS\Expose()
      * @SWG\Property(description="Unique identifier", type="integer")
      */
-    protected ?int $id = null;
+    public ?int $id = null;
 
     /**
      * @var DateTime

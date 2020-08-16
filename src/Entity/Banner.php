@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="somda_banner")
  * @ORM\Entity
  */
-class Banner extends Entity
+class Banner
 {
     const LOCATION_HEADER = 'header';
     const LOCATION_FORUM = 'forum';
@@ -21,7 +21,7 @@ class Banner extends Entity
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected ?int $id = null;
+    public ?int $id = null;
 
     /**
      * @var string|null

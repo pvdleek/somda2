@@ -12,7 +12,7 @@ use Swagger\Annotations as SWG;
  * @ORM\Table(name="somda_sns_spoor_nieuws")
  * @ORM\Entity
  */
-class RailNews extends Entity
+class RailNews
 {
     /**
      * @var int|null
@@ -22,7 +22,7 @@ class RailNews extends Entity
      * @JMS\Expose()
      * @SWG\Property(description="Unique identifier", type="integer")
      */
-    protected ?int $id = null;
+    public ?int $id = null;
 
     /**
      * @var string

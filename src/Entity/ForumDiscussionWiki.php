@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  * )
  * @ORM\Entity
  */
-class ForumDiscussionWiki extends Entity
+class ForumDiscussionWiki
 {
     /**
      * @var int|null
@@ -19,7 +19,7 @@ class ForumDiscussionWiki extends Entity
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected ?int $id = null;
+    public ?int $id = null;
 
     /**
      * @var ForumDiscussion

@@ -16,7 +16,7 @@ use Swagger\Annotations as SWG;
  * )
  * @ORM\Entity
  */
-class Train extends Entity
+class Train
 {
     /**
      * @var int|null
@@ -26,7 +26,7 @@ class Train extends Entity
      * @JMS\Expose()
      * @SWG\Property(description="Unique identifier", type="integer")
      */
-    protected ?int $id = null;
+    public ?int $id = null;
 
     /**
      * @var string

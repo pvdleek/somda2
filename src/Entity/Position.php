@@ -10,7 +10,7 @@ use Swagger\Annotations as SWG;
  * @ORM\Table(name="somda_positie")
  * @ORM\Entity(repositoryClass="App\Repository\Position")
  */
-class Position extends Entity
+class Position
 {
     /**
      * @var int|null
@@ -20,7 +20,7 @@ class Position extends Entity
      * @JMS\Expose()
      * @SWG\Property(description="Unique identifier", type="integer")
      */
-    protected ?int $id = null;
+    public ?int $id = null;
 
     /**
      * @var string

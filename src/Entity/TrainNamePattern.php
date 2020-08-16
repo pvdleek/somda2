@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  * )
  * @ORM\Entity
  */
-class TrainNamePattern extends Entity
+class TrainNamePattern
 {
     /**
      * @var int|null
@@ -19,7 +19,7 @@ class TrainNamePattern extends Entity
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected ?int $id = null;
+    public ?int $id = null;
 
     /**
      * @var int

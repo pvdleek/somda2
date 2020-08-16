@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="somda_forum_alerts_notes", indexes={@ORM\Index(name="idx_47898_alertid", columns={"alertid"})})
  * @ORM\Entity
  */
-class ForumPostAlertNote extends Entity
+class ForumPostAlertNote
 {
     /**
      * @var int|null
@@ -17,7 +17,7 @@ class ForumPostAlertNote extends Entity
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected ?int $id = null;
+    public ?int $id = null;
 
     /**
      * @var ForumPostAlert

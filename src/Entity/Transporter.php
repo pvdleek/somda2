@@ -14,7 +14,7 @@ use Swagger\Annotations as SWG;
  * )
  * @ORM\Entity
  */
-class Transporter extends Entity
+class Transporter
 {
     /**
      * @var int|null
@@ -24,7 +24,7 @@ class Transporter extends Entity
      * @JMS\Expose()
      * @SWG\Property(description="Unique identifier", type="integer")
      */
-    protected ?int $id = null;
+    public ?int $id = null;
 
     /**
      * @var string

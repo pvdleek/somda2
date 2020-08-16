@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="somda_drgl")
  * @ORM\Entity(repositoryClass="App\Repository\SpecialRoute")
  */
-class SpecialRoute extends Entity
+class SpecialRoute
 {
     /**
      * @var int|null
@@ -18,7 +18,7 @@ class SpecialRoute extends Entity
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected ?int $id = null;
+    public ?int $id = null;
 
     /**
      * @var bool

@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="somda_jargon")
  * @ORM\Entity
  */
-class Jargon extends Entity
+class Jargon
 {
     /**
      * @var int|null
@@ -16,7 +16,7 @@ class Jargon extends Entity
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected ?int $id = null;
+    public ?int $id = null;
 
     /**
      * @var string

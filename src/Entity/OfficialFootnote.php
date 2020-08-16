@@ -15,7 +15,7 @@ use Swagger\Annotations as SWG;
  * )
  * @ORM\Entity
  */
-class OfficialFootnote extends Entity
+class OfficialFootnote
 {
     /**
      * @var int|null
@@ -25,7 +25,7 @@ class OfficialFootnote extends Entity
      * @JMS\Expose()
      * @SWG\Property(description="Unique identifier", type="integer")
      */
-    protected ?int $id = null;
+    public ?int $id = null;
 
     /**
      * @var int

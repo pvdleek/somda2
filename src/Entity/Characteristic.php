@@ -13,7 +13,7 @@ use Swagger\Annotations as SWG;
  * )
  * @ORM\Entity
  */
-class Characteristic extends Entity
+class Characteristic
 {
     /**
      * @var int|null
@@ -23,7 +23,7 @@ class Characteristic extends Entity
      * @JMS\Expose()
      * @SWG\Property(description="Unique identifier", type="integer")
      */
-    protected ?int $id = null;
+    public ?int $id = null;
 
     /**
      * @var string

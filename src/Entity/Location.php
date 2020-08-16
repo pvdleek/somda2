@@ -19,7 +19,7 @@ use Swagger\Annotations as SWG;
  * )
  * @ORM\Entity(repositoryClass="App\Repository\Location")
  */
-class Location extends Entity
+class Location
 {
     public const UNKNOWN_NAME = 'Fout!';
 
@@ -31,7 +31,7 @@ class Location extends Entity
      * @JMS\Expose()
      * @SWG\Property(description="Unique identifier", type="integer")
      */
-    protected ?int $id = null;
+    public ?int $id = null;
 
     /**
      * @var string

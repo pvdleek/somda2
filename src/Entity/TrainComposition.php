@@ -20,7 +20,7 @@ class TrainComposition extends TrainCompositionBase
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected ?int $id = null;
+    public ?int $id = null;
 
     /**
      * @var TrainCompositionType

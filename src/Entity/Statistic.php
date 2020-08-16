@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="somda_stats", uniqueConstraints={@ORM\UniqueConstraint(name="idx_date", columns={"datum"})})
  * @ORM\Entity(repositoryClass="App\Repository\Statistic")
  */
-class Statistic extends Entity
+class Statistic
 {
     /**
      * @var int|null
@@ -17,7 +17,7 @@ class Statistic extends Entity
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected ?int $id = null;
+    public ?int $id = null;
 
     /**
      * @var DateTime

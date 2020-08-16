@@ -9,7 +9,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(name="somda_prefs", indexes={@ORM\Index(name="idx_48215_sleutel", columns={"sleutel"})})
  * @ORM\Entity
  */
-class UserPreference extends Entity
+class UserPreference
 {
     public const KEY_HOME_LAYOUT = 'layout';
     public const KEY_HOME_MAX_NEWS = 'max_news';
@@ -61,7 +61,7 @@ class UserPreference extends Entity
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected ?int $id = null;
+    public ?int $id = null;
 
     /**
      * @var string

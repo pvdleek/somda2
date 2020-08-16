@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="somda_blokken")
  * @ORM\Entity(repositoryClass="App\Repository\Block")
  */
-class Block extends Entity
+class Block
 {
     /**
      * @var int|null
@@ -17,7 +17,7 @@ class Block extends Entity
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected ?int $id = null;
+    public ?int $id = null;
 
     /**
      * @var string

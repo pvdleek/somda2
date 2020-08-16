@@ -9,7 +9,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(name="somda_forum_log")
  * @ORM\Entity
  */
-class ForumPostLog extends Entity
+class ForumPostLog
 {
     public const ACTION_POST_NEW = 0;
     public const ACTION_POST_EDIT = 1;
@@ -21,7 +21,7 @@ class ForumPostLog extends Entity
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected ?int $id = null;
+    public ?int $id = null;
 
     /**
      * @var ForumPost

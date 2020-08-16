@@ -10,7 +10,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(name="somda_forum_forums", indexes={@ORM\Index(name="idx_47937_catid", columns={"catid"})})
  * @ORM\Entity(repositoryClass="App\Repository\ForumForum")
  */
-class ForumForum extends Entity
+class ForumForum
 {
     public const TYPE_PUBLIC = 0;
     public const TYPE_LOGGED_IN = 1;
@@ -29,7 +29,7 @@ class ForumForum extends Entity
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected ?int $id = null;
+    public ?int $id = null;
 
     /**
      * @var ForumCategory

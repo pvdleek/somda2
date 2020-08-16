@@ -12,7 +12,7 @@ use Swagger\Annotations as SWG;
  * @ORM\Table(name="somda_tdr_drgl")
  * @ORM\Entity(repositoryClass="App\Repository\TrainTableYear")
  */
-class TrainTableYear extends Entity
+class TrainTableYear
 {
     /**
      * @var int|null
@@ -22,7 +22,7 @@ class TrainTableYear extends Entity
      * @JMS\Expose()
      * @SWG\Property(description="Unique identifier", type="integer")
      */
-    protected ?int $id = null;
+    public ?int $id = null;
 
     /**
      * @var string

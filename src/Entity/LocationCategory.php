@@ -11,7 +11,7 @@ use Swagger\Annotations as SWG;
  * @ORM\Table(name="somda_verk_cats")
  * @ORM\Entity
  */
-class LocationCategory extends Entity
+class LocationCategory
 {
     public const NO_LONGER_VALID_ID = 50;
 
@@ -23,7 +23,7 @@ class LocationCategory extends Entity
      * @JMS\Expose()
      * @SWG\Property(description="Unique identifier", type="integer")
      */
-    protected ?int $id = null;
+    public ?int $id = null;
 
     /**
      * @var string

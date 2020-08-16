@@ -21,7 +21,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * )
  * @ORM\Entity(repositoryClass="App\Repository\ForumPost")
  */
-class ForumPost extends Entity
+class ForumPost
 {
     public const WIKI_CHECK_NOT_CHECKED = 0;
     public const WIKI_CHECK_OK = 1;
@@ -36,7 +36,7 @@ class ForumPost extends Entity
      * @JMS\Expose()
      * @SWG\Property(description="Unique identifier", type="integer")
      */
-    protected ?int $id = null;
+    public ?int $id = null;
 
     /**
      * @var User

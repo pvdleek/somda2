@@ -10,7 +10,7 @@ use Swagger\Annotations as SWG;
  * @ORM\Table(name="somda_rijdagen")
  * @ORM\Entity(repositoryClass="App\Repository\RouteOperationDays")
  */
-class RouteOperationDays extends Entity
+class RouteOperationDays
 {
     /**
      * @var int|null
@@ -20,7 +20,7 @@ class RouteOperationDays extends Entity
      * @JMS\Expose()
      * @SWG\Property(description="Unique identifier, binary representation of the operation days", type="integer")
      */
-    protected ?int $id = null;
+    public ?int $id = null;
 
     /**
      * @var bool

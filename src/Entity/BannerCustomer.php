@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="somda_banner_customer")
  * @ORM\Entity
  */
-class BannerCustomer extends Entity
+class BannerCustomer
 {
     /**
      * @var int|null
@@ -17,7 +17,7 @@ class BannerCustomer extends Entity
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected ?int $id = null;
+    public ?int $id = null;
 
     /**
      * @var string

@@ -20,7 +20,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * )
  * @ORM\Entity(repositoryClass="App\Repository\User")
  */
-class User extends Entity implements UserInterface
+class User implements UserInterface
 {
     public const COOKIE_UNKNOWN = '0';
     public const COOKIE_NOT_OK = 'nok';
@@ -37,7 +37,7 @@ class User extends Entity implements UserInterface
      * @JMS\Expose()
      * @SWG\Property(description="Unique identifier", type="integer")
      */
-    protected ?int $id = null;
+    public ?int $id = null;
 
     /**
      * @var bool

@@ -19,7 +19,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * )
  * @ORM\Entity(repositoryClass="App\Repository\RouteList")
  */
-class RouteList extends Entity
+class RouteList
 {
     /**
      * @var int|null
@@ -29,7 +29,7 @@ class RouteList extends Entity
      * @JMS\Expose()
      * @SWG\Property(description="Unique identifier", type="integer")
      */
-    protected ?int $id = null;
+    public ?int $id = null;
 
     /**
      * @var int
