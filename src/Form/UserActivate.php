@@ -5,12 +5,14 @@ namespace App\Form;
 
 use App\Entity\User as UserEntity;
 use App\Generics\ConstraintGenerics;
+use App\Generics\FormGenerics;
+use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Length;
 
-class UserActivate extends BaseForm
+class UserActivate extends AbstractType
 {
     public const FIELD_KEY = 'key';
 
@@ -22,8 +24,8 @@ class UserActivate extends BaseForm
     {
         $builder
             ->add(self::FIELD_KEY, TextType::class, [
-                self::KEY_ATTRIBUTES => [self::KEY_ATTRIBUTES_MAX_LENGTH => 13],
-                self::KEY_CONSTRAINTS => [
+                FormGenerics::KEY_ATTRIBUTES => [FormGenerics::KEY_ATTRIBUTES_MAX_LENGTH => 13],
+                FormGenerics::KEY_CONSTRAINTS => [
                     new Length([
                         ConstraintGenerics::MAX => 13,
                         ConstraintGenerics::MAX_MESSAGE => 'De activatie-sleutel moet exact 13 karakters lang zijn',
@@ -31,9 +33,9 @@ class UserActivate extends BaseForm
                         ConstraintGenerics::MIN_MESSAGE => 'De activatie-sleutel moet exact 13 karakters lang zijn',
                     ]),
                 ],
-                self::KEY_LABEL => 'Geef de activatie-sleutel die je per e-mail hebt ontvangen',
-                self::KEY_MAPPED => false,
-                self::KEY_REQUIRED => true,
+                FormGenerics::KEY_LABEL => 'Geef de activatie-sleutel die je per e-mail hebt ontvangen',
+                FormGenerics::KEY_MAPPED => false,
+                FormGenerics::KEY_REQUIRED => true,
             ]);
     }
 

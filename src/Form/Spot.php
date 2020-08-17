@@ -5,13 +5,15 @@ namespace App\Form;
 use App\Entity\Location;
 use App\Entity\Position;
 use App\Entity\Spot as SpotEntity;
+use App\Generics\FormGenerics;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class Spot extends BaseForm
+class Spot extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
@@ -21,52 +23,52 @@ class Spot extends BaseForm
     {
         $builder
             ->add('spotDate', DateType::class, [
-                self::KEY_ATTRIBUTES => [self::KEY_CLASS=> 'datepicker'],
-                self::KEY_FORMAT=> 'dd-MM-yyyy',
-                self::KEY_HTML5 => false,
-                self::KEY_LABEL => 'Datum van de spot(s)',
-                self::KEY_REQUIRED => true,
-                self::KEY_WIDGET => 'single_text',
+                FormGenerics::KEY_ATTRIBUTES => [FormGenerics::KEY_CLASS=> 'datepicker'],
+                FormGenerics::KEY_FORMAT=> 'dd-MM-yyyy',
+                FormGenerics::KEY_HTML5 => false,
+                FormGenerics::KEY_LABEL => 'Datum van de spot(s)',
+                FormGenerics::KEY_REQUIRED => true,
+                FormGenerics::KEY_WIDGET => 'single_text',
             ])
             ->add('train', TextType::class, [
-                self::KEY_DATA => $options['data']->train->number,
-                self::KEY_LABEL => 'Materieelnummer',
-                self::KEY_MAPPED => false,
-                self::KEY_REQUIRED => true,
+                FormGenerics::KEY_DATA => $options['data']->train->number,
+                FormGenerics::KEY_LABEL => 'Materieelnummer',
+                FormGenerics::KEY_MAPPED => false,
+                FormGenerics::KEY_REQUIRED => true,
             ])
             ->add('route', TextType::class, [
-                self::KEY_DATA => $options['data']->route->number,
-                self::KEY_LABEL => 'Treinnummer',
-                self::KEY_MAPPED => false,
-                self::KEY_REQUIRED => true,
+                FormGenerics::KEY_DATA => $options['data']->route->number,
+                FormGenerics::KEY_LABEL => 'Treinnummer',
+                FormGenerics::KEY_MAPPED => false,
+                FormGenerics::KEY_REQUIRED => true,
             ])
             ->add('position', EntityType::class, [
-                self::KEY_CHOICE_LABEL => 'name',
-                self::KEY_CHOICE_VALUE => 'name',
-                self::KEY_CLASS => Position::class,
-                self::KEY_LABEL => 'Positie',
-                self::KEY_REQUIRED => true,
+                FormGenerics::KEY_CHOICE_LABEL => 'name',
+                FormGenerics::KEY_CHOICE_VALUE => 'name',
+                FormGenerics::KEY_CLASS => Position::class,
+                FormGenerics::KEY_LABEL => 'Positie',
+                FormGenerics::KEY_REQUIRED => true,
             ])
             ->add('location', EntityType::class, [
-                self::KEY_CHOICE_LABEL => function (Location $location) {
+                FormGenerics::KEY_CHOICE_LABEL => function (Location $location) {
                     return $location->name . ' - ' . $location->description;
                 },
-                self::KEY_CHOICE_VALUE => 'name',
-                self::KEY_CLASS => Location::class,
-                self::KEY_LABEL => 'Spot-locatie',
-                self::KEY_REQUIRED => true,
+                FormGenerics::KEY_CHOICE_VALUE => 'name',
+                FormGenerics::KEY_CLASS => Location::class,
+                FormGenerics::KEY_LABEL => 'Spot-locatie',
+                FormGenerics::KEY_REQUIRED => true,
             ])
             ->add('extra', TextType::class, [
-                self::KEY_DATA => $options['data']->extra ? $options['data']->extra->extra : null,
-                self::KEY_LABEL => 'Extra',
-                self::KEY_MAPPED => false,
-                self::KEY_REQUIRED => false,
+                FormGenerics::KEY_DATA => $options['data']->extra ? $options['data']->extra->extra : null,
+                FormGenerics::KEY_LABEL => 'Extra',
+                FormGenerics::KEY_MAPPED => false,
+                FormGenerics::KEY_REQUIRED => false,
             ])
             ->add('userExtra', TextType::class, [
-                self::KEY_DATA => $options['data']->extra ? $options['data']->extra->userExtra : null,
-                self::KEY_LABEL => 'Verborgen informatie',
-                self::KEY_MAPPED => false,
-                self::KEY_REQUIRED => false,
+                FormGenerics::KEY_DATA => $options['data']->extra ? $options['data']->extra->userExtra : null,
+                FormGenerics::KEY_LABEL => 'Verborgen informatie',
+                FormGenerics::KEY_MAPPED => false,
+                FormGenerics::KEY_REQUIRED => false,
             ]);
     }
 

@@ -8,8 +8,8 @@ use App\Entity\ForumFavorite;
 use App\Entity\ForumPost;
 use App\Entity\ForumPostLog;
 use App\Entity\ForumPostText;
-use App\Form\BaseForm;
 use App\Form\ForumPost as ForumPostForm;
+use App\Generics\FormGenerics;
 use App\Generics\RoleGenerics;
 use App\Generics\RouteGenerics;
 use App\Helpers\EmailHelper;
@@ -118,8 +118,8 @@ class ForumPostController
             ->create(ForumPostForm::class, null, [ForumPostForm::OPTION_QUOTED_POST => $quote ? $quotedPost : null]);
         if ($userIsModerator) {
             $form->add('postAsModerator', CheckboxType::class, [
-                BaseForm::KEY_LABEL => 'Plaatsen als moderator',
-                BaseForm::KEY_MAPPED => false,
+                FormGenerics::KEY_LABEL => 'Plaatsen als moderator',
+                FormGenerics::KEY_MAPPED => false,
             ]);
         }
 
@@ -224,16 +224,16 @@ class ForumPostController
             $form->add(
                 ForumPostForm::FIELD_EDIT_AS_MODERATOR,
                 CheckboxType::class,
-                [BaseForm::KEY_LABEL => 'Bewerken als moderator']
+                [FormGenerics::KEY_LABEL => 'Bewerken als moderator']
             );
             $postNrInDiscussion = $this->formHelper->getDoctrine()
                 ->getRepository('App:ForumDiscussion')
                 ->getPostNumberInDiscussion($post->discussion, $post->id);
             if ($postNrInDiscussion === 0) {
                 $form->add(ForumPostForm::FIELD_TITLE, TextType::class, [
-                    BaseForm::KEY_DATA => $post->discussion->title,
-                    BaseForm::KEY_LABEL => 'Onderwerp van de discussie',
-                    BaseForm::KEY_REQUIRED => true,
+                    FormGenerics::KEY_DATA => $post->discussion->title,
+                    FormGenerics::KEY_LABEL => 'Onderwerp van de discussie',
+                    FormGenerics::KEY_REQUIRED => true,
                 ]);
             }
         }

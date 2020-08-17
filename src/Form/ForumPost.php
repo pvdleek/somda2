@@ -2,13 +2,15 @@
 
 namespace App\Form;
 
+use App\Generics\FormGenerics;
 use FOS\CKEditorBundle\Form\Type\CKEditorType;
+use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class ForumPost extends BaseForm
+class ForumPost extends AbstractType
 {
     private const QUOTE_HTML = '<blockquote><strong>Quote</strong><hr />%s (%s): %s<hr /></blockquote><br />';
 
@@ -40,19 +42,22 @@ class ForumPost extends BaseForm
 
         $builder
             ->add('text', CKEditorType::class, [
-                self::KEY_ATTRIBUTES => [self::KEY_ATTRIBUTES_ROWS => 10, self::KEY_ATTRIBUTES_COLS => 80],
-                self::KEY_DATA => $data,
-                self::KEY_LABEL => 'Jouw reactie',
-                self::KEY_REQUIRED => true,
+                FormGenerics::KEY_ATTRIBUTES => [
+                    FormGenerics::KEY_ATTRIBUTES_ROWS => 10,
+                    FormGenerics::KEY_ATTRIBUTES_COLS => 80,
+                ],
+                FormGenerics::KEY_DATA => $data,
+                FormGenerics::KEY_LABEL => 'Jouw reactie',
+                FormGenerics::KEY_REQUIRED => true,
             ])
             ->add('signatureOn', CheckboxType::class, [
-                self::KEY_LABEL => 'Handtekening gebruiken',
+                FormGenerics::KEY_LABEL => 'Handtekening gebruiken',
             ]);
 
         if (!is_null($options[self::OPTION_EDITED_POST])) {
             $builder->add('editReason', TextType::class, [
-                self::KEY_LABEL => 'Reden voor bewerking (optioneel)',
-                self::KEY_REQUIRED => false,
+                FormGenerics::KEY_LABEL => 'Reden voor bewerking (optioneel)',
+                FormGenerics::KEY_REQUIRED => false,
             ]);
         }
     }

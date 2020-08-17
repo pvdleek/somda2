@@ -3,13 +3,15 @@
 namespace App\Form;
 
 use App\Entity\News as NewsEntity;
+use App\Generics\FormGenerics;
 use FOS\CKEditorBundle\Form\Type\CKEditorType;
+use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class News extends BaseForm
+class News extends AbstractType
 {
     public const FIELD_TIMESTAMP = 'timestamp';
 
@@ -21,17 +23,20 @@ class News extends BaseForm
     {
         $builder
             ->add('title', TextType::class, [
-                self::KEY_ATTRIBUTES => [self::KEY_ATTRIBUTES_MAX_LENGTH => 255],
-                self::KEY_LABEL => 'Titel van het bericht',
-                self::KEY_REQUIRED => true,
+                FormGenerics::KEY_ATTRIBUTES => [FormGenerics::KEY_ATTRIBUTES_MAX_LENGTH => 255],
+                FormGenerics::KEY_LABEL => 'Titel van het bericht',
+                FormGenerics::KEY_REQUIRED => true,
             ])
             ->add('text', CKEditorType::class, [
-                self::KEY_ATTRIBUTES => [self::KEY_ATTRIBUTES_ROWS => 10, self::KEY_ATTRIBUTES_COLS => 80],
-                self::KEY_LABEL => 'Bericht',
-                self::KEY_REQUIRED => true,
+                FormGenerics::KEY_ATTRIBUTES => [
+                    FormGenerics::KEY_ATTRIBUTES_ROWS => 10,
+                    FormGenerics::KEY_ATTRIBUTES_COLS => 80,
+                ],
+                FormGenerics::KEY_LABEL => 'Bericht',
+                FormGenerics::KEY_REQUIRED => true,
             ])
             ->add('archived', CheckboxType::class, [
-                self::KEY_LABEL => 'Bericht gearchiveerd',
+                FormGenerics::KEY_LABEL => 'Bericht gearchiveerd',
             ]);
     }
 

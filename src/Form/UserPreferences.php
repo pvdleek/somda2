@@ -7,18 +7,20 @@ use App\Entity\User as UserEntity;
 use App\Entity\UserPreference;
 use App\Exception\UnknownUserPreferenceTable;
 use App\Exception\UnknownUserPreferenceType;
+use App\Generics\FormGenerics;
 use App\Helpers\UserHelper;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class UserPreferences extends BaseForm
+class UserPreferences extends AbstractType
 {
     /**
      * @var ManagerRegistry
@@ -54,30 +56,30 @@ class UserPreferences extends BaseForm
                 switch ($typePart[0]) {
                     case 'number':
                         $builder->add($setting->key, ChoiceType::class, [
-                            self::KEY_CHOICES => array_combine(
+                            FormGenerics::KEY_CHOICES => array_combine(
                                 range(1, (int)$typePart[1]),
                                 range(1, (int)$typePart[1])
                             ),
-                            self::KEY_DATA => (int)$value,
-                            self::KEY_LABEL => $setting->description,
-                            self::KEY_MAPPED => false,
-                            self::KEY_REQUIRED => true,
+                            FormGenerics::KEY_DATA => (int)$value,
+                            FormGenerics::KEY_LABEL => $setting->description,
+                            FormGenerics::KEY_MAPPED => false,
+                            FormGenerics::KEY_REQUIRED => true,
                         ]);
                         break;
                     case 'text':
                         $builder->add($setting->key, TextType::class, [
-                            self::KEY_DATA => $value,
-                            self::KEY_LABEL => $setting->description,
-                            self::KEY_MAPPED => false,
-                            self::KEY_REQUIRED => true,
+                            FormGenerics::KEY_DATA => $value,
+                            FormGenerics::KEY_LABEL => $setting->description,
+                            FormGenerics::KEY_MAPPED => false,
+                            FormGenerics::KEY_REQUIRED => true,
                         ]);
                         break;
                     case 'boolean':
                         $builder->add($setting->key, CheckboxType::class, [
-                            self::KEY_DATA => (int)$value === 1,
-                            self::KEY_LABEL => $setting->description,
-                            self::KEY_MAPPED => false,
-                            self::KEY_REQUIRED => true,
+                            FormGenerics::KEY_DATA => (int)$value === 1,
+                            FormGenerics::KEY_LABEL => $setting->description,
+                            FormGenerics::KEY_MAPPED => false,
+                            FormGenerics::KEY_REQUIRED => true,
                         ]);
                         break;
                     case 'table':
@@ -88,23 +90,23 @@ class UserPreferences extends BaseForm
                         }
 
                         $builder->add($setting->key, EntityType::class, [
-                            self::KEY_CHOICE_LABEL => function (Location $location) {
+                            FormGenerics::KEY_CHOICE_LABEL => function (Location $location) {
                                 return $location->name . ' - ' . $location->description;
                             },
-                            self::KEY_CHOICE_VALUE => $typePart[2],
-                            self::KEY_CLASS => Location::class,
-                            self::KEY_DATA => $this->doctrine->getRepository(Location::class)->findOneBy(
+                            FormGenerics::KEY_CHOICE_VALUE => $typePart[2],
+                            FormGenerics::KEY_CLASS => Location::class,
+                            FormGenerics::KEY_DATA => $this->doctrine->getRepository(Location::class)->findOneBy(
                                 ['name' => $value]
                             ),
-                            self::KEY_LABEL => $setting->description,
-                            self::KEY_MAPPED => false,
-                            self::KEY_QUERY_BUILDER => function (EntityRepository $repository) {
+                            FormGenerics::KEY_LABEL => $setting->description,
+                            FormGenerics::KEY_MAPPED => false,
+                            FormGenerics::KEY_QUERY_BUILDER => function (EntityRepository $repository) {
                                 return $repository
                                     ->createQueryBuilder('l')
                                     ->andWhere('l.spotAllowed = TRUE')
                                     ->orderBy('l.name', 'ASC');
                             },
-                            self::KEY_REQUIRED => true,
+                            FormGenerics::KEY_REQUIRED => true,
                         ]);
                         break;
                     default:

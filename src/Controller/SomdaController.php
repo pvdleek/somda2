@@ -3,8 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Form\BaseForm;
 use App\Form\Contact;
+use App\Generics\FormGenerics;
 use App\Helpers\EmailHelper;
 use App\Helpers\FormHelper;
 use App\Helpers\TemplateHelper;
@@ -83,8 +83,8 @@ class SomdaController
         $form = $this->formHelper->getFactory()->create(Contact::class);
         if (!$this->userHelper->userIsLoggedIn()) {
             $form->add(Contact::FIELD_EMAIL, TextType::class, [
-                BaseForm::KEY_LABEL => 'Jouw e-mailadres',
-                BaseForm::KEY_REQUIRED => true,
+                FormGenerics::KEY_LABEL => 'Jouw e-mailadres',
+                FormGenerics::KEY_REQUIRED => true,
             ]);
         }
 

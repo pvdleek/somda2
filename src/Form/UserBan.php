@@ -3,11 +3,13 @@
 namespace App\Form;
 
 use App\Entity\User as UserEntity;
+use App\Generics\FormGenerics;
+use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class UserBan extends BaseForm
+class UserBan extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
@@ -17,12 +19,12 @@ class UserBan extends BaseForm
     {
         $builder
             ->add('banExpireTimestamp', DateType::class, [
-                self::KEY_ATTRIBUTES => [self::KEY_CLASS=> 'ban-datepicker'],
-                self::KEY_FORMAT=> 'dd-MM-yyyy',
-                self::KEY_HTML5 => false,
-                self::KEY_LABEL => 'Verloopdatum',
-                self::KEY_REQUIRED => false,
-                self::KEY_WIDGET => 'single_text',
+                FormGenerics::KEY_ATTRIBUTES => [FormGenerics::KEY_CLASS=> 'ban-datepicker'],
+                FormGenerics::KEY_FORMAT=> 'dd-MM-yyyy',
+                FormGenerics::KEY_HTML5 => false,
+                FormGenerics::KEY_LABEL => 'Verloopdatum',
+                FormGenerics::KEY_REQUIRED => false,
+                FormGenerics::KEY_WIDGET => 'single_text',
             ]);
     }
 

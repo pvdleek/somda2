@@ -4,12 +4,14 @@ namespace App\Form;
 
 use App\Entity\ForumDiscussion;
 use App\Entity\ForumForum;
+use App\Generics\FormGenerics;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class ForumDiscussionMove extends BaseForm
+class ForumDiscussionMove extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
@@ -18,19 +20,19 @@ class ForumDiscussionMove extends BaseForm
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->add('forum', EntityType::class, [
-            self::KEY_CHOICE_LABEL => function (ForumForum $forum) {
+            FormGenerics::KEY_CHOICE_LABEL => function (ForumForum $forum) {
                 return $forum->category->name . ' - ' . $forum->name;
             },
-            self::KEY_CLASS => ForumForum::class,
-            self::KEY_LABEL => 'Kies een nieuw locatie',
-            self::KEY_QUERY_BUILDER => function (EntityRepository $repository) {
+            FormGenerics::KEY_CLASS => ForumForum::class,
+            FormGenerics::KEY_LABEL => 'Kies een nieuw locatie',
+            FormGenerics::KEY_QUERY_BUILDER => function (EntityRepository $repository) {
                 return $repository
                     ->createQueryBuilder('f')
                     ->join('f.category', 'c')
                     ->orderBy('c.order', 'ASC')
                     ->addOrderBy('f.order', 'ASC');
             },
-            self::KEY_REQUIRED => true,
+            FormGenerics::KEY_REQUIRED => true,
         ]);
     }
 

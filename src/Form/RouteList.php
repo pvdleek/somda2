@@ -6,8 +6,10 @@ use App\Entity\Characteristic;
 use App\Entity\RouteList as RouteListEntity;
 use App\Entity\Transporter;
 use App\Generics\ConstraintGenerics;
+use App\Generics\FormGenerics;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -15,7 +17,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\GreaterThan;
 use Symfony\Component\Validator\Constraints\LessThan;
 
-class RouteList extends BaseForm
+class RouteList extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
@@ -25,7 +27,7 @@ class RouteList extends BaseForm
     {
         $builder
             ->add('firstNumber', NumberType::class, [
-                self::KEY_CONSTRAINTS => [
+                FormGenerics::KEY_CONSTRAINTS => [
                     new GreaterThan([
                         ConstraintGenerics::MESSAGE => 'Het startnummer moet minimaal 1 zijn',
                         ConstraintGenerics::VALUE => 0,
@@ -35,13 +37,13 @@ class RouteList extends BaseForm
                         ConstraintGenerics::VALUE => 1000000,
                     ]),
                 ],
-                self::KEY_HTML5 => true,
-                self::KEY_LABEL => 'Startnummer',
-                self::KEY_REQUIRED => true,
-                self::KEY_SCALE => 0,
+                FormGenerics::KEY_HTML5 => true,
+                FormGenerics::KEY_LABEL => 'Startnummer',
+                FormGenerics::KEY_REQUIRED => true,
+                FormGenerics::KEY_SCALE => 0,
             ])
             ->add('lastNumber', NumberType::class, [
-                self::KEY_CONSTRAINTS => [
+                FormGenerics::KEY_CONSTRAINTS => [
                     new GreaterThan([
                         ConstraintGenerics::MESSAGE => 'Het eindnummer moet minimaal 1 zijn',
                         ConstraintGenerics::VALUE => 0,
@@ -51,36 +53,36 @@ class RouteList extends BaseForm
                         ConstraintGenerics::VALUE => 1000000,
                     ]),
                 ],
-                self::KEY_HTML5 => true,
-                self::KEY_LABEL => 'Eindnummer',
-                self::KEY_REQUIRED => true,
-                self::KEY_SCALE => 0,
+                FormGenerics::KEY_HTML5 => true,
+                FormGenerics::KEY_LABEL => 'Eindnummer',
+                FormGenerics::KEY_REQUIRED => true,
+                FormGenerics::KEY_SCALE => 0,
             ])
             ->add('transporter', EntityType::class, [
-                self::KEY_CHOICE_LABEL => 'name',
-                self::KEY_CHOICE_VALUE => 'id',
-                self::KEY_CLASS => Transporter::class,
-                self::KEY_LABEL => 'Vervoerder',
-                self::KEY_QUERY_BUILDER => function (EntityRepository $repository) {
+                FormGenerics::KEY_CHOICE_LABEL => 'name',
+                FormGenerics::KEY_CHOICE_VALUE => 'id',
+                FormGenerics::KEY_CLASS => Transporter::class,
+                FormGenerics::KEY_LABEL => 'Vervoerder',
+                FormGenerics::KEY_QUERY_BUILDER => function (EntityRepository $repository) {
                     return $repository->createQueryBuilder('t')->orderBy('t.name', 'ASC');
                 },
-                self::KEY_REQUIRED => true,
+                FormGenerics::KEY_REQUIRED => true,
             ])
             ->add('characteristic', EntityType::class, [
-                self::KEY_CHOICE_LABEL => function (Characteristic $characteristic) {
+                FormGenerics::KEY_CHOICE_LABEL => function (Characteristic $characteristic) {
                     return $characteristic->name . ' (' . $characteristic->description . ')';
                 },
-                self::KEY_CHOICE_VALUE => 'id',
-                self::KEY_CLASS => Characteristic::class,
-                self::KEY_LABEL => 'Karakteristiek',
-                self::KEY_QUERY_BUILDER => function (EntityRepository $repository) {
+                FormGenerics::KEY_CHOICE_VALUE => 'id',
+                FormGenerics::KEY_CLASS => Characteristic::class,
+                FormGenerics::KEY_LABEL => 'Karakteristiek',
+                FormGenerics::KEY_QUERY_BUILDER => function (EntityRepository $repository) {
                     return $repository->createQueryBuilder('c')->orderBy('c.name', 'ASC');
                 },
-                self::KEY_REQUIRED => true,
+                FormGenerics::KEY_REQUIRED => true,
             ])
             ->add('section', TextType::class, [
-                self::KEY_LABEL => 'Traject',
-                self::KEY_REQUIRED => false,
+                FormGenerics::KEY_LABEL => 'Traject',
+                FormGenerics::KEY_REQUIRED => false,
             ]);
     }
 

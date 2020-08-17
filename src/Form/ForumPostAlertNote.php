@@ -2,11 +2,13 @@
 
 namespace App\Form;
 
+use App\Generics\FormGenerics;
+use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 
-class ForumPostAlertNote extends BaseForm
+class ForumPostAlertNote extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
@@ -16,13 +18,16 @@ class ForumPostAlertNote extends BaseForm
     {
         $builder
             ->add('text', TextareaType::class, [
-                self::KEY_ATTRIBUTES => [self::KEY_ATTRIBUTES_ROWS => 5, self::KEY_ATTRIBUTES_COLS => 60],
-                self::KEY_LABEL => 'Voeg commentaar toe',
-                self::KEY_REQUIRED => true,
+                FormGenerics::KEY_ATTRIBUTES => [
+                    FormGenerics::KEY_ATTRIBUTES_ROWS => 5,
+                    FormGenerics::KEY_ATTRIBUTES_COLS => 60,
+                ],
+                FormGenerics::KEY_LABEL => 'Voeg commentaar toe',
+                FormGenerics::KEY_REQUIRED => true,
             ])
             ->add('sentToReporter', CheckboxType::class, [
-                self::KEY_LABEL => 'Stuur dit commentaar naar de melder van het bericht',
-                self::KEY_REQUIRED => false,
+                FormGenerics::KEY_LABEL => 'Stuur dit commentaar naar de melder van het bericht',
+                FormGenerics::KEY_REQUIRED => false,
             ]);
     }
 }

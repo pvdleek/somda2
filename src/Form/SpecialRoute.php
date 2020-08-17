@@ -3,8 +3,10 @@
 namespace App\Form;
 
 use App\Entity\SpecialRoute as SpecialRouteEntity;
+use App\Generics\FormGenerics;
 use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
@@ -12,7 +14,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class SpecialRoute extends BaseForm
+class SpecialRoute extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
@@ -22,38 +24,41 @@ class SpecialRoute extends BaseForm
     {
         $builder
             ->add('startDate', DateType::class, [
-                self::KEY_ATTRIBUTES => [self::KEY_CLASS=> 'special-route-datepicker'],
-                self::KEY_FORMAT=> 'dd-MM-yyyy',
-                self::KEY_HTML5 => false,
-                self::KEY_LABEL => 'Startdatum',
-                self::KEY_REQUIRED => false,
-                self::KEY_WIDGET => 'single_text',
+                FormGenerics::KEY_ATTRIBUTES => [FormGenerics::KEY_CLASS=> 'special-route-datepicker'],
+                FormGenerics::KEY_FORMAT=> 'dd-MM-yyyy',
+                FormGenerics::KEY_HTML5 => false,
+                FormGenerics::KEY_LABEL => 'Startdatum',
+                FormGenerics::KEY_REQUIRED => false,
+                FormGenerics::KEY_WIDGET => 'single_text',
             ])
             ->add('endDate', DateType::class, [
-                self::KEY_ATTRIBUTES => [self::KEY_CLASS=> 'special-route-datepicker'],
-                self::KEY_FORMAT=> 'dd-MM-yyyy',
-                self::KEY_HTML5 => false,
-                self::KEY_LABEL => 'Einddatum',
-                self::KEY_REQUIRED => false,
-                self::KEY_WIDGET => 'single_text',
+                FormGenerics::KEY_ATTRIBUTES => [FormGenerics::KEY_CLASS=> 'special-route-datepicker'],
+                FormGenerics::KEY_FORMAT=> 'dd-MM-yyyy',
+                FormGenerics::KEY_HTML5 => false,
+                FormGenerics::KEY_LABEL => 'Einddatum',
+                FormGenerics::KEY_REQUIRED => false,
+                FormGenerics::KEY_WIDGET => 'single_text',
             ])
             ->add('title', TextType::class, [
-                self::KEY_ATTRIBUTES => [self::KEY_ATTRIBUTES_MAX_LENGTH => 255],
-                self::KEY_LABEL => 'Titel',
-                self::KEY_REQUIRED => true,
+                FormGenerics::KEY_ATTRIBUTES => [FormGenerics::KEY_ATTRIBUTES_MAX_LENGTH => 255],
+                FormGenerics::KEY_LABEL => 'Titel',
+                FormGenerics::KEY_REQUIRED => true,
             ])
             ->add('image', ChoiceType::class, [
-                self::KEY_CHOICES => $this->getImages(),
-                self::KEY_LABEL => 'Afbeelding',
-                self::KEY_REQUIRED => true,
+                FormGenerics::KEY_CHOICES => $this->getImages(),
+                FormGenerics::KEY_LABEL => 'Afbeelding',
+                FormGenerics::KEY_REQUIRED => true,
             ])
             ->add('text', CKEditorType::class, [
-                self::KEY_ATTRIBUTES => [self::KEY_ATTRIBUTES_ROWS => 10, self::KEY_ATTRIBUTES_COLS => 80],
-                self::KEY_LABEL => 'Bijzondere rit',
-                self::KEY_REQUIRED => true,
+                FormGenerics::KEY_ATTRIBUTES => [
+                    FormGenerics::KEY_ATTRIBUTES_ROWS => 10,
+                    FormGenerics::KEY_ATTRIBUTES_COLS => 80,
+                ],
+                FormGenerics::KEY_LABEL => 'Bijzondere rit',
+                FormGenerics::KEY_REQUIRED => true,
             ])
             ->add('public', CheckboxType::class, [
-                self::KEY_LABEL => 'Rit gepubliceerd',
+                FormGenerics::KEY_LABEL => 'Rit gepubliceerd',
             ]);
     }
 

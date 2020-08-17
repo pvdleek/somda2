@@ -5,6 +5,8 @@ namespace App\Form;
 
 use App\Entity\User as UserEntity;
 use App\Generics\ConstraintGenerics;
+use App\Generics\FormGenerics;
+use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -12,7 +14,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\Regex;
 
-class User extends BaseForm
+class User extends AbstractType
 {
     public const FIELD_EMAIL = 'email';
     public const FIELD_USERNAME = 'username';
@@ -26,13 +28,13 @@ class User extends BaseForm
     {
         $builder
             ->add(self::FIELD_EMAIL, TextType::class, [
-                self::KEY_ATTRIBUTES => [self::KEY_ATTRIBUTES_MAX_LENGTH => 255],
-                self::KEY_LABEL => 'Geef jouw e-mailadres',
-                self::KEY_REQUIRED => true,
+                FormGenerics::KEY_ATTRIBUTES => [FormGenerics::KEY_ATTRIBUTES_MAX_LENGTH => 255],
+                FormGenerics::KEY_LABEL => 'Geef jouw e-mailadres',
+                FormGenerics::KEY_REQUIRED => true,
             ])
             ->add(self::FIELD_USERNAME, TextType::class, [
-                self::KEY_ATTRIBUTES => [self::KEY_ATTRIBUTES_MAX_LENGTH => 10],
-                self::KEY_CONSTRAINTS => [
+                FormGenerics::KEY_ATTRIBUTES => [FormGenerics::KEY_ATTRIBUTES_MAX_LENGTH => 10],
+                FormGenerics::KEY_CONSTRAINTS => [
                     new Length([
                         ConstraintGenerics::MAX => 20,
                         ConstraintGenerics::MAX_MESSAGE => 'De gebruikersnaam mag maximaal 20 karakters lang zijn',
@@ -45,19 +47,19 @@ class User extends BaseForm
                             'De gebruikersnaam mag alleen letters, cijfers of een liggend streepje bevatten',
                     ])
                 ],
-                self::KEY_LABEL => 'Kies een gebruikersnaam (maximaal 20 karakters)',
-                self::KEY_REQUIRED => true,
+                FormGenerics::KEY_LABEL => 'Kies een gebruikersnaam (maximaal 20 karakters)',
+                FormGenerics::KEY_REQUIRED => true,
             ])
             ->add(self::FIELD_PLAIN_PASSWORD, PasswordType::class, [
-                self::KEY_CONSTRAINTS => [
+                FormGenerics::KEY_CONSTRAINTS => [
                     new Length([
                         ConstraintGenerics::MIN => 8,
                         ConstraintGenerics::MIN_MESSAGE => 'Het wachtwoord moet minimaal 8 karakters lang zijn',
                     ]),
                 ],
-                self::KEY_LABEL => 'Kies een wachtwoord',
-                self::KEY_MAPPED => false,
-                self::KEY_REQUIRED => true,
+                FormGenerics::KEY_LABEL => 'Kies een wachtwoord',
+                FormGenerics::KEY_MAPPED => false,
+                FormGenerics::KEY_REQUIRED => true,
             ]);
     }
 

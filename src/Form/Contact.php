@@ -2,11 +2,13 @@
 
 namespace App\Form;
 
+use App\Generics\FormGenerics;
+use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 
-class Contact extends BaseForm
+class Contact extends AbstractType
 {
     public const FIELD_EMAIL = 'email';
 
@@ -18,13 +20,16 @@ class Contact extends BaseForm
     {
         $builder
             ->add('subject', TextType::class, [
-                self::KEY_LABEL => 'Onderwerp van jouw bericht',
-                self::KEY_REQUIRED => true,
+                FormGenerics::KEY_LABEL => 'Onderwerp van jouw bericht',
+                FormGenerics::KEY_REQUIRED => true,
             ])
             ->add('text', TextareaType::class, [
-                self::KEY_ATTRIBUTES => [self::KEY_ATTRIBUTES_ROWS => 5, self::KEY_ATTRIBUTES_COLS => 60],
-                self::KEY_LABEL => 'Jouw bericht',
-                self::KEY_REQUIRED => true,
+                FormGenerics::KEY_ATTRIBUTES => [
+                    FormGenerics::KEY_ATTRIBUTES_ROWS => 5,
+                    FormGenerics::KEY_ATTRIBUTES_COLS => 60,
+                ],
+                FormGenerics::KEY_LABEL => 'Jouw bericht',
+                FormGenerics::KEY_REQUIRED => true,
             ]);
     }
 }

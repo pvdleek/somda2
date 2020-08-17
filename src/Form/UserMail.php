@@ -2,13 +2,15 @@
 
 namespace App\Form;
 
+use App\Generics\FormGenerics;
 use FOS\CKEditorBundle\Form\Type\CKEditorType;
+use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class UserMail extends BaseForm
+class UserMail extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
@@ -26,19 +28,22 @@ class UserMail extends BaseForm
 
         $builder
             ->add('senderOption', ChoiceType::class, [
-                self::KEY_CHOICES => $senderChoices,
-                self::KEY_DATA => 'direct',
-                self::KEY_LABEL => 'Kies de afzender',
-                self::KEY_REQUIRED => true,
+                FormGenerics::KEY_CHOICES => $senderChoices,
+                FormGenerics::KEY_DATA => 'direct',
+                FormGenerics::KEY_LABEL => 'Kies de afzender',
+                FormGenerics::KEY_REQUIRED => true,
             ])
             ->add('subject', TextType::class, [
-                self::KEY_LABEL => 'Geef het onderwerp van jouw bericht',
-                self::KEY_REQUIRED => true,
+                FormGenerics::KEY_LABEL => 'Geef het onderwerp van jouw bericht',
+                FormGenerics::KEY_REQUIRED => true,
             ])
             ->add('text', CKEditorType::class, [
-                self::KEY_ATTRIBUTES => [self::KEY_ATTRIBUTES_ROWS => 10, self::KEY_ATTRIBUTES_COLS => 80],
-                self::KEY_LABEL => 'Jouw bericht',
-                self::KEY_REQUIRED => true,
+                FormGenerics::KEY_ATTRIBUTES => [
+                    FormGenerics::KEY_ATTRIBUTES_ROWS => 10,
+                    FormGenerics::KEY_ATTRIBUTES_COLS => 80,
+                ],
+                FormGenerics::KEY_LABEL => 'Jouw bericht',
+                FormGenerics::KEY_REQUIRED => true,
             ]);
     }
 

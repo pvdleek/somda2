@@ -3,11 +3,13 @@
 namespace App\Form;
 
 use App\Entity\ForumDiscussion;
+use App\Generics\FormGenerics;
+use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class ForumDiscussionCombine extends BaseForm
+class ForumDiscussionCombine extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
@@ -16,8 +18,8 @@ class ForumDiscussionCombine extends BaseForm
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->add('title', TextType::class, [
-            self::KEY_LABEL => 'Geef de titel van de gecombineerde discussie',
-            self::KEY_REQUIRED => true,
+            FormGenerics::KEY_LABEL => 'Geef de titel van de gecombineerde discussie',
+            FormGenerics::KEY_REQUIRED => true,
         ]);
     }
 

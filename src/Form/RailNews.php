@@ -3,13 +3,15 @@
 namespace App\Form;
 
 use App\Entity\RailNews as RailNewsEntity;
+use App\Generics\FormGenerics;
+use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class RailNews extends BaseForm
+class RailNews extends AbstractType
 {
     public const FIELD_TIMESTAMP = 'timestamp';
 
@@ -21,20 +23,23 @@ class RailNews extends BaseForm
     {
         $builder
             ->add('title', TextType::class, [
-                self::KEY_ATTRIBUTES => [self::KEY_ATTRIBUTES_MAX_LENGTH => 255],
-                self::KEY_LABEL => 'Titel van het bericht',
-                self::KEY_REQUIRED => true,
+                FormGenerics::KEY_ATTRIBUTES => [FormGenerics::KEY_ATTRIBUTES_MAX_LENGTH => 255],
+                FormGenerics::KEY_LABEL => 'Titel van het bericht',
+                FormGenerics::KEY_REQUIRED => true,
             ])
             ->add('introduction', TextareaType::class, [
-                self::KEY_ATTRIBUTES => [self::KEY_ATTRIBUTES_ROWS => 5, self::KEY_ATTRIBUTES_COLS => 60],
-                self::KEY_LABEL => 'Koptekst van het bericht',
-                self::KEY_REQUIRED => true,
+                FormGenerics::KEY_ATTRIBUTES => [
+                    FormGenerics::KEY_ATTRIBUTES_ROWS => 5,
+                    FormGenerics::KEY_ATTRIBUTES_COLS => 60,
+                ],
+                FormGenerics::KEY_LABEL => 'Koptekst van het bericht',
+                FormGenerics::KEY_REQUIRED => true,
             ])
             ->add('active', CheckboxType::class, [
-                self::KEY_LABEL => 'Bericht goedgekeurd',
+                FormGenerics::KEY_LABEL => 'Bericht goedgekeurd',
             ])
             ->add('automaticUpdates', CheckboxType::class, [
-                self::KEY_LABEL => 'Bericht automatisch bijwerken',
+                FormGenerics::KEY_LABEL => 'Bericht automatisch bijwerken',
             ]);
     }
 

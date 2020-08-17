@@ -4,12 +4,14 @@ namespace App\Form;
 
 use App\Entity\TrainComposition as TrainCompositionEntity;
 use App\Entity\TrainCompositionBase;
+use App\Generics\FormGenerics;
+use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class TrainComposition extends BaseForm
+class TrainComposition extends AbstractType
 {
     public const OPTION_MANAGEMENT_ROLE = 'managementRole';
 
@@ -27,31 +29,31 @@ class TrainComposition extends BaseForm
         for ($car = 1; $car <= TrainCompositionEntity::NUMBER_OF_CARS; ++$car) {
             if (!is_null($trainComposition->getType()->getCar($car))) {
                 $builder->add('car' . $car, TextType::class, [
-                    self::KEY_ATTRIBUTES => [self::KEY_ATTRIBUTES_MAX_LENGTH => 15],
-                    self::KEY_LABEL => $trainComposition->getType()->getCar($car),
-                    self::KEY_REQUIRED => false,
+                    FormGenerics::KEY_ATTRIBUTES => [FormGenerics::KEY_ATTRIBUTES_MAX_LENGTH => 15],
+                    FormGenerics::KEY_LABEL => $trainComposition->getType()->getCar($car),
+                    FormGenerics::KEY_REQUIRED => false,
                 ]);
             }
         }
 
         $builder->add('note', TextType::class, [
-            self::KEY_ATTRIBUTES => [self::KEY_ATTRIBUTES_MAX_LENGTH => 255],
-            self::KEY_LABEL => 'Opmerkingen',
-            self::KEY_REQUIRED => false,
+            FormGenerics::KEY_ATTRIBUTES => [FormGenerics::KEY_ATTRIBUTES_MAX_LENGTH => 255],
+            FormGenerics::KEY_LABEL => 'Opmerkingen',
+            FormGenerics::KEY_REQUIRED => false,
         ]);
 
         if ($options[self::OPTION_MANAGEMENT_ROLE]) {
             $builder
                 ->add('extra', TextType::class, [
-                    self::KEY_ATTRIBUTES => [self::KEY_ATTRIBUTES_MAX_LENGTH => 255],
-                    self::KEY_LABEL => 'Extra',
-                    self::KEY_REQUIRED => false,
+                    FormGenerics::KEY_ATTRIBUTES => [FormGenerics::KEY_ATTRIBUTES_MAX_LENGTH => 255],
+                    FormGenerics::KEY_LABEL => 'Extra',
+                    FormGenerics::KEY_REQUIRED => false,
                 ])
                 ->add('indexLine', ChoiceType::class, [
-                    self::KEY_CHOICES => ['Ja' => true, 'Nee' => false],
-                    self::KEY_EXPANDED => true,
-                    self::KEY_LABEL => 'Index-regel',
-                    self::KEY_REQUIRED => true,
+                    FormGenerics::KEY_CHOICES => ['Ja' => true, 'Nee' => false],
+                    FormGenerics::KEY_EXPANDED => true,
+                    FormGenerics::KEY_LABEL => 'Index-regel',
+                    FormGenerics::KEY_REQUIRED => true,
                 ]);
         }
     }

@@ -3,13 +3,15 @@
 namespace App\Form;
 
 use App\Entity\ForumDiscussion as ForumDiscussionEntity;
+use App\Generics\FormGenerics;
 use FOS\CKEditorBundle\Form\Type\CKEditorType;
+use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class ForumDiscussion extends BaseForm
+class ForumDiscussion extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
@@ -19,18 +21,21 @@ class ForumDiscussion extends BaseForm
     {
         $builder
             ->add('title', TextType::class, [
-                self::KEY_LABEL => 'Onderwerp van de discussie',
-                self::KEY_REQUIRED => true,
+                FormGenerics::KEY_LABEL => 'Onderwerp van de discussie',
+                FormGenerics::KEY_REQUIRED => true,
             ])
             ->add('text', CKEditorType::class, [
-                self::KEY_ATTRIBUTES => [self::KEY_ATTRIBUTES_ROWS => 10, self::KEY_ATTRIBUTES_COLS => 80],
-                self::KEY_LABEL => 'Jouw bericht',
-                self::KEY_MAPPED => false,
-                self::KEY_REQUIRED => true,
+                FormGenerics::KEY_ATTRIBUTES => [
+                    FormGenerics::KEY_ATTRIBUTES_ROWS => 10,
+                    FormGenerics::KEY_ATTRIBUTES_COLS => 80,
+                ],
+                FormGenerics::KEY_LABEL => 'Jouw bericht',
+                FormGenerics::KEY_MAPPED => false,
+                FormGenerics::KEY_REQUIRED => true,
             ])
             ->add('signatureOn', CheckboxType::class, [
-                self::KEY_LABEL => 'Handtekening gebruiken',
-                self::KEY_MAPPED => false,
+                FormGenerics::KEY_LABEL => 'Handtekening gebruiken',
+                FormGenerics::KEY_MAPPED => false,
             ]);
     }
 

@@ -4,11 +4,13 @@ declare(strict_types=1);
 namespace App\Form;
 
 use App\Generics\ConstraintGenerics;
+use App\Generics\FormGenerics;
+use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\Email;
 
-class UserLostPassword extends BaseForm
+class UserLostPassword extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
@@ -18,12 +20,12 @@ class UserLostPassword extends BaseForm
     {
         $builder
             ->add('email', TextType::class, [
-                self::KEY_ATTRIBUTES => [self::KEY_ATTRIBUTES_MAX_LENGTH => 60],
-                self::KEY_CONSTRAINTS => [
+                FormGenerics::KEY_ATTRIBUTES => [FormGenerics::KEY_ATTRIBUTES_MAX_LENGTH => 60],
+                FormGenerics::KEY_CONSTRAINTS => [
                     new Email([ConstraintGenerics::MESSAGE => 'Dit is geen geldig e-mailadres']),
                 ],
-                self::KEY_LABEL => 'Geef je e-mailadres om een nieuw wachtwoord te ontvangen',
-                self::KEY_REQUIRED => true,
+                FormGenerics::KEY_LABEL => 'Geef je e-mailadres om een nieuw wachtwoord te ontvangen',
+                FormGenerics::KEY_REQUIRED => true,
             ]);
     }
 }
