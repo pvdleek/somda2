@@ -19,6 +19,7 @@ abstract class BaseWebTestCase extends WebTestCase
 
     /**
      * @param array $fixtures
+     * For more information about using fixtures, see https://github.com/doctrine/data-fixtures
      */
     public function loadRequiredFixtures(array $fixtures): void
     {
