@@ -21,7 +21,7 @@ trait DateTrait
         }
 
         $timePart = explode('.', $time);
-        $returnTime = $timePart[0] * 60 + $timePart[1] - 120;
+        $returnTime = (int)$timePart[0] * 60 + (int)$timePart[1] - 120;
         if ($returnTime < 0) {
             return $returnTime + 1440;
         }

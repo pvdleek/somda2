@@ -107,7 +107,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
         }
 
         /**
-         * @var User $user
+         * @var User|null $user
          */
         $user = $this->entityManager->getRepository(User::class)->findOneBy([
             UserForm::FIELD_USERNAME => $credentials[self::CREDENTIALS_USERNAME]

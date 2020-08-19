@@ -58,6 +58,12 @@
         <exec executable="vendor/bin/phpcs" />
     </target>
 
+    <target name="psalm">
+        <exec executable="vendor/bin/psalm">
+            <arg value="--show-info=true" />
+        </exec>
+    </target>
+
     <target name="sonar-start">
         <exec executable="/opt/sonarqube/bin/linux-x86-64/sonar.sh">
             <arg value="console" />

@@ -30,7 +30,7 @@ class News extends EntityRepository
                 SELECT `n`.`newsid` AS `id`, `n`.`title` AS `title`, `n`.`timestamp` AS `timestamp`,
                     IF(`r`.`uid` IS NULL, FALSE, TRUE) AS `news_read`
                 FROM somda_news n
-                LEFT JOIN somda_news_read r ON r.uid = ' . $user->id . ' AND r.newsid = n.newsid
+                LEFT JOIN somda_news_read r ON r.uid = ' . (string)$user->id . ' AND r.newsid = n.newsid
                 WHERE n.archief = \'0\'
                 GROUP BY `id`, `title`, `timestamp`, `news_read`
                 ORDER BY `timestamp` DESC

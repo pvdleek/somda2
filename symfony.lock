@@ -1,4 +1,10 @@
 {
+    "amphp/amp": {
+        "version": "v2.5.0"
+    },
+    "amphp/byte-stream": {
+        "version": "v1.8.0"
+    },
     "beberlei/doctrineextensions": {
         "version": "v1.2.6"
     },
@@ -7,6 +13,9 @@
     },
     "composer/ca-bundle": {
         "version": "1.2.7"
+    },
+    "composer/semver": {
+        "version": "3.0.0"
     },
     "composer/xdebug-handler": {
         "version": "1.4.1"
@@ -130,6 +139,12 @@
     "exsyst/swagger": {
         "version": "v0.4.1"
     },
+    "felixfbecker/advanced-json-rpc": {
+        "version": "v3.1.1"
+    },
+    "felixfbecker/language-server-protocol": {
+        "version": "v1.4.0"
+    },
     "friendsofsymfony/ckeditor-bundle": {
         "version": "2.0",
         "recipe": {
@@ -223,6 +238,9 @@
             "config/packages/nelmio_security.yaml"
         ]
     },
+    "netresearch/jsonmapper": {
+        "version": "v2.1.0"
+    },
     "nikic/php-parser": {
         "version": "v4.3.0"
     },
@@ -231,6 +249,9 @@
     },
     "ocramius/proxy-manager": {
         "version": "2.2.3"
+    },
+    "openlss/lib-array2xml": {
+        "version": "1.0.0"
     },
     "pdepend/pdepend": {
         "version": "2.7.1"
@@ -691,11 +712,20 @@
     "ua-parser/uap-php": {
         "version": "v3.9.8"
     },
+    "vimeo/psalm": {
+        "version": "3.14.1"
+    },
     "webimpress/safe-writer": {
         "version": "2.0.1"
     },
     "webmozart/assert": {
         "version": "1.7.0"
+    },
+    "webmozart/glob": {
+        "version": "4.1.0"
+    },
+    "webmozart/path-util": {
+        "version": "2.3.0"
     },
     "willdurand/jsonp-callback-validator": {
         "version": "v1.1.0"

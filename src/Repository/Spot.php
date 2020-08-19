@@ -204,7 +204,7 @@ class Spot extends EntityRepository
      * @param QueryBuilder $queryBuilder
      * @param DateTime|null $spotDate
      */
-    private function filterOnSpotDate(QueryBuilder $queryBuilder, ?DateTime $spotDate = null)
+    private function filterOnSpotDate(QueryBuilder $queryBuilder, ?DateTime $spotDate = null): void
     {
         if (!is_null($spotDate)) {
             $queryBuilder
@@ -217,7 +217,7 @@ class Spot extends EntityRepository
      * @param QueryBuilder $queryBuilder
      * @param string|null $location
      */
-    private function filterOnLocation(QueryBuilder $queryBuilder, ?string $location = null)
+    private function filterOnLocation(QueryBuilder $queryBuilder, ?string $location = null): void
     {
         if (!is_null($location)) {
             $queryBuilder
