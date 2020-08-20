@@ -41,27 +41,27 @@ class ManageTrainTablesController
     /**
      * @var RouteManagementHelper
      */
-    private RouteManagementHelper $routeManagementHelper;
+    private RouteManagementHelper $routeMgmtHelper;
 
     /**
      * @param UserHelper $userHelper
      * @param FormHelper $formHelper
      * @param TemplateHelper $templateHelper
      * @param RoutesDisplayHelper $routesDisplayHelper
-     * @param RouteManagementHelper $routeManagementHelper
+     * @param RouteManagementHelper $routeMgmtHelper
      */
     public function __construct(
         UserHelper $userHelper,
         FormHelper $formHelper,
         TemplateHelper $templateHelper,
         RoutesDisplayHelper $routesDisplayHelper,
-        RouteManagementHelper $routeManagementHelper
+        RouteManagementHelper $routeMgmtHelper
     ) {
         $this->userHelper = $userHelper;
         $this->formHelper = $formHelper;
         $this->templateHelper = $templateHelper;
         $this->routesDisplayHelper = $routesDisplayHelper;
-        $this->routeManagementHelper = $routeManagementHelper;
+        $this->routeMgmtHelper = $routeMgmtHelper;
     }
 
     /**
@@ -100,10 +100,10 @@ class ManageTrainTablesController
     {
         $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_ADMIN_TRAINTABLE_EDIT);
 
-        $this->routeManagementHelper->setRouteListFromId($routeListId);
-        $this->routeManagementHelper->setRouteFromId($routeId);
+        $this->routeMgmtHelper->setRouteListFromId($routeListId);
+        $this->routeMgmtHelper->setRouteFromId($routeId);
 
-        if (!$this->routeManagementHelper->setTrainTableLines($routeNumber)) {
+        if (!$this->routeMgmtHelper->setTrainTableLines($routeNumber)) {
             $this->formHelper->getFlashHelper()->add(
                 FlashHelper::FLASH_TYPE_ERROR,
                 'Het door jou opgegeven treinnummer ' . $routeNumber .
@@ -111,19 +111,19 @@ class ManageTrainTablesController
             );
 
             return $this->formHelper->getRedirectHelper()->redirectToRoute('manage_train_tables_year_route_list', [
-                'yearId' => $this->routeManagementHelper->getRouteList()->trainTableYear->id,
+                'yearId' => $this->routeMgmtHelper->getRouteList()->trainTableYear->id,
                 'routeListId' => $routeListId
             ]);
         }
 
         if ($request->getMethod() === Request::METHOD_POST) {
-            if ($this->routeManagementHelper->handlePost($routeId, $request->request->all())) {
+            if ($this->routeMgmtHelper->handlePost($routeId, $request->request->all())) {
                 return $this->formHelper->finishFormHandling(
                     'Trein opgeslagen',
                     'manage_train_tables_year_route_list',
                     [
-                        'yearId' => $this->routeManagementHelper->getRouteList()->trainTableYear->id,
-                        'routeListId' => $this->routeManagementHelper->getRouteList()->id,
+                        'yearId' => $this->routeMgmtHelper->getRouteList()->trainTableYear->id,
+                        'routeListId' => $this->routeMgmtHelper->getRouteList()->id,
                     ]
                 );
             }
@@ -136,9 +136,9 @@ class ManageTrainTablesController
 
         return $this->templateHelper->render('manageTrainTables/item.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Beheer dienstregeling',
-            'routeList' => $this->routeManagementHelper->getRouteList(),
-            'route' => $this->routeManagementHelper->getRoute(),
-            'trainTableLines' => $this->routeManagementHelper->getTrainTableLines(),
+            'routeList' => $this->routeMgmtHelper->getRouteList(),
+            'route' => $this->routeMgmtHelper->getRoute(),
+            'trainTableLines' => $this->routeMgmtHelper->getTrainTableLines(),
         ]);
     }
 }

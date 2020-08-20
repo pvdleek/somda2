@@ -55,7 +55,9 @@
     </target>
 
     <target name="phpcs">
-        <exec executable="vendor/bin/phpcs" />
+        <exec executable="vendor/bin/phpcs">
+            <arg value="src/" />
+        </exec>
     </target>
 
     <target name="psalm">
