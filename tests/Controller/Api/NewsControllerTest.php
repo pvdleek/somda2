@@ -23,7 +23,7 @@ class NewsControllerTest extends BaseWebTestCase
         $this->client->request('GET', '/api/1/news/', [], [], self::$authHeaders);
 
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
-        $response = json_decode($this->client->getResponse()->getContent(), true);
+        $response = (array)json_decode($this->client->getResponse()->getContent(), true);
 
         $this->assertCount(3, $response['data']);
 

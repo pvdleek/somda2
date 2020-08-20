@@ -70,7 +70,7 @@ class SecurityController extends AbstractFOSRestController
     public function loginAction(Request $request): Response
     {
         // If we reach this point, the user was successfully logged in, so we look the user up and return it
-        $userInformation = json_decode($request->getContent(), true);
+        $userInformation = (array)json_decode($request->getContent(), true);
         $user = $this->doctrine->getRepository(User::class)->findOneBy(['username' => $userInformation['username']]);
 
         return $this->handleView($this->view(['data' => $user], 200));

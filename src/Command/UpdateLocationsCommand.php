@@ -57,7 +57,7 @@ class UpdateLocationsCommand extends Command
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($curl, CURLOPT_HTTPHEADER, ['Ocp-Apim-Subscription-Key:' . $_ENV['NS_API_PRIMARY_KEY']]);
 
-        $result = json_decode(curl_exec($curl), true);
+        $result = (array)json_decode(curl_exec($curl), true);
         curl_close($curl);
 
         /**

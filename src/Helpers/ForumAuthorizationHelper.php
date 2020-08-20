@@ -3,7 +3,7 @@
 namespace App\Helpers;
 
 use App\Entity\ForumForum;
-use App\Entity\User;
+use App\Interfaces\User;
 use App\Generics\RoleGenerics;
 
 class ForumAuthorizationHelper

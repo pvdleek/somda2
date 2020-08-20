@@ -96,7 +96,7 @@ class ForumPostController extends AbstractFOSRestController
             throw new AccessDeniedException('This discussion does not exist or the user may not post');
         }
 
-        $postInformation = json_decode($request->getContent(), true);
+        $postInformation = (array)json_decode($request->getContent(), true);
         $post = $this->formHelper->addPost(
             $discussion,
             $this->userHelper->getUser(),

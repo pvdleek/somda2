@@ -112,7 +112,7 @@ class ProfileController extends AbstractFOSRestController
 
         $user = $this->userHelper->getUser();
 
-        $userInformation = json_decode($request->getContent(), true);
+        $userInformation = (array)json_decode($request->getContent(), true);
         $user->info->avatar = $userInformation['avatar'];
         if (isset($userInformation['birthDate'])) {
             $user->info->birthDate = DateTime::createFromFormat('Y-m-d', $userInformation['birthDate']);

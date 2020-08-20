@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Interfaces\User as UserInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -45,11 +46,11 @@ class ForumDiscussion
     public ForumForum $forum;
 
     /**
-     * @var User
+     * @var UserInterface
      * @ORM\ManyToOne(targetEntity="App\Entity\User")
      * @ORM\JoinColumn(name="authorid", referencedColumnName="uid")
      */
-    public User $author;
+    public UserInterface $author;
 
     /**
      * @var ForumPost[]
