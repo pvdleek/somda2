@@ -42,6 +42,11 @@ class ForumDiscussionHelper
     /**
      * @var int|null
      */
+    private ?int $numberOfPosts;
+
+    /**
+     * @var int|null
+     */
     private ?int $pageNumber;
 
     /**
@@ -85,17 +90,18 @@ class ForumDiscussionHelper
     }
 
     /**
+     * @param bool $newToOld
      * @param int|null $requestedPageNumber
      * @param int|null $requestedPostId
      * @return ForumPost[]
      * @throws WrongMethodError
      */
-    public function getPosts(int $requestedPageNumber = null, int $requestedPostId = null): array
+    public function getPosts(bool $newToOld, int $requestedPageNumber = null, int $requestedPostId = null): array
     {
-        $this->setNumberOfPages();
+        $this->setNumberOfPostsAndPages();
         $this->setNumberOfReadPosts();
         $this->setForumJump($requestedPageNumber, $requestedPostId);
-        $this->setPageNumber($requestedPageNumber, $requestedPostId);
+        $this->setPageNumber($newToOld, $requestedPageNumber, $requestedPostId);
 
         $this->discussion->viewed = (int)$this->discussion->viewed + 1;
         $this->doctrine->getManager()->flush();
@@ -105,7 +111,7 @@ class ForumDiscussionHelper
          */
         $posts = $this->doctrine->getRepository(ForumPost::class)->findBy(
             [ForumPostForm::FIELD_DISCUSSION => $this->discussion],
-            [ForumPostForm::FIELD_TIMESTAMP => 'ASC'],
+            [ForumPostForm::FIELD_TIMESTAMP => $newToOld ? 'DESC' : 'ASC'],
             ForumGenerics::MAX_POSTS_PER_PAGE,
             ($this->pageNumber - 1) * ForumGenerics::MAX_POSTS_PER_PAGE
         );
@@ -130,6 +136,19 @@ class ForumDiscussionHelper
         }
 
         return $this->numberOfPages;
+    }
+
+    /**
+     * @return int
+     * @throws WrongMethodError
+     */
+    public function getNumberOfPosts(): int
+    {
+        if (is_null($this->numberOfPosts)) {
+            throw new WrongMethodError('Execute the getPosts() method first');
+        }
+
+        return $this->numberOfPosts;
     }
 
     /**
@@ -168,12 +187,12 @@ class ForumDiscussionHelper
     /**
      *
      */
-    private function setNumberOfPages(): void
+    private function setNumberOfPostsAndPages(): void
     {
-        $numberOfPosts = $this->doctrine->getRepository(ForumDiscussion::class)->getNumberOfPosts(
+        $this->numberOfPosts = $this->doctrine->getRepository(ForumDiscussion::class)->getNumberOfPosts(
             $this->discussion
         );
-        $this->numberOfPages = (int)floor(($numberOfPosts - 1) / ForumGenerics::MAX_POSTS_PER_PAGE) + 1;
+        $this->numberOfPages = (int)floor(($this->numberOfPosts - 1) / ForumGenerics::MAX_POSTS_PER_PAGE) + 1;
     }
 
     /**
@@ -197,11 +216,12 @@ class ForumDiscussionHelper
 
     /**
      * This function should always be called after setForumJump for this function modifies the pageNumber
+     * @param bool $newToOld
      * @param int|null $requestedPageNumber
      * @param int|null $postId
      * @throws WrongMethodError
      */
-    private function setPageNumber(int $requestedPageNumber = null, int $postId = null): void
+    private function setPageNumber(bool $newToOld, int $requestedPageNumber = null, int $postId = null): void
     {
         if (!is_null($requestedPageNumber)) {
             $this->pageNumber = $requestedPageNumber;
@@ -221,10 +241,13 @@ class ForumDiscussionHelper
             // Neither a specific page or post were requested but the user is logged in,
             // so we will go to the first unread post in the discussion
             $this->pageNumber = (int)floor($this->getNumberOfReadPosts() / ForumGenerics::MAX_POSTS_PER_PAGE) + 1;
+            if ($newToOld) {
+                $this->pageNumber = max($this->numberOfPages - $this->pageNumber, 1);
+            }
             return;
         }
 
-        $this->pageNumber = 1;
+        $this->pageNumber = $newToOld ? $this->numberOfPages : 1;
     }
 
     /**

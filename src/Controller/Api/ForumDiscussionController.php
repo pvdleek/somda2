@@ -5,6 +5,7 @@ namespace App\Controller\Api;
 
 use App\Entity\ForumDiscussion;
 use App\Entity\ForumPost;
+use App\Entity\UserPreference;
 use App\Generics\ForumGenerics;
 use App\Generics\RoleGenerics;
 use App\Helpers\ForumAuthorizationHelper;
@@ -82,6 +83,57 @@ class ForumDiscussionController extends AbstractFOSRestController
      *     response=200,
      *     description="Returns paginated posts in a discussion",
      *     @SWG\Schema(
+     *         @SWG\Property(
+     *             property="meta",
+     *             type="object",
+     *             @SWG\Property(
+     *                 description="Whether the user is a moderator for this forum",
+     *                 property="user_is_moderator",
+     *                 type="boolean",
+     *             ),
+     *             @SWG\Property(
+     *                 description="The number of posts displayed per page",
+     *                 property="posts_per_page",
+     *                 type="integer",
+     *             ),
+     *             @SWG\Property(
+     *                 description="The number of pages in this discussion",
+     *                 property="number_of_pages",
+     *                 type="integer",
+     *             ),
+     *             @SWG\Property(
+     *                 description="The total number of posts in this discussion",
+     *                 property="number_of_posts",
+     *                 type="integer",
+     *             ),
+     *             @SWG\Property(
+     *                 description="The currently displayed page-number",
+     *                 property="page_number",
+     *                 type="integer",
+     *             ),
+     *             @SWG\Property(
+     *                 description="Whether the posts are displayed from new to old for this user",
+     *                 property="new_to_old",
+     *                 type="boolean",
+     *             ),
+     *             @SWG\Property(
+     *                 description="Whether the user is allowed to post a reply in this discussion",
+     *                 property="may_post",
+     *                 type="boolean",
+     *             ),
+     *             @SWG\Property(
+     *                 description="The total number of posts the user has already read in this discussion",
+     *                 property="number_of_read_posts",
+     *                 type="integer",
+     *             ),
+     *             @SWG\Property(
+     *                 description="A string containing information which post to jump to: \
+     *                     - 'p{postid}' for the first unread post-id \
+     *                     - 'new_post' if all posts are read",
+     *                 property="forum_jump",
+     *                 type="string",
+     *             ),
+     *         ),
      *         @SWG\Property(property="data", type="array", @SWG\Items(ref=@Model(type=ForumPost::class))),
      *     ),
      * )
@@ -99,21 +151,26 @@ class ForumDiscussionController extends AbstractFOSRestController
             throw new AccessDeniedException('This discussion does not exist');
         }
 
+        $newToOld = $this->userHelper->userIsLoggedIn() ?
+            (bool)$this->userHelper->getPreferenceByKey(UserPreference::KEY_FORUM_NEW_TO_OLD)->value : false;
+
         $this->discussionHelper->setDiscussion($discussion);
-        $posts = $this->discussionHelper->getPosts($pageNumber, $postId);
+        $posts = $this->discussionHelper->getPosts($newToOld, $pageNumber, $postId);
 
         return $this->handleView($this->view([
-            'data' => $posts,
             'meta' => [
                 'user_is_moderator' =>
                     $this->forumAuthHelper->userIsModerator($discussion->forum, $this->userHelper->getUser()),
                 'posts_per_page' => ForumGenerics::MAX_POSTS_PER_PAGE,
                 'number_of_pages' => $this->discussionHelper->getNumberOfPages(),
+                'number_of_posts' => $this->discussionHelper->getNumberOfPosts(),
                 'page_number' => $this->discussionHelper->getPageNumber(),
+                'new_to_old' => $newToOld,
                 'may_post' => $this->forumAuthHelper->mayPost($discussion->forum, $this->userHelper->getUser()),
                 'number_of_read_posts' => $this->discussionHelper->getNumberOfReadPosts(),
                 'forum_jump' => $this->discussionHelper->getForumJump(),
-            ]
+            ],
+            'data' => $posts,
         ], 200));
     }
 

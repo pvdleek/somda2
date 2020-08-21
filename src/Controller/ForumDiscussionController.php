@@ -6,6 +6,7 @@ use App\Entity\Banner;
 use App\Entity\BannerView;
 use App\Entity\ForumDiscussion;
 use App\Entity\ForumForum;
+use App\Entity\UserPreference;
 use App\Form\ForumDiscussion as ForumDiscussionForm;
 use App\Generics\RoleGenerics;
 use App\Generics\RouteGenerics;
@@ -86,8 +87,11 @@ class ForumDiscussionController
             return $this->formHelper->getRedirectHelper()->redirectToRoute(RouteGenerics::ROUTE_FORUM);
         }
 
+        $newToOld = $this->userHelper->userIsLoggedIn() ?
+            (bool)$this->userHelper->getPreferenceByKey(UserPreference::KEY_FORUM_NEW_TO_OLD)->value : false;
+
         $this->discussionHelper->setDiscussion($discussion);
-        $posts = $this->discussionHelper->getPosts($pageNumber, $postId);
+        $posts = $this->discussionHelper->getPosts($newToOld, $pageNumber, $postId);
 
         return $this->templateHelper->render('forum/discussion.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Forum - ' . $discussion->title,
@@ -95,7 +99,9 @@ class ForumDiscussionController
                 $this->forumAuthHelper->userIsModerator($discussion->forum, $this->userHelper->getUser()),
             TemplateHelper::PARAMETER_DISCUSSION => $discussion,
             'numberOfPages' => $this->discussionHelper->getNumberOfPages(),
+            'numberOfPosts' => $this->discussionHelper->getNumberOfPosts(),
             'pageNumber' => $this->discussionHelper->getPageNumber(),
+            'newToOld' => $newToOld,
             'posts' => $posts,
             'mayPost' => $this->forumAuthHelper->mayPost($discussion->forum, $this->userHelper->getUser()),
             'numberOfReadPosts' => $this->discussionHelper->getNumberOfReadPosts(),

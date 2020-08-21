@@ -7,11 +7,11 @@ use App\Entity\User;
 use App\Entity\UserPreference;
 use App\Entity\UserPreferenceValue;
 use App\Exception\UnknownUserPreferenceKey;
-use App\Interfaces\User as UserInterface;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Exception;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Twig\Extension\RuntimeExtensionInterface;
 
 class UserHelper implements RuntimeExtensionInterface
@@ -56,7 +56,7 @@ class UserHelper implements RuntimeExtensionInterface
             $this->user = $this->security->getUser();
         }
 
-        return $this->user instanceof UserInterface ? $this->user : null;
+        return $this->user instanceof User ? $this->user : null;
     }
 
     /**

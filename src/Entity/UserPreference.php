@@ -31,6 +31,7 @@ class UserPreference
     public const KEY_DEFAULT_SPOT_LOCATION = 'default_spot_place';
 
     public const KEY_FORUM_SIGNATURE = 'forum_signature';
+    public const KEY_FORUM_NEW_TO_OLD = 'forum_new_to_old';
     public const KEY_FORUM_MAIL_FOR_ALL_FAVORITES = 'mail_all_favorites';
 
     public const KEY_MAIL_LAST_MINUTE_SPECIAL_ROUTE = 'mail_drgls';
@@ -51,6 +52,7 @@ class UserPreference
         self::KEY_MY_SPOTS_SORT_METHOD_2,
         self::KEY_DEFAULT_SPOT_LOCATION,
         self::KEY_FORUM_SIGNATURE,
+        self::KEY_FORUM_NEW_TO_OLD,
         self::KEY_FORUM_MAIL_FOR_ALL_FAVORITES,
         self::KEY_MAIL_LAST_MINUTE_SPECIAL_ROUTE,
     ];
