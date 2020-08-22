@@ -30,7 +30,6 @@ class TrainTable extends EntityRepository
      * @param TrainTableYear $trainTableYear
      * @param Location $location
      * @param int $dayNumber
-     * @param string $dayName
      * @param int $startTime
      * @param int $endTime
      * @return array
@@ -39,7 +38,6 @@ class TrainTable extends EntityRepository
         TrainTableYear $trainTableYear,
         Location $location,
         int $dayNumber,
-        string $dayName,
         int $startTime,
         int $endTime
     ): array {
@@ -65,7 +63,7 @@ class TrainTable extends EntityRepository
             ->andWhere('t.time <= :endTime')
             ->setParameter('endTime', $endTime)
             ->join('t.routeOperationDays', 'routeOperationDays')
-            ->andWhere('routeOperationDays.' . $dayName . ' = TRUE')
+            ->andWhere('routeOperationDays.' . $this->getDayName($dayNumber - 1) . ' = TRUE')
             ->join('t.route', 'route')
             ->join('route.trainTableFirstLasts', 'trainTableFirstLasts')
             ->andWhere('trainTableFirstLasts.dayNumber = :dayNumber')

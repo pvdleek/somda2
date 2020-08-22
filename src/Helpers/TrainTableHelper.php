@@ -212,7 +212,6 @@ class TrainTableHelper
             $this->getTrainTableYear(),
             $this->getLocation(),
             $dayNumber,
-            $this->getDayName($dayNumber),
             $startTimeDatabase,
             $endTimeDatabase
         );
