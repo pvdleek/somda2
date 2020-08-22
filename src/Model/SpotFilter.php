@@ -53,7 +53,7 @@ class SpotFilter
         $this->location = strlen($parameters[0]) > 0 ? $parameters[0] : null;
         $this->dayNumber = (int)$parameters[1];
         try {
-            $this->spotDate = strlen($parameters[2] > 0) ? DateTime::createFromFormat('d-m-Y', $parameters[2]) : null;
+            $this->spotDate = strlen($parameters[2]) > 0 ? DateTime::createFromFormat('d-m-Y', $parameters[2]) : null;
         } catch (Exception $exception) {
             $this->spotDate = null;
         }
