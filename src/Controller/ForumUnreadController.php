@@ -76,6 +76,6 @@ class ForumUnreadController
 
         $this->doctrine->getRepository(ForumDiscussion::class)->markAllPostsAsRead($this->userHelper->getUser());
 
-        return $this->redirectHelper->redirectToRoute('unread_stuff');
+        return $this->redirectHelper->redirectToRoute('forum_unread');
     }
 }
