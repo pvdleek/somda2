@@ -233,7 +233,7 @@ class ForumDiscussionHelper
             $postNumber = $this->doctrine
                 ->getRepository(ForumDiscussion::class)
                 ->getPostNumberInDiscussion($this->discussion, $postId);
-            $this->pageNumber = floor($postNumber / ForumGenerics::MAX_POSTS_PER_PAGE) + 1;
+            $this->pageNumber = (int)floor($postNumber / ForumGenerics::MAX_POSTS_PER_PAGE) + 1;
             return;
         }
 
