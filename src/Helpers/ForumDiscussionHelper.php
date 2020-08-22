@@ -224,7 +224,7 @@ class ForumDiscussionHelper
     private function setPageNumber(bool $newToOld, int $requestedPageNumber = null, int $postId = null): void
     {
         if (!is_null($requestedPageNumber)) {
-            $this->pageNumber = $requestedPageNumber;
+            $this->pageNumber = max($requestedPageNumber, 1);
             return;
         }
 
