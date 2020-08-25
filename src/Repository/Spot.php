@@ -8,6 +8,7 @@ use App\Entity\Spot as SpotEntity;
 use App\Entity\User;
 use App\Generics\DateGenerics;
 use App\Model\DataTableOrder;
+use App\Model\Spot as SpotModel;
 use App\Model\SpotFilter;
 use DateTime;
 use Doctrine\ORM\EntityRepository;
@@ -70,11 +71,65 @@ class Spot extends EntityRepository
             ->from(SpotEntity::class, 's')
             ->join('s.train', 't')
             ->join('s.route', 'r')
+            ->join('s.location', 'l')
             ->addOrderBy('s.timestamp', 'DESC');
+        $this->applySpotFilter($queryBuilder, $spotFilter, $maxMonths);
 
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * @param int $maxMonths
+     * @param SpotFilter $spotFilter
+     * @return SpotModel[]
+     * @throws Exception
+     */
+    public function findRecentWithSpotFilter(int $maxMonths, SpotFilter $spotFilter): array
+    {
+        $queryBuilder = $this->getEntityManager()
+            ->createQueryBuilder()
+            ->select('s.id AS id')
+            ->addSelect('s.spotDate AS spotDate')
+            ->addSelect('r.number AS routeNumber')
+            ->addSelect('p.name AS positionName')
+            ->addSelect('t.number AS trainNumber')
+            ->addSelect('np.name AS namePatternName')
+            ->addSelect('e.extra AS extra')
+            ->addSelect('u.id AS spotterId')
+            ->addSelect('u.username AS spotterUsername')
+            ->addSelect('l.name AS locationName')
+            ->addSelect('l.description AS locationDescription')
+
+            ->from(SpotEntity::class, 's')
+            ->join('s.route', 'r')
+            ->join('s.position', 'p')
+            ->join('s.train', 't')
+            ->join('s.user', 'u')
+            ->join('s.location', 'l')
+            ->leftJoin('t.namePattern', 'np')
+            ->leftJoin('s.extra', 'e')
+            ->addOrderBy('s.timestamp', 'DESC');
+        $this->applySpotFilter($queryBuilder, $spotFilter, $maxMonths);
+
+        $queryResults = $queryBuilder->getQuery()->getArrayResult();
+
+        $results = [];
+        foreach ($queryResults as $queryResult) {
+            $results[] = new SpotModel($queryResult);
+        }
+        return $results;
+    }
+
+    /**
+     * @param QueryBuilder $queryBuilder
+     * @param SpotFilter $spotFilter
+     * @param int $maxMonths
+     * @throws Exception
+     */
+    private function applySpotFilter(QueryBuilder $queryBuilder, SpotFilter $spotFilter, int $maxMonths): void
+    {
         if (!is_null($spotFilter->location)) {
             $queryBuilder
-                ->join('s.location', 'l')
                 ->andWhere('l.name = :location')
                 ->setParameter(self::FIELD_LOCATION, $spotFilter->location);
         }
@@ -97,8 +152,6 @@ class Spot extends EntityRepository
         }
         $this->filterOnTrainNumber($queryBuilder, true, $spotFilter->trainNumber);
         $this->filterOnRouteNumber($queryBuilder, true, $spotFilter->routeNumber);
-
-        return $queryBuilder->getQuery()->getResult();
     }
 
     /**

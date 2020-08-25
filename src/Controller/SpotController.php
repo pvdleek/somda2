@@ -103,7 +103,7 @@ class SpotController
                     'Het is niet mogelijk om spots te bekijken zonder filter, kies minimaal 1 filter'
                 );
             } else {
-                $spots = $this->doctrine->getRepository(Spot::class)->findWithSpotFilter($maxMonths, $spotFilter);
+                $spots = $this->doctrine->getRepository(Spot::class)->findRecentWithSpotFilter($maxMonths, $spotFilter);
             }
         }
 

@@ -79,23 +79,20 @@
                     {% for spot in spots %}
                         <tr>
                             <td>
-                                {% if spot.train.namePattern is not null %}
-                                    {{ spot.train.namePattern.name }}
-                                {% endif %}
-                                {{ spot.train.number }}
+                                {{ spot.namePatternName }} {{ spot.trainNumber }}
                             </td>
                             <td>
-                                {% if spot.route.number matches '/^\\d+$/' %}
-                                    <a href="{{ path('spots_to_train_table', { 'routeNumber': spot.route.number, 'date': spot.spotDate | date('Y-m-d') }) }}" title="Bekijk de dienstregeling van trein {{ spot.route.number }}">{{ spot.route.number }}</a>
+                                {% if spot.routeNumber matches '/^\\d+$/' %}
+                                    <a href="{{ path('spots_to_train_table', { 'routeNumber': spot.routeNumber, 'date': spot.spotDate | date('Y-m-d') }) }}" title="Bekijk de dienstregeling van trein {{ spot.routeNumber }}">{{ spot.routeNumber }}</a>
                                 {% else %}
-                                    {{ spot.route.number }}
+                                    {{ spot.routeNumber }}
                                 {% endif %}
                             </td>
-                            <td>{{ spot.position.name }}</td>
-                            <td>{{ spot.extra ? spot.extra.extra }}</td>
+                            <td>{{ spot.positionName }}</td>
+                            <td>{{ spot.extra }}</td>
                             <td>{{ spot.spotDate | displayDateTime }}</td>
-                            <td>{{ spot.user.id | displayUser(spot.user.username) | raw }}</td>
-                            <td><span title="{{ spot.location.description }}">{{ spot.location.name }}</span></td>
+                            <td>{{ spot.spotterId | displayUser(spot.spotterUsername) | raw }}</td>
+                            <td><span title="{{ spot.locationDescription }}">{{ spot.locationName }}</span></td>
                         </tr>
                     {% else %}
                         <tr><td colspan="7">Er zijn geen spots gevonden met de ingestelde filters</td></tr>

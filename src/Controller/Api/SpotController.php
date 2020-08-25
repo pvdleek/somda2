@@ -75,6 +75,13 @@ class SpotController extends AbstractFOSRestController
      *         @SWG\Property(description="Description of the error", property="error", type="string"),
      *     ),
      * )
+     * @SWG\Response(
+     *     response=500,
+     *     description="Parsing of the search-parameters failed",
+     *     @SWG\Schema(
+     *         @SWG\Property(description="Description of the error", property="error", type="string"),
+     *     ),
+     * )
      * @SWG\Response(response=504, description="The request timed out, try again with extra filters")
      * @SWG\Tag(name="Spots")
      */
