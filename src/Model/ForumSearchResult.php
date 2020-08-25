@@ -53,12 +53,12 @@ class ForumSearchResult
     public function __construct(array $queryResult)
     {
         $this->titleMatch = $queryResult['titleMatch'];
-        $this->discussionId = $queryResult['discussionId'];
+        $this->discussionId = (int)$queryResult['discussionId'];
         $this->discussionTitle = $queryResult['discussionTitle'];
-        $this->discussionLocked = $queryResult['discussionLocked'];
-        $this->authorId = $queryResult['authorId'];
+        $this->discussionLocked = (bool)$queryResult['discussionLocked'];
+        $this->authorId = (int)$queryResult['authorId'];
         $this->authorUsername = $queryResult['authorUsername'];
-        $this->postId = $queryResult['postId'];
+        $this->postId = (int)$queryResult['postId'];
         $this->postTimestamp = $queryResult['postTimestamp'];
     }
 
