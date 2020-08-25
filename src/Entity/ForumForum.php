@@ -2,7 +2,6 @@
 
 namespace App\Entity;
 
-use App\Interfaces\User as UserInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -71,7 +70,7 @@ class ForumForum
     private $discussions;
 
     /**
-     * @var UserInterface[]
+     * @var User[]
      * @ORM\ManyToMany(targetEntity="User", inversedBy="moderatedForums")
      * @ORM\JoinTable(name="somda_forum_mods",
      *      joinColumns={@ORM\JoinColumn(name="forumid", referencedColumnName="forumid")},
@@ -108,17 +107,17 @@ class ForumForum
     }
 
     /**
-     * @param UserInterface $user
+     * @param User $user
      * @return ForumForum
      */
-    public function addModerator(UserInterface $user): ForumForum
+    public function addModerator(User $user): ForumForum
     {
         $this->moderators[] = $user;
         return $this;
     }
 
     /**
-     * @return UserInterface[]
+     * @return User[]
      */
     public function getModerators(): array
     {

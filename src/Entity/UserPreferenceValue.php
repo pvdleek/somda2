@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use App\Interfaces\User as UserInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -13,12 +12,12 @@ use Doctrine\ORM\Mapping as ORM;
 class UserPreferenceValue
 {
     /**
-     * @var UserInterface
+     * @var User
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="preferences")
      * @ORM\JoinColumn(name="uid", referencedColumnName="uid")
      * @ORM\Id
      */
-    public UserInterface $user;
+    public User $user;
 
     /**
      * @var UserPreference

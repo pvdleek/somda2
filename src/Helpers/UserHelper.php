@@ -48,9 +48,9 @@ class UserHelper implements RuntimeExtensionInterface
     }
 
     /**
-     * @return UserInterface|null
+     * @return User|null
      */
-    public function getUser(): ?UserInterface
+    public function getUser(): ?User
     {
         if (is_null($this->user)) {
             $this->user = $this->security->getUser();
@@ -76,7 +76,7 @@ class UserHelper implements RuntimeExtensionInterface
      */
     public function setFromApiRequest(int $userId, string $apiToken): void
     {
-        $user = $this->doctrine->getRepository(UserInterface::class)->findOneBy(
+        $user = $this->doctrine->getRepository(User::class)->findOneBy(
             ['id' => $userId, 'active' => true, 'apiToken' => $apiToken]
         );
         if (!is_null($user)) {

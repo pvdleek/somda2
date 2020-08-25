@@ -2,7 +2,6 @@
 
 namespace App\Entity;
 
-use App\Interfaces\User as UserInterface;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
@@ -40,13 +39,13 @@ class ForumPost
     public ?int $id = null;
 
     /**
-     * @var UserInterface
+     * @var User
      * @ORM\ManyToOne(targetEntity="App\Entity\User")
      * @ORM\JoinColumn(name="authorid", referencedColumnName="uid")
      * @JMS\Expose()
      * @SWG\Property(description="The author of the post", ref=@Model(type=User::class))
      */
-    public UserInterface $author;
+    public User $author;
 
     /**
      * @var ForumDiscussion
@@ -81,13 +80,13 @@ class ForumPost
     public ?DateTime $editTimestamp = null;
 
     /**
-     * @var UserInterface|null
+     * @var User|null
      * @ORM\ManyToOne(targetEntity="App\Entity\User")
      * @ORM\JoinColumn(name="edit_uid", referencedColumnName="uid")
      * @JMS\Expose()
      * @SWG\Property(description="The user that edited the post", ref=@Model(type=User::class))
      */
-    public ?UserInterface $editor = null;
+    public ?User $editor = null;
 
     /**
      * @var string|null

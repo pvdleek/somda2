@@ -6,7 +6,7 @@ use App\Entity\ForumDiscussion;
 use App\Entity\ForumPost;
 use App\Entity\ForumPostLog;
 use App\Entity\ForumPostText;
-use App\Interfaces\User;
+use App\Entity\User;
 use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
