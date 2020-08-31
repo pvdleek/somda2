@@ -30,7 +30,6 @@ nelmio_security:
         - 'unsafe-inline'
         - 'unpkg.com'
         - 'code.jquery.com'
-        - '*.cloudinary.com'
         - '*.datatables.net'
         - '*.fontawesome.com'
         - '*.googletagmanager.com'
