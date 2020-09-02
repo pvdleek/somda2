@@ -91,10 +91,14 @@
                             <td><a href="{{ path('advertise') }}">advertentie</a></td>
                         </tr></table><br />
                     {% else %}
-                        <br /><table align="center"><tr>
-                            <td><p class="warn">Tevreden over Somda? Overweeg dan eens een <a href="{{ path('about') }}">vrijwillige donatie</a>, alvast bedankt!</p></td>
+                        <table align="center"><tr>
+                            <td><iframe height="90" src="https://rotator.tradetracker.net/?r=89736&amp;t=iframe" scrolling="no" width="728"></iframe></td>
                         </tr></table><br />
                     {% endif %}
+                {% elseif loop.index == 30 %}
+                    <br /><table align="center"><tr>
+                        <td><p class="warn">Tevreden over Somda? Overweeg dan eens een <a href="{{ path('about') }}">vrijwillige donatie</a>, alvast bedankt!</p></td>
+                    </tr></table><br />
                 {% endif %}
 
                 <table align="center">

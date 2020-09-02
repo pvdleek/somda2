@@ -25,6 +25,8 @@ nelmio_security:
         - '*.google-analytics.com'
       font-src:
         - 'self'
+      frame-src:
+        - '*.tradetracker.net'
       script-src:
         - 'self'
         - 'unsafe-eval'
@@ -39,8 +41,9 @@ nelmio_security:
         - 'self'
         - 'unsafe-inline'
         - 'code.jquery.com'
-        - '*.datatables.net'
         - 'unpkg.com'
+        - '*.datatables.net'
+        - '*.tradetracker.net'
       img-src:
         - 'self'
         - 'data:'
@@ -50,6 +53,7 @@ nelmio_security:
         - '*.buienradar.nl'
         - '*.datatables.net'
         - '*.google-analytics.com'
+        - '*.tradetracker.net'
       block-all-mixed-content: true
       upgrade-insecure-requests: true
 
