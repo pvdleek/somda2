@@ -12,7 +12,7 @@
                     <tr>
                         <td>&nbsp;</td>
                         <td>
-                            <a class="somda-button" href="#" onclick="$('#reply_form').submit(); return false;">Reageer</a>
+                            <a class="somda-button" href="#" id="reply_button" onclick="disableMeAndSubmitForm('reply_button', 'reply_form'); return false;">Reageer</a>
                             <a class="somda-button" href="{{ path('forum_discussion', { 'id': post.discussion.id, 'name': (post.discussion.title | slugify) }) }}">Terug naar de discussie</a>
                         </td>
                     </tr>

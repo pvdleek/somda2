@@ -16,7 +16,7 @@
                     <tr>
                         <td>&nbsp;</td>
                         <td>
-                            <a class="somda-button" href="#" onclick="$('#rail_news_form').submit(); return false;">Opslaan</a>
+                            <a class="somda-button" href="#" id="rail_news_button" onclick="disableMeAndSubmitForm('rail_news_button', 'rail_news_form'); return false;">Opslaan</a>
                             <a class="somda-button" href="{{ path('manage_rail_news') }}">Terug naar het overzicht</a>
                         </td>
                     </tr>

@@ -16,7 +16,7 @@
                     <tr>
                         <td>&nbsp;</td>
                         <td>
-                            <a class="somda-button" href="#" onclick="$('#spot_form').submit(); return false;">Opslaan</a>
+                            <a class="somda-button" href="#" id="spot_button" onclick="disableMeAndSubmitForm('spot_button', 'spot_form'); return false;">Opslaan</a>
                             <a class="somda-button" href="{{ path('my_spots') }}">Terug naar mijn spots</a>
                         </td>
                     </tr>

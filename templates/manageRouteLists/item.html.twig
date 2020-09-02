@@ -14,7 +14,7 @@
                     <tr>
                         <td>&nbsp;</td>
                         <td>
-                            <a class="somda-button" href="#" onclick="$('#route_list_form').submit(); return false;">Opslaan</a>
+                            <a class="somda-button" href="#" id="route_list_button" onclick="disableMeAndSubmitForm('route_list_button', 'route_list_form'); return false;">Opslaan</a>
                             <a class="somda-button" href="{{ path('manage_route_lists_year', { 'id': routeList.trainTableYear.id }) }}">Terug naar het overzicht</a>
                         </td>
                     </tr>

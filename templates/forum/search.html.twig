@@ -14,7 +14,7 @@
                     <tr>
                         <td>&nbsp;</td>
                         <td>
-                            <a class="somda-button" href="#" onclick="$('#search_form').submit(); return false;">Zoeken</a>
+                            <a class="somda-button" href="#" id="search_button" onclick="disableMeAndSubmitForm('search_button', 'search_form'); return false;">Zoeken</a>
                             <a class="somda-button" href="{{ path('forum') }}">Naar het forum-overzicht</a>
                         </td>
                     </tr>

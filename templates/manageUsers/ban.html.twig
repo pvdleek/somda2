@@ -10,7 +10,7 @@
                     <tr>
                         <td>&nbsp;</td>
                         <td>
-                            <a class="somda-button" href="#" onclick="$('#ban_form').submit(); return false;">Opslaan</a>
+                            <a class="somda-button" href="#" id="ban_button" onclick="disableMeAndSubmitForm('ban_button', 'ban_form'); return false;">Opslaan</a>
                             <a class="somda-button" href="{{ path('manage_bans') }}">Terug naar het overzicht</a>
                         </td>
                     </tr>

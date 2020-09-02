@@ -12,7 +12,7 @@
                 <tr>
                     <td>&nbsp;</td>
                     <td>
-                        <a class="somda-button" href="#" onclick="$('#contact_form').submit(); return false;">Verstuur bericht</a>
+                        <a class="somda-button" href="#" id="contact_button" onclick="disableMeAndSubmitForm('contact_button', 'contact_form'); return false;">Verstuur bericht</a>
                         <a class="somda-button" href="{{ path('home') }}">Terug naar home</a>
                     </td>
                 </tr>

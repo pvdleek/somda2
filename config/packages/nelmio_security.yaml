@@ -22,6 +22,7 @@ nelmio_security:
         - 'none'
       connect-src:
         - 'self'
+        - '*.google-analytics.com'
       font-src:
         - 'self'
       script-src:

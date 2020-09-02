@@ -14,7 +14,7 @@
                     <tr>
                         <td>&nbsp;</td>
                         <td>
-                            <a class="somda-button" href="#" onclick="$('#edit_form').submit(); return false;">Bewerken</a>
+                            <a class="somda-button" href="#" id="edit_button" onclick="disableMeAndSubmitForm('edit_button', 'edit_form'); return false;">Bewerken</a>
                             <a class="somda-button" href="{{ path('forum_discussion', { 'id': post.discussion.id, 'name': (post.discussion.title | slugify) }) }}">Terug naar de discussie</a>
                         </td>
                     </tr>

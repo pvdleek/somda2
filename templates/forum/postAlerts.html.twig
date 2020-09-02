@@ -49,7 +49,7 @@
                     <tr>
                         <td>&nbsp;</td>
                         <td>
-                            <a class="somda-button" href="#" onclick="$('#alert_note_form').submit(); return false;">Voeg toe</a>
+                            <a class="somda-button" href="#" id="alert_note_button" onclick="disableMeAndSubmitForm('alert_note_button', 'alert_note_form'); return false;">Voeg toe</a>
                             <a class="somda-button" href="{{ path('forum_discussion_post', { 'id': post.discussion.id, 'postId': post.id, 'name': (post.discussion.title | slugify) }) }}">Terug naar het bericht</a>
                         </td>
                     </tr>

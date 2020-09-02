@@ -10,7 +10,7 @@
                 {{ form_row(form.plainPassword) }}
                 <tr>
                     <td>&nbsp;</td>
-                    <td><a class="somda-button" href="#" onclick="$('#user_form').submit(); return false;">Registereren bij Somda</a></td>
+                    <td><a class="somda-button" href="#" id="user_button" onclick="disableMeAndSubmitForm('user_button', 'user_form'); return false;">Registereren bij Somda</a></td>
                 </tr>
             </table>
         {{ form_end(form) }}

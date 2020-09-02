@@ -9,7 +9,7 @@
                     {{ form_rest(form) }}
                     <tr>
                         <td>&nbsp;</td>
-                        <td><a class="somda-button" href="#" onclick="$('#settings_form').submit(); return false;">Instellingen opslaan</a></td>
+                        <td><a class="somda-button" href="#" id="settings_button" onclick="disableMeAndSubmitForm('settings_button', 'settings_form'); return false;">Instellingen opslaan</a></td>
                     </tr>
                 </table>
             {{ form_end(form) }}

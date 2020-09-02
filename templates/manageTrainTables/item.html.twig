@@ -65,7 +65,7 @@
                     </tr>
                     <tr>
                         <td colspan="7">
-                            <a class="somda-button" href="#" onclick="$('#train_table_form').submit(); return false;">Opslaan</a>
+                            <a class="somda-button" href="#" id="train_table_button" onclick="disableMeAndSubmitForm('train_table_button', 'train_table_form'); return false;">Opslaan</a>
                             <a class="somda-button" href="{{ path('manage_train_tables_year_route_list', { 'yearId': routeList.trainTableYear.id, 'routeListId': routeList.id }) }}">Terug naar het overzicht</a>
                         </td>
                     </tr>

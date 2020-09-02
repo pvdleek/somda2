@@ -10,7 +10,7 @@
                     <tr>
                         <td>&nbsp;</td>
                         <td>
-                            <a class="somda-button" href="#" onclick="$('#mail_form').submit(); return false;">Verstuur bericht</a>
+                            <a class="somda-button" href="#" id="mail_button" onclick="disableMeAndSubmitForm('mail_button', 'mail_form'); return false;">Verstuur bericht</a>
                             <a class="somda-button" href="{{ path('profile_view', { 'id': user.id }) }}">Terug naar het profiel van "{{ user.username }}"</a>
                         </td>
                     </tr>

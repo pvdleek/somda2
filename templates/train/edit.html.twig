@@ -15,7 +15,7 @@
                 <tr>
                     <td>&nbsp;</td>
                     <td>
-                        <a class="somda-button" href="#" onclick="$('#composition_form').submit(); return false;">Opslaan</a>
+                        <a class="somda-button" href="#" id="composition_button" onclick="disableMeAndSubmitForm('composition_button', 'composition_form'); return false;">Opslaan</a>
                         <a class="somda-button" href="{{ path('train_compositions_type', { 'typeId': trainComposition.type.id }) }}">Terug naar het overzicht</a>
                     </td>
                 </tr>

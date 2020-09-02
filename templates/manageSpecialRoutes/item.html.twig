@@ -17,7 +17,7 @@
                     <tr>
                         <td>&nbsp;</td>
                         <td>
-                            <a class="somda-button" href="#" onclick="$('#special_route_form').submit(); return false;">Opslaan</a>
+                            <a class="somda-button" href="#" id="special_route_button" onclick="disableMeAndSubmitForm('special_route_button', 'special_route_form'); return false;">Opslaan</a>
                             <a class="somda-button" href="{{ path('manage_special_routes') }}">Terug naar het overzicht</a>
                         </td>
                     </tr>
