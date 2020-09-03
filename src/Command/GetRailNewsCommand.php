@@ -187,11 +187,12 @@ class GetRailNewsCommand extends Command
         $railNews = $this->doctrine->getRepository(RailNews::class)->findOneBy(
             ['url' => $item->getLink()]
         );
+
         if (is_null($railNews)) {
             $railNews = new RailNews();
             $railNews->title = $item->getTitle();
             $railNews->url = $item->getLink();
-            $railNews->introduction = $description;
+            $railNews->introduction = html_entity_decode($description, ENT_NOQUOTES, 'UTF-8');
             $railNews->timestamp = $item->getLastModified() ?? new DateTime();
             $railNews->approved = false;
             $railNews->active = false;
@@ -202,7 +203,7 @@ class GetRailNewsCommand extends Command
         } elseif ($railNews->automaticUpdates) {
             $railNews->title = $item->getTitle();
             $railNews->url = $item->getLink();
-            $railNews->introduction = $description;
+            $railNews->introduction = html_entity_decode($description, ENT_NOQUOTES, 'UTF-8');
             $railNews->timestamp = $item->getLastModified() ?? new DateTime();
         }
     }
