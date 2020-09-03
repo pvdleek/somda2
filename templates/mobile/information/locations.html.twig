@@ -1,0 +1,109 @@
+{% extends('mobile/base.html.twig') %}
+
+{% block content %}
+    <div>Verkortingen</div>
+    <br />
+    <div>
+        <table>
+            <tr><th colspan="8"><label for="textSearchSingle">{{ 'location.search.single' | trans }}</label></th></tr>
+            <tr>
+                <td colspan="5"><input id="textSearchSingle" maxlength="10" name="textSearchSingle" onkeypress="return checkEnter(event, 'searchSingle');" size="12" type="text" value="{{ search }}" /></td>
+                <td colspan="3"><a class="somda-button" href="#" id="searchSingle" onclick="searchSingle(); return false;" title="{{ 'location.search.single' | trans }}">{{ 'general.button.search' | trans }}</a></td>
+            </tr>
+        </table>
+        <br />
+        <table>
+            <tr><th colspan="8"><label for="textSearchName">{{ 'location.search.name' | trans }}</label></th></tr>
+            <tr>
+                <td colspan="5"><input id="textSearchName" maxlength="10" name="textSearchName" onkeypress="return checkEnter(event, 'searchName');" size="12" type="text" value="{{ search }}" /></td>
+                <td colspan="3"><a class="somda-button" href="#" id="searchName" onclick="searchName(); return false;" title="{{ 'location.search.name' | trans }}">{{ 'general.button.search' | trans }}</a></td>
+            </tr>
+        </table>
+        <br />
+        <table>
+            <tr><th colspan="8"><label for="textSearchDescription">{{ 'location.search.description' | trans }}</label></th></tr>
+            <tr>
+                <td colspan="5"><input id="textSearchDescription" maxlength="15" name="textSearchDescription" onkeypress="return checkEnter(event, 'searchDescription');" size="12" type="text" value="{{ search }}" /></td>
+                <td colspan="3"><a class="somda-button" href="#" id="searchDescription" onclick="searchDescription(); return false;" title="{{ 'location.search.description' | trans }}">{{ 'general.button.search' | trans }}</a></td>
+            </tr>
+        </table>
+    </div>
+
+    <div>
+        {% if locations %}
+            <br />
+            <table id="sorted">
+                <thead><tr><th>{{ 'location.name' | trans }}</th><th>{{ 'location.description' | trans }}</th><th>{{ 'location.category' | trans }}</th></tr></thead>
+                {% for location in locations %}
+                    <tr><td>{{ location.name }}</td><td>{{ location.description }}</td><td>{{ location.category.name }}</td></tr>
+                {% endfor %}
+            </table><br />
+
+            <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.4/dist/leaflet.css" integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA==" crossorigin=""/>
+            <script src="https://unpkg.com/leaflet@1.3.4/dist/leaflet.js" integrity="sha512-nMMmRyTVoLYqjP9hrbed9S+FzjZHW5gY1TWCHA5ckwXZBadntCNs8kEqAWdrb9O7rxbCaA4lKTIWjDXZxflOcA==" crossorigin=""></script>
+            <div id="locations_map"></div>
+            <p class="info">{{ 'location.credits' | trans | raw }}<br />{{ 'location.additions' | trans | format('http://www.somda.nl/forum/12369/Co%F6rdinaten+van+verkortingen+voor+de+kaart/') | raw }}</p>
+        {% else %}
+            <p class="warn">{{ 'location.search.noResults' | trans }}</p>
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        function searchSingle() {
+            const location = '{{ path('location_search', { 'searchMethod': constant('App\\Controller\\LocationController::SEARCH_METHOD_SINGLE'), 'search': 'searchSingle' }) }}';
+            document.location = location.replace('searchSingle', $('#textSearchSingle').val());
+        }
+
+        function searchName() {
+            const location = '{{ path('location_search', { 'searchMethod': constant('App\\Controller\\LocationController::SEARCH_METHOD_NAME'), 'search': 'searchName' }) }}';
+            document.location = location.replace('searchName', $('#textSearchName').val());
+        }
+
+        function searchDescription() {
+            const location = '{{ path('location_search', { 'searchMethod': constant('App\\Controller\\LocationController::SEARCH_METHOD_DESCRIPTION'), 'search': 'searchDescription' }) }}';
+            document.location = location.replace('searchDescription', $('#textSearchDescription').val());
+        }
+
+        {% if locations %}
+            $(document).ready(function() {
+                $('#sorted').tablesorter({sortList: [[0, 0]]});
+
+                {% if locations | length == 1 %}
+                    {% set latitude = (locations | first).latitude %}
+                    {% set longitude = (locations | first).longitude %}
+                    {% set zoomLevel = 16 %}
+                {% else %}
+                    {% set latitude = 52.315195 %}
+                    {% set longitude = 5.634155 %}
+                    {% set zoomLevel = 8 %}
+                {% endif %}
+
+                let locationsMap = L.map('locations_map').setView([{{ latitude }}, {{ longitude }}], {{ zoomLevel }});
+                L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoicHZkbGVlayIsImEiOiJjanE1MTlvOGQxdHpyM3lueWdjYmVtOHB6In0.z1E_Bl8X0W5ik_upQgR7Mw', {
+                    attribution: '© <a href="https://www.mapbox.com/about/maps/">Mapbox</a> © <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> <strong><a href="https://www.mapbox.com/map-feedback/" rel="noreferrer sponsored" target="_blank">Improve this map</a></strong>',
+                    tileSize: 512,
+                    maxZoom: 18,
+                    zoomOffset: -1,
+                    id: 'mapbox/streets-v11',
+                    accessToken: 'pk.eyJ1IjoicHZkbGVlayIsImEiOiJjanE1MTlvOGQxdHpyM3lueWdjYmVtOHB6In0.z1E_Bl8X0W5ik_upQgR7Mw',
+                }).addTo(locationsMap);
+
+                {% if locations | length == 1 %}
+                    let marker1 = L.marker([{{ latitude }}, {{ longitude }}]).addTo(locationsMap);
+                    marker1.bindPopup("{{ (locations | first).description }} ({{ (locations | first).name }})").openPopup();
+                {% else %}
+                    {% set counter = 1 %}
+                    {% for location in locations %}
+                        {% if location.latitude %}
+                            let marker{{ counter }} = L.marker([{{ location.latitude }}, {{ location.longitude }}]).addTo(locationsMap);
+                            marker{{ counter }}.bindPopup("{{ location.description }}");
+                            {% set counter = counter + 1 %}
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+            });
+        {% endif %}
+    </script>
+{% endblock %}

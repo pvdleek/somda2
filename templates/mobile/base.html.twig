@@ -50,9 +50,9 @@
         <div id="menu">
             <a href="{{ path('home') }}">Home</a> -
             {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-                <a href="{{ path('passing_routes') }}">Doorkomststaat</a> - <a href="{{ path('train_table') }}">Dienstregeling</a> - <a href="{{ path('special_routes') }}">Bijzondere ritten</a> - <a href="{{ path('spot_input') }}">Spots invoeren</a> - <a href="{{ path('forum') }}">Forum</a> - <a href="{{ path('logout') }}">Afmelden</a>
+                <a href="{{ path('passing_routes') }}">Doorkomststaat</a> - <a href="{{ path('location') }}">Verkortingen</a> - <a href="{{ path('train_table') }}">Dienstregeling</a> - <a href="{{ path('special_routes') }}">Bijzondere ritten</a> - <a href="{{ path('spot_input') }}">Spots invoeren</a> - <a href="{{ path('forum') }}">Forum</a> - <a href="{{ path('logout') }}">Afmelden</a>
             {% else %}
-                <a href="{{ path('train_table') }}">Dienstregeling</a> - <a href="{{ path('special_routes') }}">Bijzondere ritten</a> - <a href="{{ path('forum') }}">Forum</a>
+                <a href="{{ path('train_table') }}">Dienstregeling</a> - <a href="{{ path('location') }}">Verkortingen</a> - <a href="{{ path('special_routes') }}">Bijzondere ritten</a> - <a href="{{ path('forum') }}">Forum</a>
             {% endif %}
         </div>
 
@@ -67,7 +67,8 @@
         </div>
     </div>
 
-    <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="{{ asset('js/jquery-tablesorter.js') }}?version={{ 'js/jquery-tablesorter.js' | fileTimestamp }}"></script>
 
     {# If applicable, jump to the requested forum-post #}
     {% if forumJump is defined and forumJump is not null %}
