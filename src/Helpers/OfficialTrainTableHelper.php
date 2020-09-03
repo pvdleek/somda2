@@ -11,7 +11,7 @@ use App\Entity\Route;
 use App\Entity\Transporter;
 use App\Model\OfficialRoute;
 use DateTime;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 
 class OfficialTrainTableHelper

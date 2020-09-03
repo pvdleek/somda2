@@ -8,7 +8,7 @@ use App\Generics\RoleGenerics;
 use App\Helpers\RedirectHelper;
 use App\Helpers\TemplateHelper;
 use App\Helpers\UserHelper;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 

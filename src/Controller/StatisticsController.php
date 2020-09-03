@@ -6,7 +6,7 @@ use App\Entity\Statistic;
 use App\Helpers\TemplateHelper;
 use App\Model\StatisticBusiest;
 use App\Model\StatisticSummary;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Response;
 
 class StatisticsController

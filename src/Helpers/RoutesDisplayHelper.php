@@ -7,7 +7,7 @@ use App\Entity\TrainTableYear;
 use App\Model\RoutesDisplay;
 use App\Traits\SortTrait;
 use DateTime;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Twig\Extension\RuntimeExtensionInterface;
 

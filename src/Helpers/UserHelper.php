@@ -7,7 +7,7 @@ use App\Entity\User;
 use App\Entity\UserPreference;
 use App\Entity\UserPreferenceValue;
 use App\Exception\UnknownUserPreferenceKey;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Security;

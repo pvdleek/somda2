@@ -6,7 +6,7 @@ namespace App\Controller;
 use App\Entity\ForumPost;
 use App\Generics\RoleGenerics;
 use App\Helpers\UserHelper;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 

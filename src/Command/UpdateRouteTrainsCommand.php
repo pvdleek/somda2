@@ -10,7 +10,7 @@ use App\Entity\Spot;
 use App\Entity\TrainNamePattern;
 use App\Entity\TrainTableYear;
 use DateTime;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;

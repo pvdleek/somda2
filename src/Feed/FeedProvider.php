@@ -11,7 +11,7 @@ use App\Helpers\UserHelper;
 use DateTime;
 use Debril\RssAtomBundle\Exception\FeedException\FeedNotFoundException;
 use Debril\RssAtomBundle\Provider\FeedProviderInterface;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 use FeedIo\Feed;
 use FeedIo\FeedInterface;
 use FeedIo\Feed\Item;

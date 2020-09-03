@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Help;
 use App\Helpers\TemplateHelper;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Response;
 
 class HelpController

@@ -7,7 +7,7 @@ use App\Entity\ForumPost;
 use App\Entity\ForumPostLog;
 use App\Entity\ForumSearchList;
 use App\Entity\ForumSearchWord;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
