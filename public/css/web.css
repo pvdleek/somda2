@@ -557,7 +557,7 @@ span.train-composition-add {
 /****************/
 /*** My spots ***/
 /****************/
-#my_spots_table_filter {
+#my_spots_table_filter, #spots_table_filter {
     display: none;
 }
 

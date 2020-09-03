@@ -66,37 +66,50 @@
         <div class="panel">
             <div class="panel-title">Recente spots</div>
             <div class="panel-content">
-                <table>
-                    <tr>
-                        <th>Materieel</th>
-                        <th>Treinnummer</th>
-                        <th>Positie</th>
-                        <th>Extra info</th>
-                        <th>Datum</th>
-                        <th>Gespot door</th>
-                        <th>Spot-locatie</th>
-                    </tr>
-                    {% for spot in spots %}
+                <table class="nowrap" id="spots_table">
+                    <thead>
                         <tr>
-                            <td>
-                                {{ spot.namePatternName }} {{ spot.trainNumber }}
-                            </td>
-                            <td>
-                                {% if spot.routeNumber matches '/^\\d+$/' %}
-                                    <a href="{{ path('spots_to_train_table', { 'routeNumber': spot.routeNumber, 'date': spot.spotDate | date('Y-m-d') }) }}" title="Bekijk de dienstregeling van trein {{ spot.routeNumber }}">{{ spot.routeNumber }}</a>
-                                {% else %}
-                                    {{ spot.routeNumber }}
-                                {% endif %}
-                            </td>
-                            <td>{{ spot.positionName }}</td>
-                            <td>{{ spot.extra }}</td>
-                            <td>{{ spot.spotDate | displayDateTime }}</td>
-                            <td>{{ spot.spotterId | displayUser(spot.spotterUsername) | raw }}</td>
-                            <td><span title="{{ spot.locationDescription }}">{{ spot.locationName }}</span></td>
+                            <th>Materieel</th>
+                            <th>Treinnummer</th>
+                            <th>Positie</th>
+                            <th>Extra info</th>
+                            <th>Datum</th>
+                            <th>Gespot door</th>
+                            <th>Spot-locatie</th>
                         </tr>
-                    {% else %}
-                        <tr><td colspan="7">Er zijn geen spots gevonden met de ingestelde filters</td></tr>
-                    {% endfor %}
+                    </thead>
+                    <tbody>
+                        {% for spot in spots %}
+                            <tr>
+                                <td>{{ spot.namePatternName }} {{ spot.trainNumber }}</td>
+                                <td>
+                                    {% if spot.routeNumber matches '/^\\d+$/' %}
+                                        <a href="{{ path('spots_to_train_table', { 'routeNumber': spot.routeNumber, 'date': spot.spotDate | date('Y-m-d') }) }}" title="Bekijk de dienstregeling van trein {{ spot.routeNumber }}">{{ spot.routeNumber }}</a>
+                                    {% else %}
+                                        {{ spot.routeNumber }}
+                                    {% endif %}
+                                </td>
+                                <td>{{ spot.positionName }}</td>
+                                <td>{{ spot.extra }}</td>
+                                <td>{{ spot.spotDate | displayDateTime }}</td>
+                                <td>{{ spot.spotterId | displayUser(spot.spotterUsername) | raw }}</td>
+                                <td><span title="{{ spot.locationDescription }}">{{ spot.locationName }}</span></td>
+                            </tr>
+                        {% else %}
+                            <tr><td colspan="7">Er zijn geen spots gevonden met de ingestelde filters</td></tr>
+                        {% endfor %}
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th>materieel</th>
+                            <th>treinnummer</th>
+                            <th>&nbsp;</th>
+                            <th>&nbsp;</th>
+                            <th>datum</th>
+                            <th>spotter</th>
+                            <th>locatie</th>
+                        </tr>
+                    </tfoot>
                 </table>
             </div>
         </div>
@@ -104,6 +117,9 @@
 {% endblock %}
 
 {% block javascripts %}
+    <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+    <script src="{{ asset('js/dateFormat-2019-08-01.js') }}?version={{ 'js/dateFormat-2019-08-01.js' | fileTimestamp }}"></script>
+
     <script>
         {{ include('partials/locationAutoComplete.js.twig') }}
 
@@ -113,5 +129,84 @@
             location = location.replace('myParameters', $('#location').val() + '/' + $('#day_number').val() + '/' + $('#spot_date').val() + '/' + $('#train_number').val() + '/' + $('#route_number').val());
             document.location = location;
         }
+
+        {% if spots is not null %}
+            $(document).ready(function() {
+                $('#spots_table tfoot th').each(function () {
+                    const title = $(this).text();
+                    if (title.length > 1) {
+                        $(this).html('<input id="filter_' + title + '" placeholder="Zoek een ' + title + '" size="10" type="text" />');
+                    }
+                });
+                $('#filter_datum').datepicker({
+                    closeText: 'Sluiten',
+                    constrainInput: true,
+                    currentText: 'Vandaag',
+                    dateFormat: 'dd-mm-yy',
+                    dayNames: ['Zondag', 'Maandag', 'Dinsdag', 'Woensdag', 'Donderdag', 'Vrijdag', 'Zaterdag'],
+                    dayNamesMin: ['zo', 'ma', 'di', 'wo', 'do', 'vr', 'za'],
+                    dayNamesShort: ['Zon', 'Maa', 'Din', 'Woe', 'Don', 'Vri', 'Zat'],
+                    firstDay: 1,
+                    maxDate: '+0',
+                    monthNames: ['januari', 'februari', 'maart', 'april', 'mei', 'juni', 'juli', 'augustus', 'september', 'oktober', 'november', 'december'],
+                    monthNamesShort: ['jan', 'feb', 'mar', 'apr', 'mei', 'jun', 'jul', 'aug', 'sep', 'okt', 'nov', 'dec'],
+                    nextText: 'Volgende maand',
+                    prevText: 'Vorige maand',
+                    showButtonPanel: true,
+                });
+
+                let spotsTable = $('#spots_table').DataTable({
+                    initComplete: function () {
+                        this.api().columns().every(function () {
+                            let that = this;
+                            $('input', this.footer()).on('keyup change clear', function () {
+                                if (that.search() !== this.value) {
+                                    that.search(this.value).draw();
+                                }
+                            });
+                        });
+                    },
+                    'language': {
+                        'aria': {
+                            'sortAscending': ': activeer om oplopend te sorteren',
+                            'sortDescending': ': activeer om aflopend te sorteren'
+                        },
+                        'emptyTable': 'Geen spots gevonden',
+                        'info': 'Toont pagina _PAGE_ van _PAGES_',
+                        'infoEmpty': 'Geen spots gevonden',
+                        'infoFiltered': '(gefilterd uit _MAX_ spots)',
+                        'lengthMenu': 'Toon _MENU_ spots per pagina',
+                        'loadingRecords': 'Laden ...',
+                        'processing': 'Laden ...',
+                        'search': 'Zoeken:',
+                        'paginate': {
+                            'first': 'Eerste',
+                            'last': 'Laatste',
+                            'next': 'Volgende',
+                            'previous': 'Vorige',
+                        },
+                        'zeroRecords': 'Geen spots gevonden',
+                    },
+                    'order': [[1, 'asc'], [2, 'asc']],
+                    'stateSave': true,
+                });
+
+                // Restore the saved state for the individual columns
+                let state = spotsTable.state.loaded();
+                if (state) {
+                    spotsTable.columns().eq(0).each(function (colIdx) {
+                        const columnSearch = state.columns[colIdx].search;
+                        if (columnSearch.search) {
+                            $('input', spotsTable.column(colIdx).footer()).val(columnSearch.search);
+                        }
+                    });
+                    spotsTable.draw();
+                }
+            });
+        {% endif %}
     </script>
+{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css" type="text/css" />
 {% endblock %}
