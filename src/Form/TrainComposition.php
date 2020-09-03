@@ -7,6 +7,7 @@ use App\Entity\TrainCompositionBase;
 use App\Generics\FormGenerics;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -44,6 +45,14 @@ class TrainComposition extends AbstractType
 
         if ($options[self::OPTION_MANAGEMENT_ROLE]) {
             $builder
+                ->add('lastUpdateTimestamp', DateType::class, [
+                    FormGenerics::KEY_ATTRIBUTES => [FormGenerics::KEY_CLASS=> 'datepicker'],
+                    FormGenerics::KEY_FORMAT=> 'dd-MM-yyyy',
+                    FormGenerics::KEY_HTML5 => false,
+                    FormGenerics::KEY_LABEL => 'Update datum',
+                    FormGenerics::KEY_REQUIRED => true,
+                    FormGenerics::KEY_WIDGET => 'single_text',
+                ])
                 ->add('extra', TextType::class, [
                     FormGenerics::KEY_ATTRIBUTES => [FormGenerics::KEY_ATTRIBUTES_MAX_LENGTH => 255],
                     FormGenerics::KEY_LABEL => 'Extra',

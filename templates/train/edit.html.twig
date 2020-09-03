@@ -10,6 +10,7 @@
                     {% if attribute(form, 'car' ~ car) is defined %}{{ form_row(attribute(form, 'car' ~ car)) }}{% endif %}
                 {% endfor %}
                 {{ form_row(form.note) }}
+                {% if form.lastUpdateTimestamp is defined %}{{ form_row(form.lastUpdateTimestamp) }}{% endif %}
                 {% if form.extra is defined %}{{ form_row(form.extra) }}{% endif %}
                 {% if form.indexLine is defined %}{{ form_row(form.indexLine) }}{% endif %}
                 <tr>

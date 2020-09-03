@@ -136,7 +136,6 @@ class TrainController
         );
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $trainComposition->lastUpdateTimestamp = new DateTime();
             return $this->formHelper->finishFormHandling(
                 'Materieelsamenstelling bijgewerkt',
                 RouteGenerics::TRAIN_COMPOSITIONS_TYPE,
