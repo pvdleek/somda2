@@ -24,33 +24,35 @@
                 </select>
                 <a class="somda-button" href="#" onclick="viewTrainTableYearRouteList(); return false;">Toon treinen</a>
 
-                {% if routes | length %}
-                    <br /><br />
-                    <table>
-                        <tr>
-                            <th>Treinnummer</th>
-                            {% for dayNumber in 1..7 %}
-                                <th>{{ ('general.date.days.' ~ (dayNumber - 1)) | trans }}</th>
-                            {% endfor %}
-                        </tr>
-                        {% for route in routes %}
+                {% if selectedRouteList is not null %}
+                    {% if routes | length %}
+                        <br /><br />
+                        <table>
                             <tr>
-                                <td><a href="{{ path('train_table_search', { 'trainTableYearId': trainTableIndexNumber, 'routeNumber': route.number }) }}">{{ route.number }}</a></td>
+                                <th>Treinnummer</th>
                                 {% for dayNumber in 1..7 %}
-                                    <td>
-                                        {% if route.trainTableFirstLastByDay(dayNumber) %}
-                                            <span title="{{ route.trainTableFirstLastByDay(dayNumber).firstLocation.description }}">{{ route.trainTableFirstLastByDay(dayNumber).firstLocation.name }}</span>
-                                            - <span title="{{ route.trainTableFirstLastByDay(dayNumber).lastLocation.description }}">{{ route.trainTableFirstLastByDay(dayNumber).lastLocation.name }}</span>
-                                        {% else %}
-                                            &nbsp;
-                                        {% endif %}
-                                    </td>
+                                    <th>{{ ('general.date.days.' ~ (dayNumber - 1)) | trans }}</th>
                                 {% endfor %}
                             </tr>
-                        {% endfor %}
-                    </table>
-                {% else %}
-                    <p class="info">Geen dienstregelingen gevonden</p>
+                            {% for route in routes %}
+                                <tr>
+                                    <td><a href="{{ path('train_table_search', { 'trainTableYearId': trainTableIndexNumber, 'routeNumber': route.number }) }}">{{ route.number }}</a></td>
+                                    {% for dayNumber in 1..7 %}
+                                        <td>
+                                            {% if route.trainTableFirstLastByDay(dayNumber) %}
+                                                <span title="{{ route.trainTableFirstLastByDay(dayNumber).firstLocation.description }}">{{ route.trainTableFirstLastByDay(dayNumber).firstLocation.name }}</span>
+                                                - <span title="{{ route.trainTableFirstLastByDay(dayNumber).lastLocation.description }}">{{ route.trainTableFirstLastByDay(dayNumber).lastLocation.name }}</span>
+                                            {% else %}
+                                                &nbsp;
+                                            {% endif %}
+                                        </td>
+                                    {% endfor %}
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    {% else %}
+                        <p class="info">Geen dienstregelingen gevonden</p>
+                    {% endif %}
                 {% endif %}
             {% endif %}
         </div>
