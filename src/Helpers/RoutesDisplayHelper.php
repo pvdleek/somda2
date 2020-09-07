@@ -51,7 +51,7 @@ class RoutesDisplayHelper implements RuntimeExtensionInterface
 
             $routesDisplay->routeLists = $this->doctrine
                 ->getRepository(RouteList::class)
-                ->findBy(['trainTableYear' => $routesDisplay->trainTableYear], ['firstNumber' => 'ASC']);
+                ->findForOverview($routesDisplay->trainTableYear);
 
             if (!is_null($routeListId)) {
                 $routesDisplay->selectedRouteList = $this->doctrine->getRepository(RouteList::class)->find(

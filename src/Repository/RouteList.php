@@ -35,4 +35,21 @@ class RouteList extends EntityRepository
             return null;
         }
     }
+
+    /**
+     * @param TrainTableYear $trainTableYear
+     * @return RouteListEntity[]
+     */
+    public function findForOverview(TrainTableYear $trainTableYear): array
+    {
+        $queryBuilder = $this->getEntityManager()
+            ->createQueryBuilder()
+            ->select('r')
+            ->from(RouteListEntity::class, 'r')
+            ->andWhere('r.trainTableYear = :trainTableYear')
+            ->setParameter('trainTableYear', $trainTableYear)
+            ->join('r.routes', 'routes')
+            ->addOrderBy('r.firstNumber', 'ASC');
+        return $queryBuilder->getQuery()->getResult();
+    }
 }
