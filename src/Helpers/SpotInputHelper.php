@@ -170,6 +170,9 @@ class SpotInputHelper
             $spotExtra->extra = $spotInput->extra;
             $spotExtra->userExtra = $spotInput->userExtra ?? '';
             $spot->extra = $spotExtra;
+        } elseif (!is_null($spotExtra = $spot->extra)) {
+            $spot->extra = null;
+            $this->doctrine->getManager()->remove($spotExtra);
         }
 
         $this->doctrine->getManager()->persist($spot);
