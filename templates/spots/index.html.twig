@@ -69,19 +69,26 @@
                 <table class="nowrap" id="spots_table">
                     <thead>
                         <tr>
+                            <th>&nbsp;</th>
                             <th>Materieel</th>
+                            <th>&nbsp;</th>
                             <th>Treinnummer</th>
                             <th>Positie</th>
                             <th>Extra info</th>
+                            <th>&nbsp;</th>
                             <th>Datum</th>
+                            <th>&nbsp;</th>
                             <th>Gespot door</th>
+                            <th>&nbsp;</th>
                             <th>Spot-locatie</th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for spot in spots %}
                             <tr>
+                                <td>{{ spot.trainNumber }}</td>
                                 <td>{{ spot.namePatternName }} {{ spot.trainNumber }}</td>
+                                <td>{{ spot.routeNumber }}</td>
                                 <td>
                                     {% if spot.routeNumber matches '/^\\d+$/' %}
                                         <a href="{{ path('spots_to_train_table', { 'routeNumber': spot.routeNumber, 'date': spot.spotDate | date('Y-m-d') }) }}" title="Bekijk de dienstregeling van trein {{ spot.routeNumber }}">{{ spot.routeNumber }}</a>
@@ -91,8 +98,11 @@
                                 </td>
                                 <td>{{ spot.positionName }}</td>
                                 <td>{{ spot.extra }}</td>
+                                <td>{{ spot.spotDate | date('Y-m-d') }}</td>
                                 <td>{{ spot.spotDate | displayDateTime }}</td>
+                                <td>{{ spot.spotterUsername }}</td>
                                 <td>{{ spot.spotterId | displayUser(spot.spotterUsername) | raw }}</td>
+                                <td>{{ spot.locationName }}</td>
                                 <td><span title="{{ spot.locationDescription }}">{{ spot.locationName }}</span></td>
                             </tr>
                         {% else %}
@@ -101,12 +111,17 @@
                     </tbody>
                     <tfoot>
                         <tr>
+                            <th>&nbsp;</th>
                             <th>materieel</th>
+                            <th>&nbsp;</th>
                             <th>treinnummer</th>
                             <th>&nbsp;</th>
                             <th>&nbsp;</th>
+                            <th>&nbsp;</th>
                             <th>datum</th>
+                            <th>&nbsp;</th>
                             <th>spotter</th>
+                            <th>&nbsp;</th>
                             <th>locatie</th>
                         </tr>
                     </tfoot>
@@ -156,6 +171,18 @@
                 });
 
                 let spotsTable = $('#spots_table').DataTable({
+                    'columnDefs': [
+                        { 'targets': 0, 'visible': false },
+                        { 'targets': 1, 'orderData': 0 },
+                        { 'targets': 2, 'type': 'num', 'visible': false },
+                        { 'targets': 3, 'orderData': 2 },
+                        { 'targets': 6, 'visible': false },
+                        { 'targets': 7, 'orderData': 6 },
+                        { 'targets': 8, 'visible': false },
+                        { 'targets': 9, 'orderData': 8 },
+                        { 'targets': 10, 'visible': false },
+                        { 'targets': 11, 'orderData': 10 },
+                    ],
                     initComplete: function () {
                         this.api().columns().every(function () {
                             let that = this;
