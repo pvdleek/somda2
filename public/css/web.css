@@ -240,8 +240,7 @@ a.rail-news-title:hover {
     -webkit-column-break-inside: avoid;
     align-items: center;
     box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
+    display: block;
     margin-bottom: 5px;
     width: 100%;
 }
