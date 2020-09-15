@@ -9,12 +9,7 @@
             {% if category['forums'] | length > 0 %}
                 <tr><th colspan="2">{{ category['name'] }}</th></tr>
                 {% for forum in category['forums'] %}
-                    <tr>
-                        <td>
-                            <i class="fas fa-comments"></i>
-                            <a href="{{ path('forum_forum', { 'id': forum['id'], 'name': forum['name'] }) }}">{{ forum['name'] }}</a>
-                        </td>
-                    </tr>
+                    <tr><td><a href="{{ path('forum_forum', { 'id': forum['id'], 'name': forum['name'] }) }}">{{ forum['name'] }}</a></td></tr>
                 {% endfor %}
             {% endif %}
         {% endfor %}
