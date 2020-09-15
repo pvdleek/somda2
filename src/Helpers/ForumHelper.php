@@ -88,12 +88,7 @@ class ForumHelper implements RuntimeExtensionInterface
         $numberOfQuote = 0;
         $numberOfUnquote = 0;
         while (stripos($text, '%quote%') !== false) {
-            $text = preg_replace(
-                '[%quote%]',
-                '<blockquote><span style="font-size:8px; font-weight:bold;">Quote' . '</span><hr />',
-                $text,
-                1
-            );
+            $text = preg_replace('[%quote%]', '<blockquote><strong>Quote' . '</strong><hr />', $text, 1);
             ++$numberOfQuote;
         }
         while (stripos($text, '%unquote%') !== false) {
@@ -104,7 +99,7 @@ class ForumHelper implements RuntimeExtensionInterface
         // Place extra quotes if necessary
         $doQuotes = $numberOfUnquote - $numberOfQuote;
         for ($doQuote = 0; $doQuote < $doQuotes; ++$doQuote) {
-            $text = '<blockquote><span style="font-size:8px; font-weight:bold;">Quote' . '</span><hr />' . $text;
+            $text = '<blockquote><strong>Quote' . '</strong><hr />' . $text;
         }
         // Place extra unquotes if necessary
         $doQuotes = $numberOfQuote - $numberOfUnquote;
