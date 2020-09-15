@@ -104,7 +104,7 @@ class Statistic extends EntityRepository
             ->setMaxResults(1);
         $result = $queryBuilder->getQuery()->getArrayResult()[0];
         $statisticBusiest->timestamp = $result['timestamp'];
-        $statisticBusiest->number = $result['number'];
+        $statisticBusiest->number = (int)$result['number'];
     }
 
     /**
