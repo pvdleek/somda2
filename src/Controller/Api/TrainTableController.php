@@ -18,7 +18,6 @@ use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use Nelmio\ApiDocBundle\Annotation\Model;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Swagger\Annotations as SWG;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -125,7 +124,7 @@ class TrainTableController extends AbstractFOSRestController
         }
 
         $this->trainTableHelper->setTrainTableYear($trainTableYearId);
-        $this->trainTableHelper->setRoute($routeNumber);
+        $this->trainTableHelper->setRoute((string)$routeNumber);
         $trainTableLines = $this->trainTableHelper->getTrainTableLines();
 
         $daysFilter = [];
