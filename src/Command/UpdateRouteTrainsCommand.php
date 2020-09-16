@@ -95,7 +95,7 @@ class UpdateRouteTrainsCommand extends Command
                 $this->doctrine->getManager()->persist($routeTrain);
             }
 
-            $routeTrain->numberOfSpots = $routeItem['numberOfSPots'];
+            $routeTrain->numberOfSpots = (int)$routeItem['numberOfSPots'];
             $routeTrain->trainNamePattern = $pattern;
 
             $this->doctrine->getManager()->flush();
