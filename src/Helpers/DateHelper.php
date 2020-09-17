@@ -51,6 +51,6 @@ class DateHelper implements RuntimeExtensionInterface
         if ($includeTime) {
             $output .= ' ' . $date->format('H:i:s');
         }
-        return $output;
+        return trim($output);
     }
 }
