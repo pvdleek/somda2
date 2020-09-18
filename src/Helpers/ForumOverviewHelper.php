@@ -46,7 +46,9 @@ class ForumOverviewHelper
     public function getCategoryArray(): array
     {
         $categories = [];
-        $forums = $this->doctrine->getRepository(ForumForum::class)->findAll();
+        $forums = $this->doctrine->getRepository(ForumForum::class)->findAllAndGetArray(
+            $this->userHelper->userIsLoggedIn() ? $this->userHelper->getUser()->id : null
+        );
         foreach ($forums as $forum) {
             if (!isset($categories[$forum['categoryId']])) {
                 $categories[$forum['categoryId']] = [
@@ -59,13 +61,8 @@ class ForumOverviewHelper
 
             $unreadDiscussions = 0;
             if ($this->userHelper->userIsLoggedIn()) {
-                /**
-                 * @var ForumForum $forumEntity
-                 */
-                $forumEntity = $this->doctrine->getRepository(ForumForum::class)->find($forum['id']);
-
                 if ((int)$forum['type'] === ForumForum::TYPE_MODERATORS_ONLY
-                    && !$this->forumAuthHelper->userIsModerator($forumEntity, $this->userHelper->getUser())
+                    && (bool)$forum['userIsModerator'] !== true
                 ) {
                     // The user is not allowed to view this category
                     continue;
@@ -74,7 +71,7 @@ class ForumOverviewHelper
                 if ((int)$forum['type'] !== ForumForum::TYPE_ARCHIVE) {
                     $unreadDiscussions = $this->doctrine
                         ->getRepository(ForumForum::class)
-                        ->getNumberOfUnreadPostsInForum($forumEntity, $this->userHelper->getUser());
+                        ->getNumberOfUnreadPostsInForum((int)$forum['id'], $this->userHelper->getUser());
                 }
             } elseif ((int)$forum['type'] === ForumForum::TYPE_MODERATORS_ONLY) {
                 // Guest is not allowed to view this category
