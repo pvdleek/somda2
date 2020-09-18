@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\SpecialRoute;
 use App\Entity\TrainTableYear;
 use App\Generics\RoleGenerics;
+use App\Helpers\RedirectHelper;
 use App\Helpers\TrainTableHelper;
 use App\Helpers\FlashHelper;
 use App\Helpers\RoutesDisplayHelper;
@@ -15,6 +16,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use Dompdf\Dompdf;
 use Dompdf\Options;
 use Exception;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 class TrainTableController
@@ -44,6 +46,8 @@ class TrainTableController
      */
     private RoutesDisplayHelper $routesDisplayHelper;
 
+    private RedirectHelper $redirectHelper;
+
     /**
      * @var FlashHelper
      */
@@ -55,6 +59,7 @@ class TrainTableController
      * @param TemplateHelper $templateHelper
      * @param TrainTableHelper $trainTableHelper
      * @param RoutesDisplayHelper $routesDisplayHelper
+     * @param RedirectHelper $redirectHelper
      * @param FlashHelper $flashHelper
      */
     public function __construct(
@@ -63,6 +68,7 @@ class TrainTableController
         TemplateHelper $templateHelper,
         TrainTableHelper $trainTableHelper,
         RoutesDisplayHelper $routesDisplayHelper,
+        RedirectHelper $redirectHelper,
         FlashHelper $flashHelper
     ) {
         $this->doctrine = $doctrine;
@@ -70,6 +76,7 @@ class TrainTableController
         $this->templateHelper = $templateHelper;
         $this->trainTableHelper = $trainTableHelper;
         $this->routesDisplayHelper = $routesDisplayHelper;
+        $this->redirectHelper = $redirectHelper;
         $this->flashHelper = $flashHelper;
     }
 
@@ -179,6 +186,7 @@ class TrainTableController
      * @param string $startTime
      * @param string $endTime
      * @param int $spotterVersion
+     * @return RedirectResponse
      * @throws Exception
      */
     public function passingRoutesExportAction(
@@ -188,7 +196,7 @@ class TrainTableController
         string $startTime,
         string $endTime,
         int $spotterVersion
-    ) {
+    ): RedirectResponse {
         $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_PASSING_ROUTES);
 
         $this->trainTableHelper->setTrainTableYear($trainTableYearId);
@@ -217,6 +225,14 @@ class TrainTableController
         $domPdf->setPaper('A4', 'landscape');
         $domPdf->render();
         $domPdf->stream('doorkomststaat.pdf', ['attachment' => true]);
+
+        return $this->redirectHelper->redirectToRoute('passing_routes_search', [
+            'trainTableYearId' => $trainTableYearId,
+            'locationName' => $locationName,
+            'dayNumber' => $dayNumber,
+            'startTime' => $startTime,
+            'endTime' => $endTime,
+        ]);
     }
 
     /**
