@@ -115,15 +115,6 @@ class UserHelper implements RuntimeExtensionInterface
      */
     public function getPreferenceByKey(string $key): UserPreferenceValue
     {
-        if (!is_null($this->getUser())) {
-            foreach ($this->getUser()->getPreferences() as $preference) {
-                if ($preference->preference->key === $key) {
-                    return $preference;
-                }
-            }
-        }
-
-        // Get and save the default value for this key
         /**
          * @var UserPreference $userPreference
          */
@@ -131,6 +122,16 @@ class UserHelper implements RuntimeExtensionInterface
         if (is_null($userPreference)) {
             throw new UnknownUserPreferenceKey('Preference with key "' . $key . '" does not exist');
         }
+
+        if (!is_null($this->getUser())) {
+            foreach ($this->getUser()->getPreferences() as $preference) {
+                if ($preference->preference === $userPreference) {
+                    return $preference;
+                }
+            }
+        }
+
+        // Get the default value for this key and save if user is logged in
         $userPreferenceValue = new UserPreferenceValue();
         $userPreferenceValue->preference = $userPreference;
         $userPreferenceValue->value = $userPreference->defaultValue;
