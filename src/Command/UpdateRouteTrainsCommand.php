@@ -90,7 +90,7 @@ class UpdateRouteTrainsCommand extends Command
                 $routeTrain->trainTableYear = $trainTableYear;
                 $routeTrain->route = $route;
                 $routeTrain->position = $position;
-                $routeTrain->dayNumber = $routeItem['dayOfWeek'];
+                $routeTrain->dayNumber = (int)$routeItem['dayOfWeek'];
 
                 $this->doctrine->getManager()->persist($routeTrain);
             }
