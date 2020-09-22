@@ -13,9 +13,9 @@
             <td nowrap="nowrap">{{ trainTable['time'] | displayTime }}</td>
             <td nowrap="nowrap"><a href="{{ url('train_table_search', {'trainTableYearId': trainTableIndexNumber, 'routeNumber': trainTable['route_number'] }) }}">{{ trainTable['route_number'] }}</a></td>
             <td nowrap="nowrap">{{ trainTable[constant('App\\Repository\\TrainTable::FIELD_TRANSPORTER_NAME')] }} - {{ trainTable[constant('App\\Repository\\TrainTable::FIELD_CHARACTERISTIC_DESCRIPTION')] }}</td>
-            <td nowrap="nowrap"><span title="{{ trainTable['fl_first_description'] }}">{{ trainTable['fl_first_name'] }}</span></td>
+            <td nowrap="nowrap"><span title="{{ trainTable['fl_first_description'] }}">{{ trainTable['fl_first_name'] }}</span> ({{ trainTable['fl_first_time'] | displayTime }})</td>
             <td nowrap="nowrap">{{ ("general.action." ~ trainTable['action']) | trans }}</td>
-            <td nowrap="nowrap"><span title="{{ trainTable['fl_last_description'] }}">{{ trainTable['fl_last_name'] }}</span></td>
+            <td nowrap="nowrap"><span title="{{ trainTable['fl_last_description'] }}">{{ trainTable['fl_last_name'] }}</span> ({{ trainTable['fl_last_time'] | displayTime }})</td>
             {% if spotterVersion is defined and spotterVersion %}<td style="width:100%">&nbsp;</td>{% endif %}
         </tr>
     {% endfor %}
