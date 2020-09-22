@@ -8,6 +8,7 @@
         "ext-gd": "*",
         "ext-iconv": "*",
         "ext-json": "*",
+        "amphp/http-client": "^4.5",
         "beberlei/doctrineextensions": "^1.2",
         "cocur/slugify": "^4.0",
         "debril/rss-atom-bundle": "^5.0",
