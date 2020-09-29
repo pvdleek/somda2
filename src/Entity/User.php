@@ -181,6 +181,13 @@ class User implements UserInterface
     private $forumFavorites;
 
     /**
+     * @var ForumPostFavorite[]
+     * @ORM\OneToMany(targetEntity="App\Entity\ForumPostFavorite", mappedBy="user")
+     * @JMS\Exclude()
+     */
+    private $forumPostFavorites;
+
+    /**
      * @var ForumForum[]
      * @ORM\ManyToMany(targetEntity="App\Entity\ForumForum", mappedBy="moderators")
      * @JMS\Exclude()
@@ -208,6 +215,7 @@ class User implements UserInterface
     {
         $this->groups = new ArrayCollection();
         $this->forumFavorites = new ArrayCollection();
+        $this->forumPostFavorites = new ArrayCollection();
         $this->moderatedForums = new ArrayCollection();
         $this->spots = new ArrayCollection();
         $this->preferences = new ArrayCollection();
@@ -311,6 +319,24 @@ class User implements UserInterface
     public function getForumFavorites(): array
     {
         return $this->forumFavorites->toArray();
+    }
+
+    /**
+     * @param ForumPostFavorite $forumPostFavorite
+     * @return User
+     */
+    public function addForumPostFavorite(ForumPostFavorite $forumPostFavorite): User
+    {
+        $this->forumPostFavorites[] = $forumPostFavorite;
+        return $this;
+    }
+
+    /**
+     * @return ForumPostFavorite[]
+     */
+    public function getForumPostFavorites(): array
+    {
+        return $this->forumPostFavorites->toArray();
     }
 
     /**
