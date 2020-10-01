@@ -142,6 +142,12 @@ class ForumPost
     private $searchLists;
 
     /**
+     * @var ForumPostFavorite[]
+     * @ORM\OneToMany(targetEntity="App\Entity\ForumPostFavorite", mappedBy="post")
+     */
+    private $favorites;
+
+    /**
      *
      */
     public function __construct()
@@ -149,6 +155,7 @@ class ForumPost
         $this->alerts = new ArrayCollection();
         $this->logs = new ArrayCollection();
         $this->searchLists = new ArrayCollection();
+        $this->favorites = new ArrayCollection();
     }
 
     /**
@@ -206,5 +213,31 @@ class ForumPost
     public function getSearchLists(): array
     {
         return $this->searchLists->toArray();
+    }
+
+    /**
+     * @param ForumPostFavorite $forumPostFavorite
+     * @return ForumPost
+     */
+    public function addFavorite(ForumPostFavorite $forumPostFavorite): ForumPost
+    {
+        $this->favorites[] = $forumPostFavorite;
+        return $this;
+    }
+
+    /**
+     * @return ForumPostFavorite[]
+     */
+    public function getFavorites(): array
+    {
+        return $this->favorites->toArray();
+    }
+
+    /**
+     * @return int
+     */
+    public function getNumberOfFavorites(): int
+    {
+        return $this->favorites->count();
     }
 }

@@ -5,6 +5,8 @@ namespace App\Controller;
 
 use App\Entity\ForumDiscussion;
 use App\Entity\ForumFavorite;
+use App\Entity\ForumPost;
+use App\Entity\ForumPostFavorite;
 use App\Generics\RoleGenerics;
 use App\Helpers\TemplateHelper;
 use App\Helpers\UserHelper;
@@ -52,6 +54,9 @@ class ForumPostFavoriteController
         return $this->templateHelper->render('forum/favorites.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Forum favorieten',
             'favorites' => $this->doctrine->getRepository(ForumDiscussion::class)->findByFavorites(
+                $this->userHelper->getUser()
+            ),
+            'postFavorites' => $this->doctrine->getRepository(ForumPost::class)->findByFavorites(
                 $this->userHelper->getUser()
             ),
         ]);
@@ -111,6 +116,60 @@ class ForumPostFavoriteController
         $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_USER);
 
         if (is_null($favorite = $this->getFavorite($id))) {
+            return new JsonResponse();
+        }
+
+        $this->doctrine->getManager()->remove($favorite);
+        $this->doctrine->getManager()->flush();
+
+        return new JsonResponse();
+    }
+
+    /**
+     * @param int $id
+     * @return JsonResponse
+     * @throws Exception
+     */
+    public function addPostAction(int $id): JsonResponse
+    {
+        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_USER);
+
+        $post = $this->doctrine->getRepository(ForumPost::class)->find($id);
+        if (is_null($post)) {
+            return new JsonResponse();
+        }
+
+        $favorite = new ForumPostFavorite();
+        $favorite->post = $post;
+        $favorite->user = $this->userHelper->getUser();
+
+        $this->doctrine->getManager()->persist($favorite);
+        $this->doctrine->getManager()->flush();
+
+        return new JsonResponse();
+    }
+
+    /**
+     * @param int $id
+     * @return JsonResponse
+     * @throws Exception
+     */
+    public function removePostAction(int $id): JsonResponse
+    {
+        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_USER);
+
+        $post = $this->doctrine->getRepository(ForumPost::class)->find($id);
+        if (is_null($post)) {
+            return new JsonResponse();
+        }
+
+        /**
+         * @var ForumPostFavorite $favorite
+         */
+        $favorite = $this->doctrine->getRepository(ForumPostFavorite::class)->findOneBy(
+            ['post' => $post, 'user' => $this->userHelper->getUser()]
+        );
+        if (is_null($favorite)) {
             return new JsonResponse();
         }
 

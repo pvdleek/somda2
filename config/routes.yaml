@@ -343,6 +343,16 @@ forum_favorite_remove:
   methods: [GET]
   requirements: { id: \d+ }
   controller: App\Controller\ForumPostFavoriteController::removeAction
+forum_favorite_post_add:
+  path: /forum/favoriet-bericht/{id}/toevoegen/
+  methods: [GET]
+  requirements: { id: \d+ }
+  controller: App\Controller\ForumPostFavoriteController::addPostAction
+forum_favorite_post_remove:
+  path: /forum/favoriet-bericht/{id}/verwijderen/
+  methods: [GET]
+  requirements: { id: \d+ }
+  controller: App\Controller\ForumPostFavoriteController::removePostAction
 
 forum_search:
   path: /forum/zoeken/

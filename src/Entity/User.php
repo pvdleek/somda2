@@ -322,6 +322,20 @@ class User implements UserInterface
     }
 
     /**
+     * @param ForumDiscussion $discussion
+     * @return bool
+     */
+    public function isForumFavorite(ForumDiscussion $discussion): bool
+    {
+        foreach ($this->getForumFavorites() as $forumFavorite) {
+            if ($forumFavorite->discussion === $discussion) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      * @param ForumPostFavorite $forumPostFavorite
      * @return User
      */
@@ -340,13 +354,13 @@ class User implements UserInterface
     }
 
     /**
-     * @param ForumDiscussion $discussion
+     * @param ForumPost $post
      * @return bool
      */
-    public function isForumFavorite(ForumDiscussion $discussion): bool
+    public function isPostFavorite(ForumPost $post): bool
     {
-        foreach ($this->getForumFavorites() as $forumFavorite) {
-            if ($forumFavorite->discussion === $discussion) {
+        foreach ($this->getForumPostFavorites() as $postFavorite) {
+            if ($postFavorite->post === $post) {
                 return true;
             }
         }

@@ -6,49 +6,76 @@
     <br />
     <br />
 
-    <table>
-        <tr>
-            <th>&nbsp;</th>
-            <th>E-mail ontvangen</th>
-            <th colspan="2">{{ 'forum.discussion.subject' | trans }}</th>
-            <th>{{ 'forum.number.posts' | trans }}</th>
-            <th>{{ 'forum.author' | trans }}</th>
-            <th>{{ 'forum.number.viewed' | trans }}</th>
-            <th>{{ 'forum.lastPost' | trans }}</th>
-        </tr>
-        {% for favorite in favorites %}
-            <tr id="favorite_row_{{ favorite['id'] }}">
-                <td><a href="#" onclick="remove({{ favorite['id'] }}); return false;"><i class="fas fa-times" title="Verwijder discussie uit je favorieten"></i></a></td>
-                <td align="center" id="alerting_{{ favorite['id'] }}">
-                    {% if favorite['alerting'] == constant('App\\Entity\\ForumFavorite::ALERTING_OFF') %}
-                        Nee<br /><a href="#" onclick="toggleAlerting({{ favorite['id'] }}, true); return false;">Zet aan</a>
-                    {% else %}
-                        Ja<br /><a href="#" onclick="toggleAlerting({{ favorite['id'] }}, false); return false;">Zet uit</a>
-                    {% endif %}
-                </td>
-                <td>
-                    {% if favorite['locked'] %}
-                        <i class="fas fa-lock"></i>
-                    {% elseif favorite['posts'] > 1 %}
-                        <i class="fas fa-comments"></i>
-                    {% else %}
-                        <i class="fas fa-comment"></i>
-                    {% endif %}
-                </td>
-                <td>
-                    <a href="{{ path('forum_discussion', { 'id': favorite['id'], 'name': (favorite['title'] | slugify) }) }}">{{ favorite['title'] }}</a>
-                    {% if not favorite['discussion_read'] %} <i class="fas fa-comment-dots"></i>{% endif %}
-                </td>
-                <td>{{ favorite['posts'] }}</td>
-                <td>{{ favorite['author_id'] | displayUser(favorite['author_username']) | raw }}</td>
-                <td>{{ favorite['viewed'] }}</td>
-                <td>{{ favorite['max_post_timestamp'] | displayDateTime(true) }}</td>
+    <div class="panel">
+        <div class="panel-title">Favoriete discussies</div>
+        <table>
+            <tr>
+                <th>&nbsp;</th>
+                <th>E-mail ontvangen</th>
+                <th colspan="2">{{ 'forum.discussion.subject' | trans }}</th>
+                <th>{{ 'forum.number.posts' | trans }}</th>
+                <th>{{ 'forum.author' | trans }}</th>
+                <th>{{ 'forum.number.viewed' | trans }}</th>
+                <th>{{ 'forum.lastPost' | trans }}</th>
             </tr>
-        {% else %}
-            <tr><td colspan="8">Je hebt nog geen favoriete discussies</td></tr>
-        {% endfor %}
-    </table>
+            {% for favorite in favorites %}
+                <tr id="favorite_row_{{ favorite['id'] }}">
+                    <td><a href="#" onclick="remove({{ favorite['id'] }}); return false;"><i class="fas fa-times" title="Verwijder discussie uit je favorieten"></i></a></td>
+                    <td align="center" id="alerting_{{ favorite['id'] }}">
+                        {% if favorite['alerting'] == constant('App\\Entity\\ForumFavorite::ALERTING_OFF') %}
+                            Nee<br /><a href="#" onclick="toggleAlerting({{ favorite['id'] }}, true); return false;">Zet aan</a>
+                        {% else %}
+                            Ja<br /><a href="#" onclick="toggleAlerting({{ favorite['id'] }}, false); return false;">Zet uit</a>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if favorite['locked'] %}
+                            <i class="fas fa-lock"></i>
+                        {% elseif favorite['posts'] > 1 %}
+                            <i class="fas fa-comments"></i>
+                        {% else %}
+                            <i class="fas fa-comment"></i>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{{ path('forum_discussion', { 'id': favorite['id'], 'name': (favorite['title'] | slugify) }) }}">{{ favorite['title'] }}</a>
+                        {% if not favorite['discussion_read'] %} <i class="fas fa-comment-dots"></i>{% endif %}
+                    </td>
+                    <td>{{ favorite['posts'] }}</td>
+                    <td>{{ favorite['author_id'] | displayUser(favorite['author_username']) | raw }}</td>
+                    <td>{{ favorite['viewed'] }}</td>
+                    <td>{{ favorite['max_post_timestamp'] | displayDateTime(true) }}</td>
+                </tr>
+            {% else %}
+                <tr><td colspan="8">Je hebt nog geen favoriete discussies</td></tr>
+            {% endfor %}
+        </table>
+    </div>
+
     <br />
+
+    <div class="panel">
+        <div class="panel-title">Favoriete berichten</div>
+        <table>
+            <tr>
+                <th>&nbsp;</th>
+                <th colspan="2">{{ 'forum.discussion.subject' | trans }}</th>
+                <th>Bericht</th>
+                <th>{{ 'forum.author' | trans }}</th>
+            </tr>
+            {% for favorite in app.user.forumPostFavorites %}
+                <tr id="favorite_post_row_{{ favorite.post.id }}">
+                    <td><a href="#" onclick="removePost({{ favorite.post.id }}); return false;"><i class="fas fa-times" title="Verwijder bericht uit je favorieten"></i></a></td>
+                    <td><i class="fas fa-comment"></i></td>
+                    <td><a href="{{ path('forum_discussion_post', { 'id': favorite.post.discussion.id, 'name': (favorite.post.discussion.title | slugify), 'postId': favorite.post.id }) }}">{{ favorite.post.discussion.title }}</a></td>
+                    <td>{{ favorite.post | displayForumPost | raw }}</td>
+                    <td>{{ favorite.post.author.id | displayUser(favorite.post.author.username) | raw }}</td>
+                </tr>
+            {% else %}
+                <tr><td colspan="8">Je hebt nog geen favoriete berichten</td></tr>
+            {% endfor %}
+        </table>
+    </div>
 {% endblock %}
 
 {% block javascripts %}
@@ -75,9 +102,20 @@
         function remove(discussionId)
         {
             $.ajax({
-                url: '{{ path('forum_favorite_remove', { 'id': '1234' }) }}'.replace('1234', discussionId),
+                url: '{{ path('forum_favorite_remove', { 'id': '1234' }) }}'.replace('/1234/', '/' + discussionId + '/'),
             });
             $('#favorite_row_' + discussionId).remove();
+        }
+
+        /**
+         * @param {int} postId
+         */
+        function removePost(postId)
+        {
+            $.ajax({
+                url: '{{ path('forum_favorite_post_remove', { 'id': '1234' }) }}'.replace('/1234/', '/' + postId + '/'),
+            });
+            $('#favorite_post_row_' + postId).remove();
         }
     </script>
 {% endblock %}
