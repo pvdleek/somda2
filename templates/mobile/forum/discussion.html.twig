@@ -145,4 +145,16 @@
         </script>
     {% endif %}
 
+    <script>
+        /**
+         * @param {int} postId
+         */
+        function favoritePostAdd(postId)
+        {
+            $.ajax({
+                url: '{{ path('forum_favorite_post_add', { 'id': 1234 }) }}'.replace('/1234/', '/' + postId + '/'),
+            });
+            $('#favorite_box_' + postId).html('<a href="{{ path('forum_favorites') }}" title="Deze discussie staat in jouw favoriete berichten"><i class="fas fa-hand-holding-heart"></i></a>');
+        }
+    </script>
 {% endblock %}

@@ -65,6 +65,11 @@ table.forum-overview td {
     padding-left: 20px;
     padding-right: 10px;
 }
+.favorite-box {
+    float: right;
+    padding-right: 5px;
+    padding-top: 5px;
+}
 
 /**************/
 /*** Header ***/

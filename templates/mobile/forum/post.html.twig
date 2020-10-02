@@ -8,6 +8,18 @@
         {% endif %}
         {% if postIsUnread %}<i class="color-orange fas fa-comment-dots"></i>{% else %}<i class="fas fa-comment"></i>{% endif %}
         {{ post.author.id | displayUser(post.author.username) | raw }} ~ {{ post.timestamp | date('d-m-Y H:i:s') }}
+        {% set numberOfFavorites = post.numberOfFavorites %}
+        {% if numberOfFavorites > 0 %}<i class="fas fa-heart"></i> {{ numberOfFavorites }}{% endif %}
+
+        {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+            <div class="favorite-box" id="favorite_box_{{ post.id }}">
+                {% if app.user.postFavorite(post) %}
+                    <a href="{{ path('forum_favorites') }}" title="Deze discussie staat in jouw favoriete berichten"><i class="fas fa-hand-holding-heart"></i></a>
+                {% else %}
+                    <a href="#" onclick="favoritePostAdd({{ post.id }}); return false;" title="Voeg bericht toe aan jouw favoriete berichten"><i class="fas fa-hand-holding-medical"></i></a>
+                {% endif %}
+            </div>
+        {% endif %}
     </th>
 </tr>
 <tr><td class="text">{{ post | displayForumPost | raw }}</td></tr>

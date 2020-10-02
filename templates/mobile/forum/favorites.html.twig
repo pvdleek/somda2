@@ -1,0 +1,95 @@
+{% extends('mobile/base.html.twig') %}
+
+{% block content %}
+    <br />
+    <a class="somda-button" href="{{ path('forum') }}">Terug naar het forum-overzicht</a>
+    <br />
+    <br />
+
+    <h2>Favoriete discussies</h2>
+    <table>
+        <tr>
+            <th>&nbsp;</th>
+            <th nowrap="nowrap">E-mail</th>
+            <th>{{ 'forum.discussion.subject' | trans }}</th>
+            <th>{{ 'forum.lastPost' | trans }}</th>
+        </tr>
+        {% for favorite in favorites %}
+            <tr id="favorite_row_{{ favorite['id'] }}">
+                <td><a href="#" onclick="remove({{ favorite['id'] }}); return false;"><i class="fas fa-times" title="Verwijder discussie uit je favorieten"></i></a></td>
+                <td align="center" id="alerting_{{ favorite['id'] }}">{% if favorite['alerting'] == constant('App\\Entity\\ForumFavorite::ALERTING_OFF') %}Nee{% else %}Ja{% endif %}</td>
+                <td>
+                    <a href="{{ path('forum_discussion', { 'id': favorite['id'], 'name': (favorite['title'] | slugify) }) }}">{{ favorite['title'] }}</a>
+                    {% if not favorite['discussion_read'] %} <i class="fas fa-comment-dots"></i>{% endif %}
+                </td>
+                <td>{{ favorite['max_post_timestamp'] | displayDateTime(true, true) }}</td>
+            </tr>
+        {% else %}
+            <tr><td colspan="8">Je hebt nog geen favoriete discussies</td></tr>
+        {% endfor %}
+    </table>
+
+    <br />
+
+    <h2>Favoriete berichten</h2>
+    <table>
+        <tr>
+            <th>&nbsp;</th>
+            <th>Bericht</th>
+            <th>{{ 'forum.discussion.subject' | trans }}</th>
+            <th>{{ 'forum.author' | trans }}</th>
+        </tr>
+        {% for favorite in app.user.forumPostFavorites %}
+            <tr id="favorite_post_row_{{ favorite.post.id }}">
+                <td><a href="#" onclick="removePost({{ favorite.post.id }}); return false;"><i class="fas fa-times" title="Verwijder bericht uit je favorieten"></i></a></td>
+                <td>{{ favorite.post | displayForumPost | raw | slice(0, 50) }}...</td>
+                <td><a href="{{ path('forum_discussion_post', { 'id': favorite.post.discussion.id, 'name': (favorite.post.discussion.title | slugify), 'postId': favorite.post.id }) }}">{{ favorite.post.discussion.title }}</a></td>
+                <td>{{ favorite.post.author.id | displayUser(favorite.post.author.username) | raw }}</td>
+            </tr>
+        {% else %}
+            <tr><td colspan="8">Je hebt nog geen favoriete berichten</td></tr>
+        {% endfor %}
+    </table>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        /**
+         * @param {int} discussionId
+         * @param {boolean} alertingOn
+         */
+        function toggleAlerting(discussionId, alertingOn)
+        {
+            $.ajax({
+                url: '{{ path('forum_favorite_toggle', { 'id': '1234', 'alerting': 0 }) }}'.replace('0', alertingOn ? '1' : '0').replace('1234', discussionId),
+            });
+            if (alertingOn) {
+                $('#alerting_' + discussionId).html('Ja<br /><a href="#" onclick="toggleAlerting(' + discussionId + ', false); return false;">Zet uit</a>');
+            } else {
+                $('#alerting_' + discussionId).html('Nee<br /><a href="#" onclick="toggleAlerting(' + discussionId + ', true); return false;">Zet aan</a>');
+            }
+        }
+
+        /**
+         * @param {int} discussionId
+         */
+        function remove(discussionId)
+        {
+            $.ajax({
+                url: '{{ path('forum_favorite_remove', { 'id': '1234' }) }}'.replace('/1234/', '/' + discussionId + '/'),
+            });
+            $('#favorite_row_' + discussionId).remove();
+        }
+
+        /**
+         * @param {int} postId
+         */
+        function removePost(postId)
+        {
+            $.ajax({
+                url: '{{ path('forum_favorite_post_remove', { 'id': '1234' }) }}'.replace('/1234/', '/' + postId + '/'),
+            });
+            $('#favorite_post_row_' + postId).remove();
+        }
+    </script>
+{% endblock %}
