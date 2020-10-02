@@ -1,18 +1,18 @@
 <div class="home-rail-news-headline">
-	<img alt="{{ railNews[0].source.name }}" src="{{ asset('images/news-logos/' ~ railNews[0].source.logo) }}" />
-	<a class="rail-news-title" href="{{ railNews[0].url }}" rel="noopener" target="_blank">{{ railNews[0].title }}</a>
+    <img alt="{{ railNews[0].source.name }}" height="25" src="{{ asset('images/news-logos/' ~ railNews[0].source.logo) }}" />
+    <a class="rail-news-title" href="{{ railNews[0].url }}" rel="noopener" target="_blank">{{ railNews[0].title }}</a>
 </div>
 <div class="create-date">{{ railNews[0].timestamp | displayDateTime(true) }}</div>
 {{ railNews[0].introduction }}
 <br /><a href="{{ railNews[0].url }}" rel="noopener" target="_blank">Lees verder...</a>
 
 <ul>
-	{% for railNews in layoutData['railNews'] %}
-		{% if loop.index > 1 %}<li><i class="fas fa-arrow-right"></i> <a href="{{ railNews.url }}" rel="noopener" target="_blank">{{ railNews.title }}</a></li>{% endif %}
-	{% endfor %}
+    {% for railNews in layoutData['railNews'] %}
+        {% if loop.index > 1 %}<li><i class="fas fa-arrow-right"></i> <a href="{{ railNews.url }}" rel="noopener" target="_blank">{{ railNews.title }}</a></li>{% endif %}
+    {% endfor %}
 </ul>
 
 <br />
 <div class="panel-buttons">
-	<a class="somda-button" href="{{ path('rail_news') }}">Spoornieuws-archief</a>
+    <a class="somda-button" href="{{ path('rail_news') }}">Spoornieuws-archief</a>
 </div>

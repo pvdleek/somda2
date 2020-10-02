@@ -50,6 +50,10 @@ class KernelListener implements EventSubscriberInterface
      */
     private ?Stopwatch $stopwatch;
 
+    private ?string $route;
+
+    private ?array $routeParameters;
+
     /**
      * @param ManagerRegistry $doctrine
      * @param SessionInterface $session
@@ -98,6 +102,9 @@ class KernelListener implements EventSubscriberInterface
             return;
         }
 
+        $this->route = (string)$event->getRequest()->attributes->get('_route');
+        $this->routeParameters = (array)$event->getRequest()->attributes->get('_route_params');
+
         if ($this->isApiRequest($event)
             && $event->getRequest()->headers->has(UserHelper::KEY_API_USER_ID)
             && $event->getRequest()->headers->has(UserHelper::KEY_API_TOKEN)
@@ -137,8 +144,8 @@ class KernelListener implements EventSubscriberInterface
             $log->user = $this->userHelper->getUser();
             $log->timestamp = new DateTime();
             $log->ipAddress = ip2long($event->getRequest()->getClientIp());
-            $log->route = (string)$event->getRequest()->attributes->get('_route');
-            $log->routeParameters = (array)$event->getRequest()->attributes->get('_route_params');
+            $log->route = $this->route ?? '';
+            $log->routeParameters = $this->routeParameters ?? [];
             $log->duration = $stopwatchEvent->getDuration() / 1000;
             $log->memoryUsage = floatval(sprintf('%+08.3f', $stopwatchEvent->getMemory())) / 1024 / 1024;
             $this->doctrine->getManager()->persist($log);
