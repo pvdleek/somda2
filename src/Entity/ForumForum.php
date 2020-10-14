@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Table(name="somda_forum_forums", indexes={@ORM\Index(name="idx_47937_catid", columns={"catid"})})
+ * @ORM\Table(name="fof_forum_forum", indexes={@ORM\Index(name="idx_47937_catid", columns={"fof_foc_id"})})
  * @ORM\Entity(repositoryClass="App\Repository\ForumForum")
  */
 class ForumForum
@@ -25,7 +25,7 @@ class ForumForum
 
     /**
      * @var int|null
-     * @ORM\Column(name="forumid", type="bigint", nullable=false)
+     * @ORM\Column(name="fof_id", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -34,31 +34,31 @@ class ForumForum
     /**
      * @var ForumCategory
      * @ORM\ManyToOne(targetEntity="App\Entity\ForumCategory", inversedBy="forums")
-     * @ORM\JoinColumn(name="catid", referencedColumnName="catid")
+     * @ORM\JoinColumn(name="fof_foc_id", referencedColumnName="foc_id")
      */
     public ForumCategory $category;
 
     /**
      * @var string
-     * @ORM\Column(name="name", type="string", length=40, nullable=false)
+     * @ORM\Column(name="fof_name", type="string", length=40, nullable=false)
      */
     public string $name = '';
 
     /**
      * @var string
-     * @ORM\Column(name="description", type="string", length=100, nullable=false)
+     * @ORM\Column(name="fof_description", type="string", length=100, nullable=false)
      */
     public string $description = '';
 
     /**
      * @var int
-     * @ORM\Column(name="volgorde", type="integer", nullable=false, options={"default"="1"})
+     * @ORM\Column(name="fof_order", type="integer", nullable=false, options={"default"="1"})
      */
     public int $order = 1;
 
     /**
      * @var int
-     * @ORM\Column(name="type", type="integer", nullable=false, options={"default"=ForumForum::TYPE_LOGGED_IN})
+     * @ORM\Column(name="fof_type", type="integer", nullable=false, options={"default"=ForumForum::TYPE_LOGGED_IN})
      * @Assert\Choice(choices=ForumForum::TYPE_VALUES)
      */
     public int $type = self::TYPE_LOGGED_IN;
@@ -72,9 +72,9 @@ class ForumForum
     /**
      * @var User[]
      * @ORM\ManyToMany(targetEntity="User", inversedBy="moderatedForums")
-     * @ORM\JoinTable(name="somda_forum_mods",
-     *      joinColumns={@ORM\JoinColumn(name="forumid", referencedColumnName="forumid")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="uid", referencedColumnName="uid")}
+     * @ORM\JoinTable(name="ffm_forum_forum_moderator",
+     *      joinColumns={@ORM\JoinColumn(name="ffm_fof_id", referencedColumnName="fof_id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="ffm_use_id", referencedColumnName="use_id")}
      * )
      */
     private $moderators;

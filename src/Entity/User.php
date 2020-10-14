@@ -13,10 +13,10 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Table(
- *     name="somda_users",
+ *     name="use_user",
  *     indexes={
- *         @ORM\Index(name="idx_49053_uname", columns={"username"}),
- *         @ORM\Index(name="idx_49076_active", columns={"active"}),
+ *         @ORM\Index(name="idx_49053_uname", columns={"use_username"}),
+ *         @ORM\Index(name="idx_49076_active", columns={"use_active"}),
  *     }
  * )
  * @ORM\Entity(repositoryClass="App\Repository\User")
@@ -32,7 +32,7 @@ class User implements UserInterface
 
     /**
      * @var int|null
-     * @ORM\Column(name="uid", type="bigint", nullable=false)
+     * @ORM\Column(name="use_id", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @JMS\Expose()
@@ -42,7 +42,7 @@ class User implements UserInterface
 
     /**
      * @var bool
-     * @ORM\Column(name="active", type="boolean", nullable=false)
+     * @ORM\Column(name="use_active", type="boolean", nullable=false)
      * @JMS\Expose()
      * @SWG\Property(description="Is the user active", type="boolean")
      */
@@ -50,14 +50,14 @@ class User implements UserInterface
 
     /**
      * @var int
-     * @ORM\Column(name="spots_ok", type="integer", nullable=false)
+     * @ORM\Column(name="use_spots_ok", type="integer", nullable=false)
      * @JMS\Exclude()
      */
     public int $spotsOk = 0;
 
     /**
      * @var string
-     * @ORM\Column(name="username", type="string", length=20, nullable=false)
+     * @ORM\Column(name="use_username", type="string", length=20, nullable=false)
      * @Assert\NotBlank()
      * @Assert\Length(
      *     min = 2,
@@ -72,7 +72,7 @@ class User implements UserInterface
 
     /**
      * @var string|null
-     * @ORM\Column(name="name", type="string", length=100, nullable=true)
+     * @ORM\Column(name="use_name", type="string", length=100, nullable=true)
      * @JMS\Expose()
      * @SWG\Property(description="Real name of the user", maxLength=100, type="string")
      */
@@ -80,14 +80,14 @@ class User implements UserInterface
 
     /**
      * @var string
-     * @ORM\Column(name="password", type="string", length=255, nullable=false)
+     * @ORM\Column(name="use_password", type="string", length=255, nullable=false)
      * @JMS\Exclude()
      */
     public string $password = '';
 
     /**
      * @var string
-     * @ORM\Column(name="email", type="string", length=100, nullable=false)
+     * @ORM\Column(name="use_email", type="string", length=100, nullable=false)
      * @Assert\NotBlank()
      * @Assert\Email(message="Dit is geen geldig e-mailadres")
      * @Assert\Length(
@@ -101,7 +101,7 @@ class User implements UserInterface
 
     /**
      * @var string
-     * @ORM\Column(name="cookie_ok", type="string", length=3, nullable=false)
+     * @ORM\Column(name="use_cookie_ok", type="string", length=3, nullable=false)
      * @Assert\Choice(choices=User::COOKIE_VALUES)
      * @JMS\Exclude()
      */
@@ -109,14 +109,14 @@ class User implements UserInterface
 
     /**
      * @var string|null
-     * @ORM\Column(name="actkey", type="string", length=13, nullable=true)
+     * @ORM\Column(name="use_activation_key", type="string", length=13, nullable=true)
      * @JMS\Exclude()
      */
     public ?string $activationKey;
 
     /**
      * @var DateTime
-     * @ORM\Column(name="regdate", type="datetime", nullable=false)
+     * @ORM\Column(name="use_register_timestamp", type="datetime", nullable=false)
      * @JMS\Expose()
      * @SWG\Property(description="ISO-8601 timestamp of the registration of the user (Y-m-dTH:i:sP)", type="string")
      */
@@ -124,14 +124,14 @@ class User implements UserInterface
 
     /**
      * @var DateTime|null
-     * @ORM\Column(name="ban_expire_timestamp", type="datetime", nullable=true)
+     * @ORM\Column(name="use_ban_expire_timestamp", type="datetime", nullable=true)
      * @JMS\Exclude()
      */
     public ?DateTime $banExpireTimestamp;
 
     /**
      * @var DateTime|null
-     * @ORM\Column(name="last_visit", type="datetime", nullable=true)
+     * @ORM\Column(name="use_last_visit", type="datetime", nullable=true)
      * @JMS\Expose()
      * @SWG\Property(description="ISO-8601 timestamp of the last visit of the user (Y-m-dTH:i:sP)", type="string")
      */
@@ -139,7 +139,7 @@ class User implements UserInterface
 
     /**
      * @var string|null
-     * @ORM\Column(name="api_token", type="string", length=23, nullable=true)
+     * @ORM\Column(name="use_api_token", type="string", length=23, nullable=true)
      * @JMS\Expose()
      * @SWG\Property(description="Token of the user, if logged in", maxLength=23, type="string")
      */
@@ -147,14 +147,14 @@ class User implements UserInterface
 
     /**
      * @var DateTime|null
-     * @ORM\Column(name="api_token_expiry_timestamp", type="datetime", nullable=true)
+     * @ORM\Column(name="use_api_token_expiry_timestamp", type="datetime", nullable=true)
      * @JMS\Exclude()
      */
     public ?DateTime $apiTokenExpiryTimestamp = null;
 
     /**
      * @var array
-     * @ORM\Column(name="roles", type="array", nullable=false)
+     * @ORM\Column(name="use_roles", type="array", nullable=false)
      * @JMS\Exclude()
      */
     public array $roles = [];

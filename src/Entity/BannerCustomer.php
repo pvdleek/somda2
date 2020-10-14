@@ -6,14 +6,14 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table(name="somda_banner_customer")
+ * @ORM\Table(name="bac_banner_customer")
  * @ORM\Entity
  */
 class BannerCustomer
 {
     /**
      * @var int|null
-     * @ORM\Column(name="id", type="bigint", nullable=false)
+     * @ORM\Column(name="bac_id", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -21,25 +21,25 @@ class BannerCustomer
 
     /**
      * @var string
-     * @ORM\Column(name="name", type="string", length=6, nullable=false)
+     * @ORM\Column(name="bac_name", type="string", length=6, nullable=false)
      */
     public string $name;
 
     /**
      * @var int|null
-     * @ORM\Column(name="max_views", type="integer", nullable=true)
+     * @ORM\Column(name="bac_max_views", type="integer", nullable=true)
      */
     public ?int $maxViews;
 
     /**
      * @var int|null
-     * @ORM\Column(name="max_hits", type="integer", nullable=true)
+     * @ORM\Column(name="bac_max_hits", type="integer", nullable=true)
      */
     public ?int $maxHits;
 
     /**
      * @var int|null
-     * @ORM\Column(name="max_days", type="integer", nullable=true)
+     * @ORM\Column(name="bac_max_days", type="integer", nullable=true)
      */
     public ?int $maxDays;
 

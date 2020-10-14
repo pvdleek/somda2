@@ -6,14 +6,14 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table(name="somda_forum_discussion", indexes={@ORM\Index(name="idx_47915_forumid", columns={"forumid"})})
+ * @ORM\Table(name="fod_forum_discussion", indexes={@ORM\Index(name="idx_47915_forumid", columns={"forumid"})})
  * @ORM\Entity(repositoryClass="App\Repository\ForumDiscussion")
  */
 class ForumDiscussion
 {
     /**
      * @var int|null
-     * @ORM\Column(name="discussionid", type="bigint", nullable=false)
+     * @ORM\Column(name="fod_id", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -21,33 +21,33 @@ class ForumDiscussion
 
     /**
      * @var string
-     * @ORM\Column(name="title", type="string", length=50, nullable=false)
+     * @ORM\Column(name="fod_title", type="string", length=50, nullable=false)
      */
     public string $title = '';
 
     /**
      * @var int
-     * @ORM\Column(name="viewed", type="bigint", nullable=false)
+     * @ORM\Column(name="fod_viewed", type="bigint", nullable=false)
      */
     public int $viewed = 0;
 
     /**
      * @var bool
-     * @ORM\Column(name="locked", type="boolean", nullable=false, options={"default"=false})
+     * @ORM\Column(name="fod_locked", type="boolean", nullable=false, options={"default"=false})
      */
     public bool $locked = false;
 
     /**
      * @var ForumForum
      * @ORM\ManyToOne(targetEntity="App\Entity\ForumForum", inversedBy="discussions")
-     * @ORM\JoinColumn(name="forumid", referencedColumnName="forumid")
+     * @ORM\JoinColumn(name="fod_fof_id", referencedColumnName="fof_id")
      */
     public ForumForum $forum;
 
     /**
      * @var User
      * @ORM\ManyToOne(targetEntity="App\Entity\User")
-     * @ORM\JoinColumn(name="authorid", referencedColumnName="uid")
+     * @ORM\JoinColumn(name="fod_author_use_id", referencedColumnName="use_id")
      */
     public User $author;
 

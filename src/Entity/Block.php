@@ -6,14 +6,14 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table(name="somda_blokken")
+ * @ORM\Table(name="blo_block")
  * @ORM\Entity(repositoryClass="App\Repository\Block")
  */
 class Block
 {
     /**
      * @var int|null
-     * @ORM\Column(name="blokid", type="bigint", nullable=false)
+     * @ORM\Column(name="blo_id", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -21,31 +21,31 @@ class Block
 
     /**
      * @var string
-     * @ORM\Column(name="name", type="string", length=55, nullable=false, options={"default"=""})
+     * @ORM\Column(name="blo_name", type="string", length=55, nullable=false, options={"default"=""})
      */
     public string $name = '';
 
     /**
      * @var string
-     * @ORM\Column(name="route", type="string", length=45, nullable=false, options={"default"=""})
+     * @ORM\Column(name="blo_route", type="string", length=45, nullable=false, options={"default"=""})
      */
     public string $route = '';
 
     /**
      * @var string|null
-     * @ORM\Column(name="role", type="string", length=50, nullable=true)
+     * @ORM\Column(name="blo_role", type="string", length=50, nullable=true)
      */
     public ?string $role;
 
     /**
      * @var int
-     * @ORM\Column(name="menu_volgorde", type="integer", nullable=false, options={"default"="1"})
+     * @ORM\Column(name="blo_menu_order", type="integer", nullable=false, options={"default"="1"})
      */
     public int $menuOrder = 1;
 
     /**
      * @var bool
-     * @ORM\Column(name="do_separator", type="boolean", nullable=false)
+     * @ORM\Column(name="blo_do_separator", type="boolean", nullable=false)
      */
     public bool $doSeparator = false;
 
@@ -58,7 +58,7 @@ class Block
     /**
      * @var Block
      * @ORM\ManyToOne(targetEntity="App\Entity\Block", inversedBy="children")
-     * @ORM\JoinColumn(name="parent_block", referencedColumnName="blokid")
+     * @ORM\JoinColumn(name="blo_parent_blo_id", referencedColumnName="blo_id")
      */
     public Block $parent;
 

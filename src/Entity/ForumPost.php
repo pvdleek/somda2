@@ -12,11 +12,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Table(
- *     name="somda_forum_posts",
+ *     name="fop_forum_post",
  *     indexes={
- *         @ORM\Index(name="idx_47961_timestamp", columns={"timestamp"}),
- *         @ORM\Index(name="idx_47961_authorid", columns={"authorid"}),
- *         @ORM\Index(name="idx_47961_discussionid", columns={"discussionid"})
+ *         @ORM\Index(name="idx_47961_timestamp", columns={"tfop_imestamp"}),
+ *         @ORM\Index(name="idx_47961_authorid", columns={"fop_author_use_id"}),
+ *         @ORM\Index(name="idx_47961_discussionid", columns={"fop_fod_id"})
  *     }
  * )
  * @ORM\Entity(repositoryClass="App\Repository\ForumPost")
@@ -30,7 +30,7 @@ class ForumPost
 
     /**
      * @var int|null
-     * @ORM\Column(name="postid", type="bigint", nullable=false)
+     * @ORM\Column(name="fop_id", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @JMS\Expose()
@@ -41,7 +41,7 @@ class ForumPost
     /**
      * @var User
      * @ORM\ManyToOne(targetEntity="App\Entity\User")
-     * @ORM\JoinColumn(name="authorid", referencedColumnName="uid")
+     * @ORM\JoinColumn(name="fop_author_use_id", referencedColumnName="use_id")
      * @JMS\Expose()
      * @SWG\Property(description="The author of the post", ref=@Model(type=User::class))
      */
@@ -50,14 +50,14 @@ class ForumPost
     /**
      * @var ForumDiscussion
      * @ORM\ManyToOne(targetEntity="App\Entity\ForumDiscussion", inversedBy="posts")
-     * @ORM\JoinColumn(name="discussionid", referencedColumnName="discussionid")
+     * @ORM\JoinColumn(name="fop_fod_id", referencedColumnName="fod_id")
      * @JMS\Exclude()
      */
     public ForumDiscussion $discussion;
 
     /**
      * @var DateTime
-     * @ORM\Column(name="timestamp", type="datetime", nullable=false)
+     * @ORM\Column(name="fop_timestamp", type="datetime", nullable=false)
      * @JMS\Expose()
      * @SWG\Property(description="ISO-8601 timestamp of the post (Y-m-dTH:i:sP)", type="string")
      */
@@ -73,7 +73,7 @@ class ForumPost
 
     /**
      * @var DateTime|null
-     * @ORM\Column(name="edit_timestamp", type="datetime", nullable=true)
+     * @ORM\Column(name="fop_edit_timestamp", type="datetime", nullable=true)
      * @JMS\Expose()
      * @SWG\Property(description="ISO-8601 timestamp of the post edit (Y-m-dTH:i:sP)", type="string")
      */
@@ -82,7 +82,7 @@ class ForumPost
     /**
      * @var User|null
      * @ORM\ManyToOne(targetEntity="App\Entity\User")
-     * @ORM\JoinColumn(name="edit_uid", referencedColumnName="uid")
+     * @ORM\JoinColumn(name="fop_editor_use_id", referencedColumnName="use_id")
      * @JMS\Expose()
      * @SWG\Property(description="The user that edited the post", ref=@Model(type=User::class))
      */
@@ -90,7 +90,7 @@ class ForumPost
 
     /**
      * @var string|null
-     * @ORM\Column(name="edit_reason", type="string", length=50, nullable=true)
+     * @ORM\Column(name="fop_edit_reason", type="string", length=50, nullable=true)
      * @JMS\Expose()
      * @SWG\Property(description="Reason for editing the post", maxLength=50, type="string")
      */
@@ -98,7 +98,7 @@ class ForumPost
 
     /**
      * @var bool
-     * @ORM\Column(name="sign_on", type="boolean", nullable=false)
+     * @ORM\Column(name="fop_signature_on", type="boolean", nullable=false)
      * @JMS\Expose()
      * @SWG\Property(description="Whether the signature of the author is included", type="boolean")
      */
@@ -115,7 +115,7 @@ class ForumPost
     /**
      * @var User|null
      * @ORM\ManyToOne(targetEntity="App\Entity\User")
-     * @ORM\JoinColumn(name="wiki_uid", referencedColumnName="uid")
+     * @ORM\JoinColumn(name="fop_wiki_checker_use_id", referencedColumnName="use_id")
      * @JMS\Exclude()
      */
     public ?User $wikiChecker;

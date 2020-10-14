@@ -7,14 +7,14 @@ use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table(name="somda_ddar", indexes={@ORM\Index(name="idx_47846_matid", columns={"matid"})})
+ * @ORM\Table(name="dda_ddar", indexes={@ORM\Index(name="idx_47846_matid", columns={"matid"})})
  * @ORM\Entity
  */
 class Ddar
 {
     /**
      * @var int|null
-     * @ORM\Column(name="id", type="bigint", nullable=false)
+     * @ORM\Column(name="dda_id", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -29,7 +29,7 @@ class Ddar
 
     /**
      * @var int|null
-     * @ORM\Column(name="stam", type="integer", nullable=true)
+     * @ORM\Column(name="dda_trunk_number", type="integer", nullable=true)
      */
     public ?int $trunkNumber;
 
@@ -42,31 +42,31 @@ class Ddar
 
     /**
      * @var DateTime|null
-     * @ORM\Column(name="spot_ander_laatste", type="date", nullable=true)
+     * @ORM\Column(name="dda_timestamp_other_last", type="date", nullable=true)
      */
     public ?DateTime $timestampOtherLast;
 
     /**
      * @var DateTime
-     * @ORM\Column(name="spot_eerste", type="date", nullable=false)
+     * @ORM\Column(name="dda_timestamp_first", type="date", nullable=false)
      */
     public DateTime $timestampFirst;
 
     /**
      * @var DateTime|null
-     * @ORM\Column(name="spot_laatste", type="date", nullable=true)
+     * @ORM\Column(name="dda_timestamp_last", type="date", nullable=true)
      */
     public ?DateTime $timestampLast;
 
     /**
      * @var DateTime|null
-     * @ORM\Column(name="spot_ander_eerste", type="date", nullable=true)
+     * @ORM\Column(name="dda_timestamp_other_first", type="date", nullable=true)
      */
     public ?DateTime $timestampOtherFirst;
 
     /**
      * @var string
-     * @ORM\Column(name="extra", type="string", length=150, nullable=false)
+     * @ORM\Column(name="dda_extra", type="string", length=150, nullable=false)
      */
     public string $extra = '';
 }

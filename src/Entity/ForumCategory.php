@@ -8,14 +8,14 @@ use JMS\Serializer\Annotation as JMS;
 use Swagger\Annotations as SWG;
 
 /**
- * @ORM\Table(name="somda_forum_cats")
+ * @ORM\Table(name="foc_forum_category")
  * @ORM\Entity
  */
 class ForumCategory
 {
     /**
      * @var int|null
-     * @ORM\Column(name="catid", type="bigint", nullable=false)
+     * @ORM\Column(name="foc_id", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @JMS\Expose()
@@ -25,7 +25,7 @@ class ForumCategory
 
     /**
      * @var string
-     * @ORM\Column(name="name", type="string", length=30, nullable=false)
+     * @ORM\Column(name="foc_name", type="string", length=30, nullable=false)
      * @JMS\Expose()
      * @SWG\Property(description="Name of the category", maxLength=30, type="string")
      */
@@ -33,7 +33,7 @@ class ForumCategory
 
     /**
      * @var int
-     * @ORM\Column(name="volgorde", type="integer", nullable=false, options={"default"="1"})
+     * @ORM\Column(name="foc_order", type="integer", nullable=false, options={"default"="1"})
      * @JMS\Expose()
      * @SWG\Property(description="The order in which to display the forums", type="integer")
      */

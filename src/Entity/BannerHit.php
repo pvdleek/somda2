@@ -6,14 +6,14 @@ use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table(name="somda_banner_hits")
+ * @ORM\Table(name="bah_banner_hit")
  * @ORM\Entity
  */
 class BannerHit
 {
     /**
      * @var int|null
-     * @ORM\Column(name="id", type="bigint", nullable=false)
+     * @ORM\Column(name="bah_id", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -21,20 +21,20 @@ class BannerHit
 
     /**
      * @var DateTime
-     * @ORM\Column(name="timestamp", type="datetime", nullable=false)
+     * @ORM\Column(name="bah_timestamp", type="datetime", nullable=false)
      */
     public DateTime $timestamp;
 
     /**
      * @var int
-     * @ORM\Column(name="ip_address", type="bigint", nullable=false)
+     * @ORM\Column(name="bah_ip_address", type="bigint", nullable=false)
      */
     public int $ipAddress;
 
     /**
      * @var Banner
      * @ORM\ManyToOne(targetEntity="App\Entity\Banner", inversedBy="bannerHits")
-     * @ORM\JoinColumn(name="bannerid", referencedColumnName="bannerid")
+     * @ORM\JoinColumn(name="bah_ban_id", referencedColumnName="ban_id")
      */
     public Banner $banner;
 }
