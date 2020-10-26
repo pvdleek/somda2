@@ -9,7 +9,7 @@ use JMS\Serializer\Annotation as JMS;
 use Swagger\Annotations as SWG;
 
 /**
- * @ORM\Table(name="somda_verk_cats")
+ * @ORM\Table(name="loa_location_category")
  * @ORM\Entity
  */
 class LocationCategory
@@ -18,7 +18,7 @@ class LocationCategory
 
     /**
      * @var int|null
-     * @ORM\Column(name="verk_catid", type="bigint", nullable=false)
+     * @ORM\Column(name="loa_id", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @JMS\Expose()
@@ -28,14 +28,14 @@ class LocationCategory
 
     /**
      * @var string
-     * @ORM\Column(name="code", type="string", length=5, nullable=false)
+     * @ORM\Column(name="loa_code", type="string", length=5, nullable=false)
      * @JMS\Exclude()
      */
     public string $code = '';
 
     /**
      * @var string
-     * @ORM\Column(name="name", type="string", length=20, nullable=false)
+     * @ORM\Column(name="loa_name", type="string", length=20, nullable=false)
      * @JMS\Expose()
      * @SWG\Property(description="Name of the location-category", maxLength=20, type="string")
      */

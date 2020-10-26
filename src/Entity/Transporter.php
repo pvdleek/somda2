@@ -9,8 +9,8 @@ use Swagger\Annotations as SWG;
 
 /**
  * @ORM\Table(
- *     name="somda_vervoerder",
- *     uniqueConstraints={@ORM\UniqueConstraint(name="idx_49122_omschrijving", columns={"omschrijving"})}
+ *     name="trn_transporter",
+ *     uniqueConstraints={@ORM\UniqueConstraint(name="UNQ_trn_name", columns={"trn_name"})}
  * )
  * @ORM\Entity
  */
@@ -18,7 +18,7 @@ class Transporter
 {
     /**
      * @var int|null
-     * @ORM\Column(name="vervoerder_id", type="bigint", nullable=false)
+     * @ORM\Column(name="trn_id", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @JMS\Expose()
@@ -28,7 +28,7 @@ class Transporter
 
     /**
      * @var string
-     * @ORM\Column(name="omschrijving", type="string", length=35, nullable=false)
+     * @ORM\Column(name="trn_name", type="string", length=35, nullable=false)
      * @JMS\Expose()
      * @SWG\Property(description="Name of the transporter", maxLength=35, type="string")
      */
@@ -36,7 +36,7 @@ class Transporter
 
     /**
      * @var int|null
-     * @ORM\Column(name="iff_code", type="integer", nullable=true)
+     * @ORM\Column(name="trn_iff_code", type="integer", nullable=true)
      * @JMS\Expose()
      * @SWG\Property(description="Official IFF code", type="integer")
      */

@@ -7,7 +7,7 @@ use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table(name="bav_banner_view", indexes={@ORM\Index(name="idx_47831_bannerid", columns={"bav_ban_id"})})
+ * @ORM\Table(name="bav_banner_view", indexes={@ORM\Index(name="IDX_bav_ban_id", columns={"bav_ban_id"})})
  * @ORM\Entity
  */
 class BannerView

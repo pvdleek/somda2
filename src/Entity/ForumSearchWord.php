@@ -7,8 +7,8 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(
- *     name="somda_forum_zoeken_woorden",
- *     uniqueConstraints={@ORM\UniqueConstraint(name="idx_48035_woord", columns={"woord"})}
+ *     name="fsw_forum_search_word",
+ *     uniqueConstraints={@ORM\UniqueConstraint(name="UNQ_fsw_word", columns={"fsw_word"})}
  * )
  * @ORM\Entity(repositoryClass="App\Repository\ForumSearchWord")
  */
@@ -16,7 +16,7 @@ class ForumSearchWord
 {
     /**
      * @var int|null
-     * @ORM\Column(name="woord_id", type="bigint", nullable=false)
+     * @ORM\Column(name="fsw_id", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -24,7 +24,7 @@ class ForumSearchWord
 
     /**
      * @var string
-     * @ORM\Column(name="woord", type="string", length=50, nullable=false)
+     * @ORM\Column(name="fsw_word", type="string", length=50, nullable=false)
      */
     public string $word;
 

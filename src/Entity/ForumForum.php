@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Table(name="fof_forum_forum", indexes={@ORM\Index(name="idx_47937_catid", columns={"fof_foc_id"})})
+ * @ORM\Table(name="fof_forum_forum", indexes={@ORM\Index(name="IDX_fof_foc_id", columns={"fof_foc_id"})})
  * @ORM\Entity(repositoryClass="App\Repository\ForumForum")
  */
 class ForumForum

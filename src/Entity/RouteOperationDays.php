@@ -7,14 +7,14 @@ use JMS\Serializer\Annotation as JMS;
 use Swagger\Annotations as SWG;
 
 /**
- * @ORM\Table(name="somda_rijdagen")
+ * @ORM\Table(name="rod_route_operation_days")
  * @ORM\Entity(repositoryClass="App\Repository\RouteOperationDays")
  */
 class RouteOperationDays
 {
     /**
      * @var int|null
-     * @ORM\Column(name="rijdagenid", type="bigint", nullable=false)
+     * @ORM\Column(name="rod_id", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @JMS\Expose()
@@ -24,7 +24,7 @@ class RouteOperationDays
 
     /**
      * @var bool
-     * @ORM\Column(name="ma", type="boolean", nullable=false)
+     * @ORM\Column(name="rod_monday", type="boolean", nullable=false)
      * @JMS\Expose()
      * @SWG\Property(description="Is the route operating on Monday", type="boolean")
      */
@@ -32,7 +32,7 @@ class RouteOperationDays
 
     /**
      * @var bool
-     * @ORM\Column(name="di", type="boolean", nullable=false)
+     * @ORM\Column(name="rod_tuesday", type="boolean", nullable=false)
      * @JMS\Expose()
      * @SWG\Property(description="Is the route operating on Tuesday", type="boolean")
      */
@@ -40,7 +40,7 @@ class RouteOperationDays
 
     /**
      * @var bool
-     * @ORM\Column(name="wo", type="boolean", nullable=false)
+     * @ORM\Column(name="rod_wednesday", type="boolean", nullable=false)
      * @JMS\Expose()
      * @SWG\Property(description="Is the route operating on Wednesday", type="boolean")
      */
@@ -48,7 +48,7 @@ class RouteOperationDays
 
     /**
      * @var bool
-     * @ORM\Column(name="do", type="boolean", nullable=false)
+     * @ORM\Column(name="rod_thursday", type="boolean", nullable=false)
      * @JMS\Expose()
      * @SWG\Property(description="Is the route operating on Thursday", type="boolean")
      */
@@ -56,7 +56,7 @@ class RouteOperationDays
 
     /**
      * @var bool
-     * @ORM\Column(name="vr", type="boolean", nullable=false)
+     * @ORM\Column(name="rod_friday", type="boolean", nullable=false)
      * @JMS\Expose()
      * @SWG\Property(description="Is the route operating on Friday", type="boolean")
      */
@@ -64,7 +64,7 @@ class RouteOperationDays
 
     /**
      * @var bool
-     * @ORM\Column(name="za", type="boolean", nullable=false)
+     * @ORM\Column(name="rod_saturday", type="boolean", nullable=false)
      * @JMS\Expose()
      * @SWG\Property(description="Is the route operating on Saturday", type="boolean")
      */
@@ -72,7 +72,7 @@ class RouteOperationDays
 
     /**
      * @var bool
-     * @ORM\Column(name="zf", type="boolean", nullable=false)
+     * @ORM\Column(name="rod_sunday", type="boolean", nullable=false)
      * @JMS\Expose()
      * @SWG\Property(description="Is the route operating on Sunday", type="boolean")
      */

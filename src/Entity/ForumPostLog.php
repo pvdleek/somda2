@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Table(name="somda_forum_log")
+ * @ORM\Table(name="fpl_forum_post_log", indexes={@ORM\Index(name="IDX_fpl_fop_id", columns={"fpl_fop_id"})})
  * @ORM\Entity
  */
 class ForumPostLog
@@ -17,7 +17,7 @@ class ForumPostLog
 
     /**
      * @var int|null
-     * @ORM\Column(name="id", type="bigint", nullable=false)
+     * @ORM\Column(name="fpl_id", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -26,13 +26,13 @@ class ForumPostLog
     /**
      * @var ForumPost
      * @ORM\ManyToOne(targetEntity="App\Entity\ForumPost", inversedBy="logs")
-     * @ORM\JoinColumn(name="postid", referencedColumnName="postid")
+     * @ORM\JoinColumn(name="fpl_fop_id", referencedColumnName="fop_id")
      */
     public ForumPost $post;
 
     /**
      * @var int
-     * @ORM\Column(name="actie", type="integer", nullable=false, options={"default"=ForumPostLog::ACTION_POST_NEW})
+     * @ORM\Column(name="fpl_action", type="integer", nullable=false, options={"default"=ForumPostLog::ACTION_POST_NEW})
      * @Assert\Choice(choices=ForumPostLog::ACTION_VALUES)
      */
     public int $action = self::ACTION_POST_NEW;

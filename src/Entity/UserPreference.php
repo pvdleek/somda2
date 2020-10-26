@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Table(name="somda_prefs", indexes={@ORM\Index(name="idx_48215_sleutel", columns={"sleutel"})})
+ * @ORM\Table(name="usp_user_preference", indexes={@ORM\Index(name="IDX_usp_key", columns={"usp_key"})})
  * @ORM\Entity
  */
 class UserPreference
@@ -59,7 +59,7 @@ class UserPreference
 
     /**
      * @var int|null
-     * @ORM\Column(name="prefid", type="bigint", nullable=false)
+     * @ORM\Column(name="usp_id", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -67,32 +67,32 @@ class UserPreference
 
     /**
      * @var string
-     * @ORM\Column(name="sleutel", type="string", length=25, nullable=false)
+     * @ORM\Column(name="usp_key", type="string", length=25, nullable=false)
      * @Assert\Choice(choices=UserPreference::KEY_VALUES)
      */
     public string $key;
 
     /**
      * @var string
-     * @ORM\Column(name="type", type="string", length=50, nullable=false)
+     * @ORM\Column(name="usp_type", type="string", length=50, nullable=false)
      */
     public string $type = '';
 
     /**
      * @var string
-     * @ORM\Column(name="description", type="string", length=90, nullable=false)
+     * @ORM\Column(name="usp_description", type="string", length=90, nullable=false)
      */
     public string $description = '';
 
     /**
      * @var string
-     * @ORM\Column(name="default_value", type="string", length=200, nullable=false)
+     * @ORM\Column(name="usp_default_value", type="string", length=200, nullable=false)
      */
     public string $defaultValue = '';
 
     /**
      * @var int
-     * @ORM\Column(name="volgorde", type="integer", nullable=false)
+     * @ORM\Column(name="usp_order", type="integer", nullable=false)
      */
     public int $order = 0;
 }

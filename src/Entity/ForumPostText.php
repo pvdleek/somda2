@@ -8,7 +8,7 @@ use JMS\Serializer\Annotation as JMS;
 use Swagger\Annotations as SWG;
 
 /**
- * @ORM\Table(name="somda_forum_posts_text")
+ * @ORM\Table(name="fpt_forum_post_text")
  * @ORM\Entity
  */
 class ForumPostText
@@ -16,7 +16,7 @@ class ForumPostText
     /**
      * @var ForumPost
      * @ORM\OneToOne(targetEntity="App\Entity\ForumPost", inversedBy="text")
-     * @ORM\JoinColumn(name="postid", referencedColumnName="postid")
+     * @ORM\JoinColumn(name="fpt_fop_id", referencedColumnName="fop_id")
      * @ORM\Id
      * @JMS\Exclude()
      */
@@ -24,7 +24,7 @@ class ForumPostText
 
     /**
      * @var bool
-     * @ORM\Column(name="new_style", type="boolean", options={"default"=true})
+     * @ORM\Column(name="fpt_new_style", type="boolean", options={"default"=true})
      * @JMS\Expose()
      * @SWG\Property(description="Whether the post was created using the new WYSIWYG editor", type="boolean")
      */
@@ -32,7 +32,7 @@ class ForumPostText
 
     /**
      * @var string
-     * @ORM\Column(name="text", type="text", length=0, nullable=false)
+     * @ORM\Column(name="fpt_text", type="text", length=0, nullable=false)
      * @JMS\Expose()
      * @SWG\Property(description="Text of the post", type="text")
      */

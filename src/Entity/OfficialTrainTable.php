@@ -10,15 +10,14 @@ use Swagger\Annotations as SWG;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Table(
- *     name="ott_official_train_table",
- *     indexes={
- *         @ORM\Index(name="idx_ott_time", columns={"ott_time"}),
- *         @ORM\Index(name="idx_ott_ofo_id", columns={"ott_ofo_id"}),
- *         @ORM\Index(name="idx_ott_location_id", columns={"ott_location_id"}),
- *         @ORM\Index(name="idx_ott_route_id", columns={"ott_route_id"})
- *     }
- * )
+ * @ORM\Table(name="ott_official_train_table", indexes={
+ *     @ORM\Index(name="IDX_ott_time", columns={"ott_time"}),
+ *     @ORM\Index(name="IDX_ott_ofo_id", columns={"ott_ofo_id"}),
+ *     @ORM\Index(name="IDX_ott_loc_id", columns={"ott_loc_id"}),
+ *     @ORM\Index(name="IDX_ott_rou_id", columns={"ott_rou_id"}),
+ *     @ORM\Index(name="IDX_ott_trn_id", columns={"ott_trn_id"}),
+ *     @ORM\Index(name="IDX_ott_cha_id", columns={"ott_cha_id"}),
+ * })
  * @ORM\Entity
  */
 class OfficialTrainTable
@@ -92,7 +91,7 @@ class OfficialTrainTable
     /**
      * @var Transporter
      * @ORM\ManyToOne(targetEntity="App\Entity\Transporter")
-     * @ORM\JoinColumn(name="ott_transporter_id", referencedColumnName="vervoerder_id")
+     * @ORM\JoinColumn(name="ott_trn_id", referencedColumnName="trn_id")
      * @JMS\Expose()
      * @SWG\Property(
      *     description="The transporter of this trainTable",
@@ -104,7 +103,7 @@ class OfficialTrainTable
     /**
      * @var Characteristic
      * @ORM\ManyToOne(targetEntity="App\Entity\Characteristic")
-     * @ORM\JoinColumn(name="ott_characteristic_id", referencedColumnName="karakteristiek_id")
+     * @ORM\JoinColumn(name="ott_cha_id", referencedColumnName="cha_id")
      * @JMS\Expose()
      * @SWG\Property(
      *     description="The characteristic of this trainTable",
@@ -116,7 +115,7 @@ class OfficialTrainTable
     /**
      * @var Route
      * @ORM\ManyToOne(targetEntity="App\Entity\Route", inversedBy="trainTables")
-     * @ORM\JoinColumn(name="ott_route_id", referencedColumnName="treinid")
+     * @ORM\JoinColumn(name="ott_rou_id", referencedColumnName="rou_id")
      * @JMS\Exclude()
      */
     public Route $route;
@@ -124,7 +123,7 @@ class OfficialTrainTable
     /**
      * @var Location
      * @ORM\ManyToOne(targetEntity="App\Entity\Location", inversedBy="trainTables")
-     * @ORM\JoinColumn(name="ott_location_id", referencedColumnName="afkid")
+     * @ORM\JoinColumn(name="ott_loc_id", referencedColumnName="loc_id")
      * @JMS\Expose()
      * @SWG\Property(
      *     description="The location of the trainTable action",

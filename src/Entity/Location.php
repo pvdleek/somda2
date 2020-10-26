@@ -11,11 +11,11 @@ use Swagger\Annotations as SWG;
 
 /**
  * @ORM\Table(
- *     name="somda_verk",
- *     uniqueConstraints={@ORM\UniqueConstraint(name="idx_49103_afkorting_2", columns={"afkorting", "landid"})},
+ *     name="loc_location",
+ *     uniqueConstraints={@ORM\UniqueConstraint(name="UNQ_loc_name_loa_id", columns={"loc_name", "loc_loa_id"})},
  *     indexes={
- *         @ORM\Index(name="idx_49103_landid", columns={"landid"}),
- *         @ORM\Index(name="idx_49103_description", columns={"description"})
+ *         @ORM\Index(name="IDX_loc_loa_id", columns={"loc_loa_id"}),
+ *         @ORM\Index(name="IDX_loc_description", columns={"loc_description"})
  *     }
  * )
  * @ORM\Entity(repositoryClass="App\Repository\Location")
@@ -26,7 +26,7 @@ class Location
 
     /**
      * @var int|null
-     * @ORM\Column(name="afkid", type="bigint", nullable=false)
+     * @ORM\Column(name="loc_id", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @JMS\Expose()
@@ -36,7 +36,7 @@ class Location
 
     /**
      * @var string
-     * @ORM\Column(name="afkorting", type="string", length=10, nullable=false)
+     * @ORM\Column(name="loc_name", type="string", length=10, nullable=false)
      * @JMS\Expose()
      * @SWG\Property(description="Abbreviation of the location", maxLength=10, type="string")
      */
@@ -44,7 +44,7 @@ class Location
 
     /**
      * @var float|null
-     * @ORM\Column(name="latitude", type="float", precision=10, scale=0, nullable=true)
+     * @ORM\Column(name="loc_latitude", type="float", precision=10, scale=0, nullable=true)
      * @JMS\Expose()
      * @SWG\Property(description="Latitude of the location", type="float")
      */
@@ -52,7 +52,7 @@ class Location
 
     /**
      * @var float|null
-     * @ORM\Column(name="longitude", type="float", precision=10, scale=0, nullable=true)
+     * @ORM\Column(name="loc_longitude", type="float", precision=10, scale=0, nullable=true)
      * @JMS\Expose()
      * @SWG\Property(description="Longitude of the location", type="float")
      */
@@ -60,7 +60,7 @@ class Location
 
     /**
      * @var string
-     * @ORM\Column(name="description", type="string", length=100, nullable=false)
+     * @ORM\Column(name="loc_description", type="string", length=100, nullable=false)
      * @JMS\Expose()
      * @SWG\Property(description="Description of the location", maxLength=100, type="string")
      */
@@ -68,7 +68,7 @@ class Location
 
     /**
      * @var string|null
-     * @ORM\Column(name="traject", type="string", length=15, nullable=true)
+     * @ORM\Column(name="loc_route_description", type="string", length=15, nullable=true)
      * @JMS\Expose()
      * @SWG\Property(description="Route where this location is located", maxLength=15, type="string")
      */
@@ -76,7 +76,7 @@ class Location
 
     /**
      * @var bool
-     * @ORM\Column(name="spot_allowed", type="boolean", nullable=false)
+     * @ORM\Column(name="loc_spot_allowed", type="boolean", nullable=false)
      * @JMS\Expose()
      * @SWG\Property(description="Is the location currently active (allowed to add spots)", type="boolean")
      */
@@ -84,7 +84,7 @@ class Location
 
     /**
      * @var int|null
-     * @ORM\Column(name="route_overstaptijd", type="integer", nullable=true)
+     * @ORM\Column(name="loc_tranfer_time", type="integer", nullable=true)
      * @JMS\Exclude()
      */
     public ?int $transferTime;
@@ -92,7 +92,7 @@ class Location
     /**
      * @var LocationCategory
      * @ORM\ManyToOne(targetEntity="App\Entity\LocationCategory", inversedBy="locations")
-     * @ORM\JoinColumn(name="landid", referencedColumnName="verk_catid")
+     * @ORM\JoinColumn(name="loc_loa_id", referencedColumnName="loa_id")
      * @JMS\Expose()
      * @SWG\Property(
      *     description="The category to which this location belongs",

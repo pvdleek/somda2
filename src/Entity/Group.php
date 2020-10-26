@@ -6,14 +6,14 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table(name="somda_groups")
+ * @ORM\Table(name="gro_group")
  * @ORM\Entity
  */
 class Group
 {
     /**
      * @var int|null
-     * @ORM\Column(name="groupid", type="bigint", nullable=false)
+     * @ORM\Column(name="gro_id", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -21,22 +21,22 @@ class Group
 
     /**
      * @var string
-     * @ORM\Column(name="name", type="string", length=15, nullable=false)
+     * @ORM\Column(name="gro_name", type="string", length=15, nullable=false)
      */
     public string $name = '';
 
     /**
      * @var array
-     * @ORM\Column(name="roles", type="array", nullable=false)
+     * @ORM\Column(name="gro_roles", type="array", nullable=false)
      */
     public array $roles = [];
 
     /**
      * @var User
      * @ORM\ManyToMany(targetEntity="User", inversedBy="groups")
-     * @ORM\JoinTable(name="somda_users_groups",
-     *      joinColumns={@ORM\JoinColumn(name="groupid", referencedColumnName="groupid")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="uid", referencedColumnName="uid")}
+     * @ORM\JoinTable(name="usg_user_group",
+     *      joinColumns={@ORM\JoinColumn(name="usg_gro_id", referencedColumnName="gro_id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="usg_use_id", referencedColumnName="use_id")}
      * )
      */
     private $users;

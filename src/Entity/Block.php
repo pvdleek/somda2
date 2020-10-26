@@ -6,7 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table(name="blo_block")
+ * @ORM\Table(name="blo_block", indexes={@ORM\Index(name="IDX_blo_parent_blo_id", columns={"blo_parent_blo_id"})})
  * @ORM\Entity(repositoryClass="App\Repository\Block")
  */
 class Block

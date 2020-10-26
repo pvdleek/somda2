@@ -10,7 +10,7 @@ use Swagger\Annotations as SWG;
 /**
  * @ORM\Table(
  *     name="cha_characteristic",
- *     uniqueConstraints={@ORM\UniqueConstraint(name="idx_48102_omschrijving", columns={"cha_name"})}
+ *     uniqueConstraints={@ORM\UniqueConstraint(name="UNQ_cha_name", columns={"cha_name"})}
  * )
  * @ORM\Entity
  */

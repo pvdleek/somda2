@@ -8,14 +8,14 @@ use JMS\Serializer\Annotation as JMS;
 use Swagger\Annotations as SWG;
 
 /**
- * @ORM\Table(name="somda_snb_spoor_nieuws_bron")
+ * @ORM\Table(name="rns_rail_news_source")
  * @ORM\Entity
  */
 class RailNewsSource
 {
     /**
      * @var int|null
-     * @ORM\Column(name="snb_id", type="bigint", nullable=false)
+     * @ORM\Column(name="rns_id", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @JMS\Expose()
@@ -25,7 +25,7 @@ class RailNewsSource
 
     /**
      * @var string
-     * @ORM\Column(name="snb_bron", type="string", length=7, nullable=false)
+     * @ORM\Column(name="rns_name", type="string", length=7, nullable=false)
      * @JMS\Expose()
      * @SWG\Property(description="The abbreviation of the news-source", maxLength=7, type="string")
      */
@@ -33,14 +33,14 @@ class RailNewsSource
 
     /**
      * @var string
-     * @ORM\Column(name="snb_logo", type="string", length=25, nullable=false)
+     * @ORM\Column(name="rns_logo", type="string", length=25, nullable=false)
      * @JMS\Exclude()
      */
     public string $logo;
 
     /**
      * @var string
-     * @ORM\Column(name="snb_url", type="string", length=30, nullable=false)
+     * @ORM\Column(name="rns_url", type="string", length=30, nullable=false)
      * @JMS\Expose()
      * @SWG\Property(description="The base-URL of the news-source", maxLength=30, type="string")
      */
@@ -48,7 +48,7 @@ class RailNewsSource
 
     /**
      * @var string
-     * @ORM\Column(name="snb_description", type="string", length=100, nullable=false)
+     * @ORM\Column(name="rns_description", type="string", length=100, nullable=false)
      * @JMS\Expose()
      * @SWG\Property(description="The name of the news-source", maxLength=100, type="string")
      */

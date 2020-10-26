@@ -11,7 +11,12 @@ use Nelmio\ApiDocBundle\Annotation\Model;
 use Swagger\Annotations as SWG;
 
 /**
- * @ORM\Table(name="somda_tdr_s_e")
+ * @ORM\Table(name="ttf_train_table_first_last", indexes={
+ *     @ORM\Index(name="IDX_ttf_tty_id", columns={"ttf_tty_id"}),
+ *     @ORM\Index(name="IDX_ttf_rou_id", columns={"ttf_rou_id"}),
+ *     @ORM\Index(name="IDX_ttf_first_loc_id", columns={"ttf_first_loc_id"}),
+ *     @ORM\Index(name="IDX_ttf_last_loc_id", columns={"ttf_last_loc_id"}),
+ * })
  * @ORM\Entity
  */
 class TrainTableFirstLast
@@ -21,7 +26,7 @@ class TrainTableFirstLast
     /**
      * @var TrainTableYear
      * @ORM\ManyToOne(targetEntity="App\Entity\TrainTableYear")
-     * @ORM\JoinColumn(name="tdr_nr", referencedColumnName="tdr_nr")
+     * @ORM\JoinColumn(name="ttf_tty_id", referencedColumnName="tty_id")
      * @ORM\Id
      * @JMS\Expose()
      * @SWG\Property(description="Unique identifier", type="integer")
@@ -31,7 +36,7 @@ class TrainTableFirstLast
     /**
      * @var Route
      * @ORM\ManyToOne(targetEntity="App\Entity\Route", inversedBy="trainTableFirstLasts")
-     * @ORM\JoinColumn(name="treinid", referencedColumnName="treinid")
+     * @ORM\JoinColumn(name="ttf_rou_id", referencedColumnName="rou_id")
      * @ORM\Id
      * @JMS\Exclude()
      */
@@ -39,7 +44,7 @@ class TrainTableFirstLast
 
     /**
      * @var int
-     * @ORM\Column(name="dag", type="integer", nullable=false, options={"default"="1"})
+     * @ORM\Column(name="ttf_day_number", type="integer", nullable=false, options={"default"="1"})
      * @ORM\Id
      * @JMS\Expose()
      * @SWG\Property(description="The day-number", enum={1,2,3,4,5,6,7}, type="integer")
@@ -49,7 +54,7 @@ class TrainTableFirstLast
     /**
      * @var Location
      * @ORM\ManyToOne(targetEntity="App\Entity\Location")
-     * @ORM\JoinColumn(name="v_locatieid", referencedColumnName="afkid")
+     * @ORM\JoinColumn(name="ttf_first_loc_id", referencedColumnName="loc_id")
      * @JMS\Expose()
      * @SWG\Property(description="The start-location of the route", ref=@Model(type=Location::class))
      */
@@ -57,7 +62,7 @@ class TrainTableFirstLast
 
     /**
      * @var string
-     * @ORM\Column(name="v_actie", type="string", length=1, nullable=false, options={"default"="-"})
+     * @ORM\Column(name="ttf_first_action", type="string", length=1, nullable=false, options={"default"="-"})
      * @Assert\Choice(choices=TrainTable::ACTION_VALUES)
      * @JMS\Expose()
      * @SWG\Property(
@@ -72,7 +77,7 @@ class TrainTableFirstLast
 
     /**
      * @var int
-     * @ORM\Column(name="v_tijd", type="integer", nullable=false, options={"default"="0"})
+     * @ORM\Column(name="ttf_first_time", type="integer", nullable=false, options={"default"="0"})
      * @JMS\Exclude()
      * @SWG\Property(
      *     description="The start-time of the route (hh:mm, 24-hour clock, GMT+1 Amsterdam timezone)",
@@ -85,7 +90,7 @@ class TrainTableFirstLast
     /**
      * @var Location
      * @ORM\ManyToOne(targetEntity="App\Entity\Location")
-     * @ORM\JoinColumn(name="a_locatieid", referencedColumnName="afkid")
+     * @ORM\JoinColumn(name="ttf_last_loc_id", referencedColumnName="loc_id")
      * @JMS\Expose()
      * @SWG\Property(description="The end-location of the route", ref=@Model(type=Location::class))
      */
@@ -93,7 +98,7 @@ class TrainTableFirstLast
 
     /**
      * @var string
-     * @ORM\Column(name="a_actie", type="string", length=1, nullable=false, options={"default"="-"})
+     * @ORM\Column(name="ttf_last_action", type="string", length=1, nullable=false, options={"default"="-"})
      * @Assert\Choice(choices=TrainTable::ACTION_VALUES)
      * @JMS\Expose()
      * @SWG\Property(
@@ -108,7 +113,7 @@ class TrainTableFirstLast
 
     /**
      * @var int
-     * @ORM\Column(name="a_tijd", type="integer", nullable=false, options={"default"="0"})
+     * @ORM\Column(name="ttf_last_time", type="integer", nullable=false, options={"default"="0"})
      * @JMS\Exclude()
      * @SWG\Property(
      *     description="The end-time of the route (hh:mm, 24-hour clock, GMT+1 Amsterdam timezone)",

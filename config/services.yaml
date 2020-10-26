@@ -18,4 +18,4 @@ services:
   Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler:
     arguments:
       - '%env(DATABASE_URL)%'
-      - { db_table: 'somda_session' }
+      - { db_table: 'ses_session', db_id_col: 'ses_id', db_data_col: 'ses_data', db_time_col: 'ses_timestamp', db_lifetime_col: 'ses_lifetime' }

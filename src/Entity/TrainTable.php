@@ -10,14 +10,13 @@ use Swagger\Annotations as SWG;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Table(
- *     name="somda_tdr",
- *     indexes={
- *         @ORM\Index(name="idx_48320_tijd", columns={"tijd"}),
- *         @ORM\Index(name="idx_48320_locatieid", columns={"locatieid"}),
- *         @ORM\Index(name="idx_48320_treinid", columns={"treinid"})
- *     }
- * )
+ * @ORM\Table(name="trt_train_table", indexes={
+ *     @ORM\Index(name="IDX_trt_time", columns={"trt_time"}),
+ *     @ORM\Index(name="IDX_trt_loc_id", columns={"trt_loc_id"}),
+ *     @ORM\Index(name="IDX_trt_rou_id", columns={"trt_rou_id"}),
+ *     @ORM\Index(name="IDX_trt_tty_id", columns={"trt_tty_id"}),
+ *     @ORM\Index(name="IDX_trt_rod_id", columns={"trt_rod_id"}),
+ * })
  * @ORM\Entity(repositoryClass="App\Repository\TrainTable")
  */
 class TrainTable
@@ -28,7 +27,7 @@ class TrainTable
 
     /**
      * @var int|null
-     * @ORM\Column(name="tdrid", type="bigint", nullable=false)
+     * @ORM\Column(name="trt_id", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @JMS\Expose()
@@ -38,7 +37,7 @@ class TrainTable
 
     /**
      * @var int
-     * @ORM\Column(name="orderid", type="integer", nullable=false, options={"default"="1"})
+     * @ORM\Column(name="trt_order", type="integer", nullable=false, options={"default"="1"})
      * @JMS\Expose()
      * @SWG\Property(description="The order in which the items should be displayed", type="integer")
      */
@@ -46,7 +45,7 @@ class TrainTable
 
     /**
      * @var string
-     * @ORM\Column(name="actie", type="string", length=1, nullable=false, options={"default"="-"})
+     * @ORM\Column(name="trt_action", type="string", length=1, nullable=false, options={"default"="-"})
      * @Assert\Choice(choices=TrainTable::ACTION_VALUES)
      * @JMS\Expose()
      * @SWG\Property(
@@ -61,7 +60,7 @@ class TrainTable
 
     /**
      * @var int
-     * @ORM\Column(name="tijd", type="integer", nullable=false, options={"default"="0"})
+     * @ORM\Column(name="trt_time", type="integer", nullable=false, options={"default"="0"})
      * @JMS\Exclude()
      * @SWG\Property(
      *     description="The time of the trainTable action (hh:mm, 24-hour clock, GMT+1 Amsterdam timezone)",
@@ -73,7 +72,7 @@ class TrainTable
 
     /**
      * @var string|null
-     * @ORM\Column(name="spoor", type="string", length=3, nullable=true)
+     * @ORM\Column(name="trt_track", type="string", length=3, nullable=true)
      * @JMS\Exclude()
      */
     public ?string $track;
@@ -81,7 +80,7 @@ class TrainTable
     /**
      * @var TrainTableYear
      * @ORM\ManyToOne(targetEntity="App\Entity\TrainTableYear")
-     * @ORM\JoinColumn(name="tdr_nr", referencedColumnName="tdr_nr")
+     * @ORM\JoinColumn(name="trt_tty_id", referencedColumnName="tty_id")
      * @JMS\Expose()
      * @SWG\Property(
      *     description="The trainTableYear to which this trainTable belongs",
@@ -93,7 +92,7 @@ class TrainTable
     /**
      * @var Route
      * @ORM\ManyToOne(targetEntity="App\Entity\Route", inversedBy="trainTables")
-     * @ORM\JoinColumn(name="treinid", referencedColumnName="treinid")
+     * @ORM\JoinColumn(name="trt_rou_id", referencedColumnName="rou_id")
      * @JMS\Exclude()
      */
     public Route $route;
@@ -101,7 +100,7 @@ class TrainTable
     /**
      * @var RouteOperationDays
      * @ORM\ManyToOne(targetEntity="App\Entity\RouteOperationDays")
-     * @ORM\JoinColumn(name="rijdagenid", referencedColumnName="rijdagenid")
+     * @ORM\JoinColumn(name="trt_rod_id", referencedColumnName="rod_id")
      * @JMS\Expose()
      * @SWG\Property(
      *     description="The days on which this route operates",
@@ -113,7 +112,7 @@ class TrainTable
     /**
      * @var Location
      * @ORM\ManyToOne(targetEntity="App\Entity\Location", inversedBy="trainTables")
-     * @ORM\JoinColumn(name="locatieid", referencedColumnName="afkid")
+     * @ORM\JoinColumn(name="trt_loc_id", referencedColumnName="loc_id")
      * @JMS\Expose()
      * @SWG\Property(
      *     description="The location of the trainTable action",

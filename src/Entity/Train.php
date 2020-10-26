@@ -11,9 +11,12 @@ use Swagger\Annotations as SWG;
 
 /**
  * @ORM\Table(
- *     name="somda_mat",
- *     uniqueConstraints={@ORM\UniqueConstraint(name="idx_48117_nummer", columns={"nummer"})},
- *     indexes={@ORM\Index(name="idx_48117_vervoerder_id", columns={"vervoerder_id"})}
+ *     name="tra_train",
+ *     uniqueConstraints={@ORM\UniqueConstraint(name="UNQ_tra_number", columns={"tra_number"})},
+ *     indexes={
+ *         @ORM\Index(name="IDX_tra_trn_id", columns={"tra_trn_id"}),
+ *         @ORM\Index(name="IDX_tra_tnp_id", columns={"tra_tnp_id"}),
+ *     }
  * )
  * @ORM\Entity
  */
@@ -21,7 +24,7 @@ class Train
 {
     /**
      * @var int|null
-     * @ORM\Column(name="matid", type="bigint", nullable=false)
+     * @ORM\Column(name="tra_id", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @JMS\Expose()
@@ -31,7 +34,7 @@ class Train
 
     /**
      * @var string
-     * @ORM\Column(name="nummer", type="string", length=20, nullable=false)
+     * @ORM\Column(name="tra_number", type="string", length=20, nullable=false)
      * @JMS\Expose()
      * @SWG\Property(description="Number of the train", maxLength=20, type="string")
      */
@@ -39,7 +42,7 @@ class Train
 
     /**
      * @var string|null
-     * @ORM\Column(name="naam", type="string", length=35, nullable=true)
+     * @ORM\Column(name="tra_name", type="string", length=35, nullable=true)
      * @JMS\Expose()
      * @SWG\Property(description="Name of the train if known", maxLength=35, type="string")
      */
@@ -48,7 +51,7 @@ class Train
     /**
      * @var Transporter|null
      * @ORM\ManyToOne(targetEntity="App\Entity\Transporter")
-     * @ORM\JoinColumn(name="vervoerder_id", referencedColumnName="vervoerder_id")
+     * @ORM\JoinColumn(name="tra_trn_id", referencedColumnName="trn_id")
      * @JMS\Expose()
      * @SWG\Property(description="The transporter of this train if known", ref=@Model(type=Transporter::class))
      */
@@ -57,7 +60,7 @@ class Train
     /**
      * @var TrainNamePattern|null
      * @ORM\ManyToOne(targetEntity="App\Entity\TrainNamePattern")
-     * @ORM\JoinColumn(name="pattern_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="tra_tnp_id", referencedColumnName="tnp_id")
      * @JMS\Exclude()
      */
     public ?TrainNamePattern $namePattern = null;

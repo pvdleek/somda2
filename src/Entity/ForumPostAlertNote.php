@@ -7,14 +7,17 @@ use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table(name="somda_forum_alerts_notes", indexes={@ORM\Index(name="idx_47898_alertid", columns={"alertid"})})
+ * @ORM\Table(name="fpn_forum_post_alert_note", indexes={
+ *     @ORM\Index(name="IDX_fpn_fpa_id", columns={"fpn_fpa_id"}),
+ *     @ORM\Index(name="IDX_fpn_author_use_id", columns={"fpn_author_use_id"})
+ * })
  * @ORM\Entity
  */
 class ForumPostAlertNote
 {
     /**
      * @var int|null
-     * @ORM\Column(name="id", type="bigint", nullable=false)
+     * @ORM\Column(name="fpn_id", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -23,32 +26,32 @@ class ForumPostAlertNote
     /**
      * @var ForumPostAlert
      * @ORM\ManyToOne(targetEntity="App\Entity\ForumPostAlert", inversedBy="notes")
-     * @ORM\JoinColumn(name="alertid", referencedColumnName="id")
+     * @ORM\JoinColumn(name="fpn_fpa_id", referencedColumnName="fpa_id")
      */
     public ForumPostAlert $alert;
 
     /**
      * @var User
      * @ORM\ManyToOne(targetEntity="App\Entity\User")
-     * @ORM\JoinColumn(name="authorid", referencedColumnName="uid")
+     * @ORM\JoinColumn(name="fpn_author_use_id", referencedColumnName="use_id")
      */
     public User $author;
 
     /**
      * @var DateTime
-     * @ORM\Column(name="timestamp", type="datetime", nullable=false)
+     * @ORM\Column(name="fpn_timestamp", type="datetime", nullable=false)
      */
     public DateTime $timestamp;
 
     /**
      * @var bool
-     * @ORM\Column(name="sent_to_reporter", type="boolean", nullable=false)
+     * @ORM\Column(name="fpn_sent_to_reporter", type="boolean", nullable=false)
      */
     public bool $sentToReporter;
 
     /**
      * @var string
-     * @ORM\Column(name="text", type="text", length=0, nullable=false)
+     * @ORM\Column(name="fpn_text", type="text", length=0, nullable=false)
      */
     public string $text;
 }

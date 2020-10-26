@@ -11,14 +11,13 @@ use Swagger\Annotations as SWG;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Table(
- *     name="fop_forum_post",
- *     indexes={
- *         @ORM\Index(name="idx_47961_timestamp", columns={"tfop_imestamp"}),
- *         @ORM\Index(name="idx_47961_authorid", columns={"fop_author_use_id"}),
- *         @ORM\Index(name="idx_47961_discussionid", columns={"fop_fod_id"})
- *     }
- * )
+ * @ORM\Table(name="fop_forum_post", indexes={
+ *     @ORM\Index(name="IDX_fop_timestamp", columns={"fop_timestamp"}),
+ *     @ORM\Index(name="IDX_fop_author_use_id", columns={"fop_author_use_id"}),
+ *     @ORM\Index(name="IDX_fop_fod_id", columns={"fop_fod_id"}),
+ *     @ORM\Index(name="IDX_fop_editor_use_id", columns={"fop_editor_use_id"}),
+ *     @ORM\Index(name="IDX_fop_wiki_checker_use_id", columns={"fop_wiki_checker_use_id"})
+ * })
  * @ORM\Entity(repositoryClass="App\Repository\ForumPost")
  */
 class ForumPost

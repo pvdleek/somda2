@@ -6,7 +6,10 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Table(name="somda_forum_favorites")
+ * @ORM\Table(name="foa_forum_favorite", indexes={
+ *     @ORM\Index(name="IDX_foa_fod_id", columns={"foa_fod_id"}),
+ *     @ORM\Index(name="IDX_foa_use_id", columns={"foa_use_id"})
+ * })
  * @ORM\Entity
  */
 class ForumFavorite
@@ -19,7 +22,7 @@ class ForumFavorite
     /**
      * @var ForumDiscussion
      * @ORM\ManyToOne(targetEntity="App\Entity\ForumDiscussion", inversedBy="favorites")
-     * @ORM\JoinColumn(name="discussionid", referencedColumnName="discussionid")
+     * @ORM\JoinColumn(name="foa_fod_id", referencedColumnName="fod_id")
      * @ORM\Id
      */
     public ForumDiscussion $discussion;
@@ -27,14 +30,14 @@ class ForumFavorite
     /**
      * @var User
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="forumFavorites")
-     * @ORM\JoinColumn(name="uid", referencedColumnName="uid")
+     * @ORM\JoinColumn(name="foa_use_id", referencedColumnName="use_id")
      * @ORM\Id
      */
     public User $user;
 
     /**
      * @var int
-     * @ORM\Column(name="alerting", type="integer", nullable=false, options={"default"=ForumFavorite::ALERTING_OFF})
+     * @ORM\Column(name="foa_alerting", type="integer", nullable=false, options={"default"=ForumFavorite::ALERTING_OFF})
      * @Assert\Choice(choices=ForumFavorite::ALERTING_VALUES)
      */
     public int $alerting = self::ALERTING_OFF;

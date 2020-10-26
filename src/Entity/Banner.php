@@ -8,7 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table(name="ban_banner")
+ * @ORM\Table(name="ban_banner", indexes={@ORM\Index(name="IDX_ban_bac_id", columns={"ban_bac_id"})})
  * @ORM\Entity
  */
 class Banner

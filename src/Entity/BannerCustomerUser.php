@@ -6,7 +6,10 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table(name="bcu_banner_customer_user")
+ * @ORM\Table(name="bcu_banner_customer_user", indexes={
+ *     @ORM\Index(name="IDX_bcu_bac_id", columns={"bcu_bac_id"}),
+ *     @ORM\Index(name="IDX_bcu_use_id", columns={"bcu_use_id"})
+ * })
  * @ORM\Entity
  */
 class BannerCustomerUser
@@ -53,7 +56,7 @@ class BannerCustomerUser
      * @var User
      * @ORM\Id
      * @ORM\ManyToOne(targetEntity="App\Entity\User")
-     * @ORM\JoinColumn(name="uid", referencedColumnName="uid")
+     * @ORM\JoinColumn(name="bcu_use_id", referencedColumnName="use_id")
      */
     public User $user;
 }

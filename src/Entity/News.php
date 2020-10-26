@@ -9,14 +9,14 @@ use JMS\Serializer\Annotation as JMS;
 use Swagger\Annotations as SWG;
 
 /**
- * @ORM\Table(name="somda_news")
+ * @ORM\Table(name="new_news")
  * @ORM\Entity(repositoryClass="App\Repository\News")
  */
 class News
 {
     /**
      * @var int|null
-     * @ORM\Column(name="newsid", type="bigint", nullable=false)
+     * @ORM\Column(name="new_id", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @JMS\Expose()
@@ -26,7 +26,7 @@ class News
 
     /**
      * @var DateTime
-     * @ORM\Column(name="timestamp", type="datetime", nullable=false)
+     * @ORM\Column(name="new_timestamp", type="datetime", nullable=false)
      * @JMS\Expose()
      * @SWG\Property(description="ISO-8601 timestamp of the news-item (Y-m-dTH:i:sP)", type="string")
      */
@@ -34,7 +34,7 @@ class News
 
     /**
      * @var string
-     * @ORM\Column(name="title", type="string", length=50, nullable=false)
+     * @ORM\Column(name="new_title", type="string", length=50, nullable=false)
      * @JMS\Expose()
      * @SWG\Property(description="Title of the news-item", maxLength=50, type="string")
      */
@@ -42,7 +42,7 @@ class News
 
     /**
      * @var string
-     * @ORM\Column(name="text", type="text", length=0, nullable=false)
+     * @ORM\Column(name="new_text", type="text", length=0, nullable=false)
      * @JMS\Expose()
      * @SWG\Property(description="Contents of the news-item", type="string")
      */
@@ -50,7 +50,7 @@ class News
 
     /**
      * @var bool
-     * @ORM\Column(name="archief", type="boolean", nullable=false)
+     * @ORM\Column(name="new_archived", type="boolean", nullable=false)
      * @JMS\Expose()
      * @SWG\Property(description="Whether the news-item is in the archive", type="boolean")
      */
@@ -59,9 +59,9 @@ class News
     /**
      * @var User[]
      * @ORM\ManyToMany(targetEntity="User")
-     * @ORM\JoinTable(name="somda_news_read",
-     *      joinColumns={@ORM\JoinColumn(name="newsid", referencedColumnName="newsid")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="uid", referencedColumnName="uid")}
+     * @ORM\JoinTable(name="ner_news_read",
+     *      joinColumns={@ORM\JoinColumn(name="ner_new_id", referencedColumnName="new_id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="ner_use_id", referencedColumnName="use_id")}
      * )
      * @JMS\Exclude()
      */

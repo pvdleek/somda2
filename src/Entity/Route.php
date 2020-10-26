@@ -10,8 +10,8 @@ use Swagger\Annotations as SWG;
 
 /**
  * @ORM\Table(
- *     name="somda_trein",
- *     uniqueConstraints={@ORM\UniqueConstraint(name="idx_49046_treinnr", columns={"treinnr"})}
+ *     name="rou_route",
+ *     uniqueConstraints={@ORM\UniqueConstraint(name="UNQ_rou_number", columns={"rou_number"})}
  * )
  * @ORM\Entity
  */
@@ -24,7 +24,7 @@ class Route
 
     /**
      * @var int|null
-     * @ORM\Column(name="treinid", type="bigint", nullable=false)
+     * @ORM\Column(name="rou_id", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @JMS\Expose()
@@ -34,7 +34,7 @@ class Route
 
     /**
      * @var string
-     * @ORM\Column(name="treinnr", type="string", length=15, nullable=false)
+     * @ORM\Column(name="rou_number", type="string", length=15, nullable=false)
      * @JMS\Expose()
      * @SWG\Property(description="The route-number", maxLength=15, type="string")
      */

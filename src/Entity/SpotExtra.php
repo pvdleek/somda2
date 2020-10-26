@@ -8,7 +8,7 @@ use JMS\Serializer\Annotation as JMS;
 use Swagger\Annotations as SWG;
 
 /**
- * @ORM\Table(name="somda_spots_extra")
+ * @ORM\Table(name="spe_spot_extra")
  * @ORM\Entity
  */
 class SpotExtra
@@ -16,7 +16,7 @@ class SpotExtra
     /**
      * @var Spot
      * @ORM\OneToOne(targetEntity="App\Entity\Spot", inversedBy="extra")
-     * @ORM\JoinColumn(name="spotid", referencedColumnName="spotid")
+     * @ORM\JoinColumn(name="spe_spo_id", referencedColumnName="spo_id")
      * @ORM\Id
      * @JMS\Exclude()
      */
@@ -24,7 +24,7 @@ class SpotExtra
 
     /**
      * @var string
-     * @ORM\Column(name="extra", type="string", length=255, nullable=false)
+     * @ORM\Column(name="spe_extra", type="string", length=255, nullable=false)
      * @JMS\Expose()
      * @SWG\Property(description="Extra information", maxLength=255, type="string")
      */
@@ -32,7 +32,7 @@ class SpotExtra
 
     /**
      * @var string
-     * @ORM\Column(name="user_extra", type="string", length=255, nullable=false)
+     * @ORM\Column(name="spe_user_extra", type="string", length=255, nullable=false)
      * @JMS\Exclude()
      */
     public string $userExtra = '';

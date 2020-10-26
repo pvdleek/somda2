@@ -11,15 +11,18 @@ use Swagger\Annotations as SWG;
 
 /**
  * @ORM\Table(
- *     name="somda_spots",
+ *     name="spo_spot",
  *     uniqueConstraints={@ORM\UniqueConstraint(
- *         name="idx_48259_treinid",
- *         columns={"treinid", "posid", "locatieid", "matid", "uid", "datum"}
+ *         name="UNQ_spo_tra_id_pos_id_loc_id_rou_id_spotter_use_id_timestamp",
+ *         columns={"spo_tra_id", "spo_pos_id", "spo_loc_id", "spo_rou_id", "spo_spotter_use_id", "spo_timestamp"}
  *     )},
  *     indexes={
- *         @ORM\Index(name="idx_48259_matid", columns={"matid"}),
- *         @ORM\Index(name="idx_48259_datum", columns={"datum"}),
- *         @ORM\Index(name="idx_48259_uid", columns={"uid"})
+ *         @ORM\Index(name="IDX_spo_tra_id", columns={"spo_tra_id"}),
+ *         @ORM\Index(name="IDX_spo_rou_id", columns={"spo_rou_id"}),
+ *         @ORM\Index(name="IDX_spo_pos_id", columns={"spo_pos_id"}),
+ *         @ORM\Index(name="IDX_spo_loc_id", columns={"spo_loc_id"}),
+ *         @ORM\Index(name="IDX_spo_timestamp", columns={"spo_timestamp"}),
+ *         @ORM\Index(name="IDX_spo_spotter_use_id", columns={"spo_spotter_use_id"}),
  *     }
  * )
  * @ORM\Entity(repositoryClass="App\Repository\Spot")
@@ -34,7 +37,7 @@ class Spot
 
     /**
      * @var int|null
-     * @ORM\Column(name="spotid", type="bigint", nullable=false)
+     * @ORM\Column(name="spo_id", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @JMS\Expose()
@@ -44,7 +47,7 @@ class Spot
 
     /**
      * @var DateTime
-     * @ORM\Column(name="timestamp", type="datetime", nullable=false)
+     * @ORM\Column(name="spo_timestamp", type="datetime", nullable=false)
      * @JMS\Expose()
      * @SWG\Property(description="ISO-8601 timestamp of the moment the spot was saved (Y-m-dTH:i:sP)", type="string")
      */
@@ -52,7 +55,7 @@ class Spot
 
     /**
      * @var DateTime
-     * @ORM\Column(name="datum", type="datetime", nullable=false)
+     * @ORM\Column(name="spo_spot_date", type="datetime", nullable=false)
      * @JMS\Expose()
      * @SWG\Property(description="ISO-8601 timestamp of the spot (Y-m-dTH:i:sP)", type="string")
      */
@@ -60,7 +63,7 @@ class Spot
 
     /**
      * @var integer
-     * @ORM\Column(name="input_feedback_flag", type="integer", nullable=false)
+     * @ORM\Column(name="spo_input_feedback_flag", type="integer", nullable=false)
      * @JMS\Exclude()
      */
     public int $inputFeedbackFlag = 0;
@@ -68,7 +71,7 @@ class Spot
     /**
      * @var Train
      * @ORM\ManyToOne(targetEntity="App\Entity\Train", inversedBy="spots")
-     * @ORM\JoinColumn(name="matid", referencedColumnName="matid")
+     * @ORM\JoinColumn(name="spo_tra_id", referencedColumnName="tra_id")
      * @JMS\Expose()
      * @SWG\Property(description="The spotted train", ref=@Model(type=Train::class))
      */
@@ -77,7 +80,7 @@ class Spot
     /**
      * @var Route
      * @ORM\ManyToOne(targetEntity="App\Entity\Route", inversedBy="spots")
-     * @ORM\JoinColumn(name="treinid", referencedColumnName="treinid")
+     * @ORM\JoinColumn(name="spo_rou_id", referencedColumnName="rou_id")
      * @JMS\Expose()
      * @SWG\Property(description="The spotted route", ref=@Model(type=Route::class))
      */
@@ -86,7 +89,7 @@ class Spot
     /**
      * @var Position
      * @ORM\ManyToOne(targetEntity="App\Entity\Position")
-     * @ORM\JoinColumn(name="posid", referencedColumnName="posid")
+     * @ORM\JoinColumn(name="spo_pos_id", referencedColumnName="pos_id")
      * @JMS\Expose()
      * @SWG\Property(description="The position of the spotted train", ref=@Model(type=Position::class))
      */
@@ -95,7 +98,7 @@ class Spot
     /**
      * @var Location
      * @ORM\ManyToOne(targetEntity="App\Entity\Location", inversedBy="spots")
-     * @ORM\JoinColumn(name="locatieid", referencedColumnName="afkid")
+     * @ORM\JoinColumn(name="spo_loc_id", referencedColumnName="loc_id")
      * @JMS\Expose()
      * @SWG\Property(description="The spot-location", ref=@Model(type=Location::class))
      */
@@ -104,7 +107,7 @@ class Spot
     /**
      * @var User
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="spots")
-     * @ORM\JoinColumn(name="uid", referencedColumnName="uid")
+     * @ORM\JoinColumn(name="spo_spotter_use_id", referencedColumnName="use_id")
      * @JMS\Expose()
      * @SWG\Property(description="The spotter", ref=@Model(type=User::class))
      */

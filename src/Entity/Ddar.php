@@ -7,7 +7,10 @@ use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table(name="dda_ddar", indexes={@ORM\Index(name="idx_47846_matid", columns={"matid"})})
+ * @ORM\Table(name="dda_ddar", indexes={
+ *     @ORM\Index(name="IDX_dda_tra_id", columns={"dda_tra_id"}),
+ *     @ORM\Index(name="IDX_dda_loc_id", columns={"dda_loc_id"})
+ * })
  * @ORM\Entity
  */
 class Ddar
@@ -23,7 +26,7 @@ class Ddar
     /**
      * @var Train
      * @ORM\ManyToOne(targetEntity="App\Entity\Train")
-     * @ORM\JoinColumn(name="matid", referencedColumnName="matid")
+     * @ORM\JoinColumn(name="dda_tra_id", referencedColumnName="tra_id")
      */
     public Train $train;
 
@@ -36,7 +39,7 @@ class Ddar
     /**
      * @var Location
      * @ORM\ManyToOne(targetEntity="App\Entity\Location")
-     * @ORM\JoinColumn(name="afkid", referencedColumnName="afkid")
+     * @ORM\JoinColumn(name="dda_loc_id", referencedColumnName="loc_id")
      */
     public Location $location;
 

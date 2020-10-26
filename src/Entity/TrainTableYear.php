@@ -9,14 +9,14 @@ use JMS\Serializer\Annotation as JMS;
 use Swagger\Annotations as SWG;
 
 /**
- * @ORM\Table(name="somda_tdr_drgl")
+ * @ORM\Table(name="tty_train_table_year")
  * @ORM\Entity(repositoryClass="App\Repository\TrainTableYear")
  */
 class TrainTableYear
 {
     /**
      * @var int|null
-     * @ORM\Column(name="tdr_nr", type="bigint", nullable=false)
+     * @ORM\Column(name="tty_id", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @JMS\Expose()
@@ -26,7 +26,7 @@ class TrainTableYear
 
     /**
      * @var string
-     * @ORM\Column(name="naam", type="string", length=10, nullable=false)
+     * @ORM\Column(name="tty_name", type="string", length=10, nullable=false)
      * @JMS\Expose()
      * @SWG\Property(description="Name of the trainTableYear", maxLength=10, type="string")
      */
@@ -34,7 +34,7 @@ class TrainTableYear
 
     /**
      * @var DateTime
-     * @ORM\Column(name="start_datum", type="date", nullable=false)
+     * @ORM\Column(name="tty_start_date", type="date", nullable=false)
      * @JMS\Expose()
      * @SWG\Property(description="The start-date (00:00:00)")
      */
@@ -42,7 +42,7 @@ class TrainTableYear
 
     /**
      * @var DateTime
-     * @ORM\Column(name="eind_datum", type="date", nullable=false)
+     * @ORM\Column(name="tty_end_date", type="date", nullable=false)
      * @JMS\Expose()
      * @SWG\Property(description="The end-date (23:59:59)")
      */
