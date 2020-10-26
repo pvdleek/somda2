@@ -52,7 +52,7 @@ class ForumHelper implements RuntimeExtensionInterface
         if ($post->text->newStyle) {
             $text = strip_tags(
                 str_replace(['&nbsp;', "\r\n", '<p>&nbsp;</p>'], ' ', $post->text->text),
-                '<p><a><img><ul><ol><li><blockquote><strong><em><s><hr>'
+                '<br><p><a><img><ul><ol><li><blockquote><strong><em><s><hr>'
             );
 //            $text = $this->replaceLinks(str_replace('</p>', ' </p>', $text));
         } else {
