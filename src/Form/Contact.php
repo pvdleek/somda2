@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Generics\FormGenerics;
+use Gregwar\CaptchaBundle\Type\CaptchaType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -29,6 +30,10 @@ class Contact extends AbstractType
                     FormGenerics::KEY_ATTRIBUTES_COLS => 60,
                 ],
                 FormGenerics::KEY_LABEL => 'Jouw bericht',
+                FormGenerics::KEY_REQUIRED => true,
+            ])
+            ->add('captcha', CaptchaType::class, [
+                FormGenerics::KEY_LABEL => 'Neem de code in de afbeelding over',
                 FormGenerics::KEY_REQUIRED => true,
             ]);
     }

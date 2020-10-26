@@ -15,6 +15,7 @@
         "dompdf/dompdf": "^0.8.5",
         "friendsofsymfony/ckeditor-bundle": "^2.2",
         "friendsofsymfony/rest-bundle": "^3.0",
+        "gregwar/captcha-bundle": "^2.1",
         "jms/serializer-bundle": "^3.6",
         "mobiledetect/mobiledetectlib": "^2.8",
         "nelmio/api-doc-bundle": "^3.6",

@@ -208,6 +208,12 @@
             "config/packages/fos_rest.yaml"
         ]
     },
+    "gregwar/captcha": {
+        "version": "v1.1.8"
+    },
+    "gregwar/captcha-bundle": {
+        "version": "v2.1.3"
+    },
     "guzzlehttp/guzzle": {
         "version": "6.5.3"
     },
