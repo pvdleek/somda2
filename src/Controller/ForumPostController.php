@@ -166,7 +166,7 @@ class ForumPostController
 
         $text = (string)$request->request->get('text');
         $postText = new ForumPostText();
-        $postText->text = str_replace("\n", '', $text);
+        $postText->text = str_replace("\n", ' ', $text);
         $post = new ForumPost();
         $post->text = $postText;
         return new JsonResponse(['data' => $this->forumHelper->getDisplayForumPost($post)]);
