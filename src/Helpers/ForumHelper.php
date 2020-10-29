@@ -199,7 +199,8 @@ class ForumHelper implements RuntimeExtensionInterface
                     self::REPLACE_WORD_START . $word . self::REPLACE_WORD_END,
                     '\\1<!-- s\\2 --><span class="tooltip" title="' . htmlspecialchars($routes[$word]) .
                         '">\\2<!-- s\\2 --></span>\\3',
-                    $text
+                    $text,
+                    1
                 );
             }
         }
