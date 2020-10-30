@@ -61,27 +61,11 @@ class ForumDiscussionController extends AbstractFOSRestController
 
     /**
      * @param int $id
-     * @param int|null $pageNumber
-     * @param int|null $postId
      * @return Response
      * @throws Exception
-     * @SWG\Parameter(
-     *     default="",
-     *     description="Fill this to request a specific page-number",
-     *     in="path",
-     *     name="pageNumber",
-     *     type="integer",
-     * )
-     * @SWG\Parameter(
-     *     default="",
-     *     description="Fill this to request a specific post",
-     *     in="path",
-     *     name="postId",
-     *     type="integer",
-     * )
      * @SWG\Response(
      *     response=200,
-     *     description="Returns paginated posts in a discussion",
+     *     description="Returns non-paginated posts in a discussion",
      *     @SWG\Schema(
      *         @SWG\Property(
      *             property="meta",
@@ -92,23 +76,8 @@ class ForumDiscussionController extends AbstractFOSRestController
      *                 type="boolean",
      *             ),
      *             @SWG\Property(
-     *                 description="The number of posts displayed per page",
-     *                 property="posts_per_page",
-     *                 type="integer",
-     *             ),
-     *             @SWG\Property(
-     *                 description="The number of pages in this discussion",
-     *                 property="number_of_pages",
-     *                 type="integer",
-     *             ),
-     *             @SWG\Property(
      *                 description="The total number of posts in this discussion",
      *                 property="number_of_posts",
-     *                 type="integer",
-     *             ),
-     *             @SWG\Property(
-     *                 description="The currently displayed page-number",
-     *                 property="page_number",
      *                 type="integer",
      *             ),
      *             @SWG\Property(
@@ -126,20 +95,13 @@ class ForumDiscussionController extends AbstractFOSRestController
      *                 property="number_of_read_posts",
      *                 type="integer",
      *             ),
-     *             @SWG\Property(
-     *                 description="A string containing information which post to jump to: \
-     *                     - 'p{postid}' for the first unread post-id \
-     *                     - 'new_post' if all posts are read",
-     *                 property="forum_jump",
-     *                 type="string",
-     *             ),
      *         ),
      *         @SWG\Property(property="data", type="array", @SWG\Items(ref=@Model(type=ForumPost::class))),
      *     ),
      * )
      * @SWG\Tag(name="Forum")
      */
-    public function indexAction(int $id, int $pageNumber = null, int $postId = null): Response
+    public function indexAction(int $id): Response
     {
         $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_API_USER);
 
@@ -155,20 +117,16 @@ class ForumDiscussionController extends AbstractFOSRestController
             (bool)$this->userHelper->getPreferenceByKey(UserPreference::KEY_FORUM_NEW_TO_OLD)->value : false;
 
         $this->discussionHelper->setDiscussion($discussion);
-        $posts = $this->discussionHelper->getPosts($newToOld, $pageNumber, $postId);
+        $posts = $this->discussionHelper->getNonPaginatedPosts($newToOld);
 
         return $this->handleView($this->view([
             'meta' => [
                 'user_is_moderator' =>
                     $this->forumAuthHelper->userIsModerator($discussion->forum, $this->userHelper->getUser()),
-                'posts_per_page' => ForumGenerics::MAX_POSTS_PER_PAGE,
-                'number_of_pages' => $this->discussionHelper->getNumberOfPages(),
                 'number_of_posts' => $this->discussionHelper->getNumberOfPosts(),
-                'page_number' => $this->discussionHelper->getPageNumber(),
                 'new_to_old' => $newToOld,
                 'may_post' => $this->forumAuthHelper->mayPost($discussion->forum, $this->userHelper->getUser()),
                 'number_of_read_posts' => $this->discussionHelper->getNumberOfReadPosts(),
-                'forum_jump' => $this->discussionHelper->getForumJump(),
             ],
             'data' => $posts,
         ], 200));

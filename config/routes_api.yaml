@@ -104,18 +104,8 @@ api_forum_discussion:
   path: /{version}/forum-discussion/{id}/
   methods: [GET]
   controller: App\Controller\Api\ForumDiscussionController::indexAction
-api_forum_discussion_page:
-  path: /{version}/forum-discussion/{id}/{pageNumber}/
-  methods: [GET]
-  requirements: { id: \d+, pageNumber: \d+ }
-  controller: App\Controller\Api\ForumDiscussionController::indexAction
-api_forum_discussion_post:
-  path: /{version}/forum-discussion/{id}/p{postId}/
-  methods: [GET]
-  requirements: { id: \d+, postId: \d+ }
-  controller: App\Controller\Api\ForumDiscussionController::indexAction
 
-api_forum_discussion_post_reply:
+api_forum_discussion_reply:
   path: /{version}/forum-discussion/{discussionId}/reply/
   methods: [POST]
   requirements: { discussionId: \d+ }

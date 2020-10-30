@@ -126,6 +126,28 @@ class ForumDiscussionHelper
     }
 
     /**
+     * @param bool $newToOld
+     * @return ForumPost[]
+     */
+    public function getNonPaginatedPosts(bool $newToOld): array
+    {
+        $this->setNumberOfPostsAndPages();
+        $this->setNumberOfReadPosts();
+
+        $this->discussion->viewed = (int)$this->discussion->viewed + 1;
+        $this->doctrine->getManager()->flush();
+
+        /**
+         * @var ForumPost[] $posts
+         */
+        $posts = $this->doctrine->getRepository(ForumPost::class)->findBy(
+            [ForumPostForm::FIELD_DISCUSSION => $this->discussion],
+            [ForumPostForm::FIELD_TIMESTAMP => $newToOld ? 'DESC' : 'ASC']
+        );
+        return $posts;
+    }
+
+    /**
      * @return int
      * @throws WrongMethodError
      */
