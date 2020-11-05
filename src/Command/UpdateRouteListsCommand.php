@@ -47,7 +47,11 @@ class UpdateRouteListsCommand extends Command
     {
         $connection = $this->doctrine->getManager()->getConnection();
 
-        $query = 'INSERT IGNORE INTO `somda_tdr_trein_treinnummerlijst` (`treinnummerlijst_id`, `treinid`)
+        $query = 'DELETE FROM `somda_tdr_trein_treinnummerlijst`';
+        $statement = $connection->prepare($query);
+        $statement->execute();
+
+        $query = 'INSERT INTO `somda_tdr_trein_treinnummerlijst` (`treinnummerlijst_id`, `treinid`)
         SELECT `l`.`id`, `tr`.`treinid`
             FROM `somda_tdr_treinnummerlijst` `l`
             JOIN `somda_trein` `tr` ON `tr`.`treinnr` BETWEEN `l`.`nr_start` AND `l`.`nr_eind`
