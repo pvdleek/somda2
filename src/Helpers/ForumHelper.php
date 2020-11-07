@@ -9,8 +9,8 @@ use Twig\Extension\RuntimeExtensionInterface;
 
 class ForumHelper implements RuntimeExtensionInterface
 {
-    private const REPLACE_WORD_START = '/(^|[<\s.-?:;().-\/\[\]])(';
-    private const REPLACE_WORD_END = ')($|[<\s,-?:;().-\/\[\]])/m';
+    private const REPLACE_WORD_START = '/(.*)\b(';
+    private const REPLACE_WORD_END = ')\b(.*)/m';
 
     /**
      * @var TranslatorInterface
@@ -199,8 +199,7 @@ class ForumHelper implements RuntimeExtensionInterface
                     self::REPLACE_WORD_START . $word . self::REPLACE_WORD_END,
                     '\\1<!-- s\\2 --><span class="tooltip" title="' . htmlspecialchars($routes[$word]) .
                         '">\\2<!-- s\\2 --></span>\\3',
-                    $text,
-                    1
+                    $text
                 );
             }
         }
