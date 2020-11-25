@@ -6,7 +6,34 @@
         <div class="panel-content">
             {{ form_start(form, { 'attr': { 'id': 'settings_form' } }) }}
                 <table>
-                    {{ form_rest(form) }}
+                    <tr><th colspan="2">Layout van de home-pagina</th></tr>
+                    {{ form_row(form.max_news) }}
+                    {{ form_row(form.max_drgls) }}
+                    {{ form_row(form.max_spots) }}
+                    {{ form_row(form.max_posts) }}
+                    {{ form_row(form.max_foutespots) }}
+                    {{ form_row(form.display_poll) }}
+
+                    <tr><td colspan="2">&nbsp;</td></tr>
+                    <tr><th colspan="2">Gebruik van de mobiele website</th></tr>
+                    {{ form_row(form.force_desktop) }}
+
+                    <tr><td colspan="2">&nbsp;</td></tr>
+                    <tr><th colspan="2">Spotten</th></tr>
+                    {{ form_row(form.default_spot_place) }}
+                    {{ form_row(form.mail_drgls) }}
+
+                    <tr><td colspan="2">&nbsp;</td></tr>
+                    <tr><th colspan="2">Forum</th></tr>
+                    {{ form_row(form.forum_signature) }}
+                    {{ form_row(form.forum_new_to_old) }}
+                    {{ form_row(form.mail_all_favorites) }}
+
+                    <tr><td colspan="2">&nbsp;</td></tr>
+                    <tr><th colspan="2">Instellingen voor de <a href="https://play.google.com/store/apps/details?id=nl.somda.somda&hl=nl_NL&gl=NL" target="_blank">Somda Android app</a></th></tr>
+                    {{ form_row(form.app_mark_forum_read) }}
+
+                    <tr><td colspan="2">&nbsp;</td></tr>
                     <tr>
                         <td>&nbsp;</td>
                         <td><a class="somda-button" href="#" id="settings_button" onclick="disableMeAndSubmitForm('settings_button', 'settings_form'); return false;">Instellingen opslaan</a></td>

@@ -7,6 +7,7 @@ use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as JMS;
+use Nelmio\ApiDocBundle\Annotation\Model;
 use Swagger\Annotations as SWG;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -204,7 +205,8 @@ class User implements UserInterface
     /**
      * @var UserPreferenceValue[]
      * @ORM\OneToMany(targetEntity="App\Entity\UserPreferenceValue", mappedBy="user")
-     * @JMS\Exclude()
+     * @JMS\Expose()
+     * @SWG\Property(description="The user-settings", ref=@Model(type=UserPreferenceValue::class))
      */
     private $preferences;
 

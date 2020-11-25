@@ -6,10 +6,12 @@ namespace App\Helpers;
 use App\Entity\ForumDiscussion;
 use App\Entity\ForumForum;
 use App\Entity\ForumPost;
+use App\Entity\UserPreference;
 use App\Exception\WrongMethodError;
 use App\Form\ForumPost as ForumPostForm;
 use App\Generics\ForumGenerics;
 use Doctrine\Persistence\ManagerRegistry;
+use Exception;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class ForumDiscussionHelper
@@ -115,6 +117,7 @@ class ForumDiscussionHelper
             ForumGenerics::MAX_POSTS_PER_PAGE,
             ($this->pageNumber - 1) * ForumGenerics::MAX_POSTS_PER_PAGE
         );
+
         if ($this->userHelper->userIsLoggedIn()) {
             $this->doctrine->getRepository(ForumDiscussion::class)->markPostsAsRead(
                 $this->userHelper->getUser(),
@@ -128,6 +131,7 @@ class ForumDiscussionHelper
     /**
      * @param bool $newToOld
      * @return ForumPost[]
+     * @throws Exception
      */
     public function getNonPaginatedPosts(bool $newToOld): array
     {
@@ -144,6 +148,16 @@ class ForumDiscussionHelper
             [ForumPostForm::FIELD_DISCUSSION => $this->discussion],
             [ForumPostForm::FIELD_TIMESTAMP => $newToOld ? 'DESC' : 'ASC']
         );
+
+        $markPostsAsRead = $this->userHelper->userIsLoggedIn() ?
+            (bool)$this->userHelper->getPreferenceByKey(UserPreference::KEY_APP_MARK_FORUM_READ)->value : false;
+        if ($markPostsAsRead) {
+            $this->doctrine->getRepository(ForumDiscussion::class)->markPostsAsRead(
+                $this->userHelper->getUser(),
+                $posts
+            );
+        }
+
         return $posts;
     }
 

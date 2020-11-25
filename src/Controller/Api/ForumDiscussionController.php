@@ -6,7 +6,6 @@ namespace App\Controller\Api;
 use App\Entity\ForumDiscussion;
 use App\Entity\ForumPost;
 use App\Entity\UserPreference;
-use App\Generics\ForumGenerics;
 use App\Generics\RoleGenerics;
 use App\Helpers\ForumAuthorizationHelper;
 use App\Helpers\ForumDiscussionHelper;

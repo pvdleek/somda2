@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as JMS;
+use Swagger\Annotations as SWG;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -36,6 +38,8 @@ class UserPreference
 
     public const KEY_MAIL_LAST_MINUTE_SPECIAL_ROUTE = 'mail_drgls';
 
+    public const KEY_APP_MARK_FORUM_READ = 'app_mark_forum_read';
+
     public const KEY_VALUES = [
         self::KEY_HOME_LAYOUT,
         self::KEY_HOME_MAX_NEWS,
@@ -55,6 +59,7 @@ class UserPreference
         self::KEY_FORUM_NEW_TO_OLD,
         self::KEY_FORUM_MAIL_FOR_ALL_FAVORITES,
         self::KEY_MAIL_LAST_MINUTE_SPECIAL_ROUTE,
+        self::KEY_APP_MARK_FORUM_READ,
     ];
 
     /**
@@ -62,6 +67,7 @@ class UserPreference
      * @ORM\Column(name="prefid", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @JMS\Exclude()
      */
     public ?int $id = null;
 
@@ -69,30 +75,39 @@ class UserPreference
      * @var string
      * @ORM\Column(name="sleutel", type="string", length=25, nullable=false)
      * @Assert\Choice(choices=UserPreference::KEY_VALUES)
+     * @JMS\Expose()
+     * @SWG\Property(description="Unique identifier", maxLength=25, type="string")
      */
     public string $key;
 
     /**
      * @var string
      * @ORM\Column(name="type", type="string", length=50, nullable=false)
+     * @JMS\Expose()
+     * @SWG\Property(description="Type of the value", maxLength=50, type="string")
      */
     public string $type = '';
 
     /**
      * @var string
      * @ORM\Column(name="description", type="string", length=90, nullable=false)
+     * @JMS\Expose()
+     * @SWG\Property(description="Description of the setting", maxLength=90, type="string")
      */
     public string $description = '';
 
     /**
      * @var string
      * @ORM\Column(name="default_value", type="string", length=200, nullable=false)
+     * @JMS\Expose()
+     * @SWG\Property(description="Default value", maxLength=200, type="string")
      */
     public string $defaultValue = '';
 
     /**
      * @var int
      * @ORM\Column(name="volgorde", type="integer", nullable=false)
+     * @JMS\Exclude()
      */
     public int $order = 0;
 }
