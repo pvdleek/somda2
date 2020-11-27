@@ -131,10 +131,14 @@ api_forum_search:
 # User #
 ########
 api_profile:
-  path: /profile/
+  path: /{version}/profile/
   methods: [GET]
   controller: App\Controller\Api\ProfileController::indexAction
 api_profile_update:
-  path: /profile/
+  path: /{version}/profile/
   methods: [POST]
   controller: App\Controller\Api\ProfileController::updateAction
+api_preferences_update:
+  path: /{version}/preferences/
+  methods: [ POST ]
+  controller: App\Controller\Api\ProfileController::updatePreferencesAction

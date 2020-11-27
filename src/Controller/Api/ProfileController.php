@@ -3,6 +3,7 @@
 namespace App\Controller\Api;
 
 use App\Entity\User;
+use App\Entity\UserPreference;
 use App\Generics\RoleGenerics;
 use App\Helpers\UserHelper;
 use DateTime;
@@ -141,6 +142,65 @@ class ProfileController extends AbstractFOSRestController
         }
         if (isset($userInformation['youtubeAccount'])) {
             $user->info->youtubeAccount = $userInformation['youtubeAccount'];
+        }
+
+        $this->doctrine->getManager()->flush();
+
+        return $this->handleView($this->view(['data' => $user], 200));
+    }
+
+    /**
+     * @param Request $request
+     * @return Response
+     * @throws Exception
+     * @SWG\Post(
+     *     @SWG\Parameter(in="formData", maxLength=200, name="forum_signature", required=false, type="string"),
+     *     @SWG\Parameter(default=0, enum={0,1}, in="formData", name="forum_new_to_old", required=true, type="integer"),
+     *     @SWG\Parameter(
+     *         default=0,
+     *         enum={0,1},
+     *         in="formData",
+     *         name="app_mark_forum_read",
+     *         required=true,
+     *         type="integer"
+     *     ),
+     *     @SWG\Parameter(in="formData", maxLength=200, name="default_spot_place", required=false, type="string"),
+     * )
+     * @SWG\Response(
+     *     response=200,
+     *     description="Returns the updated user profile",
+     *     @SWG\Schema(
+     *         @SWG\Property(property="data", type="array", @SWG\Items(ref=@Model(type=User::class))),
+     *     ),
+     * )
+     * @SWG\Tag(name="Profile")
+     */
+    public function updatePreferencesAction(Request $request): Response
+    {
+        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_API_USER);
+
+        if (!$this->userHelper->userIsLoggedIn()) {
+            throw new AccessDeniedException('The user is not logged in');
+        }
+
+        $user = $this->userHelper->getUser();
+
+        $preferences = (array)json_decode($request->getContent(), true);
+        if (isset($preferences['forum_signature'])) {
+            $this->userHelper->getPreferenceByKey(UserPreference::KEY_FORUM_SIGNATURE)->value =
+                $preferences['forum_signature'];
+        }
+        if (isset($preferences['forum_new_to_old'])) {
+            $this->userHelper->getPreferenceByKey(UserPreference::KEY_FORUM_NEW_TO_OLD)->value =
+                (bool)$preferences['forum_new_to_old'];
+        }
+        if (isset($preferences['app_mark_forum_read'])) {
+            $this->userHelper->getPreferenceByKey(UserPreference::KEY_APP_MARK_FORUM_READ)->value =
+                (bool)$preferences['app_mark_forum_read'];
+        }
+        if (isset($preferences['default_spot_place'])) {
+            $this->userHelper->getPreferenceByKey(UserPreference::KEY_DEFAULT_SPOT_LOCATION)->value =
+                $preferences['default_spot_place'];
         }
 
         $this->doctrine->getManager()->flush();
