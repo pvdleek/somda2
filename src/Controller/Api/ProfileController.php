@@ -10,9 +10,7 @@ use DateTime;
 use Exception;
 use Doctrine\Persistence\ManagerRegistry;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
-use Monolog\Logger;
 use Nelmio\ApiDocBundle\Annotation\Model;
-use Psr\Log\LoggerInterface;
 use Swagger\Annotations as SWG;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -30,17 +28,14 @@ class ProfileController extends AbstractFOSRestController
      */
     private UserHelper $userHelper;
 
-    private LoggerInterface $logger;
-
     /**
      * @param ManagerRegistry $doctrine
      * @param UserHelper $userHelper
      */
-    public function __construct(ManagerRegistry $doctrine, UserHelper $userHelper, LoggerInterface $logger)
+    public function __construct(ManagerRegistry $doctrine, UserHelper $userHelper)
     {
         $this->doctrine = $doctrine;
         $this->userHelper = $userHelper;
-        $this->logger = $logger;
     }
 
     /**
@@ -191,7 +186,6 @@ class ProfileController extends AbstractFOSRestController
         $user = $this->userHelper->getUser();
 
         $preferences = (array)json_decode($request->getContent(), true);
-        $this->logger->addRecord(Logger::INFO, 'Request content: ' . $request->getContent());
         if (isset($preferences['forum_signature'])) {
             $this->userHelper->getPreferenceByKey(UserPreference::KEY_FORUM_SIGNATURE)->value =
                 $preferences['forum_signature'];
