@@ -16,6 +16,14 @@ api_authenticate_token:
   controller: App\Controller\Api\SecurityController::verifyAction
 
 ########
+# Home #
+########
+api_home:
+  path: /{version}/home/
+  methods: [GET]
+  controller: App\Controller\Api\HomeController::indexAction
+
+########
 # News #
 ########
 api_news:

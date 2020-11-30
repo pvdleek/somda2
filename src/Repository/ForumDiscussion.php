@@ -9,6 +9,7 @@ use App\Entity\User;
 use App\Form\ForumPost as ForumPostForm;
 use App\Generics\DateGenerics;
 use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Driver\Exception as DoctrineException;
 use Doctrine\ORM\EntityRepository;
 use Exception;
 
@@ -226,6 +227,41 @@ class ForumDiscussion extends EntityRepository
         } catch (DBALException $exception) {
             return [];
         }
+    }
+
+    /**
+     * @return array
+     * @throws Exception|DoctrineException
+     */
+    public function findLastDiscussion(): array
+    {
+        $maxQuery = '
+            SELECT p.discussionid AS disc_id, MAX(p.timestamp) AS max_date_time
+            FROM somda_forum_posts p
+            JOIN somda_forum_discussion d ON d.discussionid = p.discussionid
+            WHERE p.timestamp > :minDate
+            GROUP BY disc_id';
+        $query = '
+            SELECT `d`.`discussionid` AS `id`, `d`.`title` AS `title`, `d`.`locked` AS `locked`,
+                `p_max`.`timestamp` AS `max_post_timestamp`
+            FROM somda_forum_discussion d
+            JOIN somda_forum_forums f ON f.forumid = d.forumid
+            JOIN somda_forum_posts p_max ON p_max.discussionid = d.discussionid
+            INNER JOIN (' . $maxQuery . ') m ON m.disc_id = d.discussionid
+            WHERE p_max.timestamp = m.max_date_time AND f.type != :moderatorForumType
+            GROUP BY id, title, max_post_timestamp
+            ORDER BY m.max_date_time DESC
+            LIMIT 1';
+
+        $connection = $this->getEntityManager()->getConnection();
+        $statement = $connection->prepare($query);
+        $statement->bindValue(
+            'minDate',
+            date(DateGenerics::DATE_FORMAT_DATABASE, mktime(0, 0, 0, date('m'), date('d') - 5, date('Y')))
+        );
+        $statement->bindValue('moderatorForumType', ForumForum::TYPE_MODERATORS_ONLY);
+        $statement->execute();
+        return $statement->fetchAssociative();
     }
 
     /**
