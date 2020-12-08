@@ -118,4 +118,14 @@ class RouteList
     {
         return $this->routes->toArray();
     }
+
+    /**
+     * @param Route $route
+     * @return RouteList
+     */
+    public function removeRoute(Route $route): RouteList
+    {
+        $this->routes->removeElement($route);
+        return $this;
+    }
 }

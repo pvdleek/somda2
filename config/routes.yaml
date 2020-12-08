@@ -540,6 +540,11 @@ manage_train_table_add:
   methods: [GET, POST]
   requirements: { routeListId: \d+, routeId: \d+, routeNumber: \d+ }
   controller: App\Controller\ManageTrainTablesController::manageRouteAction
+manage_train_table_delete:
+  path: /beheer-dienstregeling/verwijder/{yearId}/{routeListId}/{routeId}/
+  methods: [GET, POST]
+  requirements: { yearId: \d+, routeListId: \d+, routeId: \d+ }
+  controller: App\Controller\ManageTrainTablesController::deleteRouteAction
 
 manage_pois:
   path: /beheer-spotpunten/

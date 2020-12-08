@@ -149,6 +149,16 @@ class Route
     }
 
     /**
+     * @param RouteList $routeList
+     * @return $this
+     */
+    public function removeRouteList(RouteList $routeList): Route
+    {
+        $this->routeLists->removeElement($routeList);
+        return $this;
+    }
+
+    /**
      * @param Spot $spot
      * @return Route
      */

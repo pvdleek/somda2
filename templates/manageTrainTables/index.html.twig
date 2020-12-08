@@ -51,7 +51,8 @@
                             <td>{{ route.trainTableFirstLastByDay(7) ? route.trainTableFirstLastByDay(7).firstLocation.name ~ ' - ' ~ route.trainTableFirstLastByDay(7).lastLocation.name }}</td>
                             <td>
                                 <a href="{{ path('manage_train_table', { 'routeListId': selectedRouteList.id, 'routeId': route.id }) }}">Bewerk</a>
-                                <a href="#" onclick="addTrainTable({{ route.id }}); return false;">Kopieer</a>
+                                - <a href="#" onclick="addTrainTable({{ route.id }}); return false;">Kopieer</a>
+                                - <a href="{{ path('manage_train_table_delete', { 'yearId': selectedTrainTableYear.id, 'routeListId': selectedRouteList.id, 'routeId': route.id }) }}">Verwijder</a>
                             </td>
                         </tr>
                     {% endfor %}

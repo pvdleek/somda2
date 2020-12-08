@@ -15,6 +15,7 @@ use Exception;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class ManageTrainTablesController
 {
@@ -139,6 +140,49 @@ class ManageTrainTablesController
             'routeList' => $this->routeMgmtHelper->getRouteList(),
             'route' => $this->routeMgmtHelper->getRoute(),
             'trainTableLines' => $this->routeMgmtHelper->getTrainTableLines(),
+        ]);
+    }
+
+    /**
+     * @param int $yearId
+     * @param int $routeListId
+     * @param int $routeId
+     * @return RedirectResponse
+     */
+    public function deleteRouteAction(int $yearId, int $routeListId, int $routeId): RedirectResponse
+    {
+        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_ADMIN_TRAINTABLE_EDIT);
+
+        $trainTableYear = $this->formHelper->getDoctrine()->getRepository(TrainTableYear::class)->find($yearId);
+        if (is_null($trainTableYear)) {
+            throw new AccessDeniedException('This trainTableYear does not exist');
+        }
+        $this->routeMgmtHelper->setRouteListFromId($routeListId);
+        $this->routeMgmtHelper->setRouteFromId($routeId);
+
+        $route = $this->routeMgmtHelper->getRoute();
+        $route->removeRouteList($this->routeMgmtHelper->getRouteList());
+        $this->routeMgmtHelper->getRouteList()->removeRoute($route);
+
+        foreach ($route->getTrainTables() as $trainTable) {
+            if ($trainTable->trainTableYear === $trainTableYear) {
+                $this->formHelper->getDoctrine()->getManager()->remove($trainTable);
+            }
+        }
+        foreach ($route->getTrainTableFirstLasts() as $trainTableFirstLast) {
+            if ($trainTableFirstLast->trainTableYear === $trainTableYear) {
+                $this->formHelper->getDoctrine()->getManager()->remove($trainTableFirstLast);
+            }
+        }
+        $this->formHelper->getDoctrine()->getManager()->flush();
+
+        $this->formHelper->getFlashHelper()->add(
+            FlashHelper::FLASH_TYPE_INFORMATION,
+            'De dienstregeling is verwijderd'
+        );
+        return $this->formHelper->getRedirectHelper()->redirectToRoute('manage_train_tables_year_route_list', [
+            'yearId' => $yearId,
+            'routeListId' => $routeListId,
         ]);
     }
 }
