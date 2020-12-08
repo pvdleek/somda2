@@ -6,7 +6,14 @@
         <div class="panel-content panel-no-background">
             <form id="train_table_form" method="post">
                 <table>
-                    <tr><th colspan="7">Dienstregeling van trein {{ route.number }} beheren</th></tr>
+                    <tr>
+                        <th colspan="6">Dienstregeling van trein {{ route.number }} beheren</th>
+                        <th>
+                            <span class="time-modify-control-left"><a href="#" onclick="modifyAllTimes(true); return false;">+30</a></span>
+                            Alle dagen
+                            <span class="time-modify-control-right"><a href="#" onclick="modifyAllTimes(false); return false;">-30</a></span>
+                        </th>
+                    </tr>
                     <tr>
                         {% for dayNumber in 1..7 %}
                             <th>
@@ -195,6 +202,14 @@
                     }
                 }
             });
+        }
+
+        /**
+         * @param {boolean} increase
+         */
+        function modifyAllTimes(increase)
+        {
+            {% for dayNumber in 1..7 %}modifyTimes({{ dayNumber }}, increase);{% endfor %}
         }
 
         /**
