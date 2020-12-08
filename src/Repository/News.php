@@ -5,7 +5,8 @@ namespace App\Repository;
 
 use App\Entity\News as NewsEntity;
 use App\Entity\User;
-use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Exception as DBALException;
+use Doctrine\DBAL\Driver\Exception as DBALDriverException;
 use Doctrine\ORM\EntityRepository;
 
 class News extends EntityRepository
@@ -40,8 +41,8 @@ class News extends EntityRepository
         try {
             $statement = $connection->prepare($query);
             $statement->execute();
-            return $statement->fetchAll();
-        } catch (DBALException $exception) {
+            return $statement->fetchAllAssociative();
+        } catch (DBALException | DBALDriverException $exception) {
             return [];
         }
     }

@@ -2,25 +2,13 @@
 
 namespace App\Repository;
 
-use App\Entity\ForumPost as ForumPostEntity;
 use App\Entity\User;
-use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Exception as DBALException;
+use Doctrine\DBAL\Driver\Exception as DBALDriverException;
 use Doctrine\ORM\EntityRepository;
 
 class ForumPost extends EntityRepository
 {
-    /**
-     * @return int[]
-     */
-    public function findAllAndGetIds(): array
-    {
-        $queryBuilder = $this->getEntityManager()
-            ->createQueryBuilder()
-            ->select('p.id')
-            ->from(ForumPostEntity::class, 'p');
-        return array_column($queryBuilder->getQuery()->getResult(), 'id');
-    }
-
     /**
      * @param User $user
      * @return array
@@ -52,10 +40,9 @@ class ForumPost extends EntityRepository
             $statement = $connection->prepare($query);
             $statement->bindValue('userId', $user->id);
             $statement->execute();
-            return $statement->fetchAll();
-        } catch (DBALException $exception) {
+            return $statement->fetchAllAssociative();
+        } catch (DBALException | DBALDriverException $exception) {
             return [];
         }
     }
-
 }
