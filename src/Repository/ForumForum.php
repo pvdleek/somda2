@@ -3,7 +3,8 @@
 namespace App\Repository;
 
 use App\Entity\User;
-use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Exception as DBALException;
+use Doctrine\DBAL\Driver\Exception as DBALDriverException;
 use Doctrine\ORM\EntityRepository;
 
 class ForumForum extends EntityRepository
@@ -31,8 +32,8 @@ class ForumForum extends EntityRepository
             $statement = $connection->prepare($query);
             $statement->bindParam('userId', $userId);
             $statement->execute();
-            return $statement->fetchAll();
-        } catch (DBALException $exception) {
+            return $statement->fetchAllAssociative();
+        } catch (DBALException | DBALDriverException $exception) {
             return [];
         }
     }
@@ -65,8 +66,8 @@ class ForumForum extends EntityRepository
             $statement = $connection->prepare($query);
             $statement->bindValue('forumId', $forumId);
             $statement->execute();
-            return (int)$statement->fetchColumn(0);
-        } catch (DBALException $exception) {
+            return (int)$statement->fetchFirstColumn();
+        } catch (DBALException | DBALDriverException $exception) {
             return 0;
         }
     }

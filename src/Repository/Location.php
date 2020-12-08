@@ -25,9 +25,7 @@ class Location extends EntityRepository
             ->setParameter(self::PARAMETER_SEARCH, strtolower($search));
         try {
             return $queryBuilder->getQuery()->getSingleResult();
-        } catch (NonUniqueResultException $exception) {
-            return null;
-        } catch (NoResultException $exception) {
+        } catch (NonUniqueResultException | NoResultException $exception) {
             return null;
         }
     }

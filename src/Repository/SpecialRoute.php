@@ -17,7 +17,7 @@ class SpecialRoute extends EntityRepository
     public function findForDashboard(bool $construction): array
     {
         $today = new DateTime();
-        $today->setTime(0, 0, 0);
+        $today->setTime(0, 0);
         $queryBuilder = $this->getEntityManager()
             ->createQueryBuilder()
             ->select('s')

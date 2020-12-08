@@ -80,7 +80,7 @@ class OfficialTrainTableHelper
                             throw new Exception('No validity record found before footnote');
                         }
                         $footnoteId = (int)substr($line, 1);
-                        $validDays = str_split(fgets($handle), 1);
+                        $validDays = str_split(fgets($handle));
                         foreach ($validDays as $position => $validDay) {
                             if ($validDay === '1') {
                                 $date = clone($firstDate);

@@ -80,7 +80,7 @@ class FeedProvider implements FeedProviderInterface
         $feedType = $request->attributes->get('id');
 
         $this->limit = (int)$request->query->get('limit', 10);
-        $this->trainFilter = $request->query->get('train', null);
+        $this->trainFilter = $request->query->get('train');
 
         $feed = new Feed();
         $feed

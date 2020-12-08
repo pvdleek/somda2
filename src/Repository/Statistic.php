@@ -24,9 +24,7 @@ class Statistic extends EntityRepository
             ->from(StatisticEntity::class, 's');
         try {
             return (int)$queryBuilder->getQuery()->getSingleScalarResult();
-        } catch (NonUniqueResultException $exception) {
-            return 0;
-        } catch (NoResultException $exception) {
+        } catch (NonUniqueResultException | NoResultException $exception) {
             return 0;
         }
     }
@@ -83,9 +81,7 @@ class Statistic extends EntityRepository
             ->setMaxResults(1);
         try {
             return new DateTime($queryBuilder->getQuery()->getSingleScalarResult());
-        } catch (NonUniqueResultException $exception) {
-            return new DateTime();
-        } catch (NoResultException $exception) {
+        } catch (NonUniqueResultException | NoResultException $exception) {
             return new DateTime();
         }
     }

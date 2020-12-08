@@ -36,7 +36,7 @@ class DateHelperTest extends BaseTestCase
     /**
      * @param string $expectedOutput
      * @param DateTime $dateTime
-     * @parma bool $includeTime
+     * @param bool $includeTime
      * @param bool $shortDate
      * @dataProvider getDisplayDateProvider
      * @throws Exception

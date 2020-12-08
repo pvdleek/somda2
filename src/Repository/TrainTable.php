@@ -138,9 +138,7 @@ class TrainTable extends EntityRepository
             ->andWhere('o.' . $this->getDayName($dayNumber - 1) .' = TRUE');
         try {
             return (int)$queryBuilder->getQuery()->getSingleScalarResult() > 0;
-        } catch (NonUniqueResultException $exception) {
-            return false;
-        } catch (NoResultException $exception) {
+        } catch (NonUniqueResultException | NoResultException $exception) {
             return false;
         }
     }

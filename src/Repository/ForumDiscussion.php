@@ -8,8 +8,8 @@ use App\Entity\ForumPost;
 use App\Entity\User;
 use App\Form\ForumPost as ForumPostForm;
 use App\Generics\DateGenerics;
-use Doctrine\DBAL\DBALException;
-use Doctrine\DBAL\Driver\Exception as DoctrineException;
+use Doctrine\DBAL\Exception as DBALException;
+use Doctrine\DBAL\Driver\Exception as DBALDriverException;
 use Doctrine\ORM\EntityRepository;
 use Exception;
 
@@ -80,8 +80,8 @@ class ForumDiscussion extends EntityRepository
             $statement->bindValue('excludeForums', implode(',', $excludeForums));
             $statement->bindValue('moderatorForumType', ForumForum::TYPE_MODERATORS_ONLY);
             $statement->execute();
-            return $statement->fetchAll();
-        } catch (DBALException $exception) {
+            return $statement->fetchAllAssociative();
+        } catch (DBALDriverException $exception) {
             return [];
         }
     }
@@ -138,8 +138,8 @@ class ForumDiscussion extends EntityRepository
             $statement = $connection->prepare($query);
             $statement->bindValue('forumid', $forum->id);
             $statement->execute();
-            return $statement->fetchAll();
-        } catch (DBALException $exception) {
+            return $statement->fetchAllAssociative();
+        } catch (DBALDriverException | DBALException $exception) {
             return [];
         }
     }
@@ -178,8 +178,8 @@ class ForumDiscussion extends EntityRepository
             $statement = $connection->prepare($query);
             $statement->bindValue('userId', $user->id);
             $statement->execute();
-            return $statement->fetchAll();
-        } catch (DBALException $exception) {
+            return $statement->fetchAllAssociative();
+        } catch (DBALDriverException | DBALException $exception) {
             return [];
         }
     }
@@ -223,8 +223,8 @@ class ForumDiscussion extends EntityRepository
             ));
             $statement->bindValue('moderatorForumType', ForumForum::TYPE_MODERATORS_ONLY);
             $statement->execute();
-            return $statement->fetchAll();
-        } catch (DBALException $exception) {
+            return $statement->fetchAllAssociative();
+        } catch (DBALDriverException $exception) {
             return [];
         }
     }
@@ -341,7 +341,7 @@ class ForumDiscussion extends EntityRepository
         try {
             $statement = $connection->prepare(substr($query, 0, -1));
             $statement->execute();
-        } catch (DBALException $exception) {
+        } catch (DBALDriverException | DBALException $exception) {
             return;
         }
     }
@@ -358,7 +358,7 @@ class ForumDiscussion extends EntityRepository
         try {
             $statement = $connection->prepare($query);
             $statement->execute();
-        } catch (DBALException $exception) {
+        } catch (DBALDriverException | DBALException $exception) {
             return;
         }
     }
