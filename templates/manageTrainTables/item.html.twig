@@ -207,7 +207,7 @@
                 let newTime = new Date();
                 newTime.setHours(parseInt($(this).val().substr(0, 2)));
                 newTime.setMinutes(parseInt($(this).val().substr(3, 2))  + (increase ? 30 : -30));
-                $(this).val(newTime.toLocaleTimeString('nl-NL').substring(0, 5));
+                $(this).attr('value', newTime.toLocaleTimeString('nl-NL').substring(0, 5));
             });
         }
 
