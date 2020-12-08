@@ -103,16 +103,18 @@ class ForumPostAlertController
 
             // Send this alert to the forum-moderators
             foreach ($post->discussion->forum->getModerators() as $moderator) {
-                $this->emailHelper->sendEmail(
-                    $moderator,
-                    '[Somda-Forum] Een gebruiker heeft een forumbericht gemeld!',
-                    'forum-new-alert',
-                    [
-                        'post' => $post,
-                        'user' => $this->userHelper->getUser(),
-                        'comment' => $form->get(ForumPostAlertForm::FIELD_COMMENT)->getData()
-                    ]
-                );
+                if ($moderator !== $this->userHelper->getModeratorUser()) {
+                    $this->emailHelper->sendEmail(
+                        $moderator,
+                        '[Somda-Forum] Een gebruiker heeft een forumbericht gemeld!',
+                        'forum-new-alert',
+                        [
+                            'post' => $post,
+                            'user' => $this->userHelper->getUser(),
+                            'comment' => $form->get(ForumPostAlertForm::FIELD_COMMENT)->getData()
+                        ]
+                    );
+                }
             }
 
             return $this->formHelper->finishFormHandling('', 'forum_discussion_post', [
@@ -153,12 +155,14 @@ class ForumPostAlertController
 
             // Send this alert-note to the forum-moderators
             foreach ($post->discussion->forum->getModerators() as $moderator) {
-                $this->emailHelper->sendEmail(
-                    $moderator,
-                    '[Somda-Forum] Notitie geplaatst bij gemeld forumbericht!',
-                    'forum-new-alert-note',
-                    ['post' => $post, 'note' => $forumPostAlertNote]
-                );
+                if ($moderator !== $this->userHelper->getModeratorUser()) {
+                    $this->emailHelper->sendEmail(
+                        $moderator,
+                        '[Somda-Forum] Notitie geplaatst bij gemeld forumbericht!',
+                        'forum-new-alert-note',
+                        ['post' => $post, 'note' => $forumPostAlertNote]
+                    );
+                }
             }
 
             if ($form->get('sentToReporter')->getData()) {
