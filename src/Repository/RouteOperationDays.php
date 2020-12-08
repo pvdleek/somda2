@@ -25,9 +25,7 @@ class RouteOperationDays extends EntityRepository
 
         try {
             return $queryBuilder->getQuery()->getSingleResult();
-        } catch (NoResultException $e) {
-            return null;
-        } catch (NonUniqueResultException $e) {
+        } catch (NoResultException | NonUniqueResultException $e) {
             return null;
         }
     }

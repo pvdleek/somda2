@@ -50,9 +50,7 @@ class Spot extends EntityRepository
         }
         try {
             return (int)$queryBuilder->getQuery()->getSingleScalarResult();
-        } catch (NonUniqueResultException $exception) {
-            return 0;
-        } catch (NoResultException $exception) {
+        } catch (NonUniqueResultException | NoResultException $exception) {
             return 0;
         }
     }
@@ -221,9 +219,7 @@ class Spot extends EntityRepository
 
         try {
             return (int)$queryBuilder->getQuery()->getSingleScalarResult();
-        } catch (NonUniqueResultException $exception) {
-            return 0;
-        } catch (NoResultException $exception) {
+        } catch (NonUniqueResultException | NoResultException $exception) {
             return 0;
         }
     }
