@@ -185,7 +185,7 @@ class RouteManagementHelper
         }
 
         $routeDayArray = $this->getUniqueRouteDayArray($this->getRouteDayArray($submittedFields));
-        $this->removeExistingTrainTablesFromRoute($this->route);
+        $this->removeExistingTrainTablesFromRoute($this->routeList->trainTableYear, $this->route);
 
         return $this->saveRouteDay($routeDayArray, $this->routeList->trainTableYear, $this->route);
     }
@@ -250,15 +250,20 @@ class RouteManagementHelper
     }
 
     /**
+     * @param TrainTableYear $trainTableYear
      * @param Route $route
      */
-    private function removeExistingTrainTablesFromRoute(Route $route): void
+    private function removeExistingTrainTablesFromRoute(TrainTableYear $trainTableYear, Route $route): void
     {
         foreach ($route->getTrainTables() as $trainTable) {
-            $this->doctrine->getManager()->remove($trainTable);
+            if ($trainTableYear === $trainTable->trainTableYear) {
+                $this->doctrine->getManager()->remove($trainTable);
+            }
         }
         foreach ($route->getTrainTableFirstLasts() as $trainTableFirstLast) {
-            $this->doctrine->getManager()->remove($trainTableFirstLast);
+            if ($trainTableYear === $trainTableFirstLast->trainTableYear) {
+                $this->doctrine->getManager()->remove($trainTableFirstLast);
+            }
         }
 
         $this->doctrine->getManager()->flush();
