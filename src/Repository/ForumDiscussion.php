@@ -231,7 +231,7 @@ class ForumDiscussion extends EntityRepository
 
     /**
      * @return array
-     * @throws Exception|DoctrineException
+     * @throws Exception|DBALDriverException
      */
     public function findLastDiscussion(): array
     {
