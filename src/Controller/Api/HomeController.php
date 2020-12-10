@@ -41,51 +41,49 @@ class HomeController extends AbstractFOSRestController
      *     response=200,
      *     description="Returns information for the home-screen of the app",
      *     @SWG\Schema(
-     *         @SWG\Property(property="data", type="array", @SWG\Items(
+     *         @SWG\Property(
+     *             property="lastForumPost",
+     *             type="object",
      *             @SWG\Property(
-     *                 property="lastForumPost",
-     *                 type="object",
-     *                 @SWG\Property(
-     *                     description="The id of the discussion",
-     *                     property="discussionId",
-     *                     type="integer",
-     *                 ),
-     *                 @SWG\Property(
-     *                     description="The title of the discussion",
-     *                     property="discussionTitle",
-     *                     type="string",
-     *                 ),
-     *                 @SWG\Property(
-     *                     description="Whether the discussion is locked",
-     *                     property="discussionLocked",
-     *                     type="boolean",
-     *                 ),
-     *                 @SWG\Property(
-     *                     description="The timestamp of the last post in the discussion (Y-m-d H:i:s)",
-     *                     property="lastPostTimestamp",
-     *                     type="string",
-     *                 ),
+     *                 description="The id of the discussion",
+     *                 property="discussionId",
+     *                 type="integer",
      *             ),
      *             @SWG\Property(
-     *                 property="railNews",
-     *                 type="object",
-     *                 @SWG\Property(
-     *                     description="The title of the rail-news item",
-     *                     property="title",
-     *                     type="string",
-     *                 ),
-     *                 @SWG\Property(
-     *                     description="The timestamp of the rail-news item (Y-m-d H:i:s)",
-     *                     property="timestamp",
-     *                     type="string",
-     *                 ),
-     *                 @SWG\Property(
-     *                     description="The external link for the rail-news item",
-     *                     property="url",
-     *                     type="string",
-     *                 ),
+     *                 description="The title of the discussion",
+     *                 property="discussionTitle",
+     *                 type="string",
      *             ),
-     *         )),
+     *             @SWG\Property(
+     *                description="Whether the discussion is locked",
+     *                property="discussionLocked",
+     *                type="boolean",
+     *             ),
+     *             @SWG\Property(
+     *                 description="The timestamp of the last post in the discussion (Y-m-d H:i:s)",
+     *                 property="lastPostTimestamp",
+     *                 type="string",
+     *             ),
+     *         ),
+     *         @SWG\Property(
+     *             property="railNews",
+     *             type="object",
+     *             @SWG\Property(
+     *                 description="The title of the rail-news item",
+     *                 property="title",
+     *                 type="string",
+     *             ),
+     *             @SWG\Property(
+     *                 description="The timestamp of the rail-news item (Y-m-d H:i:s)",
+     *                 property="timestamp",
+     *                 type="string",
+     *             ),
+     *             @SWG\Property(
+     *                 description="The external link for the rail-news item",
+     *                 property="url",
+     *                 type="string",
+     *             ),
+     *         ),
      *     ),
      * )
      * @SWG\Tag(name="Home")
@@ -108,7 +106,7 @@ class HomeController extends AbstractFOSRestController
             50
         )[random_int(0, 4)];
 
-        return $this->handleView($this->view(['data' => [
+        return $this->handleView($this->view([
             'lastForumPost' => [
                 'discussionId' => $discussion['id'],
                 'discussionTitle' => $discussion['title'],
@@ -120,6 +118,6 @@ class HomeController extends AbstractFOSRestController
                 'timestamp' => $railNewsItem->timestamp->format('Y-m-d H:i:s'),
                 'url' => $railNewsItem->url,
             ]
-        ]], 200));
+        ], 200));
     }
 }
