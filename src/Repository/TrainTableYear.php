@@ -18,6 +18,7 @@ class TrainTableYear extends EntityRepository
      */
     public function findTrainTableYearByDate(DateTime $checkDate): ?TrainTableYearEntity
     {
+        $checkDate->setTime(0, 0);
         $queryBuilder = $this->getEntityManager()
             ->createQueryBuilder()
             ->select('t')
