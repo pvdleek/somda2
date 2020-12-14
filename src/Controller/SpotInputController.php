@@ -3,9 +3,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Entity\Location;
 use App\Entity\Spot;
-use App\Entity\UserPreference;
 use App\Form\SpotBulk;
 use App\Generics\RoleGenerics;
 use App\Helpers\FormHelper;
@@ -70,7 +68,7 @@ class SpotInputController
         $form = $this->formHelper->getFactory()->create(
             SpotBulk::class,
             null,
-            ['defaultLocation' => $this->getDefaultLocation()]
+            ['defaultLocation' => $this->userHelper->getDefaultLocation()]
         );
         $form->handleRequest($request);
 
@@ -98,26 +96,6 @@ class SpotInputController
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Spots invoeren',
             TemplateHelper::PARAMETER_FORM => $form->createView(),
         ]);
-    }
-
-    /**
-     * @return Location|null
-     * @throws Exception
-     */
-    private function getDefaultLocation(): ?Location
-    {
-        $location = null;
-        $defaultLocation = $this->userHelper->getPreferenceByKey(UserPreference::KEY_DEFAULT_SPOT_LOCATION);
-        if (strlen($defaultLocation->value) > 0) {
-            /**
-             * @var Location $location
-             */
-            $location = $this->formHelper
-                ->getDoctrine()
-                ->getRepository(Location::class)
-                ->findOneBy(['name' => $defaultLocation->value]);
-        }
-        return $location;
     }
 
     /**

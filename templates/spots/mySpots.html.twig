@@ -7,6 +7,7 @@
             <table class="nowrap" id="my_spots_table">
                 <thead>
                     <tr>
+                        <th><input name="select_all" type="checkbox" value="1" /></th>
                         <th>Spot-datum</th>
                         <th>Materieel</th>
                         <th>Treinnummer</th>
@@ -19,6 +20,7 @@
                 <tbody></tbody>
                 <tfoot>
                     <tr>
+                        <th>&nbsp;</th>
                         <th>datum</th>
                         <th>materieel</th>
                         <th>trein</th>
@@ -29,6 +31,10 @@
                     </tr>
                 </tfoot>
             </table>
+
+            <br />Met geselecteerde spots:
+            <a class="somda-button" href="#" id="my_spots_bulk_edit_date">Datum aanpassen</a>
+            <a class="somda-button" href="#" id="my_spots_bulk_edit_location">Locatie aanpassen</a>
         </div>
     </div>
 {% endblock %}
@@ -37,6 +43,8 @@
     <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
     <script src="{{ asset('js/dateFormat-2019-08-01.js') }}?version={{ 'js/dateFormat-2019-08-01.js' | fileTimestamp }}"></script>
     <script>
+        let rowsSelected = [];
+
         /**
          * @param {int} id
          */
@@ -52,6 +60,34 @@
         {
             if (confirm('Weet je zeker dat je deze spot wilt verwijderen?')) {
                 document.location = '{{ path('my_spots_delete', { 'id': 1234 }) }}'.replace('1234', id);
+            }
+        }
+
+        function updateDataTableSelectAllCtrl(table)
+        {
+            table = table.table().node();
+            let checkboxAll = $('tbody input[type="checkbox"]', table);
+            let checkboxChecked = $('tbody input[type="checkbox"]:checked', table);
+            let checkboxSelectAll  = $('thead input[name="select_all"]', table).get(0);
+
+            if (checkboxChecked.length === 0) {
+                // None of the checkboxes are checked
+                checkboxSelectAll.checked = false;
+                if ('indeterminate' in checkboxSelectAll) {
+                    checkboxSelectAll.indeterminate = false;
+                }
+            } else if (checkboxChecked.length === checkboxAll.length) {
+                // All of the checkboxes are checked
+                checkboxSelectAll.checked = true;
+                if ('indeterminate' in checkboxSelectAll) {
+                    checkboxSelectAll.indeterminate = false;
+                }
+            } else {
+                // Some of the checkboxes are checked
+                checkboxSelectAll.checked = true;
+                if ('indeterminate' in checkboxSelectAll) {
+                    checkboxSelectAll.indeterminate = true;
+                }
             }
         }
 
@@ -83,10 +119,19 @@
                 'ajax': '{{ path('my_spots_json') }}',
                 'columnDefs': [
                     {
+                        'className': 'dt-body-center',
+                        'data': null,
+                        'render': function() {
+                            return '<input type="checkbox" />';
+                        },
+                        'sortable': false,
+                        'targets': 0,
+                    },
+                    {
                         'render': function (data) {
                             return DateFormat.format.date(data.date, 'dd-MM-yyyy');
                         },
-                        'targets': 0,
+                        'targets': 1,
                     },
                     {
                         'render': function (data, type, row) {
@@ -95,13 +140,13 @@
                             }
                             return data;
                         },
-                        'targets': 2,
+                        'targets': 3,
                     },
                     {
                         'render': function (data, type, row) {
                             return '<span title="' + row['locationDescription'] + '">' + data + '</span>';
                         },
-                        'targets': 3,
+                        'targets': 4,
                     },
                     {
                         'data': null,
@@ -109,14 +154,12 @@
                             return '<a href="#" onclick="editSpot(' + row['id'] + '); return false;" title="Bewerk deze spot"><i class="fas fa-pen"></i></a>' +
                                 ' <a href="#" onclick="deleteSpot(' + row['id'] + '); return false;" title="Verwijder deze spot"><i class="fas fa-trash-alt"></i></a>';
                         },
+                        'sortable': false,
                         'targets': -1,
                     },
-                    {
-                        'sortable': false,
-                        'targets': [-1],
-                    }
                 ],
                 'columns': [
+                    { 'data': null },
                     { 'data': 'spotDate' },
                     { 'data': 'train' },
                     { 'data': 'route' },
@@ -156,9 +199,19 @@
                     },
                     'zeroRecords': 'Geen spots gevonden',
                 },
+                'order': [[1, 'DESC']],
                 'processing': true,
+                'rowCallback': function(row, data) {
+                    if($.inArray(data.id, rowsSelected) !== -1) {
+                        $(row).find('input[type="checkbox"]').prop('checked', true);
+                        $(row).addClass('selected');
+                    }
+                },
                 'serverSide': true,
                 'stateSave': true,
+            }).on('click', 'tbody td, thead th:first-child', function() {
+                // Handle click on table cells with checkboxes
+                $(this).parent().find('input[type="checkbox"]').trigger('click');
             });
 
             // Restore the saved state for the individual columns
@@ -172,6 +225,58 @@
                 });
                 mySpotsTable.draw();
             }
+
+            // Handle click on checkbox
+            $('#my_spots_table tbody').on('click', 'input[type="checkbox"]', function(e) {
+                let row = $(this).closest('tr');
+                let data = mySpotsTable.row(row).data();
+
+                // Determine whether row ID is in the list of selected row IDs
+                let index = $.inArray(data.id, rowsSelected);
+                if (this.checked && index === -1) {
+                    // Checkbox is checked and row ID is not in list of selected row IDs
+                    rowsSelected.push(data.id);
+                } else if (!this.checked && index !== -1) {
+                    // Checkbox is not checked and row ID is in list of selected row IDs
+                    rowsSelected.splice(index, 1);
+                }
+
+                if (this.checked) {
+                    row.addClass('selected');
+                } else {
+                    row.removeClass('selected');
+                }
+
+                // Update state of "Select all" control
+                updateDataTableSelectAllCtrl(mySpotsTable);
+
+                // Prevent click event from propagating to parent
+                e.stopPropagation();
+            });
+
+            // Handle click on "Select all" control
+            $('thead input[name="select_all"]', mySpotsTable.table().container()).on('click', function(e) {
+                if (this.checked) {
+                    $('#my_spots_table tbody input[type="checkbox"]:not(:checked)').trigger('click');
+                } else {
+                    $('#my_spots_table tbody input[type="checkbox"]:checked').trigger('click');
+                }
+
+                // Prevent click event from propagating to parent
+                e.stopPropagation();
+            });
+
+            mySpotsTable.on('draw', function() {
+                // Update state of "Select all" control
+                updateDataTableSelectAllCtrl(mySpotsTable);
+            });
+
+            $('#my_spots_bulk_edit_date').on('click', function () {
+                document.location = '{{ path('my_spots_bulk_edit_date', { 'idList': '1234' }) }}'.replace('/1234/', '/' + rowsSelected.join(',') + '/');
+            });
+            $('#my_spots_bulk_edit_location').on('click', function () {
+                document.location = '{{ path('my_spots_bulk_edit_location', { 'idList': '1234' }) }}'.replace('/1234/', '/' + rowsSelected.join(',') + '/');
+            });
         });
     </script>
 {% endblock %}

@@ -181,11 +181,25 @@ my_spots_json:
 my_spots_edit:
   path: /mijn-spots/bewerken/{id}/
   methods: [GET, POST]
+  requirements: { id: \d+ }
   controller: App\Controller\MySpotsController::editAction
 my_spots_delete:
   path: /mijn-spots/verwijderen/{id}/
   methods: [GET]
+  requirements: { id: \d+ }
   controller: App\Controller\MySpotsController::deleteAction
+my_spots_bulk_edit_date:
+  path: /mijn-spots/bulk-bewerken/datum/{idList}/
+  methods: [GET, POST]
+  defaults: { 'type': 'date' }
+  requirements: { idList: .+ }
+  controller: App\Controller\MySpotsController::bulkAction
+my_spots_bulk_edit_location:
+  path: /mijn-spots/bulk-bewerken/locatie/{idList}/
+  methods: [GET, POST]
+  defaults: { 'type': 'location' }
+  requirements: { idList: .+ }
+  controller: App\Controller\MySpotsController::bulkAction
 pois:
   path: /spotpunten/
   methods: [GET]

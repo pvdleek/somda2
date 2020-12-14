@@ -5,7 +5,10 @@ namespace App\Controller;
 
 use App\Entity\Spot;
 use App\Form\Spot as SpotForm;
+use App\Form\SpotBulkEditDate;
+use App\Form\SpotBulkEditLocation;
 use App\Generics\RoleGenerics;
+use App\Helpers\FlashHelper;
 use App\Helpers\FormHelper;
 use App\Helpers\SpotInputHelper;
 use App\Helpers\TemplateHelper;
@@ -14,10 +17,12 @@ use App\Model\DataTableOrder;
 use App\Model\SpotFilter;
 use App\Model\SpotInput;
 use DateTime;
+use Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class MySpotsController
@@ -25,6 +30,9 @@ class MySpotsController
     private const COLUMN_DATA = 'data';
     private const COLUMN_SEARCH = 'search';
     private const COLUMN_SEARCH_VALUE = 'value';
+
+    private const BULK_ACTION_DATE = 'date';
+    private const BULK_ACTION_LOCATION = 'location';
 
     /**
      * @var FormHelper
@@ -205,5 +213,59 @@ class MySpotsController
         $this->formHelper->getDoctrine()->getManager()->remove($spot);
 
         return $this->formHelper->finishFormHandling('Spot verwijderd', 'my_spots');
+    }
+
+    /**
+     * @param Request $request
+     * @param string $type
+     * @param string $idList
+     * @return RedirectResponse|Response
+     * @throws Exception
+     */
+    public function bulkAction(Request $request, string $type, string $idList)
+    {
+        $idArray = array_filter(explode(',', $idList));
+
+        if (self::BULK_ACTION_DATE === $type) {
+            $form = $this->formHelper->getFactory()->create(SpotBulkEditDate::class);
+        } elseif (self::BULK_ACTION_LOCATION === $type) {
+            $form = $this->formHelper->getFactory()->create(
+                SpotBulkEditLocation::class,
+                null,
+                ['defaultLocation' => $this->userHelper->getDefaultLocation()]
+            );
+        } else {
+            throw new AccessDeniedHttpException();
+        }
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $spots = $this->formHelper
+                ->getDoctrine()
+                ->getRepository(Spot::class)
+                ->findByIdsAndUser($idArray, $this->userHelper->getUser());
+            foreach ($spots as $spot) {
+                if (self::BULK_ACTION_DATE === $type) {
+                    $spot->spotDate = $form->get('date')->getData();
+                } else {
+                    $spot->location = $form->get('location')->getData();
+                }
+            }
+
+            $this->formHelper->getDoctrine()->getManager()->flush();
+            $this->formHelper->getFlashHelper()->add(FlashHelper::FLASH_TYPE_INFORMATION, 'Spots aangepast');
+
+            return $this->formHelper->getRedirectHelper()->redirectToRoute('my_spots');
+        }
+
+        $spots = $this->formHelper
+            ->getDoctrine()
+            ->getRepository(Spot::class)
+            ->findByIdsAndUserForDisplay($idArray, $this->userHelper->getUser());
+        return $this->templateHelper->render('spots/editBulk.html.twig', [
+            TemplateHelper::PARAMETER_PAGE_TITLE => 'Bewerk meerdere spots',
+            TemplateHelper::PARAMETER_FORM => $form->createView(),
+            'spots' => $spots,
+        ]);
     }
 }

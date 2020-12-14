@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Helpers;
 
+use App\Entity\Location;
 use App\Entity\User;
 use App\Entity\UserPreference;
 use App\Entity\UserPreferenceValue;
@@ -157,5 +158,22 @@ class UserHelper implements RuntimeExtensionInterface
             }
         }
         return '';
+    }
+
+    /**
+     * @return Location|null
+     * @throws Exception
+     */
+    public function getDefaultLocation(): ?Location
+    {
+        $location = null;
+        $defaultLocation = $this->getPreferenceByKey(UserPreference::KEY_DEFAULT_SPOT_LOCATION);
+        if (strlen($defaultLocation->value) > 0) {
+            /**
+             * @var Location $location
+             */
+            $location = $this->doctrine->getRepository(Location::class)->findOneBy(['name' => $defaultLocation->value]);
+        }
+        return $location;
     }
 }

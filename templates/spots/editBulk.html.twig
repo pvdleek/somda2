@@ -1,0 +1,57 @@
+{% extends('base.html.twig') %}
+
+{% block content %}
+    <div class="panel">
+        <div class="panel-title">Spots aanpassen</div>
+        <div class="panel-content panel-no-background">
+            <p class="info">De volgende spots worden allemaal aangepast:</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Materieel</th>
+                        <th>Treinnummer</th>
+                        <th>Positie</th>
+                        <th>Extra info</th>
+                        <th>Datum</th>
+                        <th>Gespot door</th>
+                        <th>Spot-locatie</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for spot in spots %}
+                        <tr>
+                            <td>{{ spot.namePatternName }} {{ spot.trainNumber }}</td>
+                            <td>
+                                {% if spot.routeNumber matches '/^\\d+$/' %}
+                                    <a href="{{ path('spots_to_train_table', { 'routeNumber': spot.routeNumber, 'date': spot.spotDate | date('Y-m-d') }) }}" title="Bekijk de dienstregeling van trein {{ spot.routeNumber }}">{{ spot.routeNumber }}</a>
+                                {% else %}
+                                    {{ spot.routeNumber }}
+                                {% endif %}
+                            </td>
+                            <td>{{ spot.positionName }}</td>
+                            <td>{{ spot.extra }}</td>
+                            <td>{{ spot.spotDate | displayDateTime }}</td>
+                            <td>{{ spot.spotterId | displayUser(spot.spotterUsername) | raw }}</td>
+                            <td><span title="{{ spot.locationDescription }}">{{ spot.locationName }}</span></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <br />
+
+            {{ form_start(form, { 'attr': { 'id': 'spot_form' } }) }}
+                <table>
+                    {% if form.date is defined %}{{ form_row(form.date) }}{% endif %}
+                    {% if form.location is defined %}{{ form_row(form.location) }}{% endif %}
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td>
+                            <a class="somda-button" href="#" id="spot_button" onclick="disableMeAndSubmitForm('spot_button', 'spot_form'); return false;">Spots opslaan</a>
+                        </td>
+                    </tr>
+                </table>
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}
