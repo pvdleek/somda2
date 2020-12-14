@@ -39,9 +39,9 @@
                                     <td><a href="{{ path('train_table_search', { 'trainTableYearId': trainTableIndexNumber, 'routeNumber': route.number }) }}">{{ route.number }}</a></td>
                                     {% for dayNumber in 1..7 %}
                                         <td>
-                                            {% if route.trainTableFirstLastByDay(dayNumber) %}
-                                                <span title="{{ route.trainTableFirstLastByDay(dayNumber).firstLocation.description }}">{{ route.trainTableFirstLastByDay(dayNumber).firstLocation.name }}</span>
-                                                - <span title="{{ route.trainTableFirstLastByDay(dayNumber).lastLocation.description }}">{{ route.trainTableFirstLastByDay(dayNumber).lastLocation.name }}</span>
+                                            {% if route.trainTableFirstLastByDay(trainTableIndexNumber, dayNumber) %}
+                                                <span title="{{ route.trainTableFirstLastByDay(trainTableIndexNumber, dayNumber).firstLocation.description }}">{{ route.trainTableFirstLastByDay(trainTableIndexNumber, dayNumber).firstLocation.name }}</span>
+                                                - <span title="{{ route.trainTableFirstLastByDay(trainTableIndexNumber, dayNumber).lastLocation.description }}">{{ route.trainTableFirstLastByDay(trainTableIndexNumber, dayNumber).lastLocation.name }}</span>
                                             {% else %}
                                                 &nbsp;
                                             {% endif %}

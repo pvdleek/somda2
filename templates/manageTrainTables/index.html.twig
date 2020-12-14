@@ -42,13 +42,13 @@
                     {% for route in routes %}
                         <tr>
                             <td>{{ route.number }}</td>
-                            <td>{{ route.trainTableFirstLastByDay(1) ? route.trainTableFirstLastByDay(1).firstLocation.name ~ ' - ' ~ route.trainTableFirstLastByDay(1).lastLocation.name }}</td>
-                            <td>{{ route.trainTableFirstLastByDay(2) ? route.trainTableFirstLastByDay(2).firstLocation.name ~ ' - ' ~ route.trainTableFirstLastByDay(2).lastLocation.name }}</td>
-                            <td>{{ route.trainTableFirstLastByDay(3) ? route.trainTableFirstLastByDay(3).firstLocation.name ~ ' - ' ~ route.trainTableFirstLastByDay(3).lastLocation.name }}</td>
-                            <td>{{ route.trainTableFirstLastByDay(4) ? route.trainTableFirstLastByDay(4).firstLocation.name ~ ' - ' ~ route.trainTableFirstLastByDay(4).lastLocation.name }}</td>
-                            <td>{{ route.trainTableFirstLastByDay(5) ? route.trainTableFirstLastByDay(5).firstLocation.name ~ ' - ' ~ route.trainTableFirstLastByDay(5).lastLocation.name }}</td>
-                            <td>{{ route.trainTableFirstLastByDay(6) ? route.trainTableFirstLastByDay(6).firstLocation.name ~ ' - ' ~ route.trainTableFirstLastByDay(6).lastLocation.name }}</td>
-                            <td>{{ route.trainTableFirstLastByDay(7) ? route.trainTableFirstLastByDay(7).firstLocation.name ~ ' - ' ~ route.trainTableFirstLastByDay(7).lastLocation.name }}</td>
+                            <td>{{ route.trainTableFirstLastByDay(selectedTrainTableYear.id, 1) ? route.trainTableFirstLastByDay(selectedTrainTableYear.id, 1).firstLocation.name ~ ' - ' ~ route.trainTableFirstLastByDay(selectedTrainTableYear.id, 1).lastLocation.name }}</td>
+                            <td>{{ route.trainTableFirstLastByDay(selectedTrainTableYear.id, 2) ? route.trainTableFirstLastByDay(selectedTrainTableYear.id, 2).firstLocation.name ~ ' - ' ~ route.trainTableFirstLastByDay(selectedTrainTableYear.id, 2).lastLocation.name }}</td>
+                            <td>{{ route.trainTableFirstLastByDay(selectedTrainTableYear.id, 3) ? route.trainTableFirstLastByDay(selectedTrainTableYear.id, 3).firstLocation.name ~ ' - ' ~ route.trainTableFirstLastByDay(selectedTrainTableYear.id, 3).lastLocation.name }}</td>
+                            <td>{{ route.trainTableFirstLastByDay(selectedTrainTableYear.id, 4) ? route.trainTableFirstLastByDay(selectedTrainTableYear.id, 4).firstLocation.name ~ ' - ' ~ route.trainTableFirstLastByDay(selectedTrainTableYear.id, 4).lastLocation.name }}</td>
+                            <td>{{ route.trainTableFirstLastByDay(selectedTrainTableYear.id, 5) ? route.trainTableFirstLastByDay(selectedTrainTableYear.id, 5).firstLocation.name ~ ' - ' ~ route.trainTableFirstLastByDay(selectedTrainTableYear.id, 5).lastLocation.name }}</td>
+                            <td>{{ route.trainTableFirstLastByDay(selectedTrainTableYear.id, 6) ? route.trainTableFirstLastByDay(selectedTrainTableYear.id, 6).firstLocation.name ~ ' - ' ~ route.trainTableFirstLastByDay(selectedTrainTableYear.id, 6).lastLocation.name }}</td>
+                            <td>{{ route.trainTableFirstLastByDay(selectedTrainTableYear.id, 7) ? route.trainTableFirstLastByDay(selectedTrainTableYear.id, 7).firstLocation.name ~ ' - ' ~ route.trainTableFirstLastByDay(selectedTrainTableYear.id, 7).lastLocation.name }}</td>
                             <td>
                                 <a href="{{ path('manage_train_table', { 'routeListId': selectedRouteList.id, 'routeId': route.id }) }}">Bewerk</a>
                                 - <a href="#" onclick="addTrainTable({{ route.id }}); return false;">Kopieer</a>

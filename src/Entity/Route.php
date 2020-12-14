@@ -117,13 +117,16 @@ class Route
     }
 
     /**
+     * @param int $trainTableYearId
      * @param int $dayNumber
      * @return TrainTableFirstLast|null
      */
-    public function getTrainTableFirstLastByDay(int $dayNumber): ?TrainTableFirstLast
+    public function getTrainTableFirstLastByDay(int $trainTableYearId, int $dayNumber): ?TrainTableFirstLast
     {
         foreach ($this->getTrainTableFirstLasts() as $trainTableFirstLast) {
-            if ($trainTableFirstLast->dayNumber === $dayNumber) {
+            if ($trainTableYearId === $trainTableFirstLast->trainTableYear->id
+                && $dayNumber === $trainTableFirstLast->dayNumber
+            ) {
                 return $trainTableFirstLast;
             }
         }
