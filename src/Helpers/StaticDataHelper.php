@@ -144,7 +144,9 @@ class StaticDataHelper implements RuntimeExtensionInterface
     {
         $seriesRouteNumber = 100 * floor($route[TrainTableRepository::FIELD_ROUTE_NUMBER] / 100);
         if (!isset($this->routes[$seriesRouteNumber])) {
-            if (strlen($route[TrainTableRepository::FIELD_SECTION]) > 0) {
+            if (!is_null($route[TrainTableRepository::FIELD_SECTION])
+                && strlen($route[TrainTableRepository::FIELD_SECTION]) > 0
+            ) {
                 $this->routes[$seriesRouteNumber] = sprintf(
                     $this->translator->trans('trainTable.forum.seriesWithSection'),
                     $seriesRouteNumber,
