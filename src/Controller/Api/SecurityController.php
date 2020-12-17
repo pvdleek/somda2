@@ -8,8 +8,11 @@ use App\Generics\RoleGenerics;
 use App\Helpers\UserHelper;
 use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
+use Exception;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
+use Monolog\Logger;
 use Nelmio\ApiDocBundle\Annotation\Model;
+use Psr\Log\LoggerInterface;
 use Swagger\Annotations as SWG;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,13 +30,20 @@ class SecurityController extends AbstractFOSRestController
     private UserHelper $userHelper;
 
     /**
+     * @var LoggerInterface
+     */
+    private LoggerInterface $logger;
+
+    /**
      * @param ManagerRegistry $doctrine
      * @param UserHelper $userHelper
+     * @param LoggerInterface $logger
      */
-    public function __construct(ManagerRegistry $doctrine, UserHelper $userHelper)
+    public function __construct(ManagerRegistry $doctrine, UserHelper $userHelper, LoggerInterface $logger)
     {
         $this->doctrine = $doctrine;
         $this->userHelper = $userHelper;
+        $this->logger = $logger;
     }
 
     /**
@@ -108,7 +118,14 @@ class SecurityController extends AbstractFOSRestController
         }
 
         $user->apiTokenExpiryTimestamp = new DateTime(User::API_TOKEN_VALIDITY);
-        $this->doctrine->getManager()->flush();
+        try {
+            $this->doctrine->getManager()->flush();
+        } catch (Exception $exception) {
+            $this->logger->addRecord(
+                Logger::CRITICAL,
+                'Failed to set api-token-expiry-timestamp for user ' . $user->id
+            );
+        }
 
         return $this->handleView($this->view(['data' => $user], 200));
     }
