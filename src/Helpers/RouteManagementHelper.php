@@ -179,14 +179,15 @@ class RouteManagementHelper
     public function handlePost(int $routeId, array $submittedFields): bool
     {
         if ($routeId === 0) {
-            $this->route->addRouteList($this->routeList);
-            $this->routeList->addRoute($this->route);
+            if (!in_array($this->routeList, $this->route->getRouteLists())) {
+                $this->route->addRouteList($this->routeList);
+                $this->routeList->addRoute($this->route);
+            }
             $this->doctrine->getManager()->persist($this->route);
         }
 
-        $routeDayArray = $this->getUniqueRouteDayArray($this->getRouteDayArray($submittedFields));
         $this->removeExistingTrainTablesFromRoute($this->routeList->trainTableYear, $this->route);
-
+        $routeDayArray = $this->getUniqueRouteDayArray($this->getRouteDayArray($submittedFields));
         return $this->saveRouteDay($routeDayArray, $this->routeList->trainTableYear, $this->route);
     }
 
