@@ -230,10 +230,10 @@ class ForumDiscussion extends EntityRepository
     }
 
     /**
-     * @return array
+     * @return array|null
      * @throws Exception|DBALDriverException
      */
-    public function findLastDiscussion(): array
+    public function findLastDiscussion(): ?array
     {
         $maxQuery = '
             SELECT p.discussionid AS disc_id, MAX(p.timestamp) AS max_date_time
@@ -261,7 +261,9 @@ class ForumDiscussion extends EntityRepository
         );
         $statement->bindValue('moderatorForumType', ForumForum::TYPE_MODERATORS_ONLY);
         $statement->execute();
-        return $statement->fetchAssociative();
+
+        $lastDiscussion = $statement->fetchAssociative();
+        return $lastDiscussion === false ? null : $lastDiscussion;
     }
 
     /**

@@ -95,6 +95,12 @@ class HomeController extends AbstractFOSRestController
 
         // Get the last forum topic where a response was posted
         $discussion = $this->doctrine->getRepository(ForumDiscussion::class)->findLastDiscussion();
+        $lastForumPost = is_null($discussion) ? null : [
+            'discussionId' => $discussion['id'],
+            'discussionTitle' => $discussion['title'],
+            'discussionLocked' => $discussion['locked'],
+            'lastPostTimestamp' => $discussion['max_post_timestamp'],
+        ];
 
         // Get one of the last rail-news items
         /**
@@ -107,12 +113,7 @@ class HomeController extends AbstractFOSRestController
         )[random_int(0, 4)];
 
         return $this->handleView($this->view([
-            'lastForumPost' => [
-                'discussionId' => $discussion['id'],
-                'discussionTitle' => $discussion['title'],
-                'discussionLocked' => $discussion['locked'],
-                'lastPostTimestamp' => $discussion['max_post_timestamp'],
-            ],
+            'lastForumPost' => $lastForumPost,
             'railNews' => [
                 'title' => $railNewsItem->title,
                 'timestamp' => $railNewsItem->timestamp->format('Y-m-d H:i:s'),
