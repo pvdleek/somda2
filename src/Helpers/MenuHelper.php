@@ -37,8 +37,7 @@ class MenuHelper implements RuntimeExtensionInterface
     public function getNumberOfOpenForumAlerts(): int
     {
         if ($this->authorizationHelper->isGranted(RoleGenerics::ROLE_ADMIN)) {
-            $openAlerts = $this->doctrine->getRepository(ForumPostAlert::class)->findBy(['closed' => false]);
-            return count($openAlerts);
+            return $this->doctrine->getRepository(ForumPostAlert::class)->getNumberOfOpenAlerts();
         }
         return 0;
     }

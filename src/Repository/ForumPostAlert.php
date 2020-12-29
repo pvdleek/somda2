@@ -4,9 +4,28 @@ namespace App\Repository;
 
 use App\Entity\ForumPostAlert as ForumPostAlertEntity;
 use Doctrine\ORM\EntityRepository;
+use Exception;
 
 class ForumPostAlert extends EntityRepository
 {
+    /**
+     * @return int
+     */
+    public function getNumberOfOpenAlerts(): int
+    {
+        $queryBuilder = $this->getEntityManager()
+            ->createQueryBuilder()
+            ->select('COUNT(a.id)')
+            ->from(ForumPostAlertEntity::class, 'a')
+            ->andWhere('a.closed = FALSE')
+            ->setMaxResults(1);
+        try {
+            return (int)$queryBuilder->getQuery()->getSingleScalarResult();
+        } catch (Exception $exception) {
+            return 0;
+        }
+    }
+
     /**
      * @return ForumPostAlertEntity[]
      */
