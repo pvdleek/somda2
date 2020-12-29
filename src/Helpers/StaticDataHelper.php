@@ -96,6 +96,10 @@ class StaticDataHelper implements RuntimeExtensionInterface
      */
     private function loadStaticData(): void
     {
+        $this->locations = [];
+        $this->users = [];
+        $this->routes = [];
+
         /**
          * @var Location[] $locationArray
          * @var Jargon[] $jargonArray
