@@ -6,6 +6,7 @@ use App\Entity\User;
 use Doctrine\DBAL\Exception as DBALException;
 use Doctrine\DBAL\Driver\Exception as DBALDriverException;
 use Doctrine\ORM\EntityRepository;
+use ErrorException;
 
 class ForumForum extends EntityRepository
 {
@@ -22,8 +23,8 @@ class ForumForum extends EntityRepository
                 COUNT(DISTINCT(`d`.`discussionid`)) AS `numberOfDiscussions`
             FROM `somda_forum_forums` `f`
             JOIN `somda_forum_cats` `c` ON `c`.`catid` = `f`.`catid`
-            JOIN `somda_forum_discussion` `d` ON `d`.`forumid` = `f`.`forumid`
-            JOIN `somda_forum_posts` `p` ON `p`.`discussionid` = `d`.`discussionid`
+            LEFT JOIN `somda_forum_discussion` `d` ON `d`.`forumid` = `f`.`forumid`
+            LEFT JOIN `somda_forum_posts` `p` ON `p`.`discussionid` = `d`.`discussionid`
             LEFT JOIN `somda_forum_mods` `m` ON `m`.`forumid` = `f`.`forumid` AND `m`.`uid` = :userId
             GROUP BY `f`.`forumid`';
 
@@ -67,7 +68,7 @@ class ForumForum extends EntityRepository
             $statement->bindValue('forumId', $forumId);
             $statement->execute();
             return (int)$statement->fetchFirstColumn()[0];
-        } catch (DBALException | DBALDriverException $exception) {
+        } catch (DBALException | DBALDriverException | ErrorException $exception) {
             return 0;
         }
     }
