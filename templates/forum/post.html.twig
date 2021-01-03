@@ -60,13 +60,15 @@
         {% endif %}
     </td>
     <td class="text">{{ post | displayForumPost | raw }}</td>
-    <td class="buttons">
-        {% if mayPost and not post.discussion.locked %}
-            <a class="somda-button" href="{{ path('forum_discussion_post_reply', { 'id': post.id }) }}">Reageer</a>
-            <a class="somda-button" href="{{ path('forum_discussion_post_quote', { 'id': post.id }) }}">Quote</a>
-        {% endif %}
-        {% if userIsModerator or (mayPost and not post.discussion.locked and post.author == app.user) %}
-            <a class="somda-button" href="{{ path('forum_discussion_post_edit', { 'id': post.id }) }}">Bewerk</a>
+    {% if userIsModerator or (mayPost and not post.discussion.locked) %}
+        <td class="buttons">
+            {% if mayPost and not post.discussion.locked %}
+                <a class="somda-button" href="{{ path('forum_discussion_post_reply', { 'id': post.id }) }}">Reageer</a>
+                <a class="somda-button" href="{{ path('forum_discussion_post_quote', { 'id': post.id }) }}">Quote</a>
+            {% endif %}
+            {% if userIsModerator or (mayPost and not post.discussion.locked and post.author == app.user) %}
+                <a class="somda-button" href="{{ path('forum_discussion_post_edit', { 'id': post.id }) }}">Bewerk</a>
+            {% endif %}
         {% endif %}
     </td>
 </tr>
