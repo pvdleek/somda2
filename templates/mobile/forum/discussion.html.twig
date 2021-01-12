@@ -118,7 +118,7 @@
             function wikiCheck(postId, operation)
             {
                 $.ajax({
-                    url: '{{ path('forum_post_wiki_check', { 'id': 1234, 'operation': 'ok' }) }}'.replace('1234', postId).replace('ok', operation)
+                    url: '{{ path('forum_post_wiki_check', { 'id': 1234, 'operation': 'ok' }) }}'.replace('/1234/', '/' + postId + '/').replace('ok', operation)
                 })
                 $('#wiki_' + postId).html('<i class="fas fa-check"></i>');
             }

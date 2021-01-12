@@ -42,7 +42,7 @@
 {% block javascripts %}
     <script>
         function manageTrainTableYear() {
-            document.location = '{{ path('manage_route_lists_year', { 'id': 9999 }) }}'.replace('9999', $('#trainTableYear').val());
+            document.location = '{{ path('manage_route_lists_year', { 'id': 9999 }) }}'.replace('/9999/', '/' + $('#trainTableYear').val() + '/');
         }
     </script>
 {% endblock %}

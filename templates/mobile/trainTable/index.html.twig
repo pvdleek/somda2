@@ -35,7 +35,7 @@
 {% block javascripts %}
     <script>
         function searchTrainTable() {
-            document.location = '{{ path('train_table_search', { 'trainTableYearId': trainTableIndexNumber, 'routeNumber': '1234' }) }}'.replace('1234', $('#route_number').val());
+            document.location = '{{ path('train_table_search', { 'trainTableYearId': trainTableIndexNumber, 'routeNumber': '1234' }) }}'.replace('/1234/', '/' + $('#route_number').val() + '/');
         }
     </script>
 {% endblock %}

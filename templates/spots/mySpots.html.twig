@@ -50,7 +50,7 @@
          */
         function editSpot(id)
         {
-            document.location = '{{ path('my_spots_edit', { 'id': 1234 }) }}'.replace('1234', id);
+            document.location = '{{ path('my_spots_edit', { 'id': 1234 }) }}'.replace('/1234/', '/' + id + '/');
         }
 
         /**
@@ -59,7 +59,7 @@
         function deleteSpot(id)
         {
             if (confirm('Weet je zeker dat je deze spot wilt verwijderen?')) {
-                document.location = '{{ path('my_spots_delete', { 'id': 1234 }) }}'.replace('1234', id);
+                document.location = '{{ path('my_spots_delete', { 'id': 1234 }) }}'.replace('/1234/', '/' + id + '/');
             }
         }
 
