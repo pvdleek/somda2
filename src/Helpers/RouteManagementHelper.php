@@ -121,7 +121,7 @@ class RouteManagementHelper
                 $routeList = $this->doctrine
                     ->getRepository(RouteList::class)
                     ->findForRouteNumber($this->routeList->trainTableYear, $routeNumber);
-                if (is_null($this->routeList)) {
+                if (is_null($routeList)) {
                     return false;
                 }
                 // We set this after the negative return, so te original routeList can still be retrieved from
