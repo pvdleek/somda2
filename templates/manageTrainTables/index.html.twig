@@ -87,7 +87,7 @@
             {
                 let location = '{{ path('manage_train_table_add', { 'routeListId': selectedRouteList.id, 'routeId': 1234, 'routeNumber': 5678 }) }}';
                 location = location.replace('1234', routeIdToCopy ? routeIdToCopy : 0);
-                location = location.replace('5678', prompt('Geef het treinnummer:', '{{ selectedRouteList.firstNumber | slice(0, 2) }}'));
+                location = location.replace('5678', prompt('Geef het treinnummer:', '{{ selectedRouteList.firstNumber | slice(0, (selectedRouteList.firstNumber | length) - 2) }}'));
                 document.location = location;
             }
         {% endif %}
