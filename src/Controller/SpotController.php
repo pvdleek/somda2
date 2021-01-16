@@ -91,6 +91,10 @@ class SpotController
     {
         $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_SPOTS_RECENT);
 
+        $trainTableYear = $this->doctrine
+            ->getRepository(TrainTableYear::class)
+            ->findTrainTableYearByDate(new DateTime());
+
         $spotFilter = new SpotFilter();
         $spots = null;
 
@@ -103,7 +107,9 @@ class SpotController
                     'Het is niet mogelijk om spots te bekijken zonder filter, kies minimaal 1 filter'
                 );
             } else {
-                $spots = $this->doctrine->getRepository(Spot::class)->findRecentWithSpotFilter($maxMonths, $spotFilter);
+                $spots = $this->doctrine
+                    ->getRepository(Spot::class)
+                    ->findRecentWithSpotFilter($maxMonths, $spotFilter, $trainTableYear);
             }
         }
 

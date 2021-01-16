@@ -59,6 +59,14 @@ class Spot
     public DateTime $spotDate;
 
     /**
+     * @var int
+     * @ORM\Column(name="dag", type="integer", nullable=false)
+     * @JMS\Expose()
+     * @SWG\Property(description="Day-number of the spot (1 till 7)", type="integer")
+     */
+    public int $dayNumber;
+
+    /**
      * @var integer
      * @ORM\Column(name="input_feedback_flag", type="integer", nullable=false)
      * @JMS\Exclude()

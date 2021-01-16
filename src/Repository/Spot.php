@@ -4,7 +4,9 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\Entity\Route;
+use App\Entity\RouteOperationDays;
 use App\Entity\Spot as SpotEntity;
+use App\Entity\TrainTableYear;
 use App\Entity\User;
 use App\Generics\DateGenerics;
 use App\Model\DataTableOrder;
@@ -36,11 +38,12 @@ class Spot extends EntityRepository
     ];
 
     /**
+     * @param TrainTableYear|null $trainTableYear
      * @return QueryBuilder
      */
-    private function getBaseQueryBuilder(): QueryBuilder
+    private function getBaseQueryBuilder(?TrainTableYear $trainTableYear = null): QueryBuilder
     {
-        return $this->getEntityManager()
+        $queryBuilder = $this->getEntityManager()
             ->createQueryBuilder()
             ->select('s.id AS id')
             ->addSelect('s.spotDate AS spotDate')
@@ -63,6 +66,27 @@ class Spot extends EntityRepository
             ->leftJoin('t.namePattern', 'np')
             ->leftJoin('s.extra', 'e')
             ->addOrderBy('s.timestamp', 'DESC');
+
+        if (!is_null($trainTableYear)) {
+            $queryBuilder
+                ->addSelect('tt.time AS spotTime')
+                ->join(
+                    RouteOperationDays::class,
+                    'rd',
+                    Join::WITH,
+                    'BIT_AND(rd.id, POWER(2, s.dayNumber)) = POWER(2, s.dayNumber)'
+                )
+                ->leftJoin(
+                    'r.trainTables',
+                    'tt',
+                    Join::WITH,
+                    'tt.trainTableYear = :trainTableYear AND tt.location = s.location AND rd.id = tt.routeOperationDays'
+                )
+                ->setParameter('trainTableYear', $trainTableYear)
+                ->addGroupBy('s.id');
+        }
+
+        return $queryBuilder;
     }
 
     /**
@@ -142,12 +166,16 @@ class Spot extends EntityRepository
     /**
      * @param int $maxMonths
      * @param SpotFilter $spotFilter
+     * @param TrainTableYear $trainTableYear
      * @return SpotModel[]
      * @throws Exception
      */
-    public function findRecentWithSpotFilter(int $maxMonths, SpotFilter $spotFilter): array
-    {
-        $queryBuilder = $this->getBaseQueryBuilder();
+    public function findRecentWithSpotFilter(
+        int $maxMonths,
+        SpotFilter $spotFilter,
+        TrainTableYear $trainTableYear
+    ): array {
+        $queryBuilder = $this->getBaseQueryBuilder($trainTableYear);
         $this->applySpotFilter($queryBuilder, $spotFilter, $maxMonths);
 
         $queryResults = $queryBuilder->getQuery()->getArrayResult();
@@ -183,7 +211,7 @@ class Spot extends EntityRepository
                 ->setParameter('minDate', new DateTime('-' . $maxMonths . ' months'));
         } else {
             $queryBuilder
-                ->andWhere('DATE(s.spotDate) = :' . self::FIELD_SPOT_DATE)
+                ->andWhere('s.spotDate = :' . self::FIELD_SPOT_DATE)
                 ->setParameter(
                     self::FIELD_SPOT_DATE,
                     $spotFilter->spotDate->format(DateGenerics::DATE_FORMAT_DATABASE)

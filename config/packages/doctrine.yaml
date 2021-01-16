@@ -19,5 +19,7 @@ doctrine:
         dayofweek: DoctrineExtensions\Query\Mysql\DayOfWeek
         month: DoctrineExtensions\Query\Mysql\Month
         year: DoctrineExtensions\Query\Mysql\Year
+      numeric_functions:
+        power: DoctrineExtensions\Query\Mysql\Power
       string_functions:
         group_concat: DoctrineExtensions\Query\Mysql\GroupConcat

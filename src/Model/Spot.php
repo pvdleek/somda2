@@ -3,10 +3,13 @@ declare(strict_types=1);
 
 namespace App\Model;
 
+use App\Traits\DateTrait;
 use DateTime;
 
 class Spot
 {
+    use DateTrait;
+
     /**
      * @var int
      */
@@ -16,6 +19,11 @@ class Spot
      * @var DateTime
      */
     public DateTime $spotDate;
+
+    /**
+     * @var int|null
+     */
+    public ?int $spotTime;
 
     /**
      * @var string
@@ -69,6 +77,7 @@ class Spot
     {
         $this->id = (int)$queryResult['id'];
         $this->spotDate = $queryResult['spotDate'];
+        $this->spotTime = isset($queryResult['spotTime']) ? $queryResult['spotTime'] : null;
         $this->routeNumber = $queryResult['routeNumber'];
         $this->positionName = $queryResult['positionName'];
         $this->trainNumber = $queryResult['trainNumber'];
@@ -78,5 +87,16 @@ class Spot
         $this->spotterUsername = $queryResult['spotterUsername'];
         $this->locationName = $queryResult['locationName'];
         $this->locationDescription = $queryResult['locationDescription'];
+    }
+
+    /**
+     * @return string
+     */
+    public function getDisplaySpotTime(): string
+    {
+        if (!is_null($this->spotTime)) {
+            return $this->timeDatabaseToDisplay($this->spotTime);
+        }
+        return '';
     }
 }

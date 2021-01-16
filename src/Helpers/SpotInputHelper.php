@@ -151,6 +151,7 @@ class SpotInputHelper
 
         $spot->timestamp = new DateTime();
         $spot->spotDate = $spotInput->spotDate;
+        $spot->dayNumber = $spotInput->spotDate->format('N');
         $spot->train = $train;
         $train->addSpot($spot);
         $spot->route = $route;

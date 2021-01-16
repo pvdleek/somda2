@@ -99,7 +99,7 @@
                                 <td>{{ spot.positionName }}</td>
                                 <td>{{ spot.extra }}</td>
                                 <td>{{ spot.spotDate | date('Y-m-d') }}</td>
-                                <td>{{ spot.spotDate | displayDateTime }}</td>
+                                <td>{{ spot.spotDate | displayDateTime }} {{ spot.displaySpotTime }}</td>
                                 <td>{{ spot.spotterUsername }}</td>
                                 <td>{{ spot.spotterId | displayUser(spot.spotterUsername) | raw }}</td>
                                 <td>{{ spot.locationName }}</td>
