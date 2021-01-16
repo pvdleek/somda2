@@ -23,8 +23,9 @@ final class Version20210116142047 extends AbstractMigration
     public function up(Schema $schema) : void
     {
         $this->addSql('ALTER TABLE `somda_spots` ADD `dag` INT(11) NULL');
-        $this->addSql('UPDATE `somda_spots` SET `dag` = DAYOFWEEK(`datum`)');
-        $this->addSql('UPDATE `somda_spots` SET `dag` = 7 WHERE `dag` = 0');
+        $this->addSql(
+            'UPDATE `somda_spots` SET `dag` = CASE WHEN DAYOFWEEK(`datum`) = 1 THEN 7 ELSE DAYOFWEEK(`datum`) - 1 END
+        ');
     }
 
     /**
