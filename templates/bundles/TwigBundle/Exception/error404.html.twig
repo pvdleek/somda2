@@ -7,7 +7,7 @@
             <br />
             <img alt="404" height="350" src="{{ asset('images/error/404.png') }}" />
             <h1>{{ 'general.error.generic.header' | trans }}</h1>
-            <p>{{ 'general.error.generic.404info' | trans | format(path('home')) }}</p>
+            <p>{{ 'general.error.generic.404info' | trans | format(path('home')) | raw }}</p>
         </div>
     </div>
 {% endblock %}
