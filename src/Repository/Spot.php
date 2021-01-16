@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\Entity\Route;
-use App\Entity\RouteOperationDays;
 use App\Entity\Spot as SpotEntity;
 use App\Entity\TrainTableYear;
 use App\Entity\User;
@@ -70,17 +69,17 @@ class Spot extends EntityRepository
         if (!is_null($trainTableYear)) {
             $queryBuilder
                 ->addSelect('tt.time AS spotTime')
-                ->join(
-                    RouteOperationDays::class,
-                    'rd',
-                    Join::WITH,
-                    'BIT_AND(rd.id, POWER(2, s.dayNumber)) = POWER(2, s.dayNumber)'
-                )
                 ->leftJoin(
                     'r.trainTables',
                     'tt',
                     Join::WITH,
-                    'tt.trainTableYear = :trainTableYear AND tt.location = s.location AND rd.id = tt.routeOperationDays'
+                    'tt.trainTableYear = :trainTableYear AND tt.route = s.route AND tt.location = s.location'
+                )
+                ->leftJoin(
+                    'tt.routeOperationDays',
+                    'rd',
+                    Join::WITH,
+                    'BIT_AND(rd.id, POWER(2, s.dayNumber)) = POWER(2, s.dayNumber)'
                 )
                 ->setParameter('trainTableYear', $trainTableYear)
                 ->addGroupBy('s.id');
