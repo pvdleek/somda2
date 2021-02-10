@@ -11,7 +11,7 @@ use Swagger\Annotations as SWG;
 
 /**
  * @ORM\Table(name="somda_sns_spoor_nieuws")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\RailNews")
  */
 class RailNews
 {
