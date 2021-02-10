@@ -14,7 +14,7 @@
                     <th>&nbsp;</th>
                 </tr>
                 {% for item in railNews %}
-                    <tr{% if not item.approved %} style="background-color:red;"{% endif %}>
+                    <tr{% if not item.approved %} style="font-weight:bold;"{% endif %}>
                         <td class="news-checkbox"><input id="item_{{ item.id }}" type="checkbox" /></td>
                         <td>{{ item.timestamp | displayDateTime(true) }}</td>
                         <td><img alt="{{ item.source.name }}" class="rail-news-logo-overview" src="{{ asset('images/news-logos/' ~ item.source.logo) }}" /></td>
