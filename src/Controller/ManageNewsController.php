@@ -109,7 +109,7 @@ class ManageNewsController
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Beheer spoornieuws',
             'railNews' => $this->formHelper->getDoctrine()
                 ->getRepository(RailNews::class)
-                ->findBy([], ['approved' => 'ASC', RailNewsForm::FIELD_TIMESTAMP => 'DESC'], 100),
+                ->findBy([], ['approved' => 'DESC', RailNewsForm::FIELD_TIMESTAMP => 'DESC'], 100),
         ]);
     }
 
