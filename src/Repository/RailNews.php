@@ -20,8 +20,8 @@ class RailNews extends EntityRepository
             ->select('r')
             ->from(RailNewsEntity::class, 'r')
             ->andWhere('r.approved = false OR r.active = true')
-            ->addOrderBy('approved', 'DESC')
-            ->addOrderBy(RailNewsForm::FIELD_TIMESTAMP, 'DESC')
+            ->addOrderBy('r.approved', 'DESC')
+            ->addOrderBy('r.' . RailNewsForm::FIELD_TIMESTAMP, 'DESC')
             ->setMaxResults($limit);
         return $queryBuilder->getQuery()->getResult();
     }
