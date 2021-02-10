@@ -117,6 +117,11 @@ class GetRailNewsCommand extends Command
      */
     private function isArticleMatch(ItemInterface $item): bool
     {
+        // Disapprove news-items in the future
+        if (!is_null($item->getLastModified()) && $item->getLastModified() > new DateTime()) {
+            return false;
+        }
+
         foreach (self::$wordMatches as $wordMatch) {
             if ($this->isWordMatch($wordMatch, $item)) {
                 if (isset($wordMatch[self::NEGATIVE_WORD])) {
