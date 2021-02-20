@@ -1,0 +1,32 @@
+{% extends('base.html.twig') %}
+
+{% block content %}
+
+    <div class="panel">
+        <div class="panel-title">Materieelnamen</div>
+        <div class="panel-content">
+            <table>
+                <tr><th colspan="10">Kies een vervoerder</th></tr>
+                <tr>
+                    {% for id, name in transporters %}
+                        <td><a href="#t{{ id }}">{{ name }}</a></td>
+                        {% if loop.index is divisible by(7) %}</tr><tr>{% endif %}
+                    {% endfor %}
+                </tr>
+            </table>
+            <br />
+
+            <table>
+                <tr><th>Vervoerder</th><th>Nummer</th><th>Naam</th></tr>
+                {% set lastTransporterId = 0 %}
+                {% for train in trains %}
+                    <tr>
+                        <td>{% if lastTransporterId != train.transporterId %}<a name="t{{ train.transporterId }}"></a> {{ train.transporterName }}{% else %}&nbsp;{% endif %}</td>
+                        <td>{{ train.namePatternName }} <i class="fas fa-train"></i> <a href="{{ path('spots_search', { 'maxMonths': 12, 'searchParameters': '///' ~ train.number ~ '/' }) }}" title="Bekijk alle spots van trein {{ train.number }}">{{ train.number }}</a></td>
+                        <td>{{ train.name }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+{% endblock %}

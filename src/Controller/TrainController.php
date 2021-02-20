@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Entity\Train;
 use App\Entity\TrainComposition;
 use App\Entity\TrainCompositionProposition;
 use App\Entity\TrainCompositionType;
@@ -236,5 +237,20 @@ class TrainController
         $this->formHelper->getDoctrine()->getManager()->flush();
 
         return new JsonResponse();
+    }
+
+    public function namesAction(): Response
+    {
+        $trains = $this->formHelper->getDoctrine()->getRepository(Train::class)->findByTransporter();
+        $transporters = [];
+        foreach ($trains as $train) {
+            $transporters[$train['transporterId']] = $train['transporterName'];
+        }
+
+        return $this->templateHelper->render('train/names.html.twig', [
+            TemplateHelper::PARAMETER_PAGE_TITLE => 'Materieelnamen',
+            'transporters' => $transporters,
+            'trains' => $trains,
+        ]);
     }
 }

@@ -240,7 +240,7 @@ ddar_trains:
 materieelnamen:
   path: /materieel-namen/
   methods: [GET]
-  controller: App\Controller\HomeController::notImplementedAction
+  controller: App\Controller\TrainController::namesAction
 
 #########
 # Forum #

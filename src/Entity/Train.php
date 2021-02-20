@@ -15,7 +15,7 @@ use Swagger\Annotations as SWG;
  *     uniqueConstraints={@ORM\UniqueConstraint(name="idx_48117_nummer", columns={"nummer"})},
  *     indexes={@ORM\Index(name="idx_48117_vervoerder_id", columns={"vervoerder_id"})}
  * )
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\Train")
  */
 class Train
 {
