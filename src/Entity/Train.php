@@ -39,9 +39,9 @@ class Train
 
     /**
      * @var string|null
-     * @ORM\Column(name="naam", type="string", length=35, nullable=true)
+     * @ORM\Column(name="naam", type="string", length=50, nullable=true)
      * @JMS\Expose()
-     * @SWG\Property(description="Name of the train if known", maxLength=35, type="string")
+     * @SWG\Property(description="Name of the train if known", maxLength=50, type="string")
      */
     public ?string $name;
 
