@@ -28,9 +28,9 @@ class Transporter
 
     /**
      * @var string
-     * @ORM\Column(name="omschrijving", type="string", length=35, nullable=false)
+     * @ORM\Column(name="omschrijving", type="string", length=50, nullable=false)
      * @JMS\Expose()
-     * @SWG\Property(description="Name of the transporter", maxLength=35, type="string")
+     * @SWG\Property(description="Name of the transporter", maxLength=50, type="string")
      */
     public string $name = '';
 
