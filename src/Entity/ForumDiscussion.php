@@ -21,7 +21,7 @@ class ForumDiscussion
 
     /**
      * @var string
-     * @ORM\Column(name="title", type="string", length=50, nullable=false)
+     * @ORM\Column(name="title", type="string", length=75, nullable=false)
      */
     public string $title = '';
 
