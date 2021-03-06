@@ -54,7 +54,7 @@ class ForumHelper implements RuntimeExtensionInterface
                 str_replace(['&nbsp;', "\r\n", '<p>&nbsp;</p>'], ' ', $post->text->text),
                 '<br><p><a><img><ul><ol><li><blockquote><strong><em><s><hr>'
             );
-//            $text = $this->replaceLinks(str_replace('</p>', ' </p>', $text));
+            $text = $this->replaceLinks($text);
         } else {
             $text = $this->doSpecialText($post->text->text);
         }
