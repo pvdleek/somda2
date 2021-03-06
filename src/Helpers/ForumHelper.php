@@ -116,10 +116,16 @@ class ForumHelper implements RuntimeExtensionInterface
      */
     private function replaceLinks(string $text): string
     {
-        $pattern = '/((((http|https|ftp|ftps)\:\/\/))' .
+        $pattern = '/!"((((http|https|ftp|ftps)\:\/\/))' .
             '(([a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,63})|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(\/[^) \n\r]*)?)/';
         $replacement = '<a href="\1" rel="ugc" target="_blank">\5</a>';
         $text = preg_replace($pattern, $replacement, $text);
+
+        $pattern = '/">((((http|https|ftp|ftps)\:\/\/))' .
+            '(([a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,63})|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(\/[^) \n\r]*)?)/';
+        $replacement = '">$5</a>';
+        $text = preg_replace($pattern, $replacement, $text);
+
         if (isset($_SERVER['HTTP_HOST'])) {
             $server = $_SERVER['HTTP_HOST'];
             if (substr($server, 0, 4) != 'http') {
@@ -131,6 +137,7 @@ class ForumHelper implements RuntimeExtensionInterface
             ];
             $text = str_replace($replace, $server, $text);
         }
+
         return $text;
     }
 
