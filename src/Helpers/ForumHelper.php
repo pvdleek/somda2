@@ -122,7 +122,7 @@ class ForumHelper implements RuntimeExtensionInterface
         $text = preg_replace($pattern, $replacement, $text);
 
         $pattern = '/">((((http|https|ftp|ftps)\:\/\/))' .
-            '(([a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,63})|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(\/[^) \n\r]*)?)/';
+            '(([a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,63})|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(\/[^<^) \n\r]*)?)/';
         $replacement = '">$5</a>';
         $text = preg_replace($pattern, $replacement, $text);
 
