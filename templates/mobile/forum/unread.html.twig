@@ -1,11 +1,11 @@
 {% extends('mobile/base.html.twig') %}
 
 {% block content %}
-    <a class="somda-button" href="{{ path('forum') }}">Naar het forum-overzicht</a>
+    <a class="somda-button" href="{{ path('forum') }}">Naar het forumoverzicht</a>
     <a class="somda-button" href="{{ path('forum_unread_mark_read') }}">Markeer alle forumberichten als gelezen</a>
 
     <table class="forum-overview">
-        <tr><th>Forum-discussie</th></tr>
+        <tr><th>Forumdiscussie</th></tr>
         {% for discussion in discussions | slice(0, 100) %}
             <tr>
                 <td>

@@ -28,7 +28,7 @@ final class Version20201125113445 extends AbstractMigration
             VALUES (
                 \'' . UserPreference::KEY_APP_MARK_FORUM_READ . '\',
                 \'boolean\',
-                \'Markeer forum-discussies die ik bekijk als gelezen\',
+                \'Markeer forumdiscussies die ik bekijk als gelezen\',
                 \'0\',
                 510
             )
