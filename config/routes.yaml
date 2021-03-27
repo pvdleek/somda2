@@ -213,7 +213,7 @@ train_compositions:
   methods: [GET]
   controller: App\Controller\TrainController::indexAction
 train_compositions_type:
-  path: /materieel-samenstellingen/t{typeId}/
+  path: /materieel-samenstellingen/{typeId}/
   methods: [GET]
   requirements: { typeId: \d+ }
   controller: App\Controller\TrainController::indexAction
