@@ -117,7 +117,7 @@
                     {% for location in locations %}
                         {% if location.latitude %}
                             let marker{{ counter }} = L.marker([{{ location.latitude }}, {{ location.longitude }}]).addTo(locationsMap);
-                            marker{{ counter }}.bindPopup("{{ location.description }}");
+                            marker{{ counter }}.bindPopup("{{ location.name }} - {{ location.description }}");
                             {% set counter = counter + 1 %}
                         {% endif %}
                     {% endfor %}
