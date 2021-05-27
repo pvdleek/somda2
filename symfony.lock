@@ -102,6 +102,9 @@
     "doctrine/dbal": {
         "version": "v2.10.1"
     },
+    "doctrine/deprecations": {
+        "version": "v0.5.3"
+    },
     "doctrine/doctrine-bundle": {
         "version": "2.0",
         "recipe": {
@@ -342,6 +345,9 @@
     },
     "phpspec/prophecy": {
         "version": "1.11.1"
+    },
+    "phpstan/phpdoc-parser": {
+        "version": "0.5.4"
     },
     "psr/cache": {
         "version": "1.0.1"
@@ -647,6 +653,9 @@
     "symfony/property-info": {
         "version": "v5.0.5"
     },
+    "symfony/proxy-manager-bridge": {
+        "version": "v5.1.11"
+    },
     "symfony/routing": {
         "version": "5.1",
         "recipe": {
@@ -780,9 +789,6 @@
     },
     "vimeo/psalm": {
         "version": "3.14.1"
-    },
-    "webimpress/safe-writer": {
-        "version": "2.0.1"
     },
     "webmozart/assert": {
         "version": "1.7.0"
