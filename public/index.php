@@ -16,7 +16,10 @@ if ($_SERVER['APP_DEBUG']) {
     Debug::enable();
 }
 
-Request::setTrustedProxies(['10.62.81.0/24'], Request::HEADER_X_FORWARDED_ALL);
+Request::setTrustedProxies(['10.62.81.0/24'], (
+    Request::HEADER_X_FORWARDED_FOR | Request::HEADER_X_FORWARDED_HOST |
+    Request::HEADER_X_FORWARDED_PORT | Request::HEADER_X_FORWARDED_PROTO
+));
 if ($trustedHosts = $_SERVER['TRUSTED_HOSTS'] ?? false) {
     Request::setTrustedHosts([$trustedHosts]);
 }
