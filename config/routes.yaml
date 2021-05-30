@@ -203,7 +203,12 @@ my_spots_bulk_edit_location:
 pois:
   path: /spotpunten/
   methods: [GET]
-  controller: App\Controller\HomeController::notImplementedAction
+  controller: App\Controller\PoiController::indexAction
+pois_detail:
+  path: /spotpunten/{id}/
+  methods: [GET]
+  requirements: { id: \d+ }
+  controller: App\Controller\PoiController::detailAction
 
 ##########
 # Trains #

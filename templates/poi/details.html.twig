@@ -1,0 +1,31 @@
+{% extends('base.html.twig') %}
+
+{% block content %}
+    <br />
+
+    <div class="panel">
+        <div class="panel-title">Spotpunt "{{ poi.name }}"</div>
+        <div class="panel-content">
+            <table class="nowrap">
+                <tr><th>Provincie</th><td>{{ poi.category.name }}</td></tr>
+                <tr><th>Naam</th><td>{{ poi.name }}</td></tr>
+                <tr><th>Voorbeeld-foto</th><td><img src="/images/spotpunten/{{ poi.photo }}"></td></tr>
+                <tr><th>Locatie</th><td>{{ poi.location.name }} - <a href="{{ path('passing_routes_search', { 'trainTableYearId': 0, 'dayNumber': ('now' | date('N')) - 1, 'startTime': ('5 minutes ago' | date('H:i')), 'endTime': ('+30 minutes' | date('H:i')), 'locationName': poi.locationForRoutes.name }) }}">Doorkomststaat</a></td></tr>
+                <tr>
+                    <th>Traject</th>
+                    <td>
+                        <span title="{{ poi.locationSection1.description }}">{{ poi.locationSection1.name }}</span> -
+                        <span title="{{ poi.locationSection2.description }}">{{ poi.locationSection2.name }}</span>
+                    </td>
+                </tr>
+                <tr><th>Kilometrage</th><td>{{ poi.kilometre }}</td>
+                <tr><th>GPS</th><td><a href="{{ poi.googleUrl }}" target="_blank">{{ poi.gps }}</a></td>
+                <tr><th>Zon-stand winter</th><td>{{ poi.sunPositionWinter }}</td>
+                <tr><th>Zon-stand zomer</th><td>{{ poi.sunPositionSummer }}</td>
+                <tr><th>Route met OV</th><td>{{ poi.text.routePublicTransport }}</td>
+                <tr><th>Route met de auto</th><td>{{ poi.text.routeCar }}</td>
+                <tr><th>Bijzonderheden</th><td>{{ poi.text.particularities }}</td>
+            </table>
+        </div>
+    </div>
+{% endblock %}
