@@ -8,7 +8,7 @@
                 <tr><th>Bron</th><th>Datum</th><th>Titel</th></tr>
                 {% for item in news %}
                     <tr>
-                        <td><img alt="{{ item.source.name }}" class="rail-news-logo-overview" src="{{ asset('images/news-logos/' ~ item.source.logo) }}" /></td>
+                        <td><img alt="{{ item.source.description }}" class="rail-news-logo-overview" src="{{ asset('images/news-logos/' ~ item.source.logo) }}" /></td>
                         <td>{{ item.timestamp | displayDateTime(true) }}</td>
                         <td><a class="rail-news-title" href="{{ item.url }}" rel="noopener" target="_blank">{{ item.title }}</a></td>
                     </tr>
