@@ -7,7 +7,7 @@ use App\Generics\RoleGenerics;
 use App\Helpers\ForumSearchHelper;
 use App\Helpers\UserHelper;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
-use Swagger\Annotations as SWG;
+use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\Response;
 
 class ForumSearchController extends AbstractFOSRestController
@@ -36,59 +36,59 @@ class ForumSearchController extends AbstractFOSRestController
      * @param string $searchMethod
      * @param string $terms
      * @return Response
-     * @SWG\Parameter(
+     * @OA\Parameter(
      *     description="Search method to use, 'all' to have all words match, 'some' to let any word match",
      *     in="path",
      *     name="searchMethod",
      *     type="string",
      *     enum={"all","some"}
      * )
-     * @SWG\Parameter(
+     * @OA\Parameter(
      *     description="Words to search for, separated by a space",
      *     in="path",
      *     name="terms",
      *     type="string",
      * )
-     * @SWG\Response(
+     * @OA\Response(
      *     response=200,
      *     description="Searches the forum with the given terms and returns an array with results",
-     *     @SWG\Schema(
-     *         @SWG\Property(
+     *     @OA\Schema(
+     *         @OA\Property(
      *             property="meta",
      *             type="object",
-     *             @SWG\Property(
+     *             @OA\Property(
      *                 description="The maximum number of results this action returns",
      *                 property="max_number_of_results",
      *                 type="integer",
      *             ),
-     *             @SWG\Property(
+     *             @OA\Property(
      *                 description="Indicates if there were more results than returned",
      *                 property="more_results",
      *                 type="boolean",
      *             )
      *         ),
-     *         @SWG\Property(
+     *         @OA\Property(
      *             property="data",
      *             type="array",
-     *             @SWG\Items(
+     *             @OA\Items(
      *                 type="object",
-     *                 @SWG\Property(
+     *                 @OA\Property(
      *                     description="Indicates if the search-term was found in the title",
      *                     property="title_match",
      *                     type="boolean"
      *                 ),
-     *                 @SWG\Property(property="discussion_id", type="integer"),
-     *                 @SWG\Property(property="discussion_title", type="string"),
-     *                 @SWG\Property(property="discussion_locked", type="boolean"),
-     *                 @SWG\Property(property="author_id", type="integer"),
-     *                 @SWG\Property(property="author_username", type="string"),
-     *                 @SWG\Property(property="post_id", type="integer"),
-     *                 @SWG\Property(format="date-time", property="post_timestamp", type="string"),
+     *                 @OA\Property(property="discussion_id", type="integer"),
+     *                 @OA\Property(property="discussion_title", type="string"),
+     *                 @OA\Property(property="discussion_locked", type="boolean"),
+     *                 @OA\Property(property="author_id", type="integer"),
+     *                 @OA\Property(property="author_username", type="string"),
+     *                 @OA\Property(property="post_id", type="integer"),
+     *                 @OA\Property(format="date-time", property="post_timestamp", type="string"),
      *             ),
      *         ),
      *     ),
      * )
-     * @SWG\Tag(name="Forum")
+     * @OA\Tag(name="Forum")
      */
     public function indexAction(string $searchMethod, string $terms): Response
     {

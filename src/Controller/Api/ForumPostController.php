@@ -15,7 +15,7 @@ use App\Helpers\UserHelper;
 use Exception;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use Nelmio\ApiDocBundle\Annotation\Model;
-use Swagger\Annotations as SWG;
+use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -65,18 +65,57 @@ class ForumPostController extends AbstractFOSRestController
      * @param int $discussionId
      * @return Response
      * @throws Exception
-     * @SWG\Post(
-     *     @SWG\Parameter(in="formData", name="signatureOn", type="integer", enum={0,1}),
-     *     @SWG\Parameter(in="formData", name="text", type="string")
-     * )
-     * @SWG\Response(
-     *     response=200,
-     *     description="Returns the new forum-post",
-     *     @SWG\Schema(
-     *         @SWG\Property(property="data", type="object", ref=@Model(type=ForumPost::class)),
+     * @OA\Post(
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="multipart/form-data",
+     *             @OA\Schema(ref="#/components/schemas/NewForumPost")
+     *             @OA\Schema(
+     *                 @OA\Parameter(in="query", name="signatureOn", type="integer", enum={0,1}),
+     *                 @OA\Parameter(in="query", name="text", type="string")
+     *             ),
+     *         ),
      *     ),
      * )
-     * @SWG\Tag(name="Forum")
+     * @OA\Response(
+     *     response=200,
+     *     description="Returns the new forum-post",
+     *     @OA\Schema(
+     *         @OA\Property(property="data", type="object", ref=@Model(type=ForumPost::class)),
+     *     ),
+     * )
+     * @OA\Tag(name="Forum")
+     */
+
+//required:
+//        - name
+//      properties:
+//        name:
+//          type: string
+//        tag:
+//          type: string
+//      type: object
+    /**
+     * @OA\Post(
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="multipart/form-data",
+     *             @OA\Schema(ref="#/components/schemas/NewPet")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="pet response",
+     *         @OA\JsonContent(ref="#/components/schemas/Pet")
+     *     ),
+     *     @OA\Response(
+     *         response="default",
+     *         description="unexpected error",
+     *         @OA\JsonContent(ref="#/components/schemas/ErrorModel")
+     *     )
+     * )
      */
     public function replyAction(Request $request, int $discussionId): Response
     {

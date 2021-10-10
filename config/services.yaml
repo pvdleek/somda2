@@ -15,6 +15,8 @@ services:
     tags: ['controller.service_arguments']
   debril.rss_atom.provider:
     class: App\Feed\FeedProvider
+  nelmio_api_doc.generator_locator:
+    class: Nelmio\ApiDocBundle\NelmioApiDocBundle
   Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler:
     arguments:
       - '%env(DATABASE_URL)%'

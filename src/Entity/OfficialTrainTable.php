@@ -6,7 +6,7 @@ use App\Traits\DateTrait;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as JMS;
 use Nelmio\ApiDocBundle\Annotation\Model;
-use Swagger\Annotations as SWG;
+use OpenApi\Annotations as OA;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -31,7 +31,7 @@ class OfficialTrainTable
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @JMS\Expose()
-     * @SWG\Property(description="Unique identifier", type="integer")
+     * @OA\Property(description="Unique identifier", type="integer")
      */
     public ?int $id = null;
 
@@ -39,7 +39,7 @@ class OfficialTrainTable
      * @var int
      * @ORM\Column(name="ott_order", type="integer", nullable=false, options={"default"="1"})
      * @JMS\Expose()
-     * @SWG\Property(description="The order in which the items should be displayed", type="integer")
+     * @OA\Property(description="The order in which the items should be displayed", type="integer")
      */
     public int $order = 1;
 
@@ -48,7 +48,7 @@ class OfficialTrainTable
      * @ORM\Column(name="ott_action", type="string", length=1, nullable=false, options={"default"="-"})
      * @Assert\Choice(choices=TrainTable::ACTION_VALUES)
      * @JMS\Expose()
-     * @SWG\Property(
+     * @OA\Property(
      *     description="The action on the location: 'v' for departure, '-' for a drivethrough,\
              '+' for a short stop and 'a' for arrival",
      *     maxLength=1,
@@ -62,7 +62,7 @@ class OfficialTrainTable
      * @var int|null
      * @ORM\Column(name="ott_time", type="integer", nullable=true)
      * @JMS\Exclude()
-     * @SWG\Property(
+     * @OA\Property(
      *     description="The time of the trainTable action (hh:mm, 24-hour clock, GMT+1 Amsterdam timezone)",
      *     property="displayTime",
      *     type="string",
@@ -82,7 +82,7 @@ class OfficialTrainTable
      * @ORM\ManyToOne(targetEntity="App\Entity\OfficialFootnote")
      * @ORM\JoinColumn(name="ott_ofo_id", referencedColumnName="ofo_id")
      * @JMS\Expose()
-     * @SWG\Property(
+     * @OA\Property(
      *     description="The footnote to which this trainTable belongs",
      *     ref=@Model(type=OfficialFootnote::class),
      * )
@@ -94,7 +94,7 @@ class OfficialTrainTable
      * @ORM\ManyToOne(targetEntity="App\Entity\Transporter")
      * @ORM\JoinColumn(name="ott_transporter_id", referencedColumnName="vervoerder_id")
      * @JMS\Expose()
-     * @SWG\Property(
+     * @OA\Property(
      *     description="The transporter of this trainTable",
      *     ref=@Model(type=Transporter::class),
      * )
@@ -106,7 +106,7 @@ class OfficialTrainTable
      * @ORM\ManyToOne(targetEntity="App\Entity\Characteristic")
      * @ORM\JoinColumn(name="ott_characteristic_id", referencedColumnName="karakteristiek_id")
      * @JMS\Expose()
-     * @SWG\Property(
+     * @OA\Property(
      *     description="The characteristic of this trainTable",
      *     ref=@Model(type=Characteristic::class),
      * )
@@ -126,7 +126,7 @@ class OfficialTrainTable
      * @ORM\ManyToOne(targetEntity="App\Entity\Location", inversedBy="trainTables")
      * @ORM\JoinColumn(name="ott_location_id", referencedColumnName="afkid")
      * @JMS\Expose()
-     * @SWG\Property(
+     * @OA\Property(
      *     description="The location of the trainTable action",
      *     ref=@Model(type=Location::class),
      * )

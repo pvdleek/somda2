@@ -5,7 +5,7 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as JMS;
-use Swagger\Annotations as SWG;
+use OpenApi\Annotations as OA;
 
 /**
  * @ORM\Table(name="somda_forum_cats")
@@ -19,7 +19,7 @@ class ForumCategory
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @JMS\Expose()
-     * @SWG\Property(description="Unique identifier", type="integer")
+     * @OA\Property(description="Unique identifier", type="integer")
      */
     public ?int $id = null;
 
@@ -27,7 +27,7 @@ class ForumCategory
      * @var string
      * @ORM\Column(name="name", type="string", length=30, nullable=false)
      * @JMS\Expose()
-     * @SWG\Property(description="Name of the category", maxLength=30, type="string")
+     * @OA\Property(description="Name of the category", maxLength=30, type="string")
      */
     public string $name;
 
@@ -35,7 +35,7 @@ class ForumCategory
      * @var int
      * @ORM\Column(name="volgorde", type="integer", nullable=false, options={"default"="1"})
      * @JMS\Expose()
-     * @SWG\Property(description="The order in which to display the forums", type="integer")
+     * @OA\Property(description="The order in which to display the forums", type="integer")
      */
     public int $order = 1;
 

@@ -6,7 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as JMS;
 use Nelmio\ApiDocBundle\Annotation\Model;
-use Swagger\Annotations as SWG;
+use OpenApi\Annotations as OA;
 
 /**
  * @ORM\Table(
@@ -28,7 +28,7 @@ class Route
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @JMS\Expose()
-     * @SWG\Property(description="Unique identifier", type="integer")
+     * @OA\Property(description="Unique identifier", type="integer")
      */
     public ?int $id = null;
 
@@ -36,7 +36,7 @@ class Route
      * @var string
      * @ORM\Column(name="treinnr", type="string", length=15, nullable=false)
      * @JMS\Expose()
-     * @SWG\Property(description="The route-number", maxLength=15, type="string")
+     * @OA\Property(description="The route-number", maxLength=15, type="string")
      */
     public string $number = '';
 
@@ -51,7 +51,7 @@ class Route
      * @var TrainTableFirstLast[]
      * @ORM\OneToMany(targetEntity="App\Entity\TrainTableFirstLast", mappedBy="route")
      * @JMS\Expose()
-     * @SWG\Property(description="The days on which this route runs", ref=@Model(type=TrainTableFirstLast::class))
+     * @OA\Property(description="The days on which this route runs", ref=@Model(type=TrainTableFirstLast::class))
      */
     private $trainTableFirstLasts;
 

@@ -9,7 +9,7 @@ use App\Helpers\UserHelper;
 use Doctrine\Persistence\ManagerRegistry;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use Nelmio\ApiDocBundle\Annotation\Model;
-use Swagger\Annotations as SWG;
+use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\Response;
 
 class TrainTableYearController extends AbstractFOSRestController
@@ -36,14 +36,14 @@ class TrainTableYearController extends AbstractFOSRestController
 
     /**
      * @return Response
-     * @SWG\Response(
+     * @OA\Response(
      *     response=200,
      *     description="Returns all trainTableYears in the Somda database",
-     *     @SWG\Schema(
-     *         @SWG\Property(property="data", type="array", @SWG\Items(ref=@Model(type=TrainTableYear::class)))
+     *     @OA\Schema(
+     *         @OA\Property(property="data", type="array", @OA\Items(ref=@Model(type=TrainTableYear::class)))
      *     )
      * )
-     * @SWG\Tag(name="Train-tables")
+     * @OA\Tag(name="Train-tables")
      */
     public function indexAction(): Response
     {

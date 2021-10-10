@@ -10,7 +10,7 @@ use App\Helpers\UserHelper;
 use Doctrine\Persistence\ManagerRegistry;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use Nelmio\ApiDocBundle\Annotation\Model;
-use Swagger\Annotations as SWG;
+use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\Response;
 
 class NewsController extends AbstractFOSRestController
@@ -38,7 +38,7 @@ class NewsController extends AbstractFOSRestController
     /**
      * @param int|null $id
      * @return Response
-     * @SWG\Parameter(
+     * @OA\Parameter(
      *     description="ID of a specific news-item to request, all information about the items is in \
      *         the initial request. But requesting a specific news-item for a logged-in user will mark the \
      *         item as read",
@@ -46,14 +46,14 @@ class NewsController extends AbstractFOSRestController
      *     name="id",
      *     type="integer",
      * )
-     * @SWG\Response(
+     * @OA\Response(
      *     response=200,
      *     description="Returns a single or all Somda news-items",
-     *     @SWG\Schema(
-     *         @SWG\Property(property="data", type="array", @SWG\Items(ref=@Model(type=News::class))),
+     *     @OA\Schema(
+     *         @OA\Property(property="data", type="array", @OA\Items(ref=@Model(type=News::class))),
      *     ),
      * )
-     * @SWG\Tag(name="News")
+     * @OA\Tag(name="News")
      */
     public function indexAction(int $id = null): Response
     {
@@ -86,21 +86,21 @@ class NewsController extends AbstractFOSRestController
     /**
      * @param int|null $limit
      * @return Response
-     * @SWG\Parameter(
+     * @OA\Parameter(
      *     default="25",
      *     description="The maximum number of items to return (limited to 100)",
      *     in="path",
      *     name="limit",
      *     type="integer",
      * )
-     * @SWG\Response(
+     * @OA\Response(
      *     response=200,
      *     description="Returns all rail-news-items",
-     *     @SWG\Schema(
-     *         @SWG\Property(property="data", type="array", @SWG\Items(ref=@Model(type=RailNews::class))),
+     *     @OA\Schema(
+     *         @OA\Property(property="data", type="array", @OA\Items(ref=@Model(type=RailNews::class))),
      *     ),
      * )
-     * @SWG\Tag(name="News")
+     * @OA\Tag(name="News")
      */
     public function railNewsAction(int $limit = null): Response
     {

@@ -5,7 +5,7 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as JMS;
-use Swagger\Annotations as SWG;
+use OpenApi\Annotations as OA;
 
 /**
  * @ORM\Table(
@@ -22,7 +22,7 @@ class Transporter
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @JMS\Expose()
-     * @SWG\Property(description="Unique identifier", type="integer")
+     * @OA\Property(description="Unique identifier", type="integer")
      */
     public ?int $id = null;
 
@@ -30,7 +30,7 @@ class Transporter
      * @var string
      * @ORM\Column(name="omschrijving", type="string", length=50, nullable=false)
      * @JMS\Expose()
-     * @SWG\Property(description="Name of the transporter", maxLength=50, type="string")
+     * @OA\Property(description="Name of the transporter", maxLength=50, type="string")
      */
     public string $name = '';
 
@@ -38,7 +38,7 @@ class Transporter
      * @var int|null
      * @ORM\Column(name="iff_code", type="integer", nullable=true)
      * @JMS\Expose()
-     * @SWG\Property(description="Official IFF code", type="integer")
+     * @OA\Property(description="Official IFF code", type="integer")
      */
     public ?int $iffCode = null;
 

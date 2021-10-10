@@ -11,7 +11,7 @@ use App\Helpers\UserHelper;
 use Doctrine\Persistence\ManagerRegistry;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use Nelmio\ApiDocBundle\Annotation\Model;
-use Swagger\Annotations as SWG;
+use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\Response;
 
 class LocationController extends AbstractFOSRestController
@@ -40,30 +40,30 @@ class LocationController extends AbstractFOSRestController
      * @param string|null $searchMethod
      * @param string|null $search
      * @return Response
-     * @SWG\Parameter(
+     * @OA\Parameter(
      *     description="The search-method",
      *     enum={"letter","specifiek","naam","omschrijving"},
      *     in="path",
      *     name="searchMethod",
      *     type="string",
      * )
-     * @SWG\Parameter(
+     * @OA\Parameter(
      *     description="The search-string",
      *     in="path",
      *     name="search",
      *     type="string",
      * )
-     * @SWG\Response(
+     * @OA\Response(
      *     response=200,
      *     description="Returns all locations in the Somda database",
-     *     @SWG\Property(
+     *     @OA\Property(
      *         property="filters",
      *         type="object",
-     *         @SWG\Property(property="categories", type="array", @SWG\Items(type="string")),
+     *         @OA\Property(property="categories", type="array", @OA\Items(type="string")),
      *     ),
-     *     @SWG\Property(property="data", type="array", @SWG\Items(ref=@Model(type=Location::class))),
+     *     @OA\Property(property="data", type="array", @OA\Items(ref=@Model(type=Location::class))),
      * )
-     * @SWG\Tag(name="Locations")
+     * @OA\Tag(name="Locations")
      */
     public function indexAction(string $searchMethod = null, string $search = null): Response
     {

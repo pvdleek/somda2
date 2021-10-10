@@ -18,7 +18,7 @@ use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use Nelmio\ApiDocBundle\Annotation\Model;
-use Swagger\Annotations as SWG;
+use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\Response;
 
 class TrainTableController extends AbstractFOSRestController
@@ -75,31 +75,31 @@ class TrainTableController extends AbstractFOSRestController
      * @param int $trainTableYearId
      * @param int $routeNumber
      * @return Response
-     * @SWG\Parameter(
+     * @OA\Parameter(
      *     default="0",
      *     description="The unique identifier of the trainTableYear, 0 for the current trainTableYear",
      *     in="path",
      *     name="trainTableYearId",
      *     type="integer",
      * )
-     * @SWG\Parameter(description="The routeNumber", in="path", name="routeNumber", type="integer")
-     * @SWG\Response(
+     * @OA\Parameter(description="The routeNumber", in="path", name="routeNumber", type="integer")
+     * @OA\Response(
      *     response=200,
      *     description="The train-table for the requested routeNumber",
-     *     @SWG\Schema(
-     *         @SWG\Property(
+     *     @OA\Schema(
+     *         @OA\Property(
      *             property="filters",
      *             type="object",
-     *             @SWG\Property(property="days", type="array", @SWG\Items(type="integer")),
+     *             @OA\Property(property="days", type="array", @OA\Items(type="integer")),
      *         ),
-     *         @SWG\Property(
+     *         @OA\Property(
      *             property="legend",
      *             type="object",
-     *             @SWG\Property(
+     *             @OA\Property(
      *                 property="days",
      *                 type="array",
-     *                 @SWG\Items(
-     *                     @SWG\Property(
+     *                 @OA\Items(
+     *                     @OA\Property(
      *                         property="The day-identification (integer) as defined in the filters property",
      *                         description="Visual representation of the days the route runs",
      *                         type="string"
@@ -107,10 +107,10 @@ class TrainTableController extends AbstractFOSRestController
      *                 ),
      *             ),
      *         ),
-     *         @SWG\Property(property="data", type="array", @SWG\Items(ref=@Model(type=TrainTable::class))),
+     *         @OA\Property(property="data", type="array", @OA\Items(ref=@Model(type=TrainTable::class))),
      *     ),
      * )
-     * @SWG\Tag(name="Train-tables")
+     * @OA\Tag(name="Train-tables")
      */
     public function indexAction(int $trainTableYearId, int $routeNumber): Response
     {
@@ -160,52 +160,52 @@ class TrainTableController extends AbstractFOSRestController
      * @param string $startTime
      * @param string $endTime
      * @return Response
-     * @SWG\Parameter(
+     * @OA\Parameter(
      *     default="0",
      *     description="The unique identifier of the trainTableYear, 0 for the current trainTableYear",
      *     in="path",
      *     name="trainTableYearId",
      *     type="integer",
      * )
-     * @SWG\Parameter(
+     * @OA\Parameter(
      *     description="The abbreviation of the location requested, for example Ut",
      *     in="path",
      *     name="locationName",
      *     type="string",
      * )
-     * @SWG\Parameter(
+     * @OA\Parameter(
      *     description="The day-number for which to get the passing-routes",
      *     enum={1,2,3,4,5,6,7},
      *     in="path",
      *     name="dayNumber",
      *     type="integer",
      * )
-     * @SWG\Parameter(
+     * @OA\Parameter(
      *     description="The start-time for the passing-routes: hh:mm, hh.mm or hh",
      *     in="path",
      *     name="startTime",
      *     type="string",
      * )
-     * @SWG\Parameter(
+     * @OA\Parameter(
      *     description="The end-time for the passing-routes: hh:mm, hh.mm or hh",
      *     in="path",
      *     name="endTime",
      *     type="string",
      * )
-     * @SWG\Response(
+     * @OA\Response(
      *     response=200,
      *     description="Overview of passing routes for a location",
-     *     @SWG\Schema(
-     *         @SWG\Property(
+     *     @OA\Schema(
+     *         @OA\Property(
      *             property="data",
      *             type="array",
-     *             @SWG\Items(
-     *                 @SWG\Property(
+     *             @OA\Items(
+     *                 @OA\Property(
      *                     description="The time of the action (hh:mm, 24-hour clock, GMT+1 Amsterdam timezone)",
      *                     property="time",
      *                     type="string",
      *                 ),
-     *                 @SWG\Property(
+     *                 @OA\Property(
      *                     description="The action of the route: 'v' for departure, '-' for a drivethrough,\
                                         '+' for a short stop and 'a' for arrival",
      *                     enum={"v","-","+","a"},
@@ -213,49 +213,49 @@ class TrainTableController extends AbstractFOSRestController
      *                     property="action",
      *                     type="string",
      *                 ),
-     *                 @SWG\Property(
+     *                 @OA\Property(
      *                     description="The route-number",
      *                     maxLength=15,
      *                     property="route_number",
      *                     type="string",
      *                 ),
-     *                 @SWG\Property(
+     *                 @OA\Property(
      *                     description="The abbreviation of the first location of this route",
      *                     maxLength=10,
      *                     property="fl_first_name",
      *                     type="string",
      *                 ),
-     *                 @SWG\Property(
+     *                 @OA\Property(
      *                     description="The description of the first location of this route",
      *                     maxLength=100,
      *                     property="fl_first_description",
      *                     type="string",
      *                 ),
-     *                 @SWG\Property(
+     *                 @OA\Property(
      *                     description="The abbreviation of the last location of this route",
      *                     maxLength=10,
      *                     property="fl_last_name",
      *                     type="string",
      *                 ),
-     *                 @SWG\Property(
+     *                 @OA\Property(
      *                     description="The description of the last location of this route",
      *                     maxLength=100,
      *                     property="fl_last_description",
      *                     type="string",
      *                 ),
-     *                 @SWG\Property(
+     *                 @OA\Property(
      *                     description="The name of the transporter of this route",
      *                     maxLength=35,
      *                     property="transporterName",
      *                     type="string",
      *                 ),
-     *                 @SWG\Property(
+     *                 @OA\Property(
      *                     description="The name of the characteristic of this route",
      *                     maxLength=5,
      *                     property="characteristicName",
      *                     type="string",
      *                 ),
-     *                 @SWG\Property(
+     *                 @OA\Property(
      *                     description="The description of the characteristic of this route",
      *                     maxLength=25,
      *                     property="characteristicDescription",
@@ -265,12 +265,12 @@ class TrainTableController extends AbstractFOSRestController
      *         ),
      *     ),
      * )
-     * @SWG\Response(
+     * @OA\Response(
      *     response=400,
      *     description="The request failed",
-     *     @SWG\Schema(@SWG\Property(property="errors", type="array", @SWG\Items(type="string"))),
+     *     @OA\Schema(@OA\Property(property="errors", type="array", @OA\Items(type="string"))),
      * )
-     * @SWG\Tag(name="Train-tables")
+     * @OA\Tag(name="Train-tables")
      */
     public function passingRoutesAction(
         int $trainTableYearId,
@@ -308,51 +308,51 @@ class TrainTableController extends AbstractFOSRestController
      * @param int|null $trainTableYearId
      * @param int|null $routeListId
      * @return Response
-     * @SWG\Parameter(
+     * @OA\Parameter(
      *     default="0",
      *     description="The unique identifier of the trainTableYear, 0 for the current trainTableYear",
      *     in="path",
      *     name="trainTableYearId",
      *     type="integer",
      * )
-     * @SWG\Parameter(
+     * @OA\Parameter(
      *     description="The unique identifier of the routeListId",
      *     in="path",
      *     name="routeListId",
      *     type="integer",
      * )
-     * @SWG\Response(
+     * @OA\Response(
      *     response=200,
      *     description="Overview of routes in the requested trainTableYear and routeList",
-     *     @SWG\Schema(
-     *         @SWG\Property(
+     *     @OA\Schema(
+     *         @OA\Property(
      *             property="filters",
      *             type="object",
-     *             @SWG\Property(
+     *             @OA\Property(
      *                 property="trainTableYears",
      *                 type="array",
-     *                 @SWG\Items(ref=@Model(type=TrainTableYear::class)),
+     *                 @OA\Items(ref=@Model(type=TrainTableYear::class)),
      *             ),
-     *             @SWG\Property(
+     *             @OA\Property(
      *                 property="routeLists",
      *                 type="array",
-     *                 @SWG\Items(ref=@Model(type=RouteList::class)),
+     *                 @OA\Items(ref=@Model(type=RouteList::class)),
      *             ),
-     *             @SWG\Property(
+     *             @OA\Property(
      *                 property="selectedRouteList",
      *                 ref=@Model(type=RouteList::class),
      *                 type="object",
      *             ),
      *         ),
-     *         @SWG\Property(property="data", type="array", @SWG\Items(ref=@Model(type=Route::class))),
+     *         @OA\Property(property="data", type="array", @OA\Items(ref=@Model(type=Route::class))),
      *     ),
      * )
-     * @SWG\Response(
+     * @OA\Response(
      *     response=403,
      *     description="The request failed",
-     *     @SWG\Schema(@SWG\Property(description="Description of the error", property="error", type="string")),
+     *     @OA\Schema(@OA\Property(description="Description of the error", property="error", type="string")),
      * )
-     * @SWG\Tag(name="Train-tables")
+     * @OA\Tag(name="Train-tables")
      */
     public function routeOverviewAction(int $trainTableYearId = null, int $routeListId = null): Response
     {

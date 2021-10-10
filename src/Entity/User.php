@@ -8,7 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as JMS;
 use Nelmio\ApiDocBundle\Annotation\Model;
-use Swagger\Annotations as SWG;
+use OpenApi\Annotations as OA;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -37,7 +37,7 @@ class User implements UserInterface
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @JMS\Expose()
-     * @SWG\Property(description="Unique identifier", type="integer")
+     * @OA\Property(description="Unique identifier", type="integer")
      */
     public ?int $id = null;
 
@@ -45,7 +45,7 @@ class User implements UserInterface
      * @var bool
      * @ORM\Column(name="active", type="boolean", nullable=false)
      * @JMS\Expose()
-     * @SWG\Property(description="Is the user active", type="boolean")
+     * @OA\Property(description="Is the user active", type="boolean")
      */
     public bool $active = false;
 
@@ -67,7 +67,7 @@ class User implements UserInterface
      *     maxMessage = "De gebruikersnaam mag maximaal 20 karakters lang zijn"
      * )
      * @JMS\Expose()
-     * @SWG\Property(description="Username", maxLength=20, type="string")
+     * @OA\Property(description="Username", maxLength=20, type="string")
      */
     public string $username = '';
 
@@ -75,7 +75,7 @@ class User implements UserInterface
      * @var string|null
      * @ORM\Column(name="name", type="string", length=100, nullable=true)
      * @JMS\Expose()
-     * @SWG\Property(description="Real name of the user", maxLength=100, type="string")
+     * @OA\Property(description="Real name of the user", maxLength=100, type="string")
      */
     public ?string $name;
 
@@ -96,7 +96,7 @@ class User implements UserInterface
      *     maxMessage = "Het e-mailadres mag maximaal 100 karakters lang zijn"
      * )
      * @JMS\Expose()
-     * @SWG\Property(description="Email address of the user", maxLength=100, type="string")
+     * @OA\Property(description="Email address of the user", maxLength=100, type="string")
      */
     public string $email = '';
 
@@ -119,7 +119,7 @@ class User implements UserInterface
      * @var DateTime
      * @ORM\Column(name="regdate", type="datetime", nullable=false)
      * @JMS\Expose()
-     * @SWG\Property(description="ISO-8601 timestamp of the registration of the user (Y-m-dTH:i:sP)", type="string")
+     * @OA\Property(description="ISO-8601 timestamp of the registration of the user (Y-m-dTH:i:sP)", type="string")
      */
     public DateTime $registerTimestamp;
 
@@ -134,7 +134,7 @@ class User implements UserInterface
      * @var DateTime|null
      * @ORM\Column(name="last_visit", type="datetime", nullable=true)
      * @JMS\Expose()
-     * @SWG\Property(description="ISO-8601 timestamp of the last visit of the user (Y-m-dTH:i:sP)", type="string")
+     * @OA\Property(description="ISO-8601 timestamp of the last visit of the user (Y-m-dTH:i:sP)", type="string")
      */
     public ?DateTime $lastVisit;
 
@@ -142,7 +142,7 @@ class User implements UserInterface
      * @var string|null
      * @ORM\Column(name="api_token", type="string", length=23, nullable=true)
      * @JMS\Expose()
-     * @SWG\Property(description="Token of the user, if logged in", maxLength=23, type="string")
+     * @OA\Property(description="Token of the user, if logged in", maxLength=23, type="string")
      */
     public ?string $apiToken = null;
 
@@ -206,7 +206,7 @@ class User implements UserInterface
      * @var UserPreferenceValue[]
      * @ORM\OneToMany(targetEntity="App\Entity\UserPreferenceValue", mappedBy="user")
      * @JMS\Expose()
-     * @SWG\Property(description="The user-settings", ref=@Model(type=UserPreferenceValue::class))
+     * @OA\Property(description="The user-settings", ref=@Model(type=UserPreferenceValue::class))
      */
     private $preferences;
 

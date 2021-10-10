@@ -5,7 +5,7 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as JMS;
-use Swagger\Annotations as SWG;
+use OpenApi\Annotations as OA;
 
 /**
  * @ORM\Table(name="somda_snb_spoor_nieuws_bron")
@@ -19,7 +19,7 @@ class RailNewsSource
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @JMS\Expose()
-     * @SWG\Property(description="Unique identifier", type="integer")
+     * @OA\Property(description="Unique identifier", type="integer")
      */
     public ?int $id = null;
 
@@ -27,7 +27,7 @@ class RailNewsSource
      * @var string
      * @ORM\Column(name="snb_bron", type="string", length=7, nullable=false)
      * @JMS\Expose()
-     * @SWG\Property(description="The abbreviation of the news-source", maxLength=7, type="string")
+     * @OA\Property(description="The abbreviation of the news-source", maxLength=7, type="string")
      */
     public string $name;
 
@@ -42,7 +42,7 @@ class RailNewsSource
      * @var string
      * @ORM\Column(name="snb_url", type="string", length=30, nullable=false)
      * @JMS\Expose()
-     * @SWG\Property(description="The base-URL of the news-source", maxLength=30, type="string")
+     * @OA\Property(description="The base-URL of the news-source", maxLength=30, type="string")
      */
     public string $url;
 
@@ -50,7 +50,7 @@ class RailNewsSource
      * @var string
      * @ORM\Column(name="snb_description", type="string", length=100, nullable=false)
      * @JMS\Expose()
-     * @SWG\Property(description="The name of the news-source", maxLength=100, type="string")
+     * @OA\Property(description="The name of the news-source", maxLength=100, type="string")
      */
     public string $description;
 

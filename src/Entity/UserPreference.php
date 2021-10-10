@@ -4,7 +4,7 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as JMS;
-use Swagger\Annotations as SWG;
+use OpenApi\Annotations as OA;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -76,7 +76,7 @@ class UserPreference
      * @ORM\Column(name="sleutel", type="string", length=25, nullable=false)
      * @Assert\Choice(choices=UserPreference::KEY_VALUES)
      * @JMS\Expose()
-     * @SWG\Property(description="Unique identifier", maxLength=25, type="string")
+     * @OA\Property(description="Unique identifier", maxLength=25, type="string")
      */
     public string $key;
 
@@ -84,7 +84,7 @@ class UserPreference
      * @var string
      * @ORM\Column(name="type", type="string", length=50, nullable=false)
      * @JMS\Expose()
-     * @SWG\Property(description="Type of the value", maxLength=50, type="string")
+     * @OA\Property(description="Type of the value", maxLength=50, type="string")
      */
     public string $type = '';
 
@@ -92,7 +92,7 @@ class UserPreference
      * @var string
      * @ORM\Column(name="description", type="string", length=90, nullable=false)
      * @JMS\Expose()
-     * @SWG\Property(description="Description of the setting", maxLength=90, type="string")
+     * @OA\Property(description="Description of the setting", maxLength=90, type="string")
      */
     public string $description = '';
 
@@ -100,7 +100,7 @@ class UserPreference
      * @var string
      * @ORM\Column(name="default_value", type="string", length=200, nullable=false)
      * @JMS\Expose()
-     * @SWG\Property(description="Default value", maxLength=200, type="string")
+     * @OA\Property(description="Default value", maxLength=200, type="string")
      */
     public string $defaultValue = '';
 

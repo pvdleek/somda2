@@ -6,42 +6,42 @@ namespace App\Model;
 use DateTime;
 use Exception;
 use JMS\Serializer\Annotation as JMS;
-use Swagger\Annotations as SWG;
+use OpenApi\Annotations as OA;
 
 class SpotFilter
 {
     /**
      * @var string|null
      * @JMS\Expose()
-     * @SWG\Property(description="Location abbreviation", type="string")
+     * @OA\Property(description="Location abbreviation", type="string")
      */
     public ?string $location = null;
 
     /**
      * @var int
      * @JMS\Expose()
-     * @SWG\Property(description="The day-number", enum={1,2,3,4,5,6,7}, type="integer")
+     * @OA\Property(description="The day-number", enum={1,2,3,4,5,6,7}, type="integer")
      */
     public int $dayNumber = 0;
 
     /**
      * @var DateTime|null
      * @JMS\Expose()
-     * @SWG\Property(description="ISO-8601 timestamp of the spot (Y-m-dTH:i:sP)", type="string")
+     * @OA\Property(description="ISO-8601 timestamp of the spot (Y-m-dTH:i:sP)", type="string")
      */
     public ?DateTime $spotDate = null;
 
     /**
      * @var string|null
      * @JMS\Expose()
-     * @SWG\Property(description="The train-number", type="string")
+     * @OA\Property(description="The train-number", type="string")
      */
     public ?string $trainNumber = null;
 
     /**
      * @var string|null
      * @JMS\Expose()
-     * @SWG\Property(description="The route-number", type="string")
+     * @OA\Property(description="The route-number", type="string")
      */
     public ?string $routeNumber = null;
 

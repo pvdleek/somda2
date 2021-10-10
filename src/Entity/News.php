@@ -6,7 +6,7 @@ use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as JMS;
-use Swagger\Annotations as SWG;
+use OpenApi\Annotations as OA;
 
 /**
  * @ORM\Table(name="somda_news")
@@ -20,7 +20,7 @@ class News
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @JMS\Expose()
-     * @SWG\Property(description="Unique identifier", type="integer")
+     * @OA\Property(description="Unique identifier", type="integer")
      */
     public ?int $id = null;
 
@@ -28,7 +28,7 @@ class News
      * @var DateTime
      * @ORM\Column(name="timestamp", type="datetime", nullable=false)
      * @JMS\Expose()
-     * @SWG\Property(description="ISO-8601 timestamp of the news-item (Y-m-dTH:i:sP)", type="string")
+     * @OA\Property(description="ISO-8601 timestamp of the news-item (Y-m-dTH:i:sP)", type="string")
      */
     public DateTime $timestamp;
 
@@ -36,7 +36,7 @@ class News
      * @var string
      * @ORM\Column(name="title", type="string", length=50, nullable=false)
      * @JMS\Expose()
-     * @SWG\Property(description="Title of the news-item", maxLength=50, type="string")
+     * @OA\Property(description="Title of the news-item", maxLength=50, type="string")
      */
     public string $title = '';
 
@@ -44,7 +44,7 @@ class News
      * @var string
      * @ORM\Column(name="text", type="text", length=0, nullable=false)
      * @JMS\Expose()
-     * @SWG\Property(description="Contents of the news-item", type="string")
+     * @OA\Property(description="Contents of the news-item", type="string")
      */
     public string $text = '';
 
@@ -52,7 +52,7 @@ class News
      * @var bool
      * @ORM\Column(name="archief", type="boolean", nullable=false)
      * @JMS\Expose()
-     * @SWG\Property(description="Whether the news-item is in the archive", type="boolean")
+     * @OA\Property(description="Whether the news-item is in the archive", type="boolean")
      */
     public bool $archived = false;
 

@@ -13,7 +13,7 @@ use FOS\RestBundle\Controller\AbstractFOSRestController;
 use Monolog\Logger;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Psr\Log\LoggerInterface;
-use Swagger\Annotations as SWG;
+use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -49,33 +49,33 @@ class SecurityController extends AbstractFOSRestController
     /**
      * @param Request $request
      * @return Response
-     * @SWG\Post(
+     * @OA\Post(
      *     description="Authenticates a user",
-     *     @SWG\Parameter(
+     *     @OA\Parameter(
      *         in="body",
      *         name="body",
-     *         @SWG\Schema(
-     *             @SWG\Property(property="username", type="string", description="The username to authenticate"),
-     *             @SWG\Property(property="password", type="string", description="The password to authenticate"),
+     *         @OA\Schema(
+     *             @OA\Property(property="username", type="string", description="The username to authenticate"),
+     *             @OA\Property(property="password", type="string", description="The password to authenticate"),
      *         )
      *     )
      * )
-     * @SWG\Response(
+     * @OA\Response(
      *     response=200,
      *     description="The user is authenticated",
-     *     @SWG\Schema(
-     *         @SWG\Property(property="data", type="array", @SWG\Items(ref=@Model(type=User::class))),
+     *     @OA\Schema(
+     *         @OA\Property(property="data", type="array", @OA\Items(ref=@Model(type=User::class))),
      *     ),
      * )
-     * @SWG\Response(response=400, description="The request is malformed")
-     * @SWG\Response(
+     * @OA\Response(response=400, description="The request is malformed")
+     * @OA\Response(
      *     response=401,
      *     description="Authentication failed",
-     *     @SWG\Schema(
-     *         @SWG\Property(description="Description of the error", property="error", type="string"),
+     *     @OA\Schema(
+     *         @OA\Property(description="Description of the error", property="error", type="string"),
      *     ),
      * )
-     * @SWG\Tag(name="Security")
+     * @OA\Tag(name="Security")
      */
     public function loginAction(Request $request): Response
     {
@@ -90,21 +90,21 @@ class SecurityController extends AbstractFOSRestController
      * @param int $id
      * @param string $token
      * @return Response
-     * @SWG\Parameter(description="ID of the user to verify", in="path", name="id", type="integer")
-     * @SWG\Parameter(description="Token of the user to verify", in="path", name="token", type="string")
-     * @SWG\Response(
+     * @OA\Parameter(description="ID of the user to verify", in="path", name="id", type="integer")
+     * @OA\Parameter(description="Token of the user to verify", in="path", name="token", type="string")
+     * @OA\Response(
      *     response=200,
      *     description="Verifies an existing user-token",
-     *     @SWG\Schema(
-     *         @SWG\Property(property="data", type="array", @SWG\Items(ref=@Model(type=User::class))),
+     *     @OA\Schema(
+     *         @OA\Property(property="data", type="array", @OA\Items(ref=@Model(type=User::class))),
      *     ),
      * )
-     * @SWG\Response(
+     * @OA\Response(
      *     response=401,
      *     description="Verification ot the token failed",
-     *     @SWG\Schema(@SWG\Property(description="Description of the error", property="error", type="string")),
+     *     @OA\Schema(@OA\Property(description="Description of the error", property="error", type="string")),
      * )
-     * @SWG\Tag(name="Security")
+     * @OA\Tag(name="Security")
      */
     public function verifyAction(int $id, string $token): Response
     {

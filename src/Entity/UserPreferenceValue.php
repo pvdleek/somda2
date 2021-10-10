@@ -6,7 +6,7 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as JMS;
 use Nelmio\ApiDocBundle\Annotation\Model;
-use Swagger\Annotations as SWG;
+use OpenApi\Annotations as OA;
 
 /**
  * @ORM\Table(name="somda_users_prefs")
@@ -29,7 +29,7 @@ class UserPreferenceValue
      * @ORM\JoinColumn(name="prefid", referencedColumnName="prefid")
      * @ORM\Id
      * @JMS\Expose()
-     * @SWG\Property(description="The setting", ref=@Model(type=UserPreference::class))
+     * @OA\Property(description="The setting", ref=@Model(type=UserPreference::class))
      */
     public UserPreference $preference;
 
@@ -37,7 +37,7 @@ class UserPreferenceValue
      * @var string
      * @ORM\Column(name="value", type="string", length=200, nullable=false)
      * @JMS\Expose()
-     * @SWG\Property(description="The value of the user-setting", maxLength=200, type="string")
+     * @OA\Property(description="The value of the user-setting", maxLength=200, type="string")
      */
     public string $value = '';
 }

@@ -5,7 +5,7 @@ namespace App\Entity;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as JMS;
-use Swagger\Annotations as SWG;
+use OpenApi\Annotations as OA;
 
 /**
  * @ORM\Table(
@@ -23,7 +23,7 @@ class OfficialFootnote
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @JMS\Expose()
-     * @SWG\Property(description="Unique identifier", type="integer")
+     * @OA\Property(description="Unique identifier", type="integer")
      */
     public ?int $id = null;
 
@@ -31,7 +31,7 @@ class OfficialFootnote
      * @var int
      * @ORM\Column(name="ofo_footnote_id", type="bigint", nullable=false)
      * @JMS\Expose()
-     * @SWG\Property(description="Unique footnote identifier", type="integer")
+     * @OA\Property(description="Unique footnote identifier", type="integer")
      */
     public int $footnoteId = 0;
 
@@ -39,7 +39,7 @@ class OfficialFootnote
      * @var DateTime
      * @ORM\Column(name="ofo_date", type="date", nullable=false)
      * @JMS\Expose()
-     * @SWG\Property(description="ISO-8601 timestamp of the date on which the route runs (Y-m-dTH:i:sP)", type="string")
+     * @OA\Property(description="ISO-8601 timestamp of the date on which the route runs (Y-m-dTH:i:sP)", type="string")
      */
     public DateTime $date;
 }

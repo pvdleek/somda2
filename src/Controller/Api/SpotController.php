@@ -9,7 +9,7 @@ use App\Model\SpotFilter;
 use Doctrine\Persistence\ManagerRegistry;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use Nelmio\ApiDocBundle\Annotation\Model;
-use Swagger\Annotations as SWG;
+use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\Response;
 
 class SpotController extends AbstractFOSRestController
@@ -38,14 +38,14 @@ class SpotController extends AbstractFOSRestController
      * @param int $maxMonths
      * @param string|null $searchParameters
      * @return Response
-     * @SWG\Parameter(
+     * @OA\Parameter(
      *     description="The maximum number of months to search for",
      *     enum={1,3,6,12,24,36,48,60,99},
      *     in="path",
      *     name="maxMonths",
      *     type="integer",
      * )
-     * @SWG\Parameter(
+     * @OA\Parameter(
      *     default="////",
      *     description="A slash separated list of search-parameters, being: \
      *         The location to filter on,\
@@ -59,31 +59,31 @@ class SpotController extends AbstractFOSRestController
      *     name="searchParameters",
      *     type="string",
      * )
-     * @SWG\Response(
+     * @OA\Response(
      *     response=200,
      *     description="Returns the filtered spots, this can be a potentially slow call, \
      *         especially with little filtering. If a 504 timeout is generated, try extra filters.",
-     *     @SWG\Schema(
-     *         @SWG\Property(property="filters", type="array", @SWG\Items(ref=@Model(type=SpotFilter::class))),
-     *         @SWG\Property(property="data", type="array", @SWG\Items(ref=@Model(type=Spot::class))),
+     *     @OA\Schema(
+     *         @OA\Property(property="filters", type="array", @OA\Items(ref=@Model(type=SpotFilter::class))),
+     *         @OA\Property(property="data", type="array", @OA\Items(ref=@Model(type=Spot::class))),
      *     ),
      * )
-     * @SWG\Response(
+     * @OA\Response(
      *     response=404,
      *     description="The request failed",
-     *     @SWG\Schema(
-     *         @SWG\Property(description="Description of the error", property="error", type="string"),
+     *     @OA\Schema(
+     *         @OA\Property(description="Description of the error", property="error", type="string"),
      *     ),
      * )
-     * @SWG\Response(
+     * @OA\Response(
      *     response=500,
      *     description="Parsing of the search-parameters failed",
-     *     @SWG\Schema(
-     *         @SWG\Property(description="Description of the error", property="error", type="string"),
+     *     @OA\Schema(
+     *         @OA\Property(description="Description of the error", property="error", type="string"),
      *     ),
      * )
-     * @SWG\Response(response=504, description="The request timed out, try again with extra filters")
-     * @SWG\Tag(name="Spots")
+     * @OA\Response(response=504, description="The request timed out, try again with extra filters")
+     * @OA\Tag(name="Spots")
      */
     public function indexAction(int $maxMonths = 1, string $searchParameters = null): Response
     {
