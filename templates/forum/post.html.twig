@@ -53,7 +53,7 @@
             <a href="https://www.facebook.com/{{ post.author.info.facebookAccount }}" rel="ugc noopener" target="_blank"><i class="fab fa-facebook" title="Facebook {{ post.author.info.facebookAccount }}"></i></a>
         {% endif %}
         {% if post.author.info.youtubeAccount | length > 0 %}
-            <a href="https://www.youtube.com/user/{{ post.author.info.youtubeAccount }}" rel="ugc noopener" target="_blank"><i class="fab fa-youtube" title="Youtube {{ post.author.info.youtubeAccount }}"></i></a>
+            <a href="https://www.youtube.com/{{ post.author.info.youtubeAccount }}" rel="ugc noopener" target="_blank"><i class="fab fa-youtube" title="Youtube {{ post.author.info.youtubeAccount }}"></i></a>
         {% endif %}
         {% if post.author.info.flickrAccount | length > 0 %}
             <a href="https://www.flickr.com/photos/{{ post.author.info.flickrAccount }}" rel="ugc noopener" target="_blank"><i class="fab fa-flickr" title="Flickr {{ post.author.info.flickrAccount }}"></i></a>

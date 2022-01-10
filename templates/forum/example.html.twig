@@ -15,7 +15,7 @@
                 <a href="https://www.facebook.com/{{ user.info.facebookAccount }}" rel="ugc noopener" target="_blank"><i class="fab fa-facebook" title="Facebook {{ user.info.facebookAccount }}"></i></a>
             {% endif %}
             {% if user.info.youtubeAccount | length > 0 %}
-                <a href="https://www.youtube.com/user/{{ user.info.youtubeAccount }}" rel="ugc noopener" target="_blank"><i class="fab fa-youtube" title="Youtube {{ user.info.youtubeAccount }}"></i></a>
+                <a href="https://www.youtube.com/{{ user.info.youtubeAccount }}" rel="ugc noopener" target="_blank"><i class="fab fa-youtube" title="Youtube {{ user.info.youtubeAccount }}"></i></a>
             {% endif %}
             {% if user.info.flickrAccount | length > 0 %}
                 <a href="https://www.flickr.com/photos/{{ user.info.flickrAccount }}" rel="ugc noopener" target="_blank"><i class="fab fa-flickr" title="Flickr {{ user.info.flickrAccount }}"></i></a>
