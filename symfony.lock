@@ -47,6 +47,9 @@
     "composer/ca-bundle": {
         "version": "1.2.7"
     },
+    "composer/package-versions-deprecated": {
+        "version": "1.11.99.5"
+    },
     "composer/semver": {
         "version": "3.0.0"
     },
@@ -186,6 +189,9 @@
     },
     "felixfbecker/language-server-protocol": {
         "version": "v1.4.0"
+    },
+    "friendsofphp/proxy-manager-lts": {
+        "version": "v1.0.5"
     },
     "friendsofsymfony/ckeditor-bundle": {
         "version": "2.0",
@@ -361,6 +367,9 @@
     "psr/http-client": {
         "version": "1.0.1"
     },
+    "psr/http-factory": {
+        "version": "1.0.1"
+    },
     "psr/http-message": {
         "version": "1.0.1"
     },
@@ -456,9 +465,6 @@
         "files": [
             "config/packages/dev/debug.yaml"
         ]
-    },
-    "symfony/debug-pack": {
-        "version": "v1.0.7"
     },
     "symfony/dependency-injection": {
         "version": "v5.0.5"
@@ -602,9 +608,6 @@
     "symfony/options-resolver": {
         "version": "v5.0.5"
     },
-    "symfony/orm-pack": {
-        "version": "v1.0.8"
-    },
     "symfony/phpunit-bridge": {
         "version": "4.3",
         "recipe": {
@@ -643,9 +646,6 @@
     },
     "symfony/process": {
         "version": "v5.0.5"
-    },
-    "symfony/profiler-pack": {
-        "version": "v1.0.4"
     },
     "symfony/property-access": {
         "version": "v5.0.5"
@@ -735,9 +735,6 @@
             "config/packages/twig.yaml",
             "templates/base.html.twig"
         ]
-    },
-    "symfony/twig-pack": {
-        "version": "v1.0.0"
     },
     "symfony/validator": {
         "version": "4.3",
