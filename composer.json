@@ -54,8 +54,8 @@
         "symfony/validator": "5.*",
         "symfony/web-link": "5.*",
         "symfony/yaml": "5.*",
-        "twig/extra-bundle": "^2.12|^3.0",
-        "twig/twig": "^2.12|^3.0"
+        "twig/extra-bundle": "3.*",
+        "twig/twig": "3.*"
     },
     "require-dev": {
         "doctrine/data-fixtures": "^1.4",
