@@ -32,7 +32,7 @@ class ForumForum extends EntityRepository
         try {
             $statement = $connection->prepare($query);
             $statement->bindParam('userId', $userId);
-            return $statement->executeQuery()->fetchAssociative();
+            return $statement->executeQuery()->fetchAllAssociative();
         } catch (DBALException | DBALDriverException $exception) {
             return [];
         }
