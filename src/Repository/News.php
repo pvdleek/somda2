@@ -41,7 +41,7 @@ class News extends EntityRepository
         try {
             $statement = $connection->prepare($query);
             $statement->execute();
-            return $statement->fetchAllAssociative();
+            return $statement->fetchAll();
         } catch (DBALException | DBALDriverException $exception) {
             return [];
         }

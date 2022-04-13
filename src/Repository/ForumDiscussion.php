@@ -80,7 +80,7 @@ class ForumDiscussion extends EntityRepository
             $statement->bindValue('excludeForums', implode(',', $excludeForums));
             $statement->bindValue('moderatorForumType', ForumForum::TYPE_MODERATORS_ONLY);
             $statement->execute();
-            return $statement->fetchAllAssociative();
+            return $statement->fetchAll();
         } catch (DBALDriverException $exception) {
             return [];
         }
@@ -138,7 +138,7 @@ class ForumDiscussion extends EntityRepository
             $statement = $connection->prepare($query);
             $statement->bindValue('forumid', $forum->id);
             $statement->execute();
-            return $statement->fetchAllAssociative();
+            return $statement->fetchAll();
         } catch (DBALDriverException | DBALException $exception) {
             return [];
         }
@@ -178,7 +178,7 @@ class ForumDiscussion extends EntityRepository
             $statement = $connection->prepare($query);
             $statement->bindValue('userId', $user->id);
             $statement->execute();
-            return $statement->fetchAllAssociative();
+            return $statement->fetchAll();
         } catch (DBALDriverException | DBALException $exception) {
             return [];
         }
@@ -223,7 +223,7 @@ class ForumDiscussion extends EntityRepository
             ));
             $statement->bindValue('moderatorForumType', ForumForum::TYPE_MODERATORS_ONLY);
             $statement->execute();
-            return $statement->fetchAllAssociative();
+            return $statement->fetchAll();
         } catch (DBALDriverException $exception) {
             return [];
         }
