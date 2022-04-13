@@ -40,7 +40,7 @@ class ForumPost extends EntityRepository
             $statement = $connection->prepare($query);
             $statement->bindValue('userId', $user->id);
             $statement->execute();
-            return $statement->fetchAllAssociative();
+            return $statement->fetchAll();
         } catch (DBALException | DBALDriverException $exception) {
             return [];
         }
