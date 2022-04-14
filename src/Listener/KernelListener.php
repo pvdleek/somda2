@@ -188,7 +188,7 @@ class KernelListener implements EventSubscriberInterface
      */
     private function isShouldExecuteEventHandler(KernelEvent $event): bool
     {
-        if (!$event->isMasterRequest()) {
+        if (!$event->isMainRequest()) {
             return false;
         }
 
