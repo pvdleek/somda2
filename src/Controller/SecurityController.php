@@ -270,7 +270,7 @@ class SecurityController
                 );
                 return $this->formHelper->getRedirectHelper()->redirectToRoute(
                     'login_with_username',
-                    ['username' => $user->getUsername()]
+                    ['username' => $user->getUserIdentifier()]
                 );
             }
             $form->get(UserActivate::FIELD_KEY)->addError(
