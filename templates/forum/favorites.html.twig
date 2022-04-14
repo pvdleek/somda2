@@ -61,7 +61,7 @@
                 <th>&nbsp;</th>
                 <th colspan="2">{{ 'forum.discussion.subject' | trans }}</th>
                 <th>Bericht</th>
-                <th>{{ 'forum.author' | trans }}</th>
+                <th>Datum, tijd en auteur</th>
             </tr>
             {% for favorite in app.user.forumPostFavorites %}
                 <tr id="favorite_post_row_{{ favorite.post.id }}">
@@ -69,7 +69,7 @@
                     <td><i class="fas fa-comment"></i></td>
                     <td><a href="{{ path('forum_discussion_post', { 'id': favorite.post.discussion.id, 'name': (favorite.post.discussion.title | slugify), 'postId': favorite.post.id }) }}">{{ favorite.post.discussion.title }}</a></td>
                     <td>{{ favorite.post | displayForumPost | raw }}</td>
-                    <td>{{ favorite.post.author.id | displayUser(favorite.post.author.username) | raw }}</td>
+                    <td>{{ favorite.post.timestamp | date('d-m-Y H:i:s') }}<br />{{ favorite.post.author.id | displayUser(favorite.post.author.username) | raw }}</td>
                 </tr>
             {% else %}
                 <tr><td colspan="8">Je hebt nog geen favoriete berichten</td></tr>
