@@ -65,7 +65,7 @@ class ForumForum extends EntityRepository
         try {
             $statement = $connection->prepare($query);
             $statement->bindValue('forumId', $forumId);
-            return (int)$statement->executeQuery()->fetchFirstColumn()[0];
+            return (int)$statement->executeQuery()->fetchOne()[0];
         } catch (DBALException | DBALDriverException | ErrorException $exception) {
             return 0;
         }
