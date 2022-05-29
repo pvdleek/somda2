@@ -28,11 +28,6 @@
     </target>
 
     <target name="deploy" depends="setup">
-        <exec executable="chmod">
-            <arg value="-R" />
-            <arg value="777" />
-            <arg value="var/cache" />
-        </exec>
         <exec executable="chown">
             <arg value="-R" />
             <arg value="nginx:nginx" />
