@@ -245,6 +245,9 @@ class ForumPostController
                 'id' => $post->discussion->id,
                 'name' => urlencode($post->discussion->title)
             ]);
+        } elseif ($form->isSubmitted()) {
+            var_dump($form->getErrors());
+            die();
         }
 
         return $this->templateHelper->render('forum/edit.html.twig', [
