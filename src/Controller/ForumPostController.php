@@ -246,9 +246,7 @@ class ForumPostController
                 'name' => urlencode($post->discussion->title)
             ]);
         } elseif ($form->isSubmitted()) {
-            foreach ($form->getErrors(true) as $error) {
-                var_dump($error->getMessage());
-            }
+            var_dump($form->getErrors(true));
             die();
         }
 
