@@ -1,13 +1,13 @@
 framework:
   secret: '%env(APP_SECRET)%'
-  csrf_protection: true
+  csrf_protection: false
   http_method_override: true
   validation: { enable_annotations: true }
 
   session:
     enabled: true
     handler_id: Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler
-    cookie_secure: true
+    cookie_secure: false
     cookie_samesite: strict
     cookie_lifetime: 8640000
     use_cookies: true

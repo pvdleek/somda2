@@ -13,7 +13,6 @@
             <p class="alert">{{ error.messageKey | trans(error.messageData, 'security') }}</p>
         {% endif %}
         <form action="{{ path('login') }}" id="login_form" method="post">
-            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}" />
             <table>
                 <tr><th colspan="2">Inloggen op Somda Mobiel<br /><i>(sommige onderdelen zijn beveiligd)</i></th></tr>
                 <tr><td><label for="username">Gebruikersnaam</label></td><td><input id="username" maxlength="20" name="username" size="20" type="text"{% if lastUsername is defined %} value="{{ lastUsername }}"{% endif%} /></td></tr>
