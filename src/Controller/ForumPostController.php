@@ -227,7 +227,7 @@ class ForumPostController
                 [FormGenerics::KEY_LABEL => 'Bewerken als moderator']
             );
             $postNrInDiscussion = $this->formHelper->getDoctrine()
-                ->getRepository('App:ForumDiscussion')
+                ->getRepository(ForumDiscussion::class)
                 ->getPostNumberInDiscussion($post->discussion, $post->id);
             if ($postNrInDiscussion === 0) {
                 $form->add(ForumPostForm::FIELD_TITLE, TextType::class, [
