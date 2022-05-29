@@ -49,7 +49,7 @@ class UpdateRouteListsCommand extends Command
 
         $query = 'DELETE FROM `somda_tdr_trein_treinnummerlijst`';
         $statement = $connection->prepare($query);
-        $statement->executeStatement();
+        $statement->execute();
 
         $query = 'INSERT INTO `somda_tdr_trein_treinnummerlijst` (`treinnummerlijst_id`, `treinid`)
         SELECT `l`.`id`, `tr`.`treinid`
@@ -58,13 +58,13 @@ class UpdateRouteListsCommand extends Command
             JOIN `somda_tdr_s_e` `t` ON `t`.`treinid` = `tr`.`treinid` AND `t`.`tdr_nr` = `l`.`tdr_nr`
             GROUP BY `tr`.`treinid`, `l`.`id`';
         $statement = $connection->prepare($query);
-        $statement->executeStatement();
+        $statement->execute();
 
         // Remove all routes that no longer exist
         $query = 'DELETE FROM `somda_tdr_trein_treinnummerlijst`
 			    WHERE `treinnummerlijst_id` NOT IN (SELECT `id` FROM `somda_tdr_treinnummerlijst`)';
         $statement = $connection->prepare($query);
-        $statement->executeStatement();
+        $statement->execute();
 
         return 0;
     }

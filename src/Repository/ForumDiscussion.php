@@ -256,8 +256,9 @@ class ForumDiscussion extends EntityRepository
             date(DateGenerics::DATE_FORMAT_DATABASE, mktime(0, 0, 0, date('m'), date('d') - 5, date('Y')))
         );
         $statement->bindValue('moderatorForumType', ForumForum::TYPE_MODERATORS_ONLY);
-        $lastDiscussion = $statement->executeQuery()->fetchAssociative();
+        $statement->execute();
 
+        $lastDiscussion = $statement->fetchAssociative();
         return $lastDiscussion === false ? null : $lastDiscussion;
     }
 
@@ -337,7 +338,7 @@ class ForumDiscussion extends EntityRepository
         $connection = $this->getEntityManager()->getConnection();
         try {
             $statement = $connection->prepare(substr($query, 0, -1));
-            $statement->executeStatement();
+            $statement->execute();
         } catch (DBALDriverException | DBALException $exception) {
             return;
         }
@@ -354,7 +355,7 @@ class ForumDiscussion extends EntityRepository
         $connection = $this->getEntityManager()->getConnection();
         try {
             $statement = $connection->prepare($query);
-            $statement->executeStatement();
+            $statement->execute();
         } catch (DBALDriverException | DBALException $exception) {
             return;
         }
