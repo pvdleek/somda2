@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Command;
 
+use App\Entity\ForumDiscussion;
 use App\Entity\ForumPost;
 use App\Entity\ForumPostLog;
 use App\Entity\ForumSearchList;
@@ -65,7 +66,7 @@ class ProcessForumLogCommand extends Command
 
                 $words = $this->getCleanWordsFromText($forumLog->post->text->text);
                 $postNrInDiscussion = $this->doctrine
-                    ->getRepository('App:ForumDiscussion')
+                    ->getRepository(ForumDiscussion::class)
                     ->getPostNumberInDiscussion($forumLog->post->discussion, $forumLog->post->id);
                 if ($postNrInDiscussion === 0) {
                     // This is the first post in the discussion, we need to include the title
