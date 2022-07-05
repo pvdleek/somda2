@@ -46,7 +46,7 @@ final class Version20200804134855 extends AbstractMigration
                 INDEX `idx_ofo_footnote_id` (`ofo_footnote_id`),
                 UNIQUE INDEX `idx_ofo_footnote` (`ofo_footnote_id`, `ofo_date`),
                 PRIMARY KEY(`ofo_id`)
-            ) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB
+            ) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_general_ci` ENGINE = InnoDB
         ');
         $this->addSql('
             CREATE TABLE `ott_official_train_table` (
@@ -67,7 +67,7 @@ final class Version20200804134855 extends AbstractMigration
                 INDEX `idx_ott_location_id` (`ott_location_id`),
                 INDEX `idx_ott_route_id` (`ott_route_id`),
                 PRIMARY KEY(`ott_id`)
-           ) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB
+           ) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_general_ci` ENGINE = InnoDB
        ');
         $this->addSql('
             ALTER TABLE `ott_official_train_table` ADD CONSTRAINT `FK_ott_ofo_id`
