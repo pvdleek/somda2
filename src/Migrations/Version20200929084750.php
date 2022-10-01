@@ -29,7 +29,7 @@ final class Version20200929084750 extends AbstractMigration
                 INDEX `IDX_AA766AFC7510F6AF` (`postid`),
                 INDEX `IDX_AA766AFC539B0606` (`uid`),
                 PRIMARY KEY (`postid`, `uid`)
-            ) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB
+            ) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_general_ci` ENGINE = InnoDB
         ');
         $this->addSql('
             ALTER TABLE `fpf_forum_post_favorite` ADD CONSTRAINT `FRK_fpf_postid`
