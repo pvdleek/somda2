@@ -65,9 +65,6 @@ class MenuHelper implements RuntimeExtensionInterface
      */
     private function isAuthorizedForBlock(array $block): bool
     {
-        if ($block['role'] === 'IS_AUTHENTICATED_ANONYMOUSLY') {
-            return is_null($this->authorizationHelper->getUser());
-        }
         if (is_null($block['role']) || $this->authorizationHelper->isGranted(RoleGenerics::ROLE_ADMIN)) {
             return true;
         }

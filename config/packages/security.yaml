@@ -73,6 +73,3 @@ security:
       - ROLE_ADMIN_SPECIAL_ROUTES
       - ROLE_ADMIN_TRAINTABLE_EDIT
       - ROLE_ADMIN_WIKI
-
-  access_control:
-    - { path: ^/inloggen, roles: IS_AUTHENTICATED_ANONYMOUSLY }
