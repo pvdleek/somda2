@@ -1,5 +1,5 @@
 framework:
+  enabled_locales: ['nl']
   default_locale: 'nl'
   translator:
     default_path: '%kernel.project_dir%/translations'
-    enabled_locales: ['nl']

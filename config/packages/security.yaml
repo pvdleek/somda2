@@ -1,5 +1,7 @@
 security:
-  encoders:
+  enable_authenticator_manager: true
+
+  password_hashers:
     App\Entity\User:
       algorithm: auto
     Symfony\Component\Security\Core\User\User:
@@ -24,7 +26,6 @@ security:
       pattern: ^/(_(profiler|wdt)|css|images|js|webfonts)/
       security: false
     api:
-      anonymous: false
       http_basic:
         realm: Secured API
       json_login:
@@ -34,13 +35,13 @@ security:
       provider: all_users
       stateless: true
     main:
-      anonymous: true
       lazy: true
       stateless: true
       provider: app_user_provider
-      guard:
-        authenticators:
-          - App\Security\LoginFormAuthenticator
+      form_login:
+        login_path: login
+        check_path: login
+      entry_point: form_login
       logout:
         path: logout
         target: home

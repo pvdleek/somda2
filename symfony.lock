@@ -178,9 +178,6 @@
     "egulias/email-validator": {
         "version": "2.1.17"
     },
-    "exsyst/swagger": {
-        "version": "v0.4.1"
-    },
     "felixfbecker/advanced-json-rpc": {
         "version": "v3.1.1"
     },

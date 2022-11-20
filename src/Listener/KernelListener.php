@@ -12,7 +12,6 @@ use Exception;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Event\KernelEvent;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
@@ -36,11 +35,6 @@ class KernelListener implements EventSubscriberInterface
     private ManagerRegistry $doctrine;
 
     /**
-     * @var SessionInterface
-     */
-    private SessionInterface $session;
-
-    /**
      * @var UserHelper
      */
     private UserHelper $userHelper;
@@ -56,13 +50,11 @@ class KernelListener implements EventSubscriberInterface
 
     /**
      * @param ManagerRegistry $doctrine
-     * @param SessionInterface $session
      * @param UserHelper $userHelper
      */
-    public function __construct(ManagerRegistry $doctrine, SessionInterface $session, UserHelper $userHelper)
+    public function __construct(ManagerRegistry $doctrine, UserHelper $userHelper)
     {
         $this->doctrine = $doctrine;
-        $this->session = $session;
         $this->userHelper = $userHelper;
 
         $this->stopwatch = new Stopwatch(true);

@@ -3,9 +3,10 @@ framework:
   csrf_protection: false
   http_method_override: true
   validation: { enable_annotations: true }
-
+  
   session:
     enabled: true
+    storage_factory_id: session.storage.factory.native
     handler_id: Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler
     cookie_secure: false
     cookie_samesite: strict

@@ -39,8 +39,8 @@ trait SortTrait
     private function getSortValue($item, string $sortBy): string
     {
         if (is_array($item)) {
-            return $item[$sortBy];
+            return (string) $item[$sortBy];
         }
-        return $item->$sortBy;
+        return (string) $item->$sortBy;
     }
 }
