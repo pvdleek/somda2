@@ -15,8 +15,8 @@
         <form action="{{ path('login') }}" id="login_form" method="post">
             <table>
                 <tr><th colspan="2">Inloggen op Somda Mobiel<br /><i>(sommige onderdelen zijn beveiligd)</i></th></tr>
-                <tr><td><label for="username">Gebruikersnaam</label></td><td><input id="username" maxlength="20" name="username" size="20" type="text"{% if lastUsername is defined %} value="{{ lastUsername }}"{% endif%} /></td></tr>
-                <tr><td><label for="password">Wachtwoord</label></td><td><input id="password" name="password" size="20" type="password" /></td></tr>
+                <tr><td><label for="username">Gebruikersnaam</label></td><td><input id="username" maxlength="20" name="_username" size="20" type="text"{% if lastUsername is defined %} value="{{ lastUsername }}"{% endif%} /></td></tr>
+                <tr><td><label for="password">Wachtwoord</label></td><td><input id="password" name="_password" size="20" type="password" /></td></tr>
                 <tr><td>&nbsp;</td><td><label for="remember_me"><input id="remember_me" name="_remember_me" type="checkbox" /> Blijf ingelogd</label></td></tr>
                 <tr><td colspan="2"><a class="somda-button" href="#" onclick="$('#login_form').submit(); return false;">Inloggen bij Somda</a></td></tr>
             </table>
