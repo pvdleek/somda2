@@ -6,7 +6,7 @@ use App\Traits\DateTrait;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as JMS;
 use Nelmio\ApiDocBundle\Annotation\Model;
-use Swagger\Annotations as SWG;
+use OpenApi\Annotations as OA;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -32,7 +32,7 @@ class TrainTable
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @JMS\Expose()
-     * @SWG\Property(description="Unique identifier", type="integer")
+     * @OA\Property(description="Unique identifier", type="integer")
      */
     public ?int $id = null;
 
@@ -40,7 +40,7 @@ class TrainTable
      * @var int
      * @ORM\Column(name="orderid", type="integer", nullable=false, options={"default"="1"})
      * @JMS\Expose()
-     * @SWG\Property(description="The order in which the items should be displayed", type="integer")
+     * @OA\Property(description="The order in which the items should be displayed", type="integer")
      */
     public int $order = 1;
 
@@ -49,7 +49,7 @@ class TrainTable
      * @ORM\Column(name="actie", type="string", length=1, nullable=false, options={"default"="-"})
      * @Assert\Choice(choices=TrainTable::ACTION_VALUES)
      * @JMS\Expose()
-     * @SWG\Property(
+     * @OA\Property(
      *     description="The action on the location: 'v' for departure, '-' for a drivethrough,\
              '+' for a short stop and 'a' for arrival",
      *     maxLength=1,
@@ -63,7 +63,7 @@ class TrainTable
      * @var int
      * @ORM\Column(name="tijd", type="integer", nullable=false, options={"default"="0"})
      * @JMS\Exclude()
-     * @SWG\Property(
+     * @OA\Property(
      *     description="The time of the trainTable action (hh:mm, 24-hour clock, GMT+1 Amsterdam timezone)",
      *     property="displayTime",
      *     type="string",
@@ -83,7 +83,7 @@ class TrainTable
      * @ORM\ManyToOne(targetEntity="App\Entity\TrainTableYear")
      * @ORM\JoinColumn(name="tdr_nr", referencedColumnName="tdr_nr")
      * @JMS\Expose()
-     * @SWG\Property(
+     * @OA\Property(
      *     description="The trainTableYear to which this trainTable belongs",
      *     ref=@Model(type=TrainTableYear::class),
      * )
@@ -103,7 +103,7 @@ class TrainTable
      * @ORM\ManyToOne(targetEntity="App\Entity\RouteOperationDays")
      * @ORM\JoinColumn(name="rijdagenid", referencedColumnName="rijdagenid")
      * @JMS\Expose()
-     * @SWG\Property(
+     * @OA\Property(
      *     description="The days on which this route operates",
      *     ref=@Model(type=RouteOperationDays::class),
      * )
@@ -115,7 +115,7 @@ class TrainTable
      * @ORM\ManyToOne(targetEntity="App\Entity\Location", inversedBy="trainTables")
      * @ORM\JoinColumn(name="locatieid", referencedColumnName="afkid")
      * @JMS\Expose()
-     * @SWG\Property(
+     * @OA\Property(
      *     description="The location of the trainTable action",
      *     ref=@Model(type=Location::class),
      * )

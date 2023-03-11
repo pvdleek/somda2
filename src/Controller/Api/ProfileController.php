@@ -11,7 +11,7 @@ use Exception;
 use Doctrine\Persistence\ManagerRegistry;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use Nelmio\ApiDocBundle\Annotation\Model;
-use Swagger\Annotations as SWG;
+use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -41,14 +41,14 @@ class ProfileController extends AbstractFOSRestController
     /**
      * @return Response
      * @throws Exception
-     * @SWG\Response(
+     * @OA\Response(
      *     response=200,
      *     description="Returns the user profile",
-     *     @SWG\Schema(
-     *         @SWG\Property(property="data", type="array", @SWG\Items(ref=@Model(type=User::class))),
+     *     @OA\Schema(
+     *         @OA\Property(property="data", type="array", @OA\Items(ref=@Model(type=User::class))),
      *     ),
      * )
-     * @SWG\Tag(name="Profile")
+     * @OA\Tag(name="Profile")
      */
     public function indexAction(): Response
     {
@@ -65,43 +65,39 @@ class ProfileController extends AbstractFOSRestController
      * @param Request $request
      * @return Response
      * @throws Exception
-     * @SWG\Post(
-     *     @SWG\Parameter(in="formData", maxLength=30, name="avatar", required=true, type="string"),
-     *     @SWG\Parameter(
+     * @OA\Post(
+     *     @OA\Parameter(in="formData", name="avatar", required=true, @OA\Schema(type="string", maxLength=30)),
+     *     @OA\Parameter(
      *         description="Y-m-d",
      *         in="formData",
-     *         maxLength=10,
-     *         minLength=10,
      *         name="birthDate",
      *         required=false,
-     *         type="string",
+     *         @OA\Schema(type="string", maxLength=10, minLength=10),
      *     ),
-     *     @SWG\Parameter(in="formData", maxLength=50, minLength=2, name="city", required=false, type="string"),
-     *     @SWG\Parameter(default=0, enum={0,1,2}, in="formData", name="gender", required=true, type="integer"),
-     *     @SWG\Parameter(
+     *     @OA\Parameter(in="formData", name="city", required=false, @OA\Schema(type="string", maxLength=50, minLength=2)),
+     *     @OA\Parameter(in="formData", name="gender", required=true, @OA\Schema(type="integer", default=0, enum={0,1,2})),
+     *     @OA\Parameter(
      *         description="Format is 316xxxxxxxx",
      *         in="formData",
-     *         minLength=11,
-     *         maxLength=11,
      *         name="mobilePhone",
      *         required=false,
-     *         type="string",
+     *         @OA\Schema(type="string", maxLength=11, minLength=11),
      *     ),
-     *     @SWG\Parameter(in="formData", maxLength=60, name="skype", required=false, type="string"),
-     *     @SWG\Parameter(in="formData", maxLength=75, name="website", required=false, type="string"),
-     *     @SWG\Parameter(in="formData", maxLength=255, name="facebookAccount", required=false, type="string"),
-     *     @SWG\Parameter(in="formData", maxLength=255, name="flickrAccount", required=false, type="string"),
-     *     @SWG\Parameter(in="formData", maxLength=255, name="twitterAccount", required=false, type="string"),
-     *     @SWG\Parameter(in="formData", maxLength=255, name="youtubeAccount", required=false, type="string"),
+     *     @OA\Parameter(in="formData", name="skype", required=false, @OA\Schema(type="string", maxLength=60)),
+     *     @OA\Parameter(in="formData", name="website", required=false, @OA\Schema(type="string", maxLength=75)),
+     *     @OA\Parameter(in="formData", name="facebookAccount", required=false, @OA\Schema(type="string", maxLength=255)),
+     *     @OA\Parameter(in="formData", name="flickrAccount", required=false, @OA\Schema(type="string", maxLength=255)),
+     *     @OA\Parameter(in="formData", name="twitterAccount", required=false, @OA\Schema(type="string", maxLength=255)),
+     *     @OA\Parameter(in="formData", name="youtubeAccount", required=false, @OA\Schema(type="string", maxLength=255)),
      * )
-     * @SWG\Response(
+     * @OA\Response(
      *     response=200,
      *     description="Returns the updated user profile",
-     *     @SWG\Schema(
-     *         @SWG\Property(property="data", type="array", @SWG\Items(ref=@Model(type=User::class))),
+     *     @OA\Schema(
+     *         @OA\Property(property="data", type="array", @OA\Items(ref=@Model(type=User::class))),
      *     ),
      * )
-     * @SWG\Tag(name="Profile")
+     * @OA\Tag(name="Profile")
      */
     public function updateAction(Request $request): Response
     {
@@ -153,27 +149,25 @@ class ProfileController extends AbstractFOSRestController
      * @param Request $request
      * @return Response
      * @throws Exception
-     * @SWG\Post(
-     *     @SWG\Parameter(in="formData", maxLength=200, name="forum_signature", required=false, type="string"),
-     *     @SWG\Parameter(default=0, enum={0,1}, in="formData", name="forum_new_to_old", required=true, type="integer"),
-     *     @SWG\Parameter(
-     *         default=0,
-     *         enum={0,1},
+     * @OA\Post(
+     *     @OA\Parameter(in="formData", name="forum_signature", required=false, @OA\Schema(type="string", maxLength=200)),
+     *     @OA\Parameter(in="formData", name="forum_new_to_old", required=true, @OA\Schema(type="integer", default=0, enum={0,1})),
+     *     @OA\Parameter(
      *         in="formData",
      *         name="app_mark_forum_read",
      *         required=true,
-     *         type="integer"
+     *         @OA\Schema(type="integer", enum={0,1}, default=0),
      *     ),
-     *     @SWG\Parameter(in="formData", maxLength=200, name="default_spot_place", required=false, type="string"),
+     *     @OA\Parameter(in="formData", name="default_spot_place", required=false, @OA\Schema(type="string", maxLength=200)),
      * )
-     * @SWG\Response(
+     * @OA\Response(
      *     response=200,
      *     description="Returns the updated user profile",
-     *     @SWG\Schema(
-     *         @SWG\Property(property="data", type="array", @SWG\Items(ref=@Model(type=User::class))),
+     *     @OA\Schema(
+     *         @OA\Property(property="data", type="array", @OA\Items(ref=@Model(type=User::class))),
      *     ),
      * )
-     * @SWG\Tag(name="Profile")
+     * @OA\Tag(name="Profile")
      */
     public function updatePreferencesAction(Request $request): Response
     {

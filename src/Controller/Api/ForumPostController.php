@@ -15,7 +15,7 @@ use App\Helpers\UserHelper;
 use Exception;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use Nelmio\ApiDocBundle\Annotation\Model;
-use Swagger\Annotations as SWG;
+use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -65,18 +65,18 @@ class ForumPostController extends AbstractFOSRestController
      * @param int $discussionId
      * @return Response
      * @throws Exception
-     * @SWG\Post(
-     *     @SWG\Parameter(in="formData", name="signatureOn", type="integer", enum={0,1}),
-     *     @SWG\Parameter(in="formData", name="text", type="string")
+     * @OA\Post(
+     *     @OA\Parameter(in="formData", name="signatureOn", @OA\Schema(type="integer", enum={0,1})),
+     *     @OA\Parameter(in="formData", name="text", @OA\Schema(type="string"))
      * )
-     * @SWG\Response(
+     * @OA\Response(
      *     response=200,
      *     description="Returns the new forum-post",
-     *     @SWG\Schema(
-     *         @SWG\Property(property="data", type="object", ref=@Model(type=ForumPost::class)),
+     *     @OA\Schema(
+     *         @OA\Property(property="data", type="object", ref=@Model(type=ForumPost::class)),
      *     ),
      * )
-     * @SWG\Tag(name="Forum")
+     * @OA\Tag(name="Forum")
      */
     public function replyAction(Request $request, int $discussionId): Response
     {

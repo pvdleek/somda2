@@ -5,7 +5,7 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as JMS;
-use Swagger\Annotations as SWG;
+use OpenApi\Annotations as OA;
 
 /**
  * @ORM\Table(name="somda_forum_posts_text")
@@ -26,7 +26,7 @@ class ForumPostText
      * @var bool
      * @ORM\Column(name="new_style", type="boolean", options={"default"=true})
      * @JMS\Expose()
-     * @SWG\Property(description="Whether the post was created using the new WYSIWYG editor", type="boolean")
+     * @OA\Property(description="Whether the post was created using the new WYSIWYG editor", type="boolean")
      */
     public bool $newStyle = true;
 
@@ -34,7 +34,7 @@ class ForumPostText
      * @var string
      * @ORM\Column(name="text", type="text", length=0, nullable=false)
      * @JMS\Expose()
-     * @SWG\Property(description="Text of the post", type="text")
+     * @OA\Property(description="Text of the post", type="text")
      */
     public string $text;
 }

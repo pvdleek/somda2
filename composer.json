@@ -23,7 +23,7 @@
         "jms/serializer-bundle": "^5.0",
         "laminas/laminas-zendframework-bridge": "^1.6",
         "mobiledetect/mobiledetectlib": "^2.8",
-        "nelmio/api-doc-bundle": "^3.6",
+        "nelmio/api-doc-bundle": "^4.0",
         "nelmio/security-bundle": "^3.0",
         "sensio/framework-extra-bundle": "^6.2",
         "symfony/asset": "^5.4",

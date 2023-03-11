@@ -7,7 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as JMS;
 use Nelmio\ApiDocBundle\Annotation\Model;
-use Swagger\Annotations as SWG;
+use OpenApi\Annotations as OA;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -34,7 +34,7 @@ class ForumPost
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @JMS\Expose()
-     * @SWG\Property(description="Unique identifier", type="integer")
+     * @OA\Property(description="Unique identifier", type="integer")
      */
     public ?int $id = null;
 
@@ -43,7 +43,7 @@ class ForumPost
      * @ORM\ManyToOne(targetEntity="App\Entity\User")
      * @ORM\JoinColumn(name="authorid", referencedColumnName="uid")
      * @JMS\Expose()
-     * @SWG\Property(description="The author of the post", ref=@Model(type=User::class))
+     * @OA\Property(description="The author of the post", ref=@Model(type=User::class))
      */
     public User $author;
 
@@ -59,7 +59,7 @@ class ForumPost
      * @var DateTime
      * @ORM\Column(name="timestamp", type="datetime", nullable=false)
      * @JMS\Expose()
-     * @SWG\Property(description="ISO-8601 timestamp of the post (Y-m-dTH:i:sP)", type="string")
+     * @OA\Property(description="ISO-8601 timestamp of the post (Y-m-dTH:i:sP)", type="string")
      */
     public DateTime $timestamp;
 
@@ -67,7 +67,7 @@ class ForumPost
      * @var ForumPostText
      * @ORM\OneToOne(targetEntity="App\Entity\ForumPostText", mappedBy="post")
      * @JMS\Expose()
-     * @SWG\Property(description="The text of the post", ref=@Model(type=ForumPostText::class))
+     * @OA\Property(description="The text of the post", ref=@Model(type=ForumPostText::class))
      */
     public ForumPostText $text;
 
@@ -75,7 +75,7 @@ class ForumPost
      * @var DateTime|null
      * @ORM\Column(name="edit_timestamp", type="datetime", nullable=true)
      * @JMS\Expose()
-     * @SWG\Property(description="ISO-8601 timestamp of the post edit (Y-m-dTH:i:sP)", type="string")
+     * @OA\Property(description="ISO-8601 timestamp of the post edit (Y-m-dTH:i:sP)", type="string")
      */
     public ?DateTime $editTimestamp = null;
 
@@ -84,7 +84,7 @@ class ForumPost
      * @ORM\ManyToOne(targetEntity="App\Entity\User")
      * @ORM\JoinColumn(name="edit_uid", referencedColumnName="uid")
      * @JMS\Expose()
-     * @SWG\Property(description="The user that edited the post", ref=@Model(type=User::class))
+     * @OA\Property(description="The user that edited the post", ref=@Model(type=User::class))
      */
     public ?User $editor = null;
 
@@ -92,7 +92,7 @@ class ForumPost
      * @var string|null
      * @ORM\Column(name="edit_reason", type="string", length=50, nullable=true)
      * @JMS\Expose()
-     * @SWG\Property(description="Reason for editing the post", maxLength=50, type="string")
+     * @OA\Property(description="Reason for editing the post", maxLength=50, type="string")
      */
     public ?string $editReason = null;
 
@@ -100,7 +100,7 @@ class ForumPost
      * @var bool
      * @ORM\Column(name="sign_on", type="boolean", nullable=false)
      * @JMS\Expose()
-     * @SWG\Property(description="Whether the signature of the author is included", type="boolean")
+     * @OA\Property(description="Whether the signature of the author is included", type="boolean")
      */
     public bool $signatureOn = false;
 

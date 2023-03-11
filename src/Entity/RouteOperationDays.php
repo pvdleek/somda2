@@ -4,7 +4,7 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as JMS;
-use Swagger\Annotations as SWG;
+use OpenApi\Annotations as OA;
 
 /**
  * @ORM\Table(name="somda_rijdagen")
@@ -18,7 +18,7 @@ class RouteOperationDays
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @JMS\Expose()
-     * @SWG\Property(description="Unique identifier, binary representation of the operation days", type="integer")
+     * @OA\Property(description="Unique identifier, binary representation of the operation days", type="integer")
      */
     public ?int $id = null;
 
@@ -26,7 +26,7 @@ class RouteOperationDays
      * @var bool
      * @ORM\Column(name="ma", type="boolean", nullable=false)
      * @JMS\Expose()
-     * @SWG\Property(description="Is the route operating on Monday", type="boolean")
+     * @OA\Property(description="Is the route operating on Monday", type="boolean")
      */
     public bool $monday = false;
 
@@ -34,7 +34,7 @@ class RouteOperationDays
      * @var bool
      * @ORM\Column(name="di", type="boolean", nullable=false)
      * @JMS\Expose()
-     * @SWG\Property(description="Is the route operating on Tuesday", type="boolean")
+     * @OA\Property(description="Is the route operating on Tuesday", type="boolean")
      */
     public bool $tuesday = false;
 
@@ -42,7 +42,7 @@ class RouteOperationDays
      * @var bool
      * @ORM\Column(name="wo", type="boolean", nullable=false)
      * @JMS\Expose()
-     * @SWG\Property(description="Is the route operating on Wednesday", type="boolean")
+     * @OA\Property(description="Is the route operating on Wednesday", type="boolean")
      */
     public bool $wednesday = false;
 
@@ -50,7 +50,7 @@ class RouteOperationDays
      * @var bool
      * @ORM\Column(name="do", type="boolean", nullable=false)
      * @JMS\Expose()
-     * @SWG\Property(description="Is the route operating on Thursday", type="boolean")
+     * @OA\Property(description="Is the route operating on Thursday", type="boolean")
      */
     public bool $thursday = false;
 
@@ -58,7 +58,7 @@ class RouteOperationDays
      * @var bool
      * @ORM\Column(name="vr", type="boolean", nullable=false)
      * @JMS\Expose()
-     * @SWG\Property(description="Is the route operating on Friday", type="boolean")
+     * @OA\Property(description="Is the route operating on Friday", type="boolean")
      */
     public bool $friday = false;
 
@@ -66,7 +66,7 @@ class RouteOperationDays
      * @var bool
      * @ORM\Column(name="za", type="boolean", nullable=false)
      * @JMS\Expose()
-     * @SWG\Property(description="Is the route operating on Saturday", type="boolean")
+     * @OA\Property(description="Is the route operating on Saturday", type="boolean")
      */
     public bool $saturday = false;
 
@@ -74,7 +74,7 @@ class RouteOperationDays
      * @var bool
      * @ORM\Column(name="zf", type="boolean", nullable=false)
      * @JMS\Expose()
-     * @SWG\Property(description="Is the route operating on Sunday", type="boolean")
+     * @OA\Property(description="Is the route operating on Sunday", type="boolean")
      */
     public bool $sunday = false;
 

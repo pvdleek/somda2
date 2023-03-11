@@ -7,7 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as JMS;
 use Nelmio\ApiDocBundle\Annotation\Model;
-use Swagger\Annotations as SWG;
+use OpenApi\Annotations as OA;
 
 /**
  * @ORM\Table(
@@ -30,7 +30,7 @@ class Location
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @JMS\Expose()
-     * @SWG\Property(description="Unique identifier", type="integer")
+     * @OA\Property(description="Unique identifier", type="integer")
      */
     public ?int $id = null;
 
@@ -38,7 +38,7 @@ class Location
      * @var string
      * @ORM\Column(name="afkorting", type="string", length=10, nullable=false)
      * @JMS\Expose()
-     * @SWG\Property(description="Abbreviation of the location", maxLength=10, type="string")
+     * @OA\Property(description="Abbreviation of the location", maxLength=10, type="string")
      */
     public string $name = '';
 
@@ -46,7 +46,7 @@ class Location
      * @var float|null
      * @ORM\Column(name="latitude", type="float", precision=10, scale=0, nullable=true)
      * @JMS\Expose()
-     * @SWG\Property(description="Latitude of the location", type="float")
+     * @OA\Property(description="Latitude of the location", type="float")
      */
     public ?float $latitude;
 
@@ -54,7 +54,7 @@ class Location
      * @var float|null
      * @ORM\Column(name="longitude", type="float", precision=10, scale=0, nullable=true)
      * @JMS\Expose()
-     * @SWG\Property(description="Longitude of the location", type="float")
+     * @OA\Property(description="Longitude of the location", type="float")
      */
     public ?float $longitude;
 
@@ -62,7 +62,7 @@ class Location
      * @var string
      * @ORM\Column(name="description", type="string", length=100, nullable=false)
      * @JMS\Expose()
-     * @SWG\Property(description="Description of the location", maxLength=100, type="string")
+     * @OA\Property(description="Description of the location", maxLength=100, type="string")
      */
     public string $description;
 
@@ -70,7 +70,7 @@ class Location
      * @var string|null
      * @ORM\Column(name="traject", type="string", length=15, nullable=true)
      * @JMS\Expose()
-     * @SWG\Property(description="Route where this location is located", maxLength=15, type="string")
+     * @OA\Property(description="Route where this location is located", maxLength=15, type="string")
      */
     public ?string $routeDescription;
 
@@ -78,7 +78,7 @@ class Location
      * @var bool
      * @ORM\Column(name="spot_allowed", type="boolean", nullable=false)
      * @JMS\Expose()
-     * @SWG\Property(description="Is the location currently active (allowed to add spots)", type="boolean")
+     * @OA\Property(description="Is the location currently active (allowed to add spots)", type="boolean")
      */
     public bool $spotAllowed = true;
 
@@ -94,7 +94,7 @@ class Location
      * @ORM\ManyToOne(targetEntity="App\Entity\LocationCategory", inversedBy="locations")
      * @ORM\JoinColumn(name="landid", referencedColumnName="verk_catid")
      * @JMS\Expose()
-     * @SWG\Property(
+     * @OA\Property(
      *     description="The category to which this location belongs",
      *     ref=@Model(type=LocationCategory::class),
      * )

@@ -7,7 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as JMS;
 use Nelmio\ApiDocBundle\Annotation\Model;
-use Swagger\Annotations as SWG;
+use OpenApi\Annotations as OA;
 
 /**
  * @ORM\Table(
@@ -25,7 +25,7 @@ class Train
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @JMS\Expose()
-     * @SWG\Property(description="Unique identifier", type="integer")
+     * @OA\Property(description="Unique identifier", type="integer")
      */
     public ?int $id = null;
 
@@ -33,7 +33,7 @@ class Train
      * @var string
      * @ORM\Column(name="nummer", type="string", length=20, nullable=false)
      * @JMS\Expose()
-     * @SWG\Property(description="Number of the train", maxLength=20, type="string")
+     * @OA\Property(description="Number of the train", maxLength=20, type="string")
      */
     public string $number = '';
 
@@ -41,7 +41,7 @@ class Train
      * @var string|null
      * @ORM\Column(name="naam", type="string", length=50, nullable=true)
      * @JMS\Expose()
-     * @SWG\Property(description="Name of the train if known", maxLength=50, type="string")
+     * @OA\Property(description="Name of the train if known", maxLength=50, type="string")
      */
     public ?string $name;
 
@@ -50,7 +50,7 @@ class Train
      * @ORM\ManyToOne(targetEntity="App\Entity\Transporter")
      * @ORM\JoinColumn(name="vervoerder_id", referencedColumnName="vervoerder_id")
      * @JMS\Expose()
-     * @SWG\Property(description="The transporter of this train if known", ref=@Model(type=Transporter::class))
+     * @OA\Property(description="The transporter of this train if known", ref=@Model(type=Transporter::class))
      */
     public ?Transporter $transporter;
 

@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace App\Controller\Api;
 
 use App\Entity\ForumDiscussion;
-use App\Entity\ForumPost;
 use App\Entity\UserPreference;
 use App\Generics\RoleGenerics;
 use App\Helpers\ForumAuthorizationHelper;
@@ -14,7 +13,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use Nelmio\ApiDocBundle\Annotation\Model;
-use Swagger\Annotations as SWG;
+use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
@@ -62,43 +61,43 @@ class ForumDiscussionController extends AbstractFOSRestController
      * @param int $id
      * @return Response
      * @throws Exception
-     * @SWG\Response(
+     * @OA\Response(
      *     response=200,
      *     description="Returns non-paginated posts in a discussion",
-     *     @SWG\Schema(
-     *         @SWG\Property(
+     *     @OA\Schema(
+     *         @OA\Property(
      *             property="meta",
      *             type="object",
-     *             @SWG\Property(
+     *             @OA\Property(
      *                 description="Whether the user is a moderator for this forum",
      *                 property="user_is_moderator",
      *                 type="boolean",
      *             ),
-     *             @SWG\Property(
+     *             @OA\Property(
      *                 description="The total number of posts in this discussion",
      *                 property="number_of_posts",
      *                 type="integer",
      *             ),
-     *             @SWG\Property(
+     *             @OA\Property(
      *                 description="Whether the posts are displayed from new to old for this user",
      *                 property="new_to_old",
      *                 type="boolean",
      *             ),
-     *             @SWG\Property(
+     *             @OA\Property(
      *                 description="Whether the user is allowed to post a reply in this discussion",
      *                 property="may_post",
      *                 type="boolean",
      *             ),
-     *             @SWG\Property(
+     *             @OA\Property(
      *                 description="The total number of posts the user has already read in this discussion",
      *                 property="number_of_read_posts",
      *                 type="integer",
      *             ),
      *         ),
-     *         @SWG\Property(property="data", type="array", @SWG\Items(ref=@Model(type=ForumPost::class))),
+     *         @OA\Property(property="data", type="array", @OA\Items(ref=@Model(type=ForumPost::class))),
      *     ),
      * )
-     * @SWG\Tag(name="Forum")
+     * @OA\Tag(name="Forum")
      */
     public function indexAction(int $id): Response
     {
@@ -133,14 +132,14 @@ class ForumDiscussionController extends AbstractFOSRestController
 
     /**
      * @return Response
-     * @SWG\Response(
+     * @OA\Response(
      *     response=200,
      *     description="Returns the favorite discussions of the user",
-     *     @SWG\Schema(
-     *         @SWG\Property(property="data", type="array", @SWG\Items(ref=@Model(type=ForumDiscussion::class))),
+     *     @OA\Schema(
+     *         @OA\Property(property="data", type="array", @OA\Items(ref=@Model(type=ForumDiscussion::class))),
      *     ),
      * )
-     * @SWG\Tag(name="Forum")
+     * @OA\Tag(name="Forum")
      */
     public function favoritesAction(): Response
     {
@@ -158,14 +157,14 @@ class ForumDiscussionController extends AbstractFOSRestController
 
     /**
      * @return Response
-     * @SWG\Response(
+     * @OA\Response(
      *     response=200,
      *     description="Returns all unread discussions of the user",
-     *     @SWG\Schema(
-     *         @SWG\Property(property="data", type="array", @SWG\Items(ref=@Model(type=ForumDiscussion::class))),
+     *     @OA\Schema(
+     *         @OA\Property(property="data", type="array", @OA\Items(ref=@Model(type=ForumDiscussion::class))),
      *     ),
      * )
-     * @SWG\Tag(name="Forum")
+     * @OA\Tag(name="Forum")
      */
     public function unreadAction(): Response
     {

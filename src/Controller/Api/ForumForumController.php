@@ -14,7 +14,7 @@ use App\Traits\SortTrait;
 use Doctrine\Persistence\ManagerRegistry;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use Nelmio\ApiDocBundle\Annotation\Model;
-use Swagger\Annotations as SWG;
+use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\Response;
 
 class ForumForumController extends AbstractFOSRestController
@@ -61,13 +61,13 @@ class ForumForumController extends AbstractFOSRestController
 
     /**
      * @return Response
-     * @SWG\Response(
+     * @OA\Response(
      *     response=200,
      *     description="Returns all categories and forums",
-     *     @SWG\Schema(
-     *         @SWG\Property(property="data", type="array", @SWG\Items(
-     *             @SWG\Property(description="Unique identifier", property="id", type="integer"),
-     *             @SWG\Property(
+     *     @OA\Schema(
+     *         @OA\Property(property="data", type="array", @OA\Items(
+     *             @OA\Property(description="Unique identifier", property="id", type="integer"),
+     *             @OA\Property(
      *                 description="The forum-type:\
      *                     0 for publicly accessible,
      *                     1 for logged-in users only,
@@ -77,23 +77,23 @@ class ForumForumController extends AbstractFOSRestController
      *                 property="type",
      *                 type="integer",
      *             ),
-     *             @SWG\Property(description="Name of the forum", maxLength=40, property="name", type="string"),
-     *             @SWG\Property(
+     *             @OA\Property(description="Name of the forum", maxLength=40, property="name", type="string"),
+     *             @OA\Property(
      *                 description="The order in which to display the forums",
      *                 property="order",
      *                 type="integer",
      *             ),
-     *             @SWG\Property(
+     *             @OA\Property(
      *                 description="The total number of discussions in this forum",
      *                 property="numberOfDiscussions",
      *                 type="integer",
      *             ),
-     *             @SWG\Property(
+     *             @OA\Property(
      *                 description="The total number of unread discussions in this forum",
      *                 property="numberOfUnreadDiscussions",
      *                 type="integer",
      *             ),
-     *             @SWG\Property(
+     *             @OA\Property(
      *                 description="Unique identifier",
      *                 property="category",
      *                 ref=@Model(type=ForumCategory::class),
@@ -101,7 +101,7 @@ class ForumForumController extends AbstractFOSRestController
      *         )),
      *     ),
      * )
-     * @SWG\Tag(name="Forum")
+     * @OA\Tag(name="Forum")
      */
     public function indexAction(): Response
     {
@@ -128,56 +128,56 @@ class ForumForumController extends AbstractFOSRestController
     /**
      * @param int $id
      * @return Response
-     * @SWG\Response(
+     * @OA\Response(
      *     response=200,
      *     description="Returns all discussions in a forum",
-     *     @SWG\Schema(
-     *         @SWG\Property(
+     *     @OA\Schema(
+     *         @OA\Property(
      *             property="meta",
      *             type="object",
-     *             @SWG\Property(
+     *             @OA\Property(
      *                 description="Whether the user is a moderator for this forum",
      *                 property="user_is_moderator",
      *                 type="boolean",
      *             ),
      *         ),
-     *         @SWG\Property(property="data", type="array", @SWG\Items(
-     *             @SWG\Property(description="Unique identifier", property="id", type="integer"),
-     *             @SWG\Property(description="Title of the discussion", maxLength=50, property="title", type="string"),
-     *             @SWG\Property(
+     *         @OA\Property(property="data", type="array", @OA\Items(
+     *             @OA\Property(description="Unique identifier", property="id", type="integer"),
+     *             @OA\Property(description="Title of the discussion", maxLength=50, property="title", type="string"),
+     *             @OA\Property(
      *                 description="Unique identifier of the user that started the discussion",
      *                  property="author_id",
      *                type="integer",
      *             ),
-     *             @SWG\Property(
+     *             @OA\Property(
      *                 description="Username of the user that started the discussion",
      *                 maxLength=20,
      *                 property="author_username",
      *                 type="string",
      *             ),
-     *             @SWG\Property(
+     *             @OA\Property(
      *                 description="Whether the discussion is locked",
      *                 enum={"0","1"},
      *                 property="locked",
      *                 type="string",
      *             ),
-     *            @SWG\Property(
+     *            @OA\Property(
      *                 description="The number of times the discussion has been viewed",
      *                 property="viewed",
      *                 type="integer",
      *             ),
-     *             @SWG\Property(
+     *             @OA\Property(
      *                 description="Whether the discussion is fully read by the user",
      *                 enum={"0","1"},
      *                 property="discussion_read",
      *                 type="string",
      *             ),
-     *             @SWG\Property(
+     *             @OA\Property(
      *                 description="Timestamp of the last post in this discussion (Y-m-d H:i:s)",
      *                 property="max_post_timestamp",
      *                 type="string",
      *             ),
-     *             @SWG\Property(
+     *             @OA\Property(
      *                 description="The number of posts in this discussion",
      *                 property="posts",
      *                 type="integer",
@@ -185,7 +185,7 @@ class ForumForumController extends AbstractFOSRestController
      *         )),
      *     ),
      * )
-     * @SWG\Tag(name="Forum")
+     * @OA\Tag(name="Forum")
      */
     public function forumAction(int $id): Response
     {
