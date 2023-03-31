@@ -91,13 +91,13 @@ class LocationController
          * @var Location[] $locations
          */
         $locations = $this->doctrine->getRepository(Location::class)->findByName($search);
-        if (count($locations) < 1) {
+        if (\count($locations) < 1) {
             $locations = $this->doctrine->getRepository(Location::class)->findByName('%' . $search . '%');
-            if (count($locations) < 1) {
+            if (\count($locations) < 1) {
                 $locations = $this->doctrine->getRepository(Location::class)->findByDescription('%' . $search . '%');
             }
         }
-        $locations = array_slice($locations, 0, 20);
+        $locations = \array_slice($locations, 0, 20);
 
         $json = [];
         foreach ($locations as $location) {

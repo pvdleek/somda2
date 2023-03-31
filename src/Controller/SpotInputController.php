@@ -73,7 +73,7 @@ class SpotInputController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $spotLines = array_filter(preg_split('/$\R?^/m', $form->get('spots')->getData()));
+            $spotLines = \array_filter(\preg_split('/$\R?^/m', $form->get('spots')->getData()));
             $spotIdArray = $this->spotInputHelper->processSpotLines(
                 $spotLines,
                 $this->userHelper->getUser(),
@@ -81,11 +81,11 @@ class SpotInputController
                 $form->get('location')->getData()
             );
 
-            if (count($spotIdArray) > 0) {
+            if (\count($spotIdArray) > 0) {
                 return $this->formHelper->finishFormHandling(
                     'Spot(s) opgeslagen',
                     'spot_input_feedback',
-                    ['idList' => implode('/', $spotIdArray)]
+                    ['idList' => \implode('/', $spotIdArray)]
                 );
             }
 
@@ -106,11 +106,11 @@ class SpotInputController
     {
         $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_SPOTS_NEW);
 
-        $idArray = array_filter(explode('/', $idList));
+        $idArray = \array_filter(\explode('/', $idList));
         $spots = [];
         foreach ($idArray as $id) {
             $spot = $this->formHelper->getDoctrine()->getRepository(Spot::class)->find($id);
-            if (is_null($spot) || $spot->user !== $this->userHelper->getUser()) {
+            if (null === $spot || $spot->user !== $this->userHelper->getUser()) {
                 throw new AccessDeniedException('This spot does not exist or does not belong to the user');
             }
 

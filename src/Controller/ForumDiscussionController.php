@@ -83,7 +83,7 @@ class ForumDiscussionController
          * @var ForumDiscussion $discussion
          */
         $discussion = $this->formHelper->getDoctrine()->getRepository(ForumDiscussion::class)->find($id);
-        if (is_null($discussion)) {
+        if (null === $discussion) {
             return $this->formHelper->getRedirectHelper()->redirectToRoute(RouteGenerics::ROUTE_FORUM);
         }
 
@@ -120,19 +120,19 @@ class ForumDiscussionController
         $banners = $this->formHelper->getDoctrine()->getRepository(Banner::class)->findBy(
             ['location' => Banner::LOCATION_FORUM, 'active' => true]
         );
-        if (count($banners) < 1) {
+        if (\count($banners) < 1) {
             return null;
         }
         /**
          * @var Banner $forumBanner
          */
-        $forumBanner = $banners[random_int(0, count($banners) - 1)];
+        $forumBanner = $banners[\random_int(0, \count($banners) - 1)];
 
         // Create a view for this banner
         $bannerView = new BannerView();
         $bannerView->banner = $forumBanner;
-        $bannerView->timestamp = new DateTime();
-        $bannerView->ipAddress = inet_pton($request->getClientIp());
+        $bannerView->timestamp = new \DateTime();
+        $bannerView->ipAddress = \inet_pton($request->getClientIp());
         $this->formHelper->getDoctrine()->getManager()->persist($bannerView);
         $this->formHelper->getDoctrine()->getManager()->flush();
 
@@ -153,7 +153,7 @@ class ForumDiscussionController
          * @var ForumForum $forum
          */
         $forum = $this->formHelper->getDoctrine()->getRepository(ForumForum::class)->find($id);
-        if (is_null($forum) || !$this->forumAuthHelper->mayPost($forum, $this->userHelper->getUser())) {
+        if (null === $forum || !$this->forumAuthHelper->mayPost($forum, $this->userHelper->getUser())) {
             return $this->formHelper->getRedirectHelper()->redirectToRoute(RouteGenerics::ROUTE_FORUM);
         }
 
@@ -175,7 +175,7 @@ class ForumDiscussionController
 
             return $this->formHelper->finishFormHandling('', RouteGenerics::ROUTE_FORUM_DISCUSSION, [
                 'id' => $forumDiscussion->id,
-                'name' => urlencode($forumDiscussion->title)
+                'name' => \urlencode($forumDiscussion->title)
             ]);
         }
 

@@ -8,8 +8,6 @@ use App\Generics\RoleGenerics;
 use App\Helpers\FormHelper;
 use App\Helpers\TemplateHelper;
 use App\Helpers\UserHelper;
-use DateTime;
-use Exception;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -63,23 +61,23 @@ class ManageSpecialRoutesController
      * @param Request $request
      * @param int $id
      * @return RedirectResponse|Response
-     * @throws Exception
+     * @throws \Exception
      */
     public function editAction(Request $request, int $id)
     {
         $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_ADMIN_SPECIAL_ROUTES);
 
         $specialRoute = $this->formHelper->getDoctrine()->getRepository(SpecialRoute::class)->find($id);
-        if (is_null($specialRoute)) {
+        if (null === $specialRoute) {
             $specialRoute = new SpecialRoute();
-            $specialRoute->startDate = new DateTime('+1 day');
-            $specialRoute->publicationTimestamp = new DateTime();
+            $specialRoute->startDate = new \DateTime('+1 day');
+            $specialRoute->publicationTimestamp = new \DateTime();
         }
         $form = $this->formHelper->getFactory()->create(SpecialRouteForm::class, $specialRoute);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            if (is_null($specialRoute->id)) {
+            if (null === $specialRoute->id) {
                 $this->formHelper->getDoctrine()->getManager()->persist($specialRoute);
                 return $this->formHelper->finishFormHandling('Rit toegevoegd', 'manage_special_routes');
             }

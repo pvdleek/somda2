@@ -14,8 +14,6 @@ use App\Generics\RouteGenerics;
 use App\Helpers\FormHelper;
 use App\Helpers\TemplateHelper;
 use App\Helpers\UserHelper;
-use DateTime;
-use Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -84,7 +82,7 @@ class TrainController
      * @param int $id
      * @param int|null $typeId
      * @return RedirectResponse|Response
-     * @throws Exception
+     * @throws \Exception
      */
     public function editAction(Request $request, int $id, int $typeId = null)
     {
@@ -126,7 +124,7 @@ class TrainController
      * @param Request $request
      * @param TrainComposition $trainComposition
      * @return RedirectResponse|Response
-     * @throws Exception
+     * @throws \Exception
      */
     private function editAsManager(Request $request, TrainComposition $trainComposition)
     {
@@ -168,7 +166,7 @@ class TrainController
             $trainProposition->user = $this->userHelper->getUser();
         }
 
-        $trainProposition->timestamp = new DateTime();
+        $trainProposition->timestamp = new \DateTime();
 
         $form = $this->formHelper->getFactory()->create(TrainCompositionForm::class, $trainProposition);
         $form->handleRequest($request);

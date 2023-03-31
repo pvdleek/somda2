@@ -55,7 +55,7 @@ class CleanupUsersCommand extends Command
         $users = $this->doctrine->getRepository(User::class)->findNonActivated();
         foreach ($users as $user) {
             $numberOfPosts = $this->doctrine->getRepository(ForumPost::class)->findBy(['author' => $user]);
-            if (count($user->getSpots()) < 1 && count($numberOfPosts) < 1) {
+            if (\count($user->getSpots()) < 1 && \count($numberOfPosts) < 1) {
                 $this->doctrine->getManager()->remove($user->info);
                 $this->doctrine->getManager()->remove($user);
                 $this->doctrine->getManager()->flush();

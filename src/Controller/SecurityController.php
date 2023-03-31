@@ -16,8 +16,6 @@ use App\Helpers\FlashHelper;
 use App\Helpers\FormHelper;
 use App\Helpers\TemplateHelper;
 use App\Helpers\UserHelper;
-use DateTime;
-use Exception;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -70,7 +68,7 @@ class SecurityController
      * @param AuthenticationUtils $authenticationUtils
      * @param string|null $username
      * @return Response
-     * @throws Exception
+     * @throws \Exception
      */
     public function loginAction(AuthenticationUtils $authenticationUtils, string $username = null): Response
     {
@@ -88,7 +86,7 @@ class SecurityController
     /**
      * @param Request $request
      * @return RedirectResponse|Response
-     * @throws Exception
+     * @throws \Exception
      */
     public function registerAction(Request $request)
     {
@@ -108,7 +106,7 @@ class SecurityController
                     PASSWORD_DEFAULT
                 );
                 $user->activationKey = uniqid();
-                $user->registerTimestamp = new DateTime();
+                $user->registerTimestamp = new \DateTime();
                 $this->formHelper->getDoctrine()->getManager()->persist($user);
 
                 $userInfo = new UserInfo();
@@ -289,7 +287,7 @@ class SecurityController
     /**
      * @param Request $request
      * @return RedirectResponse|Response
-     * @throws Exception
+     * @throws \Exception
      */
     public function lostPasswordAction(Request $request)
     {
@@ -332,7 +330,7 @@ class SecurityController
     /**
      * @param int $length
      * @return string
-     * @throws Exception
+     * @throws \Exception
      */
     private function getRandomPassword(int $length): string
     {

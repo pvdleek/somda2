@@ -11,11 +11,9 @@ use App\Helpers\FlashHelper;
 use App\Helpers\RoutesDisplayHelper;
 use App\Helpers\TemplateHelper;
 use App\Helpers\UserHelper;
-use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
 use Dompdf\Dompdf;
 use Dompdf\Options;
-use Exception;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -84,16 +82,16 @@ class TrainTableController
      * @param int|null $trainTableYearId
      * @param string|null $routeNumber
      * @return Response
-     * @throws Exception
+     * @throws \Exception
      */
     public function indexAction(int $trainTableYearId = null, string $routeNumber = null): Response
     {
         $submit = false;
 
-        if (is_null($trainTableYearId)) {
+        if (null === $trainTableYearId) {
             $trainTableYearId = $this->doctrine
                 ->getRepository(TrainTableYear::class)
-                ->findTrainTableYearByDate(new DateTime())
+                ->findTrainTableYearByDate(new \DateTime())
                 ->id;
         } else {
             $submit = true;
@@ -125,7 +123,7 @@ class TrainTableController
      * @param string|null $startTime
      * @param string|null $endTime
      * @return Response
-     * @throws Exception
+     * @throws \Exception
      */
     public function passingRoutesAction(
         int $trainTableYearId = null,
@@ -136,22 +134,22 @@ class TrainTableController
     ): Response {
         $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_PASSING_ROUTES);
 
-        if (is_null($dayNumber)) {
+        if (null === $dayNumber) {
             $trainTableYearId = $this->doctrine
                 ->getRepository(TrainTableYear::class)
-                ->findTrainTableYearByDate(new DateTime())
+                ->findTrainTableYearByDate(new \DateTime())
                 ->id;
 
-            $dayNumber = date('N');
-            $startTime = date('H:i', time() - (60 * 15));
-            $endTime = date('H:i', time() + (60 * 45));
+            $dayNumber = \date('N');
+            $startTime = \date('H:i', \time() - (60 * 15));
+            $endTime = \date('H:i', \time() + (60 * 45));
 
             $passingRoutes = [];
         } else {
             if ($trainTableYearId === 0) {
                 $trainTableYearId = $this->doctrine
                     ->getRepository(TrainTableYear::class)
-                    ->findTrainTableYearByDate(new DateTime())
+                    ->findTrainTableYearByDate(new \DateTime())
                     ->id;
             }
 
@@ -187,7 +185,7 @@ class TrainTableController
      * @param string $endTime
      * @param int $spotterVersion
      * @return RedirectResponse
-     * @throws Exception
+     * @throws \Exception
      */
     public function passingRoutesExportAction(
         int $trainTableYearId,
@@ -262,11 +260,11 @@ class TrainTableController
     public function specialRoutesAction(int $id = null): Response
     {
         $specialRoute = null;
-        if (!is_null($id)) {
+        if (null !== $id) {
             $specialRoute = $this->doctrine->getRepository(SpecialRoute::class)->find($id);
         }
 
-        if (is_null($specialRoute)) {
+        if (null === $specialRoute) {
             $specialRoutes = $this->doctrine
                 ->getRepository(SpecialRoute::class)
                 ->findBy([], ['startDate' => 'DESC']);

@@ -8,7 +8,6 @@ use App\Helpers\TemplateHelper;
 use App\Helpers\TrainTableHelper;
 use App\Repository\TrainTable;
 use App\Traits\DateTrait;
-use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -89,15 +88,15 @@ class FeedController
      */
     public function imageAction(Request $request, string $locationName, int $dayNumber = null, string $startTime = null)
     {
-        header('Content-Type: image/png');
+        \header('Content-Type: image/png');
 
         $limit = (int)$request->query->get('limit', self::DEFAULT_LIMIT);
-        $image = ImageCreate(750, 15 * ($limit + 1));
+        $image = \ImageCreate(750, 15 * ($limit + 1));
         $backgroundColor = $this->getColorAllocation(
             $image,
             $request->query->get('bg-color', self::DEFAULT_BACKGROUND_COLOR)
         );
-        ImageFill($image, 0, 0, $backgroundColor);
+        \ImageFill($image, 0, 0, $backgroundColor);
         $this->foregroundColor = $this->getColorAllocation(
             $image,
             $request->query->get('fg-color', self::DEFAULT_FOREGROUND_COLOR)
@@ -107,7 +106,7 @@ class FeedController
          * @var Location $location
          */
         $location = $this->doctrine->getRepository(Location::class)->findOneBy(['name' => $locationName]);
-        if (is_null($location)) {
+        if (null === $location) {
             $this->doText($image, 'Het opgegeven station ' . $locationName . ' is niet bekend in Somda');
             return new Response(imagepng($image), 200, ['Content-Type' => 'image/png']);
         }
@@ -115,12 +114,12 @@ class FeedController
         if ($limit === 1) {
             $this->doText(
                 $image,
-                sprintf($this->translator->trans('passingRoutes.feedHeader.single'), $location->description)
+                \sprintf($this->translator->trans('passingRoutes.feedHeader.single'), $location->description)
             );
         } else {
             $this->doText(
                 $image,
-                sprintf($this->translator->trans('passingRoutes.feedHeader.multiple'), $limit, $location->description)
+                \sprintf($this->translator->trans('passingRoutes.feedHeader.multiple'), $limit, $location->description)
             );
         }
 
@@ -146,18 +145,18 @@ class FeedController
     private function getColorAllocation($id, string $color): int
     {
         if ($color[0] == '#') {
-            $color = substr($color, 1);
+            $color = \substr($color, 1);
         }
 
-        if (strlen($color) === 6) {
+        if (\strlen($color) === 6) {
             list($red, $green, $blue) = array($color[0] . $color[1], $color[2] . $color[3], $color[4] . $color[5]);
-        } elseif (strlen($color) === 3) {
+        } elseif (\strlen($color) === 3) {
             list($red, $green, $blue) = array($color[0] . $color[0], $color[1] . $color[1], $color[2] . $color[2]);
         } else {
-            return ImageColorAllocate($id, 255, 255, 255);
+            return \ImageColorAllocate($id, 255, 255, 255);
         }
 
-        return ImageColorAllocate($id, hexdec($red), hexdec($green), hexdec($blue));
+        return \ImageColorAllocate($id, \hexdec($red), \hexdec($green), \hexdec($blue));
     }
 
     /**
@@ -170,7 +169,7 @@ class FeedController
     {
         $trainTableYearId = $this->doctrine
             ->getRepository(TrainTableYear::class)
-            ->findTrainTableYearByDate(new DateTime())
+            ->findTrainTableYearByDate(new \DateTime())
             ->id;
         $this->trainTableHelper->setTrainTableYear($trainTableYearId);
         $this->trainTableHelper->setLocation($location->name);
@@ -184,13 +183,13 @@ class FeedController
      */
     private function doText($id, string $text): void
     {
-        $text = str_replace(
+        $text = \str_replace(
             ['&amp;', '&uuml;', '&ouml;', '&oslash;', '&egrave;', '&eacute;', '&euml;'],
             ['&', 'u', 'o', 'o', 'e', 'e', 'e'],
             $text
         );
 
-        ImageString($id, 2, 5, 15 * ($this->lineNumber - 1), $text, $this->foregroundColor);
+        \ImageString($id, 2, 5, 15 * ($this->lineNumber - 1), $text, $this->foregroundColor);
         $this->lineNumber += 1;
     }
 }

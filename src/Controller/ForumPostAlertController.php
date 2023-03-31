@@ -13,8 +13,6 @@ use App\Helpers\EmailHelper;
 use App\Helpers\FormHelper;
 use App\Helpers\TemplateHelper;
 use App\Helpers\UserHelper;
-use DateTime;
-use Exception;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -80,7 +78,7 @@ class ForumPostAlertController
      * @param Request $request
      * @param int $id
      * @return Response|RedirectResponse
-     * @throws Exception
+     * @throws \Exception
      */
     public function alertAction(Request $request, int $id)
     {
@@ -96,7 +94,7 @@ class ForumPostAlertController
             $forumPostAlert = new ForumPostAlert();
             $forumPostAlert->post = $post;
             $forumPostAlert->sender = $this->userHelper->getUser();
-            $forumPostAlert->timestamp = new DateTime();
+            $forumPostAlert->timestamp = new \DateTime();
             $forumPostAlert->comment = $form->get(ForumPostAlertForm::FIELD_COMMENT)->getData();
             $this->formHelper->getDoctrine()->getManager()->persist($forumPostAlert);
             $post->addAlert($forumPostAlert);
@@ -120,7 +118,7 @@ class ForumPostAlertController
             return $this->formHelper->finishFormHandling('', 'forum_discussion_post', [
                 'id' => $post->discussion->id,
                 'postId' => $post->id,
-                'name' => urlencode($post->discussion->title)
+                'name' => \urlencode($post->discussion->title)
             ]);
         }
 
@@ -137,7 +135,7 @@ class ForumPostAlertController
      * @param Request $request
      * @param int $id
      * @return RedirectResponse|Response
-     * @throws Exception
+     * @throws \Exception
      */
     public function postAlertsAction(Request $request, int $id)
     {
@@ -190,7 +188,7 @@ class ForumPostAlertController
         $forumPostAlertNote = new ForumPostAlertNote();
         $forumPostAlertNote->alert = $post->getAlerts()[0];
         $forumPostAlertNote->author = $this->userHelper->getUser();
-        $forumPostAlertNote->timestamp = new DateTime();
+        $forumPostAlertNote->timestamp = new \DateTime();
         $forumPostAlertNote->text = $form->get('text')->getData();
         $forumPostAlertNote->sentToReporter = $form->get('sentToReporter')->getData();
 

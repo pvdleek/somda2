@@ -94,7 +94,7 @@ class SpotInputHelper
             $spotInput->spotDate = $spotDate;
             $spotInput->user = $user;
 
-            if (!is_null($spotId = $this->processSpotInput($spotInput))) {
+            if (null !== ($spotId = $this->processSpotInput($spotInput))) {
                 $spotIdArray[] = $spotId;
             } else {
                 $this->flashHelper->add('error', 'Spot op regel ' . ($lineNumber + 1) . ' is al ingevoerd!');
@@ -120,12 +120,12 @@ class SpotInputHelper
          */
         $position = $this->doctrine->getRepository(Position::class)->find($spotInput->positionId);
 
-        if (is_null($spotInput->location)) {
+        if (null === $spotInput->location) {
             // We cannot process a spot without a location
             return null;
         }
 
-        if (is_null($spotInput->existingSpotId)) {
+        if (null === $spotInput->existingSpotId) {
             // Search for an existing spot
             $existingSpot = $this->doctrine->getRepository(Spot::class)->findOneBy([
                 'spotDate' => $spotInput->spotDate,
@@ -135,7 +135,7 @@ class SpotInputHelper
                 'train' => $train,
                 'user' => $spotInput->user,
             ]);
-            if (!is_null($existingSpot)) {
+            if (null !== $existingSpot) {
                 return null;
             }
 
@@ -144,7 +144,7 @@ class SpotInputHelper
         } else {
             // Update the existing spot
             $spot = $this->doctrine->getRepository(Spot::class)->find($spotInput->existingSpotId);
-            if (is_null($spot)) {
+            if (null === $spot) {
                 return null;
             }
         }
@@ -160,8 +160,8 @@ class SpotInputHelper
         $spot->location = $spotInput->location;
         $spotInput->location->addSpot($spot);
         $spot->inputFeedbackFlag = $spotInput->feedbackFlag;
-        if (strlen($spotInput->extra) > 0 || strlen($spotInput->userExtra) > 0) {
-            if (!is_null($spot->extra)) {
+        if (\strlen($spotInput->extra) > 0 || \strlen($spotInput->userExtra) > 0) {
+            if (null !== $spot->extra) {
                 $spotExtra = $spot->extra;
             } else {
                 $spotExtra = new SpotExtra();
@@ -171,7 +171,7 @@ class SpotInputHelper
             $spotExtra->extra = $spotInput->extra;
             $spotExtra->userExtra = $spotInput->userExtra ?? '';
             $spot->extra = $spotExtra;
-        } elseif (!is_null($spotExtra = $spot->extra)) {
+        } elseif (null !== ($spotExtra = $spot->extra)) {
             $spot->extra = null;
             $this->doctrine->getManager()->remove($spotExtra);
         }
@@ -194,26 +194,26 @@ class SpotInputHelper
         $spotInput->positionId = 1;
         $spotInput->extra = '';
 
-        $spotPart = explode(' ', $spotLine);
+        $spotPart = \explode(' ', $spotLine);
 
         $spotInput->trainNumber = $this->getNextLineItem($spotPart, $spotInput);
         $spotInput->routeNumber = $this->getNextLineItem($spotPart, $spotInput);
 
-        if (count($spotPart) > 0) {
+        if (\count($spotPart) > 0) {
             $nextPart = $this->getNextLineItem($spotPart, $spotInput);
 
-            if (in_array(strtoupper($nextPart), $this->positionArray, true)) {
+            if (\in_array(\strtoupper($nextPart), $this->positionArray, true)) {
                 // The argument is a position
-                $spotInput->positionId = array_search(strtoupper($nextPart), $this->positionArray);
-                $nextPart = trim(array_shift($spotPart));
+                $spotInput->positionId = \array_search(\strtoupper($nextPart), $this->positionArray);
+                $nextPart = \trim(\array_shift($spotPart));
             }
 
-            if (!is_null($nextPart) && $this->isLineItemLocation($nextPart, $spotInput)) {
-                $nextPart = trim(array_shift($spotPart));
+            if (null !== $nextPart && $this->isLineItemLocation($nextPart, $spotInput)) {
+                $nextPart = \trim(\array_shift($spotPart));
             }
 
             // The rest of the parts form the extra information
-            $spotInput->extra = $nextPart . ' ' . implode(' ', $spotPart);
+            $spotInput->extra = $nextPart . ' ' . \implode(' ', $spotPart);
         }
 
         return $spotInput;
@@ -226,9 +226,9 @@ class SpotInputHelper
      */
     private function getNextLineItem(array &$spotPart, SpotInput $spotInput): string
     {
-        $item = trim(array_shift($spotPart));
+        $item = \trim(\array_shift($spotPart));
         if ($this->isLineItemLocation($item, $spotInput)) {
-            return trim(array_shift($spotPart));
+            return \trim(\array_shift($spotPart));
         }
         return $item;
     }
@@ -240,12 +240,12 @@ class SpotInputHelper
      */
     private function isLineItemLocation(string $item, SpotInput $spotInput): bool
     {
-        if (substr($item, 0, 1) === '|' && substr($item, -1) === '|') {
+        if (\substr($item, 0, 1) === '|' && \substr($item, -1) === '|') {
             /**
              * @var Location $location
              */
             $location = $this->doctrine->getRepository(Location::class)->findOneBy(
-                ['name' => substr($item, 1, strlen($item) - 2)]
+                ['name' => \substr($item, 1, \strlen($item) - 2)]
             );
             $spotInput->location = $location;
             return true;
@@ -263,7 +263,7 @@ class SpotInputHelper
          * @var Train $train
          */
         $train = $this->doctrine->getRepository(Train::class)->findOneBy(['number' => $spotInput->trainNumber]);
-        if (!is_null($train)) {
+        if (null !== $train) {
             return $train;
         }
 
@@ -278,8 +278,7 @@ class SpotInputHelper
             }
         }
 
-        $spotInput->feedbackFlag += is_null($train->namePattern)
-            ? Spot::INPUT_FEEDBACK_TRAIN_NEW_NO_PATTERN : Spot::INPUT_FEEDBACK_TRAIN_NEW;
+        $spotInput->feedbackFlag += null === $train->namePattern ? Spot::INPUT_FEEDBACK_TRAIN_NEW_NO_PATTERN : Spot::INPUT_FEEDBACK_TRAIN_NEW;
 
         $this->doctrine->getManager()->persist($train);
 
@@ -296,7 +295,7 @@ class SpotInputHelper
          * @var Route $route
          */
         $route = $this->doctrine->getRepository(Route::class)->findOneBy(['number' => $spotInput->routeNumber]);
-        if (is_null($route)) {
+        if (null === $route) {
             $route = new Route();
             $route->number = $spotInput->routeNumber;
 
@@ -307,11 +306,9 @@ class SpotInputHelper
             return $route;
         }
 
-        if (is_numeric($route->number)) {
-            if (count($route->getTrainTables()) > 0
-                && is_null(
-                    $route->getTrainTableFirstLastByDay($this->trainTableYear->id, $spotInput->spotDate->format('N'))
-                )
+        if (\is_numeric($route->number)) {
+            if (\count($route->getTrainTables()) > 0
+                && null === $route->getTrainTableFirstLastByDay($this->trainTableYear->id, $spotInput->spotDate->format('N'))
             ) {
                 $spotInput->feedbackFlag += Spot::INPUT_FEEDBACK_ROUTE_NOT_ON_DAY;
                 return $route;

@@ -6,9 +6,7 @@ namespace App\Controller\Api;
 use App\Entity\User;
 use App\Generics\RoleGenerics;
 use App\Helpers\UserHelper;
-use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
-use Exception;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use Monolog\Logger;
 use Nelmio\ApiDocBundle\Annotation\Model;
@@ -80,7 +78,7 @@ class SecurityController extends AbstractFOSRestController
     public function loginAction(Request $request): Response
     {
         // If we reach this point, the user was successfully logged in, so we look the user up and return it
-        $userInformation = (array)json_decode($request->getContent(), true);
+        $userInformation = (array)\json_decode($request->getContent(), true);
         $user = $this->doctrine->getRepository(User::class)->findOneBy(['username' => $userInformation['username']]);
 
         return $this->handleView($this->view(['data' => $user], 200));
@@ -113,14 +111,14 @@ class SecurityController extends AbstractFOSRestController
         $user = $this->doctrine->getRepository(User::class)->findOneBy(
             ['id' => $id, 'active' => true, 'apiToken' => $token]
         );
-        if (is_null($user) || $user->apiTokenExpiryTimestamp <= new DateTime()) {
+        if (null === $user || $user->apiTokenExpiryTimestamp <= new \DateTime()) {
             return $this->handleView($this->view(['error' => 'This token is not valid'], 401));
         }
 
-        $user->apiTokenExpiryTimestamp = new DateTime(User::API_TOKEN_VALIDITY);
+        $user->apiTokenExpiryTimestamp = new \DateTime(User::API_TOKEN_VALIDITY);
         try {
             $this->doctrine->getManager()->flush();
-        } catch (Exception $exception) {
+        } catch (\Exception $exception) {
             $this->logger->addRecord(
                 Logger::CRITICAL,
                 'Failed to set api-token-expiry-timestamp for user ' . $user->id

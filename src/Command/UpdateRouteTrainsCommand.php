@@ -9,9 +9,7 @@ use App\Entity\RouteTrain;
 use App\Entity\Spot;
 use App\Entity\TrainNamePattern;
 use App\Entity\TrainTableYear;
-use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
-use Exception;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -52,7 +50,7 @@ class UpdateRouteTrainsCommand extends Command
      * @param InputInterface|null $input
      * @param OutputInterface|null $output
      * @return int
-     * @throws Exception
+     * @throws \Exception
      */
     protected function execute(InputInterface $input = null, OutputInterface $output = null): int
     {
@@ -61,8 +59,8 @@ class UpdateRouteTrainsCommand extends Command
          */
         $trainTableYear = $this->doctrine
             ->getRepository(TrainTableYear::class)
-            ->findTrainTableYearByDate(new DateTime());
-        $checkDate = max($trainTableYear->startDate, new DateTime('-' . self::CHECK_DATE_DAYS . ' days'));
+            ->findTrainTableYearByDate(new \DateTime());
+        $checkDate = max($trainTableYear->startDate, new \DateTime('-' . self::CHECK_DATE_DAYS . ' days'));
 
         $routeArray = $this->doctrine->getRepository(Spot::class)->findForRouteTrains($checkDate);
         foreach ($routeArray as $routeItem) {
@@ -85,7 +83,7 @@ class UpdateRouteTrainsCommand extends Command
                 'position' => $position,
                 'dayNumber' => $routeItem['dayOfWeek'],
             ]);
-            if (is_null($routeTrain)) {
+            if (null === $routeTrain) {
                 $routeTrain = new RouteTrain();
                 $routeTrain->trainTableYear = $trainTableYear;
                 $routeTrain->route = $route;

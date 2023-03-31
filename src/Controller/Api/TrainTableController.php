@@ -128,11 +128,11 @@ class TrainTableController extends AbstractFOSRestController
 
         $daysFilter = [];
         foreach ($trainTableLines as $trainTableLine) {
-            if (array_search($trainTableLine->routeOperationDays->id, $daysFilter) === false) {
+            if (\array_search($trainTableLine->routeOperationDays->id, $daysFilter) === false) {
                 $daysFilter[] = $trainTableLine->routeOperationDays->id;
             }
         }
-        $daysFilter = array_values(array_unique($daysFilter));
+        $daysFilter = \array_values(\array_unique($daysFilter));
 
         $daysLegend = [];
         /**
@@ -290,7 +290,7 @@ class TrainTableController extends AbstractFOSRestController
 
         $passingRoutes = $this->trainTableHelper->getPassingRoutes($dayNumber, $startTime, $endTime);
 
-        if (count($messages = $this->trainTableHelper->getErrorMessages()) > 0) {
+        if (\count($messages = $this->trainTableHelper->getErrorMessages()) > 0) {
             return $this->handleView($this->view(['errors' => $messages], 400));
         }
 

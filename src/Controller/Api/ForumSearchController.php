@@ -101,9 +101,9 @@ class ForumSearchController extends AbstractFOSRestController
             $this->view([
                 'meta' => [
                     'max_number_of_results' => ForumSearchHelper::MAX_RESULTS,
-                    'more_results' => count($results) > ForumSearchHelper::MAX_RESULTS
+                    'more_results' => \count($results) > ForumSearchHelper::MAX_RESULTS
                 ],
-                'data' => array_slice($results, 0, ForumSearchHelper::MAX_RESULTS),
+                'data' => \array_slice($results, 0, ForumSearchHelper::MAX_RESULTS),
             ], 200)
         );
     }

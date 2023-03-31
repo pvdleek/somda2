@@ -56,8 +56,8 @@ class UpdateBannerStatisticsCommand extends Command
         // Activate banners that should start
         $banners = $this->doctrine->getRepository(Banner::class)->findBy(['active' => false]);
         foreach ($banners as $banner) {
-            if ($banner->startTimestamp <= new DateTime() &&
-                (is_null($banner->endTimestamp) || $banner->endTimestamp > new DateTime())
+            if ($banner->startTimestamp <= new \DateTime() &&
+                (null === $banner->endTimestamp || $banner->endTimestamp > new \DateTime())
             ) {
                 $banner->active = true;
             }
@@ -66,9 +66,9 @@ class UpdateBannerStatisticsCommand extends Command
         // De-activate banners that should stop
         $banners = $this->doctrine->getRepository(Banner::class)->findBy(['active' => true]);
         foreach ($banners as $banner) {
-            if (!is_null($banner->endTimestamp) && $banner->endTimestamp <= new DateTime() ||
-                $banner->maxHits >= count($banner->getBannerHits()) ||
-                $banner->maxViews >= count($banner->getBannerViews())
+            if (null !== $banner->endTimestamp && $banner->endTimestamp <= new \DateTime() ||
+                $banner->maxHits >= \count($banner->getBannerHits()) ||
+                $banner->maxViews >= \count($banner->getBannerViews())
             ) {
                 $banner->active = false;
             }

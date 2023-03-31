@@ -69,7 +69,7 @@ class SpecialRoute extends AbstractType
     private function getImages(): array
     {
         $finder = new Finder();
-        $finder->files()->in(__DIR__ . '/../../public/images/materieel');
+        $finder->files()->in($_ENV['PUBLIC_DIRECTORY'].'/images/materieel');
         $imageList = [];
         foreach ($finder as $file) {
             $imageList[strtolower($file->getFilenameWithoutExtension())] = $file->getRelativePathname();

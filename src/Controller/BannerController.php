@@ -6,9 +6,7 @@ namespace App\Controller;
 use App\Entity\Banner;
 use App\Entity\BannerHit;
 use App\Helpers\RedirectHelper;
-use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
-use Exception;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -38,7 +36,7 @@ class BannerController
      * @param Request $request
      * @param int $id
      * @return RedirectResponse
-     * @throws Exception
+     * @throws \Exception
      */
     public function clickOutAction(Request $request, int $id): RedirectResponse
     {
@@ -46,14 +44,14 @@ class BannerController
          * @var Banner $banner
          */
         $banner = $this->doctrine->getRepository(Banner::class)->find($id);
-        if (is_null($banner)) {
+        if (null === $banner) {
             return $this->redirectHelper->redirectToRoute('home');
         }
 
         $bannerHit = new BannerHit();
         $bannerHit->banner = $banner;
-        $bannerHit->timestamp = new DateTime();
-        $bannerHit->ipAddress = ip2long($request->getClientIp());
+        $bannerHit->timestamp = new \DateTime();
+        $bannerHit->ipAddress = \ip2long($request->getClientIp());
 
         $this->doctrine->getManager()->persist($bannerHit);
         $this->doctrine->getManager()->flush();

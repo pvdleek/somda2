@@ -18,8 +18,6 @@ use App\Helpers\ForumAuthorizationHelper;
 use App\Helpers\ForumHelper;
 use App\Helpers\TemplateHelper;
 use App\Helpers\UserHelper;
-use DateTime;
-use Exception;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormInterface;
@@ -90,7 +88,7 @@ class ForumPostController
      * @param int $id
      * @param bool $quote
      * @return Response|RedirectResponse
-     * @throws Exception
+     * @throws \Exception
      */
     public function replyAction(Request $request, int $id, bool $quote = false)
     {
@@ -101,7 +99,7 @@ class ForumPostController
          */
         $quotedPost = $this->formHelper->getDoctrine()->getRepository(ForumPost::class)->find($id);
         if (!$this->forumAuthHelper->mayPost($quotedPost->discussion->forum, $this->userHelper->getUser())
-            || is_null($quotedPost) || $quotedPost->discussion->locked
+            || null === $quotedPost || $quotedPost->discussion->locked
         ) {
             throw new AccessDeniedException(
                 'The quoted post does not exist, the discussion is locked or the user may not view the discussion'
@@ -137,7 +135,7 @@ class ForumPostController
 
             return $this->formHelper->finishFormHandling('', RouteGenerics::ROUTE_FORUM_DISCUSSION, [
                 'id' => $quotedPost->discussion->id,
-                'name' => urlencode($quotedPost->discussion->title)
+                'name' => \urlencode($quotedPost->discussion->title)
             ]);
         }
 
@@ -158,7 +156,7 @@ class ForumPostController
     /**
      * @param Request $request
      * @return JsonResponse
-     * @throws Exception
+     * @throws \Exception
      */
     public function replyExampleAction(Request $request): JsonResponse
     {
@@ -166,7 +164,7 @@ class ForumPostController
 
         $text = (string)$request->request->get('text');
         $postText = new ForumPostText();
-        $postText->text = str_replace("\n", ' ', $text);
+        $postText->text = \str_replace("\n", ' ', $text);
         $post = new ForumPost();
         $post->text = $postText;
         return new JsonResponse(['data' => $this->forumHelper->getDisplayForumPost($post)]);
@@ -194,7 +192,7 @@ class ForumPostController
      * @param Request $request
      * @param int $id
      * @return Response|RedirectResponse
-     * @throws Exception
+     * @throws \Exception
      */
     public function editAction(Request $request, int $id)
     {
@@ -257,7 +255,7 @@ class ForumPostController
     /**
      * @param FormInterface $form
      * @param ForumPost $post
-     * @throws Exception
+     * @throws \Exception
      */
     private function editPost(FormInterface $form, ForumPost $post): void
     {
@@ -273,7 +271,7 @@ class ForumPostController
             $post->discussion->title = $form->get(ForumPostForm::FIELD_TITLE)->getData();
         }
 
-        $post->editTimestamp = new DateTime();
+        $post->editTimestamp = new \DateTime();
         $post->editor = $editor;
         $post->editReason = $form->get('editReason')->getData();
         $post->signatureOn = $form->get('signatureOn')->getData();

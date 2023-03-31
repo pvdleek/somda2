@@ -93,7 +93,7 @@ class RailNews
     public function getLogo(): string
     {
         list($width, $height) = $this->resizeImage(
-            getimagesize(__DIR__ . '/../../public/images/news-logos/' . $this->source->logo),
+            \getimagesize($_ENV['PUBLIC_DIRECTORY'].'/images/news-logos/' . $this->source->logo),
             [500, 25]
         );
         return '<a href="http://' . $this->source->url . '/" target="_blank"><img alt="' .
@@ -115,10 +115,10 @@ class RailNews
 
         $xRatio = $maxSizes[0] / $currentSizes[0];
         if (($xRatio * $currentSizes[1]) < $maxSizes[1]) {
-            return [$maxSizes[0], ceil($xRatio * $currentSizes[1])];
+            return [$maxSizes[0], \ceil($xRatio * $currentSizes[1])];
         }
 
         $yRatio = $maxSizes[1] / $currentSizes[1];
-        return [ceil($yRatio * $currentSizes[0]), $maxSizes[1]];
+        return [\ceil($yRatio * $currentSizes[0]), $maxSizes[1]];
     }
 }

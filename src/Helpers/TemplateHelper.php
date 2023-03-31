@@ -121,7 +121,7 @@ class TemplateHelper
         }
 
         $detect = new Mobile_Detect();
-        if ($detect->isMobile() && file_exists(__DIR__ . '/../../templates/mobile/' . $view)) {
+        if ($detect->isMobile() && \file_exists(__DIR__ . '/../../templates/mobile/' . $view)) {
             $view = 'mobile/' . $view;
         }
         return $view;
@@ -138,9 +138,9 @@ class TemplateHelper
         $banners = $this->doctrine->getRepository(Banner::class)->findBy(
             ['location' => Banner::LOCATION_HEADER, 'active' => true]
         );
-        if (count($banners) > 0) {
+        if (\count($banners) > 0) {
             $headerType = 'banner';
-            $headerContent = $banners[random_int(0, count($banners) - 1)];
+            $headerContent = $banners[\random_int(0, \count($banners) - 1)];
 
             // Create a view for this banner
             $bannerView = new BannerView();
@@ -155,13 +155,13 @@ class TemplateHelper
                 ['active' => true, 'approved' => true],
                 [RailNewsForm::FIELD_TIMESTAMP => 'DESC'],
                 3
-            )[random_int(0, 2)];
+            )[\random_int(0, 2)];
         }
 
         return array_merge($viewParameters, [
             'headerType' =>  $headerType,
             'headerContent' => $headerContent,
-            'imageNumber' => random_int(1, 11),
+            'imageNumber' => \random_int(1, 11),
             'menuStructure' => $this->menuHelper->getMenuStructure(),
             'nrOfOpenForumAlerts' => $this->menuHelper->getNumberOfOpenForumAlerts(),
             'blockHelp' => $this->getBlockHelp(),
@@ -179,7 +179,7 @@ class TemplateHelper
         $block = $this->doctrine->getRepository(Block::class)->findOneBy(
             ['route' => $this->requestStack->getCurrentRequest()->get('_route')]
         );
-        if (!is_null($block) && !is_null($block->blockHelp)) {
+        if (null !== $block && null !== $block->blockHelp) {
             return $block->blockHelp;
         }
 

@@ -11,9 +11,7 @@ use App\Helpers\RedirectHelper;
 use App\Helpers\TemplateHelper;
 use App\Helpers\UserHelper;
 use App\Model\SpotFilter;
-use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
-use Exception;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -69,11 +67,11 @@ class SpotController
      * @param string $routeNumber
      * @param string $date
      * @return RedirectResponse
-     * @throws Exception
+     * @throws \Exception
      */
     public function redirectToTrainTableAction(string $routeNumber, string $date): RedirectResponse
     {
-        $checkDate = new DateTime($date);
+        $checkDate = new \DateTime($date);
         $trainTableYear = $this->doctrine->getRepository(TrainTableYear::class)->findTrainTableYearByDate($checkDate);
 
         return $this->redirectHelper->redirectToRoute(
@@ -93,7 +91,7 @@ class SpotController
 
         $trainTableYear = $this->doctrine
             ->getRepository(TrainTableYear::class)
-            ->findTrainTableYearByDate(new DateTime());
+            ->findTrainTableYearByDate(new \DateTime());
 
         $spotFilter = new SpotFilter();
         $spots = null;

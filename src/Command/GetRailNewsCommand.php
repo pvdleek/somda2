@@ -6,9 +6,7 @@ namespace App\Command;
 use App\Entity\RailNews;
 use App\Entity\RailNewsSource;
 use App\Entity\RailNewsSourceFeed;
-use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
-use Exception;
 use FeedIo\Feed\ItemInterface;
 use FeedIo\FeedIo;
 use FeedIo\Reader\ReadErrorException;
@@ -82,7 +80,7 @@ class GetRailNewsCommand extends Command
      * @param InputInterface|null $input
      * @param OutputInterface|null $output
      * @return int
-     * @throws Exception
+     * @throws \Exception
      */
     protected function execute(InputInterface $input = null, OutputInterface $output = null): int
     {
@@ -95,7 +93,7 @@ class GetRailNewsCommand extends Command
              * @var ItemInterface[] $items
              */
             try {
-                $items = $this->feedIo->read($feed->url, null, new DateTime('-1 day'))->getFeed();
+                $items = $this->feedIo->read($feed->url, null, new \DateTime('-1 day'))->getFeed();
             } catch (ReadErrorException $exception) {
                 $output->writeln($exception->getMessage());
                 continue;
@@ -118,15 +116,15 @@ class GetRailNewsCommand extends Command
     private function isArticleMatch(ItemInterface $item): bool
     {
         // Disapprove news-items in the future
-        if (!is_null($item->getLastModified()) && $item->getLastModified() > new DateTime()) {
+        if (null !== $item->getLastModified() && $item->getLastModified() > new \DateTime()) {
             return false;
         }
 
         foreach (self::$wordMatches as $wordMatch) {
             if ($this->isWordMatch($wordMatch, $item)) {
                 if (isset($wordMatch[self::NEGATIVE_WORD])) {
-                    if (stripos($item->getTitle(), $wordMatch[self::NEGATIVE_WORD]) === false
-                        && stripos($item->getDescription(), $wordMatch[self::NEGATIVE_WORD]) === false
+                    if (\stripos($item->getTitle(), $wordMatch[self::NEGATIVE_WORD]) === false
+                        && \stripos($item->getDescription(), $wordMatch[self::NEGATIVE_WORD]) === false
                     ) {
                         return true;
                     }
@@ -147,10 +145,10 @@ class GetRailNewsCommand extends Command
     private function isWordMatch(array $wordMatch, ItemInterface $item): bool
     {
         if ($wordMatch[self::TITLE_ONLY]) {
-            return stripos($item->getTitle(), $wordMatch[self::POSITIVE_WORD]) !== false;
+            return \stripos($item->getTitle(), $wordMatch[self::POSITIVE_WORD]) !== false;
         }
-        return stripos($item->getTitle(), $wordMatch[self::POSITIVE_WORD]) !== false
-            || stripos($item->getDescription(), $wordMatch[self::POSITIVE_WORD]) !== false;
+        return \stripos($item->getTitle(), $wordMatch[self::POSITIVE_WORD]) !== false
+            || \stripos($item->getDescription(), $wordMatch[self::POSITIVE_WORD]) !== false;
     }
 
     /**
@@ -162,7 +160,7 @@ class GetRailNewsCommand extends Command
         $railNewsByTitle = $this->doctrine->getRepository(RailNews::class)->findOneBy(
             ['title' => $item->getTitle()]
         );
-        return !is_null($railNewsByTitle);
+        return null !== $railNewsByTitle;
     }
 
     /**
@@ -171,9 +169,9 @@ class GetRailNewsCommand extends Command
      */
     private function getItemDescription(ItemInterface $item): string
     {
-        $description = trim(strip_tags(str_replace('?', '', $item->getDescription())));
-        $description = preg_replace('/\s\s+/', ' ', $description);
-        if (strlen($description) < 1) {
+        $description = \trim(\strip_tags(\str_replace('?', '', $item->getDescription())));
+        $description = \preg_replace('/\s\s+/', ' ', $description);
+        if (\strlen($description) < 1) {
             return $item->getTitle();
         }
         return $description;
@@ -193,12 +191,12 @@ class GetRailNewsCommand extends Command
             ['url' => $item->getLink()]
         );
 
-        if (is_null($railNews)) {
+        if (null === $railNews) {
             $railNews = new RailNews();
             $railNews->title = $item->getTitle();
             $railNews->url = $item->getLink();
             $railNews->introduction = html_entity_decode($description, ENT_NOQUOTES, 'UTF-8');
-            $railNews->timestamp = $item->getLastModified() ?? new DateTime();
+            $railNews->timestamp = $item->getLastModified() ?? new \DateTime();
             $railNews->approved = false;
             $railNews->active = false;
             $railNews->automaticUpdates = true;
@@ -208,8 +206,8 @@ class GetRailNewsCommand extends Command
         } elseif ($railNews->automaticUpdates) {
             $railNews->title = $item->getTitle();
             $railNews->url = $item->getLink();
-            $railNews->introduction = html_entity_decode($description, ENT_NOQUOTES, 'UTF-8');
-            $railNews->timestamp = $item->getLastModified() ?? new DateTime();
+            $railNews->introduction = \html_entity_decode($description, ENT_NOQUOTES, 'UTF-8');
+            $railNews->timestamp = $item->getLastModified() ?? new \DateTime();
         }
     }
 }
