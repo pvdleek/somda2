@@ -2,6 +2,9 @@ FROM joseluisq/php-fpm:8.2
 
 WORKDIR /var/www
 
+RUN apl add --no-cache tzdata
+ENV TZ Europe/Amsterdam
+
 COPY .env.local ./.env
 COPY composer.json ./
 COPY composer.lock ./
