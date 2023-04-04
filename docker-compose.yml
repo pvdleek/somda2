@@ -13,6 +13,9 @@ services:
       - php-fpm
     links:
       - php-fpm
+    volumes:
+      - "/etc/timezone:/etc/timezone:ro"
+      - "/etc/localtime:/etc/localtime:ro"
     restart: always
 
   php-fpm:
@@ -25,8 +28,7 @@ services:
       PHP_SESSION_GC_MAXLIFETIME: 7200
     expose:
       - "9090"
+    volumes:
+      - "/etc/timezone:/etc/timezone:ro"
+      - "/etc/localtime:/etc/localtime:ro"
     restart: always
-
-volumes:
-  - "/etc/timezone:/etc/timezone:ro"
-  - "/etc/localtime:/etc/localtime:ro"
