@@ -26,3 +26,7 @@ services:
     expose:
       - "9090"
     restart: always
+
+volumes:
+  - "/etc/timezone:/etc/timezone:ro"
+  - "/etc/localtime:/etc/localtime:ro"
