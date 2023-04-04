@@ -13,6 +13,7 @@ services:
       - php-fpm
     links:
       - php-fpm
+    restart: always
 
   php-fpm:
     image: 10.62.181.2:5000/somda
@@ -24,3 +25,4 @@ services:
       PHP_SESSION_GC_MAXLIFETIME: 7200
     expose:
       - "9090"
+    restart: always
