@@ -2,7 +2,7 @@ FROM joseluisq/php-fpm:8.2
 
 WORKDIR /var/www
 
-RUN apl add --no-cache tzdata
+RUN apk add --no-cache tzdata
 ENV TZ Europe/Amsterdam
 
 COPY .env.local ./.env
@@ -20,6 +20,7 @@ COPY translations translations/
 RUN php composer.phar install --no-plugins --no-scripts
 RUN php composer.phar dump-autoload --no-dev --classmap-authoritative
 RUN php bin/console ckeditor:install
+RUN php bin/console assets:install html
 RUN php bin/console cache:clear --env=prod
 
 RUN chown -R www-data:www-data *
