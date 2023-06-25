@@ -3,18 +3,20 @@
 namespace App\Repository;
 
 use App\Entity\Location as LocationEntity;
-use Doctrine\ORM\EntityRepository;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
+use Doctrine\Persistence\ManagerRegistry;
 
-class Location extends EntityRepository
+class Location extends ServiceEntityRepository
 {
     private const PARAMETER_SEARCH = 'search';
 
-    /**
-     * @param string $search
-     * @return LocationEntity|null
-     */
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, LocationEntity::class);
+    }
+
     public function findOneByName(string $search): ?LocationEntity
     {
         $queryBuilder = $this->getEntityManager()
@@ -31,7 +33,6 @@ class Location extends EntityRepository
     }
 
     /**
-     * @param string $search
      * @return LocationEntity[]
      */
     public function findByName(string $search): array
@@ -46,7 +47,6 @@ class Location extends EntityRepository
     }
 
     /**
-     * @param string $search
      * @return LocationEntity[]
      */
     public function findByDescription(string $search): array

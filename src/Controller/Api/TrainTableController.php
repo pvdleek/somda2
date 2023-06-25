@@ -14,7 +14,6 @@ use App\Helpers\RoutesDisplayHelper;
 use App\Helpers\TrainTableHelper;
 use App\Helpers\UserHelper;
 use App\Traits\DateTrait;
-use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use Nelmio\ApiDocBundle\Annotation\Model;
@@ -25,56 +24,16 @@ class TrainTableController extends AbstractFOSRestController
 {
     use DateTrait;
 
-    /**
-     * @var ManagerRegistry
-     */
-    private ManagerRegistry $doctrine;
-
-    /**
-     * @var UserHelper
-     */
-    private UserHelper $userHelper;
-
-    /**
-     * @var TrainTableHelper
-     */
-    private TrainTableHelper $trainTableHelper;
-
-    /**
-     * @var RouteOperationDaysHelper
-     */
-    private RouteOperationDaysHelper $daysHelper;
-
-    /**
-     * @var RoutesDisplayHelper
-     */
-    private RoutesDisplayHelper $routesDisplayHelper;
-
-    /**
-     * @param ManagerRegistry $doctrine
-     * @param UserHelper $userHelper
-     * @param TrainTableHelper $trainTableHelper
-     * @param RouteOperationDaysHelper $daysHelper
-     * @param RoutesDisplayHelper $routesDisplayHelper
-     */
     public function __construct(
-        ManagerRegistry $doctrine,
-        UserHelper $userHelper,
-        TrainTableHelper $trainTableHelper,
-        RouteOperationDaysHelper $daysHelper,
-        RoutesDisplayHelper $routesDisplayHelper
+        private readonly ManagerRegistry $doctrine,
+        private readonly UserHelper $userHelper,
+        private readonly TrainTableHelper $trainTableHelper,
+        private readonly RouteOperationDaysHelper $daysHelper,
+        private readonly RoutesDisplayHelper $routesDisplayHelper,
     ) {
-        $this->doctrine = $doctrine;
-        $this->trainTableHelper = $trainTableHelper;
-        $this->userHelper = $userHelper;
-        $this->daysHelper = $daysHelper;
-        $this->routesDisplayHelper = $routesDisplayHelper;
     }
 
     /**
-     * @param int $trainTableYearId
-     * @param int $routeNumber
-     * @return Response
      * @OA\Parameter(
      *     description="The unique identifier of the trainTableYear, 0 for the current trainTableYear",
      *     in="path",
@@ -118,17 +77,17 @@ class TrainTableController extends AbstractFOSRestController
         if ($trainTableYearId === 0) {
             $trainTableYearId = $this->doctrine
                 ->getRepository(TrainTableYear::class)
-                ->findTrainTableYearByDate(new DateTime())
+                ->findTrainTableYearByDate(new \DateTime())
                 ->id;
         }
 
         $this->trainTableHelper->setTrainTableYear($trainTableYearId);
-        $this->trainTableHelper->setRoute((string)$routeNumber);
+        $this->trainTableHelper->setRoute((string) $routeNumber);
         $trainTableLines = $this->trainTableHelper->getTrainTableLines();
 
         $daysFilter = [];
         foreach ($trainTableLines as $trainTableLine) {
-            if (array_search($trainTableLine->routeOperationDays->id, $daysFilter) === false) {
+            if (\array_search($trainTableLine->routeOperationDays->id, $daysFilter) === false) {
                 $daysFilter[] = $trainTableLine->routeOperationDays->id;
             }
         }
@@ -153,12 +112,6 @@ class TrainTableController extends AbstractFOSRestController
     }
 
     /**
-     * @param int $trainTableYearId
-     * @param string $locationName
-     * @param int $dayNumber
-     * @param string $startTime
-     * @param string $endTime
-     * @return Response
      * @OA\Parameter(
      *     description="The unique identifier of the trainTableYear, 0 for the current trainTableYear",
      *     in="path",
@@ -281,7 +234,7 @@ class TrainTableController extends AbstractFOSRestController
         if ($trainTableYearId === 0) {
             $trainTableYearId = $this->doctrine
                 ->getRepository(TrainTableYear::class)
-                ->findTrainTableYearByDate(new DateTime())
+                ->findTrainTableYearByDate(new \DateTime())
                 ->id;
         }
 
@@ -290,7 +243,7 @@ class TrainTableController extends AbstractFOSRestController
 
         $passingRoutes = $this->trainTableHelper->getPassingRoutes($dayNumber, $startTime, $endTime);
 
-        if (count($messages = $this->trainTableHelper->getErrorMessages()) > 0) {
+        if (\count($messages = $this->trainTableHelper->getErrorMessages()) > 0) {
             return $this->handleView($this->view(['errors' => $messages], 400));
         }
 
@@ -302,9 +255,6 @@ class TrainTableController extends AbstractFOSRestController
     }
 
     /**
-     * @param int|null $trainTableYearId
-     * @param int|null $routeListId
-     * @return Response
      * @OA\Parameter(
      *     description="The unique identifier of the trainTableYear, 0 for the current trainTableYear",
      *     in="path",
@@ -357,7 +307,7 @@ class TrainTableController extends AbstractFOSRestController
         if ($trainTableYearId === 0) {
             $trainTableYearId = $this->doctrine
                 ->getRepository(TrainTableYear::class)
-                ->findTrainTableYearByDate(new DateTime())
+                ->findTrainTableYearByDate(new \DateTime())
                 ->id;
         }
 

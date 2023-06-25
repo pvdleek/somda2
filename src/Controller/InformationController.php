@@ -9,29 +9,12 @@ use Symfony\Component\HttpFoundation\Response;
 
 class InformationController
 {
-    /**
-     * @var ManagerRegistry
-     */
-    private ManagerRegistry $doctrine;
-
-    /**
-     * @var TemplateHelper
-     */
-    private TemplateHelper $templateHelper;
-
-    /**
-     * @param ManagerRegistry $doctrine
-     * @param TemplateHelper $templateHelper
-     */
-    public function __construct(ManagerRegistry $doctrine, TemplateHelper $templateHelper)
-    {
-        $this->doctrine = $doctrine;
-        $this->templateHelper = $templateHelper;
+    public function __construct(
+        private readonly ManagerRegistry $doctrine,
+        private readonly TemplateHelper $templateHelper,
+    ) {
     }
 
-    /**
-     * @return Response
-     */
     public function jargonAction(): Response
     {
         return $this->templateHelper->render('information/jargon.html.twig', [
@@ -40,9 +23,6 @@ class InformationController
         ]);
     }
 
-    /**
-     * @return Response
-     */
     public function uicAction(): Response
     {
         return $this->templateHelper->render(

@@ -11,75 +11,29 @@ use App\Exception\WrongMethodError;
 use App\Form\ForumPost as ForumPostForm;
 use App\Generics\ForumGenerics;
 use Doctrine\Persistence\ManagerRegistry;
-use Exception;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class ForumDiscussionHelper
 {
-    /**
-     * @var ManagerRegistry
-     */
-    private ManagerRegistry $doctrine;
+    private ?ForumDiscussion $discussion = null;
 
-    /**
-     * @var UserHelper
-     */
-    private UserHelper $userHelper;
+    private ?int $numberOfPages = null;
 
-    /**
-     * @var ForumAuthorizationHelper
-     */
-    private ForumAuthorizationHelper $forumAuthHelper;
+    private ?int $numberOfPosts = null;
 
-    /**
-     * @var ForumDiscussion|null
-     */
-    private ?ForumDiscussion $discussion;
+    private ?int $pageNumber = null;
 
-    /**
-     * @var int|null
-     */
-    private ?int $numberOfPages;
-
-    /**
-     * @var int|null
-     */
-    private ?int $numberOfPosts;
-
-    /**
-     * @var int|null
-     */
-    private ?int $pageNumber;
-
-    /**
-     * @var string|null
-     */
     private ?string $forumJump = null;
 
-    /**
-     * @var int|null
-     */
-    private ?int $numberOfReadPosts;
+    private ?int $numberOfReadPosts = null;
 
-    /**
-     * @param ManagerRegistry $doctrine
-     * @param UserHelper $userHelper
-     * @param ForumAuthorizationHelper $forumAuthHelper
-     */
     public function __construct(
-        ManagerRegistry $doctrine,
-        UserHelper $userHelper,
-        ForumAuthorizationHelper $forumAuthHelper
+        private readonly ManagerRegistry $doctrine,
+        private readonly UserHelper $userHelper,
+        private readonly ForumAuthorizationHelper $forumAuthHelper,
     ) {
-        $this->doctrine = $doctrine;
-        $this->userHelper = $userHelper;
-        $this->forumAuthHelper = $forumAuthHelper;
     }
 
-    /**
-     * @param ForumDiscussion $discussion
-     * @return ForumDiscussionHelper
-     */
     public function setDiscussion(ForumDiscussion $discussion): ForumDiscussionHelper
     {
         $this->discussion = $discussion;
@@ -92,9 +46,6 @@ class ForumDiscussionHelper
     }
 
     /**
-     * @param bool $newToOld
-     * @param int|null $requestedPageNumber
-     * @param int|null $requestedPostId
      * @return ForumPost[]
      * @throws WrongMethodError
      */
@@ -105,7 +56,7 @@ class ForumDiscussionHelper
         $this->setForumJump($requestedPageNumber, $requestedPostId);
         $this->setPageNumber($newToOld, $requestedPageNumber, $requestedPostId);
 
-        $this->discussion->viewed = (int)$this->discussion->viewed + 1;
+        $this->discussion->viewed = (int) $this->discussion->viewed + 1;
         $this->doctrine->getManager()->flush();
 
         /**
@@ -129,16 +80,15 @@ class ForumDiscussionHelper
     }
 
     /**
-     * @param bool $newToOld
      * @return ForumPost[]
-     * @throws Exception
+     * @throws \Exception
      */
     public function getNonPaginatedPosts(bool $newToOld): array
     {
         $this->setNumberOfPostsAndPages();
         $this->setNumberOfReadPosts();
 
-        $this->discussion->viewed = (int)$this->discussion->viewed + 1;
+        $this->discussion->viewed = (int) $this->discussion->viewed + 1;
         $this->doctrine->getManager()->flush();
 
         /**
@@ -162,12 +112,11 @@ class ForumDiscussionHelper
     }
 
     /**
-     * @return int
      * @throws WrongMethodError
      */
     public function getNumberOfPages(): int
     {
-        if (is_null($this->numberOfPages)) {
+        if (\is_null($this->numberOfPages)) {
             throw new WrongMethodError('Execute the getPosts() method first');
         }
 
@@ -175,12 +124,11 @@ class ForumDiscussionHelper
     }
 
     /**
-     * @return int
      * @throws WrongMethodError
      */
     public function getNumberOfPosts(): int
     {
-        if (is_null($this->numberOfPosts)) {
+        if (\is_null($this->numberOfPosts)) {
             throw new WrongMethodError('Execute the getPosts() method first');
         }
 
@@ -188,41 +136,33 @@ class ForumDiscussionHelper
     }
 
     /**
-     * @return int
      * @throws WrongMethodError
      */
     public function getPageNumber(): int
     {
-        if (is_null($this->pageNumber)) {
+        if (\is_null($this->pageNumber)) {
             throw new WrongMethodError('Execute the getPosts() method first');
         }
 
         return $this->pageNumber;
     }
 
-    /**
-     * @return string|null
-     */
     public function getForumJump(): ?string
     {
         return $this->forumJump;
     }
 
     /**
-     * @return int
      * @throws WrongMethodError
      */
     public function getNumberOfReadPosts(): int
     {
-        if (is_null($this->numberOfReadPosts)) {
+        if (\is_null($this->numberOfReadPosts)) {
             throw new WrongMethodError('Execute the getPosts() method first');
         }
         return $this->numberOfReadPosts;
     }
 
-    /**
-     *
-     */
     private function setNumberOfPostsAndPages(): void
     {
         $this->numberOfPosts = $this->doctrine->getRepository(ForumDiscussion::class)->getNumberOfPosts(
@@ -233,16 +173,14 @@ class ForumDiscussionHelper
 
     /**
      * This function should always be called before setPageNumber for that function modifies the pageNumber
-     * @param int|null $requestedPageNumber
-     * @param int|null $requestedPostId
      */
     private function setForumJump(int $requestedPageNumber = null, int $requestedPostId = null): void
     {
-        if (!is_null($requestedPostId)) {
+        if (!\is_null($requestedPostId)) {
             $this->forumJump = 'p' . $requestedPostId;
             return;
         }
-        if (is_null($requestedPageNumber)
+        if (\is_null($requestedPageNumber)
             && $this->discussion->forum->type !== ForumForum::TYPE_ARCHIVE
             && $this->userHelper->userIsLoggedIn()
         ) {
@@ -252,19 +190,16 @@ class ForumDiscussionHelper
 
     /**
      * This function should always be called after setForumJump for this function modifies the pageNumber
-     * @param bool $newToOld
-     * @param int|null $requestedPageNumber
-     * @param int|null $postId
      * @throws WrongMethodError
      */
     private function setPageNumber(bool $newToOld, int $requestedPageNumber = null, int $postId = null): void
     {
-        if (!is_null($requestedPageNumber)) {
-            $this->pageNumber = max($requestedPageNumber, 1);
+        if (!\is_null($requestedPageNumber)) {
+            $this->pageNumber = \max($requestedPageNumber, 1);
             return;
         }
 
-        if (!is_null($postId)) {
+        if (!\is_null($postId)) {
             // A specific post was requested, so we go to this post
             $postNumber = $this->doctrine
                 ->getRepository(ForumDiscussion::class)
@@ -276,9 +211,9 @@ class ForumDiscussionHelper
         if ($this->discussion->forum->type !== ForumForum::TYPE_ARCHIVE && $this->userHelper->userIsLoggedIn()) {
             // Neither a specific page or post were requested but the user is logged in,
             // so we will go to the first unread post in the discussion
-            $this->pageNumber = (int)floor($this->getNumberOfReadPosts() / ForumGenerics::MAX_POSTS_PER_PAGE) + 1;
+            $this->pageNumber = (int) \floor($this->getNumberOfReadPosts() / ForumGenerics::MAX_POSTS_PER_PAGE) + 1;
             if ($newToOld) {
-                $this->pageNumber = max($this->numberOfPages - $this->pageNumber, 1);
+                $this->pageNumber = \max($this->numberOfPages - $this->pageNumber, 1);
             }
             return;
         }
@@ -286,9 +221,6 @@ class ForumDiscussionHelper
         $this->pageNumber = $newToOld ? $this->numberOfPages : 1;
     }
 
-    /**
-     *
-     */
     private function setNumberOfReadPosts(): void
     {
         if ($this->userHelper->userIsLoggedIn()) {

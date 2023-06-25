@@ -16,10 +16,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class SpecialRoute extends AbstractType
 {
-    /**
-     * @param FormBuilderInterface $builder
-     * @param array $options
-     */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
@@ -63,24 +59,18 @@ class SpecialRoute extends AbstractType
     }
 
 
-    /**
-     * @return array
-     */
     private function getImages(): array
     {
         $finder = new Finder();
         $finder->files()->in(__DIR__ . '/../../public/images/materieel');
         $imageList = [];
         foreach ($finder as $file) {
-            $imageList[strtolower($file->getFilenameWithoutExtension())] = $file->getRelativePathname();
+            $imageList[\strtolower($file->getFilenameWithoutExtension())] = $file->getRelativePathname();
         }
-        asort($imageList);
+        \asort($imageList);
         return $imageList;
     }
 
-    /**
-     * @param OptionsResolver $resolver
-     */
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(['data_class' => SpecialRouteEntity::class]);

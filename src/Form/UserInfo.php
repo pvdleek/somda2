@@ -14,10 +14,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class UserInfo extends AbstractType
 {
-    /**
-     * @param FormBuilderInterface $builder
-     * @param array $options
-     */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
@@ -77,24 +73,18 @@ class UserInfo extends AbstractType
             ]);
     }
 
-    /**
-     * @return array
-     */
     private function getAvatars(): array
     {
         $finder = new Finder();
         $finder->files()->in(__DIR__ . '/../../public/images/avatar');
         $avatarList = [];
         foreach ($finder as $file) {
-            $avatarList[strtolower($file->getFilenameWithoutExtension())] = $file->getRelativePathname();
+            $avatarList[\strtolower($file->getFilenameWithoutExtension())] = $file->getRelativePathname();
         }
-        asort($avatarList);
+        \asort($avatarList);
         return $avatarList;
     }
 
-    /**
-     * @param OptionsResolver $resolver
-     */
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(['data_class' => UserInfoEntity::class]);

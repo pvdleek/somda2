@@ -12,7 +12,6 @@ use Doctrine\ORM\Mapping as ORM;
 class Help
 {
     /**
-     * @var int|null
      * @ORM\Column(name="contentid", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -20,13 +19,11 @@ class Help
     public ?int $id = null;
 
     /**
-     * @var string
      * @ORM\Column(name="titel", type="text", length=255, nullable=false)
      */
     public string $title = '';
 
     /**
-     * @var string
      * @ORM\Column(name="template", type="text", length=255, nullable=false)
      */
     public string $template = '';

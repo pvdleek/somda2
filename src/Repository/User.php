@@ -3,17 +3,18 @@
 namespace App\Repository;
 
 use App\Entity\User as UserEntity;
-use DateTime;
-use Doctrine\ORM\EntityRepository;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
-use Exception;
+use Doctrine\Persistence\ManagerRegistry;
 
-class User extends EntityRepository
+class User extends ServiceEntityRepository
 {
-    /**
-     * @return array
-     */
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, UserEntity::class);
+    }
+
     public function findActiveForStaticData(): array
     {
         $queryBuilder = $this->getEntityManager()
@@ -25,9 +26,6 @@ class User extends EntityRepository
         return $queryBuilder->getQuery()->getResult();
     }
 
-    /**
-     * @return int
-     */
     public function countActive(): int
     {
         $queryBuilder = $this->getEntityManager()
@@ -36,15 +34,14 @@ class User extends EntityRepository
             ->from(UserEntity::class, 'u')
             ->andWhere('u.active = TRUE');
         try {
-            return (int)$queryBuilder->getQuery()->getSingleScalarResult();
+            return (int) $queryBuilder->getQuery()->getSingleScalarResult();
         } catch (NonUniqueResultException | NoResultException $exception) {
             return 0;
         }
     }
 
     /**
-     * @return int
-     * @throws Exception
+     * @throws \Exception
      */
     public function countBirthdays(): int
     {
@@ -55,9 +52,9 @@ class User extends EntityRepository
             ->andWhere('u.active = TRUE')
             ->join('u.info', 'i')
             ->andWhere('i.birthDate = :today')
-            ->setParameter('today', new DateTime());
+            ->setParameter('today', new \DateTime());
         try {
-            return (int)$queryBuilder->getQuery()->getSingleScalarResult();
+            return (int) $queryBuilder->getQuery()->getSingleScalarResult();
         } catch (NonUniqueResultException | NoResultException $exception) {
             return 0;
         }
@@ -89,8 +86,8 @@ class User extends EntityRepository
             ->andWhere('u.activationKey IS NOT NULL')
             ->andWhere('u.registerTimestamp >= :minimumDate')
             ->andWhere('u.registerTimestamp < :maximumDate')
-            ->setParameter('minimumDate', new DateTime('2016-01-01'))
-            ->setParameter('maximumDate', new DateTime('-5 days'));
+            ->setParameter('minimumDate', new \DateTime('2016-01-01'))
+            ->setParameter('maximumDate', new \DateTime('-5 days'));
         return $queryBuilder->getQuery()->getResult();
     }
 }

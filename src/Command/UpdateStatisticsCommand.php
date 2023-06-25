@@ -4,12 +4,17 @@ declare(strict_types=1);
 namespace App\Command;
 
 use App\Generics\DateGenerics;
-use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
-use Exception;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+
+#[AsCommand(
+    name: 'app:update-statistics',
+    description: 'Update statistics',
+    hidden: false,
+)]
 
 class UpdateStatisticsCommand extends Command
 {
@@ -18,46 +23,21 @@ class UpdateStatisticsCommand extends Command
     private const DATE_PERIOD_YESTERDAY = 'yesterday';
     private const DATE_PERIOD_TODAY = 'today';
 
-    /**
-     * @var string
-     */
-    protected static $defaultName = 'app:update-statistics';
-
-    /**
-     * @var ManagerRegistry
-     */
-    private ManagerRegistry $doctrine;
-
-    /**
-     * @param ManagerRegistry $doctrine
-     */
-    public function __construct(ManagerRegistry $doctrine)
-    {
-        parent::__construct(self::$defaultName);
-
-        $this->doctrine = $doctrine;
+    public function __construct(
+        private readonly ManagerRegistry $doctrine,
+    ) {
+        parent::__construct();
     }
 
     /**
-     *
-     */
-    protected function configure(): void
-    {
-        $this->setDescription('Update statistics');
-    }
-
-    /**
-     * @param InputInterface|null $input
-     * @param OutputInterface|null $output
-     * @return int
-     * @throws Exception
+     * @throws \Exception
      */
     protected function execute(InputInterface $input = null, OutputInterface $output = null): int
     {
-        $today = new DateTime();
-        $yesterday = new DateTime('-1 day');
-        $weekAgo = new DateTime('-7 days');
-        $yearAgo = new DateTime('-1 year');
+        $today = new \DateTime();
+        $yesterday = new \DateTime('-1 day');
+        $weekAgo = new \DateTime('-7 days');
+        $yearAgo = new \DateTime('-1 year');
 
         $connection = $this->doctrine->getManager()->getConnection();
 

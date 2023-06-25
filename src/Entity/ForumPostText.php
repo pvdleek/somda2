@@ -14,16 +14,14 @@ use OpenApi\Annotations as OA;
 class ForumPostText
 {
     /**
-     * @var ForumPost
      * @ORM\OneToOne(targetEntity="App\Entity\ForumPost", inversedBy="text")
      * @ORM\JoinColumn(name="postid", referencedColumnName="postid")
      * @ORM\Id
      * @JMS\Exclude()
      */
-    public ForumPost $post;
+    public ?ForumPost $post = null;
 
     /**
-     * @var bool
      * @ORM\Column(name="new_style", type="boolean", options={"default"=true})
      * @JMS\Expose()
      * @OA\Property(description="Whether the post was created using the new WYSIWYG editor", type="boolean")
@@ -31,10 +29,9 @@ class ForumPostText
     public bool $newStyle = true;
 
     /**
-     * @var string
      * @ORM\Column(name="text", type="text", length=0, nullable=false)
      * @JMS\Expose()
      * @OA\Property(description="Text of the post", type="text")
      */
-    public string $text;
+    public string $text = '';
 }

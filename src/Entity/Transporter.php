@@ -17,7 +17,6 @@ use OpenApi\Annotations as OA;
 class Transporter
 {
     /**
-     * @var int|null
      * @ORM\Column(name="vervoerder_id", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -27,7 +26,6 @@ class Transporter
     public ?int $id = null;
 
     /**
-     * @var string
      * @ORM\Column(name="omschrijving", type="string", length=50, nullable=false)
      * @JMS\Expose()
      * @OA\Property(description="Name of the transporter", maxLength=50, type="string")
@@ -35,7 +33,6 @@ class Transporter
     public string $name = '';
 
     /**
-     * @var int|null
      * @ORM\Column(name="iff_code", type="integer", nullable=true)
      * @JMS\Expose()
      * @OA\Property(description="Official IFF code", type="integer")
@@ -43,30 +40,21 @@ class Transporter
     public ?int $iffCode = null;
 
     /**
-     * @var Train[]
      * @JMS\Exclude()
      */
     private $trains;
 
     /**
-     * @var RouteList[]
      * @JMS\Exclude()
      */
     private $routeLists;
 
-    /**
-     *
-     */
     public function __construct()
     {
         $this->trains = new ArrayCollection();
         $this->routeLists = new ArrayCollection();
     }
 
-    /**
-     * @param Train $train
-     * @return Transporter
-     */
     public function addTrain(Train $train): Transporter
     {
         $this->trains[] = $train;
@@ -81,10 +69,6 @@ class Transporter
         return $this->trains->toArray();
     }
 
-    /**
-     * @param RouteList $routeList
-     * @return Transporter
-     */
     public function addRouteList(RouteList $routeList): Transporter
     {
         $this->routeLists[] = $routeList;

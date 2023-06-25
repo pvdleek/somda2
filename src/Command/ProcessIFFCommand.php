@@ -3,33 +3,25 @@
 namespace App\Command;
 
 use App\Helpers\OfficialTrainTableHelper;
-use Exception;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
+#[AsCommand(
+    name: 'app:process-iff',
+    description: 'Process the IFF files from NS',
+    hidden: false,
+)]
+
 class ProcessIFFCommand extends Command
 {
-    /**
-     * @var string
-     */
-    protected static $defaultName = 'app:process-iff';
-
-    /**
-     * @var OfficialTrainTableHelper
-     */
-    private OfficialTrainTableHelper $trainTableHelper;
-
-    /**
-     * @param OfficialTrainTableHelper $trainTableHelper
-     */
-    public function __construct(OfficialTrainTableHelper $trainTableHelper)
-    {
-        parent::__construct(self::$defaultName);
-
-        $this->trainTableHelper = $trainTableHelper;
+    public function __construct(
+        private readonly OfficialTrainTableHelper $trainTableHelper,
+    ) {
+        parent::__construct();
     }
 
     /**
@@ -43,15 +35,11 @@ class ProcessIFFCommand extends Command
             ->addOption('companies', 'c', InputOption::VALUE_NONE, 'Process the companies')
             ->addOption('characteristics', 'a', InputOption::VALUE_NONE, 'Process the characteristics')
             ->addOption('stations', 's', InputOption::VALUE_NONE, 'Process the stations')
-            ->addOption('train-tables', 't', InputOption::VALUE_NONE, 'Process the train-tables')
-            ->setDescription('Process the IFF files from NS');
+            ->addOption('train-tables', 't', InputOption::VALUE_NONE, 'Process the train-tables');
     }
 
     /**
-     * @param InputInterface|null $input
-     * @param OutputInterface|null $output
-     * @return int
-     * @throws Exception
+     * @throws \Exception
      */
     protected function execute(InputInterface $input = null, OutputInterface $output = null): int
     {

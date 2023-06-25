@@ -11,33 +11,12 @@ use Symfony\Component\Mime\Address;
 
 class EmailHelper
 {
-    /**
-     * @var LoggerInterface
-     */
-    private LoggerInterface $logger;
-
-    /**
-     * @var MailerInterface
-     */
-    private MailerInterface $mailer;
-
-    /**
-     * @param LoggerInterface $logger
-     * @param MailerInterface $mailer
-     */
-    public function __construct(LoggerInterface $logger, MailerInterface $mailer)
-    {
-        $this->logger = $logger;
-        $this->mailer = $mailer;
+    public function __construct(
+        private readonly LoggerInterface $logger,
+        private readonly MailerInterface $mailer,
+    ) {
     }
 
-    /**
-     * @param User $user
-     * @param string $subject
-     * @param string $template
-     * @param array $parameters
-     * @return bool
-     */
     public function sendEmail(User $user, string $subject, string $template, array $parameters = []): bool
     {
         if (isset($parameters['from'])) {

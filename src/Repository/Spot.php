@@ -11,22 +11,18 @@ use App\Generics\DateGenerics;
 use App\Model\DataTableOrder;
 use App\Model\Spot as SpotModel;
 use App\Model\SpotFilter;
-use DateTime;
-use Doctrine\ORM\EntityRepository;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
-use Exception;
+use Doctrine\Persistence\ManagerRegistry;
 
-class Spot extends EntityRepository
+class Spot extends ServiceEntityRepository
 {
     private const FIELD_SPOT_DATE = 'spotDate';
     private const FIELD_LOCATION = 'location';
 
-    /**
-     * @var string[]
-     */
     private static array $orderColumn = [
         self::FIELD_SPOT_DATE => 's.spotDate',
         self::FIELD_LOCATION => 'l.name',
@@ -36,10 +32,11 @@ class Spot extends EntityRepository
         'userExtra' => 'e.userExtra',
     ];
 
-    /**
-     * @param TrainTableYear|null $trainTableYear
-     * @return QueryBuilder
-     */
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, SpotEntity::class);
+    }
+
     private function getBaseQueryBuilder(?TrainTableYear $trainTableYear = null): QueryBuilder
     {
         $queryBuilder = $this->getEntityManager()
@@ -66,7 +63,7 @@ class Spot extends EntityRepository
             ->leftJoin('s.extra', 'e')
             ->addOrderBy('s.timestamp', 'DESC');
 
-        if (!is_null($trainTableYear)) {
+        if (!\is_null($trainTableYear)) {
             $queryBuilder
                 ->addSelect('tt.time AS spotTime')
                 ->leftJoin(
@@ -89,8 +86,6 @@ class Spot extends EntityRepository
     }
 
     /**
-     * @param array $idArray
-     * @param User $user
      * @return SpotModel[]
      */
     public function findByIdsAndUserForDisplay(array $idArray, User $user): array
@@ -104,8 +99,6 @@ class Spot extends EntityRepository
     }
 
     /**
-     * @param array $idArray
-     * @param User $user
      * @return SpotEntity[]
      */
     public function findByIdsAndUser(array $idArray, User $user): array
@@ -121,31 +114,25 @@ class Spot extends EntityRepository
         return $queryBuilder->getQuery()->getResult();
     }
 
-    /**
-     * @param User|null $user
-     * @return int
-     */
     public function countAll(?User $user = null): int
     {
         $queryBuilder = $this->getEntityManager()
             ->createQueryBuilder()
             ->select('COUNT(s.id)')
             ->from(SpotEntity::class, 's');
-        if (!is_null($user)) {
+        if (!\is_null($user)) {
             $queryBuilder->andWhere('s.user = :user')->setParameter('user', $user);
         }
         try {
-            return (int)$queryBuilder->getQuery()->getSingleScalarResult();
+            return (int) $queryBuilder->getQuery()->getSingleScalarResult();
         } catch (NonUniqueResultException | NoResultException $exception) {
             return 0;
         }
     }
 
     /**
-     * @param int $maxMonths
-     * @param SpotFilter $spotFilter
      * @return SpotEntity[]
-     * @throws Exception
+     * @throws \Exception
      */
     public function findWithSpotFilter(int $maxMonths, SpotFilter $spotFilter): array
     {
@@ -163,11 +150,8 @@ class Spot extends EntityRepository
     }
 
     /**
-     * @param int $maxMonths
-     * @param SpotFilter $spotFilter
-     * @param TrainTableYear $trainTableYear
      * @return SpotModel[]
-     * @throws Exception
+     * @throws \Exception
      */
     public function findRecentWithSpotFilter(
         int $maxMonths,
@@ -187,14 +171,11 @@ class Spot extends EntityRepository
     }
 
     /**
-     * @param QueryBuilder $queryBuilder
-     * @param SpotFilter $spotFilter
-     * @param int $maxMonths
-     * @throws Exception
+     * @throws \Exception
      */
     private function applySpotFilter(QueryBuilder $queryBuilder, SpotFilter $spotFilter, int $maxMonths): void
     {
-        if (!is_null($spotFilter->location)) {
+        if (!\is_null($spotFilter->location)) {
             $queryBuilder
                 ->andWhere('l.name = :location')
                 ->setParameter(self::FIELD_LOCATION, $spotFilter->location);
@@ -204,10 +185,10 @@ class Spot extends EntityRepository
                 ->andWhere('DAYOFWEEK(s.spotDate) = :dayNumber')
                 ->setParameter('dayNumber', $spotFilter->dayNumber);
         }
-        if (is_null($spotFilter->spotDate)) {
+        if (\is_null($spotFilter->spotDate)) {
             $queryBuilder
                 ->andWhere('s.timestamp > :minDate')
-                ->setParameter('minDate', new DateTime('-' . $maxMonths . ' months'));
+                ->setParameter('minDate', new \DateTime('-' . $maxMonths . ' months'));
         } else {
             $queryBuilder
                 ->andWhere('s.spotDate = :' . self::FIELD_SPOT_DATE)
@@ -221,10 +202,6 @@ class Spot extends EntityRepository
     }
 
     /**
-     * @param User $user
-     * @param SpotFilter $spotFilter
-     * @param int $numberOfRecords
-     * @param int $offset
      * @param DataTableOrder[] $orderArray
      * @return SpotEntity[]
      */
@@ -253,7 +230,7 @@ class Spot extends EntityRepository
         $this->filterOnTrainNumber($queryBuilder, false, $spotFilter->trainNumber);
         $this->filterOnRouteNumber($queryBuilder, false, $spotFilter->routeNumber);
 
-        if (count($orderArray) > 0) {
+        if (\count($orderArray) > 0) {
             foreach ($orderArray as $order) {
                 $queryBuilder->addOrderBy(self::$orderColumn[$order->column], $order->ascending ? 'ASC' : 'DESC');
             }
@@ -262,11 +239,6 @@ class Spot extends EntityRepository
         return $queryBuilder->getQuery()->getResult();
     }
 
-    /**
-     * @param User $user
-     * @param SpotFilter $spotFilter
-     * @return int
-     */
     public function countForMySpots(User $user, SpotFilter $spotFilter): int
     {
         $queryBuilder = $this->getEntityManager()
@@ -286,17 +258,13 @@ class Spot extends EntityRepository
         $this->filterOnRouteNumber($queryBuilder, false, $spotFilter->routeNumber);
 
         try {
-            return (int)$queryBuilder->getQuery()->getSingleScalarResult();
+            return (int) $queryBuilder->getQuery()->getSingleScalarResult();
         } catch (NonUniqueResultException | NoResultException $exception) {
             return 0;
         }
     }
 
-    /**
-     * @param DateTime $checkDate
-     * @return array
-     */
-    public function findForRouteTrains(DateTime $checkDate): array
+    public function findForRouteTrains(\DateTime $checkDate): array
     {
         $queryBuilder = $this->getEntityManager()
             ->createQueryBuilder()
@@ -317,42 +285,29 @@ class Spot extends EntityRepository
         return $queryBuilder->getQuery()->getArrayResult();
     }
 
-    /**
-     * @param QueryBuilder $queryBuilder
-     * @param DateTime|null $spotDate
-     */
-    private function filterOnSpotDate(QueryBuilder $queryBuilder, ?DateTime $spotDate = null): void
+    private function filterOnSpotDate(QueryBuilder $queryBuilder, ?\DateTime $spotDate = null): void
     {
-        if (!is_null($spotDate)) {
+        if (!\is_null($spotDate)) {
             $queryBuilder
                 ->andWhere('DATE(s.spotDate) = :' . self::FIELD_SPOT_DATE)
                 ->setParameter(self::FIELD_SPOT_DATE, $spotDate->format(DateGenerics::DATE_FORMAT_DATABASE));
         }
     }
 
-    /**
-     * @param QueryBuilder $queryBuilder
-     * @param string|null $location
-     */
     private function filterOnLocation(QueryBuilder $queryBuilder, ?string $location = null): void
     {
-        if (!is_null($location)) {
+        if (!\is_null($location)) {
             $queryBuilder
                 ->andWhere('l.name LIKE :location')
                 ->setParameter(self::FIELD_LOCATION, '%' . $location . '%');
         }
     }
 
-    /**
-     * @param QueryBuilder $queryBuilder
-     * @param bool $exact
-     * @param string|null $trainNumber
-     */
     private function filterOnTrainNumber(QueryBuilder $queryBuilder, bool $exact, ?string $trainNumber = null): void
     {
-        if (!is_null($trainNumber)) {
+        if (!\is_null($trainNumber)) {
             if ($exact) {
-                if (strpos($trainNumber, '*') !== false) {
+                if (\strpos($trainNumber, '*') !== false) {
                     // The train-number contains a wildcard
                     $queryBuilder
                         ->andWhere('t.number LIKE :trainNumber')
@@ -370,16 +325,11 @@ class Spot extends EntityRepository
         }
     }
 
-    /**
-     * @param QueryBuilder $queryBuilder
-     * @param bool $exact
-     * @param string|null $routeNumber
-     */
     private function filterOnRouteNumber(QueryBuilder $queryBuilder, bool $exact, ?string $routeNumber = null): void
     {
-        if (!is_null($routeNumber)) {
+        if (!\is_null($routeNumber)) {
             if ($exact) {
-                if (strpos($routeNumber, '*') !== false) {
+                if (\strpos($routeNumber, '*') !== false) {
                     // The route-number contains a wildcard
                     $queryBuilder
                         ->andWhere('r.number LIKE :routeNumber')

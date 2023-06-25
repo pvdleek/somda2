@@ -63,7 +63,6 @@ class UserPreference
     ];
 
     /**
-     * @var int|null
      * @ORM\Column(name="prefid", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -72,16 +71,14 @@ class UserPreference
     public ?int $id = null;
 
     /**
-     * @var string
      * @ORM\Column(name="sleutel", type="string", length=25, nullable=false)
      * @Assert\Choice(choices=UserPreference::KEY_VALUES)
      * @JMS\Expose()
      * @OA\Property(description="Unique identifier", maxLength=25, type="string")
      */
-    public string $key;
+    public string $key = '';
 
     /**
-     * @var string
      * @ORM\Column(name="type", type="string", length=50, nullable=false)
      * @JMS\Expose()
      * @OA\Property(description="Type of the value", maxLength=50, type="string")
@@ -89,7 +86,6 @@ class UserPreference
     public string $type = '';
 
     /**
-     * @var string
      * @ORM\Column(name="description", type="string", length=90, nullable=false)
      * @JMS\Expose()
      * @OA\Property(description="Description of the setting", maxLength=90, type="string")
@@ -97,7 +93,6 @@ class UserPreference
     public string $description = '';
 
     /**
-     * @var string
      * @ORM\Column(name="default_value", type="string", length=200, nullable=false)
      * @JMS\Expose()
      * @OA\Property(description="Default value", maxLength=200, type="string")
@@ -105,7 +100,6 @@ class UserPreference
     public string $defaultValue = '';
 
     /**
-     * @var int
      * @ORM\Column(name="volgorde", type="integer", nullable=false)
      * @JMS\Exclude()
      */

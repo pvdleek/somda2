@@ -19,10 +19,6 @@ use Symfony\Component\Validator\Constraints\LessThan;
 
 class RouteList extends AbstractType
 {
-    /**
-     * @param FormBuilderInterface $builder
-     * @param array $options
-     */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
@@ -86,9 +82,6 @@ class RouteList extends AbstractType
             ]);
     }
 
-    /**
-     * @param OptionsResolver $resolver
-     */
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(['data_class' => RouteListEntity::class ]);

@@ -10,7 +10,6 @@ use App\Helpers\ForumAuthorizationHelper;
 use App\Helpers\ForumDiscussionHelper;
 use App\Helpers\UserHelper;
 use Doctrine\Persistence\ManagerRegistry;
-use Exception;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use OpenApi\Annotations as OA;
@@ -19,48 +18,16 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class ForumDiscussionController extends AbstractFOSRestController
 {
-    /**
-     * @var ManagerRegistry
-     */
-    private ManagerRegistry $doctrine;
-
-    /**
-     * @var UserHelper
-     */
-    private UserHelper $userHelper;
-
-    /**
-     * @var ForumAuthorizationHelper
-     */
-    private ForumAuthorizationHelper $forumAuthHelper;
-
-    /**
-     * @var ForumDiscussionHelper
-     */
-    private ForumDiscussionHelper $discussionHelper;
-
-    /**
-     * @param ManagerRegistry $doctrine
-     * @param UserHelper $userHelper
-     * @param ForumAuthorizationHelper $forumAuthHelper
-     * @param ForumDiscussionHelper $discussionHelper
-     */
     public function __construct(
-        ManagerRegistry $doctrine,
-        UserHelper $userHelper,
-        ForumAuthorizationHelper $forumAuthHelper,
-        ForumDiscussionHelper $discussionHelper
+        private readonly ManagerRegistry $doctrine,
+        private readonly UserHelper $userHelper,
+        private readonly ForumAuthorizationHelper $forumAuthHelper,
+        private readonly ForumDiscussionHelper $discussionHelper,
     ) {
-        $this->doctrine = $doctrine;
-        $this->userHelper = $userHelper;
-        $this->forumAuthHelper = $forumAuthHelper;
-        $this->discussionHelper = $discussionHelper;
     }
 
     /**
-     * @param int $id
-     * @return Response
-     * @throws Exception
+     * @throws \Exception
      * @OA\Response(
      *     response=200,
      *     description="Returns non-paginated posts in a discussion",
@@ -107,12 +74,12 @@ class ForumDiscussionController extends AbstractFOSRestController
          * @var ForumDiscussion $discussion
          */
         $discussion = $this->doctrine->getRepository(ForumDiscussion::class)->find($id);
-        if (is_null($discussion)) {
+        if (\is_null($discussion)) {
             throw new AccessDeniedException('This discussion does not exist');
         }
 
         $newToOld = $this->userHelper->userIsLoggedIn() ?
-            (bool)$this->userHelper->getPreferenceByKey(UserPreference::KEY_FORUM_NEW_TO_OLD)->value : false;
+            (bool) $this->userHelper->getPreferenceByKey(UserPreference::KEY_FORUM_NEW_TO_OLD)->value : false;
 
         $this->discussionHelper->setDiscussion($discussion);
         $posts = $this->discussionHelper->getNonPaginatedPosts($newToOld);
@@ -131,7 +98,6 @@ class ForumDiscussionController extends AbstractFOSRestController
     }
 
     /**
-     * @return Response
      * @OA\Response(
      *     response=200,
      *     description="Returns the favorite discussions of the user",
@@ -156,7 +122,6 @@ class ForumDiscussionController extends AbstractFOSRestController
     }
 
     /**
-     * @return Response
      * @OA\Response(
      *     response=200,
      *     description="Returns all unread discussions of the user",

@@ -12,46 +12,40 @@ use Doctrine\ORM\Mapping as ORM;
 class RouteTrain
 {
     /**
-     * @var TrainTableYear
      * @ORM\ManyToOne(targetEntity="App\Entity\TrainTableYear")
      * @ORM\JoinColumn(name="tdr_nr", referencedColumnName="tdr_nr")
      * @ORM\Id
      */
-    public TrainTableYear $trainTableYear;
+    public ?TrainTableYear $trainTableYear = null;
 
     /**
-     * @var Route
      * @ORM\ManyToOne(targetEntity="App\Entity\Route")
      * @ORM\JoinColumn(name="treinid", referencedColumnName="treinid")
      * @ORM\Id
      */
-    public Route $route;
+    public ?Route $route = null;
 
     /**
-     * @var Position
      * @ORM\ManyToOne(targetEntity="App\Entity\Position")
      * @ORM\JoinColumn(name="posid", referencedColumnName="posid")
      * @ORM\Id
      */
-    public Position $position;
+    public ?Position $position = null;
 
     /**
-     * @var int
      * @ORM\Column(name="dag", type="integer", nullable=false, options={"default"="1"})
      * @ORM\Id
      */
     public int $dayNumber = 1;
 
     /**
-     * @var int
      * @ORM\Column(name="spots", type="bigint", nullable=false)
      */
     public int $numberOfSpots = 0;
 
     /**
-     * @var TrainNamePattern
      * @ORM\ManyToOne(targetEntity="App\Entity\TrainNamePattern")
      * @ORM\JoinColumn(name="mat_pattern_id", referencedColumnName="id")
      */
-    public TrainNamePattern $trainNamePattern;
+    public ?TrainNamePattern $trainNamePattern = null;
 }

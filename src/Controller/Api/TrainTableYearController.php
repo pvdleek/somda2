@@ -14,28 +14,13 @@ use Symfony\Component\HttpFoundation\Response;
 
 class TrainTableYearController extends AbstractFOSRestController
 {
-    /**
-     * @var ManagerRegistry
-     */
-    private ManagerRegistry $doctrine;
-
-    /**
-     * @var UserHelper
-     */
-    private UserHelper $userHelper;
-
-    /**
-     * @param ManagerRegistry $doctrine
-     * @param UserHelper $userHelper
-     */
-    public function __construct(ManagerRegistry $doctrine, UserHelper $userHelper)
-    {
-        $this->doctrine = $doctrine;
-        $this->userHelper = $userHelper;
+    public function __construct(
+        private readonly ManagerRegistry $doctrine,
+        private readonly UserHelper $userHelper,
+    ) {
     }
 
     /**
-     * @return Response
      * @OA\Response(
      *     response=200,
      *     description="Returns all trainTableYears in the Somda database",

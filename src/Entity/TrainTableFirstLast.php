@@ -19,26 +19,23 @@ class TrainTableFirstLast
     use DateTrait;
 
     /**
-     * @var TrainTableYear
      * @ORM\ManyToOne(targetEntity="App\Entity\TrainTableYear")
      * @ORM\JoinColumn(name="tdr_nr", referencedColumnName="tdr_nr")
      * @ORM\Id
      * @JMS\Expose()
      * @OA\Property(description="Unique identifier", type="integer")
      */
-    public TrainTableYear $trainTableYear;
+    public ?TrainTableYear $trainTableYear = null;
 
     /**
-     * @var Route
      * @ORM\ManyToOne(targetEntity="App\Entity\Route", inversedBy="trainTableFirstLasts")
      * @ORM\JoinColumn(name="treinid", referencedColumnName="treinid")
      * @ORM\Id
      * @JMS\Exclude()
      */
-    public Route $route;
+    public ?Route $route = null;
 
     /**
-     * @var int
      * @ORM\Column(name="dag", type="integer", nullable=false, options={"default"="1"})
      * @ORM\Id
      * @JMS\Expose()
@@ -47,16 +44,14 @@ class TrainTableFirstLast
     public int $dayNumber = 1;
 
     /**
-     * @var Location
      * @ORM\ManyToOne(targetEntity="App\Entity\Location")
      * @ORM\JoinColumn(name="v_locatieid", referencedColumnName="afkid")
      * @JMS\Expose()
      * @OA\Property(description="The start-location of the route", ref=@Model(type=Location::class))
      */
-    public Location $firstLocation;
+    public ?Location $firstLocation = null;
 
     /**
-     * @var string
      * @ORM\Column(name="v_actie", type="string", length=1, nullable=false, options={"default"="-"})
      * @Assert\Choice(choices=TrainTable::ACTION_VALUES)
      * @JMS\Expose()
@@ -71,7 +66,6 @@ class TrainTableFirstLast
     public string $firstAction = '-';
 
     /**
-     * @var int
      * @ORM\Column(name="v_tijd", type="integer", nullable=false, options={"default"="0"})
      * @JMS\Exclude()
      * @OA\Property(
@@ -83,16 +77,14 @@ class TrainTableFirstLast
     public int $firstTime = 0;
 
     /**
-     * @var Location
      * @ORM\ManyToOne(targetEntity="App\Entity\Location")
      * @ORM\JoinColumn(name="a_locatieid", referencedColumnName="afkid")
      * @JMS\Expose()
      * @OA\Property(description="The end-location of the route", ref=@Model(type=Location::class))
      */
-    public Location $lastLocation;
+    public ?Location $lastLocation = null;
 
     /**
-     * @var string
      * @ORM\Column(name="a_actie", type="string", length=1, nullable=false, options={"default"="-"})
      * @Assert\Choice(choices=TrainTable::ACTION_VALUES)
      * @JMS\Expose()
@@ -107,7 +99,6 @@ class TrainTableFirstLast
     public string $lastAction = '-';
 
     /**
-     * @var int
      * @ORM\Column(name="a_tijd", type="integer", nullable=false, options={"default"="0"})
      * @JMS\Exclude()
      * @OA\Property(
@@ -118,9 +109,7 @@ class TrainTableFirstLast
      */
     public int $lastTime = 0;
 
-
     /**
-     * @return string
      * @JMS\VirtualProperty(name="displayFirstTime")
      */
     public function getDisplayFirstTime(): string
@@ -128,9 +117,7 @@ class TrainTableFirstLast
         return $this->timeDatabaseToDisplay($this->firstTime);
     }
 
-
     /**
-     * @return string
      * @JMS\VirtualProperty(name="displayLastTime")
      */
     public function getDisplayLastTime(): string

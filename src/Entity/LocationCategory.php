@@ -17,7 +17,6 @@ class LocationCategory
     public const NO_LONGER_VALID_ID = 50;
 
     /**
-     * @var int|null
      * @ORM\Column(name="verk_catid", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -27,14 +26,12 @@ class LocationCategory
     public ?int $id = null;
 
     /**
-     * @var string
      * @ORM\Column(name="code", type="string", length=5, nullable=false)
      * @JMS\Exclude()
      */
     public string $code = '';
 
     /**
-     * @var string
      * @ORM\Column(name="name", type="string", length=20, nullable=false)
      * @JMS\Expose()
      * @OA\Property(description="Name of the location-category", maxLength=20, type="string")
@@ -42,7 +39,6 @@ class LocationCategory
     public string $name = '';
 
     /**
-     * @var Location[]
      * @ORM\OneToMany(targetEntity="App\Entity\Location", mappedBy="category")
      * @JMS\Exclude()
      */

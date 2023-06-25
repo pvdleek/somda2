@@ -15,29 +15,13 @@ use Symfony\Component\HttpFoundation\Response;
 
 class NewsController extends AbstractFOSRestController
 {
-    /**
-     * @var ManagerRegistry
-     */
-    private ManagerRegistry $doctrine;
-
-    /**
-     * @var UserHelper
-     */
-    private UserHelper $userHelper;
-
-    /**
-     * @param ManagerRegistry $doctrine
-     * @param UserHelper $userHelper
-     */
-    public function __construct(ManagerRegistry $doctrine, UserHelper $userHelper)
-    {
-        $this->doctrine = $doctrine;
-        $this->userHelper = $userHelper;
+    public function __construct(
+        private readonly ManagerRegistry $doctrine,
+        private readonly UserHelper $userHelper,
+    ) {
     }
 
     /**
-     * @param int|null $id
-     * @return Response
      * @OA\Parameter(
      *     description="ID of a specific news-item to request, all information about the items is in \
      *         the initial request. But requesting a specific news-item for a logged-in user will mark the \
@@ -59,12 +43,12 @@ class NewsController extends AbstractFOSRestController
     {
         $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_API_USER);
 
-        if (!is_null($id)) {
+        if (!\is_null($id)) {
             /**
              * @var News $news
              */
             $news = $this->doctrine->getRepository(News::class)->find($id);
-            if (is_null($news)) {
+            if (\is_null($news)) {
                 return $this->handleView($this->view(['error' => 'This news-item does not exist'], 404));
             }
 
@@ -84,8 +68,6 @@ class NewsController extends AbstractFOSRestController
     }
 
     /**
-     * @param int|null $limit
-     * @return Response
      * @OA\Parameter(
      *     description="The maximum number of items to return (limited to 100)",
      *     in="path",
@@ -105,7 +87,7 @@ class NewsController extends AbstractFOSRestController
     {
         $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_API_USER);
 
-        $limit = is_null($limit) ? 25 : min($limit, 100);
+        $limit = \is_null($limit) ? 25 : \min($limit, 100);
 
         /**
          * @var RailNews[] $news

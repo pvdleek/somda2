@@ -11,29 +11,12 @@ use Twig\Extension\RuntimeExtensionInterface;
 
 class MenuHelper implements RuntimeExtensionInterface
 {
-    /**
-     * @var ManagerRegistry
-     */
-    private ManagerRegistry $doctrine;
-
-    /**
-     * @var AuthorizationHelper
-     */
-    private AuthorizationHelper $authorizationHelper;
-
-    /**
-     * @param ManagerRegistry $doctrine
-     * @param AuthorizationHelper $authorizationHelper
-     */
-    public function __construct(ManagerRegistry $doctrine, AuthorizationHelper $authorizationHelper)
-    {
-        $this->doctrine = $doctrine;
-        $this->authorizationHelper = $authorizationHelper;
+    public function __construct(
+        private readonly ManagerRegistry $doctrine,
+        private readonly AuthorizationHelper $authorizationHelper,
+    ) {
     }
 
-    /**
-     * @return int
-     */
     public function getNumberOfOpenForumAlerts(): int
     {
         if ($this->authorizationHelper->isGranted(RoleGenerics::ROLE_ADMIN)) {
@@ -42,16 +25,13 @@ class MenuHelper implements RuntimeExtensionInterface
         return 0;
     }
 
-    /**
-     * @return array
-     */
     public function getMenuStructure(): array
     {
         $blocks = $this->doctrine->getRepository(Block::class)->getMenuStructure();
         $allowedBlocks = [];
 
         foreach ($blocks as $block) {
-            if (strlen($block['route']) > 0 && $this->isAuthorizedForBlock($block)) {
+            if (\strlen($block['route']) > 0 && $this->isAuthorizedForBlock($block)) {
                 $allowedBlocks[] = $block;
             }
         }
@@ -59,15 +39,11 @@ class MenuHelper implements RuntimeExtensionInterface
         return $allowedBlocks;
     }
 
-    /**
-     * @param array $block
-     * @return bool
-     */
     private function isAuthorizedForBlock(array $block): bool
     {
-        if (is_null($block['role']) || $this->authorizationHelper->isGranted(RoleGenerics::ROLE_ADMIN)) {
+        if (\is_null($block['role']) || $this->authorizationHelper->isGranted(RoleGenerics::ROLE_ADMIN)) {
             return true;
         }
-        return substr($block['role'], 0, 10) !== 'ROLE_ADMIN' || $this->authorizationHelper->isGranted($block['role']);
+        return \substr($block['role'], 0, 10) !== 'ROLE_ADMIN' || $this->authorizationHelper->isGranted($block['role']);
     }
 }

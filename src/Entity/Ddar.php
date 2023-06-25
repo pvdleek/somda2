@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -13,7 +12,6 @@ use Doctrine\ORM\Mapping as ORM;
 class Ddar
 {
     /**
-     * @var int|null
      * @ORM\Column(name="id", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -21,51 +19,43 @@ class Ddar
     public ?int $id = null;
 
     /**
-     * @var Train
      * @ORM\ManyToOne(targetEntity="App\Entity\Train")
      * @ORM\JoinColumn(name="matid", referencedColumnName="matid")
      */
-    public Train $train;
+    public ?Train $train = null;
 
     /**
-     * @var int|null
      * @ORM\Column(name="stam", type="integer", nullable=true)
      */
-    public ?int $trunkNumber;
+    public ?int $trunkNumber = null;
 
     /**
-     * @var Location
      * @ORM\ManyToOne(targetEntity="App\Entity\Location")
      * @ORM\JoinColumn(name="afkid", referencedColumnName="afkid")
      */
-    public Location $location;
+    public ?Location $location = null;
 
     /**
-     * @var DateTime|null
      * @ORM\Column(name="spot_ander_laatste", type="date", nullable=true)
      */
-    public ?DateTime $timestampOtherLast;
+    public ?\DateTime $timestampOtherLast = null;
 
     /**
-     * @var DateTime
      * @ORM\Column(name="spot_eerste", type="date", nullable=false)
      */
-    public DateTime $timestampFirst;
+    public ?\DateTime $timestampFirst = null;
 
     /**
-     * @var DateTime|null
      * @ORM\Column(name="spot_laatste", type="date", nullable=true)
      */
-    public ?DateTime $timestampLast;
+    public ?\DateTime $timestampLast = null;
 
     /**
-     * @var DateTime|null
      * @ORM\Column(name="spot_ander_eerste", type="date", nullable=true)
      */
-    public ?DateTime $timestampOtherFirst;
+    public ?\DateTime $timestampOtherFirst = null;
 
     /**
-     * @var string
      * @ORM\Column(name="extra", type="string", length=150, nullable=false)
      */
     public string $extra = '';

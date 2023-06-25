@@ -13,7 +13,7 @@ This is the Somda repository. It consists of:
 ### Pre-requisites
 
 Somda has the following system requirements:
-- _PHP_, minimum version 7.4
+- _PHP_, minimum version 8.1
 - PHP extensions _ctype_, _curl_, _gd_, _iconv_ and _json_
 - _MySQL_ or _MariaDB_
 - A webserver such as _Apache_ or _Nginx_

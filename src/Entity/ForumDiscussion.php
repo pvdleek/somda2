@@ -12,7 +12,6 @@ use Doctrine\ORM\Mapping as ORM;
 class ForumDiscussion
 {
     /**
-     * @var int|null
      * @ORM\Column(name="discussionid", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -20,51 +19,43 @@ class ForumDiscussion
     public ?int $id = null;
 
     /**
-     * @var string
      * @ORM\Column(name="title", type="string", length=75, nullable=false)
      */
     public string $title = '';
 
     /**
-     * @var int
      * @ORM\Column(name="viewed", type="bigint", nullable=false)
      */
     public int $viewed = 0;
 
     /**
-     * @var bool
      * @ORM\Column(name="locked", type="boolean", nullable=false, options={"default"=false})
      */
     public bool $locked = false;
 
     /**
-     * @var ForumForum
      * @ORM\ManyToOne(targetEntity="App\Entity\ForumForum", inversedBy="discussions")
      * @ORM\JoinColumn(name="forumid", referencedColumnName="forumid")
      */
-    public ForumForum $forum;
+    public ?ForumForum $forum = null;
 
     /**
-     * @var User
      * @ORM\ManyToOne(targetEntity="App\Entity\User")
      * @ORM\JoinColumn(name="authorid", referencedColumnName="uid")
      */
-    public User $author;
+    public ?User $author = null;
 
     /**
-     * @var ForumPost[]
      * @ORM\OneToMany(targetEntity="App\Entity\ForumPost", mappedBy="discussion")
      */
     private $posts;
 
     /**
-     * @var ForumDiscussionWiki[]
      * @ORM\OneToMany(targetEntity="App\Entity\ForumDiscussionWiki", mappedBy="discussion")
      */
     private $wikis;
 
     /**
-     * @var ForumFavorite[]
      * @ORM\OneToMany(targetEntity="App\Entity\ForumFavorite", mappedBy="discussion")
      */
     private $favorites;
@@ -79,10 +70,6 @@ class ForumDiscussion
         $this->favorites = new ArrayCollection();
     }
 
-    /**
-     * @param ForumPost $forumPost
-     * @return ForumDiscussion
-     */
     public function addPost(ForumPost $forumPost): ForumDiscussion
     {
         $this->posts[] = $forumPost;
@@ -97,10 +84,6 @@ class ForumDiscussion
         return $this->posts->toArray();
     }
 
-    /**
-     * @param ForumDiscussionWiki $forumDiscussionWiki
-     * @return ForumDiscussion
-     */
     public function addWiki(ForumDiscussionWiki $forumDiscussionWiki): ForumDiscussion
     {
         $this->wikis[] = $forumDiscussionWiki;
@@ -115,10 +98,6 @@ class ForumDiscussion
         return $this->wikis->toArray();
     }
 
-    /**
-     * @param ForumFavorite $forumFavorite
-     * @return ForumDiscussion
-     */
     public function addFavorite(ForumFavorite $forumFavorite): ForumDiscussion
     {
         $this->favorites[] = $forumFavorite;

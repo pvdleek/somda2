@@ -7,8 +7,6 @@ use App\Entity\Log;
 use App\Entity\User;
 use App\Generics\DateGenerics;
 use App\Helpers\UserHelper;
-use DateTime;
-use Exception;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Response;
@@ -29,41 +27,20 @@ class KernelListener implements EventSubscriberInterface
 
     private const STOPWATCH_NAME = 'main';
 
-    /**
-     * @var ManagerRegistry
-     */
-    private ManagerRegistry $doctrine;
-
-    /**
-     * @var UserHelper
-     */
-    private UserHelper $userHelper;
-
-    /**
-     * @var Stopwatch|null
-     */
     private ?Stopwatch $stopwatch;
 
     private ?string $route;
 
     private ?array $routeParameters;
 
-    /**
-     * @param ManagerRegistry $doctrine
-     * @param UserHelper $userHelper
-     */
-    public function __construct(ManagerRegistry $doctrine, UserHelper $userHelper)
-    {
-        $this->doctrine = $doctrine;
-        $this->userHelper = $userHelper;
-
+    public function __construct(
+        private readonly ManagerRegistry $doctrine,
+        private readonly UserHelper $userHelper,
+    ) {
         $this->stopwatch = new Stopwatch(true);
         $this->stopwatch->start(self::STOPWATCH_NAME);
     }
 
-    /**
-     * @return array
-     */
     public static function getSubscribedEvents(): array
     {
         return [
@@ -74,9 +51,6 @@ class KernelListener implements EventSubscriberInterface
         ];
     }
 
-    /**
-     * @param ExceptionEvent $event
-     */
     public function onKernelException(ExceptionEvent $event): void
     {
         if ($this->isApiRequest($event)) {
@@ -85,8 +59,7 @@ class KernelListener implements EventSubscriberInterface
     }
 
     /**
-     * @param RequestEvent $event
-     * @throws Exception
+     * @throws \Exception
      */
     public function onKernelRequest(RequestEvent $event): void
     {
@@ -94,21 +67,21 @@ class KernelListener implements EventSubscriberInterface
             return;
         }
 
-        $this->route = (string)$event->getRequest()->attributes->get('_route');
-        $this->routeParameters = (array)$event->getRequest()->attributes->get('_route_params');
+        $this->route = (string) $event->getRequest()->attributes->get('_route');
+        $this->routeParameters = (array) $event->getRequest()->attributes->get('_route_params');
 
         if ($this->isApiRequest($event)
             && $event->getRequest()->headers->has(UserHelper::KEY_API_USER_ID)
             && $event->getRequest()->headers->has(UserHelper::KEY_API_TOKEN)
         ) {
             $this->userHelper->setFromApiRequest(
-                (int)$event->getRequest()->headers->get(UserHelper::KEY_API_USER_ID),
+                (int) $event->getRequest()->headers->get(UserHelper::KEY_API_USER_ID),
                 $event->getRequest()->headers->get(UserHelper::KEY_API_TOKEN)
             );
         }
 
-        if (!is_null($this->userHelper->getUser())
-            && $this->userHelper->getUser()->banExpireTimestamp >= new DateTime()
+        if (!\is_null($this->userHelper->getUser())
+            && $this->userHelper->getUser()->banExpireTimestamp >= new \DateTime()
         ) {
             throw new AccessDeniedException(
                 'Je kunt tot ' . $this->userHelper->getUser()->banExpireTimestamp->format(DateGenerics::DATE_FORMAT) .
@@ -118,8 +91,7 @@ class KernelListener implements EventSubscriberInterface
     }
 
     /**
-     * @param TerminateEvent $event
-     * @throws Exception
+     * @throws \Exception
      */
     public function onKernelTerminate(TerminateEvent $event): void
     {
@@ -134,12 +106,12 @@ class KernelListener implements EventSubscriberInterface
 
             $log = new Log();
             $log->user = $this->userHelper->getUser();
-            $log->timestamp = new DateTime();
-            $log->ipAddress = ip2long($event->getRequest()->getClientIp());
+            $log->timestamp = new \DateTime();
+            $log->ipAddress = \ip2long($event->getRequest()->getClientIp());
             $log->route = $this->route ?? '';
             $log->routeParameters = $this->routeParameters ?? [];
             $log->duration = $stopwatchEvent->getDuration() / 1000;
-            $log->memoryUsage = floatval(sprintf('%+08.3f', $stopwatchEvent->getMemory())) / 1024 / 1024;
+            $log->memoryUsage = \floatval(\sprintf('%+08.3f', $stopwatchEvent->getMemory())) / 1024 / 1024;
             $this->doctrine->getManager()->persist($log);
         }
 
@@ -148,56 +120,45 @@ class KernelListener implements EventSubscriberInterface
         $this->doctrine->getManager()->flush();
     }
 
-    /**
-     * @param InteractiveLoginEvent $event
-     */
     public function onInteractiveLogin(InteractiveLoginEvent $event): void
     {
         /**
          * @var User $user
          */
         $user = $event->getAuthenticationToken()->getUser();
-        if (is_null($user->apiToken)) {
+        if (\is_null($user->apiToken)) {
             // Generate an API token for this user
-            $user->apiToken = uniqid('', true);
+            $user->apiToken = \uniqid('', true);
         }
-        $user->apiTokenExpiryTimestamp = new DateTime(User::API_TOKEN_VALIDITY);
+        $user->apiTokenExpiryTimestamp = new \DateTime(User::API_TOKEN_VALIDITY);
     }
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     private function saveVisit(): void
     {
         if ($this->userHelper->userIsLoggedIn()) {
-            $this->userHelper->getUser()->lastVisit = new DateTime();
+            $this->userHelper->getUser()->lastVisit = new \DateTime();
         }
     }
 
-    /**
-     * @param KernelEvent $event
-     * @return bool
-     */
     private function isShouldExecuteEventHandler(KernelEvent $event): bool
     {
         if (!$event->isMainRequest()) {
             return false;
         }
 
-        $route = (string)$event->getRequest()->attributes->get('_route');
-        return substr($route, 0, 1) !== '_'
-            && substr($route, -5) !== '_json'
+        $route = (string) $event->getRequest()->attributes->get('_route');
+        return \substr($route, 0, 1) !== '_'
+            && \substr($route, -5) !== '_json'
             && $route !== 'logout'
             && $route !== 'api_authenticate_token';
     }
 
-    /**
-     * @param KernelEvent $event
-     * @return bool
-     */
     private function isApiRequest(KernelEvent $event): bool
     {
-        $route = (string)$event->getRequest()->attributes->get('_route');
-        return substr($route, 0, 4) === 'api_';
+        $route = (string) $event->getRequest()->attributes->get('_route');
+        return \substr($route, 0, 4) === 'api_';
     }
 }

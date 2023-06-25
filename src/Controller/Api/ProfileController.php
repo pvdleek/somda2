@@ -6,8 +6,6 @@ use App\Entity\User;
 use App\Entity\UserPreference;
 use App\Generics\RoleGenerics;
 use App\Helpers\UserHelper;
-use DateTime;
-use Exception;
 use Doctrine\Persistence\ManagerRegistry;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use Nelmio\ApiDocBundle\Annotation\Model;
@@ -18,29 +16,16 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class ProfileController extends AbstractFOSRestController
 {
-    /**
-     * @var ManagerRegistry
-     */
-    private ManagerRegistry $doctrine;
-
-    /**
-     * @var UserHelper
-     */
-    private UserHelper $userHelper;
-
-    /**
-     * @param ManagerRegistry $doctrine
-     * @param UserHelper $userHelper
-     */
-    public function __construct(ManagerRegistry $doctrine, UserHelper $userHelper)
-    {
+    public function __construct(
+        private readonly ManagerRegistry $doctrine,
+        private readonly UserHelper $userHelper,
+    ) {
         $this->doctrine = $doctrine;
         $this->userHelper = $userHelper;
     }
 
     /**
-     * @return Response
-     * @throws Exception
+     * @throws \Exception
      * @OA\Response(
      *     response=200,
      *     description="Returns the user profile",
@@ -62,9 +47,7 @@ class ProfileController extends AbstractFOSRestController
     }
 
     /**
-     * @param Request $request
-     * @return Response
-     * @throws Exception
+     * @throws \Exception
      * @OA\Post(
      *     @OA\Parameter(in="formData", name="avatar", required=true, @OA\Schema(type="string", maxLength=30)),
      *     @OA\Parameter(
@@ -109,15 +92,15 @@ class ProfileController extends AbstractFOSRestController
 
         $user = $this->userHelper->getUser();
 
-        $userInformation = (array)json_decode($request->getContent(), true);
+        $userInformation = (array) \json_decode($request->getContent(), true);
         $user->info->avatar = $userInformation['avatar'];
         if (isset($userInformation['birthDate'])) {
-            $user->info->birthDate = DateTime::createFromFormat('Y-m-d', $userInformation['birthDate']);
+            $user->info->birthDate = \DateTime::createFromFormat('Y-m-d', $userInformation['birthDate']);
         }
         if (isset($userInformation['city'])) {
             $user->info->city = $userInformation['city'];
         }
-        $user->info->gender = (int)$userInformation['gender'];
+        $user->info->gender = (int) $userInformation['gender'];
         if (isset($userInformation['mobilePhone'])) {
             $user->info->mobilePhone = $userInformation['mobilePhone'];
         }
@@ -146,9 +129,7 @@ class ProfileController extends AbstractFOSRestController
     }
 
     /**
-     * @param Request $request
-     * @return Response
-     * @throws Exception
+     * @throws \Exception
      * @OA\Post(
      *     @OA\Parameter(in="formData", name="forum_signature", required=false, @OA\Schema(type="string", maxLength=200)),
      *     @OA\Parameter(in="formData", name="forum_new_to_old", required=true, @OA\Schema(type="integer", default=0, enum={0,1})),
@@ -179,7 +160,7 @@ class ProfileController extends AbstractFOSRestController
 
         $user = $this->userHelper->getUser();
 
-        $preferences = (array)json_decode($request->getContent(), true);
+        $preferences = (array) \json_decode($request->getContent(), true);
         if (isset($preferences['forum_signature'])) {
             $this->userHelper->getPreferenceByKey(UserPreference::KEY_FORUM_SIGNATURE)->value =
                 $preferences['forum_signature'];

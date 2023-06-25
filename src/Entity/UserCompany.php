@@ -11,7 +11,6 @@ use Doctrine\ORM\Mapping as ORM;
 class UserCompany
 {
     /**
-     * @var int|null
      * @ORM\Column(name="bedrijf_id", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -19,8 +18,7 @@ class UserCompany
     public ?int $id = null;
 
     /**
-     * @var string
      * @ORM\Column(name="naam", type="string", length=15, nullable=false)
      */
-    public string $name;
+    public string $name = '';
 }

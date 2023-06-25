@@ -9,34 +9,16 @@ use Symfony\Component\HttpFoundation\Response;
 
 class HelpController
 {
-    /**
-     * @var ManagerRegistry
-     */
-    private ManagerRegistry $doctrine;
-
-    /**
-     * @var TemplateHelper
-     */
-    private TemplateHelper $templateHelper;
-
-    /**
-     * @param ManagerRegistry $doctrine
-     * @param TemplateHelper $templateHelper
-     */
-    public function __construct(ManagerRegistry $doctrine, TemplateHelper $templateHelper)
-    {
-        $this->doctrine = $doctrine;
-        $this->templateHelper = $templateHelper;
+    public function __construct(
+        private readonly ManagerRegistry $doctrine,
+        private readonly TemplateHelper $templateHelper,
+    ) {
     }
 
-    /**
-     * @param int $id
-     * @return Response
-     */
     public function indexAction(int $id): Response
     {
         $item = $this->doctrine->getRepository(Help::class)->find($id);
-        if (is_null($item)) {
+        if (\is_null($item)) {
             $item = $this->doctrine->getRepository(Help::class)->find(1);
         }
 

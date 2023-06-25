@@ -5,10 +5,16 @@ namespace App\Repository;
 
 use App\Entity\RailNews as RailNewsEntity;
 use App\Form\RailNews as RailNewsForm;
-use Doctrine\ORM\EntityRepository;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Persistence\ManagerRegistry;
 
-class RailNews extends EntityRepository
+class RailNews extends ServiceEntityRepository
 {
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, RailNewsEntity::class);
+    }
+
     /**
      * @param int $limit
      * @return RailNewsEntity[]

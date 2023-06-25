@@ -23,11 +23,11 @@
         {% if numberOfPages > 1 %}
             <div class="forum-spacer-row"></div>
             <strong>Pagina's:</strong>
-            {% if pageNumber > 1 %}<a href="{{ path('forum_discussion_page', { 'id': discussion.id, 'name': (discussion.title | slugify), 'pageNumber': (pageNumber - 1) }) }}">«</a>{% endif %}
+            {% if pageNumber > 1 %}<a href="{{ path('forum_discussion_page', { 'id': discussion.id, 'name': (discussion.title | slug), 'pageNumber': (pageNumber - 1) }) }}">«</a>{% endif %}
             {% for page in 1..numberOfPages %}
-                {% if page != pageNumber %}<a href="{{ path('forum_discussion_page', { 'id': discussion.id, 'name': (discussion.title | slugify), 'pageNumber': page }) }}">{{ page }}</a>{% else %}{{ page }}{% endif %}
+                {% if page != pageNumber %}<a href="{{ path('forum_discussion_page', { 'id': discussion.id, 'name': (discussion.title | slug), 'pageNumber': page }) }}">{{ page }}</a>{% else %}{{ page }}{% endif %}
             {% endfor %}
-            {% if pageNumber < numberOfPages %}<a href="{{ path('forum_discussion_page', { 'id': discussion.id, 'name': (discussion.title | slugify), 'pageNumber': (pageNumber + 1) }) }}">»</a>{% endif %}
+            {% if pageNumber < numberOfPages %}<a href="{{ path('forum_discussion_page', { 'id': discussion.id, 'name': (discussion.title | slug), 'pageNumber': (pageNumber + 1) }) }}">»</a>{% endif %}
             <div class="forum-spacer-row"></div>
         {% endif %}
     {% endblock %}
@@ -55,7 +55,7 @@
         <i class="fas fa-comment"></i>
     {% endif %}
     {{ discussion.title }}
-    <br />Forum: <a href="{{ path('forum_forum', { 'id': discussion.forum.id, 'name': discussion.forum.name | slugify }) }}">{{ discussion.forum.category.name }} - {{ discussion.forum.name }}</a>
+    <br />Forum: <a href="{{ path('forum_forum', { 'id': discussion.forum.id, 'name': discussion.forum.name | slug }) }}">{{ discussion.forum.category.name }} - {{ discussion.forum.name }}</a>
     <div class="forum-spacer-row"></div>
 
     {% set firstUnreadAnchorDone = false %}

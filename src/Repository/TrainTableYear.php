@@ -3,20 +3,22 @@
 namespace App\Repository;
 
 use App\Entity\TrainTableYear as TrainTableYearEntity;
-use DateTime;
-use Doctrine\ORM\EntityRepository;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
-use Exception;
+use Doctrine\Persistence\ManagerRegistry;
 
-class TrainTableYear extends EntityRepository
+class TrainTableYear extends ServiceEntityRepository
 {
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, TrainTableYearEntity::class);
+    }
+
     /**
-     * @param DateTime $checkDate
-     * @return TrainTableYearEntity|null
-     * @throws Exception
+     * @throws \Exception
      */
-    public function findTrainTableYearByDate(DateTime $checkDate): ?TrainTableYearEntity
+    public function findTrainTableYearByDate(\DateTime $checkDate): ?TrainTableYearEntity
     {
         $checkDate->setTime(0, 0);
         $queryBuilder = $this->getEntityManager()

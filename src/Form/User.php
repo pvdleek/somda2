@@ -20,10 +20,6 @@ class User extends AbstractType
     public const FIELD_USERNAME = 'username';
     public const FIELD_PLAIN_PASSWORD = 'plainPassword';
 
-    /**
-     * @param FormBuilderInterface $builder
-     * @param array $options
-     */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
@@ -63,9 +59,6 @@ class User extends AbstractType
             ]);
     }
 
-    /**
-     * @param OptionsResolver $resolver
-     */
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(['data_class' => UserEntity::class]);

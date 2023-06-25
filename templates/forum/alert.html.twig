@@ -20,7 +20,7 @@
                         <td>&nbsp;</td>
                         <td>
                             <a class="somda-button" href="#" id="alert_button" onclick="disableMeAndSubmitForm('alert_button', 'alert_form'); return false;">Meld bericht</a>
-                            <a class="somda-button" href="{{ path('forum_discussion_post', { 'id': post.discussion.id, 'postId': post.id, 'name': (post.discussion.title | slugify)}) }}">Terug naar het bericht</a>
+                            <a class="somda-button" href="{{ path('forum_discussion_post', { 'id': post.discussion.id, 'postId': post.id, 'name': (post.discussion.title | slug)}) }}">Terug naar het bericht</a>
                         </td>
                     </tr>
                 </table>

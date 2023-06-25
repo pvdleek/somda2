@@ -2,7 +2,6 @@
 
 namespace App\Entity;
 
-use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -13,7 +12,6 @@ use Doctrine\ORM\Mapping as ORM;
 class ForumPostAlert
 {
     /**
-     * @var int|null
      * @ORM\Column(name="id", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -21,39 +19,33 @@ class ForumPostAlert
     public ?int $id = null;
 
     /**
-     * @var ForumPost
      * @ORM\ManyToOne(targetEntity="App\Entity\ForumPost", inversedBy="alerts")
      * @ORM\JoinColumn(name="postid", referencedColumnName="postid")
      */
-    public ForumPost $post;
+    public ?ForumPost $post = null;
 
     /**
-     * @var bool
      * @ORM\Column(name="closed", type="boolean", nullable=false)
      */
     public bool $closed = false;
 
     /**
-     * @var User
      * @ORM\ManyToOne(targetEntity="App\Entity\User")
      * @ORM\JoinColumn(name="senderid", referencedColumnName="uid")
      */
-    public User $sender;
+    public ?User $sender = null;
 
     /**
-     * @var DateTime
      * @ORM\Column(name="timestamp", type="datetime", nullable=false)
      */
-    public DateTime $timestamp;
+    public ?\DateTime $timestamp = null;
 
     /**
-     * @var string|null
      * @ORM\Column(name="comment", type="text", length=0, nullable=true)
      */
-    public ?string $comment;
+    public ?string $comment = null;
 
     /**
-     * @var ForumPostAlertNote[]
      * @ORM\OneToMany(targetEntity="App\Entity\ForumPostAlertNote", mappedBy="alert")
      */
     private $notes;

@@ -15,36 +15,13 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ManageUsersController
 {
-    /**
-     * @var UserHelper
-     */
-    private UserHelper $userHelper;
-
-    /**
-     * @var FormHelper
-     */
-    private FormHelper $formHelper;
-
-    /**
-     * @var TemplateHelper
-     */
-    private TemplateHelper $templateHelper;
-
-    /**
-     * @param UserHelper $userHelper
-     * @param FormHelper $formHelper
-     * @param TemplateHelper $templateHelper
-     */
-    public function __construct(UserHelper $userHelper, FormHelper $formHelper, TemplateHelper $templateHelper)
-    {
-        $this->userHelper = $userHelper;
-        $this->formHelper = $formHelper;
-        $this->templateHelper = $templateHelper;
+    public function __construct(
+        private readonly UserHelper $userHelper,
+        private readonly FormHelper $formHelper,
+        private readonly TemplateHelper $templateHelper,
+    ) {
     }
 
-    /**
-     * @return Response
-     */
     public function bansAction(): Response
     {
         $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_ADMIN_BANS);
@@ -55,12 +32,7 @@ class ManageUsersController
         ]);
     }
 
-    /**
-     * @param Request $request
-     * @param int $id
-     * @return RedirectResponse|Response
-     */
-    public function banAction(Request $request, int $id)
+    public function banAction(Request $request, int $id): Response|RedirectResponse
     {
         $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_ADMIN_BANS);
 

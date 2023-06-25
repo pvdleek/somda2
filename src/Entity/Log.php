@@ -2,7 +2,6 @@
 
 namespace App\Entity;
 
-use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -12,7 +11,6 @@ use Doctrine\ORM\Mapping as ORM;
 class Log
 {
     /**
-     * @var int|null
      * @ORM\Column(name="logid", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -20,45 +18,38 @@ class Log
     public ?int $id = null;
 
     /**
-     * @var DateTime
      * @ORM\Column(name="datumtijd", type="datetime", nullable=false)
      */
-    public DateTime $timestamp;
+    public ?\DateTime $timestamp = null;
 
     /**
-     * @var int
      * @ORM\Column(name="ip", type="bigint", nullable=false)
      */
-    public int $ipAddress;
+    public int $ipAddress = 0;
 
     /**
-     * @var string
      * @ORM\Column(name="route", type="string", nullable=false)
      */
-    public string $route;
+    public string $route = '';
 
     /**
-     * @var array
      * @ORM\Column(name="route_parameters", type="array", nullable=false)
      */
     public array $routeParameters = [];
 
     /**
-     * @var float|null
      * @ORM\Column(name="duration", type="float", precision=5, scale=2, nullable=true)
      */
-    public ?float $duration;
+    public ?float $duration = null;
 
     /**
-     * @var float|null
      * @ORM\Column(name="memory_usage", type="float", precision=8, scale=3, nullable=true)
      */
-    public ?float $memoryUsage;
+    public ?float $memoryUsage = null;
 
     /**
-     * @var User|null
      * @ORM\ManyToOne(targetEntity="App\Entity\User")
      * @ORM\JoinColumn(name="uid", referencedColumnName="uid")
      */
-    public ?User $user;
+    public ?User $user = null;
 }

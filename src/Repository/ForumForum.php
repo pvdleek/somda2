@@ -2,18 +2,22 @@
 
 namespace App\Repository;
 
+use App\Entity\ForumForum as ForumForumEntity;
 use App\Entity\User;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\DBAL\Exception as DBALException;
 use Doctrine\DBAL\Driver\Exception as DBALDriverException;
-use Doctrine\ORM\EntityRepository;
+use Doctrine\DBAL\ParameterType;
+use Doctrine\Persistence\ManagerRegistry;
 use ErrorException;
 
-class ForumForum extends EntityRepository
+class ForumForum extends ServiceEntityRepository
 {
-    /**
-     * @param int|null $userId
-     * @return array
-     */
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, ForumForumEntity::class);
+    }
+
     public function findAllAndGetArray(?int $userId = null): array
     {
         $query = '
@@ -31,18 +35,13 @@ class ForumForum extends EntityRepository
         $connection = $this->getEntityManager()->getConnection();
         try {
             $statement = $connection->prepare($query);
-            $statement->bindParam('userId', $userId);
+            $statement->bindValue('userId', $userId, ParameterType::INTEGER);
             return $statement->executeQuery()->fetchAllAssociative();
         } catch (DBALException | DBALDriverException $exception) {
             return [];
         }
     }
 
-    /**
-     * @param int $forumId
-     * @param User $user
-     * @return int
-     */
     public function getNumberOfUnreadPostsInForum(int $forumId, User $user): int
     {
         $maxQuery = '
@@ -56,16 +55,16 @@ class ForumForum extends EntityRepository
             FROM somda_forum_discussion d
             JOIN somda_users a ON a.uid = d.authorid
             JOIN somda_forum_posts p_max ON p_max.discussionid = d.discussionid
-            LEFT JOIN somda_forum_read_' . substr((string)$user->id, -1) . ' r
-                ON r.uid = ' . (string)$user->id . ' AND r.postid = p_max.postid
+            LEFT JOIN somda_forum_read_' . substr((string) $user->id, -1) . ' r
+                ON r.uid = ' . (string) $user->id . ' AND r.postid = p_max.postid
             INNER JOIN (' . $maxQuery . ') m ON m.disc_id = d.discussionid
             WHERE d.forumid = :forumId AND p_max.timestamp = m.max_date_time
             GROUP BY `d`.`forumid`';
         $connection = $this->getEntityManager()->getConnection();
         try {
             $statement = $connection->prepare($query);
-            $statement->bindValue('forumId', $forumId);
-            return (int)$statement->executeQuery()->fetchOne()[0];
+            $statement->bindValue('forumId', $forumId, ParameterType::INTEGER);
+            return (int) $statement->executeQuery()->fetchOne()[0];
         } catch (DBALException | DBALDriverException | ErrorException $exception) {
             return 0;
         }

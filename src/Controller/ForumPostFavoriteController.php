@@ -11,42 +11,18 @@ use App\Generics\RoleGenerics;
 use App\Helpers\TemplateHelper;
 use App\Helpers\UserHelper;
 use Doctrine\Persistence\ManagerRegistry;
-use Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 class ForumPostFavoriteController
 {
-    /**
-     * @var ManagerRegistry
-     */
-    private ManagerRegistry $doctrine;
-
-    /**
-     * @var UserHelper
-     */
-    private UserHelper $userHelper;
-
-    /**
-     * @var TemplateHelper
-     */
-    private TemplateHelper $templateHelper;
-
-    /**
-     * @param ManagerRegistry $doctrine
-     * @param UserHelper $userHelper
-     * @param TemplateHelper $templateHelper
-     */
-    public function __construct(ManagerRegistry $doctrine, UserHelper $userHelper, TemplateHelper $templateHelper)
-    {
-        $this->doctrine = $doctrine;
-        $this->userHelper = $userHelper;
-        $this->templateHelper = $templateHelper;
+    public function __construct(
+        private readonly ManagerRegistry $doctrine,
+        private readonly UserHelper $userHelper,
+        private readonly TemplateHelper $templateHelper,
+    ) {
     }
 
-    /**
-     * @return Response
-     */
     public function indexAction(): Response
     {
         $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_USER);
@@ -63,16 +39,13 @@ class ForumPostFavoriteController
     }
 
     /**
-     * @param int $id
-     * @param int $alerting
-     * @return JsonResponse
-     * @throws Exception
+     * @throws \Exception
      */
     public function toggleAction(int $id, int $alerting): JsonResponse
     {
         $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_USER);
 
-        if (is_null($favorite = $this->getFavorite($id))) {
+        if (\is_null($favorite = $this->getFavorite($id))) {
             return new JsonResponse();
         }
 
@@ -83,16 +56,14 @@ class ForumPostFavoriteController
     }
 
     /**
-     * @param int $id
-     * @return JsonResponse
-     * @throws Exception
+     * @throws \Exception
      */
     public function addAction(int $id): JsonResponse
     {
         $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_USER);
 
         $discussion = $this->doctrine->getRepository(ForumDiscussion::class)->find($id);
-        if (is_null($discussion)) {
+        if (\is_null($discussion)) {
             return new JsonResponse();
         }
 
@@ -107,15 +78,13 @@ class ForumPostFavoriteController
     }
 
     /**
-     * @param int $id
-     * @return JsonResponse
-     * @throws Exception
+     * @throws \Exception
      */
     public function removeAction(int $id): JsonResponse
     {
         $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_USER);
 
-        if (is_null($favorite = $this->getFavorite($id))) {
+        if (\is_null($favorite = $this->getFavorite($id))) {
             return new JsonResponse();
         }
 
@@ -126,16 +95,14 @@ class ForumPostFavoriteController
     }
 
     /**
-     * @param int $id
-     * @return JsonResponse
-     * @throws Exception
+     * @throws \Exception
      */
     public function addPostAction(int $id): JsonResponse
     {
         $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_USER);
 
         $post = $this->doctrine->getRepository(ForumPost::class)->find($id);
-        if (is_null($post)) {
+        if (\is_null($post)) {
             return new JsonResponse();
         }
 
@@ -150,16 +117,14 @@ class ForumPostFavoriteController
     }
 
     /**
-     * @param int $id
-     * @return JsonResponse
-     * @throws Exception
+     * @throws \Exception
      */
     public function removePostAction(int $id): JsonResponse
     {
         $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_USER);
 
         $post = $this->doctrine->getRepository(ForumPost::class)->find($id);
-        if (is_null($post)) {
+        if (\is_null($post)) {
             return new JsonResponse();
         }
 
@@ -169,7 +134,7 @@ class ForumPostFavoriteController
         $favorite = $this->doctrine->getRepository(ForumPostFavorite::class)->findOneBy(
             ['post' => $post, 'user' => $this->userHelper->getUser()]
         );
-        if (is_null($favorite)) {
+        if (\is_null($favorite)) {
             return new JsonResponse();
         }
 
@@ -179,14 +144,10 @@ class ForumPostFavoriteController
         return new JsonResponse();
     }
 
-    /**
-     * @param int $id
-     * @return ForumFavorite|null
-     */
     private function getFavorite(int $id): ?ForumFavorite
     {
         $discussion = $this->doctrine->getRepository(ForumDiscussion::class)->find($id);
-        if (is_null($discussion)) {
+        if (\is_null($discussion)) {
             return null;
         }
 
@@ -196,7 +157,7 @@ class ForumPostFavoriteController
         $favorite = $this->doctrine->getRepository(ForumFavorite::class)->findOneBy(
             ['discussion' => $discussion, 'user' => $this->userHelper->getUser()]
         );
-        if (is_null($favorite)) {
+        if (\is_null($favorite)) {
             return null;
         }
 

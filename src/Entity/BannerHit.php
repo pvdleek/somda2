@@ -2,7 +2,6 @@
 
 namespace App\Entity;
 
-use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -12,7 +11,6 @@ use Doctrine\ORM\Mapping as ORM;
 class BannerHit
 {
     /**
-     * @var int|null
      * @ORM\Column(name="id", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -20,21 +18,18 @@ class BannerHit
     public ?int $id = null;
 
     /**
-     * @var DateTime
      * @ORM\Column(name="timestamp", type="datetime", nullable=false)
      */
-    public DateTime $timestamp;
+    public ?\DateTime $timestamp = null;
 
     /**
-     * @var int
      * @ORM\Column(name="ip_address", type="bigint", nullable=false)
      */
-    public int $ipAddress;
+    public int $ipAddress = 0;
 
     /**
-     * @var Banner
      * @ORM\ManyToOne(targetEntity="App\Entity\Banner", inversedBy="bannerHits")
      * @ORM\JoinColumn(name="bannerid", referencedColumnName="bannerid")
      */
-    public Banner $banner;
+    public ?Banner $banner = null;
 }

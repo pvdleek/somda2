@@ -5,33 +5,25 @@ namespace App\Traits;
 
 trait DateTrait
 {
-    /**
-     * @param string $time
-     * @return int
-     */
     public function timeDisplayToDatabase(string $time): int
     {
         // Convert the given display time (hh or hh:mm or hh.mm) to a database time (minutes after 2.00)
-        $time = str_replace(':', '.', $time);
-        if (strlen($time) < 3) {
+        $time = \str_replace(':', '.', $time);
+        if (\strlen($time) < 3) {
             $time .= '.00';
         }
-        if (strpos($time, '.') === false && strlen($time) === 4) {
-            $time = substr($time, 0, 2) . '.' . substr($time, 2, 2);
+        if (\strpos($time, '.') === false && \strlen($time) === 4) {
+            $time = \substr($time, 0, 2) . '.' . \substr($time, 2, 2);
         }
 
-        $timePart = explode('.', $time);
-        $returnTime = (int)$timePart[0] * 60 + (int)$timePart[1] - 120;
+        $timePart = \explode('.', $time);
+        $returnTime = (int) $timePart[0] * 60 + (int) $timePart[1] - 120;
         if ($returnTime < 0) {
             return $returnTime + 1440;
         }
         return $returnTime;
     }
 
-    /**
-     * @param int $databaseTime
-     * @return string
-     */
     public function timeDatabaseToDisplay(int $databaseTime): string
     {
         // Convert the given database time (minutes after 2.00) to a display time
@@ -40,15 +32,11 @@ trait DateTrait
             $databaseTime -= 1440;
         }
 
-        $hours = floor($databaseTime / 60);
-        $minutes = floor($databaseTime - ($hours * 60));
+        $hours = \floor($databaseTime / 60);
+        $minutes = \floor($databaseTime - ($hours * 60));
         return ($hours <= 9 ? '0' : '') . $hours . ':' . ($minutes <= 9 ? '0' : '') . $minutes;
     }
 
-    /**
-     * @param int $dayNumber
-     * @return string
-     */
     public function getDayName(int $dayNumber): string
     {
         switch ($dayNumber) {

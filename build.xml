@@ -54,30 +54,9 @@
         </exec>
     </target>
 
-    <target name="phpcs">
-        <exec executable="vendor/bin/phpcs">
-            <arg value="src/" />
-        </exec>
-    </target>
-
     <target name="psalm">
         <exec executable="vendor/bin/psalm">
             <arg value="--show-info=true" />
-        </exec>
-    </target>
-
-    <target name="sonar-start">
-        <exec executable="/opt/sonarqube/bin/linux-x86-64/sonar.sh">
-            <arg value="console" />
-        </exec>
-    </target>
-
-    <target name="sonar">
-        <exec executable="sonar-scanner">
-            <arg value="-Dsonar.projectKey=Somda" />
-            <arg value="-Dsonar.sources=src/" />
-            <arg value="-Dsonar.host.url=http://localhost:9000" />
-            <arg value="-Dsonar.login=ca67d1f8679b83483f093e083a09e2af957643e6" />
         </exec>
     </target>
 </project>

@@ -12,7 +12,6 @@ use Doctrine\ORM\Mapping as ORM;
 class TrainCompositionType
 {
     /**
-     * @var int|null
      * @ORM\Column(name="typeid", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -20,93 +19,75 @@ class TrainCompositionType
     public ?int $id = null;
 
     /**
-     * @var string
      * @ORM\Column(name="omschrijving", type="string", length=25, nullable=false)
      */
     public string $description = '';
 
     /**
-     * @var string|null
      * @ORM\Column(name="bak1", type="string", length=25, nullable=true)
      */
-    public ?string $car1;
+    public ?string $car1 = null;
 
     /**
-     * @var string|null
      * @ORM\Column(name="bak2", type="string", length=25, nullable=true)
      */
-    public ?string $car2;
+    public ?string $car2 = null;
 
     /**
-     * @var string|null
      * @ORM\Column(name="bak3", type="string", length=25, nullable=true)
      */
-    public ?string $car3;
+    public ?string $car3 = null;
 
     /**
-     * @var string|null
      * @ORM\Column(name="bak4", type="string", length=25, nullable=true)
      */
-    public ?string $car4;
+    public ?string $car4 = null;
 
     /**
-     * @var string|null
      * @ORM\Column(name="bak5", type="string", length=25, nullable=true)
      */
-    public ?string $car5;
+    public ?string $car5 = null;
 
     /**
-     * @var string|null
      * @ORM\Column(name="bak6", type="string", length=25, nullable=true)
      */
-    public ?string $car6;
+    public ?string $car6 = null;
 
     /**
-     * @var string|null
      * @ORM\Column(name="bak7", type="string", length=25, nullable=true)
      */
-    public ?string $car7;
+    public ?string $car7 = null;
 
     /**
-     * @var string|null
      * @ORM\Column(name="bak8", type="string", length=25, nullable=true)
      */
-    public ?string $car8;
+    public ?string $car8 = null;
 
     /**
-     * @var string|null
      * @ORM\Column(name="bak9", type="string", length=25, nullable=true)
      */
-    public ?string $car9;
+    public ?string $car9 = null;
 
     /**
-     * @var string|null
      * @ORM\Column(name="bak10", type="string", length=25, nullable=true)
      */
-    public ?string $car10;
+    public ?string $car10 = null;
 
     /**
-     * @var string|null
      * @ORM\Column(name="bak11", type="string", length=25, nullable=true)
      */
-    public ?string $car11;
+    public ?string $car11 = null;
 
     /**
-     * @var string|null
      * @ORM\Column(name="bak12", type="string", length=25, nullable=true)
      */
-    public ?string $car12;
+    public ?string $car12 = null;
 
     /**
-     * @var string|null
      * @ORM\Column(name="bak13", type="string", length=25, nullable=true)
      */
-    public ?string $car13;
+    public ?string $car13 = null;
 
-    /**
-     * @param int $carNumber
-     * @return string|null
-     */
     public function getCar(int $carNumber): ?string
     {
         return $this->{'car' . $carNumber};

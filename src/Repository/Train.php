@@ -4,10 +4,16 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\Entity\Train as TrainEntity;
-use Doctrine\ORM\EntityRepository;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Persistence\ManagerRegistry;
 
-class Train extends EntityRepository
+class Train extends ServiceEntityRepository
 {
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, TrainEntity::class);
+    }
+
     /**
      * @return array
      */

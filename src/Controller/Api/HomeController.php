@@ -8,35 +8,19 @@ use App\Form\RailNews as RailNewsForm;
 use App\Generics\RoleGenerics;
 use App\Helpers\UserHelper;
 use Doctrine\Persistence\ManagerRegistry;
-use Exception;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\Response;
 
 class HomeController extends AbstractFOSRestController
 {
-    /**
-     * @var ManagerRegistry
-     */
-    private ManagerRegistry $doctrine;
-
-    /**
-     * @var UserHelper
-     */
-    private UserHelper $userHelper;
-
-    /**
-     * @param ManagerRegistry $doctrine
-     * @param UserHelper $userHelper
-     */
-    public function __construct(ManagerRegistry $doctrine, UserHelper $userHelper)
-    {
-        $this->doctrine = $doctrine;
-        $this->userHelper = $userHelper;
+    public function __construct(
+        private readonly ManagerRegistry $doctrine,
+        private readonly UserHelper $userHelper,
+    ) {
     }
 
     /**
-     * @return Response
      * @OA\Response(
      *     response=200,
      *     description="Returns information for the home-screen of the app",
@@ -87,7 +71,7 @@ class HomeController extends AbstractFOSRestController
      *     ),
      * )
      * @OA\Tag(name="Home")
-     * @throws Exception
+     * @throws \Exception
      */
     public function indexAction(): Response
     {
@@ -95,7 +79,7 @@ class HomeController extends AbstractFOSRestController
 
         // Get the last forum topic where a response was posted
         $discussion = $this->doctrine->getRepository(ForumDiscussion::class)->findLastDiscussion();
-        $lastForumPost = is_null($discussion) ? null : [
+        $lastForumPost = \is_null($discussion) ? null : [
             'discussionId' => $discussion['id'],
             'discussionTitle' => $discussion['title'],
             'discussionLocked' => $discussion['locked'],
@@ -110,7 +94,7 @@ class HomeController extends AbstractFOSRestController
             ['active' => true, 'approved' => true],
             [RailNewsForm::FIELD_TIMESTAMP => 'DESC'],
             50
-        )[random_int(0, 4)];
+        )[\random_int(0, 4)];
 
         return $this->handleView($this->view([
             'lastForumPost' => $lastForumPost,

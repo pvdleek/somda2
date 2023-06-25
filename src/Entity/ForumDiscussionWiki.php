@@ -15,7 +15,6 @@ use Doctrine\ORM\Mapping as ORM;
 class ForumDiscussionWiki
 {
     /**
-     * @var int|null
      * @ORM\Column(name="id", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -23,21 +22,18 @@ class ForumDiscussionWiki
     public ?int $id = null;
 
     /**
-     * @var ForumDiscussion
      * @ORM\ManyToOne(targetEntity="App\Entity\ForumDiscussion", inversedBy="wikis")
      * @ORM\JoinColumn(name="discussionid", referencedColumnName="discussionid")
      */
-    public ForumDiscussion $discussion;
+    public ?ForumDiscussion $discussion = null;
 
     /**
-     * @var string
      * @ORM\Column(name="wiki", type="string", length=50, nullable=false)
      */
-    public string $wiki;
+    public string $wiki = '';
 
     /**
-     * @var string|null
      * @ORM\Column(name="titel", type="string", length=50, nullable=true)
      */
-    public ?string $title;
+    public ?string $title = null;
 }

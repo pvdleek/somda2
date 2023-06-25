@@ -25,7 +25,6 @@ class Location
     public const UNKNOWN_NAME = 'Fout!';
 
     /**
-     * @var int|null
      * @ORM\Column(name="afkid", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -35,7 +34,6 @@ class Location
     public ?int $id = null;
 
     /**
-     * @var string
      * @ORM\Column(name="afkorting", type="string", length=10, nullable=false)
      * @JMS\Expose()
      * @OA\Property(description="Abbreviation of the location", maxLength=10, type="string")
@@ -43,39 +41,34 @@ class Location
     public string $name = '';
 
     /**
-     * @var float|null
      * @ORM\Column(name="latitude", type="float", precision=10, scale=0, nullable=true)
      * @JMS\Expose()
      * @OA\Property(description="Latitude of the location", type="float")
      */
-    public ?float $latitude;
+    public ?float $latitude = null;
 
     /**
-     * @var float|null
      * @ORM\Column(name="longitude", type="float", precision=10, scale=0, nullable=true)
      * @JMS\Expose()
      * @OA\Property(description="Longitude of the location", type="float")
      */
-    public ?float $longitude;
+    public ?float $longitude = null;
 
     /**
-     * @var string
      * @ORM\Column(name="description", type="string", length=100, nullable=false)
      * @JMS\Expose()
      * @OA\Property(description="Description of the location", maxLength=100, type="string")
      */
-    public string $description;
+    public string $description = '';
 
     /**
-     * @var string|null
      * @ORM\Column(name="traject", type="string", length=15, nullable=true)
      * @JMS\Expose()
      * @OA\Property(description="Route where this location is located", maxLength=15, type="string")
      */
-    public ?string $routeDescription;
+    public ?string $routeDescription = null;
 
     /**
-     * @var bool
      * @ORM\Column(name="spot_allowed", type="boolean", nullable=false)
      * @JMS\Expose()
      * @OA\Property(description="Is the location currently active (allowed to add spots)", type="boolean")
@@ -83,14 +76,12 @@ class Location
     public bool $spotAllowed = true;
 
     /**
-     * @var int|null
      * @ORM\Column(name="route_overstaptijd", type="integer", nullable=true)
      * @JMS\Exclude()
      */
-    public ?int $transferTime;
+    public ?int $transferTime = null;
 
     /**
-     * @var LocationCategory
      * @ORM\ManyToOne(targetEntity="App\Entity\LocationCategory", inversedBy="locations")
      * @ORM\JoinColumn(name="landid", referencedColumnName="verk_catid")
      * @JMS\Expose()
@@ -102,14 +93,12 @@ class Location
     public LocationCategory $category;
 
     /**
-     * @var TrainTable[]
      * @ORM\OneToMany(targetEntity="App\Entity\TrainTable", mappedBy="location")
      * @JMS\Exclude()
      */
     private $trainTables;
 
     /**
-     * @var Spot[]
      * @ORM\OneToMany(targetEntity="App\Entity\Spot", mappedBy="location")
      * @JMS\Exclude()
      */
@@ -124,10 +113,6 @@ class Location
         $this->spots = new ArrayCollection();
     }
 
-    /**
-     * @param TrainTable $trainTable
-     * @return Location
-     */
     public function addTrainTable(TrainTable $trainTable): Location
     {
         $this->trainTables[] = $trainTable;
@@ -142,10 +127,6 @@ class Location
         return $this->trainTables->toArray();
     }
 
-    /**
-     * @param Spot $spot
-     * @return Location
-     */
     public function addSpot(Spot $spot): Location
     {
         $this->spots[] = $spot;

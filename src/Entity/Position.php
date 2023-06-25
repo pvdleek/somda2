@@ -13,7 +13,6 @@ use OpenApi\Annotations as OA;
 class Position
 {
     /**
-     * @var int|null
      * @ORM\Column(name="posid", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -23,10 +22,9 @@ class Position
     public ?int $id = null;
 
     /**
-     * @var string
      * @ORM\Column(name="positie", type="string", length=2, nullable=false)
      * @JMS\Expose()
      * @OA\Property(description="The position", maxLength=2, type="string")
      */
-    public string $name;
+    public string $name = '';
 }

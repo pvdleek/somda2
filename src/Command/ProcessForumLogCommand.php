@@ -9,52 +9,32 @@ use App\Entity\ForumPostLog;
 use App\Entity\ForumSearchList;
 use App\Entity\ForumSearchWord;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Lock\LockFactory;
 use Symfony\Component\Lock\Store\SemaphoreStore;
 
+#[AsCommand(
+    name: 'app:process-forum-log',
+    description: 'Process the forum-log',
+    hidden: false,
+)]
+
 class ProcessForumLogCommand extends Command
 {
-    /**
-     * @var string
-     */
-    protected static $defaultName = 'app:process-forum-log';
-
-    /**
-     * @var ManagerRegistry
-     */
-    private ManagerRegistry $doctrine;
-
-    /**
-     * @param ManagerRegistry $doctrine
-     */
-    public function __construct(ManagerRegistry $doctrine)
-    {
-        parent::__construct(self::$defaultName);
-
-        $this->doctrine = $doctrine;
+    public function __construct(
+        private readonly ManagerRegistry $doctrine,
+    ) {
+        parent::__construct();
     }
 
-    /**
-     *
-     */
-    protected function configure(): void
-    {
-        $this->setDescription('Process the forum-log');
-    }
-
-    /**
-     * @param InputInterface|null $input
-     * @param OutputInterface|null $output
-     * @return int
-     */
     protected function execute(InputInterface $input = null, OutputInterface $output = null): int
     {
         $store = new SemaphoreStore();
         $factory = new LockFactory($store);
-        $lock = $factory->createLock(self::$defaultName);
+        $lock = $factory->createLock(self::getDefaultName());
 
         if ($lock->acquire()) {
             /**
@@ -74,7 +54,7 @@ class ProcessForumLogCommand extends Command
                     $this->processWords($titleWords, $forumLog->post, true);
                     $this->doctrine->getManager()->flush();
 
-                    $words = array_diff($words, $titleWords);
+                    $words = \array_diff($words, $titleWords);
                 }
                 $this->processWords($words, $forumLog->post);
 
@@ -87,9 +67,6 @@ class ProcessForumLogCommand extends Command
         return 0;
     }
 
-    /**
-     * @param ForumPost $post
-     */
     private function removeAllWordsForPost(ForumPost $post): void
     {
         // Remove all words linked to this post, we will add them below
@@ -100,10 +77,6 @@ class ProcessForumLogCommand extends Command
         $this->doctrine->getManager()->flush();
     }
 
-    /**
-     * @param string $text
-     * @return array
-     */
     private function getCleanWordsFromText(string $text): array
     {
         $strangeCharacters = [
@@ -111,26 +84,22 @@ class ProcessForumLogCommand extends Command
             '[', ']', '{', '}', ':', '\\', '/', '=', '#', '\'', ';', '!', '*'
         ];
 
-        $text = strip_tags(strtolower($text));
+        $text = \strip_tags(\strtolower($text));
         // Replace line-endings by spaces
-        $text = str_replace(['<br>', '<br />'], ' ', $text);
-        $text = preg_replace('/[\n\r]/is', ' ', $text);
+        $text = \str_replace(['<br>', '<br />'], ' ', $text);
+        $text = \preg_replace('/[\n\r]/is', ' ', $text);
         // Remove HTML entities
-        $text = preg_replace('/\b&[a-z]+;\b/', ' ', $text);
+        $text = \preg_replace('/\b&[a-z]+;\b/', ' ', $text);
         // Remove URL's
-        $text = preg_replace('/\b[a-z0-9]+:\/\/[a-z0-9.\-]+(\/[a-z0-9?.%_\-+=&\/]+)?/', ' ', $text);
+        $text = \preg_replace('/\b[a-z0-9]+:\/\/[a-z0-9.\-]+(\/[a-z0-9?.%_\-+=&\/]+)?/', ' ', $text);
         // Normalize and filter strange characters such as ^, $, &
-        $text = strtolower($this->normalizeText(str_replace($strangeCharacters, ' ', $text)));
+        $text = \strtolower($this->normalizeText(\str_replace($strangeCharacters, ' ', $text)));
 
-        return array_unique(array_filter(explode(' ', $text), function ($value) {
-            return strlen($value) > 2 && strlen($value) <= 50;
+        return \array_unique(\array_filter(\explode(' ', $text), function ($value) {
+            return \strlen($value) > 2 && \strlen($value) <= 50;
         }));
     }
 
-    /**
-     * @param string $text
-     * @return string
-     */
     private function normalizeText(string $text): string
     {
         $table = [
@@ -145,17 +114,13 @@ class ProcessForumLogCommand extends Command
             'ŕ' => 'r',
         ];
 
-        return strtr($text, $table);
+        return \strtr($text, $table);
     }
 
-    /**
-     * @param string $word
-     * @return ForumSearchWord
-     */
     private function getSearchWord(string $word): ForumSearchWord
     {
         $forumSearchWord = $this->doctrine->getRepository(ForumSearchWord::class)->findOneBy(['word' => $word]);
-        if (is_null($forumSearchWord)) {
+        if (\is_null($forumSearchWord)) {
             $forumSearchWord = new ForumSearchWord();
             $forumSearchWord->word = $word;
 
@@ -165,11 +130,6 @@ class ProcessForumLogCommand extends Command
         return $forumSearchWord;
     }
 
-    /**
-     * @param array $words
-     * @param ForumPost $post
-     * @param bool $title
-     */
     private function processWords(array $words, ForumPost $post, bool $title = false): void
     {
         foreach ($words as $word) {

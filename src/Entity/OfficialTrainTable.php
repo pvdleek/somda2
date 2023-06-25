@@ -26,7 +26,6 @@ class OfficialTrainTable
     use DateTrait;
 
     /**
-     * @var int|null
      * @ORM\Column(name="ott_id", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -36,7 +35,6 @@ class OfficialTrainTable
     public ?int $id = null;
 
     /**
-     * @var int
      * @ORM\Column(name="ott_order", type="integer", nullable=false, options={"default"="1"})
      * @JMS\Expose()
      * @OA\Property(description="The order in which the items should be displayed", type="integer")
@@ -44,7 +42,6 @@ class OfficialTrainTable
     public int $order = 1;
 
     /**
-     * @var string
      * @ORM\Column(name="ott_action", type="string", length=1, nullable=false, options={"default"="-"})
      * @Assert\Choice(choices=TrainTable::ACTION_VALUES)
      * @JMS\Expose()
@@ -59,7 +56,6 @@ class OfficialTrainTable
     public string $action = '-';
 
     /**
-     * @var int|null
      * @ORM\Column(name="ott_time", type="integer", nullable=true)
      * @JMS\Exclude()
      * @OA\Property(
@@ -71,14 +67,12 @@ class OfficialTrainTable
     public ?int $time = null;
 
     /**
-     * @var string|null
      * @ORM\Column(name="ott_track", type="string", length=3, nullable=true)
      * @JMS\Exclude()
      */
-    public ?string $track;
+    public ?string $track = null;
 
     /**
-     * @var OfficialFootnote
      * @ORM\ManyToOne(targetEntity="App\Entity\OfficialFootnote")
      * @ORM\JoinColumn(name="ott_ofo_id", referencedColumnName="ofo_id")
      * @JMS\Expose()
@@ -87,10 +81,9 @@ class OfficialTrainTable
      *     ref=@Model(type=OfficialFootnote::class),
      * )
      */
-    public OfficialFootnote $footnote;
+    public ?OfficialFootnote $footnote = null;
 
     /**
-     * @var Transporter
      * @ORM\ManyToOne(targetEntity="App\Entity\Transporter")
      * @ORM\JoinColumn(name="ott_transporter_id", referencedColumnName="vervoerder_id")
      * @JMS\Expose()
@@ -99,10 +92,9 @@ class OfficialTrainTable
      *     ref=@Model(type=Transporter::class),
      * )
      */
-    public Transporter $transporter;
+    public ?Transporter $transporter = null;
 
     /**
-     * @var Characteristic
      * @ORM\ManyToOne(targetEntity="App\Entity\Characteristic")
      * @ORM\JoinColumn(name="ott_characteristic_id", referencedColumnName="karakteristiek_id")
      * @JMS\Expose()
@@ -111,18 +103,16 @@ class OfficialTrainTable
      *     ref=@Model(type=Characteristic::class),
      * )
      */
-    public Characteristic $characteristic;
+    public ?Characteristic $characteristic = null;
 
     /**
-     * @var Route
      * @ORM\ManyToOne(targetEntity="App\Entity\Route", inversedBy="trainTables")
      * @ORM\JoinColumn(name="ott_route_id", referencedColumnName="treinid")
      * @JMS\Exclude()
      */
-    public Route $route;
+    public ?Route $route = null;
 
     /**
-     * @var Location
      * @ORM\ManyToOne(targetEntity="App\Entity\Location", inversedBy="trainTables")
      * @ORM\JoinColumn(name="ott_location_id", referencedColumnName="afkid")
      * @JMS\Expose()
@@ -131,10 +121,9 @@ class OfficialTrainTable
      *     ref=@Model(type=Location::class),
      * )
      */
-    public Location $location;
+    public ?Location $location = null;
 
     /**
-     * @return string
      * @JMS\VirtualProperty(name="displayTime")
      */
     public function getDisplayTime(): string

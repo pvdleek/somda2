@@ -5,7 +5,6 @@ namespace App\Form;
 use App\Entity\Location;
 use App\Generics\FormGenerics;
 use Doctrine\ORM\EntityRepository;
-use Exception;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -14,9 +13,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class SpotBulkEditLocation extends AbstractType
 {
     /**
-     * @param FormBuilderInterface $builder
-     * @param array $options
-     * @throws Exception
+     * @throws \Exception
      */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -39,9 +36,6 @@ class SpotBulkEditLocation extends AbstractType
             ]);
     }
 
-    /**
-     * @param OptionsResolver $resolver
-     */
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(['defaultLocation' => null]);

@@ -13,8 +13,6 @@ use App\Helpers\EmailHelper;
 use App\Helpers\FormHelper;
 use App\Helpers\TemplateHelper;
 use App\Helpers\UserHelper;
-use DateTime;
-use Exception;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -22,47 +20,14 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ForumPostAlertController
 {
-    /**
-     * @var UserHelper
-     */
-    private UserHelper $userHelper;
-
-    /**
-     * @var FormHelper
-     */
-    private FormHelper $formHelper;
-
-    /**
-     * @var EmailHelper
-     */
-    private EmailHelper $emailHelper;
-
-    /**
-     * @var TemplateHelper
-     */
-    private TemplateHelper $templateHelper;
-
-    /**
-     * @param UserHelper $userHelper
-     * @param FormHelper $formHelper
-     * @param EmailHelper $emailHelper
-     * @param TemplateHelper $templateHelper
-     */
     public function __construct(
-        UserHelper $userHelper,
-        FormHelper $formHelper,
-        EmailHelper $emailHelper,
-        TemplateHelper $templateHelper
+        private readonly UserHelper $userHelper,
+        private readonly FormHelper $formHelper,
+        private readonly EmailHelper $emailHelper,
+        private readonly TemplateHelper $templateHelper,
     ) {
-        $this->userHelper = $userHelper;
-        $this->formHelper = $formHelper;
-        $this->emailHelper = $emailHelper;
-        $this->templateHelper = $templateHelper;
     }
 
-    /**
-     * @return Response
-     */
     public function alertsAction(): Response
     {
         $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_ADMIN);
@@ -77,12 +42,9 @@ class ForumPostAlertController
     /**
      * User can create a new alert for a post
      *
-     * @param Request $request
-     * @param int $id
-     * @return Response|RedirectResponse
-     * @throws Exception
+     * @throws \Exception
      */
-    public function alertAction(Request $request, int $id)
+    public function alertAction(Request $request, int $id): Response|RedirectResponse
     {
         $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_USER);
 
@@ -96,7 +58,7 @@ class ForumPostAlertController
             $forumPostAlert = new ForumPostAlert();
             $forumPostAlert->post = $post;
             $forumPostAlert->sender = $this->userHelper->getUser();
-            $forumPostAlert->timestamp = new DateTime();
+            $forumPostAlert->timestamp = new \DateTime();
             $forumPostAlert->comment = $form->get(ForumPostAlertForm::FIELD_COMMENT)->getData();
             $this->formHelper->getDoctrine()->getManager()->persist($forumPostAlert);
             $post->addAlert($forumPostAlert);
@@ -120,7 +82,7 @@ class ForumPostAlertController
             return $this->formHelper->finishFormHandling('', 'forum_discussion_post', [
                 'id' => $post->discussion->id,
                 'postId' => $post->id,
-                'name' => urlencode($post->discussion->title)
+                'name' => \urlencode($post->discussion->title)
             ]);
         }
 
@@ -134,12 +96,9 @@ class ForumPostAlertController
     /**
      * View alerts for a specific post and add a note
      *
-     * @param Request $request
-     * @param int $id
-     * @return RedirectResponse|Response
-     * @throws Exception
+     * @throws \Exception
      */
-    public function postAlertsAction(Request $request, int $id)
+    public function postAlertsAction(Request $request, int $id): Response|RedirectResponse
     {
         $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_ADMIN);
 
@@ -180,17 +139,12 @@ class ForumPostAlertController
         ]);
     }
 
-    /**
-     * @param ForumPost $post
-     * @param FormInterface $form
-     * @return ForumPostAlertNote
-     */
     private function getNewAlertNote(ForumPost $post, FormInterface $form): ForumPostAlertNote
     {
         $forumPostAlertNote = new ForumPostAlertNote();
         $forumPostAlertNote->alert = $post->getAlerts()[0];
         $forumPostAlertNote->author = $this->userHelper->getUser();
-        $forumPostAlertNote->timestamp = new DateTime();
+        $forumPostAlertNote->timestamp = new \DateTime();
         $forumPostAlertNote->text = $form->get('text')->getData();
         $forumPostAlertNote->sentToReporter = $form->get('sentToReporter')->getData();
 
@@ -200,10 +154,6 @@ class ForumPostAlertController
         return $forumPostAlertNote;
     }
 
-    /**
-     * @param ForumPost $post
-     * @param ForumPostAlertNote $forumPostAlertNote
-     */
     private function sendNoteToReporters(ForumPost $post, ForumPostAlertNote $forumPostAlertNote): void
     {
         foreach ($post->getAlerts() as $alert) {
@@ -220,10 +170,6 @@ class ForumPostAlertController
         }
     }
 
-    /**
-     * @param int $id
-     * @return RedirectResponse
-     */
     public function alertsCloseAction(int $id): RedirectResponse
     {
         $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_ADMIN);

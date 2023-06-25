@@ -15,9 +15,6 @@ class AppExtension extends AbstractExtension
 {
     use DateTrait;
 
-    /**
-     * @return array
-     */
     public function getFilters(): array
     {
         return [
@@ -32,12 +29,8 @@ class AppExtension extends AbstractExtension
         ];
     }
 
-    /**
-     * @param string $filename
-     * @return string
-     */
     public function fileTimestampFilter(string $filename): string
     {
-        return (string)filemtime(__DIR__ . '/../../public/' . $filename);
+        return (string) \filemtime(__DIR__ . '/../../public/' . $filename);
     }
 }

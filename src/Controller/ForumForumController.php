@@ -20,63 +20,16 @@ class ForumForumController
 {
     use SortTrait;
 
-    /**
-     * @var ManagerRegistry
-     */
-    private ManagerRegistry $doctrine;
-
-    /**
-     * @var UserHelper
-     */
-    private UserHelper $userHelper;
-
-    /**
-     * @var TemplateHelper
-     */
-    private TemplateHelper $templateHelper;
-
-    /**
-     * @var RedirectHelper
-     */
-    private RedirectHelper $redirectHelper;
-
-    /**
-     * @var ForumAuthorizationHelper
-     */
-    private ForumAuthorizationHelper $forumAuthHelper;
-
-    /**
-     * @var ForumOverviewHelper
-     */
-    private ForumOverviewHelper $forumOverviewHelper;
-
-    /**
-     * @param ManagerRegistry $doctrine
-     * @param UserHelper $userHelper
-     * @param TemplateHelper $templateHelper
-     * @param RedirectHelper $redirectHelper
-     * @param ForumAuthorizationHelper $forumAuthHelper
-     * @param ForumOverviewHelper $forumOverviewHelper
-     */
     public function __construct(
-        ManagerRegistry $doctrine,
-        UserHelper $userHelper,
-        TemplateHelper $templateHelper,
-        RedirectHelper $redirectHelper,
-        ForumAuthorizationHelper $forumAuthHelper,
-        ForumOverviewHelper $forumOverviewHelper
+        private readonly ManagerRegistry $doctrine,
+        private readonly UserHelper $userHelper,
+        private readonly TemplateHelper $templateHelper,
+        private readonly RedirectHelper $redirectHelper,
+        private readonly ForumAuthorizationHelper $forumAuthHelper,
+        private readonly ForumOverviewHelper $forumOverviewHelper,
     ) {
-        $this->doctrine = $doctrine;
-        $this->userHelper = $userHelper;
-        $this->templateHelper = $templateHelper;
-        $this->redirectHelper = $redirectHelper;
-        $this->forumAuthHelper = $forumAuthHelper;
-        $this->forumOverviewHelper = $forumOverviewHelper;
     }
 
-    /**
-     * @return Response
-     */
     public function indexAction(): Response
     {
         $categories = $this->forumOverviewHelper->getCategoryArray();
@@ -92,17 +45,13 @@ class ForumForumController
         ]);
     }
 
-    /**
-     * @param int $id
-     * @return Response|RedirectResponse
-     */
-    public function forumAction(int $id): Response
+    public function forumAction(int $id): Response|RedirectResponse
     {
         /**
          * @var ForumForum $forum
          */
         $forum = $this->doctrine->getRepository(ForumForum::class)->find($id);
-        if (is_null($forum)) {
+        if (\is_null($forum)) {
             return $this->redirectHelper->redirectToRoute(RouteGenerics::ROUTE_FORUM);
         }
 

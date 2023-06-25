@@ -11,89 +11,36 @@ use App\Helpers\FlashHelper;
 use App\Helpers\RoutesDisplayHelper;
 use App\Helpers\TemplateHelper;
 use App\Helpers\UserHelper;
-use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
 use Dompdf\Dompdf;
 use Dompdf\Options;
-use Exception;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 class TrainTableController
 {
-    /**
-     * @var ManagerRegistry
-     */
-    private ManagerRegistry $doctrine;
-
-    /**
-     * @var UserHelper
-     */
-    private UserHelper $userHelper;
-
-    /**
-     * @var TemplateHelper
-     */
-    private TemplateHelper $templateHelper;
-
-    /**
-     * @var TrainTableHelper
-     */
-    private TrainTableHelper $trainTableHelper;
-
-    /**
-     * @var RoutesDisplayHelper
-     */
-    private RoutesDisplayHelper $routesDisplayHelper;
-
-    private RedirectHelper $redirectHelper;
-
-    /**
-     * @var FlashHelper
-     */
-    private FlashHelper $flashHelper;
-
-    /**
-     * @param ManagerRegistry $doctrine
-     * @param UserHelper $userHelper
-     * @param TemplateHelper $templateHelper
-     * @param TrainTableHelper $trainTableHelper
-     * @param RoutesDisplayHelper $routesDisplayHelper
-     * @param RedirectHelper $redirectHelper
-     * @param FlashHelper $flashHelper
-     */
     public function __construct(
-        ManagerRegistry $doctrine,
-        UserHelper $userHelper,
-        TemplateHelper $templateHelper,
-        TrainTableHelper $trainTableHelper,
-        RoutesDisplayHelper $routesDisplayHelper,
-        RedirectHelper $redirectHelper,
-        FlashHelper $flashHelper
+        private readonly ManagerRegistry $doctrine,
+        private readonly UserHelper $userHelper,
+        private readonly TemplateHelper $templateHelper,
+        private readonly TrainTableHelper $trainTableHelper,
+        private readonly RoutesDisplayHelper $routesDisplayHelper,
+        private readonly RedirectHelper $redirectHelper,
+        private readonly FlashHelper $flashHelper,
     ) {
-        $this->doctrine = $doctrine;
-        $this->userHelper = $userHelper;
-        $this->templateHelper = $templateHelper;
-        $this->trainTableHelper = $trainTableHelper;
-        $this->routesDisplayHelper = $routesDisplayHelper;
-        $this->redirectHelper = $redirectHelper;
-        $this->flashHelper = $flashHelper;
     }
 
     /**
-     * @param int|null $trainTableYearId
-     * @param string|null $routeNumber
-     * @return Response
-     * @throws Exception
+     * @throws \Exception
      */
     public function indexAction(int $trainTableYearId = null, string $routeNumber = null): Response
     {
         $submit = false;
 
-        if (is_null($trainTableYearId)) {
+        if (\is_null($trainTableYearId)) {
             $trainTableYearId = $this->doctrine
                 ->getRepository(TrainTableYear::class)
-                ->findTrainTableYearByDate(new DateTime())
+                ->findTrainTableYearByDate(new \DateTime())
                 ->id;
         } else {
             $submit = true;
@@ -119,13 +66,7 @@ class TrainTableController
     }
 
     /**
-     * @param int|null $trainTableYearId
-     * @param string|null $locationName
-     * @param int|null $dayNumber
-     * @param string|null $startTime
-     * @param string|null $endTime
-     * @return Response
-     * @throws Exception
+     * @throws \Exception
      */
     public function passingRoutesAction(
         int $trainTableYearId = null,
@@ -136,10 +77,10 @@ class TrainTableController
     ): Response {
         $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_PASSING_ROUTES);
 
-        if (is_null($dayNumber)) {
+        if (\is_null($dayNumber)) {
             $trainTableYearId = $this->doctrine
                 ->getRepository(TrainTableYear::class)
-                ->findTrainTableYearByDate(new DateTime())
+                ->findTrainTableYearByDate(new \DateTime())
                 ->id;
 
             $dayNumber = date('N');
@@ -151,7 +92,7 @@ class TrainTableController
             if ($trainTableYearId === 0) {
                 $trainTableYearId = $this->doctrine
                     ->getRepository(TrainTableYear::class)
-                    ->findTrainTableYearByDate(new DateTime())
+                    ->findTrainTableYearByDate(new \DateTime())
                     ->id;
             }
 
@@ -180,14 +121,7 @@ class TrainTableController
     }
 
     /**
-     * @param int $trainTableYearId
-     * @param string $locationName
-     * @param int $dayNumber
-     * @param string $startTime
-     * @param string $endTime
-     * @param int $spotterVersion
-     * @return RedirectResponse
-     * @throws Exception
+     * @throws \Exception
      */
     public function passingRoutesExportAction(
         int $trainTableYearId,
@@ -235,11 +169,6 @@ class TrainTableController
         ]);
     }
 
-    /**
-     * @param int|null $trainTableYearId
-     * @param int|null $routeListId
-     * @return Response
-     */
     public function routeOverviewAction(int $trainTableYearId = null, int $routeListId = null): Response
     {
         $routesDisplay = $this->routesDisplayHelper->getRoutesDisplay($trainTableYearId, $routeListId);
@@ -255,18 +184,14 @@ class TrainTableController
         ]);
     }
 
-    /**
-     * @param int|null $id
-     * @return Response
-     */
     public function specialRoutesAction(int $id = null): Response
     {
         $specialRoute = null;
-        if (!is_null($id)) {
+        if (!\is_null($id)) {
             $specialRoute = $this->doctrine->getRepository(SpecialRoute::class)->find($id);
         }
 
-        if (is_null($specialRoute)) {
+        if (\is_null($specialRoute)) {
             $specialRoutes = $this->doctrine
                 ->getRepository(SpecialRoute::class)
                 ->findBy([], ['startDate' => 'DESC']);

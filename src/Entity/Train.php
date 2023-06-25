@@ -20,7 +20,6 @@ use OpenApi\Annotations as OA;
 class Train
 {
     /**
-     * @var int|null
      * @ORM\Column(name="matid", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -30,7 +29,6 @@ class Train
     public ?int $id = null;
 
     /**
-     * @var string
      * @ORM\Column(name="nummer", type="string", length=20, nullable=false)
      * @JMS\Expose()
      * @OA\Property(description="Number of the train", maxLength=20, type="string")
@@ -38,24 +36,21 @@ class Train
     public string $number = '';
 
     /**
-     * @var string|null
      * @ORM\Column(name="naam", type="string", length=50, nullable=true)
      * @JMS\Expose()
      * @OA\Property(description="Name of the train if known", maxLength=50, type="string")
      */
-    public ?string $name;
+    public ?string $name = null;
 
     /**
-     * @var Transporter|null
      * @ORM\ManyToOne(targetEntity="App\Entity\Transporter")
      * @ORM\JoinColumn(name="vervoerder_id", referencedColumnName="vervoerder_id")
      * @JMS\Expose()
      * @OA\Property(description="The transporter of this train if known", ref=@Model(type=Transporter::class))
      */
-    public ?Transporter $transporter;
+    public ?Transporter $transporter = null;
 
     /**
-     * @var TrainNamePattern|null
      * @ORM\ManyToOne(targetEntity="App\Entity\TrainNamePattern")
      * @ORM\JoinColumn(name="pattern_id", referencedColumnName="id")
      * @JMS\Exclude()
@@ -63,24 +58,16 @@ class Train
     public ?TrainNamePattern $namePattern = null;
 
     /**
-     * @var Spot[]
      * @ORM\OneToMany(targetEntity="App\Entity\Spot", mappedBy="train")
      * @JMS\Exclude()
      */
     private $spots;
 
-    /**
-     *
-     */
     public function __construct()
     {
         $this->spots = new ArrayCollection();
     }
 
-    /**
-     * @param Spot $spot
-     * @return Train
-     */
     public function addSpot(Spot $spot): Train
     {
         $this->spots[] = $spot;

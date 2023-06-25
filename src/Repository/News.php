@@ -5,15 +5,19 @@ namespace App\Repository;
 
 use App\Entity\News as NewsEntity;
 use App\Entity\User;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\DBAL\Exception as DBALException;
 use Doctrine\DBAL\Driver\Exception as DBALDriverException;
-use Doctrine\ORM\EntityRepository;
+use Doctrine\Persistence\ManagerRegistry;
 
-class News extends EntityRepository
+class News extends ServiceEntityRepository
 {
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, NewsEntity::class);
+    }
+
     /**
-     * @param int $limit
-     * @param User|null $user
      * @return NewsEntity[]
      */
     public function findForDashboard(int $limit, User $user = null): array
@@ -31,7 +35,7 @@ class News extends EntityRepository
                 SELECT `n`.`newsid` AS `id`, `n`.`title` AS `title`, `n`.`timestamp` AS `timestamp`,
                     IF(`r`.`uid` IS NULL, FALSE, TRUE) AS `news_read`
                 FROM somda_news n
-                LEFT JOIN somda_news_read r ON r.uid = ' . (string)$user->id . ' AND r.newsid = n.newsid
+                LEFT JOIN somda_news_read r ON r.uid = ' . (string) $user->id . ' AND r.newsid = n.newsid
                 WHERE n.archief = \'0\'
                 GROUP BY `id`, `title`, `timestamp`, `news_read`
                 ORDER BY `timestamp` DESC

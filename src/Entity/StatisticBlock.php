@@ -2,7 +2,6 @@
 
 namespace App\Entity;
 
-use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -12,24 +11,21 @@ use Doctrine\ORM\Mapping as ORM;
 class StatisticBlock
 {
     /**
-     * @var Block
      * @ORM\ManyToOne(targetEntity="App\Entity\Block")
      * @ORM\JoinColumn(name="blokid", referencedColumnName="blokid")
      * @ORM\Id
      */
-    public Block $block;
+    public ?Block $block = null;
 
     /**
-     * @var DateTime
      * @ORM\Column(name="date", type="date", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
      */
-    public DateTime $date;
+    public ?\DateTime $date = null;
 
     /**
-     * @var string
      * @ORM\Column(name="pageviews", type="bigint", nullable=false)
      */
-    public string $views = '0';
+    public int $views = 0;
 }

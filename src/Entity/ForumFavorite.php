@@ -17,23 +17,20 @@ class ForumFavorite
     public const ALERTING_VALUES = [self::ALERTING_OFF, self::ALERTING_ON, self::ALERTING_SENT];
 
     /**
-     * @var ForumDiscussion
      * @ORM\ManyToOne(targetEntity="App\Entity\ForumDiscussion", inversedBy="favorites")
      * @ORM\JoinColumn(name="discussionid", referencedColumnName="discussionid")
      * @ORM\Id
      */
-    public ForumDiscussion $discussion;
+    public ?ForumDiscussion $discussion = null;
 
     /**
-     * @var User
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="forumFavorites")
      * @ORM\JoinColumn(name="uid", referencedColumnName="uid")
      * @ORM\Id
      */
-    public User $user;
+    public ?User $user = null;
 
     /**
-     * @var int
      * @ORM\Column(name="alerting", type="integer", nullable=false, options={"default"=ForumFavorite::ALERTING_OFF})
      * @Assert\Choice(choices=ForumFavorite::ALERTING_VALUES)
      */

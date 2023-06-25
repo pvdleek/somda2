@@ -10,9 +10,7 @@ use App\Entity\TrainTableYear;
 use App\Entity\User;
 use App\Repository\TrainTable as TrainTableRepository;
 use App\Traits\DateTrait;
-use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
-use Exception;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Extension\RuntimeExtensionInterface;
 
@@ -20,79 +18,53 @@ class StaticDataHelper implements RuntimeExtensionInterface
 {
     use DateTrait;
 
-    /**
-     * @var ManagerRegistry
-     */
-    private ManagerRegistry $doctrine;
-
-    /**
-     * @var TranslatorInterface
-     */
-    private TranslatorInterface $translator;
-
-    /**
-     * @var array|null
-     */
     private ?array $locations = null;
 
-    /**
-     * @var array|null
-     */
     private ?array $users = null;
 
-    /**
-     * @var array|null
-     */
     private ?array $routes = null;
 
-    /**
-     * @param ManagerRegistry $doctrine
-     * @param TranslatorInterface $translator
-     */
-    public function __construct(ManagerRegistry $doctrine, TranslatorInterface $translator)
-    {
-        $this->doctrine = $doctrine;
-        $this->translator = $translator;
+    public function __construct(
+        private readonly ManagerRegistry $doctrine,
+        private readonly TranslatorInterface $translator,
+    ) {
     }
 
     /**
-     * @return array
-     * @throws Exception
+     * @throws \Exception
      */
     public function getLocations(): array
     {
-        if (is_null($this->locations)) {
+        if (\is_null($this->locations)) {
             $this->loadStaticData();
         }
         return $this->locations;
     }
 
     /**
-     * @return array
-     * @throws Exception
+     * @throws \Exception
      */
     public function getUsers(): array
     {
-        if (is_null($this->users)) {
+        if (\is_null($this->users)) {
             $this->loadStaticData();
         }
         return $this->users;
     }
 
     /**
-     * @return array
-     * @throws Exception
+     * @throws \Exception
      */
     public function getRoutes(): array
     {
-        if (is_null($this->routes)) {
+        if (\is_null($this->routes)) {
             $this->loadStaticData();
         }
         return $this->routes;
     }
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     private function loadStaticData(): void
     {
@@ -118,11 +90,11 @@ class StaticDataHelper implements RuntimeExtensionInterface
         $userArray = $this->doctrine->getRepository(User::class)->findActiveForStaticData();
         foreach ($userArray as $user) {
             $this->users['@' . $user['username']] =
-                !is_null($user['name']) && strlen($user['name']) > 0 ? $user['name'] : $user['username'];
+                !\is_null($user['name']) && \strlen($user['name']) > 0 ? $user['name'] : $user['username'];
         }
 
         $routeArray = $this->doctrine->getRepository(TrainTable::class)->findAllTrainTablesForForum(
-            $this->doctrine->getRepository(TrainTableYear::class)->findTrainTableYearByDate(new DateTime())
+            $this->doctrine->getRepository(TrainTableYear::class)->findTrainTableYearByDate(new \DateTime())
         );
         $routeTranslation = $this->translator->trans('trainTable.forum.route');
         foreach ($routeArray as $route) {
@@ -141,15 +113,12 @@ class StaticDataHelper implements RuntimeExtensionInterface
         }
     }
 
-    /**
-     * @param array $route
-     */
     private function addSeriesRouteNumber(array $route): void
     {
-        $seriesRouteNumber = 100 * floor($route[TrainTableRepository::FIELD_ROUTE_NUMBER] / 100);
+        $seriesRouteNumber = 100 * \floor($route[TrainTableRepository::FIELD_ROUTE_NUMBER] / 100);
         if (!isset($this->routes[$seriesRouteNumber])) {
-            if (!is_null($route[TrainTableRepository::FIELD_SECTION])
-                && strlen($route[TrainTableRepository::FIELD_SECTION]) > 0
+            if (!\is_null($route[TrainTableRepository::FIELD_SECTION])
+                && \strlen($route[TrainTableRepository::FIELD_SECTION]) > 0
             ) {
                 $this->routes[$seriesRouteNumber] = sprintf(
                     $this->translator->trans('trainTable.forum.seriesWithSection'),
@@ -162,7 +131,7 @@ class StaticDataHelper implements RuntimeExtensionInterface
                 return;
             }
 
-            $this->routes[$seriesRouteNumber] = sprintf(
+            $this->routes[$seriesRouteNumber] = \sprintf(
                 $this->translator->trans('trainTable.forum.series'),
                 $seriesRouteNumber,
                 $route[TrainTableRepository::FIELD_CHARACTERISTIC_NAME],

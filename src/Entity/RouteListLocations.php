@@ -12,23 +12,20 @@ use Doctrine\ORM\Mapping as ORM;
 class RouteListLocations
 {
     /**
-     * @var TrainTable
      * @ORM\ManyToOne(targetEntity="App\Entity\TrainTableYear")
      * @ORM\JoinColumn(name="tdr_nr", referencedColumnName="tdr_nr")
      * @ORM\Id
      */
-    public TrainTable $trainTableYear;
+    public ?TrainTable $trainTableYear = null;
 
     /**
-     * @var RouteList
      * @ORM\ManyToOne(targetEntity="App\Entity\RouteList")
      * @ORM\JoinColumn(name="treinnummerlijst_id", referencedColumnName="id")
      * @ORM\Id
      */
-    public RouteList $routeList;
+    public ?RouteList $routeList = null;
 
     /**
-     * @var int
      * @ORM\Column(name="type", type="integer", nullable=false, options={"default"="1"})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
@@ -36,7 +33,6 @@ class RouteListLocations
     public int $type = 1;
 
     /**
-     * @var int
      * @ORM\Column(name="volgorde", type="integer", nullable=false, options={"default"="1"})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
@@ -44,9 +40,8 @@ class RouteListLocations
     public int $order = 1;
 
     /**
-     * @var Location
      * @ORM\ManyToOne(targetEntity="App\Entity\Location")
      * @ORM\JoinColumn(name="locatieid", referencedColumnName="afkid")
      */
-    public Location $location;
+    public ?Location $location = null;
 }

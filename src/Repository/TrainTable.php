@@ -9,12 +9,13 @@ use App\Entity\TrainTable as TrainTableEntity;
 use App\Entity\TrainTableFirstLast;
 use App\Entity\TrainTableYear;
 use App\Traits\DateTrait;
-use Doctrine\ORM\EntityRepository;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\Query\Expr\Join;
+use Doctrine\Persistence\ManagerRegistry;
 
-class TrainTable extends EntityRepository
+class TrainTable extends ServiceEntityRepository
 {
     use DateTrait;
 
@@ -26,14 +27,11 @@ class TrainTable extends EntityRepository
 
     private const PARAMETER_TRAIN_TABLE_YEAR = 'trainTableYear';
 
-    /**
-     * @param TrainTableYear $trainTableYear
-     * @param Location $location
-     * @param int $dayNumber
-     * @param int $startTime
-     * @param int $endTime
-     * @return array
-     */
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, TrainTableEntity::class);
+    }
+
     public function findPassingRoutes(
         TrainTableYear $trainTableYear,
         Location $location,
@@ -81,10 +79,6 @@ class TrainTable extends EntityRepository
         return $queryBuilder->getQuery()->getArrayResult();
     }
 
-    /**
-     * @param TrainTableYear $trainTableYear
-     * @return array
-     */
     public function findAllTrainTablesForForum(TrainTableYear $trainTableYear): array
     {
         $queryBuilder = $this->getEntityManager()
@@ -111,13 +105,6 @@ class TrainTable extends EntityRepository
         return $queryBuilder->getQuery()->getArrayResult();
     }
 
-    /**
-     * @param TrainTableYear $trainTableYear
-     * @param Route $route
-     * @param Location $location
-     * @param int $dayNumber
-     * @return bool
-     */
     public function isExistingForSpot(
         TrainTableYear $trainTableYear,
         Route $route,
@@ -137,7 +124,7 @@ class TrainTable extends EntityRepository
             ->join('t.routeOperationDays', 'o')
             ->andWhere('o.' . $this->getDayName($dayNumber - 1) .' = TRUE');
         try {
-            return (int)$queryBuilder->getQuery()->getSingleScalarResult() > 0;
+            return (int) $queryBuilder->getQuery()->getSingleScalarResult() > 0;
         } catch (NonUniqueResultException | NoResultException $exception) {
             return false;
         }

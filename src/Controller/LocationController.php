@@ -12,43 +12,18 @@ use Symfony\Component\HttpFoundation\Response;
 
 class LocationController
 {
-    const SEARCH_METHOD_CHARACTER = 'letter';
-    const SEARCH_METHOD_SINGLE = 'specifiek';
-    const SEARCH_METHOD_NAME = 'naam';
-    const SEARCH_METHOD_DESCRIPTION = 'omschrijving';
+    public const SEARCH_METHOD_CHARACTER = 'letter';
+    public const SEARCH_METHOD_SINGLE = 'specifiek';
+    public const SEARCH_METHOD_NAME = 'naam';
+    public const SEARCH_METHOD_DESCRIPTION = 'omschrijving';
 
-    /**
-     * @var ManagerRegistry
-     */
-    private ManagerRegistry $doctrine;
-
-    /**
-     * @var UserHelper
-     */
-    private UserHelper $userHelper;
-
-    /**
-     * @var TemplateHelper
-     */
-    private TemplateHelper $templateHelper;
-
-    /**
-     * @param ManagerRegistry $doctrine
-     * @param UserHelper $userHelper
-     * @param TemplateHelper $templateHelper
-     */
-    public function __construct(ManagerRegistry $doctrine, UserHelper $userHelper, TemplateHelper $templateHelper)
-    {
-        $this->doctrine = $doctrine;
-        $this->userHelper = $userHelper;
-        $this->templateHelper = $templateHelper;
+    public function __construct(
+        private readonly ManagerRegistry $doctrine,
+        private readonly UserHelper $userHelper,
+        private readonly TemplateHelper $templateHelper,
+    ) {
     }
 
-    /**
-     * @param string|null $searchMethod
-     * @param string|null $search
-     * @return Response
-     */
     public function indexAction(string $searchMethod = null, string $search = null): Response
     {
         $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_ABBREVIATIONS);
@@ -81,19 +56,15 @@ class LocationController
         ]);
     }
 
-    /**
-     * @param string $search
-     * @return JsonResponse
-     */
     public function jsonAction(string $search): JsonResponse
     {
         /**
          * @var Location[] $locations
          */
         $locations = $this->doctrine->getRepository(Location::class)->findByName($search);
-        if (count($locations) < 1) {
+        if (\count($locations) < 1) {
             $locations = $this->doctrine->getRepository(Location::class)->findByName('%' . $search . '%');
-            if (count($locations) < 1) {
+            if (\count($locations) < 1) {
                 $locations = $this->doctrine->getRepository(Location::class)->findByDescription('%' . $search . '%');
             }
         }

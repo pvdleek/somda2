@@ -16,10 +16,6 @@ class TrainComposition extends AbstractType
 {
     public const OPTION_MANAGEMENT_ROLE = 'managementRole';
 
-    /**
-     * @param FormBuilderInterface $builder
-     * @param array $options
-     */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         /**
@@ -28,7 +24,7 @@ class TrainComposition extends AbstractType
         $trainComposition = $options['data'];
 
         for ($car = 1; $car <= TrainCompositionEntity::NUMBER_OF_CARS; ++$car) {
-            if (!is_null($trainComposition->getType()->getCar($car))) {
+            if (!\is_null($trainComposition->getType()->getCar($car))) {
                 $builder->add('car' . $car, TextType::class, [
                     FormGenerics::KEY_ATTRIBUTES => [FormGenerics::KEY_ATTRIBUTES_MAX_LENGTH => 15],
                     FormGenerics::KEY_LABEL => $trainComposition->getType()->getCar($car),
@@ -67,9 +63,6 @@ class TrainComposition extends AbstractType
         }
     }
 
-    /**
-     * @param OptionsResolver $resolver
-     */
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(['data_class' => TrainCompositionBase::class, self::OPTION_MANAGEMENT_ROLE => false]);

@@ -13,7 +13,6 @@ use Doctrine\ORM\Mapping as ORM;
 class PoiCategory
 {
     /**
-     * @var int|null
      * @ORM\Column(name="provincieid", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -21,28 +20,17 @@ class PoiCategory
     public ?int $id = null;
 
     /**
-     * @var string
      * @ORM\Column(name="naam", type="string", length=15, nullable=false)
      */
     public string $name = '';
 
-    /**
-     * @var Poi[]
-     */
     private $pois;
 
-    /**
-     *
-     */
     public function __construct()
     {
         $this->pois = new ArrayCollection();
     }
 
-    /**
-     * @param Poi $poi
-     * @return PoiCategory
-     */
     public function addPoi(Poi $poi): PoiCategory
     {
         $this->pois[] = $poi;

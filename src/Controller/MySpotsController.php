@@ -16,8 +16,6 @@ use App\Helpers\UserHelper;
 use App\Model\DataTableOrder;
 use App\Model\SpotFilter;
 use App\Model\SpotInput;
-use DateTime;
-use Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -34,47 +32,14 @@ class MySpotsController
     private const BULK_ACTION_DATE = 'date';
     private const BULK_ACTION_LOCATION = 'location';
 
-    /**
-     * @var FormHelper
-     */
-    private FormHelper $formHelper;
-
-    /**
-     * @var UserHelper
-     */
-    private UserHelper $userHelper;
-
-    /**
-     * @var TemplateHelper
-     */
-    private TemplateHelper $templateHelper;
-
-    /**
-     * @var SpotInputHelper
-     */
-    private SpotInputHelper $spotInputHelper;
-
-    /**
-     * @param FormHelper $formHelper
-     * @param UserHelper $userHelper
-     * @param TemplateHelper $templateHelper
-     * @param SpotInputHelper $spotInputHelper
-     */
     public function __construct(
-        FormHelper $formHelper,
-        UserHelper $userHelper,
-        TemplateHelper $templateHelper,
-        SpotInputHelper $spotInputHelper
+        private readonly FormHelper $formHelper,
+        private readonly UserHelper $userHelper,
+        private readonly TemplateHelper $templateHelper,
+        private readonly SpotInputHelper $spotInputHelper,
     ) {
-        $this->formHelper = $formHelper;
-        $this->userHelper = $userHelper;
-        $this->templateHelper = $templateHelper;
-        $this->spotInputHelper = $spotInputHelper;
     }
 
-    /**
-     * @return Response
-     */
     public function indexAction(): Response
     {
         $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_SPOTS_EDIT);
@@ -84,10 +49,6 @@ class MySpotsController
         ]);
     }
 
-    /**
-     * @param Request $request
-     * @return JsonResponse
-     */
     public function jsonAction(Request $request): JsonResponse
     {
         $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_SPOTS_EDIT);
@@ -100,7 +61,7 @@ class MySpotsController
         foreach ($orderArray as $key => $order) {
             $spotOrder[$key] = new DataTableOrder(
                 $columns[$order['column']][self::COLUMN_DATA],
-                strtolower($order['dir']) === 'asc'
+                \strtolower($order['dir']) === 'asc'
             );
         }
 
@@ -119,8 +80,8 @@ class MySpotsController
         $spots = $this->formHelper->getDoctrine()->getRepository(Spot::class)->findForMySpots(
             $this->userHelper->getUser(),
             $spotFilter,
-            (int)$request->get('length'),
-            (int)$request->get('start'),
+            (int) $request->get('length'),
+            (int) $request->get('start'),
             $spotOrder
         );
         foreach ($spots as $spot) {
@@ -130,17 +91,13 @@ class MySpotsController
         return new JsonResponse($response);
     }
 
-    /**
-     * @param array $columns
-     * @return SpotFilter
-     */
     private function getSpotFilterFromRequest(array $columns): SpotFilter
     {
         $spotFilter = new SpotFilter();
         foreach ($columns as $column) {
-            if (strlen($column[self::COLUMN_SEARCH][self::COLUMN_SEARCH_VALUE]) > 0) {
+            if (\strlen($column[self::COLUMN_SEARCH][self::COLUMN_SEARCH_VALUE]) > 0) {
                 if ($column[self::COLUMN_DATA] === 'spotDate') {
-                    $spotFilter->spotDate = DateTime::createFromFormat(
+                    $spotFilter->spotDate = \DateTime::createFromFormat(
                         'd-m-Y',
                         $column[self::COLUMN_SEARCH][self::COLUMN_SEARCH_VALUE]
                     );
@@ -157,17 +114,12 @@ class MySpotsController
         return $spotFilter;
     }
 
-    /**
-     * @param Request $request
-     * @param int $id
-     * @return RedirectResponse|Response
-     */
-    public function editAction(Request $request, int $id)
+    public function editAction(Request $request, int $id): Response|RedirectResponse
     {
         $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_SPOTS_EDIT);
 
         $spot = $this->formHelper->getDoctrine()->getRepository(Spot::class)->find($id);
-        if (is_null($spot) || $spot->user !== $this->userHelper->getUser()) {
+        if (\is_null($spot) || $spot->user !== $this->userHelper->getUser()) {
             throw new AccessDeniedException('This spot does not exist or does not belong to the user');
         }
         $form = $this->formHelper->getFactory()->create(SpotForm::class, $spot);
@@ -196,18 +148,14 @@ class MySpotsController
         ]);
     }
 
-    /**
-     * @param int $id
-     * @return RedirectResponse
-     */
     public function deleteAction(int $id): RedirectResponse
     {
         $spot = $this->formHelper->getDoctrine()->getRepository(Spot::class)->find($id);
-        if (is_null($spot) || $spot->user !== $this->userHelper->getUser()) {
+        if (\is_null($spot) || $spot->user !== $this->userHelper->getUser()) {
             throw new AccessDeniedException('This spot does not exist or does not belong to the user');
         }
 
-        if (!is_null($spot->extra)) {
+        if (!\is_null($spot->extra)) {
             $this->formHelper->getDoctrine()->getManager()->remove($spot->extra);
         }
         $this->formHelper->getDoctrine()->getManager()->remove($spot);
@@ -216,15 +164,11 @@ class MySpotsController
     }
 
     /**
-     * @param Request $request
-     * @param string $type
-     * @param string $idList
-     * @return RedirectResponse|Response
-     * @throws Exception
+     * @throws \Exception
      */
-    public function bulkAction(Request $request, string $type, string $idList)
+    public function bulkAction(Request $request, string $type, string $idList): Response|RedirectResponse
     {
-        $idArray = array_filter(explode(',', $idList));
+        $idArray = \array_filter(\explode(',', $idList));
 
         if (self::BULK_ACTION_DATE === $type) {
             $form = $this->formHelper->getFactory()->create(SpotBulkEditDate::class);

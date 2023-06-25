@@ -3,11 +3,16 @@
 namespace App\Repository;
 
 use App\Entity\ForumPostAlert as ForumPostAlertEntity;
-use Doctrine\ORM\EntityRepository;
-use Exception;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Persistence\ManagerRegistry;
 
-class ForumPostAlert extends EntityRepository
+class ForumPostAlert extends ServiceEntityRepository
 {
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, ForumPostAlertEntity::class);
+    }
+
     /**
      * @return int
      */
@@ -20,8 +25,8 @@ class ForumPostAlert extends EntityRepository
             ->andWhere('a.closed = FALSE')
             ->setMaxResults(1);
         try {
-            return (int)$queryBuilder->getQuery()->getSingleScalarResult();
-        } catch (Exception $exception) {
+            return (int) $queryBuilder->getQuery()->getSingleScalarResult();
+        } catch (\Exception $exception) {
             return 0;
         }
     }

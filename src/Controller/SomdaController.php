@@ -16,47 +16,14 @@ use Symfony\Component\HttpFoundation\Response;
 
 class SomdaController
 {
-    /**
-     * @var UserHelper
-     */
-    private UserHelper $userHelper;
-
-    /**
-     * @var FormHelper
-     */
-    private FormHelper $formHelper;
-
-    /**
-     * @var TemplateHelper
-     */
-    private TemplateHelper $templateHelper;
-
-    /**
-     * @var EmailHelper
-     */
-    private EmailHelper $emailHelper;
-
-    /**
-     * @param UserHelper $userHelper
-     * @param FormHelper $formHelper
-     * @param TemplateHelper $templateHelper
-     * @param EmailHelper $emailHelper
-     */
     public function __construct(
-        UserHelper $userHelper,
-        FormHelper $formHelper,
-        TemplateHelper $templateHelper,
-        EmailHelper $emailHelper
+        private readonly UserHelper $userHelper,
+        private readonly FormHelper $formHelper,
+        private readonly TemplateHelper $templateHelper,
+        private readonly EmailHelper $emailHelper,
     ) {
-        $this->userHelper = $userHelper;
-        $this->formHelper = $formHelper;
-        $this->templateHelper = $templateHelper;
-        $this->emailHelper = $emailHelper;
     }
 
-    /**
-     * @return Response
-     */
     public function aboutAction(): Response
     {
         return $this->templateHelper->render('somda/about.html.twig', [
@@ -64,9 +31,6 @@ class SomdaController
         ]);
     }
 
-    /**
-     * @return Response
-     */
     public function advertiseAction(): Response
     {
         return $this->templateHelper->render('somda/advertise.html.twig', [
@@ -74,11 +38,7 @@ class SomdaController
         ]);
     }
 
-    /**
-     * @param Request $request
-     * @return RedirectResponse|Response
-     */
-    public function contactAction(Request $request)
+    public function contactAction(Request $request): Response|RedirectResponse
     {
         $form = $this->formHelper->getFactory()->create(Contact::class);
         if (!$this->userHelper->userIsLoggedIn()) {
@@ -111,13 +71,9 @@ class SomdaController
         ]);
     }
 
-    /**
-     * @param string|null $choice
-     * @return RedirectResponse|Response
-     */
-    public function disclaimerAction(string $choice = null)
+    public function disclaimerAction(string $choice = null): Response|RedirectResponse
     {
-        if (!is_null($choice) && in_array($choice, [User::COOKIE_OK, User::COOKIE_NOT_OK])) {
+        if (!\is_null($choice) && \in_array($choice, [User::COOKIE_OK, User::COOKIE_NOT_OK])) {
             $this->userHelper->getUser()->cookieOk = $choice;
 
             return $this->formHelper->finishFormHandling(

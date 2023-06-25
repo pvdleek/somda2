@@ -53,20 +53,20 @@
                     <i class="fas fa-comment"></i>
                 {% endif %}
                 {{ discussion.title }}
-                <br />Forum: <a href="{{ path('forum_forum', { 'id': discussion.forum.id, 'name': (discussion.forum.name | slugify) }) }}">{{ discussion.forum.category.name }} - {{ discussion.forum.name }}</a>
+                <br />Forum: <a href="{{ path('forum_forum', { 'id': discussion.forum.id, 'name': (discussion.forum.name | slug) }) }}">{{ discussion.forum.category.name }} - {{ discussion.forum.name }}</a>
             {% endblock %}
         </div>
         <div class="panel-content panel-no-background">
             {% block paginator %}
                 {% if numberOfPages > 1 %}
                     <ul class="pagination">
-                        {% if pageNumber > 1 %}<li><a href="{{ path('forum_discussion_page', { 'id': discussion.id, 'name': (discussion.title | slugify), 'pageNumber': (pageNumber - 1) }) }}">«</a></li>{% endif %}
+                        {% if pageNumber > 1 %}<li><a href="{{ path('forum_discussion_page', { 'id': discussion.id, 'name': (discussion.title | slug), 'pageNumber': (pageNumber - 1) }) }}">«</a></li>{% endif %}
                         {% for page in 1..numberOfPages %}
                             <li><span>
-                                {% if page != pageNumber %}<a href="{{ path('forum_discussion_page', { 'id': discussion.id, 'name': (discussion.title | slugify), 'pageNumber': page }) }}">{{ page }}</a>{% else %}{{ page }}{% endif %}
+                                {% if page != pageNumber %}<a href="{{ path('forum_discussion_page', { 'id': discussion.id, 'name': (discussion.title | slug), 'pageNumber': page }) }}">{{ page }}</a>{% else %}{{ page }}{% endif %}
                             </span></li>
                         {% endfor %}
-                        {% if pageNumber < numberOfPages %}<li><a href="{{ path('forum_discussion_page', { 'id': discussion.id, 'name': (discussion.title | slugify), 'pageNumber': (pageNumber + 1) }) }}">»</a></li>{% endif %}
+                        {% if pageNumber < numberOfPages %}<li><a href="{{ path('forum_discussion_page', { 'id': discussion.id, 'name': (discussion.title | slug), 'pageNumber': (pageNumber + 1) }) }}">»</a></li>{% endif %}
                     </ul>
                 {% endif %}
             {% endblock %}

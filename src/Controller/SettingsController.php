@@ -9,46 +9,23 @@ use App\Generics\RoleGenerics;
 use App\Helpers\FormHelper;
 use App\Helpers\TemplateHelper;
 use App\Helpers\UserHelper;
-use Exception;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class SettingsController
 {
-    /**
-     * @var FormHelper
-     */
-    private FormHelper $formHelper;
-
-    /**
-     * @var UserHelper
-     */
-    private UserHelper $userHelper;
-
-    /**
-     * @var TemplateHelper
-     */
-    private TemplateHelper $templateHelper;
-
-    /**
-     * @param FormHelper $formHelper
-     * @param UserHelper $userHelper
-     * @param TemplateHelper $templateHelper
-     */
-    public function __construct(FormHelper $formHelper, UserHelper $userHelper, TemplateHelper $templateHelper)
-    {
-        $this->formHelper = $formHelper;
-        $this->userHelper = $userHelper;
-        $this->templateHelper = $templateHelper;
+    public function __construct(
+        private readonly FormHelper $formHelper,
+        private readonly UserHelper $userHelper,
+        private readonly TemplateHelper $templateHelper,
+    ) {
     }
 
     /**
-     * @param Request $request
-     * @return Response|RedirectResponse
-     * @throws Exception
+     * @throws \Exception
      */
-    public function indexAction(Request $request)
+    public function indexAction(Request $request): Response|RedirectResponse
     {
         $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_USER);
 
@@ -70,10 +47,10 @@ class SettingsController
             foreach ($allSettings as $setting) {
                 if ($setting->order > 0) {
                     $userPreference = $this->userHelper->getPreferenceByKey($setting->key);
-                    if (is_object($form->get($setting->key)->getData())) {
-                        $userPreference->value = (string)$form->get($setting->key)->getData()->name;
+                    if (\is_object($form->get($setting->key)->getData())) {
+                        $userPreference->value = (string) $form->get($setting->key)->getData()->name;
                     } else {
-                        $userPreference->value = (string)$form->get($setting->key)->getData() ?? '';
+                        $userPreference->value = (string) $form->get($setting->key)->getData() ?? '';
                     }
                 }
             }

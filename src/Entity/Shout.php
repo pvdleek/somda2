@@ -2,7 +2,6 @@
 
 namespace App\Entity;
 
-use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -12,7 +11,6 @@ use Doctrine\ORM\Mapping as ORM;
 class Shout
 {
     /**
-     * @var int|null
      * @ORM\Column(name="sht_id", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -20,27 +18,23 @@ class Shout
     public ?int $id = null;
 
     /**
-     * @var string
      * @ORM\Column(name="sht_ip", type="bigint", nullable=false)
      */
-    public string $ipAddress;
+    public string $ipAddress = '';
 
     /**
-     * @var DateTime
      * @ORM\Column(name="sht_datumtijd", type="datetime", nullable=false)
      */
-    public DateTime $timestamp;
+    public ?\DateTime $timestamp = null;
 
     /**
-     * @var string
      * @ORM\Column(name="sht_text", type="string", length=255, nullable=false)
      */
-    public string $text;
+    public string $text = '';
 
     /**
-     * @var User
      * @ORM\ManyToOne(targetEntity="App\Entity\User")
      * @ORM\JoinColumn(name="sht_uid", referencedColumnName="uid")
      */
-    public User $author;
+    public ?User $author = null;
 }

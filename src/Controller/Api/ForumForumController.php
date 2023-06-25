@@ -21,46 +21,15 @@ class ForumForumController extends AbstractFOSRestController
 {
     use SortTrait;
 
-    /**
-     * @var ManagerRegistry
-     */
-    private ManagerRegistry $doctrine;
-
-    /**
-     * @var UserHelper
-     */
-    private UserHelper $userHelper;
-
-    /**
-     * @var ForumAuthorizationHelper
-     */
-    private ForumAuthorizationHelper $forumAuthHelper;
-
-    /**
-     * @var ForumOverviewHelper
-     */
-    private ForumOverviewHelper $forumOverviewHelper;
-
-    /**
-     * @param ManagerRegistry $doctrine
-     * @param UserHelper $userHelper
-     * @param ForumAuthorizationHelper $forumAuthHelper
-     * @param ForumOverviewHelper $forumOverviewHelper
-     */
     public function __construct(
-        ManagerRegistry $doctrine,
-        UserHelper $userHelper,
-        ForumAuthorizationHelper $forumAuthHelper,
-        ForumOverviewHelper $forumOverviewHelper
+        private readonly ManagerRegistry $doctrine,
+        private readonly UserHelper $userHelper,
+        private readonly ForumAuthorizationHelper $forumAuthHelper,
+        private readonly ForumOverviewHelper $forumOverviewHelper,
     ) {
-        $this->doctrine = $doctrine;
-        $this->userHelper = $userHelper;
-        $this->forumAuthHelper = $forumAuthHelper;
-        $this->forumOverviewHelper = $forumOverviewHelper;
     }
 
     /**
-     * @return Response
      * @OA\Response(
      *     response=200,
      *     description="Returns all categories and forums",
@@ -112,22 +81,20 @@ class ForumForumController extends AbstractFOSRestController
         $forums = [];
         foreach ($categories as $id => $category) {
             $categoryForums = $this->sortByFieldFilter($category['forums'], 'order');
-            foreach ($categoryForums as $key => $categoryForum) {
+            foreach (\array_keys($categoryForums) as $key) {
                 $categoryForums[$key]['category'] = [
                     'id' => $id,
                     'name' => $category['name'],
                     'order' => $category['order'],
                 ];
             }
-            $forums = array_merge($forums, $categoryForums);
+            $forums = \array_merge($forums, $categoryForums);
         }
 
         return $this->handleView($this->view(['data' => $forums], 200));
     }
 
     /**
-     * @param int $id
-     * @return Response
      * @OA\Response(
      *     response=200,
      *     description="Returns all discussions in a forum",
@@ -195,7 +162,7 @@ class ForumForumController extends AbstractFOSRestController
          * @var ForumForum $forum
          */
         $forum = $this->doctrine->getRepository(ForumForum::class)->find($id);
-        if (is_null($forum)) {
+        if (\is_null($forum)) {
             return $this->indexAction();
         }
 

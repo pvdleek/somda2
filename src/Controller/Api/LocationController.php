@@ -16,30 +16,13 @@ use Symfony\Component\HttpFoundation\Response;
 
 class LocationController extends AbstractFOSRestController
 {
-    /**
-     * @var ManagerRegistry
-     */
-    private ManagerRegistry $doctrine;
-
-    /**
-     * @var UserHelper
-     */
-    private UserHelper $userHelper;
-
-    /**
-     * @param UserHelper $userHelper
-     * @param ManagerRegistry $doctrine
-     */
-    public function __construct(ManagerRegistry $doctrine, UserHelper $userHelper)
-    {
-        $this->doctrine = $doctrine;
-        $this->userHelper = $userHelper;
+    public function __construct(
+        private readonly ManagerRegistry $doctrine,
+        private readonly UserHelper $userHelper,
+    ) {
     }
 
     /**
-     * @param string|null $searchMethod
-     * @param string|null $search
-     * @return Response
      * @OA\Parameter(
      *     description="The search-method",
      *     in="path",

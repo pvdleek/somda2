@@ -18,8 +18,6 @@ use App\Helpers\ForumAuthorizationHelper;
 use App\Helpers\ForumHelper;
 use App\Helpers\TemplateHelper;
 use App\Helpers\UserHelper;
-use DateTime;
-use Exception;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormInterface;
@@ -31,68 +29,20 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class ForumPostController
 {
-    /**
-     * @var UserHelper
-     */
-    private UserHelper $userHelper;
-
-    /**
-     * @var FormHelper
-     */
-    private FormHelper $formHelper;
-
-    /**
-     * @var ForumAuthorizationHelper
-     */
-    private ForumAuthorizationHelper $forumAuthHelper;
-
-    /**
-     * @var ForumHelper
-     */
-    private ForumHelper $forumHelper;
-
-    /**
-     * @var TemplateHelper
-     */
-    private TemplateHelper $templateHelper;
-
-    /**
-     * @var EmailHelper
-     */
-    private EmailHelper $emailHelper;
-
-    /**
-     * @param UserHelper $userHelper
-     * @param FormHelper $formHelper
-     * @param ForumAuthorizationHelper $forumAuthHelper
-     * @param ForumHelper $forumHelper
-     * @param TemplateHelper $templateHelper
-     * @param EmailHelper $emailHelper
-     */
     public function __construct(
-        UserHelper $userHelper,
-        FormHelper $formHelper,
-        ForumAuthorizationHelper $forumAuthHelper,
-        ForumHelper $forumHelper,
-        TemplateHelper $templateHelper,
-        EmailHelper $emailHelper
+        private readonly UserHelper $userHelper,
+        private readonly FormHelper $formHelper,
+        private readonly ForumAuthorizationHelper $forumAuthHelper,
+        private readonly ForumHelper $forumHelper,
+        private readonly TemplateHelper $templateHelper,
+        private readonly EmailHelper $emailHelper,
     ) {
-        $this->userHelper = $userHelper;
-        $this->formHelper = $formHelper;
-        $this->forumAuthHelper = $forumAuthHelper;
-        $this->forumHelper = $forumHelper;
-        $this->templateHelper = $templateHelper;
-        $this->emailHelper = $emailHelper;
     }
 
     /**
-     * @param Request $request
-     * @param int $id
-     * @param bool $quote
-     * @return Response|RedirectResponse
-     * @throws Exception
+     * @throws \Exception
      */
-    public function replyAction(Request $request, int $id, bool $quote = false)
+    public function replyAction(Request $request, int $id, bool $quote = false): Response|RedirectResponse
     {
         $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_USER);
 
@@ -101,7 +51,7 @@ class ForumPostController
          */
         $quotedPost = $this->formHelper->getDoctrine()->getRepository(ForumPost::class)->find($id);
         if (!$this->forumAuthHelper->mayPost($quotedPost->discussion->forum, $this->userHelper->getUser())
-            || is_null($quotedPost) || $quotedPost->discussion->locked
+            || \is_null($quotedPost) || $quotedPost->discussion->locked
         ) {
             throw new AccessDeniedException(
                 'The quoted post does not exist, the discussion is locked or the user may not view the discussion'
@@ -156,25 +106,20 @@ class ForumPostController
     }
 
     /**
-     * @param Request $request
-     * @return JsonResponse
-     * @throws Exception
+     * @throws \Exception
      */
     public function replyExampleAction(Request $request): JsonResponse
     {
         $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_USER);
 
-        $text = (string)$request->request->get('text');
+        $text = (string) $request->request->get('text');
         $postText = new ForumPostText();
-        $postText->text = str_replace("\n", ' ', $text);
+        $postText->text = \str_replace("\n", ' ', $text);
         $post = new ForumPost();
         $post->text = $postText;
         return new JsonResponse(['data' => $this->forumHelper->getDisplayForumPost($post)]);
     }
 
-    /**
-     * @param ForumDiscussion $discussion
-     */
     private function handleFavoritesForAddedPost(ForumDiscussion $discussion): void
     {
         foreach ($discussion->getFavorites() as $favorite) {
@@ -191,12 +136,9 @@ class ForumPostController
     }
 
     /**
-     * @param Request $request
-     * @param int $id
-     * @return Response|RedirectResponse
-     * @throws Exception
+     * @throws \Exception
      */
-    public function editAction(Request $request, int $id)
+    public function editAction(Request $request, int $id): Response|RedirectResponse
     {
         $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_USER);
 
@@ -243,7 +185,7 @@ class ForumPostController
 
             return $this->formHelper->finishFormHandling('', RouteGenerics::ROUTE_FORUM_DISCUSSION, [
                 'id' => $post->discussion->id,
-                'name' => urlencode($post->discussion->title)
+                'name' => \urlencode($post->discussion->title)
             ]);
         }
 
@@ -255,9 +197,7 @@ class ForumPostController
     }
 
     /**
-     * @param FormInterface $form
-     * @param ForumPost $post
-     * @throws Exception
+     * @throws \Exception
      */
     private function editPost(FormInterface $form, ForumPost $post): void
     {
@@ -273,7 +213,7 @@ class ForumPostController
             $post->discussion->title = $form->get(ForumPostForm::FIELD_TITLE)->getData();
         }
 
-        $post->editTimestamp = new DateTime();
+        $post->editTimestamp = new \DateTime();
         $post->editor = $editor;
         $post->editReason = $form->get('editReason')->getData();
         $post->signatureOn = $form->get('signatureOn')->getData();

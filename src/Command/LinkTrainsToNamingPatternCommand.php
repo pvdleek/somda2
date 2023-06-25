@@ -6,45 +6,25 @@ namespace App\Command;
 use App\Entity\Train;
 use App\Entity\TrainNamePattern;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+#[AsCommand(
+    name: 'app:link-trains-to-naming-pattern',
+    description: 'Link all trains (somda_mat) to naming patterns',
+    hidden: false,
+)]
+
 class LinkTrainsToNamingPatternCommand extends Command
 {
-    /**
-     * @var string
-     */
-    protected static $defaultName = 'app:link-trains-to-naming-pattern';
-
-    /**
-     * @var ManagerRegistry
-     */
-    private ManagerRegistry $doctrine;
-
-    /**
-     * @param ManagerRegistry $doctrine
-     */
-    public function __construct(ManagerRegistry $doctrine)
-    {
-        parent::__construct(self::$defaultName);
-
-        $this->doctrine = $doctrine;
+    public function __construct(
+        private readonly ManagerRegistry $doctrine,
+    ) {
+        parent::__construct();
     }
 
-    /**
-     *
-     */
-    protected function configure(): void
-    {
-        $this->setDescription('Link all trains (somda_mat) to naming patterns');
-    }
-
-    /**
-     * @param InputInterface $input
-     * @param OutputInterface $output
-     * @return int
-     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         /**
@@ -59,7 +39,7 @@ class LinkTrainsToNamingPatternCommand extends Command
 
         foreach ($trains as $train) {
             foreach ($patterns as $pattern) {
-                if (preg_match('#' . $pattern->pattern . '#', $train->number)) {
+                if (\preg_match('#' . $pattern->pattern . '#', $train->number)) {
                     $train->namePattern = $pattern;
                     break;
                 }

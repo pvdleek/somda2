@@ -24,7 +24,6 @@ class ForumForum
     ];
 
     /**
-     * @var int|null
      * @ORM\Column(name="forumid", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -32,45 +31,38 @@ class ForumForum
     public ?int $id = null;
 
     /**
-     * @var ForumCategory
      * @ORM\ManyToOne(targetEntity="App\Entity\ForumCategory", inversedBy="forums")
      * @ORM\JoinColumn(name="catid", referencedColumnName="catid")
      */
-    public ForumCategory $category;
+    public ?ForumCategory $category = null;
 
     /**
-     * @var string
      * @ORM\Column(name="name", type="string", length=40, nullable=false)
      */
     public string $name = '';
 
     /**
-     * @var string
      * @ORM\Column(name="description", type="string", length=100, nullable=false)
      */
     public string $description = '';
 
     /**
-     * @var int
      * @ORM\Column(name="volgorde", type="integer", nullable=false, options={"default"="1"})
      */
     public int $order = 1;
 
     /**
-     * @var int
      * @ORM\Column(name="type", type="integer", nullable=false, options={"default"=ForumForum::TYPE_LOGGED_IN})
      * @Assert\Choice(choices=ForumForum::TYPE_VALUES)
      */
     public int $type = self::TYPE_LOGGED_IN;
 
     /**
-     * @var ForumDiscussion[]
      * @ORM\OneToMany(targetEntity="App\Entity\ForumDiscussion", mappedBy="forum")
      */
     private $discussions;
 
     /**
-     * @var User[]
      * @ORM\ManyToMany(targetEntity="User", inversedBy="moderatedForums")
      * @ORM\JoinTable(name="somda_forum_mods",
      *      joinColumns={@ORM\JoinColumn(name="forumid", referencedColumnName="forumid")},
@@ -88,10 +80,6 @@ class ForumForum
         $this->moderators = new ArrayCollection();
     }
 
-    /**
-     * @param ForumDiscussion $forumDiscussion
-     * @return ForumForum
-     */
     public function addDiscussion(ForumDiscussion $forumDiscussion): ForumForum
     {
         $this->discussions[] = $forumDiscussion;
@@ -106,10 +94,6 @@ class ForumForum
         return $this->discussions->toArray();
     }
 
-    /**
-     * @param User $user
-     * @return ForumForum
-     */
     public function addModerator(User $user): ForumForum
     {
         $this->moderators[] = $user;

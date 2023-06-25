@@ -6,35 +6,18 @@ use App\Entity\UserPreference;
 use App\Generics\RoleGenerics;
 use App\Helpers\UserHelper;
 use Doctrine\Persistence\ManagerRegistry;
-use Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 class HomeLayoutController
 {
-    /**
-     * @var ManagerRegistry
-     */
-    private ManagerRegistry $doctrine;
-
-    /**
-     * @var UserHelper
-     */
-    private UserHelper $userHelper;
-
-    /**
-     * @param ManagerRegistry $doctrine
-     * @param UserHelper $userHelper
-     */
-    public function __construct(ManagerRegistry $doctrine, UserHelper $userHelper)
-    {
-        $this->doctrine = $doctrine;
-        $this->userHelper = $userHelper;
+    public function __construct(
+        private readonly ManagerRegistry $doctrine,
+        private readonly UserHelper $userHelper,
+    ) {
     }
 
     /**
-     * @param string $layout
-     * @return JsonResponse
-     * @throws Exception
+     * @throws \Exception
      */
     public function updateAction(string $layout): JsonResponse
     {

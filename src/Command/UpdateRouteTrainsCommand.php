@@ -9,50 +9,30 @@ use App\Entity\RouteTrain;
 use App\Entity\Spot;
 use App\Entity\TrainNamePattern;
 use App\Entity\TrainTableYear;
-use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
-use Exception;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+
+#[AsCommand(
+    name: 'app:update-route-trains',
+    description: 'Update route-trains',
+    hidden: false,
+)]
 
 class UpdateRouteTrainsCommand extends Command
 {
     private const CHECK_DATE_DAYS = 300;
 
-    /**
-     * @var string
-     */
-    protected static $defaultName = 'app:update-route-trains';
-
-    /**
-     * @var ManagerRegistry
-     */
-    private ManagerRegistry $doctrine;
-
-    /**
-     * @param ManagerRegistry $doctrine
-     */
-    public function __construct(ManagerRegistry $doctrine)
-    {
-        parent::__construct(self::$defaultName);
-
-        $this->doctrine = $doctrine;
+    public function __construct(
+        private readonly ManagerRegistry $doctrine,
+    ) {
+        parent::__construct();
     }
 
     /**
-     *
-     */
-    protected function configure(): void
-    {
-        $this->setDescription('Update route-trains');
-    }
-
-    /**
-     * @param InputInterface|null $input
-     * @param OutputInterface|null $output
-     * @return int
-     * @throws Exception
+     * @throws \Exception
      */
     protected function execute(InputInterface $input = null, OutputInterface $output = null): int
     {
@@ -61,8 +41,8 @@ class UpdateRouteTrainsCommand extends Command
          */
         $trainTableYear = $this->doctrine
             ->getRepository(TrainTableYear::class)
-            ->findTrainTableYearByDate(new DateTime());
-        $checkDate = max($trainTableYear->startDate, new DateTime('-' . self::CHECK_DATE_DAYS . ' days'));
+            ->findTrainTableYearByDate(new \DateTime());
+        $checkDate = max($trainTableYear->startDate, new \DateTime('-' . self::CHECK_DATE_DAYS . ' days'));
 
         $routeArray = $this->doctrine->getRepository(Spot::class)->findForRouteTrains($checkDate);
         foreach ($routeArray as $routeItem) {
@@ -85,17 +65,17 @@ class UpdateRouteTrainsCommand extends Command
                 'position' => $position,
                 'dayNumber' => $routeItem['dayOfWeek'],
             ]);
-            if (is_null($routeTrain)) {
+            if (\is_null($routeTrain)) {
                 $routeTrain = new RouteTrain();
                 $routeTrain->trainTableYear = $trainTableYear;
                 $routeTrain->route = $route;
                 $routeTrain->position = $position;
-                $routeTrain->dayNumber = (int)$routeItem['dayOfWeek'];
+                $routeTrain->dayNumber = (int) $routeItem['dayOfWeek'];
 
                 $this->doctrine->getManager()->persist($routeTrain);
             }
 
-            $routeTrain->numberOfSpots = (int)$routeItem['numberOfSPots'];
+            $routeTrain->numberOfSpots = (int) $routeItem['numberOfSPots'];
             $routeTrain->trainNamePattern = $pattern;
 
             $this->doctrine->getManager()->flush();

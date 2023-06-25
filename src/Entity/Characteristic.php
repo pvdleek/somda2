@@ -17,7 +17,6 @@ use OpenApi\Annotations as OA;
 class Characteristic
 {
     /**
-     * @var int|null
      * @ORM\Column(name="karakteristiek_id", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -27,7 +26,6 @@ class Characteristic
     public ?int $id = null;
 
     /**
-     * @var string
      * @ORM\Column(name="naam", type="string", length=5, nullable=false)
      * @JMS\Expose()
      * @OA\Property(description="Name of the characteristic", maxLength=5, type="string")
@@ -35,9 +33,8 @@ class Characteristic
     public string $name = '';
 
     /**
-     * @var string
      * @ORM\Column(name="omschrijving", type="string", length=25, nullable=false)
      * @OA\Property(description="Description of the characteristic", maxLength=25, type="string")
      */
-    public string $description;
+    public string $description = '';
 }

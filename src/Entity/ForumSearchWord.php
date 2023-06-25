@@ -15,7 +15,6 @@ use Doctrine\ORM\Mapping as ORM;
 class ForumSearchWord
 {
     /**
-     * @var int|null
      * @ORM\Column(name="woord_id", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -23,29 +22,20 @@ class ForumSearchWord
     public ?int $id = null;
 
     /**
-     * @var string
      * @ORM\Column(name="woord", type="string", length=50, nullable=false)
      */
-    public string $word;
+    public string $word = '';
 
     /**
-     * @var ForumSearchList[]
      * @ORM\OneToMany(targetEntity="App\Entity\ForumSearchList", mappedBy="word")
      */
     private $lists;
 
-    /**
-     *
-     */
     public function __construct()
     {
         $this->lists = new ArrayCollection();
     }
 
-    /**
-     * @param ForumSearchList $forumSearchList
-     * @return ForumSearchWord
-     */
     public function addList(ForumSearchList $forumSearchList): ForumSearchWord
     {
         $this->lists[] = $forumSearchList;

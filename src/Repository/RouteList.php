@@ -5,17 +5,18 @@ namespace App\Repository;
 
 use App\Entity\RouteList as RouteListEntity;
 use App\Entity\TrainTableYear;
-use Doctrine\ORM\EntityRepository;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
+use Doctrine\Persistence\ManagerRegistry;
 
-class RouteList extends EntityRepository
+class RouteList extends ServiceEntityRepository
 {
-    /**
-     * @param TrainTableYear $trainTableYear
-     * @param int $routeNumber
-     * @return RouteListEntity|null
-     */
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, RouteListEntity::class);
+    }
+
     public function findForRouteNumber(TrainTableYear $trainTableYear, int $routeNumber): ?RouteListEntity
     {
         $queryBuilder = $this->getEntityManager()
@@ -35,7 +36,6 @@ class RouteList extends EntityRepository
     }
 
     /**
-     * @param TrainTableYear $trainTableYear
      * @return RouteListEntity[]
      */
     public function findForOverview(TrainTableYear $trainTableYear): array

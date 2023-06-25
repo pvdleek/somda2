@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <div class="panel">
+        <div class="panel-title">{{ 'general.error.generic.title' | trans }}</div>
+        <div class="panel-content">
+            <br />
+            <img alt="500" height="350" src="{{ asset('images/error/500.png') }}" />
+            <h1>{{ 'general.error.generic.header' | trans }}</h1>
+            <p>{{ 'general.error.generic.info' | trans | format(path('home')) | raw }}</p>
+        </div>
+    </div>
+{% endblock %}

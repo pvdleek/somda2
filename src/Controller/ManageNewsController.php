@@ -12,8 +12,6 @@ use App\Generics\RouteGenerics;
 use App\Helpers\FormHelper;
 use App\Helpers\TemplateHelper;
 use App\Helpers\UserHelper;
-use DateTime;
-use Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,36 +20,13 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class ManageNewsController
 {
-    /**
-     * @var UserHelper
-     */
-    private UserHelper $userHelper;
-
-    /**
-     * @var FormHelper
-     */
-    private FormHelper $formHelper;
-
-    /**
-     * @var TemplateHelper
-     */
-    private TemplateHelper $templateHelper;
-
-    /**
-     * @param UserHelper $userHelper
-     * @param FormHelper $formHelper
-     * @param TemplateHelper $templateHelper
-     */
-    public function __construct(UserHelper $userHelper, FormHelper $formHelper, TemplateHelper $templateHelper)
-    {
-        $this->userHelper = $userHelper;
-        $this->formHelper = $formHelper;
-        $this->templateHelper = $templateHelper;
+    public function __construct(
+        private readonly UserHelper $userHelper,
+        private readonly FormHelper $formHelper,
+        private readonly TemplateHelper $templateHelper,
+    ) {
     }
 
-    /**
-     * @return Response
-     */
     public function indexAction(): Response
     {
         $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_ADMIN_NEWS);
@@ -66,19 +41,16 @@ class ManageNewsController
     }
 
     /**
-     * @param Request $request
-     * @param int $id
-     * @return RedirectResponse|Response
-     * @throws Exception
+     * @throws \Exception
      */
-    public function editAction(Request $request, int $id)
+    public function editAction(Request $request, int $id): Response|RedirectResponse
     {
         $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_ADMIN_NEWS);
 
         $news = $this->formHelper->getDoctrine()->getRepository(News::class)->find($id);
-        if (is_null($news)) {
+        if (\is_null($news)) {
             $news = new News();
-            $news->timestamp = new DateTime();
+            $news->timestamp = new \DateTime();
         }
         $form = $this->formHelper->getFactory()->create(NewsForm::class, $news);
 
@@ -98,9 +70,6 @@ class ManageNewsController
         ]);
     }
 
-    /**
-     * @return Response
-     */
     public function railNewsAction(): Response
     {
         $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_ADMIN_RAIL_NEWS);
@@ -113,15 +82,11 @@ class ManageNewsController
         ]);
     }
 
-    /**
-     * @param Request $request
-     * @return JsonResponse
-     */
     public function railNewsDisapproveAction(Request $request): JsonResponse
     {
         $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_ADMIN_RAIL_NEWS);
 
-        $ids = array_filter(explode(',', array_keys($request->request->all())[0]));
+        $ids = \array_filter(\explode(',', \array_keys($request->request->all())[0]));
         foreach ($ids as $id) {
             $railNews = $this->formHelper->getDoctrine()->getRepository(RailNews::class)->find($id);
             $railNews->approved = true;
@@ -130,17 +95,12 @@ class ManageNewsController
         return new JsonResponse();
     }
 
-    /**
-     * @param Request $request
-     * @param int $id
-     * @return RedirectResponse|Response
-     */
-    public function railNewsEditAction(Request $request, int $id)
+    public function railNewsEditAction(Request $request, int $id): Response|RedirectResponse
     {
         $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_ADMIN_RAIL_NEWS);
 
         $railNews = $this->formHelper->getDoctrine()->getRepository(RailNews::class)->find($id);
-        if (is_null($railNews)) {
+        if (\is_null($railNews)) {
             throw new AccessDeniedException('This rail-news item does not exist');
         }
         $form = $this->formHelper->getFactory()->create(RailNewsForm::class, $railNews);

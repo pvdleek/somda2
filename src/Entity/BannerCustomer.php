@@ -12,7 +12,6 @@ use Doctrine\ORM\Mapping as ORM;
 class BannerCustomer
 {
     /**
-     * @var int|null
      * @ORM\Column(name="id", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -20,37 +19,31 @@ class BannerCustomer
     public ?int $id = null;
 
     /**
-     * @var string
      * @ORM\Column(name="name", type="string", length=6, nullable=false)
      */
-    public string $name;
+    public string $name = '';
 
     /**
-     * @var int|null
      * @ORM\Column(name="max_views", type="integer", nullable=true)
      */
-    public ?int $maxViews;
+    public ?int $maxViews = null;
 
     /**
-     * @var int|null
      * @ORM\Column(name="max_hits", type="integer", nullable=true)
      */
-    public ?int $maxHits;
+    public ?int $maxHits = null;
 
     /**
-     * @var int|null
      * @ORM\Column(name="max_days", type="integer", nullable=true)
      */
-    public ?int $maxDays;
+    public ?int $maxDays = null;
 
     /**
-     * @var Banner[]
      * @ORM\OneToMany(targetEntity="App\Entity\Banner", mappedBy="customer")
      */
     private $banners;
 
     /**
-     * @var BannerCustomerUser[]
      * @ORM\OneToMany(targetEntity="App\Entity\BannerCustomerUser", mappedBy="customer")
      */
     private $customerUsers;
@@ -64,10 +57,6 @@ class BannerCustomer
         $this->customerUsers = new ArrayCollection();
     }
 
-    /**
-     * @param Banner $banner
-     * @return BannerCustomer
-     */
     public function addBanner(Banner $banner): BannerCustomer
     {
         $this->banners[] = $banner;
@@ -82,10 +71,6 @@ class BannerCustomer
         return $this->banners->toArray();
     }
 
-    /**
-     * @param BannerCustomerUser $customerUser
-     * @return BannerCustomer
-     */
     public function addCustomerUser(BannerCustomerUser $customerUser): BannerCustomer
     {
         $this->customerUsers[] = $customerUser;

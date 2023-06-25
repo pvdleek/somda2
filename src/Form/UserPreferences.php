@@ -11,7 +11,6 @@ use App\Generics\FormGenerics;
 use App\Helpers\UserHelper;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use Exception;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -22,23 +21,13 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class UserPreferences extends AbstractType
 {
-    /**
-     * @var ManagerRegistry
-     */
-    private ManagerRegistry $doctrine;
-
-    /**
-     * @param ManagerRegistry $doctrine
-     */
-    public function __construct(ManagerRegistry $doctrine)
-    {
-        $this->doctrine = $doctrine;
+    public function __construct(
+        private readonly ManagerRegistry $doctrine,
+    ) {
     }
 
     /**
-     * @param FormBuilderInterface $builder
-     * @param array $options
-     * @throws Exception
+     * @throws \Exception
      */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -56,11 +45,11 @@ class UserPreferences extends AbstractType
                 switch ($typePart[0]) {
                     case 'number':
                         $builder->add($setting->key, ChoiceType::class, [
-                            FormGenerics::KEY_CHOICES => array_combine(
-                                range(1, (int)$typePart[1]),
-                                range(1, (int)$typePart[1])
+                            FormGenerics::KEY_CHOICES => \array_combine(
+                                \range(1, (int) $typePart[1]),
+                                \range(1, (int) $typePart[1])
                             ),
-                            FormGenerics::KEY_DATA => (int)$value,
+                            FormGenerics::KEY_DATA => (int) $value,
                             FormGenerics::KEY_LABEL => $setting->description,
                             FormGenerics::KEY_MAPPED => false,
                             FormGenerics::KEY_REQUIRED => true,
@@ -76,7 +65,7 @@ class UserPreferences extends AbstractType
                         break;
                     case 'boolean':
                         $builder->add($setting->key, CheckboxType::class, [
-                            FormGenerics::KEY_DATA => (int)$value === 1,
+                            FormGenerics::KEY_DATA => (int) $value === 1,
                             FormGenerics::KEY_LABEL => $setting->description,
                             FormGenerics::KEY_MAPPED => false,
                             FormGenerics::KEY_REQUIRED => true,
@@ -118,9 +107,6 @@ class UserPreferences extends AbstractType
         }
     }
 
-    /**
-     * @param OptionsResolver $resolver
-     */
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([

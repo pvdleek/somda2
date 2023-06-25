@@ -13,7 +13,6 @@ use OpenApi\Annotations as OA;
 class RouteOperationDays
 {
     /**
-     * @var int|null
      * @ORM\Column(name="rijdagenid", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -23,7 +22,6 @@ class RouteOperationDays
     public ?int $id = null;
 
     /**
-     * @var bool
      * @ORM\Column(name="ma", type="boolean", nullable=false)
      * @JMS\Expose()
      * @OA\Property(description="Is the route operating on Monday", type="boolean")
@@ -31,7 +29,6 @@ class RouteOperationDays
     public bool $monday = false;
 
     /**
-     * @var bool
      * @ORM\Column(name="di", type="boolean", nullable=false)
      * @JMS\Expose()
      * @OA\Property(description="Is the route operating on Tuesday", type="boolean")
@@ -39,7 +36,6 @@ class RouteOperationDays
     public bool $tuesday = false;
 
     /**
-     * @var bool
      * @ORM\Column(name="wo", type="boolean", nullable=false)
      * @JMS\Expose()
      * @OA\Property(description="Is the route operating on Wednesday", type="boolean")
@@ -47,7 +43,6 @@ class RouteOperationDays
     public bool $wednesday = false;
 
     /**
-     * @var bool
      * @ORM\Column(name="do", type="boolean", nullable=false)
      * @JMS\Expose()
      * @OA\Property(description="Is the route operating on Thursday", type="boolean")
@@ -55,7 +50,6 @@ class RouteOperationDays
     public bool $thursday = false;
 
     /**
-     * @var bool
      * @ORM\Column(name="vr", type="boolean", nullable=false)
      * @JMS\Expose()
      * @OA\Property(description="Is the route operating on Friday", type="boolean")
@@ -63,7 +57,6 @@ class RouteOperationDays
     public bool $friday = false;
 
     /**
-     * @var bool
      * @ORM\Column(name="za", type="boolean", nullable=false)
      * @JMS\Expose()
      * @OA\Property(description="Is the route operating on Saturday", type="boolean")
@@ -71,42 +64,28 @@ class RouteOperationDays
     public bool $saturday = false;
 
     /**
-     * @var bool
      * @ORM\Column(name="zf", type="boolean", nullable=false)
      * @JMS\Expose()
      * @OA\Property(description="Is the route operating on Sunday", type="boolean")
      */
     public bool $sunday = false;
 
-    /**
-     * @param int $dayNumber
-     * @return bool
-     */
     public function isRunningOnDay(int $dayNumber): bool
     {
         switch ($dayNumber) {
             case 0:
-                $day = $this->monday;
-                break;
+                return $this->monday;
             case 1:
-                $day = $this->tuesday;
-                break;
+                return $this->tuesday;
             case 2:
-                $day = $this->wednesday;
-                break;
+                return $this->wednesday;
             case 3:
-                $day = $this->thursday;
-                break;
+                return $this->thursday;
             case 4:
-                $day = $this->friday;
-                break;
+                return $this->friday;
             case 5:
-                $day = $this->saturday;
-                break;
-            default:
-                $day = $this->sunday;
-                break;
+                return $this->saturday;
         }
-        return $day;
+        return $this->sunday;
     }
 }

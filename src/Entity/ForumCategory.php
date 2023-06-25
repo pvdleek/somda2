@@ -14,7 +14,6 @@ use OpenApi\Annotations as OA;
 class ForumCategory
 {
     /**
-     * @var int|null
      * @ORM\Column(name="catid", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -24,15 +23,13 @@ class ForumCategory
     public ?int $id = null;
 
     /**
-     * @var string
      * @ORM\Column(name="name", type="string", length=30, nullable=false)
      * @JMS\Expose()
      * @OA\Property(description="Name of the category", maxLength=30, type="string")
      */
-    public string $name;
+    public string $name = '';
 
     /**
-     * @var int
      * @ORM\Column(name="volgorde", type="integer", nullable=false, options={"default"="1"})
      * @JMS\Expose()
      * @OA\Property(description="The order in which to display the forums", type="integer")
@@ -40,7 +37,6 @@ class ForumCategory
     public int $order = 1;
 
     /**
-     * @var ForumForum[]
      * @ORM\OneToMany(targetEntity="App\Entity\ForumForum", mappedBy="category")
      * @JMS\Exclude()
      */

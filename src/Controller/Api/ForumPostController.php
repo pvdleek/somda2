@@ -12,7 +12,6 @@ use App\Helpers\EmailHelper;
 use App\Helpers\FormHelper;
 use App\Helpers\ForumAuthorizationHelper;
 use App\Helpers\UserHelper;
-use Exception;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use OpenApi\Annotations as OA;
@@ -22,49 +21,16 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class ForumPostController extends AbstractFOSRestController
 {
-    /**
-     * @var UserHelper
-     */
-    private UserHelper $userHelper;
-
-    /**
-     * @var FormHelper
-     */
-    private FormHelper $formHelper;
-
-    /**
-     * @var ForumAuthorizationHelper
-     */
-    private ForumAuthorizationHelper $forumAuthHelper;
-
-    /**
-     * @var EmailHelper
-     */
-    private EmailHelper $emailHelper;
-
-    /**
-     * @param UserHelper $userHelper
-     * @param FormHelper $formHelper
-     * @param ForumAuthorizationHelper $forumAuthHelper
-     * @param EmailHelper $emailHelper
-     */
     public function __construct(
-        UserHelper $userHelper,
-        FormHelper $formHelper,
-        ForumAuthorizationHelper $forumAuthHelper,
-        EmailHelper $emailHelper
+        private readonly UserHelper $userHelper,
+        private readonly FormHelper $formHelper,
+        private readonly ForumAuthorizationHelper $forumAuthHelper,
+        private readonly EmailHelper $emailHelper,
     ) {
-        $this->userHelper = $userHelper;
-        $this->formHelper = $formHelper;
-        $this->forumAuthHelper = $forumAuthHelper;
-        $this->emailHelper = $emailHelper;
     }
 
     /**
-     * @param Request $request
-     * @param int $discussionId
-     * @return Response
-     * @throws Exception
+     * @throws \Exception
      * @OA\Post(
      *     @OA\Parameter(in="formData", name="signatureOn", @OA\Schema(type="integer", enum={0,1})),
      *     @OA\Parameter(in="formData", name="text", @OA\Schema(type="string"))
@@ -96,7 +62,7 @@ class ForumPostController extends AbstractFOSRestController
             throw new AccessDeniedException('This discussion does not exist or the user may not post');
         }
 
-        $postInformation = (array)json_decode($request->getContent(), true);
+        $postInformation = (array) \json_decode($request->getContent(), true);
         $post = $this->formHelper->addPost(
             $discussion,
             $this->userHelper->getUser(),
@@ -110,9 +76,6 @@ class ForumPostController extends AbstractFOSRestController
         return $this->handleView($this->view(['data' => $post], 200));
     }
 
-    /**
-     * @param ForumDiscussion $discussion
-     */
     private function handleFavoritesForAddedPost(ForumDiscussion $discussion): void
     {
         foreach ($discussion->getFavorites() as $favorite) {

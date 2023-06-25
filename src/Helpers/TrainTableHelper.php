@@ -16,16 +16,6 @@ class TrainTableHelper
     use DateTrait;
 
     /**
-     * @var ManagerRegistry
-     */
-    protected ManagerRegistry $doctrine;
-
-    /**
-     * @var TranslatorInterface
-     */
-    protected TranslatorInterface $translator;
-
-    /**
      * @var TrainTableYear|null
      */
     private ?TrainTableYear $trainTableYear = null;
@@ -45,70 +35,45 @@ class TrainTableHelper
      */
     private array $errorMessages = [];
 
-    /**
-     * @param ManagerRegistry $doctrine
-     * @param TranslatorInterface $translator
-     */
-    public function __construct(ManagerRegistry $doctrine, TranslatorInterface $translator)
-    {
-        $this->doctrine = $doctrine;
-        $this->translator = $translator;
+    public function __construct(
+        private readonly ManagerRegistry $doctrine,
+        private readonly TranslatorInterface $translator,
+    ) {
     }
 
-    /**
-     * @param int $trainTableYearId
-     */
     public function setTrainTableYear(int $trainTableYearId)
     {
         $this->trainTableYear = $this->doctrine->getRepository(TrainTableYear::class)->find($trainTableYearId);
     }
 
-    /**
-     * @return TrainTableYear|null
-     */
     public function getTrainTableYear(): ?TrainTableYear
     {
         return $this->trainTableYear;
     }
 
-    /**
-     * @param string $routeNumber
-     */
     public function setRoute(string $routeNumber): void
     {
         $this->route = $this->doctrine->getRepository(Route::class)->findOneBy(['number' => $routeNumber]);
     }
 
-    /**
-     * @return Route|null
-     */
     public function getRoute(): ?Route
     {
         return $this->route;
     }
 
-    /**
-     * @param string $locationName
-     */
     public function setLocation(string $locationName): void
     {
         $this->location = $this->doctrine->getRepository(Location::class)->findOneByName($locationName);
     }
 
-    /**
-     * @return Location|null
-     */
     public function getLocation(): ?Location
     {
         return $this->location;
     }
 
-    /**
-     * @param string $message
-     */
-    protected function addErrorMessage(string $message): void
+    private function addErrorMessage(string $message): void
     {
-        if (!in_array($message, $this->errorMessages)) {
+        if (!\in_array($message, $this->errorMessages)) {
             $this->errorMessages[] = $message;
         }
     }
@@ -121,9 +86,6 @@ class TrainTableHelper
         return $this->errorMessages;
     }
 
-    /**
-     *
-     */
     public function clearErrorMessages()
     {
         $this->errorMessages = [];
@@ -135,11 +97,11 @@ class TrainTableHelper
     public function getTrainTableLines(): array
     {
         $this->clearErrorMessages();
-        if (is_null($this->getTrainTableYear())) {
+        if (\is_null($this->getTrainTableYear())) {
             $this->addErrorMessage($this->translator->trans('general.error.trainTableIndex'));
             return [];
         }
-        if (is_null($this->getRoute())) {
+        if (\is_null($this->getRoute())) {
             $this->addErrorMessage($this->translator->trans('general.error.route'));
             return [];
         }
@@ -156,11 +118,11 @@ class TrainTableHelper
     public function getRoutePredictions(): array
     {
         $this->clearErrorMessages();
-        if (is_null($this->getTrainTableYear())) {
+        if (\is_null($this->getTrainTableYear())) {
             $this->addErrorMessage($this->translator->trans('general.error.trainTableIndex'));
             return [];
         }
-        if (is_null($this->getRoute())) {
+        if (\is_null($this->getRoute())) {
             $this->addErrorMessage($this->translator->trans('general.error.route'));
             return [];
         }
@@ -171,34 +133,28 @@ class TrainTableHelper
         );
     }
 
-    /**
-     * @param int|null $dayNumber
-     * @param string|null $startTime
-     * @param string|null $endTime
-     * @return array
-     */
     public function getPassingRoutes(int $dayNumber = null, string $startTime = null, string $endTime = null): array
     {
         $this->clearErrorMessages();
-        if (is_null($this->getTrainTableYear())) {
+        if (\is_null($this->getTrainTableYear())) {
             $this->addErrorMessage($this->translator->trans('general.error.trainTableIndex'));
             return [];
         }
-        if (is_null($this->getLocation())) {
+        if (\is_null($this->getLocation())) {
             $this->addErrorMessage($this->translator->trans('general.error.location'));
             return [];
         }
 
-        if (is_null($dayNumber)) {
+        if (\is_null($dayNumber)) {
             $dayNumber = date('N');
         }
 
-        if (!is_null($startTime)) {
+        if (!\is_null($startTime)) {
             $startTimeDatabase = $this->timeDisplayToDatabase($startTime);
         } else {
             $startTimeDatabase = $this->timeDisplayToDatabase(date('H:i'));
         }
-        if (!is_null($endTime)) {
+        if (!\is_null($endTime)) {
             $endTimeDatabase = $this->timeDisplayToDatabase($endTime);
             if ($startTimeDatabase > $endTimeDatabase) {
                 $this->addErrorMessage($this->translator->trans('passingRoutes.error.dayBorderCrossed'));

@@ -1,17 +1,18 @@
 parameters:
   router.request_context.scheme: 'https'
   asset.request_context.secure: true
-  container.dumper.inline_factories: true
+  .container.dumper.inline_factories: true
 
 services:
   _defaults:
     autowire: true
     autoconfigure: true
+    public: true
   App\:
-    resource: '../src/*'
-    exclude: '../src/{DependencyInjection,Entity,Migrations,Tests,Kernel.php}'
+    resource: '../src/'
+    exclude: '../src/{DependencyInjection,Migrations,Model,Tests,Kernel.php}'
   App\Controller\:
-    resource: '../src/Controller'
+    resource: '../src/Controller/'
     tags: ['controller.service_arguments']
   debril.rss_atom.provider:
     class: App\Feed\FeedProvider

@@ -24,51 +24,15 @@ class ForumModerateController
     public const ACTION_OPEN = 'open';
     public const ACTION_MOVE = 'move';
 
-    /**
-     * @var FormHelper
-     */
-    private FormHelper $formHelper;
-
-    /**
-     * @var UserHelper
-     */
-    private UserHelper $userHelper;
-
-    /**
-     * @var TemplateHelper
-     */
-    private TemplateHelper $templateHelper;
-
-    /**
-     * @var ForumAuthorizationHelper
-     */
-    private ForumAuthorizationHelper $forumAuthHelper;
-
-    /**
-     * @param FormHelper $formHelper
-     * @param UserHelper $userHelper
-     * @param TemplateHelper $templateHelper
-     * @param ForumAuthorizationHelper $forumAuthHelper
-     */
     public function __construct(
-        FormHelper $formHelper,
-        UserHelper $userHelper,
-        TemplateHelper $templateHelper,
-        ForumAuthorizationHelper $forumAuthHelper
+        private readonly FormHelper $formHelper,
+        private readonly UserHelper $userHelper,
+        private readonly TemplateHelper $templateHelper,
+        private readonly ForumAuthorizationHelper $forumAuthHelper,
     ) {
-        $this->formHelper = $formHelper;
-        $this->userHelper = $userHelper;
-        $this->templateHelper = $templateHelper;
-        $this->forumAuthHelper = $forumAuthHelper;
     }
 
-    /**
-     * @param Request $request
-     * @param int $id
-     * @param string $action
-     * @return Response|RedirectResponse
-     */
-    public function indexAction(Request $request, int $id, string $action)
+    public function indexAction(Request $request, int $id, string $action): Response|RedirectResponse
     {
         $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_USER);
 
@@ -99,13 +63,7 @@ class ForumModerateController
         );
     }
 
-    /**
-     * @param Request $request
-     * @param int $id1
-     * @param int $id2
-     * @return RedirectResponse|Response
-     */
-    public function combineAction(Request $request, int $id1, int $id2)
+    public function combineAction(Request $request, int $id1, int $id2): Response|RedirectResponse
     {
         $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_USER);
 
@@ -126,7 +84,7 @@ class ForumModerateController
 
             $newDiscussion->author = $oldestPost->author;
             $newDiscussion->title = $form->get('title')->getData();
-            $newDiscussion->viewed = (int)$discussion1->viewed + (int)$discussion2->viewed;
+            $newDiscussion->viewed = (int) $discussion1->viewed + (int) $discussion2->viewed;
             $this->formHelper->getDoctrine()->getManager()->persist($newDiscussion);
             $this->formHelper->getDoctrine()->getManager()->remove($discussion1);
             $this->formHelper->getDoctrine()->getManager()->remove($discussion2);
@@ -134,7 +92,7 @@ class ForumModerateController
 
             return $this->formHelper->finishFormHandling('', RouteGenerics::ROUTE_FORUM_DISCUSSION, [
                 'id' => $newDiscussion->id,
-                'name' => urlencode($newDiscussion->title)
+                'name' => \urlencode($newDiscussion->title)
             ]);
         }
 
@@ -146,29 +104,19 @@ class ForumModerateController
         ]);
     }
 
-    /**
-     * @param ForumDiscussion $discussion1
-     * @param ForumDiscussion $discussion2
-     * @param ForumDiscussion $newDiscussion
-     * @return ForumPost
-     */
-    private function movePostsAndGetOldest(
-        ForumDiscussion $discussion1,
-        ForumDiscussion $discussion2,
-        ForumDiscussion $newDiscussion
-    ): ForumPost {
+    private function movePostsAndGetOldest(ForumDiscussion $discussion1, ForumDiscussion $discussion2, ForumDiscussion $newDiscussion): ForumPost {
         /**
          * @var ForumPost $oldestPost
          */
         $oldestPost = null;
         foreach ($discussion1->getPosts() as $post) {
-            if (is_null($oldestPost) || $post->timestamp < $oldestPost->timestamp) {
+            if (\is_null($oldestPost) || $post->timestamp < $oldestPost->timestamp) {
                 $oldestPost = $post;
             }
             $post->discussion = $newDiscussion;
         }
         foreach ($discussion2->getPosts() as $post) {
-            if (is_null($oldestPost) || $post->timestamp < $oldestPost->timestamp) {
+            if (\is_null($oldestPost) || $post->timestamp < $oldestPost->timestamp) {
                 $oldestPost = $post;
             }
             $post->discussion = $newDiscussion;
@@ -193,18 +141,13 @@ class ForumModerateController
         return $oldestPost;
     }
 
-    /**
-     * @param int $id
-     * @param string $postIds
-     * @return RedirectResponse
-     */
     public function splitAction(int $id, string $postIds): RedirectResponse
     {
         $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_USER);
 
         $discussion = $this->getDiscussion($id);
 
-        $postIds = array_filter(explode(',', $postIds));
+        $postIds = \array_filter(\explode(',', $postIds));
         $firstPost = $this->formHelper->getDoctrine()->getRepository(ForumPost::class)->find($postIds[0]);
 
         // Create the new discussion
@@ -227,17 +170,13 @@ class ForumModerateController
         );
     }
 
-    /**
-     * @param int $id
-     * @return ForumDiscussion
-     */
     private function getDiscussion(int $id): ForumDiscussion
     {
         /**
          * @var ForumDiscussion $discussion
          */
         $discussion = $this->formHelper->getDoctrine()->getRepository(ForumDiscussion::class)->find($id);
-        if (is_null($discussion)
+        if (\is_null($discussion)
             || !$this->forumAuthHelper->userIsModerator($discussion->forum, $this->userHelper->getUser())
         ) {
             throw new AccessDeniedException('The discussion does not exist of the user cannot moderate it');

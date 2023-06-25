@@ -4,45 +4,25 @@ declare(strict_types=1);
 namespace App\Command;
 
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+#[AsCommand(
+    name: 'app:update-route-lists',
+    description: 'Update route-lists',
+    hidden: false,
+)]
+
 class UpdateRouteListsCommand extends Command
 {
-    /**
-     * @var string
-     */
-    protected static $defaultName = 'app:update-route-lists';
-
-    /**
-     * @var ManagerRegistry
-     */
-    private ManagerRegistry $doctrine;
-
-    /**
-     * @param ManagerRegistry $doctrine
-     */
-    public function __construct(ManagerRegistry $doctrine)
-    {
-        parent::__construct(self::$defaultName);
-
-        $this->doctrine = $doctrine;
+    public function __construct(
+        private readonly ManagerRegistry $doctrine,
+    ) {
+        parent::__construct();
     }
 
-    /**
-     *
-     */
-    protected function configure(): void
-    {
-        $this->setDescription('Update route-lists');
-    }
-
-    /**
-     * @param InputInterface|null $input
-     * @param OutputInterface|null $output
-     * @return int
-     */
     protected function execute(InputInterface $input = null, OutputInterface $output = null): int
     {
         $connection = $this->doctrine->getManager()->getConnection();

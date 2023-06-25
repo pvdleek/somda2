@@ -14,40 +14,13 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ForumSearchController
 {
-    /**
-     * @var FormHelper
-     */
-    private FormHelper $formHelper;
-
-    /**
-     * @var TemplateHelper
-     */
-    private TemplateHelper $templateHelper;
-
-    /**
-     * @var ForumSearchHelper
-     */
-    private ForumSearchHelper $forumSearchHelper;
-
-    /**
-     * @param FormHelper $formHelper
-     * @param TemplateHelper $templateHelper
-     * @param ForumSearchHelper $forumSearchHelper
-     */
     public function __construct(
-        FormHelper $formHelper,
-        TemplateHelper $templateHelper,
-        ForumSearchHelper $forumSearchHelper
+        private readonly FormHelper $formHelper,
+        private readonly TemplateHelper $templateHelper,
+        private readonly ForumSearchHelper $forumSearchHelper,
     ) {
-        $this->formHelper = $formHelper;
-        $this->templateHelper = $templateHelper;
-        $this->forumSearchHelper = $forumSearchHelper;
     }
 
-    /**
-     * @param Request $request
-     * @return Response
-     */
     public function indexAction(Request $request): Response
     {
         $form = $this->formHelper->getFactory()->create(ForumSearch::class);
@@ -61,8 +34,8 @@ class ForumSearchController
             return $this->templateHelper->render('forum/search.html.twig', [
                 TemplateHelper::PARAMETER_PAGE_TITLE => 'Zoeken in het forum',
                 TemplateHelper::PARAMETER_FORM => $form->createView(),
-                'results' => array_slice($results, 0, ForumSearchHelper::MAX_RESULTS),
-                'moreResults' => count($results) > ForumSearchHelper::MAX_RESULTS,
+                'results' => \array_slice($results, 0, ForumSearchHelper::MAX_RESULTS),
+                'moreResults' => \count($results) > ForumSearchHelper::MAX_RESULTS,
             ]);
         }
 
@@ -72,9 +45,6 @@ class ForumSearchController
         ]);
     }
 
-    /**
-     * @return RedirectResponse
-     */
     public function noteworthyStuffAction(): RedirectResponse
     {
         $forum = $this->formHelper->getDoctrine()->getRepository(ForumForum::class)->find(

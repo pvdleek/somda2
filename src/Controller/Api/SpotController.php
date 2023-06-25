@@ -14,30 +14,13 @@ use Symfony\Component\HttpFoundation\Response;
 
 class SpotController extends AbstractFOSRestController
 {
-    /**
-     * @var ManagerRegistry
-     */
-    private ManagerRegistry $doctrine;
-
-    /**
-     * @var UserHelper
-     */
-    private UserHelper $userHelper;
-
-    /**
-     * @param ManagerRegistry $doctrine
-     * @param UserHelper $userHelper
-     */
-    public function __construct(ManagerRegistry $doctrine, UserHelper $userHelper)
-    {
-        $this->doctrine = $doctrine;
-        $this->userHelper = $userHelper;
+    public function __construct(
+        private readonly ManagerRegistry $doctrine,
+        private readonly UserHelper $userHelper,
+    ) {
     }
 
     /**
-     * @param int $maxMonths
-     * @param string|null $searchParameters
-     * @return Response
      * @OA\Parameter(
      *     description="The maximum number of months to search for",
      *     in="path",
@@ -90,8 +73,8 @@ class SpotController extends AbstractFOSRestController
         $spotFilter = new SpotFilter();
         $spots = null;
 
-        if (!is_null($searchParameters)) {
-            $spotFilter->createFromSearchParameters(explode('/', $searchParameters));
+        if (!\is_null($searchParameters)) {
+            $spotFilter->createFromSearchParameters(\explode('/', $searchParameters));
 
             if (!$spotFilter->isValid()) {
                 return $this->handleView($this->view(['error' => 'Getting spots without filters is not allowed'], 404));

@@ -16,8 +16,6 @@ use App\Helpers\FlashHelper;
 use App\Helpers\FormHelper;
 use App\Helpers\TemplateHelper;
 use App\Helpers\UserHelper;
-use DateTime;
-use Exception;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -28,49 +26,16 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class SecurityController
 {
-    /**
-     * @var FormHelper
-     */
-    private FormHelper $formHelper;
-
-    /**
-     * @var UserHelper
-     */
-    private UserHelper $userHelper;
-
-    /**
-     * @var TemplateHelper
-     */
-    private TemplateHelper $templateHelper;
-
-    /**
-     * @var EmailHelper
-     */
-    private EmailHelper $emailHelper;
-
-    /**
-     * @param FormHelper $formHelper
-     * @param UserHelper $userHelper
-     * @param TemplateHelper $templateHelper
-     * @param EmailHelper $emailHelper
-     */
     public function __construct(
-        FormHelper $formHelper,
-        UserHelper $userHelper,
-        TemplateHelper $templateHelper,
-        EmailHelper $emailHelper
+        private readonly FormHelper $formHelper,
+        private readonly UserHelper $userHelper,
+        private readonly TemplateHelper $templateHelper,
+        private readonly EmailHelper $emailHelper,
     ) {
-        $this->formHelper = $formHelper;
-        $this->userHelper = $userHelper;
-        $this->templateHelper = $templateHelper;
-        $this->emailHelper = $emailHelper;
     }
 
     /**
-     * @param AuthenticationUtils $authenticationUtils
-     * @param string|null $username
-     * @return Response
-     * @throws Exception
+     * @throws \Exception
      */
     public function loginAction(AuthenticationUtils $authenticationUtils, string $username = null): Response
     {
@@ -86,11 +51,9 @@ class SecurityController
     }
 
     /**
-     * @param Request $request
-     * @return RedirectResponse|Response
-     * @throws Exception
+     * @throws \Exception
      */
-    public function registerAction(Request $request)
+    public function registerAction(Request $request): Response|RedirectResponse
     {
         $user = new User();
         $form = $this->formHelper->getFactory()->create(UserForm::class, $user);
@@ -108,7 +71,7 @@ class SecurityController
                     PASSWORD_DEFAULT
                 );
                 $user->activationKey = uniqid();
-                $user->registerTimestamp = new DateTime();
+                $user->registerTimestamp = new \DateTime();
                 $this->formHelper->getDoctrine()->getManager()->persist($user);
 
                 $userInfo = new UserInfo();
@@ -155,27 +118,21 @@ class SecurityController
         ]);
     }
 
-    /**
-     * @param FormInterface $form
-     */
     private function validateUsername(FormInterface $form): void
     {
         $existingUsername = $this->formHelper->getDoctrine()->getRepository(User::class)->findOneBy(
             [UserForm::FIELD_USERNAME => $form->get(UserForm::FIELD_USERNAME)->getData()]
         );
-        if (!is_null($existingUsername)) {
+        if (!\is_null($existingUsername)) {
             $form->get(UserForm::FIELD_USERNAME)->addError(
                 new FormError('De gebruikersnaam die je hebt gekozen is al in gebruik, kies een andere gebruikersnaam')
             );
         }
     }
 
-    /**
-     * @param FormInterface $form
-     */
     public function validateEmail(FormInterface $form): void
     {
-        if (substr($form->get(UserForm::FIELD_EMAIL)->getData(), -16) === 'ikbenspamvrij.nl') {
+        if (\substr($form->get(UserForm::FIELD_EMAIL)->getData(), -16) === 'ikbenspamvrij.nl') {
             $form->get(UserForm::FIELD_EMAIL)->addError(
                 new FormError('E-mailadressen van ikbenspamvrij.nl zijn niet toegestaan')
             );
@@ -184,23 +141,20 @@ class SecurityController
         $existingEmail = $this->formHelper->getDoctrine()->getRepository(User::class)->findOneBy(
             [UserForm::FIELD_EMAIL => $form->get(UserForm::FIELD_EMAIL)->getData()]
         );
-        if (!is_null($existingEmail)) {
+        if (!\is_null($existingEmail)) {
             $form->get(UserForm::FIELD_EMAIL)->addError(
                 new FormError('Het e-mailadres dat je hebt gekozen is al in gebruik, probeer het opnieuw')
             );
         }
     }
 
-    /**
-     * @param FormInterface $form
-     */
     public function validatePassword(FormInterface $form): void
     {
-        $plainPassword = (string)$form->get(UserForm::FIELD_PLAIN_PASSWORD)->getData();
+        $plainPassword = (string) $form->get(UserForm::FIELD_PLAIN_PASSWORD)->getData();
 
-        $username = (string)$form->get(UserForm::FIELD_USERNAME)->getData();
-        if (stristr($plainPassword, $username) || stristr($username, $plainPassword)
-            || stristr(strrev($username), $plainPassword) || stristr($plainPassword, strrev($username))
+        $username = (string) $form->get(UserForm::FIELD_USERNAME)->getData();
+        if (\stristr($plainPassword, $username) || \stristr($username, $plainPassword)
+            || \stristr(strrev($username), $plainPassword) || \stristr($plainPassword, \strrev($username))
         ) {
             $form->get(UserForm::FIELD_PLAIN_PASSWORD)->addError(
                 new FormError('Het wachtwoord dat je hebt gekozen vertoont teveel overeenkomsten ' .
@@ -208,9 +162,9 @@ class SecurityController
             );
         }
 
-        $email = (string)$form->get(UserForm::FIELD_EMAIL)->getData();
-        if (stristr($plainPassword, $email) || stristr($email, $plainPassword)
-            || stristr(strrev($email), $plainPassword) || stristr($plainPassword, strrev($email))
+        $email = (string) $form->get(UserForm::FIELD_EMAIL)->getData();
+        if (\stristr($plainPassword, $email) || \stristr($email, $plainPassword)
+            || \stristr(strrev($email), $plainPassword) || \stristr($plainPassword, \strrev($email))
         ) {
             $form->get(UserForm::FIELD_PLAIN_PASSWORD)->addError(
                 new FormError('Het wachtwoord dat je hebt gekozen vertoont teveel overeenkomsten ' .
@@ -219,19 +173,13 @@ class SecurityController
         }
     }
 
-    /**
-     * @param Request $request
-     * @param int $id
-     * @param string|null $key
-     * @return RedirectResponse|Response
-     */
-    public function activateAction(Request $request, int $id, string $key = null)
+    public function activateAction(Request $request, int $id, string $key = null): Response|RedirectResponse
     {
         /**
          * @var User $user
          */
         $user = $this->formHelper->getDoctrine()->getRepository(User::class)->find($id);
-        if (is_null($user)) {
+        if (\is_null($user)) {
             throw new AccessDeniedException('This user does not exist');
         }
 
@@ -276,7 +224,7 @@ class SecurityController
             $form->get(UserActivate::FIELD_KEY)->addError(
                 new FormError('De activatie-sleutel is niet correct, probeer het opnieuw')
             );
-        } elseif (!is_null($key)) {
+        } elseif (!\is_null($key)) {
             $form->get(UserActivate::FIELD_KEY)->setData($key);
         }
 
@@ -287,11 +235,9 @@ class SecurityController
     }
 
     /**
-     * @param Request $request
-     * @return RedirectResponse|Response
-     * @throws Exception
+     * @throws \Exception
      */
-    public function lostPasswordAction(Request $request)
+    public function lostPasswordAction(Request $request): Response|RedirectResponse
     {
         $form = $this->formHelper->getFactory()->create(UserLostPassword::class);
         $form->handleRequest($request);
@@ -302,7 +248,7 @@ class SecurityController
             $user = $this->formHelper->getDoctrine()->getRepository(User::class)->findOneBy(
                 [UserForm::FIELD_EMAIL => $form->get(UserForm::FIELD_EMAIL)->getData()]
             );
-            if (!is_null($user)) {
+            if (!\is_null($user)) {
                 $newPassword = $this->getRandomPassword(12);
                 $user->password = (string)password_hash($newPassword, PASSWORD_DEFAULT);
                 $this->formHelper->getDoctrine()->getManager()->flush();
@@ -330,33 +276,26 @@ class SecurityController
     }
 
     /**
-     * @param int $length
-     * @return string
-     * @throws Exception
+     * @throws \Exception
      */
     private function getRandomPassword(int $length): string
     {
         $keySpace = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $pieces = [];
         for ($i = 0; $i < $length; ++$i) {
-            $pieces []= $keySpace[random_int(0, mb_strlen($keySpace, '8bit') - 1)];
+            $pieces []= $keySpace[\random_int(0, \mb_strlen($keySpace, '8bit') - 1)];
         }
-        return implode('', $pieces);
+        return \implode('', $pieces);
     }
 
-    /**
-     * @param Request $request
-     * @return RedirectResponse|Response
-     */
-    public function changePasswordAction(Request $request)
+    public function changePasswordAction(Request $request): Response|RedirectResponse
     {
         $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_USER);
 
         $form = $this->formHelper->getFactory()->create(UserPassword::class);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->userHelper->getUser()->password =
-                (string)password_hash($form->get('newPassword')->getData(), PASSWORD_DEFAULT);
+            $this->userHelper->getUser()->password = \password_hash($form->get('newPassword')->getData(), PASSWORD_DEFAULT);
             $this->formHelper->getDoctrine()->getManager()->flush();
 
             $this->formHelper->getFlashHelper()->add(

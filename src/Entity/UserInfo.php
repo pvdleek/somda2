@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as JMS;
 use OpenApi\Annotations as OA;
@@ -20,16 +19,14 @@ class UserInfo
     public const GENDER_FEMALE = 2;
 
     /**
-     * @var User
      * @ORM\OneToOne(targetEntity="App\Entity\User", inversedBy="info")
      * @ORM\JoinColumn(name="uid", referencedColumnName="uid")
      * @ORM\Id
      * @JMS\Exclude()
      */
-    public User $user;
+    public ?User $user = null;
 
     /**
-     * @var string
      * @ORM\Column(name="avatar", type="string", length=30, nullable=false, options={"default"="_blank.png"})
      * @JMS\Expose()
      * @OA\Property(description="Avatar of the user", maxLength=30, type="string")
@@ -37,15 +34,13 @@ class UserInfo
     public string $avatar = '_blank.png';
 
     /**
-     * @var string|null
      * @ORM\Column(name="website", type="string", length=75, nullable=true)
      * @JMS\Expose()
      * @OA\Property(description="Website of the user", maxLength=75, type="string")
      */
-    public ?string $website;
+    public ?string $website = null;
 
     /**
-     * @var string|null
      * @ORM\Column(name="city", type="string", length=50, nullable=true)
      * @Assert\Length(
      *     min = 2,
@@ -56,18 +51,16 @@ class UserInfo
      * @JMS\Expose()
      * @OA\Property(description="City of the user", maxLength=50, type="string")
      */
-    public ?string $city;
+    public ?string $city = null;
 
     /**
-     * @var string|null
      * @ORM\Column(name="skype", type="string", length=60, nullable=true)
      * @JMS\Expose()
      * @OA\Property(description="Skype of the user", maxLength=60, type="string")
      */
-    public ?string $skype;
+    public ?string $skype = null;
 
     /**
-     * @var int
      * @ORM\Column(name="geslacht", type="smallint", nullable=false, options={"default"="0"})
      * @JMS\Expose()
      * @OA\Property(
@@ -80,15 +73,13 @@ class UserInfo
     public int $gender = 0;
 
     /**
-     * @var DateTime|null
      * @ORM\Column(name="gebdatum", type="date", nullable=true)
      * @JMS\Expose()
      * @OA\Property(description="ISO-8601 timestamp of the birth-date (Y-m-dTH:i:sP)", type="string")
      */
-    public ?DateTime $birthDate;
+    public ?\DateTime $birthDate = null;
 
     /**
-     * @var string|null
      * @ORM\Column(name="mob_tel", type="bigint", nullable=true)
      * @Assert\Length(
      *     min = 11,
@@ -99,10 +90,9 @@ class UserInfo
      * @JMS\Expose()
      * @OA\Property(description="Mobile phone of the user", type="integer")
      */
-    public ?string $mobilePhone;
+    public ?string $mobilePhone = null;
 
     /**
-     * @var string|null
      * @ORM\Column(name="twitter_account", type="string", length=255, nullable=true)
      * @Assert\Length(
      *     max = 255,
@@ -111,10 +101,9 @@ class UserInfo
      * @JMS\Expose()
      * @OA\Property(description="Twitter account of the user", maxLength=255, type="string")
      */
-    public ?string $twitterAccount;
+    public ?string $twitterAccount = null;
 
     /**
-     * @var string|null
      * @ORM\Column(name="facebook_account", type="string", length=255, nullable=true)
      * @Assert\Length(
      *     max = 255,
@@ -123,10 +112,9 @@ class UserInfo
      * @JMS\Expose()
      * @OA\Property(description="Facebook account of the user", maxLength=255, type="string")
      */
-    public ?string $facebookAccount;
+    public ?string $facebookAccount = null;
 
     /**
-     * @var string|null
      * @ORM\Column(name="flickr_account", type="string", length=255, nullable=true)
      * @Assert\Length(
      *     max = 255,
@@ -135,10 +123,9 @@ class UserInfo
      * @JMS\Expose()
      * @OA\Property(description="Flickr account of the user", maxLength=255, type="string")
      */
-    public ?string $flickrAccount;
+    public ?string $flickrAccount = null;
 
     /**
-     * @var string|null
      * @ORM\Column(name="youtube_account", type="string", length=255, nullable=true)
      * @Assert\Length(
      *     max = 255,
@@ -147,13 +134,12 @@ class UserInfo
      * @JMS\Expose()
      * @OA\Property(description="Youtube account of the user", maxLength=255, type="string")
      */
-    public ?string $youtubeAccount;
+    public ?string $youtubeAccount = null;
 
     /**
-     * @var UserCompany|null
      * @ORM\ManyToOne(targetEntity="App\Entity\UserCompany")
      * @ORM\JoinColumn(name="bedrijf_id", referencedColumnName="bedrijf_id")
      * @JMS\Exclude()
      */
-    public ?UserCompany $company;
+    public ?UserCompany $company = null;
 }

@@ -2,9 +2,7 @@
 
 namespace App\Entity;
 
-use DateTime;
 use Doctrine\ORM\Mapping as ORM;
-use Exception;
 use JMS\Serializer\Annotation as JMS;
 use OpenApi\Annotations as OA;
 
@@ -15,7 +13,6 @@ use OpenApi\Annotations as OA;
 class TrainTableYear
 {
     /**
-     * @var int|null
      * @ORM\Column(name="tdr_nr", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -25,37 +22,33 @@ class TrainTableYear
     public ?int $id = null;
 
     /**
-     * @var string
      * @ORM\Column(name="naam", type="string", length=10, nullable=false)
      * @JMS\Expose()
      * @OA\Property(description="Name of the trainTableYear", maxLength=10, type="string")
      */
-    public string $name;
+    public string $name = '';
 
     /**
-     * @var DateTime
      * @ORM\Column(name="start_datum", type="date", nullable=false)
      * @JMS\Expose()
      * @OA\Property(description="The start-date (00:00:00)")
      */
-    public DateTime $startDate;
+    public ?\DateTime $startDate = null;
 
     /**
-     * @var DateTime
      * @ORM\Column(name="eind_datum", type="date", nullable=false)
      * @JMS\Expose()
      * @OA\Property(description="The end-date (23:59:59)")
      */
-    public DateTime $endDate;
+    public ?\DateTime $endDate = null;
 
     /**
-     * @return bool
-     * @throws Exception
+     * @throws \Exception
      * @JMS\VirtualProperty(name="active")
      * @OA\Property(description="Indication if the trainTableYear is currently active")
      */
     public function isActive(): bool
     {
-        return $this->startDate <= new DateTime() && $this->endDate >= new DateTime();
+        return $this->startDate <= new \DateTime() && $this->endDate >= new \DateTime();
     }
 }

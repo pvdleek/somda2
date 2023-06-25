@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -13,7 +12,6 @@ use Doctrine\ORM\Mapping as ORM;
 class ForumPostAlertNote
 {
     /**
-     * @var int|null
      * @ORM\Column(name="id", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -21,34 +19,29 @@ class ForumPostAlertNote
     public ?int $id = null;
 
     /**
-     * @var ForumPostAlert
      * @ORM\ManyToOne(targetEntity="App\Entity\ForumPostAlert", inversedBy="notes")
      * @ORM\JoinColumn(name="alertid", referencedColumnName="id")
      */
-    public ForumPostAlert $alert;
+    public ?ForumPostAlert $alert = null;
 
     /**
-     * @var User
      * @ORM\ManyToOne(targetEntity="App\Entity\User")
      * @ORM\JoinColumn(name="authorid", referencedColumnName="uid")
      */
-    public User $author;
+    public ?User $author = null;
 
     /**
-     * @var DateTime
      * @ORM\Column(name="timestamp", type="datetime", nullable=false)
      */
-    public DateTime $timestamp;
+    public ?\DateTime $timestamp = null;
 
     /**
-     * @var bool
      * @ORM\Column(name="sent_to_reporter", type="boolean", nullable=false)
      */
-    public bool $sentToReporter;
+    public bool $sentToReporter = false;
 
     /**
-     * @var string
      * @ORM\Column(name="text", type="text", length=0, nullable=false)
      */
-    public string $text;
+    public string $text = '';
 }

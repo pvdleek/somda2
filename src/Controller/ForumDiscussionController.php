@@ -15,75 +15,31 @@ use App\Helpers\ForumAuthorizationHelper;
 use App\Helpers\ForumDiscussionHelper;
 use App\Helpers\TemplateHelper;
 use App\Helpers\UserHelper;
-use DateTime;
-use Exception;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class ForumDiscussionController
 {
-    /**
-     * @var UserHelper
-     */
-    private UserHelper $userHelper;
-
-    /**
-     * @var FormHelper
-     */
-    private FormHelper $formHelper;
-
-    /**
-     * @var ForumAuthorizationHelper
-     */
-    private ForumAuthorizationHelper $forumAuthHelper;
-
-    /**
-     * @var ForumDiscussionHelper
-     */
-    private ForumDiscussionHelper $discussionHelper;
-
-    /**
-     * @var TemplateHelper
-     */
-    private TemplateHelper $templateHelper;
-
-    /**
-     * @param UserHelper $userHelper
-     * @param FormHelper $formHelper
-     * @param ForumAuthorizationHelper $forumAuthHelper
-     * @param ForumDiscussionHelper $discussionHelper
-     * @param TemplateHelper $templateHelper
-     */
     public function __construct(
-        UserHelper $userHelper,
-        FormHelper $formHelper,
-        ForumAuthorizationHelper $forumAuthHelper,
-        ForumDiscussionHelper $discussionHelper,
-        TemplateHelper $templateHelper
+        private readonly UserHelper $userHelper,
+        private readonly FormHelper $formHelper,
+        private readonly ForumAuthorizationHelper $forumAuthHelper,
+        private readonly ForumDiscussionHelper $discussionHelper,
+        private readonly TemplateHelper $templateHelper,
     ) {
-        $this->userHelper = $userHelper;
-        $this->formHelper = $formHelper;
-        $this->forumAuthHelper = $forumAuthHelper;
-        $this->discussionHelper = $discussionHelper;
-        $this->templateHelper = $templateHelper;
     }
 
     /**
-     * @param Request $request
-     * @param int $id
-     * @param int|null $pageNumber
-     * @param int|null $postId
-     * @return Response|RedirectResponse
-     * @throws Exception
+     * @throws \Exception
      */
-    public function indexAction(Request $request, int $id, int $pageNumber = null, int $postId = null): Response
+    public function indexAction(Request $request, int $id, ?int $pageNumber = null, ?int $postId = null): Response|RedirectResponse
     {
         /**
          * @var ForumDiscussion $discussion
          */
         $discussion = $this->formHelper->getDoctrine()->getRepository(ForumDiscussion::class)->find($id);
-        if (is_null($discussion)) {
+        if (\is_null($discussion)) {
             return $this->formHelper->getRedirectHelper()->redirectToRoute(RouteGenerics::ROUTE_FORUM);
         }
 
@@ -111,27 +67,25 @@ class ForumDiscussionController
     }
 
     /**
-     * @param Request $request
-     * @return Banner|null
-     * @throws Exception
+     * @throws \Exception
      */
     private function getForumBanner(Request $request): ?Banner
     {
         $banners = $this->formHelper->getDoctrine()->getRepository(Banner::class)->findBy(
             ['location' => Banner::LOCATION_FORUM, 'active' => true]
         );
-        if (count($banners) < 1) {
+        if (\count($banners) < 1) {
             return null;
         }
         /**
          * @var Banner $forumBanner
          */
-        $forumBanner = $banners[random_int(0, count($banners) - 1)];
+        $forumBanner = $banners[\random_int(0, \count($banners) - 1)];
 
         // Create a view for this banner
         $bannerView = new BannerView();
         $bannerView->banner = $forumBanner;
-        $bannerView->timestamp = new DateTime();
+        $bannerView->timestamp = new \DateTime();
         $bannerView->ipAddress = inet_pton($request->getClientIp());
         $this->formHelper->getDoctrine()->getManager()->persist($bannerView);
         $this->formHelper->getDoctrine()->getManager()->flush();
@@ -140,12 +94,9 @@ class ForumDiscussionController
     }
 
     /**
-     * @param Request $request
-     * @param int $id
-     * @return RedirectResponse|Response
-     * @throws Exception
+     * @throws \Exception
      */
-    public function newAction(Request $request, int $id)
+    public function newAction(Request $request, int $id): Response|RedirectResponse
     {
         $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_USER);
 
@@ -153,7 +104,7 @@ class ForumDiscussionController
          * @var ForumForum $forum
          */
         $forum = $this->formHelper->getDoctrine()->getRepository(ForumForum::class)->find($id);
-        if (is_null($forum) || !$this->forumAuthHelper->mayPost($forum, $this->userHelper->getUser())) {
+        if (\is_null($forum) || !$this->forumAuthHelper->mayPost($forum, $this->userHelper->getUser())) {
             return $this->formHelper->getRedirectHelper()->redirectToRoute(RouteGenerics::ROUTE_FORUM);
         }
 
@@ -175,7 +126,7 @@ class ForumDiscussionController
 
             return $this->formHelper->finishFormHandling('', RouteGenerics::ROUTE_FORUM_DISCUSSION, [
                 'id' => $forumDiscussion->id,
-                'name' => urlencode($forumDiscussion->title)
+                'name' => \urlencode($forumDiscussion->title)
             ]);
         }
 

@@ -15,45 +15,21 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class NewsController
 {
-    /**
-     * @var ManagerRegistry
-     */
-    private ManagerRegistry $doctrine;
-
-    /**
-     * @var UserHelper
-     */
-    private UserHelper $userHelper;
-
-    /**
-     * @var TemplateHelper
-     */
-    private TemplateHelper $templateHelper;
-
-    /**
-     * @param ManagerRegistry $doctrine
-     * @param UserHelper $userHelper
-     * @param TemplateHelper $templateHelper
-     */
-    public function __construct(ManagerRegistry $doctrine, UserHelper $userHelper, TemplateHelper $templateHelper)
-    {
-        $this->doctrine = $doctrine;
-        $this->userHelper = $userHelper;
-        $this->templateHelper = $templateHelper;
+    public function __construct(
+        private readonly ManagerRegistry $doctrine,
+        private readonly UserHelper $userHelper,
+        private readonly TemplateHelper $templateHelper,
+    ) {
     }
 
-    /**
-     * @param int|null $id
-     * @return Response
-     */
     public function indexAction(int $id = null): Response
     {
-        if (!is_null($id)) {
+        if (!\is_null($id)) {
             /**
              * @var News $news
              */
             $news = $this->doctrine->getRepository(News::class)->find($id);
-            if (is_null($news)) {
+            if (\is_null($news)) {
                 throw new AccessDeniedException('This news-item does not exist');
             }
 
@@ -78,9 +54,6 @@ class NewsController
         ]);
     }
 
-    /**
-     * @return Response
-     */
     public function railNewsAction(): Response
     {
         /**

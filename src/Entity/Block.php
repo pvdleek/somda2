@@ -12,7 +12,6 @@ use Doctrine\ORM\Mapping as ORM;
 class Block
 {
     /**
-     * @var int|null
      * @ORM\Column(name="blokid", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -20,50 +19,42 @@ class Block
     public ?int $id = null;
 
     /**
-     * @var string
      * @ORM\Column(name="name", type="string", length=55, nullable=false, options={"default"=""})
      */
     public string $name = '';
 
     /**
-     * @var string
      * @ORM\Column(name="route", type="string", length=45, nullable=false, options={"default"=""})
      */
     public string $route = '';
 
     /**
-     * @var string|null
      * @ORM\Column(name="role", type="string", length=50, nullable=true)
      */
-    public ?string $role;
+    public ?string $role = null;
 
     /**
-     * @var int
      * @ORM\Column(name="menu_volgorde", type="integer", nullable=false, options={"default"="1"})
      */
     public int $menuOrder = 1;
 
     /**
-     * @var bool
      * @ORM\Column(name="do_separator", type="boolean", nullable=false)
      */
     public bool $doSeparator = false;
 
     /**
-     * @var BlockHelp|null
      * @ORM\OneToOne(targetEntity="App\Entity\BlockHelp", mappedBy="block")
      */
-    public ?BlockHelp $blockHelp;
+    public ?BlockHelp $blockHelp = null;
 
     /**
-     * @var Block
      * @ORM\ManyToOne(targetEntity="App\Entity\Block", inversedBy="children")
      * @ORM\JoinColumn(name="parent_block", referencedColumnName="blokid")
      */
-    public Block $parent;
+    public ?Block $parent = null;
 
     /**
-     * @var Block[]
      * @ORM\OneToMany(targetEntity="App\Entity\Block", mappedBy="parent")
      */
     private $children;
@@ -76,10 +67,6 @@ class Block
         $this->children = new ArrayCollection();
     }
 
-    /**
-     * @param Block $child
-     * @return Block
-     */
     public function addChild(Block $child): Block
     {
         $this->children[] = $child;

@@ -10,10 +10,8 @@ use App\Entity\BlockHelp;
 use App\Entity\RailNews;
 use App\Entity\UserPreference;
 use App\Form\RailNews as RailNewsForm;
-use DateTime;
+use Detection\MobileDetect;
 use Doctrine\Persistence\ManagerRegistry;
-use Exception;
-use Mobile_Detect;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
@@ -30,71 +28,21 @@ class TemplateHelper
     public const PARAMETER_TRAIN_TABLE_INDEX = 'trainTableIndex';
     public const PARAMETER_TRAIN_TABLE_INDEX_NUMBER = 'trainTableIndexNumber';
 
-    /**
-     * @var RequestStack
-     */
-    private RequestStack $requestStack;
-
-    /**
-     * @var ManagerRegistry
-     */
-    protected ManagerRegistry $doctrine;
-
-    /**
-     * @var LoggerInterface
-     */
-    private LoggerInterface $logger;
-
-    /**
-     * @var Environment
-     */
-    private Environment $twig;
-
-    /**
-     * @var MenuHelper
-     */
-    private MenuHelper $menuHelper;
-
-    /**
-     * @var UserHelper
-     */
-    private UserHelper $userHelper;
-
-    /**
-     * @param RequestStack $requestStack
-     * @param ManagerRegistry $registry
-     * @param LoggerInterface $logger
-     * @param Environment $environment
-     * @param MenuHelper $menuHelper
-     * @param UserHelper $userHelper
-     */
     public function __construct(
-        RequestStack $requestStack,
-        ManagerRegistry $registry,
-        LoggerInterface $logger,
-        Environment $environment,
-        MenuHelper $menuHelper,
-        UserHelper $userHelper
+        private readonly RequestStack $requestStack,
+        private readonly ManagerRegistry $doctrine,
+        private readonly LoggerInterface $logger,
+        private readonly Environment $twig,
+        private readonly MenuHelper $menuHelper,
+        private readonly UserHelper $userHelper
     ) {
-        $this->requestStack = $requestStack;
-        $this->doctrine = $registry;
-        $this->logger = $logger;
-        $this->twig = $environment;
-        $this->menuHelper = $menuHelper;
-        $this->userHelper = $userHelper;
     }
 
-    /**
-     * @param string $view
-     * @param array $parameters
-     * @param Response|null $response
-     * @return Response
-     */
     public function render(string $view, array $parameters = [], Response $response = null): Response
     {
         try {
             $content = $this->twig->render($this->getCorrectView($view), $this->getParameters($parameters));
-        } catch (Exception $exception) {
+        } catch (\Exception $exception) {
             $this->logger->critical('Error when rendering view "' . $view . '": "' . $exception->getMessage() . '"');
             $content = '';
         }
@@ -108,9 +56,7 @@ class TemplateHelper
     }
 
     /**
-     * @param string $view
-     * @return string
-     * @throws Exception
+     * @throws \Exception
      */
     private function getCorrectView(string $view): string
     {
@@ -120,17 +66,15 @@ class TemplateHelper
             return $view;
         }
 
-        $detect = new Mobile_Detect();
-        if ($detect->isMobile() && file_exists(__DIR__ . '/../../templates/mobile/' . $view)) {
+        $detect = new MobileDetect();
+        if ($detect->isMobile() && \file_exists(__DIR__ . '/../../templates/mobile/' . $view)) {
             $view = 'mobile/' . $view;
         }
         return $view;
     }
 
     /**
-     * @param array $viewParameters
-     * @return array
-     * @throws Exception
+     * @throws \Exception
      */
     private function getParameters(array $viewParameters): array
     {
@@ -138,15 +82,15 @@ class TemplateHelper
         $banners = $this->doctrine->getRepository(Banner::class)->findBy(
             ['location' => Banner::LOCATION_HEADER, 'active' => true]
         );
-        if (count($banners) > 0) {
+        if (\count($banners) > 0) {
             $headerType = 'banner';
             $headerContent = $banners[random_int(0, count($banners) - 1)];
 
             // Create a view for this banner
             $bannerView = new BannerView();
             $bannerView->banner = $headerContent;
-            $bannerView->timestamp = new DateTime();
-            $bannerView->ipAddress = ip2long($this->requestStack->getCurrentRequest()->getClientIp());
+            $bannerView->timestamp = new \DateTime();
+            $bannerView->ipAddress = \ip2long($this->requestStack->getCurrentRequest()->getClientIp());
             $this->doctrine->getManager()->persist($bannerView);
             $this->doctrine->getManager()->flush();
         } else {
@@ -155,22 +99,19 @@ class TemplateHelper
                 ['active' => true, 'approved' => true],
                 [RailNewsForm::FIELD_TIMESTAMP => 'DESC'],
                 3
-            )[random_int(0, 2)];
+            )[\random_int(0, 2)];
         }
 
-        return array_merge($viewParameters, [
+        return \array_merge($viewParameters, [
             'headerType' =>  $headerType,
             'headerContent' => $headerContent,
-            'imageNumber' => random_int(1, 11),
+            'imageNumber' => \random_int(1, 11),
             'menuStructure' => $this->menuHelper->getMenuStructure(),
             'nrOfOpenForumAlerts' => $this->menuHelper->getNumberOfOpenForumAlerts(),
             'blockHelp' => $this->getBlockHelp(),
         ]);
     }
 
-    /**
-     * @return BlockHelp|null
-     */
     private function getBlockHelp(): ?BlockHelp
     {
         /**
@@ -179,7 +120,7 @@ class TemplateHelper
         $block = $this->doctrine->getRepository(Block::class)->findOneBy(
             ['route' => $this->requestStack->getCurrentRequest()->get('_route')]
         );
-        if (!is_null($block) && !is_null($block->blockHelp)) {
+        if (!\is_null($block) && !\is_null($block->blockHelp)) {
             return $block->blockHelp;
         }
 

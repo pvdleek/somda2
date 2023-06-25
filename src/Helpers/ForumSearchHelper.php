@@ -13,26 +13,17 @@ class ForumSearchHelper implements RuntimeExtensionInterface
 {
     public const MAX_RESULTS = 100;
 
-    /**
-     * @var ManagerRegistry
-     */
-    private ManagerRegistry $doctrine;
-
-    /**
-     * @param ManagerRegistry $doctrine
-     */
-    public function __construct(ManagerRegistry $doctrine)
-    {
-        $this->doctrine = $doctrine;
+    public function __construct(
+        private readonly ManagerRegistry $doctrine,
+    ) {
     }
 
     /**
-     * @param string $data
      * @return ForumSearchWord[]
      */
     public function getSearchWords(string $data): array
     {
-        $words = array_filter(explode(' ', $data));
+        $words = \array_filter(\explode(' ', $data));
         foreach ($words as $key => $word) {
             $words[$key] = $this->doctrine->getRepository(ForumSearchWord::class)->findOneBy(
                 ['word' => $word]
@@ -42,7 +33,6 @@ class ForumSearchHelper implements RuntimeExtensionInterface
     }
 
     /**
-     * @param string $searchMethod
      * @param ForumSearchWord[] $searchWords
      * @return ForumSearchResult[]
      */
@@ -55,10 +45,10 @@ class ForumSearchHelper implements RuntimeExtensionInterface
         $results = null;
         foreach ($searchWords as $word) {
             $result = $this->doctrine->getRepository(ForumSearchWord::class)->searchByWords([$word]);
-            if (is_null($results)) {
+            if (\is_null($results)) {
                 $results = $result;
             } else {
-                $results = array_intersect($results, $result);
+                $results = \array_intersect($results, $result);
             }
         }
 

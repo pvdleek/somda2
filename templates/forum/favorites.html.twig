@@ -38,7 +38,7 @@
                         {% endif %}
                     </td>
                     <td>
-                        <a href="{{ path('forum_discussion', { 'id': favorite['id'], 'name': (favorite['title'] | slugify) }) }}">{{ favorite['title'] }}</a>
+                        <a href="{{ path('forum_discussion', { 'id': favorite['id'], 'name': (favorite['title'] | slug) }) }}">{{ favorite['title'] }}</a>
                         {% if not favorite['discussion_read'] %} <i class="fas fa-comment-dots"></i>{% endif %}
                     </td>
                     <td>{{ favorite['posts'] }}</td>
@@ -67,7 +67,7 @@
                 <tr id="favorite_post_row_{{ favorite.post.id }}">
                     <td><a href="#" onclick="removePost({{ favorite.post.id }}); return false;"><i class="fas fa-times" title="Verwijder bericht uit je favorieten"></i></a></td>
                     <td><i class="fas fa-comment"></i></td>
-                    <td><a href="{{ path('forum_discussion_post', { 'id': favorite.post.discussion.id, 'name': (favorite.post.discussion.title | slugify), 'postId': favorite.post.id }) }}">{{ favorite.post.discussion.title }}</a></td>
+                    <td><a href="{{ path('forum_discussion_post', { 'id': favorite.post.discussion.id, 'name': (favorite.post.discussion.title | slug), 'postId': favorite.post.id }) }}">{{ favorite.post.discussion.title }}</a></td>
                     <td>{{ favorite.post | displayForumPost | raw }}</td>
                     <td>{{ favorite.post.timestamp | date('d-m-Y H:i:s') }}<br />{{ favorite.post.author.id | displayUser(favorite.post.author.username) | raw }}</td>
                 </tr>

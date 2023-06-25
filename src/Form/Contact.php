@@ -13,10 +13,6 @@ class Contact extends AbstractType
 {
     public const FIELD_EMAIL = 'email';
 
-    /**
-     * @param FormBuilderInterface $builder
-     * @param array $options
-     */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder

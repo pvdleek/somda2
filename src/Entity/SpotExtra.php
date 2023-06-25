@@ -14,16 +14,14 @@ use OpenApi\Annotations as OA;
 class SpotExtra
 {
     /**
-     * @var Spot
      * @ORM\OneToOne(targetEntity="App\Entity\Spot", inversedBy="extra")
      * @ORM\JoinColumn(name="spotid", referencedColumnName="spotid")
      * @ORM\Id
      * @JMS\Exclude()
      */
-    public Spot $spot;
+    public ?Spot $spot = null;
 
     /**
-     * @var string
      * @ORM\Column(name="extra", type="string", length=255, nullable=false)
      * @JMS\Expose()
      * @OA\Property(description="Extra information", maxLength=255, type="string")
@@ -31,7 +29,6 @@ class SpotExtra
     public string $extra = '';
 
     /**
-     * @var string
      * @ORM\Column(name="user_extra", type="string", length=255, nullable=false)
      * @JMS\Exclude()
      */

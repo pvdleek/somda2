@@ -2,7 +2,6 @@
 
 namespace App\Model;
 
-use DateTime;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class StatisticBusiest
@@ -13,26 +12,16 @@ class StatisticBusiest
     public const TYPE_VALUES = [self::TYPE_PAGE_VIEWS, self::TYPE_SPOTS, self::TYPE_POSTS];
 
     /**
-     * @param int $type
+     * @Assert\Choice(choices=StatisticBusiest::TYPE_VALUES)
      */
+    public ?int $type = null;
+
+    public ?\DateTime $timestamp = null;
+
+    public int $number = 0;
+
     public function __construct(int $type)
     {
         $this->type = $type;
     }
-
-    /**
-     * @var int
-     * @Assert\Choice(choices=StatisticBusiest::TYPE_VALUES)
-     */
-    public int $type;
-
-    /**
-     * @var DateTime
-     */
-    public DateTime $timestamp;
-
-    /**
-     * @var int
-     */
-    public int $number;
 }

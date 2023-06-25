@@ -12,8 +12,6 @@ use App\Generics\RoleGenerics;
 use App\Helpers\FormHelper;
 use App\Helpers\TemplateHelper;
 use App\Helpers\UserHelper;
-use DateTime;
-use Exception;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,51 +19,29 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class ManageRouteListsController
 {
-    /**
-     * @var UserHelper
-     */
-    private UserHelper $userHelper;
-
-    /**
-     * @var FormHelper
-     */
-    private FormHelper $formHelper;
-
-    /**
-     * @var TemplateHelper
-     */
-    private TemplateHelper $templateHelper;
-
-    /**
-     * @param UserHelper $userHelper
-     * @param FormHelper $formHelper
-     * @param TemplateHelper $templateHelper
-     */
-    public function __construct(UserHelper $userHelper, FormHelper $formHelper, TemplateHelper $templateHelper)
-    {
-        $this->userHelper = $userHelper;
-        $this->formHelper = $formHelper;
-        $this->templateHelper = $templateHelper;
+    public function __construct(
+        private readonly UserHelper $userHelper,
+        private readonly FormHelper $formHelper,
+        private readonly TemplateHelper $templateHelper,
+    ) {
     }
 
     /**
-     * @param int|null $id
-     * @return Response
-     * @throws Exception
+     * @throws \Exception
      */
     public function routeListsAction(int $id = null): Response
     {
         $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_ADMIN_ROUTE_NUMBER_LIST);
 
-        if (is_null($id)) {
+        if (\is_null($id)) {
             $trainTableYear = $this->formHelper
                 ->getDoctrine()
                 ->getRepository(TrainTableYear::class)
-                ->findTrainTableYearByDate(new DateTime());
+                ->findTrainTableYearByDate(new \DateTime());
             $routeLists = [];
         } else {
             $trainTableYear = $this->formHelper->getDoctrine()->getRepository(TrainTableYear::class)->find($id);
-            if (is_null($trainTableYear)) {
+            if (\is_null($trainTableYear)) {
                 throw new AccessDeniedException('This trainTableYear does not exist');
             }
 
@@ -86,13 +62,7 @@ class ManageRouteListsController
         ]);
     }
 
-    /**
-     * @param Request $request
-     * @param int $yearId
-     * @param int $id
-     * @return RedirectResponse|Response
-     */
-    public function routeListAction(Request $request, int $yearId, int $id)
+    public function routeListAction(Request $request, int $yearId, int $id): Response|RedirectResponse
     {
         $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_ADMIN_ROUTE_NUMBER_LIST);
 
@@ -122,11 +92,6 @@ class ManageRouteListsController
         ]);
     }
 
-    /**
-     * @param int $yearId
-     * @param int $id
-     * @return RouteList
-     */
     private function getOrCreateRouteList(int $yearId, int $id): RouteList
     {
         if ($id > 0) {
@@ -134,7 +99,7 @@ class ManageRouteListsController
              * @var RouteList $routeList
              */
             $routeList = $this->formHelper->getDoctrine()->getRepository(RouteList::class)->find($id);
-            if (is_null($routeList)) {
+            if (\is_null($routeList)) {
                 throw new AccessDeniedException('This routeList does not exist');
             }
 
@@ -142,7 +107,7 @@ class ManageRouteListsController
         }
 
         $trainTableYear = $this->formHelper->getDoctrine()->getRepository(TrainTableYear::class)->find($yearId);
-        if (is_null($trainTableYear)) {
+        if (\is_null($trainTableYear)) {
             throw new AccessDeniedException('This trainTableYear does not exist');
         }
 

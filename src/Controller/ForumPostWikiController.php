@@ -12,32 +12,13 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class ForumPostWikiController
 {
-    /**
-     * @var ManagerRegistry
-     */
-    private ManagerRegistry $doctrine;
-
-    /**
-     * @var UserHelper
-     */
-    private UserHelper $userHelper;
-
-    /**
-     * @param ManagerRegistry $doctrine
-     * @param UserHelper $userHelper
-     */
-    public function __construct(ManagerRegistry $doctrine, UserHelper $userHelper)
-    {
-        $this->doctrine = $doctrine;
-        $this->userHelper = $userHelper;
+    public function __construct(
+        private readonly ManagerRegistry $doctrine,
+        private readonly UserHelper $userHelper,
+    ) {
     }
 
-    /**
-     * @param int $id
-     * @param string $operation
-     * @return JsonResponse
-     */
-    public function checkAction(int $id, string $operation)
+    public function checkAction(int $id, string $operation): JsonResponse
     {
         $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_ADMIN_WIKI);
 
@@ -45,7 +26,7 @@ class ForumPostWikiController
          * @var ForumPost $post
          */
         $post = $this->doctrine->getRepository(ForumPost::class)->find($id);
-        if (is_null($post)) {
+        if (\is_null($post)) {
             throw new AccessDeniedException('This post does not exist');
         }
 

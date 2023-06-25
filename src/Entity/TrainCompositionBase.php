@@ -5,80 +5,34 @@ namespace App\Entity;
 
 abstract class TrainCompositionBase
 {
-    /**
-     * @var string|null
-     */
-    public ?string $car1;
+    public ?string $car1 = null;
 
-    /**
-     * @var string|null
-     */
-    public ?string $car2;
+    public ?string $car2 = null;
 
-    /**
-     * @var string|null
-     */
-    public ?string $car3;
+    public ?string $car3 = null;
 
-    /**
-     * @var string|null
-     */
-    public ?string $car4;
+    public ?string $car4 = null;
 
-    /**
-     * @var string|null
-     */
-    public ?string $car5;
+    public ?string $car5 = null;
 
-    /**
-     * @var string|null
-     */
-    public ?string $car6;
+    public ?string $car6 = null;
 
-    /**
-     * @var string|null
-     */
-    public ?string $car7;
+    public ?string $car7 = null;
 
-    /**
-     * @var string|null
-     */
-    public ?string $car8;
+    public ?string $car8 = null;
 
-    /**
-     * @var string|null
-     */
-    public ?string $car9;
+    public ?string $car9 = null;
 
-    /**
-     * @var string|null
-     */
-    public ?string $car10;
+    public ?string $car10 = null;
 
-    /**
-     * @var string|null
-     */
-    public ?string $car11;
+    public ?string $car11 = null;
 
-    /**
-     * @var string|null
-     */
-    public ?string $car12;
+    public ?string $car12 = null;
 
-    /**
-     * @var string|null
-     */
-    public ?string $car13;
+    public ?string $car13 = null;
 
-    /**
-     * @var string|null
-     */
     public ?string $note;
 
-    /**
-     * @param int $carNumber
-     * @return string|null
-     */
     public function getCar(int $carNumber): ?string
     {
         return $this->{'car' . $carNumber};

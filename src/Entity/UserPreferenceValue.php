@@ -15,26 +15,23 @@ use OpenApi\Annotations as OA;
 class UserPreferenceValue
 {
     /**
-     * @var User
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="preferences")
      * @ORM\JoinColumn(name="uid", referencedColumnName="uid")
      * @ORM\Id
      * @JMS\Exclude()
      */
-    public User $user;
+    public ?User $user = null;
 
     /**
-     * @var UserPreference
      * @ORM\ManyToOne(targetEntity="App\Entity\UserPreference")
      * @ORM\JoinColumn(name="prefid", referencedColumnName="prefid")
      * @ORM\Id
      * @JMS\Expose()
      * @OA\Property(description="The setting", ref=@Model(type=UserPreference::class))
      */
-    public UserPreference $preference;
+    public ?UserPreference $preference = null;
 
     /**
-     * @var string
      * @ORM\Column(name="value", type="string", length=200, nullable=false)
      * @JMS\Expose()
      * @OA\Property(description="The value of the user-setting", maxLength=200, type="string")

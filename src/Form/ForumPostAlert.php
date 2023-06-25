@@ -12,10 +12,6 @@ class ForumPostAlert extends AbstractType
 {
     public const FIELD_COMMENT = 'comment';
 
-    /**
-     * @param FormBuilderInterface $builder
-     * @param array $options
-     */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->add(self::FIELD_COMMENT, TextType::class, [

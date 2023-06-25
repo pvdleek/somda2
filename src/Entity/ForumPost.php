@@ -2,7 +2,6 @@
 
 namespace App\Entity;
 
-use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as JMS;
@@ -29,7 +28,6 @@ class ForumPost
     public const WIKI_CHECK_VALUES = [self::WIKI_CHECK_NOT_CHECKED, self::WIKI_CHECK_OK, self::WIKI_CHECK_N_A];
 
     /**
-     * @var int|null
      * @ORM\Column(name="postid", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -39,48 +37,42 @@ class ForumPost
     public ?int $id = null;
 
     /**
-     * @var User
      * @ORM\ManyToOne(targetEntity="App\Entity\User")
      * @ORM\JoinColumn(name="authorid", referencedColumnName="uid")
      * @JMS\Expose()
      * @OA\Property(description="The author of the post", ref=@Model(type=User::class))
      */
-    public User $author;
+    public ?User $author = null;
 
     /**
-     * @var ForumDiscussion
      * @ORM\ManyToOne(targetEntity="App\Entity\ForumDiscussion", inversedBy="posts")
      * @ORM\JoinColumn(name="discussionid", referencedColumnName="discussionid")
      * @JMS\Exclude()
      */
-    public ForumDiscussion $discussion;
+    public ?ForumDiscussion $discussion = null;
 
     /**
-     * @var DateTime
      * @ORM\Column(name="timestamp", type="datetime", nullable=false)
      * @JMS\Expose()
      * @OA\Property(description="ISO-8601 timestamp of the post (Y-m-dTH:i:sP)", type="string")
      */
-    public DateTime $timestamp;
+    public ?\DateTime $timestamp = null;
 
     /**
-     * @var ForumPostText
      * @ORM\OneToOne(targetEntity="App\Entity\ForumPostText", mappedBy="post")
      * @JMS\Expose()
      * @OA\Property(description="The text of the post", ref=@Model(type=ForumPostText::class))
      */
-    public ForumPostText $text;
+    public ?ForumPostText $text = null;
 
     /**
-     * @var DateTime|null
      * @ORM\Column(name="edit_timestamp", type="datetime", nullable=true)
      * @JMS\Expose()
      * @OA\Property(description="ISO-8601 timestamp of the post edit (Y-m-dTH:i:sP)", type="string")
      */
-    public ?DateTime $editTimestamp = null;
+    public ?\DateTime $editTimestamp = null;
 
     /**
-     * @var User|null
      * @ORM\ManyToOne(targetEntity="App\Entity\User")
      * @ORM\JoinColumn(name="edit_uid", referencedColumnName="uid")
      * @JMS\Expose()
@@ -89,7 +81,6 @@ class ForumPost
     public ?User $editor = null;
 
     /**
-     * @var string|null
      * @ORM\Column(name="edit_reason", type="string", length=50, nullable=true)
      * @JMS\Expose()
      * @OA\Property(description="Reason for editing the post", maxLength=50, type="string")
@@ -97,7 +88,6 @@ class ForumPost
     public ?string $editReason = null;
 
     /**
-     * @var bool
      * @ORM\Column(name="sign_on", type="boolean", nullable=false)
      * @JMS\Expose()
      * @OA\Property(description="Whether the signature of the author is included", type="boolean")
@@ -105,7 +95,6 @@ class ForumPost
     public bool $signatureOn = false;
 
     /**
-     * @var integer
      * @ORM\Column(name="wiki_check", type="integer", nullable=false)
      * @Assert\Choice(choices=ForumPost::WIKI_CHECK_VALUES)
      * @JMS\Exclude()
@@ -113,36 +102,31 @@ class ForumPost
     public int $wikiCheck = self::WIKI_CHECK_NOT_CHECKED;
 
     /**
-     * @var User|null
      * @ORM\ManyToOne(targetEntity="App\Entity\User")
      * @ORM\JoinColumn(name="wiki_uid", referencedColumnName="uid")
      * @JMS\Exclude()
      */
-    public ?User $wikiChecker;
+    public ?User $wikiChecker = null;
 
     /**
-     * @var ForumPostAlert[]
      * @ORM\OneToMany(targetEntity="App\Entity\ForumPostAlert", mappedBy="post")
      * @JMS\Exclude()
      */
     private $alerts;
 
     /**
-     * @var ForumPostLog[]
      * @ORM\OneToMany(targetEntity="App\Entity\ForumPostLog", mappedBy="post")
      * @JMS\Exclude()
      */
     private $logs;
 
     /**
-     * @var ForumSearchList[]
      * @ORM\OneToMany(targetEntity="App\Entity\ForumSearchList", mappedBy="post")
      * @JMS\Exclude()
      */
     private $searchLists;
 
     /**
-     * @var ForumPostFavorite[]
      * @ORM\OneToMany(targetEntity="App\Entity\ForumPostFavorite", mappedBy="post")
      */
     private $favorites;
@@ -158,10 +142,6 @@ class ForumPost
         $this->favorites = new ArrayCollection();
     }
 
-    /**
-     * @param ForumPostAlert $forumPostAlert
-     * @return ForumPost
-     */
     public function addAlert(ForumPostAlert $forumPostAlert): ForumPost
     {
         $this->alerts[] = $forumPostAlert;
@@ -177,10 +157,6 @@ class ForumPost
         return $this->alerts->toArray();
     }
 
-    /**
-     * @param ForumPostLog $forumPostLog
-     * @return ForumPost
-     */
     public function addLog(ForumPostLog $forumPostLog): ForumPost
     {
         $this->logs[] = $forumPostLog;
@@ -196,10 +172,6 @@ class ForumPost
         return $this->logs->toArray();
     }
 
-    /**
-     * @param ForumSearchList $forumSearchList
-     * @return ForumPost
-     */
     public function addSearchList(ForumSearchList $forumSearchList): ForumPost
     {
         $this->searchLists[] = $forumSearchList;
@@ -215,10 +187,6 @@ class ForumPost
         return $this->searchLists->toArray();
     }
 
-    /**
-     * @param ForumPostFavorite $forumPostFavorite
-     * @return ForumPost
-     */
     public function addFavorite(ForumPostFavorite $forumPostFavorite): ForumPost
     {
         $this->favorites[] = $forumPostFavorite;
@@ -233,9 +201,6 @@ class ForumPost
         return $this->favorites->toArray();
     }
 
-    /**
-     * @return int
-     */
     public function getNumberOfFavorites(): int
     {
         return $this->favorites->count();

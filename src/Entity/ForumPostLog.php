@@ -16,7 +16,6 @@ class ForumPostLog
     public const ACTION_VALUES = [self::ACTION_POST_NEW, self::ACTION_POST_EDIT];
 
     /**
-     * @var int|null
      * @ORM\Column(name="id", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -24,14 +23,12 @@ class ForumPostLog
     public ?int $id = null;
 
     /**
-     * @var ForumPost
      * @ORM\ManyToOne(targetEntity="App\Entity\ForumPost", inversedBy="logs")
      * @ORM\JoinColumn(name="postid", referencedColumnName="postid")
      */
-    public ForumPost $post;
+    public ?ForumPost $post = null;
 
     /**
-     * @var int
      * @ORM\Column(name="actie", type="integer", nullable=false, options={"default"=ForumPostLog::ACTION_POST_NEW})
      * @Assert\Choice(choices=ForumPostLog::ACTION_VALUES)
      */

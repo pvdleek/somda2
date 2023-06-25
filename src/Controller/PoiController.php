@@ -12,36 +12,13 @@ use Symfony\Component\HttpFoundation\Response;
 
 class PoiController
 {
-    /**
-     * @var ManagerRegistry
-     */
-    private ManagerRegistry $doctrine;
-
-    /**
-     * @var UserHelper
-     */
-    private UserHelper $userHelper;
-
-    /**
-     * @var TemplateHelper
-     */
-    private TemplateHelper $templateHelper;
-
-    /**
-     * @param ManagerRegistry $doctrine
-     * @param UserHelper $userHelper
-     * @param TemplateHelper $templateHelper
-     */
-    public function __construct(ManagerRegistry $doctrine, UserHelper $userHelper, TemplateHelper $templateHelper)
-    {
-        $this->doctrine = $doctrine;
-        $this->userHelper = $userHelper;
-        $this->templateHelper = $templateHelper;
+    public function __construct(
+        private readonly ManagerRegistry $doctrine,
+        private readonly UserHelper $userHelper,
+        private readonly TemplateHelper $templateHelper,
+    ) {
     }
 
-    /**
-     * @return Response
-     */
     public function indexAction(): Response
     {
         $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_SPOTS_RECENT);
@@ -56,10 +33,6 @@ class PoiController
         ]);
     }
 
-    /**
-     * @param int $id
-     * @return Response
-     */
     public function detailAction(int $id): Response
     {
         $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_SPOTS_RECENT);

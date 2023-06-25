@@ -12,7 +12,6 @@ use App\Helpers\FlashHelper;
 use App\Helpers\RedirectHelper;
 use App\Helpers\TemplateHelper;
 use App\Helpers\UserHelper;
-use Exception;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -22,77 +21,23 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class ProfileController
 {
-    /**
-     * @var ManagerRegistry
-     */
-    private ManagerRegistry $doctrine;
-
-    /**
-     * @var UserHelper
-     */
-    private UserHelper $userHelper;
-
-    /**
-     * @var TemplateHelper
-     */
-    private TemplateHelper $templateHelper;
-
-    /**
-     * @var FlashHelper
-     */
-    private FlashHelper $flashHelper;
-
-    /**
-     * @var FormFactoryInterface
-     */
-    private FormFactoryInterface $formFactory;
-
-    /**
-     * @var RedirectHelper
-     */
-    private RedirectHelper $redirectHelper;
-
-    /**
-     * @var EmailHelper
-     */
-    private EmailHelper $emailHelper;
-
-    /**
-     * @param ManagerRegistry $doctrine
-     * @param UserHelper $userHelper
-     * @param TemplateHelper $templateHelper
-     * @param FlashHelper $flashHelper
-     * @param FormFactoryInterface $formFactory
-     * @param RedirectHelper $redirectHelper
-     * @param EmailHelper $emailHelper
-     */
     public function __construct(
-        ManagerRegistry $doctrine,
-        UserHelper $userHelper,
-        TemplateHelper $templateHelper,
-        FlashHelper $flashHelper,
-        FormFactoryInterface $formFactory,
-        RedirectHelper $redirectHelper,
-        EmailHelper $emailHelper
+        private readonly ManagerRegistry $doctrine,
+        private readonly UserHelper $userHelper,
+        private readonly TemplateHelper $templateHelper,
+        private readonly FlashHelper $flashHelper,
+        private readonly FormFactoryInterface $formFactory,
+        private readonly RedirectHelper $redirectHelper,
+        private readonly EmailHelper $emailHelper,
     ) {
-        $this->doctrine = $doctrine;
-        $this->userHelper = $userHelper;
-        $this->templateHelper = $templateHelper;
-        $this->flashHelper = $flashHelper;
-        $this->formFactory = $formFactory;
-        $this->redirectHelper = $redirectHelper;
-        $this->emailHelper = $emailHelper;
     }
 
     /**
-     * @param Request $request
-     * @param int|null $id
-     * @return Response|RedirectResponse
-     * @throws Exception
+     * @throws \Exception
      */
-    public function indexAction(Request $request, int $id = null)
+    public function indexAction(Request $request, int $id = null): Response|RedirectResponse
     {
-        if (is_null($id)) {
+        if (\is_null($id)) {
             if (!$this->userHelper->userIsLoggedIn()) {
                 throw new AccessDeniedException('The user is not logged in');
             }
@@ -122,12 +67,7 @@ class ProfileController
         ]);
     }
 
-    /**
-     * @param Request $request
-     * @param int $id
-     * @return Response|RedirectResponse
-     */
-    public function mailAction(Request $request, int $id)
+    public function mailAction(Request $request, int $id): Response|RedirectResponse
     {
         $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_USER);
 
@@ -135,7 +75,7 @@ class ProfileController
          * @var User $user
          */
         $user = $this->doctrine->getRepository(User::class)->find($id);
-        if (is_null($user)) {
+        if (\is_null($user)) {
             throw new AccessDeniedException('This user does not exist');
         }
 

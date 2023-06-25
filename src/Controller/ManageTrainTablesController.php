@@ -11,7 +11,6 @@ use App\Helpers\RouteManagementHelper;
 use App\Helpers\RoutesDisplayHelper;
 use App\Helpers\TemplateHelper;
 use App\Helpers\UserHelper;
-use Exception;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,57 +18,17 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class ManageTrainTablesController
 {
-    /**
-     * @var UserHelper
-     */
-    private UserHelper $userHelper;
-
-    /**
-     * @var FormHelper
-     */
-    private FormHelper $formHelper;
-
-    /**
-     * @var TemplateHelper
-     */
-    private TemplateHelper $templateHelper;
-
-    /**
-     * @var RoutesDisplayHelper
-     */
-    private RoutesDisplayHelper $routesDisplayHelper;
-
-    /**
-     * @var RouteManagementHelper
-     */
-    private RouteManagementHelper $routeMgmtHelper;
-
-    /**
-     * @param UserHelper $userHelper
-     * @param FormHelper $formHelper
-     * @param TemplateHelper $templateHelper
-     * @param RoutesDisplayHelper $routesDisplayHelper
-     * @param RouteManagementHelper $routeMgmtHelper
-     */
     public function __construct(
-        UserHelper $userHelper,
-        FormHelper $formHelper,
-        TemplateHelper $templateHelper,
-        RoutesDisplayHelper $routesDisplayHelper,
-        RouteManagementHelper $routeMgmtHelper
+        private readonly UserHelper $userHelper,
+        private readonly FormHelper $formHelper,
+        private readonly TemplateHelper $templateHelper,
+        private readonly RoutesDisplayHelper $routesDisplayHelper,
+        private readonly RouteManagementHelper $routeMgmtHelper,
     ) {
-        $this->userHelper = $userHelper;
-        $this->formHelper = $formHelper;
-        $this->templateHelper = $templateHelper;
-        $this->routesDisplayHelper = $routesDisplayHelper;
-        $this->routeMgmtHelper = $routeMgmtHelper;
     }
 
     /**
-     * @param int|null $yearId
-     * @param int|null $routeListId
-     * @return Response
-     * @throws Exception
+     * @throws \Exception
      */
     public function manageAction(int $yearId = null, int $routeListId = null): Response
     {
@@ -90,14 +49,7 @@ class ManageTrainTablesController
         ]);
     }
 
-    /**
-     * @param Request $request
-     * @param int $routeListId
-     * @param int $routeId
-     * @param int|null $routeNumber
-     * @return RedirectResponse|Response
-     */
-    public function manageRouteAction(Request $request, int $routeListId, int $routeId, int $routeNumber = null)
+    public function manageRouteAction(Request $request, int $routeListId, int $routeId, int $routeNumber = null): Response|RedirectResponse
     {
         $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_ADMIN_TRAINTABLE_EDIT);
 
@@ -143,18 +95,12 @@ class ManageTrainTablesController
         ]);
     }
 
-    /**
-     * @param int $yearId
-     * @param int $routeListId
-     * @param int $routeId
-     * @return RedirectResponse
-     */
     public function deleteRouteAction(int $yearId, int $routeListId, int $routeId): RedirectResponse
     {
         $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_ADMIN_TRAINTABLE_EDIT);
 
         $trainTableYear = $this->formHelper->getDoctrine()->getRepository(TrainTableYear::class)->find($yearId);
-        if (is_null($trainTableYear)) {
+        if (\is_null($trainTableYear)) {
             throw new AccessDeniedException('This trainTableYear does not exist');
         }
         $this->routeMgmtHelper->setRouteListFromId($routeListId);

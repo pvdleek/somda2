@@ -8,9 +8,6 @@ use App\Entity\TrainTableYear;
 
 class RoutesDisplay
 {
-    /**
-     * @var TrainTableYear|null
-     */
     public ?TrainTableYear $trainTableYear = null;
 
     /**
@@ -18,9 +15,6 @@ class RoutesDisplay
      */
     public array $routeLists = [];
 
-    /**
-     * @var RouteList|null
-     */
     public ?RouteList $selectedRouteList = null;
 
     /**

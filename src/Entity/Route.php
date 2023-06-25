@@ -23,7 +23,6 @@ class Route
     public const SPECIAL_CHECKING = 'SCHOUW';
 
     /**
-     * @var int|null
      * @ORM\Column(name="treinid", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -33,7 +32,6 @@ class Route
     public ?int $id = null;
 
     /**
-     * @var string
      * @ORM\Column(name="treinnr", type="string", length=15, nullable=false)
      * @JMS\Expose()
      * @OA\Property(description="The route-number", maxLength=15, type="string")
@@ -41,14 +39,12 @@ class Route
     public string $number = '';
 
     /**
-     * @var TrainTable[]
      * @ORM\OneToMany(targetEntity="App\Entity\TrainTable", mappedBy="route")
      * @JMS\Exclude()
      */
     private $trainTables;
 
     /**
-     * @var TrainTableFirstLast[]
      * @ORM\OneToMany(targetEntity="App\Entity\TrainTableFirstLast", mappedBy="route")
      * @JMS\Expose()
      * @OA\Property(description="The days on which this route runs", ref=@Model(type=TrainTableFirstLast::class))
@@ -56,22 +52,17 @@ class Route
     private $trainTableFirstLasts;
 
     /**
-     * @var RouteList
      * @ORM\ManyToMany(targetEntity="App\Entity\RouteList", mappedBy="routes")
      * @JMS\Exclude()
      */
     private $routeLists;
 
     /**
-     * @var Spot[]
      * @ORM\OneToMany(targetEntity="App\Entity\Spot", mappedBy="route")
      * @JMS\Exclude()
      */
     private $spots;
 
-    /**
-     *
-     */
     public function __construct()
     {
         $this->trainTables = new ArrayCollection();
@@ -80,10 +71,6 @@ class Route
         $this->spots = new ArrayCollection();
     }
 
-    /**
-     * @param TrainTable $trainTable
-     * @return Route
-     */
     public function addTrainTable(TrainTable $trainTable): Route
     {
         $this->trainTables[] = $trainTable;
@@ -98,10 +85,6 @@ class Route
         return $this->trainTables->toArray();
     }
 
-    /**
-     * @param TrainTableFirstLast $trainTableFirstLast
-     * @return Route
-     */
     public function addTrainTableFirstLast(TrainTableFirstLast $trainTableFirstLast): Route
     {
         $this->trainTableFirstLasts[] = $trainTableFirstLast;
@@ -116,11 +99,6 @@ class Route
         return $this->trainTableFirstLasts->toArray();
     }
 
-    /**
-     * @param int $trainTableYearId
-     * @param int $dayNumber
-     * @return TrainTableFirstLast|null
-     */
     public function getTrainTableFirstLastByDay(int $trainTableYearId, int $dayNumber): ?TrainTableFirstLast
     {
         foreach ($this->getTrainTableFirstLasts() as $trainTableFirstLast) {
@@ -133,10 +111,6 @@ class Route
         return null;
     }
 
-    /**
-     * @param RouteList $routeList
-     * @return Route
-     */
     public function addRouteList(RouteList $routeList): Route
     {
         $this->routeLists[] = $routeList;
@@ -151,20 +125,12 @@ class Route
         return $this->routeLists->toArray();
     }
 
-    /**
-     * @param RouteList $routeList
-     * @return $this
-     */
     public function removeRouteList(RouteList $routeList): Route
     {
         $this->routeLists->removeElement($routeList);
         return $this;
     }
 
-    /**
-     * @param Spot $spot
-     * @return Route
-     */
     public function addSpot(Spot $spot): Route
     {
         $this->spots[] = $spot;

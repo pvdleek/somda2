@@ -5,17 +5,18 @@ namespace App\Repository;
 
 use App\Entity\Statistic as StatisticEntity;
 use App\Model\StatisticBusiest;
-use DateTime;
-use Doctrine\ORM\EntityRepository;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
-use Exception;
+use Doctrine\Persistence\ManagerRegistry;
 
-class Statistic extends EntityRepository
+class Statistic extends ServiceEntityRepository
 {
-    /**
-     * @return int
-     */
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, StatisticEntity::class);
+    }
+
     public function countPageViews(): int
     {
         $queryBuilder = $this->getEntityManager()
@@ -23,16 +24,15 @@ class Statistic extends EntityRepository
             ->select('SUM(s.visitorsTotal)')
             ->from(StatisticEntity::class, 's');
         try {
-            return (int)$queryBuilder->getQuery()->getSingleScalarResult();
+            return (int) $queryBuilder->getQuery()->getSingleScalarResult();
         } catch (NonUniqueResultException | NoResultException $exception) {
             return 0;
         }
     }
 
     /**
-     * @param int $numberOfDays
      * @return StatisticEntity[]
-     * @throws Exception
+     * @throws \Exception
      */
     public function findLastDays(int $numberOfDays): array
     {
@@ -45,9 +45,6 @@ class Statistic extends EntityRepository
         return $queryBuilder->getQuery()->getResult();
     }
 
-    /**
-     * @return array
-     */
     public function getTotalsPerMonth(): array
     {
         $queryBuilder = $this->getEntityManager()
@@ -68,10 +65,9 @@ class Statistic extends EntityRepository
     }
 
     /**
-     * @return DateTime
-     * @throws Exception
+     * @throws \Exception
      */
-    public function getFirstDate(): DateTime
+    public function getFirstDate(): \DateTime
     {
         $queryBuilder = $this->getEntityManager()
             ->createQueryBuilder()
@@ -80,15 +76,12 @@ class Statistic extends EntityRepository
             ->orderBy('s.timestamp', 'ASC')
             ->setMaxResults(1);
         try {
-            return new DateTime($queryBuilder->getQuery()->getSingleScalarResult());
+            return new \DateTime($queryBuilder->getQuery()->getSingleScalarResult());
         } catch (NonUniqueResultException | NoResultException $exception) {
-            return new DateTime();
+            return new \DateTime();
         }
     }
 
-    /**
-     * @param StatisticBusiest $statisticBusiest
-     */
     public function findBusiest(StatisticBusiest $statisticBusiest): void
     {
         $queryBuilder = $this->getEntityManager()
@@ -100,13 +93,9 @@ class Statistic extends EntityRepository
             ->setMaxResults(1);
         $result = $queryBuilder->getQuery()->getArrayResult()[0];
         $statisticBusiest->timestamp = $result['timestamp'];
-        $statisticBusiest->number = (int)$result['number'];
+        $statisticBusiest->number = (int) $result['number'];
     }
 
-    /**
-     * @param int $type
-     * @return string
-     */
     private function getBusiestFieldName(int $type): string
     {
         if ($type === StatisticBusiest::TYPE_PAGE_VIEWS) {

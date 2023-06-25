@@ -11,28 +11,24 @@ use Doctrine\ORM\Mapping as ORM;
 class PoiText
 {
     /**
-     * @var Poi
      * @ORM\OneToOne(targetEntity="App\Entity\Poi", inversedBy="text")
      * @ORM\JoinColumn(name="puntid", referencedColumnName="puntid")
      * @ORM\Id
      */
-    public Poi $poi;
+    public ?Poi $poi = null;
 
     /**
-     * @var string
      * @ORM\Column(name="route_auto", type="text", length=0, nullable=false)
      */
-    public string $routeCar;
+    public string $routeCar = '';
 
     /**
-     * @var string
      * @ORM\Column(name="route_ov", type="text", length=0, nullable=false)
      */
-    public string $routePublicTransport;
+    public string $routePublicTransport = '';
 
     /**
-     * @var string
      * @ORM\Column(name="bijzonderheden", type="text", length=0, nullable=false)
      */
-    public string $particularities;
+    public string $particularities = '';
 }

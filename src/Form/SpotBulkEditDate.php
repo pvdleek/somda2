@@ -3,8 +3,6 @@
 namespace App\Form;
 
 use App\Generics\FormGenerics;
-use DateTime;
-use Exception;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -12,16 +10,14 @@ use Symfony\Component\Form\FormBuilderInterface;
 class SpotBulkEditDate extends AbstractType
 {
     /**
-     * @param FormBuilderInterface $builder
-     * @param array $options
-     * @throws Exception
+     * @throws \Exception
      */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add('date', DateType::class, [
                 FormGenerics::KEY_ATTRIBUTES => [FormGenerics::KEY_CLASS=> 'datepicker'],
-                FormGenerics::KEY_DATA => new DateTime(),
+                FormGenerics::KEY_DATA => new \DateTime(),
                 FormGenerics::KEY_FORMAT=> 'dd-MM-yyyy',
                 FormGenerics::KEY_HTML5 => false,
                 FormGenerics::KEY_LABEL => 'Nieuwe datum',

@@ -23,19 +23,8 @@ class RouteManagementHelper
     private const ROUTE_LINE_KEY_ACTION = 'action';
     private const ROUTE_LINE_KEY_TIME = 'time';
 
-    /**
-     * @var ManagerRegistry
-     */
-    private ManagerRegistry $doctrine;
+    private ?RouteList $routeList = null;
 
-    /**
-     * @var RouteList
-     */
-    private RouteList $routeList;
-
-    /**
-     * @var Route|null
-     */
     private ?Route $route = null;
 
     /**
@@ -43,25 +32,16 @@ class RouteManagementHelper
      */
     private array $trainTableLines;
 
-    /**
-     * @param ManagerRegistry $doctrine
-     */
-    public function __construct(ManagerRegistry $doctrine)
-    {
-        $this->doctrine = $doctrine;
+    public function __construct(
+        private readonly ManagerRegistry $doctrine,
+    ) {
     }
 
-    /**
-     * @return RouteList
-     */
     public function getRouteList(): RouteList
     {
         return $this->routeList;
     }
 
-    /**
-     * @return Route|null
-     */
     public function getRoute(): ?Route
     {
         return $this->route;
@@ -75,53 +55,43 @@ class RouteManagementHelper
         return $this->trainTableLines;
     }
 
-    /**
-     * @param int $routeListId
-     */
     public function setRouteListFromId(int $routeListId): void
     {
         /**
          * @var RouteList $routeList
          */
         $routeList = $this->doctrine->getRepository(RouteList::class)->find($routeListId);
-        if (is_null($routeList)) {
+        if (\is_null($routeList)) {
             throw new AccessDeniedException('This routeList does not exist');
         }
         $this->routeList = $routeList;
     }
 
-    /**
-     * @param int $routeId
-     */
     public function setRouteFromId(int $routeId): void
     {
         $route = null;
-        if (!is_null($routeId) && $routeId > 0) {
+        if (!\is_null($routeId) && $routeId > 0) {
             /**
              * @var Route $route
              */
             $route = $this->doctrine->getRepository(Route::class)->find($routeId);
-            if (is_null($route)) {
+            if (\is_null($route)) {
                 throw new AccessDeniedException('This route does not exist');
             }
         }
         $this->route = $route;
     }
 
-    /**
-     * @param int|null $routeNumber
-     * @return bool
-     */
     public function setTrainTableLines(?int $routeNumber = null): bool
     {
-        if (!is_null($routeNumber)) {
+        if (!\is_null($routeNumber)) {
             // Check if the new route-number is in the correct range of the routeList
             if ($routeNumber < $this->routeList->firstNumber || $routeNumber > $this->routeList->lastNumber) {
                 // Find the correct routeList
                 $routeList = $this->doctrine
                     ->getRepository(RouteList::class)
                     ->findForRouteNumber($this->routeList->trainTableYear, $routeNumber);
-                if (is_null($routeList)) {
+                if (\is_null($routeList)) {
                     return false;
                 }
                 // We set this after the negative return, so te original routeList can still be retrieved from
@@ -153,15 +123,11 @@ class RouteManagementHelper
         return true;
     }
 
-    /**
-     * @param int $routeNumber
-     * @return Route
-     */
     private function getNewRouteFromNumber(int $routeNumber): Route
     {
         $newRoute = $this->doctrine->getRepository(Route::class)->findOneBy(['number' => $routeNumber]);
-        if (is_null($newRoute)) {
-            if (is_null($this->route)) {
+        if (\is_null($newRoute)) {
+            if (\is_null($this->route)) {
                 $newRoute = new Route();
             } else {
                 $newRoute = clone($this->route);
@@ -171,15 +137,10 @@ class RouteManagementHelper
         return $newRoute;
     }
 
-    /**
-     * @param int $routeId
-     * @param array $submittedFields
-     * @return bool
-     */
     public function handlePost(int $routeId, array $submittedFields): bool
     {
         if ($routeId === 0) {
-            if (!in_array($this->routeList, $this->route->getRouteLists())) {
+            if (!\in_array($this->routeList, $this->route->getRouteLists())) {
                 $this->route->addRouteList($this->routeList);
                 $this->routeList->addRoute($this->route);
             }
@@ -191,24 +152,16 @@ class RouteManagementHelper
         return $this->saveRouteDay($routeDayArray, $this->routeList->trainTableYear, $this->route);
     }
 
-    /**
-     * @param array $submittedFields
-     * @return array
-     */
     private function getRouteDayArray(array $submittedFields): array
     {
         $routeDayArray = [];
         foreach ($submittedFields as $key => $value) {
-            $keyPart = explode('_', $key);
-            $routeDayArray[(int)$keyPart[1]][(int)$keyPart[2]][$keyPart[0]] = $value;
+            $keyPart = \explode('_', $key);
+            $routeDayArray[(int) $keyPart[1]][(int) $keyPart[2]][$keyPart[0]] = $value;
         }
         return $routeDayArray;
     }
 
-    /**
-     * @param array $routeDayArray
-     * @return array
-     */
     private function getUniqueRouteDayArray(array $routeDayArray): array
     {
         $resultArray = [];
@@ -238,9 +191,6 @@ class RouteManagementHelper
         return $resultArray;
     }
 
-    /**
-     * @return array
-     */
     private function getEmptyDaysArray(): array
     {
         $result = [];
@@ -250,10 +200,6 @@ class RouteManagementHelper
         return $result;
     }
 
-    /**
-     * @param TrainTableYear $trainTableYear
-     * @param Route $route
-     */
     private function removeExistingTrainTablesFromRoute(TrainTableYear $trainTableYear, Route $route): void
     {
         foreach ($route->getTrainTables() as $trainTable) {
@@ -270,12 +216,6 @@ class RouteManagementHelper
         $this->doctrine->getManager()->flush();
     }
 
-    /**
-     * @param array $routeDayArray
-     * @param TrainTableYear $trainTableYear
-     * @param Route $route
-     * @return bool
-     */
     private function saveRouteDay(array $routeDayArray, TrainTableYear $trainTableYear, Route $route): bool
     {
         $okFlag = true;
@@ -325,18 +265,13 @@ class RouteManagementHelper
         return $okFlag;
     }
 
-    /**
-     * @param string $locationName
-     * @param bool $okFlag
-     * @return Location
-     */
     private function findLocation(string $locationName, bool &$okFlag): Location
     {
         /**
          * @var Location $location
          */
         $location = $this->doctrine->getRepository(Location::class)->findOneBy(['name' => $locationName]);
-        if (is_null($location)) {
+        if (\is_null($location)) {
             $location = $this->doctrine->getRepository(Location::class)->findOneBy(['name' => Location::UNKNOWN_NAME]);
             $okFlag = false;
         }

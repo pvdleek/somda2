@@ -2,13 +2,20 @@
 
 namespace App\Repository;
 
+use App\Entity\ForumPost as ForumPostEntity;
 use App\Entity\User;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\DBAL\Exception as DBALException;
 use Doctrine\DBAL\Driver\Exception as DBALDriverException;
-use Doctrine\ORM\EntityRepository;
+use Doctrine\Persistence\ManagerRegistry;
 
-class ForumPost extends EntityRepository
+class ForumPost extends ServiceEntityRepository
 {
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, ForumPostEntity::class);
+    }
+
     /**
      * @param User $user
      * @return array

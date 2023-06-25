@@ -3,20 +3,23 @@
 namespace App\Repository;
 
 use App\Entity\SpecialRoute as SpecialRouteEntity;
-use DateTime;
-use Doctrine\ORM\EntityRepository;
-use Exception;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Persistence\ManagerRegistry;
 
-class SpecialRoute extends EntityRepository
+class SpecialRoute extends ServiceEntityRepository
 {
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, SpecialRouteEntity::class);
+    }
+
     /**
-     * @param bool $construction
      * @return SpecialRouteEntity[]
-     * @throws Exception
+     * @throws \Exception
      */
     public function findForDashboard(bool $construction): array
     {
-        $today = new DateTime();
+        $today = new \DateTime();
         $today->setTime(0, 0);
         $queryBuilder = $this->getEntityManager()
             ->createQueryBuilder()
@@ -32,7 +35,6 @@ class SpecialRoute extends EntityRepository
     }
 
     /**
-     * @param int $limit
      * @return SpecialRouteEntity[]
      * @throws Exception
      */
@@ -44,7 +46,7 @@ class SpecialRoute extends EntityRepository
             ->from(SpecialRouteEntity::class, 's')
             ->andWhere('s.public = TRUE')
             ->andWhere('(s.startDate >= :today AND s.endDate IS NULL) OR s.endDate >= :today')
-            ->setParameter('today', new DateTime())
+            ->setParameter('today', new \DateTime())
             ->addOrderBy('s.startDate', 'ASC')
             ->setMaxResults($limit);
         return $queryBuilder->getQuery()->getResult();

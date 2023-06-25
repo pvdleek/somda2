@@ -12,28 +12,13 @@ use App\Entity\Transporter;
  */
 class OfficialRoute
 {
-    /**
-     * @var int
-     */
     public int $order = 1;
 
-    /**
-     * @var Route
-     */
     public Route $route;
 
-    /**
-     * @var Transporter
-     */
     public Transporter $transporter;
 
-    /**
-     * @var int
-     */
     public int $firstStopNumber;
 
-    /**
-     * @var int
-     */
     public int $lastStopNumber;
 }

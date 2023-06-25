@@ -2,47 +2,21 @@
 
 namespace App\Model;
 
-use DateTime;
-
 class StatisticSummary
 {
-    /**
-     * @var DateTime
-     */
-    public DateTime $startMeasurement;
+    public ?\DateTime $startMeasurement = null;
 
-    /**
-     * @var int
-     */
-    public int $pageViewsTotal;
+    public int $pageViewsTotal = 0;
 
-    /**
-     * @var DateTime
-     */
-    public DateTime $busiestPageViewsDate;
+    public ?\DateTime $busiestPageViewsDate = null;
 
-    /**
-     * @var int
-     */
-    public int $busiestPageViews;
+    public int $busiestPageViews = 0;
 
-    /**
-     * @var DateTime
-     */
-    public DateTime $busiestSpotsDate;
+    public ?\DateTime $busiestSpotsDate = null;
 
-    /**
-     * @var int
-     */
-    public int $busiestSpots;
+    public int $busiestSpots = 0;
 
-    /**
-     * @var DateTime
-     */
-    public DateTime $busiestPostsDate;
+    public ?\DateTime $busiestPostsDate = null;
 
-    /**
-     * @var int
-     */
-    public int $busiestPosts;
+    public int $busiestPosts = 0;
 }

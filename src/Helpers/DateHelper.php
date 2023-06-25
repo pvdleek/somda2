@@ -2,37 +2,23 @@
 
 namespace App\Helpers;
 
-use DateTime;
-use Exception;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Extension\RuntimeExtensionInterface;
 
 class DateHelper implements RuntimeExtensionInterface
 {
-    /**
-     * @var TranslatorInterface
-     */
-    private TranslatorInterface $translator;
-
-    /**
-     * @param TranslatorInterface $translator
-     */
-    public function __construct(TranslatorInterface $translator)
-    {
-        $this->translator = $translator;
+    public function __construct(
+        private readonly TranslatorInterface $translator,
+    ) {
     }
 
     /**
-     * @param DateTime|string $date
-     * @param bool $includeTime
-     * @param bool $shortDate
-     * @return string
-     * @throws Exception
+     * @throws \Exception
      */
-    public function getDisplayDate($date, bool $includeTime = false, bool $shortDate = false): string
+    public function getDisplayDate(\DateTime|string $date, bool $includeTime = false, bool $shortDate = false): string
     {
-        if (!$date instanceof DateTime) {
-            $date = new DateTime($date);
+        if (!$date instanceof \DateTime) {
+            $date = new \DateTime($date);
         }
 
         $output = '';
@@ -51,6 +37,6 @@ class DateHelper implements RuntimeExtensionInterface
         if ($includeTime) {
             $output .= ' ' . $date->format('H:i:s');
         }
-        return trim($output);
+        return \trim($output);
     }
 }

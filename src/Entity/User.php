@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as JMS;
@@ -33,7 +32,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public const API_TOKEN_VALIDITY = '+1 year';
 
     /**
-     * @var int|null
      * @ORM\Column(name="uid", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -43,7 +41,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public ?int $id = null;
 
     /**
-     * @var bool
      * @ORM\Column(name="active", type="boolean", nullable=false)
      * @JMS\Expose()
      * @OA\Property(description="Is the user active", type="boolean")
@@ -51,14 +48,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public bool $active = false;
 
     /**
-     * @var int
      * @ORM\Column(name="spots_ok", type="integer", nullable=false)
      * @JMS\Exclude()
      */
     public int $spotsOk = 0;
 
     /**
-     * @var string
      * @ORM\Column(name="username", type="string", length=20, nullable=false)
      * @Assert\NotBlank()
      * @Assert\Length(
@@ -73,22 +68,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public string $username = '';
 
     /**
-     * @var string|null
      * @ORM\Column(name="name", type="string", length=100, nullable=true)
      * @JMS\Expose()
      * @OA\Property(description="Real name of the user", maxLength=100, type="string")
      */
-    public ?string $name;
+    public ?string $name = null;
 
     /**
-     * @var string
      * @ORM\Column(name="password", type="string", length=255, nullable=false)
      * @JMS\Exclude()
      */
     public string $password = '';
 
     /**
-     * @var string
      * @ORM\Column(name="email", type="string", length=100, nullable=false)
      * @Assert\NotBlank()
      * @Assert\Email(message="Dit is geen geldig e-mailadres")
@@ -102,7 +94,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public string $email = '';
 
     /**
-     * @var string
      * @ORM\Column(name="cookie_ok", type="string", length=3, nullable=false)
      * @Assert\Choice(choices=User::COOKIE_VALUES)
      * @JMS\Exclude()
@@ -110,37 +101,32 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public string $cookieOk = self::COOKIE_UNKNOWN;
 
     /**
-     * @var string|null
      * @ORM\Column(name="actkey", type="string", length=13, nullable=true)
      * @JMS\Exclude()
      */
-    public ?string $activationKey;
+    public ?string $activationKey = null;
 
     /**
-     * @var DateTime
      * @ORM\Column(name="regdate", type="datetime", nullable=false)
      * @JMS\Expose()
      * @OA\Property(description="ISO-8601 timestamp of the registration of the user (Y-m-dTH:i:sP)", type="string")
      */
-    public DateTime $registerTimestamp;
+    public ?\DateTime $registerTimestamp = null;
 
     /**
-     * @var DateTime|null
      * @ORM\Column(name="ban_expire_timestamp", type="datetime", nullable=true)
      * @JMS\Exclude()
      */
-    public ?DateTime $banExpireTimestamp;
+    public ?\DateTime $banExpireTimestamp = null;
 
     /**
-     * @var DateTime|null
      * @ORM\Column(name="last_visit", type="datetime", nullable=true)
      * @JMS\Expose()
      * @OA\Property(description="ISO-8601 timestamp of the last visit of the user (Y-m-dTH:i:sP)", type="string")
      */
-    public ?DateTime $lastVisit;
+    public ?\DateTime $lastVisit = null;
 
     /**
-     * @var string|null
      * @ORM\Column(name="api_token", type="string", length=23, nullable=true)
      * @JMS\Expose()
      * @OA\Property(description="Token of the user, if logged in", maxLength=23, type="string")
@@ -148,72 +134,60 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public ?string $apiToken = null;
 
     /**
-     * @var DateTime|null
      * @ORM\Column(name="api_token_expiry_timestamp", type="datetime", nullable=true)
      * @JMS\Exclude()
      */
-    public ?DateTime $apiTokenExpiryTimestamp = null;
+    public ?\DateTime $apiTokenExpiryTimestamp = null;
 
     /**
-     * @var array
      * @ORM\Column(name="roles", type="array", nullable=false)
      * @JMS\Exclude()
      */
     public array $roles = [];
 
     /**
-     * @var UserInfo
      * @ORM\OneToOne(targetEntity="App\Entity\UserInfo", mappedBy="user")
      * @JMS\Expose()
      */
-    public UserInfo $info;
+    public ?UserInfo $info = null;
 
     /**
-     * @var Group[]
      * @ORM\ManyToMany(targetEntity="App\Entity\Group", mappedBy="users")
      * @JMS\Exclude()
      */
     private $groups;
 
     /**
-     * @var ForumFavorite[]
      * @ORM\OneToMany(targetEntity="App\Entity\ForumFavorite", mappedBy="user")
      * @JMS\Exclude()
      */
     private $forumFavorites;
 
     /**
-     * @var ForumPostFavorite[]
      * @ORM\OneToMany(targetEntity="App\Entity\ForumPostFavorite", mappedBy="user")
      * @JMS\Exclude()
      */
     private $forumPostFavorites;
 
     /**
-     * @var ForumForum[]
      * @ORM\ManyToMany(targetEntity="App\Entity\ForumForum", mappedBy="moderators")
      * @JMS\Exclude()
      */
     private $moderatedForums;
 
     /**
-     * @var Spot[]
      * @ORM\OneToMany(targetEntity="App\Entity\Spot", mappedBy="user")
      * @JMS\Exclude()
      */
     private $spots;
 
     /**
-     * @var UserPreferenceValue[]
      * @ORM\OneToMany(targetEntity="App\Entity\UserPreferenceValue", mappedBy="user")
      * @JMS\Expose()
      * @OA\Property(description="The user-settings", ref=@Model(type=UserPreferenceValue::class))
      */
     private $preferences;
 
-    /**
-     *
-     */
     public function __construct()
     {
         $this->groups = new ArrayCollection();
@@ -224,70 +198,44 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->preferences = new ArrayCollection();
     }
 
-    /**
-     * @return string
-     */
     public function getUserIdentifier(): string
     {
         return $this->username;
     }
 
-    /**
-     * @return string
-     */
     public function getUsername(): string
     {
         return $this->username;
     }
 
-    /**
-     * @return string
-     */
     public function getPassword(): string
     {
         return $this->password;
     }
 
-    /**
-     *
-     */
     public function eraseCredentials(): void
     {
     }
 
-    /**
-     * @return string|null
-     */
     public function getSalt(): ?string
     {
         return null;
     }
 
-    /**
-     * @return array
-     */
     public function getRoles(): array
     {
         $roleArray = $this->roles;
         foreach ($this->getGroups() as $group) {
-            $roleArray = array_merge($roleArray, $group->roles);
+            $roleArray = \array_merge($roleArray, $group->roles);
         }
         return $roleArray;
     }
 
-    /**
-     * @param string $role
-     * @return bool
-     */
     public function hasRole(string $role): bool
     {
-        return in_array($role, $this->getRoles());
+        return \in_array($role, $this->getRoles());
     }
 
-    /**
-     * @param string $role
-     * @return User
-     */
     public function addRole(string $role): User
     {
         if (!$this->hasRole($role)) {
@@ -296,10 +244,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * @param Group $group
-     * @return User
-     */
     public function addGroup(Group $group): User
     {
         $this->groups[] = $group;
@@ -314,10 +258,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->groups->toArray();
     }
 
-    /**
-     * @param ForumFavorite $forumFavorite
-     * @return User
-     */
     public function addForumFavorite(ForumFavorite $forumFavorite): User
     {
         $this->forumFavorites[] = $forumFavorite;
@@ -332,10 +272,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->forumFavorites->toArray();
     }
 
-    /**
-     * @param ForumDiscussion $discussion
-     * @return bool
-     */
     public function isForumFavorite(ForumDiscussion $discussion): bool
     {
         foreach ($this->getForumFavorites() as $forumFavorite) {
@@ -346,10 +282,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return false;
     }
 
-    /**
-     * @param ForumPostFavorite $forumPostFavorite
-     * @return User
-     */
     public function addForumPostFavorite(ForumPostFavorite $forumPostFavorite): User
     {
         $this->forumPostFavorites[] = $forumPostFavorite;
@@ -364,10 +296,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->forumPostFavorites->toArray();
     }
 
-    /**
-     * @param ForumPost $post
-     * @return bool
-     */
     public function isPostFavorite(ForumPost $post): bool
     {
         foreach ($this->getForumPostFavorites() as $postFavorite) {
@@ -378,10 +306,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return false;
     }
 
-    /**
-     * @param ForumForum $forumForum
-     * @return User
-     */
     public function addModeratedForum(ForumForum $forumForum): User
     {
         $this->moderatedForums[] = $forumForum;
@@ -396,10 +320,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->moderatedForums->toArray();
     }
 
-    /**
-     * @param Spot $spot
-     * @return User
-     */
     public function addSpot(Spot $spot): User
     {
         $this->spots[] = $spot;
@@ -414,10 +334,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->spots->toArray();
     }
 
-    /**
-     * @param UserPreferenceValue $userPreferenceValue
-     * @return User
-     */
     public function addPreference(UserPreferenceValue $userPreferenceValue): User
     {
         $this->preferences[] = $userPreferenceValue;
@@ -433,7 +349,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return string
      * @JMS\VirtualProperty(name="signature")
      */
     public function getSignature(): string

@@ -2,7 +2,6 @@
 
 namespace App\Entity;
 
-use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as JMS;
@@ -15,7 +14,6 @@ use OpenApi\Annotations as OA;
 class News
 {
     /**
-     * @var int|null
      * @ORM\Column(name="newsid", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -25,15 +23,13 @@ class News
     public ?int $id = null;
 
     /**
-     * @var DateTime
      * @ORM\Column(name="timestamp", type="datetime", nullable=false)
      * @JMS\Expose()
      * @OA\Property(description="ISO-8601 timestamp of the news-item (Y-m-dTH:i:sP)", type="string")
      */
-    public DateTime $timestamp;
+    public ?\DateTime $timestamp = null;
 
     /**
-     * @var string
      * @ORM\Column(name="title", type="string", length=50, nullable=false)
      * @JMS\Expose()
      * @OA\Property(description="Title of the news-item", maxLength=50, type="string")
@@ -41,7 +37,6 @@ class News
     public string $title = '';
 
     /**
-     * @var string
      * @ORM\Column(name="text", type="text", length=0, nullable=false)
      * @JMS\Expose()
      * @OA\Property(description="Contents of the news-item", type="string")
@@ -49,7 +44,6 @@ class News
     public string $text = '';
 
     /**
-     * @var bool
      * @ORM\Column(name="archief", type="boolean", nullable=false)
      * @JMS\Expose()
      * @OA\Property(description="Whether the news-item is in the archive", type="boolean")
@@ -57,7 +51,6 @@ class News
     public bool $archived = false;
 
     /**
-     * @var User[]
      * @ORM\ManyToMany(targetEntity="User")
      * @ORM\JoinTable(name="somda_news_read",
      *      joinColumns={@ORM\JoinColumn(name="newsid", referencedColumnName="newsid")},
@@ -75,10 +68,6 @@ class News
         $this->userReads = new ArrayCollection();
     }
 
-    /**
-     * @param User $user
-     * @return News
-     */
     public function addUserRead(User $user): News
     {
         $this->userReads[] = $user;

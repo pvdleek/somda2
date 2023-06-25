@@ -6,7 +6,7 @@
             <a id="new_post"></a>
             {% set firstUnreadAnchorDone = true %}
         {% endif %}
-        <a href="{{ path('forum_discussion_post', { 'id': post.discussion.id, 'name': (post.discussion.title | slugify), 'postId': post.id }) }}">
+        <a href="{{ path('forum_discussion_post', { 'id': post.discussion.id, 'name': (post.discussion.title | slug), 'postId': post.id }) }}">
             {% if postIsUnread %}<i class="color-orange fas fa-comment-dots"></i>{% else %}<i class="fas fa-comment"></i>{% endif %}
         </a> {{ post.timestamp | date('d-m-Y H:i:s') }}
         {% set numberOfFavorites = post.numberOfFavorites %}

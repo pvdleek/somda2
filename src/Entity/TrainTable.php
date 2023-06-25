@@ -27,7 +27,6 @@ class TrainTable
     public const ACTION_VALUES = ['v', '-', '+', 'a'];
 
     /**
-     * @var int|null
      * @ORM\Column(name="tdrid", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -37,7 +36,6 @@ class TrainTable
     public ?int $id = null;
 
     /**
-     * @var int
      * @ORM\Column(name="orderid", type="integer", nullable=false, options={"default"="1"})
      * @JMS\Expose()
      * @OA\Property(description="The order in which the items should be displayed", type="integer")
@@ -45,7 +43,6 @@ class TrainTable
     public int $order = 1;
 
     /**
-     * @var string
      * @ORM\Column(name="actie", type="string", length=1, nullable=false, options={"default"="-"})
      * @Assert\Choice(choices=TrainTable::ACTION_VALUES)
      * @JMS\Expose()
@@ -60,7 +57,6 @@ class TrainTable
     public string $action = '-';
 
     /**
-     * @var int
      * @ORM\Column(name="tijd", type="integer", nullable=false, options={"default"="0"})
      * @JMS\Exclude()
      * @OA\Property(
@@ -72,14 +68,12 @@ class TrainTable
     public int $time = 0;
 
     /**
-     * @var string|null
      * @ORM\Column(name="spoor", type="string", length=3, nullable=true)
      * @JMS\Exclude()
      */
-    public ?string $track;
+    public ?string $track = null;
 
     /**
-     * @var TrainTableYear
      * @ORM\ManyToOne(targetEntity="App\Entity\TrainTableYear")
      * @ORM\JoinColumn(name="tdr_nr", referencedColumnName="tdr_nr")
      * @JMS\Expose()
@@ -88,18 +82,16 @@ class TrainTable
      *     ref=@Model(type=TrainTableYear::class),
      * )
      */
-    public TrainTableYear $trainTableYear;
+    public ?TrainTableYear $trainTableYear = null;
 
     /**
-     * @var Route
      * @ORM\ManyToOne(targetEntity="App\Entity\Route", inversedBy="trainTables")
      * @ORM\JoinColumn(name="treinid", referencedColumnName="treinid")
      * @JMS\Exclude()
      */
-    public Route $route;
+    public ?Route $route = null;
 
     /**
-     * @var RouteOperationDays
      * @ORM\ManyToOne(targetEntity="App\Entity\RouteOperationDays")
      * @ORM\JoinColumn(name="rijdagenid", referencedColumnName="rijdagenid")
      * @JMS\Expose()
@@ -108,10 +100,9 @@ class TrainTable
      *     ref=@Model(type=RouteOperationDays::class),
      * )
      */
-    public RouteOperationDays $routeOperationDays;
+    public ?RouteOperationDays $routeOperationDays = null;
 
     /**
-     * @var Location
      * @ORM\ManyToOne(targetEntity="App\Entity\Location", inversedBy="trainTables")
      * @ORM\JoinColumn(name="locatieid", referencedColumnName="afkid")
      * @JMS\Expose()
@@ -120,10 +111,9 @@ class TrainTable
      *     ref=@Model(type=Location::class),
      * )
      */
-    public Location $location;
+    public ?Location $location = null;
 
     /**
-     * @return string
      * @JMS\VirtualProperty(name="displayTime")
      */
     public function getDisplayTime(): string

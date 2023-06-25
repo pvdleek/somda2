@@ -14,10 +14,6 @@ class ForumSearch extends AbstractType
     public const METHOD_ALL = 'all';
     public const METHOD_SOME = 'some';
 
-    /**
-     * @param FormBuilderInterface $builder
-     * @param array $options
-     */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder

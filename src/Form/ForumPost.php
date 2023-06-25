@@ -22,21 +22,17 @@ class ForumPost extends AbstractType
     public const OPTION_QUOTED_POST = 'quotedPost';
     public const OPTION_EDITED_POST = 'editedPost';
 
-    /**
-     * @param FormBuilderInterface $builder
-     * @param array $options
-     */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $data = '';
-        if (!is_null($options[self::OPTION_QUOTED_POST])) {
-            $data = sprintf(
+        if (!\is_null($options[self::OPTION_QUOTED_POST])) {
+            $data = \sprintf(
                 self::QUOTE_HTML,
                 $options[self::OPTION_QUOTED_POST]->author->username,
                 $options[self::OPTION_QUOTED_POST]->timestamp->format('d-m-Y H:i:s'),
                 $options[self::OPTION_QUOTED_POST]->text->text
             );
-        } elseif (!is_null($options[self::OPTION_EDITED_POST])) {
+        } elseif (!\is_null($options[self::OPTION_EDITED_POST])) {
             $data = $options[self::OPTION_EDITED_POST]->text->text;
         }
 
@@ -54,7 +50,7 @@ class ForumPost extends AbstractType
                 FormGenerics::KEY_LABEL => 'Handtekening gebruiken',
             ]);
 
-        if (!is_null($options[self::OPTION_EDITED_POST])) {
+        if (!\is_null($options[self::OPTION_EDITED_POST])) {
             $builder->add('editReason', TextType::class, [
                 FormGenerics::KEY_LABEL => 'Reden voor bewerking (optioneel)',
                 FormGenerics::KEY_REQUIRED => false,
@@ -62,9 +58,6 @@ class ForumPost extends AbstractType
         }
     }
 
-    /**
-     * @param OptionsResolver $resolver
-     */
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([self::OPTION_QUOTED_POST => null, self::OPTION_EDITED_POST => null]);

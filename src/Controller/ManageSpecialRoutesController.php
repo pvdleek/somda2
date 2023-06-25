@@ -8,44 +8,19 @@ use App\Generics\RoleGenerics;
 use App\Helpers\FormHelper;
 use App\Helpers\TemplateHelper;
 use App\Helpers\UserHelper;
-use DateTime;
-use Exception;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class ManageSpecialRoutesController
 {
-    /**
-     * @var UserHelper
-     */
-    private UserHelper $userHelper;
-
-    /**
-     * @var FormHelper
-     */
-    private FormHelper $formHelper;
-
-    /**
-     * @var TemplateHelper
-     */
-    private TemplateHelper $templateHelper;
-
-    /**
-     * @param UserHelper $userHelper
-     * @param FormHelper $formHelper
-     * @param TemplateHelper $templateHelper
-     */
-    public function __construct(UserHelper $userHelper, FormHelper $formHelper, TemplateHelper $templateHelper)
-    {
-        $this->userHelper = $userHelper;
-        $this->formHelper = $formHelper;
-        $this->templateHelper = $templateHelper;
+    public function __construct(
+        private readonly UserHelper $userHelper,
+        private readonly FormHelper $formHelper,
+        private readonly TemplateHelper $templateHelper,
+    ) {
     }
 
-    /**
-     * @return Response
-     */
     public function indexAction(): Response
     {
         $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_ADMIN_SPECIAL_ROUTES);
@@ -60,26 +35,23 @@ class ManageSpecialRoutesController
     }
 
     /**
-     * @param Request $request
-     * @param int $id
-     * @return RedirectResponse|Response
-     * @throws Exception
+     * @throws \Exception
      */
-    public function editAction(Request $request, int $id)
+    public function editAction(Request $request, int $id): Response|RedirectResponse
     {
         $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_ADMIN_SPECIAL_ROUTES);
 
         $specialRoute = $this->formHelper->getDoctrine()->getRepository(SpecialRoute::class)->find($id);
-        if (is_null($specialRoute)) {
+        if (\is_null($specialRoute)) {
             $specialRoute = new SpecialRoute();
-            $specialRoute->startDate = new DateTime('+1 day');
-            $specialRoute->publicationTimestamp = new DateTime();
+            $specialRoute->startDate = new \DateTime('+1 day');
+            $specialRoute->publicationTimestamp = new \DateTime();
         }
         $form = $this->formHelper->getFactory()->create(SpecialRouteForm::class, $specialRoute);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            if (is_null($specialRoute->id)) {
+            if (\is_null($specialRoute->id)) {
                 $this->formHelper->getDoctrine()->getManager()->persist($specialRoute);
                 return $this->formHelper->finishFormHandling('Rit toegevoegd', 'manage_special_routes');
             }

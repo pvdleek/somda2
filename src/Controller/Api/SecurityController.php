@@ -6,11 +6,9 @@ namespace App\Controller\Api;
 use App\Entity\User;
 use App\Generics\RoleGenerics;
 use App\Helpers\UserHelper;
-use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
-use Exception;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
-use Monolog\Logger;
+use Monolog\Level;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Psr\Log\LoggerInterface;
 use OpenApi\Annotations as OA;
@@ -19,36 +17,14 @@ use Symfony\Component\HttpFoundation\Response;
 
 class SecurityController extends AbstractFOSRestController
 {
-    /**
-     * @var ManagerRegistry
-     */
-    private ManagerRegistry $doctrine;
-
-    /**
-     * @var UserHelper
-     */
-    private UserHelper $userHelper;
-
-    /**
-     * @var LoggerInterface
-     */
-    private LoggerInterface $logger;
-
-    /**
-     * @param ManagerRegistry $doctrine
-     * @param UserHelper $userHelper
-     * @param LoggerInterface $logger
-     */
-    public function __construct(ManagerRegistry $doctrine, UserHelper $userHelper, LoggerInterface $logger)
-    {
-        $this->doctrine = $doctrine;
-        $this->userHelper = $userHelper;
-        $this->logger = $logger;
+    public function __construct(
+        private readonly ManagerRegistry $doctrine,
+        private readonly UserHelper $userHelper,
+        private readonly LoggerInterface $logger,
+    ) {
     }
 
     /**
-     * @param Request $request
-     * @return Response
      * @OA\Post(
      *     description="Authenticates a user",
      *     @OA\Parameter(
@@ -80,16 +56,13 @@ class SecurityController extends AbstractFOSRestController
     public function loginAction(Request $request): Response
     {
         // If we reach this point, the user was successfully logged in, so we look the user up and return it
-        $userInformation = (array)json_decode($request->getContent(), true);
+        $userInformation = (array) \json_decode($request->getContent(), true);
         $user = $this->doctrine->getRepository(User::class)->findOneBy(['username' => $userInformation['username']]);
 
         return $this->handleView($this->view(['data' => $user], 200));
     }
 
     /**
-     * @param int $id
-     * @param string $token
-     * @return Response
      * @OA\Parameter(description="ID of the user to verify", in="path", name="id", @OA\Schema(type="integer"))
      * @OA\Parameter(description="Token of the user to verify", in="path", name="token", @OA\Schema(type="string"))
      * @OA\Response(
@@ -113,18 +86,15 @@ class SecurityController extends AbstractFOSRestController
         $user = $this->doctrine->getRepository(User::class)->findOneBy(
             ['id' => $id, 'active' => true, 'apiToken' => $token]
         );
-        if (is_null($user) || $user->apiTokenExpiryTimestamp <= new DateTime()) {
+        if (\is_null($user) || $user->apiTokenExpiryTimestamp <= new \DateTime()) {
             return $this->handleView($this->view(['error' => 'This token is not valid'], 401));
         }
 
-        $user->apiTokenExpiryTimestamp = new DateTime(User::API_TOKEN_VALIDITY);
+        $user->apiTokenExpiryTimestamp = new \DateTime(User::API_TOKEN_VALIDITY);
         try {
             $this->doctrine->getManager()->flush();
-        } catch (Exception $exception) {
-            $this->logger->addRecord(
-                Logger::CRITICAL,
-                'Failed to set api-token-expiry-timestamp for user ' . $user->id
-            );
+        } catch (\Exception $exception) {
+            $this->logger->addRecord(Level::Critical, 'Failed to set api-token-expiry-timestamp for user ' . $user->id);
         }
 
         return $this->handleView($this->view(['data' => $user], 200));

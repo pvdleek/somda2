@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -13,7 +12,6 @@ use Doctrine\ORM\Mapping as ORM;
 class Statistic
 {
     /**
-     * @var int|null
      * @ORM\Column(name="id", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -21,44 +19,37 @@ class Statistic
     public ?int $id = null;
 
     /**
-     * @var DateTime
      * @ORM\Column(name="datum", type="datetime", nullable=false)
      */
-    public DateTime $timestamp;
+    public ?\DateTime $timestamp = null;
 
     /**
-     * @var string
      * @ORM\Column(name="uniek", type="bigint", nullable=false)
      */
-    public string $visitorsUnique = '0';
+    public int $visitorsUnique = 0;
 
     /**
-     * @var string
      * @ORM\Column(name="pageviews", type="bigint", nullable=false)
      */
-    public string $visitorsTotal = '0';
+    public int $visitorsTotal = 0;
 
     /**
-     * @var string
      * @ORM\Column(name="pageviews_home", type="bigint", nullable=false)
      */
-    public string $visitorsHome = '0';
+    public int $visitorsHome = 0;
 
     /**
-     * @var string
      * @ORM\Column(name="pageviews_func", type="bigint", nullable=false)
      */
-    public string $visitorsFunctions = '0';
+    public int $visitorsFunctions = 0;
 
     /**
-     * @var string
      * @ORM\Column(name="spots", type="bigint", nullable=false)
      */
-    public string $numberOfSpots = '0';
+    public int $numberOfSpots = 0;
 
     /**
-     * @var string
      * @ORM\Column(name="posts", type="bigint", nullable=false)
      */
-    public string $numberOfPosts = '0';
+    public int $numberOfPosts = 0;
 }

@@ -12,30 +12,13 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ForumSearchController extends AbstractFOSRestController
 {
-    /**
-     * @var UserHelper
-     */
-    private UserHelper $userHelper;
-
-    /**
-     * @var ForumSearchHelper
-     */
-    private ForumSearchHelper $forumSearchHelper;
-
-    /**
-     * @param UserHelper $userHelper
-     * @param ForumSearchHelper $forumSearchHelper
-     */
-    public function __construct(UserHelper $userHelper, ForumSearchHelper $forumSearchHelper)
-    {
-        $this->userHelper = $userHelper;
-        $this->forumSearchHelper = $forumSearchHelper;
+    public function __construct(
+        private readonly UserHelper $userHelper,
+        private readonly ForumSearchHelper $forumSearchHelper,
+    ) {
     }
 
     /**
-     * @param string $searchMethod
-     * @param string $terms
-     * @return Response
      * @OA\Parameter(
      *     description="Search method to use, 'all' to have all words match, 'some' to let any word match",
      *     in="path",
@@ -101,9 +84,9 @@ class ForumSearchController extends AbstractFOSRestController
             $this->view([
                 'meta' => [
                     'max_number_of_results' => ForumSearchHelper::MAX_RESULTS,
-                    'more_results' => count($results) > ForumSearchHelper::MAX_RESULTS
+                    'more_results' => \count($results) > ForumSearchHelper::MAX_RESULTS
                 ],
-                'data' => array_slice($results, 0, ForumSearchHelper::MAX_RESULTS),
+                'data' => \array_slice($results, 0, ForumSearchHelper::MAX_RESULTS),
             ], 200)
         );
     }

@@ -11,29 +11,12 @@ use Symfony\Component\HttpFoundation\Response;
 
 class StatisticsController
 {
-    /**
-     * @var ManagerRegistry
-     */
-    private ManagerRegistry $doctrine;
-
-    /**
-     * @var TemplateHelper
-     */
-    private TemplateHelper $templateHelper;
-
-    /**
-     * @param ManagerRegistry $doctrine
-     * @param TemplateHelper $templateHelper
-     */
-    public function __construct(ManagerRegistry $doctrine, TemplateHelper $templateHelper)
-    {
-        $this->doctrine = $doctrine;
-        $this->templateHelper = $templateHelper;
+    public function __construct(
+        private readonly ManagerRegistry $doctrine,
+        private readonly TemplateHelper $templateHelper,
+    ) {
     }
 
-    /**
-     * @return Response
-     */
     public function indexAction(): Response
     {
         $statisticsPerMonth = $this->doctrine->getRepository(Statistic::class)->getTotalsPerMonth();
@@ -47,9 +30,6 @@ class StatisticsController
         ]);
     }
 
-    /**
-     * @return StatisticSummary
-     */
     private function getStatisticsSummary(): StatisticSummary
     {
         $statisticsSummary = new StatisticSummary();

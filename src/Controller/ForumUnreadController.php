@@ -14,47 +14,14 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ForumUnreadController
 {
-    /**
-     * @var ManagerRegistry
-     */
-    private ManagerRegistry $doctrine;
-
-    /**
-     * @var UserHelper
-     */
-    private UserHelper $userHelper;
-
-    /**
-     * @var TemplateHelper
-     */
-    private TemplateHelper $templateHelper;
-
-    /**
-     * @var RedirectHelper
-     */
-    private RedirectHelper $redirectHelper;
-
-    /**
-     * @param ManagerRegistry $doctrine
-     * @param UserHelper $userHelper
-     * @param TemplateHelper $templateHelper
-     * @param RedirectHelper $redirectHelper
-     */
     public function __construct(
-        ManagerRegistry $doctrine,
-        UserHelper $userHelper,
-        TemplateHelper $templateHelper,
-        RedirectHelper $redirectHelper
+        private readonly ManagerRegistry $doctrine,
+        private readonly UserHelper $userHelper,
+        private readonly TemplateHelper $templateHelper,
+        private readonly RedirectHelper $redirectHelper,
     ) {
-        $this->doctrine = $doctrine;
-        $this->userHelper = $userHelper;
-        $this->templateHelper = $templateHelper;
-        $this->redirectHelper = $redirectHelper;
     }
 
-    /**
-     * @return Response
-     */
     public function indexAction(): Response
     {
         $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_USER);
@@ -67,9 +34,6 @@ class ForumUnreadController
         ]);
     }
 
-    /**
-     * @return RedirectResponse
-     */
     public function markReadAction(): RedirectResponse
     {
         $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_USER);
