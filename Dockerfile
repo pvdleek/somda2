@@ -339,6 +339,8 @@ RUN set -eux \
 # Copy util scripts
 COPY docker/envsubst.sh /envsubst.sh
 COPY docker/entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+RUN chmod +x /envsubst.sh
 
 STOPSIGNAL SIGQUIT
 
