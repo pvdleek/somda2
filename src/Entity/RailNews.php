@@ -80,7 +80,7 @@ class RailNews
     public function getLogo(): string
     {
         list($width, $height) = $this->resizeImage(
-            \getimagesize(__DIR__ . '/../../public/images/news-logos/' . $this->source->logo),
+            \getimagesize(__DIR__ . '/../../html/images/news-logos/' . $this->source->logo),
             [500, 25]
         );
         return '<a href="http://' . $this->source->url . '/" target="_blank"><img alt="' .

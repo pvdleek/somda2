@@ -31,6 +31,6 @@ class AppExtension extends AbstractExtension
 
     public function fileTimestampFilter(string $filename): string
     {
-        return (string) \filemtime(__DIR__ . '/../../public/' . $filename);
+        return (string) \filemtime(__DIR__ . '/../../html/' . $filename);
     }
 }

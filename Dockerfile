@@ -361,7 +361,7 @@ COPY composer.phar ./
 COPY symfony.lock ./
 COPY bin bin/
 COPY config config/
-COPY public html/
+COPY html html/
 COPY src src/
 COPY templates templates/
 COPY translations translations/

@@ -76,7 +76,7 @@ class UserInfo extends AbstractType
     private function getAvatars(): array
     {
         $finder = new Finder();
-        $finder->files()->in(__DIR__ . '/../../public/images/avatar');
+        $finder->files()->in(__DIR__ . '/../../html/images/avatar');
         $avatarList = [];
         foreach ($finder as $file) {
             $avatarList[\strtolower($file->getFilenameWithoutExtension())] = $file->getRelativePathname();
