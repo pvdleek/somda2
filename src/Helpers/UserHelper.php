@@ -59,6 +59,7 @@ class UserHelper implements RuntimeExtensionInterface
         );
         if (!\is_null($user)) {
             $this->user = $user;
+            $this->security->login($user, 'form_login', 'main');
         }
     }
 

@@ -20,8 +20,6 @@ class ProfileController extends AbstractFOSRestController
         private readonly ManagerRegistry $doctrine,
         private readonly UserHelper $userHelper,
     ) {
-        $this->doctrine = $doctrine;
-        $this->userHelper = $userHelper;
     }
 
     /**

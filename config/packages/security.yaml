@@ -3,7 +3,9 @@ security:
     App\Entity\User:
       algorithm: auto
     Symfony\Component\Security\Core\User\User:
-      algorithm: auto
+      algorithm: sodium
+    Symfony\Component\Security\Core\User\InMemoryUser:
+      algorithm: sodium
 
   providers:
     app_user_provider:
@@ -13,11 +15,8 @@ security:
     api_user_provider:
       memory:
         users:
-          'nl.somda.somda.app': { password: '$argon2id$v=19$m=65536,t=4,p=1$79JQAdFwBv6M6e+C098Z+Q$l+L4HEmPpy3B8KRx9M2yEmrfORbgRU33IKiKaWDVOHI', roles: 'ROLE_API_USER' }
-          'aar.claij.nl': { password: '$argon2id$v=19$m=65536,t=4,p=1$ek13WTRSQjBJRTYzVjdNcg$t7+BabVXHW/AiRrs/2F2h8NzCEMYwGzGyXnECkjmneY', roles: 'ROLE_API_USER' }
-    all_users:
-      chain:
-        providers: ['api_user_provider', 'app_user_provider']
+          'nl.somda.somda.app': { password: '$argon2id$v=19$m=65536,t=4,p=1$dByQmurpoaWjbHC9qZmPnQ$J9/ORhsSViSFTZAdsXy0c5nv2AHtlyUZSIrZWlqVFP0', roles: ['ROLE_API_USER'] }
+          'aar.claij.nl': { password: '$argon2id$v=19$m=65536,t=4,p=1$ek13WTRSQjBJRTYzVjdNcg$t7+BabVXHW/AiRrs/2F2h8NzCEMYwGzGyXnECkjmneY', roles: ['ROLE_API_USER'] }
 
   firewalls:
     dev:
@@ -30,7 +29,7 @@ security:
         check_path: api_authenticate
       lazy: true
       pattern: ^/api/
-      provider: all_users
+      provider: api_user_provider
       stateless: true
     main:
       lazy: true
