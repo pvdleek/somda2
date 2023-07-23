@@ -27,7 +27,7 @@ class BannerController
          * @var Banner $banner
          */
         $banner = $this->doctrine->getRepository(Banner::class)->find($id);
-        if (is_null($banner)) {
+        if (null === $banner) {
             return $this->redirectHelper->redirectToRoute('home');
         }
 

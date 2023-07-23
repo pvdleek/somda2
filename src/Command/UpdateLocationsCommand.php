@@ -51,7 +51,7 @@ class UpdateLocationsCommand extends Command
             $category = $this->doctrine->getRepository(LocationCategory::class)->findOneBy(
                 ['code' => $station['land']]
             );
-            if (\is_null($category)) {
+            if (null === $category) {
                 $category = new LocationCategory();
                 $category->code = $category->name = $station['land'];
 
@@ -62,7 +62,7 @@ class UpdateLocationsCommand extends Command
             $location = $this->doctrine->getRepository(Location::class)->findOneBy(
                 ['name' => $locationName, 'category' => $category]
             );
-            if (\is_null($location)) {
+            if (null === $location) {
                 $location = new Location();
                 $location->name = $locationName;
                 $location->category = $category;

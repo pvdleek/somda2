@@ -18,7 +18,7 @@ class HelpController
     public function indexAction(int $id): Response
     {
         $item = $this->doctrine->getRepository(Help::class)->find($id);
-        if (\is_null($item)) {
+        if (null === $item) {
             $item = $this->doctrine->getRepository(Help::class)->find(1);
         }
 

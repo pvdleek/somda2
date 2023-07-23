@@ -88,7 +88,7 @@ class GetRailNewsCommand extends Command
     private function isArticleMatch(ItemInterface $item): bool
     {
         // Disapprove news-items in the future
-        if (!\is_null($item->getLastModified()) && $item->getLastModified() > new \DateTime()) {
+        if (null !== $item->getLastModified() && $item->getLastModified() > new \DateTime()) {
             return false;
         }
 
@@ -124,7 +124,7 @@ class GetRailNewsCommand extends Command
         $railNewsByTitle = $this->doctrine->getRepository(RailNews::class)->findOneBy(
             ['title' => $item->getTitle()]
         );
-        return !\is_null($railNewsByTitle);
+        return null !== $railNewsByTitle;
     }
 
     private function getItemDescription(ItemInterface $item): string
@@ -146,7 +146,7 @@ class GetRailNewsCommand extends Command
             ['url' => $item->getLink()]
         );
 
-        if (\is_null($railNews)) {
+        if (null === $railNews) {
             $railNews = new RailNews();
             $railNews->title = $item->getTitle();
             $railNews->url = $item->getLink();
