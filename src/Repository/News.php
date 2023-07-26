@@ -18,7 +18,7 @@ class News extends ServiceEntityRepository
     }
 
     /**
-     * @return NewsEntity[]
+     * @return array<int, array<string, mixed>>
      */
     public function findForDashboard(int $limit, User $user = null): array
     {
@@ -45,7 +45,7 @@ class News extends ServiceEntityRepository
         try {
             $statement = $connection->prepare($query);
             return $statement->executeQuery()->fetchAllAssociative();
-        } catch (DBALException | DBALDriverException $exception) {
+        } catch (DBALException | DBALDriverException) {
             return [];
         }
     }

@@ -33,9 +33,11 @@ class UserPreferences extends AbstractType
     {
         /**
          * @var UserPreference[] $allSettings
-         * @var UserHelper $userHelper
          */
         $allSettings = $options['allSettings'];
+        /**
+         * @var UserHelper $userHelper
+         */
         $userHelper = $options['userHelper'];
 
         foreach ($allSettings as $setting) {

@@ -7,6 +7,8 @@ use App\Entity\Route;
 use App\Entity\RouteTrain;
 use App\Entity\TrainTable;
 use App\Entity\TrainTableYear;
+use App\Repository\Location as LocationRepository;
+use App\Repository\TrainTable as RepositoryTrainTable;
 use App\Traits\DateTrait;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -38,6 +40,8 @@ class TrainTableHelper
     public function __construct(
         private readonly ManagerRegistry $doctrine,
         private readonly TranslatorInterface $translator,
+        private readonly LocationRepository $repositoryLocation,
+        private readonly RepositoryTrainTable $repositoryTrainTable,
     ) {
     }
 
@@ -63,7 +67,7 @@ class TrainTableHelper
 
     public function setLocation(string $locationName): void
     {
-        $this->location = $this->doctrine->getRepository(Location::class)->findOneByName($locationName);
+        $this->location = $this->repositoryLocation->findOneByName($locationName);
     }
 
     public function getLocation(): ?Location
@@ -164,7 +168,7 @@ class TrainTableHelper
             $endTimeDatabase = $startTimeDatabase + 120;
         }
 
-        return $this->doctrine->getRepository(TrainTable::class)->findPassingRoutes(
+        return $this->repositoryTrainTable->findPassingRoutes(
             $this->getTrainTableYear(),
             $this->getLocation(),
             $dayNumber,

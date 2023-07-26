@@ -125,7 +125,7 @@ class Spot extends ServiceEntityRepository
         }
         try {
             return (int) $queryBuilder->getQuery()->getSingleScalarResult();
-        } catch (NonUniqueResultException | NoResultException $exception) {
+        } catch (NonUniqueResultException | NoResultException) {
             return 0;
         }
     }
@@ -259,7 +259,7 @@ class Spot extends ServiceEntityRepository
 
         try {
             return (int) $queryBuilder->getQuery()->getSingleScalarResult();
-        } catch (NonUniqueResultException | NoResultException $exception) {
+        } catch (NonUniqueResultException | NoResultException) {
             return 0;
         }
     }

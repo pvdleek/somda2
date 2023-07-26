@@ -81,7 +81,7 @@ class ForumDiscussion extends ServiceEntityRepository
             $statement->bindValue('excludeForums', implode(',', $excludeForums));
             $statement->bindValue('moderatorForumType', ForumForum::TYPE_MODERATORS_ONLY);
             return $statement->executeQuery()->fetchAllAssociative();
-        } catch (DBALDriverException $exception) {
+        } catch (DBALDriverException) {
             return [];
         }
     }
@@ -132,7 +132,7 @@ class ForumDiscussion extends ServiceEntityRepository
             $statement = $connection->prepare($query);
             $statement->bindValue('forumid', $forum->id);
             return $statement->executeQuery()->fetchAllAssociative();
-        } catch (DBALDriverException | DBALException $exception) {
+        } catch (DBALDriverException | DBALException) {
             return [];
         }
     }
@@ -167,7 +167,7 @@ class ForumDiscussion extends ServiceEntityRepository
             $statement = $connection->prepare($query);
             $statement->bindValue('userId', $user->id);
             return $statement->executeQuery()->fetchAllAssociative();
-        } catch (DBALDriverException | DBALException $exception) {
+        } catch (DBALDriverException | DBALException) {
             return [];
         }
     }
@@ -206,7 +206,7 @@ class ForumDiscussion extends ServiceEntityRepository
             ));
             $statement->bindValue('moderatorForumType', ForumForum::TYPE_MODERATORS_ONLY);
             return $statement->executeQuery()->fetchAllAssociative();
-        } catch (DBALDriverException $exception) {
+        } catch (DBALDriverException) {
             return [];
         }
     }
@@ -257,7 +257,7 @@ class ForumDiscussion extends ServiceEntityRepository
             ->setMaxResults(1);
         try {
             return (int) $queryBuilder->getQuery()->getSingleScalarResult();
-        } catch (\Exception $exception) {
+        } catch (\Exception) {
             return 0;
         }
     }
@@ -289,7 +289,7 @@ class ForumDiscussion extends ServiceEntityRepository
             ->setParameter('user', $user);
         try {
             return (int) $queryBuilder->getQuery()->getSingleScalarResult();
-        } catch (\Exception $exception) {
+        } catch (\Exception) {
             return 0;
         }
     }
@@ -308,7 +308,7 @@ class ForumDiscussion extends ServiceEntityRepository
         try {
             $statement = $connection->prepare(\substr($query, 0, -1));
             $statement->executeStatement();
-        } catch (DBALDriverException | DBALException $exception) {
+        } catch (DBALDriverException | DBALException) {
             return;
         }
     }
@@ -322,7 +322,7 @@ class ForumDiscussion extends ServiceEntityRepository
         try {
             $statement = $connection->prepare($query);
             $statement->executeStatement();
-        } catch (DBALDriverException | DBALException $exception) {
+        } catch (DBALDriverException | DBALException) {
             return;
         }
     }

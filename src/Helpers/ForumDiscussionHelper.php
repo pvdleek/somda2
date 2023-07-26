@@ -10,7 +10,9 @@ use App\Entity\UserPreference;
 use App\Exception\WrongMethodError;
 use App\Form\ForumPost as ForumPostForm;
 use App\Generics\ForumGenerics;
-use Doctrine\Persistence\ManagerRegistry;
+use App\Repository\ForumDiscussion as RepositoryForumDiscussion;
+use App\Repository\ForumPost as RepositoryForumPost;
+use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class ForumDiscussionHelper
@@ -28,9 +30,11 @@ class ForumDiscussionHelper
     private ?int $numberOfReadPosts = null;
 
     public function __construct(
-        private readonly ManagerRegistry $doctrine,
+        private readonly ObjectManager $entityManager,
         private readonly UserHelper $userHelper,
         private readonly ForumAuthorizationHelper $forumAuthHelper,
+        private readonly RepositoryForumDiscussion $forumDiscussionRepository,
+        private readonly RepositoryForumPost $repositoryForumPost,
     ) {
     }
 
@@ -57,12 +61,12 @@ class ForumDiscussionHelper
         $this->setPageNumber($newToOld, $requestedPageNumber, $requestedPostId);
 
         $this->discussion->viewed = (int) $this->discussion->viewed + 1;
-        $this->doctrine->getManager()->flush();
+        $this->entityManager->flush();
 
         /**
          * @var ForumPost[] $posts
          */
-        $posts = $this->doctrine->getRepository(ForumPost::class)->findBy(
+        $posts = $this->repositoryForumPost->findBy(
             [ForumPostForm::FIELD_DISCUSSION => $this->discussion],
             [ForumPostForm::FIELD_TIMESTAMP => $newToOld ? 'DESC' : 'ASC'],
             ForumGenerics::MAX_POSTS_PER_PAGE,
@@ -70,10 +74,7 @@ class ForumDiscussionHelper
         );
 
         if ($this->userHelper->userIsLoggedIn()) {
-            $this->doctrine->getRepository(ForumDiscussion::class)->markPostsAsRead(
-                $this->userHelper->getUser(),
-                $posts
-            );
+            $this->forumDiscussionRepository->markPostsAsRead($this->userHelper->getUser(), $posts);
         }
 
         return $posts;
@@ -89,23 +90,19 @@ class ForumDiscussionHelper
         $this->setNumberOfReadPosts();
 
         $this->discussion->viewed = (int) $this->discussion->viewed + 1;
-        $this->doctrine->getManager()->flush();
+        $this->entityManager->flush();
 
         /**
          * @var ForumPost[] $posts
          */
-        $posts = $this->doctrine->getRepository(ForumPost::class)->findBy(
+        $posts = $this->repositoryForumPost->findBy(
             [ForumPostForm::FIELD_DISCUSSION => $this->discussion],
             [ForumPostForm::FIELD_TIMESTAMP => $newToOld ? 'DESC' : 'ASC']
         );
 
-        $markPostsAsRead = $this->userHelper->userIsLoggedIn() ?
-            (bool)$this->userHelper->getPreferenceByKey(UserPreference::KEY_APP_MARK_FORUM_READ)->value : false;
+        $markPostsAsRead = $this->userHelper->userIsLoggedIn() ? (bool)$this->userHelper->getPreferenceByKey(UserPreference::KEY_APP_MARK_FORUM_READ)->value : false;
         if ($markPostsAsRead) {
-            $this->doctrine->getRepository(ForumDiscussion::class)->markPostsAsRead(
-                $this->userHelper->getUser(),
-                $posts
-            );
+            $this->forumDiscussionRepository->markPostsAsRead($this->userHelper->getUser(), $posts);
         }
 
         return $posts;
@@ -165,9 +162,7 @@ class ForumDiscussionHelper
 
     private function setNumberOfPostsAndPages(): void
     {
-        $this->numberOfPosts = $this->doctrine->getRepository(ForumDiscussion::class)->getNumberOfPosts(
-            $this->discussion
-        );
+        $this->numberOfPosts = $this->forumDiscussionRepository->getNumberOfPosts($this->discussion);
         $this->numberOfPages = (int)floor(($this->numberOfPosts - 1) / ForumGenerics::MAX_POSTS_PER_PAGE) + 1;
     }
 
@@ -201,9 +196,7 @@ class ForumDiscussionHelper
 
         if (!\is_null($postId)) {
             // A specific post was requested, so we go to this post
-            $postNumber = $this->doctrine
-                ->getRepository(ForumDiscussion::class)
-                ->getPostNumberInDiscussion($this->discussion, $postId);
+            $postNumber = $this->forumDiscussionRepository->getPostNumberInDiscussion($this->discussion, $postId);
             $this->pageNumber = (int)floor($postNumber / ForumGenerics::MAX_POSTS_PER_PAGE) + 1;
             return;
         }
@@ -228,9 +221,7 @@ class ForumDiscussionHelper
                 $this->numberOfReadPosts = 9999999;
                 return;
             }
-            $this->numberOfReadPosts = $this->doctrine
-                ->getRepository(ForumDiscussion::class)
-                ->getNumberOfReadPosts($this->discussion, $this->userHelper->getUser());
+            $this->numberOfReadPosts = $this->forumDiscussionRepository->getNumberOfReadPosts($this->discussion, $this->userHelper->getUser());
             return;
         }
 

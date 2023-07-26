@@ -86,7 +86,7 @@ class ForumDiscussionController
         $bannerView = new BannerView();
         $bannerView->banner = $forumBanner;
         $bannerView->timestamp = new \DateTime();
-        $bannerView->ipAddress = inet_pton($request->getClientIp());
+        $bannerView->ipAddress = (int) \inet_pton($request->getClientIp());
         $this->formHelper->getDoctrine()->getManager()->persist($bannerView);
         $this->formHelper->getDoctrine()->getManager()->flush();
 

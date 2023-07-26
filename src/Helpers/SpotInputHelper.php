@@ -9,10 +9,12 @@ use App\Entity\Spot;
 use App\Entity\SpotExtra;
 use App\Entity\Train;
 use App\Entity\TrainNamePattern;
-use App\Entity\TrainTable;
 use App\Entity\TrainTableYear;
 use App\Entity\User;
 use App\Model\SpotInput;
+use App\Repository\Position as RepositoryPosition;
+use App\Repository\TrainTable;
+use App\Repository\TrainTableYear as RepositoryTrainTableYear;
 use Doctrine\Persistence\ManagerRegistry;
 
 class SpotInputHelper
@@ -28,19 +30,26 @@ class SpotInputHelper
     public function __construct(
         private readonly ManagerRegistry $doctrine,
         private readonly FlashHelper $flashHelper,
+        private readonly TrainTable $repositoryTrainTable,
     ) {
     }
 
     private function initialize(\DateTime $spotDate): void
     {
         if (!$this->initialized) {
-            $this->positionArray = $this->doctrine->getRepository(Position::class)->getAllAsArray();
-            $this->trainNamePatterns = $this->doctrine
-                ->getRepository(TrainNamePattern::class)
-                ->findBy([], ['order' => 'ASC']);
-            $this->trainTableYear = $this->doctrine->getRepository(TrainTableYear::class)->findTrainTableYearByDate(
-                $spotDate
-            );
+            /**
+             * @var RepositoryPosition $positionRepository
+             */
+            $positionRepository = $this->doctrine->getRepository(Position::class);
+            $this->positionArray = $positionRepository->getAllAsArray();
+
+            $this->trainNamePatterns = $this->doctrine->getRepository(TrainNamePattern::class)->findBy([], ['order' => 'ASC']);
+
+            /**
+             * @var RepositoryTrainTableYear $trainTableYearRepository
+             */
+            $trainTableYearRepository = $this->doctrine->getRepository(TrainTableYear::class);
+            $this->trainTableYear = $trainTableYearRepository->findTrainTableYearByDate($spotDate);
 
             $this->initialized = true;
         }
@@ -113,7 +122,7 @@ class SpotInputHelper
 
         $spot->timestamp = new \DateTime();
         $spot->spotDate = $spotInput->spotDate;
-        $spot->dayNumber = $spotInput->spotDate->format('N');
+        $spot->dayNumber = (int) $spotInput->spotDate->format('N');
         $spot->train = $train;
         $train->addSpot($spot);
         $spot->route = $route;
@@ -256,7 +265,7 @@ class SpotInputHelper
                 return $route;
             }
 
-            $trainTableExists = $this->doctrine->getRepository(TrainTable::class)->isExistingForSpot(
+            $trainTableExists = $this->repositoryTrainTable->isExistingForSpot(
                 $this->trainTableYear,
                 $route,
                 $spotInput->location,

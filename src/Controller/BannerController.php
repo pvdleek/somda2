@@ -34,7 +34,7 @@ class BannerController
         $bannerHit = new BannerHit();
         $bannerHit->banner = $banner;
         $bannerHit->timestamp = new \DateTime();
-        $bannerHit->ipAddress = ip2long($request->getClientIp());
+        $bannerHit->ipAddress = \ip2long($request->getClientIp());
 
         $this->doctrine->getManager()->persist($bannerHit);
         $this->doctrine->getManager()->flush();

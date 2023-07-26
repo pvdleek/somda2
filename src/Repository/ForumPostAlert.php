@@ -26,7 +26,7 @@ class ForumPostAlert extends ServiceEntityRepository
             ->setMaxResults(1);
         try {
             return (int) $queryBuilder->getQuery()->getSingleScalarResult();
-        } catch (\Exception $exception) {
+        } catch (\Exception) {
             return 0;
         }
     }

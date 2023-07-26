@@ -39,6 +39,7 @@
         "symfony/form": "6.3.*",
         "symfony/framework-bundle": "6.3.*",
         "symfony/http-client": "6.3.*",
+        "symfony/http-foundation": "6.3.*",
         "symfony/intl": "6.3.*",
         "symfony/lock": "6.3.*",
         "symfony/mailer": "6.3.*",
@@ -111,7 +112,8 @@
         "symfony": {
             "allow-contrib": false,
             "require": "6.3.*"
-        }
+        },
+        "public-dir": "./html"
     },
     "require-dev": {
         "phan/phan": "^5.4",

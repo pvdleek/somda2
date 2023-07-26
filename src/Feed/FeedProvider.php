@@ -2,15 +2,15 @@
 
 namespace App\Feed;
 
-use App\Entity\SpecialRoute;
 use App\Entity\Spot;
-use App\Entity\Train;
 use App\Generics\DateGenerics;
 use App\Helpers\SpotHelper;
 use App\Helpers\UserHelper;
+use App\Repository\SpecialRoute as RepositorySpecialRoute;
+use App\Repository\Spot as RepositorySpot;
+use App\Repository\Train as RepositoryTrain;
 use Debril\RssAtomBundle\Exception\FeedException\FeedNotFoundException;
 use Debril\RssAtomBundle\Provider\FeedProviderInterface;
-use Doctrine\Persistence\ManagerRegistry;
 use FeedIo\Feed;
 use FeedIo\FeedInterface;
 use FeedIo\Feed\Item;
@@ -25,10 +25,12 @@ class FeedProvider implements FeedProviderInterface
     private ?string $trainFilter = null;
 
     public function __construct(
-        private readonly ManagerRegistry $doctrine,
         private readonly UserHelper $userHelper,
         private readonly SpotHelper $spotHelper,
         private readonly RouterInterface $router,
+        private readonly RepositorySpecialRoute $repositorySpecialRoute,
+        private readonly RepositorySpot $repositorySpot,
+        private readonly RepositoryTrain $repositoryTrain,
     ) {
     }
 
@@ -102,14 +104,12 @@ class FeedProvider implements FeedProviderInterface
     private function getSpots(): array
     {
         if (\is_null($this->trainFilter)) {
-            return $this->doctrine->getRepository(Spot::class)->findBy([], ['timestamp' => 'DESC'], $this->limit);
+            return $this->repositorySpot->findBy([], ['timestamp' => 'DESC'], $this->limit);
         }
 
-        $train = $this->doctrine->getRepository(Train::class)->findOneBy(['number' => $this->trainFilter]);
+        $train = $this->repositoryTrain->findOneBy(['number' => $this->trainFilter]);
         if (!\is_null($train)) {
-            return $this->doctrine
-                ->getRepository(Spot::class)
-                ->findBy(['train' => $train], ['timestamp' => 'DESC'], $this->limit);
+            return $this->repositorySpot->findBy(['train' => $train], ['timestamp' => 'DESC'], $this->limit);
         }
 
         return [];
@@ -117,10 +117,7 @@ class FeedProvider implements FeedProviderInterface
 
     private function getSpecialRouteItems(): \Generator
     {
-        /**
-         * @var SpecialRoute[] $specialRoutes
-         */
-        $specialRoutes = $this->doctrine->getRepository(SpecialRoute::class)->findForFeed($this->limit);
+        $specialRoutes = $this->repositorySpecialRoute->findForFeed($this->limit);
         foreach ($specialRoutes as $specialRoute) {
             $author = new ItemAuthor($this->userHelper->getAdministratorUser());
 

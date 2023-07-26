@@ -115,7 +115,7 @@ class UserHelper implements RuntimeExtensionInterface
     /**
      * @throws \Exception
      */
-    public function getSignatureForUser(UserInterface $user): string
+    public function getSignatureForUser(User $user): string
     {
         foreach ($user->getPreferences() as $preference) {
             if ($preference->preference->key === UserPreference::KEY_FORUM_SIGNATURE) {
