@@ -12,7 +12,7 @@ use App\Form\ForumPost as ForumPostForm;
 use App\Generics\ForumGenerics;
 use App\Repository\ForumDiscussion as RepositoryForumDiscussion;
 use App\Repository\ForumPost as RepositoryForumPost;
-use Doctrine\Persistence\ObjectManager;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class ForumDiscussionHelper
@@ -30,7 +30,7 @@ class ForumDiscussionHelper
     private ?int $numberOfReadPosts = null;
 
     public function __construct(
-        private readonly ObjectManager $entityManager,
+        private readonly ManagerRegistry $doctrine,
         private readonly UserHelper $userHelper,
         private readonly ForumAuthorizationHelper $forumAuthHelper,
         private readonly RepositoryForumDiscussion $forumDiscussionRepository,
@@ -61,7 +61,7 @@ class ForumDiscussionHelper
         $this->setPageNumber($newToOld, $requestedPageNumber, $requestedPostId);
 
         $this->discussion->viewed = (int) $this->discussion->viewed + 1;
-        $this->entityManager->flush();
+        $this->doctrine->getManager()->flush();
 
         /**
          * @var ForumPost[] $posts
@@ -90,7 +90,7 @@ class ForumDiscussionHelper
         $this->setNumberOfReadPosts();
 
         $this->discussion->viewed = (int) $this->discussion->viewed + 1;
-        $this->entityManager->flush();
+        $this->doctrine->getManager()->flush();
 
         /**
          * @var ForumPost[] $posts
