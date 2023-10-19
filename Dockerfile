@@ -127,6 +127,10 @@ RUN set -eux \
     && docker-php-ext-install -j$(nproc) pdo_dblib \
     && true \
 \
+# Install sysvsem
+    && docker-php-ext-install -j$(nproc) sysvsem \
+    && true \
+\
 # Install yaml
     && pecl install yaml \
     && docker-php-ext-enable yaml \

@@ -70,8 +70,7 @@ class GetRailNewsCommand extends Command
              */
             try {
                 $items = $this->feedIo->read($feed->url, null, new \DateTime('-1 day'))->getFeed();
-            } catch (ReadErrorException $exception) {
-                $output->writeln($exception->getMessage());
+            } catch (ReadErrorException) {
                 continue;
             }
             foreach ($items as $item) {
