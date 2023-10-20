@@ -7,9 +7,12 @@ use App\Entity\RailNews;
 use App\Entity\RailNewsSource;
 use App\Entity\RailNewsSourceFeed;
 use Doctrine\Persistence\ManagerRegistry;
+use FeedIo\Adapter\Guzzle\Client as GuzzleClient;
 use FeedIo\Feed\ItemInterface;
 use FeedIo\FeedIo;
 use FeedIo\Reader\ReadErrorException;
+use GuzzleHttp\Client;
+use Psr\Log\NullLogger;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -48,11 +51,14 @@ class GetRailNewsCommand extends Command
         [self::TITLE_ONLY => true, self::POSITIVE_WORD => ' NS ', self::NEGATIVE_WORD => 'SNS'],
     ];
 
+    private FeedIo $feedIo;
+
     public function __construct(
         private readonly ManagerRegistry $doctrine,
-        private readonly FeedIo $feedIo,
     ) {
         parent::__construct();
+
+        $this->feedIo = new FeedIo(new GuzzleClient(new Client()), new NullLogger());
     }
 
     /**

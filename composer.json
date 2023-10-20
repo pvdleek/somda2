@@ -22,6 +22,7 @@
         "friendsofsymfony/ckeditor-bundle": "^2.4",
         "friendsofsymfony/rest-bundle": "^3.5",
         "gregwar/captcha-bundle": "^2.2",
+        "guzzlehttp/guzzle": "^7.8",
         "jms/serializer-bundle": "^5.3",
         "laminas/laminas-zendframework-bridge": "^1.7",
         "mobiledetect/mobiledetectlib": "^3.74",
