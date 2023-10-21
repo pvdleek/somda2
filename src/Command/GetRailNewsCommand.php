@@ -116,6 +116,10 @@ class GetRailNewsCommand extends Command
 
     private function isWordMatch(array $wordMatch, ItemInterface $item): bool
     {
+        if (null === $item->getTitle() || null === $item->getContent()) {
+            return false;
+        }
+
         if ($wordMatch[self::TITLE_ONLY]) {
             return \stripos($item->getTitle(), $wordMatch[self::POSITIVE_WORD]) !== false;
         }
