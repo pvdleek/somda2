@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Log
 {
     /**
-     * @ORM\Column(name="logid", type="bigint", nullable=false)
+     * @ORM\Column(name="logid", type="integer", nullable=false, options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -23,7 +23,7 @@ class Log
     public ?\DateTime $timestamp = null;
 
     /**
-     * @ORM\Column(name="ip", type="bigint", nullable=false)
+     * @ORM\Column(name="ip", type="integer", nullable=false, options={"unsigned"=true})
      */
     public int $ipAddress = 0;
 

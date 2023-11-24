@@ -27,7 +27,7 @@ class TrainTable
     public const ACTION_VALUES = ['v', '-', '+', 'a'];
 
     /**
-     * @ORM\Column(name="tdrid", type="bigint", nullable=false)
+     * @ORM\Column(name="tdrid", type="integer", nullable=false, options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @JMS\Expose()
@@ -36,7 +36,7 @@ class TrainTable
     public ?int $id = null;
 
     /**
-     * @ORM\Column(name="orderid", type="integer", nullable=false, options={"default"="1"})
+     * @ORM\Column(name="orderid", type="integer", nullable=false, options={"default"="1", "unsigned"=true})
      * @JMS\Expose()
      * @OA\Property(description="The order in which the items should be displayed", type="integer")
      */
@@ -57,7 +57,7 @@ class TrainTable
     public string $action = '-';
 
     /**
-     * @ORM\Column(name="tijd", type="integer", nullable=false, options={"default"="0"})
+     * @ORM\Column(name="tijd", type="smallint", nullable=false, options={"default"="0", "unsigned"=true})
      * @JMS\Exclude()
      * @OA\Property(
      *     description="The time of the trainTable action (hh:mm, 24-hour clock, GMT+1 Amsterdam timezone)",

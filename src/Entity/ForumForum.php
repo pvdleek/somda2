@@ -24,7 +24,7 @@ class ForumForum
     ];
 
     /**
-     * @ORM\Column(name="forumid", type="bigint", nullable=false)
+     * @ORM\Column(name="forumid", type="smallint", nullable=false, options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -47,12 +47,12 @@ class ForumForum
     public string $description = '';
 
     /**
-     * @ORM\Column(name="volgorde", type="integer", nullable=false, options={"default"="1"})
+     * @ORM\Column(name="volgorde", type="smallint", nullable=false, options={"default"=1, "unsigned"=true})
      */
     public int $order = 1;
 
     /**
-     * @ORM\Column(name="type", type="integer", nullable=false, options={"default"=ForumForum::TYPE_LOGGED_IN})
+     * @ORM\Column(name="type", type="smallint", nullable=false, options={"default"=ForumForum::TYPE_LOGGED_IN, "unsigned"=true})
      * @Assert\Choice(choices=ForumForum::TYPE_VALUES)
      */
     public int $type = self::TYPE_LOGGED_IN;

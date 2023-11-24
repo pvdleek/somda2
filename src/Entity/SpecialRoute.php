@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 class SpecialRoute
 {
     /**
-     * @ORM\Column(name="drglid", type="bigint", nullable=false)
+     * @ORM\Column(name="drglid", type="integer", nullable=false, options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */

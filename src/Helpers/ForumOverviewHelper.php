@@ -38,30 +38,12 @@ class ForumOverviewHelper
                 ];
             }
 
-            $unreadDiscussions = 0;
-            if ($this->userHelper->userIsLoggedIn()) {
-                if ((int) $forum['type'] === ForumForum::TYPE_MODERATORS_ONLY
-                    && (bool) $forum['userIsModerator'] !== true
-                ) {
-                    // The user is not allowed to view this category
-                    continue;
-                }
-
-                if ((int) $forum['type'] !== ForumForum::TYPE_ARCHIVE) {
-                    $unreadDiscussions = $forumForumRepository->getNumberOfUnreadPostsInForum((int) $forum['id'], $this->userHelper->getUser());
-                }
-            } elseif ((int) $forum['type'] === ForumForum::TYPE_MODERATORS_ONLY) {
-                // Guest is not allowed to view this category
-                continue;
-            }
-
             $categories[$forum['categoryId']]['forums'][] = [
                 'id' => $forum['id'],
                 'type' => $forum['type'],
                 'name' => $forum['name'],
                 'order' => $forum['order'],
                 'numberOfDiscussions' => $forum['numberOfDiscussions'],
-                'numberOfUnreadDiscussions' => $unreadDiscussions,
             ];
         }
         return $categories;

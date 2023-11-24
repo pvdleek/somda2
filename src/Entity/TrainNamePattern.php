@@ -14,14 +14,14 @@ use Doctrine\ORM\Mapping as ORM;
 class TrainNamePattern
 {
     /**
-     * @ORM\Column(name="id", type="bigint", nullable=false)
+     * @ORM\Column(name="id", type="integer", nullable=false, options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     public ?int $id = null;
 
     /**
-     * @ORM\Column(name="volgorde", type="integer", nullable=false, options={"default"="1"})
+     * @ORM\Column(name="volgorde", type="smallint", nullable=false, options={"default"="1", "unsigned"=true})
      */
     public int $order = 1;
 

@@ -58,11 +58,6 @@ class ForumForumController extends AbstractFOSRestController
      *                 type="integer",
      *             ),
      *             @OA\Property(
-     *                 description="The total number of unread discussions in this forum",
-     *                 property="numberOfUnreadDiscussions",
-     *                 type="integer",
-     *             ),
-     *             @OA\Property(
      *                 description="Unique identifier",
      *                 property="category",
      *                 ref=@Model(type=ForumCategory::class),

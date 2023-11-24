@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 class TrainCompositionType
 {
     /**
-     * @ORM\Column(name="typeid", type="bigint", nullable=false)
+     * @ORM\Column(name="typeid", type="smallint", nullable=false, options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */

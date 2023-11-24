@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 class UserCompany
 {
     /**
-     * @ORM\Column(name="bedrijf_id", type="bigint", nullable=false)
+     * @ORM\Column(name="bedrijf_id", type="smallint", nullable=false, options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */

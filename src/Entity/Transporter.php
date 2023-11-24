@@ -17,7 +17,7 @@ use OpenApi\Annotations as OA;
 class Transporter
 {
     /**
-     * @ORM\Column(name="vervoerder_id", type="bigint", nullable=false)
+     * @ORM\Column(name="vervoerder_id", type="smallint", nullable=false, options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @JMS\Expose()
@@ -33,7 +33,7 @@ class Transporter
     public string $name = '';
 
     /**
-     * @ORM\Column(name="iff_code", type="integer", nullable=true)
+     * @ORM\Column(name="iff_code", type="integer", nullable=true, options={"unsigned"=true})
      * @JMS\Expose()
      * @OA\Property(description="Official IFF code", type="integer")
      */

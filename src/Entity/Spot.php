@@ -32,7 +32,7 @@ class Spot
     public const INPUT_FEEDBACK_ROUTE_NOT_ON_LOCATION = 16;
 
     /**
-     * @ORM\Column(name="spotid", type="bigint", nullable=false)
+     * @ORM\Column(name="spotid", type="integer", nullable=false, options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @JMS\Expose()
@@ -55,14 +55,14 @@ class Spot
     public ?\DateTime $spotDate = null;
 
     /**
-     * @ORM\Column(name="dag", type="integer", nullable=false)
+     * @ORM\Column(name="dag", type="smallint", nullable=false, options={"unsigned"=true})
      * @JMS\Expose()
      * @OA\Property(description="Day-number of the spot (1 till 7)", type="integer")
      */
     public int $dayNumber = 1;
 
     /**
-     * @ORM\Column(name="input_feedback_flag", type="integer", nullable=false)
+     * @ORM\Column(name="input_feedback_flag", type="smallint", nullable=false, options={"unsigned"=true})
      * @JMS\Exclude()
      */
     public int $inputFeedbackFlag = 0;

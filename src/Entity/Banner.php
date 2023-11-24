@@ -16,7 +16,7 @@ class Banner
     const LOCATION_FORUM = 'forum';
 
     /**
-     * @ORM\Column(name="bannerid", type="bigint", nullable=false)
+     * @ORM\Column(name="bannerid", type="smallint", nullable=false, options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -43,7 +43,7 @@ class Banner
     public ?string $description = null;
 
     /**
-     * @ORM\Column(name="link", type="string", length=100, nullable=false)
+     * @ORM\Column(name="link", type="string", length=255, nullable=false)
      */
     public string $link = '';
 
@@ -58,12 +58,12 @@ class Banner
     public string $email = '';
 
     /**
-     * @ORM\Column(name="max_views", type="integer", nullable=false, options={"default"="0"})
+     * @ORM\Column(name="max_views", type="integer", nullable=false, options={"default"="0", "unsigned"=true})
      */
     public int $maxViews = 0;
 
     /**
-     * @ORM\Column(name="max_hits", type="integer", nullable=false, options={"default"="0"})
+     * @ORM\Column(name="max_hits", type="integer", nullable=false, options={"default"="0", "unsigned"=true})
      */
     public int $maxHits = 0;
 

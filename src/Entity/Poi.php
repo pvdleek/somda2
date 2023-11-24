@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Poi
 {
     /**
-     * @ORM\Column(name="puntid", type="bigint", nullable=false)
+     * @ORM\Column(name="puntid", type="smallint", nullable=false, options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */

@@ -17,7 +17,7 @@ class LocationCategory
     public const NO_LONGER_VALID_ID = 50;
 
     /**
-     * @ORM\Column(name="verk_catid", type="bigint", nullable=false)
+     * @ORM\Column(name="verk_catid", type="smallint", nullable=false, options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @JMS\Expose()

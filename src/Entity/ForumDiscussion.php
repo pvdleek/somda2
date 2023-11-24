@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 class ForumDiscussion
 {
     /**
-     * @ORM\Column(name="discussionid", type="bigint", nullable=false)
+     * @ORM\Column(name="discussionid", type="integer", nullable=false, options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -24,7 +24,7 @@ class ForumDiscussion
     public string $title = '';
 
     /**
-     * @ORM\Column(name="viewed", type="bigint", nullable=false)
+     * @ORM\Column(name="viewed", type="integer", nullable=false, options={"default"=0, "unsigned"=true})
      */
     public int $viewed = 0;
 

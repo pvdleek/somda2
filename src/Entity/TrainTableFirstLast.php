@@ -36,7 +36,7 @@ class TrainTableFirstLast
     public ?Route $route = null;
 
     /**
-     * @ORM\Column(name="dag", type="integer", nullable=false, options={"default"="1"})
+     * @ORM\Column(name="dag", type="smallint", nullable=false, options={"default"="1", "unsigned"=true})
      * @ORM\Id
      * @JMS\Expose()
      * @OA\Property(description="The day-number", enum={1,2,3,4,5,6,7}, type="integer")
@@ -66,7 +66,7 @@ class TrainTableFirstLast
     public string $firstAction = '-';
 
     /**
-     * @ORM\Column(name="v_tijd", type="integer", nullable=false, options={"default"="0"})
+     * @ORM\Column(name="v_tijd", type="smallint", nullable=false, options={"default"="0", "unsigned"=true})
      * @JMS\Exclude()
      * @OA\Property(
      *     description="The start-time of the route (hh:mm, 24-hour clock, GMT+1 Amsterdam timezone)",
@@ -99,7 +99,7 @@ class TrainTableFirstLast
     public string $lastAction = '-';
 
     /**
-     * @ORM\Column(name="a_tijd", type="integer", nullable=false, options={"default"="0"})
+     * @ORM\Column(name="a_tijd", type="smallint", nullable=false, options={"default"="0", "unsigned"=true})
      * @JMS\Exclude()
      * @OA\Property(
      *     description="The end-time of the route (hh:mm, 24-hour clock, GMT+1 Amsterdam timezone)",

@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 class ForumPostAlert
 {
     /**
-     * @ORM\Column(name="id", type="bigint", nullable=false)
+     * @ORM\Column(name="id", type="integer", nullable=false, options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */

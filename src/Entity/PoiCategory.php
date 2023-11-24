@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 class PoiCategory
 {
     /**
-     * @ORM\Column(name="provincieid", type="bigint", nullable=false)
+     * @ORM\Column(name="provincieid", type="smallint", nullable=false, options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */

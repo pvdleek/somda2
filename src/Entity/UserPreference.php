@@ -63,7 +63,7 @@ class UserPreference
     ];
 
     /**
-     * @ORM\Column(name="prefid", type="bigint", nullable=false)
+     * @ORM\Column(name="prefid", type="integer", nullable=false, options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @JMS\Exclude()
@@ -100,7 +100,7 @@ class UserPreference
     public string $defaultValue = '';
 
     /**
-     * @ORM\Column(name="volgorde", type="integer", nullable=false)
+     * @ORM\Column(name="volgorde", type="smallint", nullable=false, options={"unsigned"=true})
      * @JMS\Exclude()
      */
     public int $order = 0;

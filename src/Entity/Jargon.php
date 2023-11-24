@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Jargon
 {
     /**
-     * @ORM\Column(name="jargonid", type="bigint", nullable=false)
+     * @ORM\Column(name="jargonid", type="smallint", nullable=false, options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */

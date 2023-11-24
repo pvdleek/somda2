@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Statistic
 {
     /**
-     * @ORM\Column(name="id", type="bigint", nullable=false)
+     * @ORM\Column(name="id", type="integer", nullable=false, options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -24,32 +24,32 @@ class Statistic
     public ?\DateTime $timestamp = null;
 
     /**
-     * @ORM\Column(name="uniek", type="bigint", nullable=false)
+     * @ORM\Column(name="uniek", type="integer", nullable=false, options={"unsigned"=true})
      */
     public int $visitorsUnique = 0;
 
     /**
-     * @ORM\Column(name="pageviews", type="bigint", nullable=false)
+     * @ORM\Column(name="pageviews", type="integer", nullable=false, options={"unsigned"=true})
      */
     public int $visitorsTotal = 0;
 
     /**
-     * @ORM\Column(name="pageviews_home", type="bigint", nullable=false)
+     * @ORM\Column(name="pageviews_home", type="integer", nullable=false, options={"unsigned"=true})
      */
     public int $visitorsHome = 0;
 
     /**
-     * @ORM\Column(name="pageviews_func", type="bigint", nullable=false)
+     * @ORM\Column(name="pageviews_func", type="integer", nullable=false, options={"unsigned"=true})
      */
     public int $visitorsFunctions = 0;
 
     /**
-     * @ORM\Column(name="spots", type="bigint", nullable=false)
+     * @ORM\Column(name="spots", type="integer", nullable=false, options={"unsigned"=true})
      */
     public int $numberOfSpots = 0;
 
     /**
-     * @ORM\Column(name="posts", type="bigint", nullable=false)
+     * @ORM\Column(name="posts", type="integer", nullable=false, options={"unsigned"=true})
      */
     public int $numberOfPosts = 0;
 }

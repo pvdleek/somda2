@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Poll
 {
     /**
-     * @ORM\Column(name="pollid", type="bigint", nullable=false)
+     * @ORM\Column(name="pollid", type="smallint", nullable=false, options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
