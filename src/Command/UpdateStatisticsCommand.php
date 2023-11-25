@@ -79,9 +79,9 @@ class UpdateStatisticsCommand extends Command
 
         // Update for the block-visits
         $query = 'REPLACE INTO `somda_stats_blokken` (`blokid`, `date`, `pageviews`)
-		    SELECT `b`.`blokid`, '.self::DATE_PERIOD_TODAY.', COUNT(*) FROM `somda_logging` `l`
+		    SELECT `b`.`blokid`, :'.self::DATE_PERIOD_TODAY.', COUNT(*) FROM `somda_logging` `l`
 		    JOIN `somda_blokken` `b` ON `b`.`route` = `l`.`route` 
-		    WHERE DATE(`l`.`datumtijd`) = '.self::DATE_PERIOD_TODAY.' GROUP BY `b`.`blokid`';
+		    WHERE DATE(`l`.`datumtijd`) = :'.self::DATE_PERIOD_TODAY.' GROUP BY `b`.`blokid`';
         $statement = $connection->prepare($query);
         $statement->bindValue(self::DATE_PERIOD_TODAY, $today->format(DateGenerics::DATE_FORMAT_DATABASE));
         $statement->executeStatement();
