@@ -18,7 +18,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class UpdateStatisticsCommand extends Command
 {
-    private const DATE_PERIOD_YEAR_AGO = 'yearAgo';
     private const DATE_PERIOD_WEEK_AGO = 'weekAgo';
     private const DATE_PERIOD_YESTERDAY = 'yesterday';
     private const DATE_PERIOD_TODAY = 'today';
@@ -37,7 +36,6 @@ class UpdateStatisticsCommand extends Command
         $today = new \DateTime();
         $yesterday = new \DateTime('-1 day');
         $weekAgo = new \DateTime('-7 days');
-        $yearAgo = new \DateTime('-1 year');
 
         $connection = $this->doctrine->getManager()->getConnection();
 
@@ -46,7 +44,7 @@ class UpdateStatisticsCommand extends Command
 		    SELECT DATE(`datumtijd`), COUNT(*), COUNT(IF(`route` = \'home\', 1, NULL)),
 		        COUNT(IF(`route` <> \'home\', 1, NULL))
 			FROM `somda_logging`
-			WHERE DATE(`datumtijd`) >= :yesterday
+			WHERE DATE(`datumtijd`) >= :'.self::DATE_PERIOD_YESTERDAY.'
 			GROUP BY DATE(`datumtijd`)';
         $statement = $connection->prepare($query);
         $statement->bindValue(self::DATE_PERIOD_YESTERDAY, $yesterday->format(DateGenerics::DATE_FORMAT_DATABASE));
@@ -54,48 +52,48 @@ class UpdateStatisticsCommand extends Command
 
         // Update for the unique visitors
         $query = 'UPDATE `somda_stats` `s` SET `s`.`uniek` =
-		    (SELECT COUNT(DISTINCT(`l`.`ip`)) FROM `somda_logging` `l` WHERE DATE(`l`.`datumtijd`) = :today)
-			WHERE `s`.`datum` = :today';
+		    (SELECT COUNT(DISTINCT(`l`.`ip`)) FROM `somda_logging` `l` WHERE DATE(`l`.`datumtijd`) = :'.self::DATE_PERIOD_TODAY.')
+			WHERE `s`.`datum` = :'.self::DATE_PERIOD_TODAY;
         $statement = $connection->prepare($query);
         $statement->bindValue(self::DATE_PERIOD_TODAY, $today->format(DateGenerics::DATE_FORMAT_DATABASE));
         $statement->executeStatement();
         $query = 'UPDATE `somda_stats` `s` SET `s`.`uniek` =
-		    (SELECT COUNT(DISTINCT(`l`.`ip`)) FROM `somda_logging` `l` WHERE DATE(`l`.`datumtijd`) = :yesterday)
-			WHERE `s`.`datum` = :yesterday';
+		    (SELECT COUNT(DISTINCT(`l`.`ip`)) FROM `somda_logging` `l` WHERE DATE(`l`.`datumtijd`) = :'.self::DATE_PERIOD_YESTERDAY.')
+			WHERE `s`.`datum` = :'.self::DATE_PERIOD_YESTERDAY;
         $statement = $connection->prepare($query);
         $statement->bindValue(self::DATE_PERIOD_YESTERDAY, $yesterday->format(DateGenerics::DATE_FORMAT_DATABASE));
         $statement->executeStatement();
 
         // Update for the spots and forum-posts
         $query = 'UPDATE `somda_stats` `s` SET spots =
-            (SELECT COUNT(*) FROM `somda_spots` `sp` WHERE `sp`.`datum` = `s`.`datum` AND `sp`.`datum` > :yearAgo)';
+            (SELECT COUNT(*) FROM `somda_spots` `sp` WHERE `sp`.`datum` = `s`.`datum` AND `sp`.`datum` > :'.self::DATE_PERIOD_WEEK_AGO.')';
         $statement = $connection->prepare($query);
-        $statement->bindValue(self::DATE_PERIOD_YEAR_AGO, $yearAgo->format(DateGenerics::DATE_FORMAT_DATABASE));
+        $statement->bindValue(self::DATE_PERIOD_WEEK_AGO, $weekAgo->format(DateGenerics::DATE_FORMAT_DATABASE));
         $statement->executeStatement();
         $query = 'UPDATE `somda_stats` `s` SET posts =
             (SELECT COUNT(*) FROM `somda_forum_posts` `f`
-            WHERE DATE(`f`.`timestamp`) = `s`.`datum` AND `f`.`timestamp` > :yearAgo)';
+            WHERE DATE(`f`.`timestamp`) = `s`.`datum` AND `f`.`timestamp` > :'.self::DATE_PERIOD_WEEK_AGO.')';
         $statement = $connection->prepare($query);
-        $statement->bindValue(self::DATE_PERIOD_YEAR_AGO, $yearAgo->format(DateGenerics::DATE_FORMAT_DATABASE));
+        $statement->bindValue(self::DATE_PERIOD_WEEK_AGO, $weekAgo->format(DateGenerics::DATE_FORMAT_DATABASE));
         $statement->executeStatement();
 
         // Update for the block-visits
         $query = 'REPLACE INTO `somda_stats_blokken` (`blokid`, `date`, `pageviews`)
-		    SELECT `b`.`blokid`, :today, COUNT(*) FROM `somda_logging` `l`
+		    SELECT `b`.`blokid`, '.self::DATE_PERIOD_TODAY.', COUNT(*) FROM `somda_logging` `l`
 		    JOIN `somda_blokken` `b` ON `b`.`route` = `l`.`route` 
-		    WHERE DATE(`l`.`datumtijd`) = :today GROUP BY `b`.`blokid`';
+		    WHERE DATE(`l`.`datumtijd`) = '.self::DATE_PERIOD_TODAY.' GROUP BY `b`.`blokid`';
         $statement = $connection->prepare($query);
         $statement->bindValue(self::DATE_PERIOD_TODAY, $today->format(DateGenerics::DATE_FORMAT_DATABASE));
         $statement->executeStatement();
         $query = 'REPLACE INTO `somda_stats_blokken` (`blokid`, `date`, `pageviews`)
-		    SELECT `b`.`blokid`, :yesterday, COUNT(*) FROM `somda_logging` `l`
+		    SELECT `b`.`blokid`, :'.self::DATE_PERIOD_YESTERDAY.', COUNT(*) FROM `somda_logging` `l`
 		    JOIN `somda_blokken` `b` ON `b`.`route` = `l`.`route` 
-		    WHERE DATE(`l`.`datumtijd`) = :yesterday GROUP BY `b`.`blokid`';
+		    WHERE DATE(`l`.`datumtijd`) = :'.self::DATE_PERIOD_YESTERDAY.' GROUP BY `b`.`blokid`';
         $statement = $connection->prepare($query);
         $statement->bindValue(self::DATE_PERIOD_YESTERDAY, $yesterday->format(DateGenerics::DATE_FORMAT_DATABASE));
         $statement->executeStatement();
 
-        $query = 'DELETE FROM `somda_logging` WHERE `datumtijd` <= :weekAgo';
+        $query = 'DELETE FROM `somda_logging` WHERE `datumtijd` <= :'.self::DATE_PERIOD_WEEK_AGO.'';
         $statement = $connection->prepare($query);
         $statement->bindValue(self::DATE_PERIOD_WEEK_AGO, $weekAgo->format(DateGenerics::DATE_FORMAT_DATABASE));
         $statement->executeStatement();
