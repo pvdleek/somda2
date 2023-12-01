@@ -42,7 +42,7 @@ class ForumForum extends ServiceEntityRepository
         }
     }
 
-    public function getNumberOfUnreadPostsInForum(int $forumId, User $user): int
+    public function getNumberOfUnreadDiscussionsInForum(int $forumId, User $user): int
     {
         $maxQuery = '
             SELECT p.discussionid AS disc_id, MAX(p.timestamp) AS max_date_time
