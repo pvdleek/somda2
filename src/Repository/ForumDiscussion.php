@@ -319,8 +319,10 @@ class ForumDiscussion extends ServiceEntityRepository
 
     public function markAllPostsAsRead(User $user): void
     {
-        $query = 'INSERT IGNORE INTO `somda_forum_read_'  . \substr((string) $user->id, -1) . '` (postid, uid) ' .
-            ' SELECT postid, ' . (string) $user->id . ' FROM `somda_forum_posts`';
+        $query = 'REPLACE INTO `somda_forum_last_read` (uid, discussionid, postid) ' .
+            ' SELECT ' . (string) $user->id . ' as uid, d.discussionid, p.postid ' .
+            'FROM `somda_forum_discussion` d LEFT JOIN `somda_forum_posts` p ' .
+            'ON p.postid = (select postid from `somda_forum_posts` order by postid desc limit 1)';
 
         $connection = $this->getEntityManager()->getConnection();
         try {
