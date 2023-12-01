@@ -299,14 +299,18 @@ class ForumDiscussion extends ServiceEntityRepository
      */
     public function markPostsAsRead(User $user, array $posts): void
     {
-        $query = 'INSERT IGNORE INTO `somda_forum_read_'  . \substr((string) $user->id, -1) . '` (postid, uid) VALUES ';
+		$maxpostid = 0;
         foreach ($posts as $post) {
-            $query .= '(' . (string) $post->id . ',' . (string) $user->id . '),';
+            if ($post->id > $maxpostid) {
+				$maxpostid = $post->id;
+			}
         }
+        $query = 'REPLACE INTO `somda_forum_last_read` (uid, discussionid, postid) VALUES '.
+            '(' . (string) $user->id . ',' . (string) $this->id . ',' . (string) $maxpostid . ');';
 
         $connection = $this->getEntityManager()->getConnection();
         try {
-            $statement = $connection->prepare(\substr($query, 0, -1));
+            $statement = $connection->prepare($query);
             $statement->executeStatement();
         } catch (DBALDriverException | DBALException $exception) {
             return;
