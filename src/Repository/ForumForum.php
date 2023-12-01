@@ -51,12 +51,12 @@ class ForumForum extends ServiceEntityRepository
             WHERE d.forumid = :forumId
             GROUP BY disc_id';
         $query = '
-            SELECT SUM(IF(`r`.`postid` IS NULL, 1, 0)) AS `number_of_discussions_unread`
+            SELECT SUM(IF(IFNULL(`r`.`postid`, 0) < p_max.postid, 1, 0)) AS `number_of_discussions_unread`
             FROM somda_forum_discussion d
             JOIN somda_users a ON a.uid = d.authorid
             JOIN somda_forum_posts p_max ON p_max.discussionid = d.discussionid
-            LEFT JOIN somda_forum_read_' . substr((string) $user->id, -1) . ' r
-                ON r.uid = ' . (string) $user->id . ' AND r.postid = p_max.postid
+            LEFT JOIN somda_forum_last_read r
+                ON r.uid = ' . (string) $user->id . ' AND r.discussionid = d.discussionid
             INNER JOIN (' . $maxQuery . ') m ON m.disc_id = d.discussionid
             WHERE d.forumid = :forumId AND p_max.timestamp = m.max_date_time
             GROUP BY `d`.`forumid`';
