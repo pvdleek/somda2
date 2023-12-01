@@ -53,7 +53,7 @@ class ForumDiscussion extends ServiceEntityRepository
             $query = '
                 SELECT `d`.`discussionid` AS `id`, `d`.`title` AS `title`, `a`.`uid` AS `author_id`,
                     `a`.`username` AS `author_username`, `d`.`locked` AS `locked`, `d`.`viewed` AS `viewed`,
-                    `f`.`type` AS `forum_type`, IF(`r`.`postid` < p_max.postid, FALSE, TRUE) AS `discussion_read`,
+                    `f`.`type` AS `forum_type`, IF(IFNULL(`r`.`postid`, 0) < p_max.postid, FALSE, TRUE) AS `discussion_read`,
 					IFNULL(`r`.`postid`, 0) AS `post_last_read`,
                     `p_max`.`timestamp` AS `max_post_timestamp`, COUNT(*) AS `posts`
                 FROM somda_forum_discussion d
@@ -112,7 +112,7 @@ class ForumDiscussion extends ServiceEntityRepository
             $query = '
                 SELECT `d`.`discussionid` AS `id`, `d`.`title` AS `title`, `a`.`uid` AS `author_id`,
                     `a`.`username` AS `author_username`, `d`.`locked` AS `locked`, `d`.`viewed` AS `viewed`,
-                    IF(`r`.`postid` < p_max.postid, FALSE, TRUE) AS `discussion_read`,
+                    IF(IFNULL(`r`.`postid`, 0) < p_max.postid, FALSE, TRUE) AS `discussion_read`,
 					IFNULL(`r`.`postid`, 0) AS `post_last_read`,
                     `p_max`.`timestamp` AS `max_post_timestamp`, COUNT(*) AS `posts`
                 FROM somda_forum_discussion d
@@ -151,7 +151,7 @@ class ForumDiscussion extends ServiceEntityRepository
             SELECT `d`.`discussionid` AS `id`, `d`.`title` AS `title`, `a`.`uid` AS `author_id`,
                 `f`.`alerting` AS `alerting`,
                 `a`.`username` AS `author_username`, `d`.`locked` AS `locked`, `d`.`viewed` AS `viewed`,
-                IF(`r`.`postid` < p_max.postid, FALSE, TRUE) AS `discussion_read`,
+                IF(IFNULL(`r`.`postid`, 0) < p_max.postid, FALSE, TRUE) AS `discussion_read`,
 				IFNULL(`r`.`postid`, 0) AS `post_last_read`,
                 `p_max`.`timestamp` AS `max_post_timestamp`, COUNT(*) AS `posts`
             FROM somda_forum_discussion d
@@ -186,7 +186,7 @@ class ForumDiscussion extends ServiceEntityRepository
         $query = '
             SELECT `d`.`discussionid` AS `id`, `d`.`title` AS `title`, `a`.`uid` AS `author_id`,
                 `a`.`username` AS `author_username`, `d`.`locked` AS `locked`, `d`.`viewed` AS `viewed`,
-                IF(`r`.`postid` < p_max.postid, FALSE, TRUE) AS `discussion_read`,
+                FALSE AS `discussion_read`,
 				IFNULL(`r`.`postid`, 0) AS `post_last_read`,
                 `p_max`.`timestamp` AS `max_post_timestamp`, COUNT(*) AS `posts`
             FROM somda_forum_discussion d
@@ -197,7 +197,7 @@ class ForumDiscussion extends ServiceEntityRepository
                     ON r.uid = ' . (string) $user->id . ' AND r.discussionid = d.discussionid
             JOIN somda_forum_posts p_count ON p_count.discussionid = d.discussionid
             INNER JOIN (' . $maxQuery . ') m ON m.disc_id = d.discussionid
-            WHERE p_max.timestamp = m.max_date_time AND f.type != :moderatorForumType AND `r`.`postid` IS NULL
+            WHERE p_max.timestamp = m.max_date_time AND f.type != :moderatorForumType AND (`r`.`postid` IS NULL OR `r`.`postid` < p_max.postid)
             GROUP BY `id`, `title`, `author_id`, `viewed`, m.max_date_time, `discussion_read`, `max_post_timestamp`
             ORDER BY m.max_date_time DESC';
 
