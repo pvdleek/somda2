@@ -282,20 +282,16 @@ class ForumDiscussion extends ServiceEntityRepository
 
     public function getNumberOfReadPosts(ForumDiscussionEntity $discussion, User $user): int
     {
-        $queryBuilder = $this->getEntityManager()
-            ->createQueryBuilder()
-            ->select('COUNT(p.id)')
-            ->from('App\Entity\ForumRead' . \substr((string) $user->id, -1), 'r')
-            ->join('r.post', 'p')
-            ->andWhere('p.discussion = :' . ForumPostForm::FIELD_DISCUSSION)
-            ->setParameter(ForumPostForm::FIELD_DISCUSSION, $discussion)
-            ->andWhere('r.user = :user')
-            ->setParameter('user', $user);
-        try {
-            return (int) $queryBuilder->getQuery()->getSingleScalarResult();
-        } catch (\Exception $exception) {
-            return 0;
-        }
+       $query = '
+            SELECT COUNT(`p`.`postid`) as number
+            FROM somda_forum_posts p
+            LEFT JOIN somda_forum_last_read r
+                ON r.uid = ' . (string) $user->id . ' AND r.discussionid = p.discussionid
+            WHERE p.discussionid = ' . (string) $discussion->id . ' AND p.postid > IFNULL(`r`.`postid`, 0);';
+        $connection = $this->getEntityManager()->getConnection();
+        $statement = $connection->prepare($query);
+        $result = $statement->executeQuery()->fetchAssociative();
+        return $result === false ? 0 : $result['number'];
     }
 
     /**
