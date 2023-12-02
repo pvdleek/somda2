@@ -37,7 +37,7 @@ class ForumForum extends ServiceEntityRepository
             $statement = $connection->prepare($query);
             $statement->bindValue('userId', $userId, ParameterType::INTEGER);
             return $statement->executeQuery()->fetchAllAssociative();
-        } catch (DBALException | DBALDriverException $exception) {
+        } catch (DBALException | DBALDriverException) {
             return [];
         }
     }
@@ -65,7 +65,7 @@ class ForumForum extends ServiceEntityRepository
             $statement = $connection->prepare($query);
             $statement->bindValue('forumId', $forumId, ParameterType::INTEGER);
             return (int) $statement->executeQuery()->fetchOne()[0];
-        } catch (DBALException | DBALDriverException | ErrorException $exception) {
+        } catch (DBALException | DBALDriverException | ErrorException) {
             return 0;
         }
     }

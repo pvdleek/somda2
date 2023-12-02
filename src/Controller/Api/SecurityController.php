@@ -93,8 +93,8 @@ class SecurityController extends AbstractFOSRestController
         $user->apiTokenExpiryTimestamp = new \DateTime(User::API_TOKEN_VALIDITY);
         try {
             $this->doctrine->getManager()->flush();
-        } catch (\Exception $exception) {
-            $this->logger->addRecord(Level::Critical, 'Failed to set api-token-expiry-timestamp for user ' . $user->id);
+        } catch (\Exception) {
+            $this->logger->critical('Failed to set api-token-expiry-timestamp for user ' . $user->id);
         }
 
         return $this->handleView($this->view(['data' => $user], 200));

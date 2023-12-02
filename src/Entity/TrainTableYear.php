@@ -13,7 +13,7 @@ use OpenApi\Annotations as OA;
 class TrainTableYear
 {
     /**
-     * @ORM\Column(name="tdr_nr", type="bigint", nullable=false)
+     * @ORM\Column(name="tdr_nr", type="smallint", nullable=false, options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @JMS\Expose()

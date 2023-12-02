@@ -31,7 +31,7 @@ class ForumFavorite
     public ?User $user = null;
 
     /**
-     * @ORM\Column(name="alerting", type="integer", nullable=false, options={"default"=ForumFavorite::ALERTING_OFF})
+     * @ORM\Column(name="alerting", type="smallint", nullable=false, options={"default"=ForumFavorite::ALERTING_OFF, "unsigned"=true})
      * @Assert\Choice(choices=ForumFavorite::ALERTING_VALUES)
      */
     public int $alerting = self::ALERTING_OFF;

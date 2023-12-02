@@ -21,6 +21,8 @@ nelmio_security:
       connect-src:
         - 'self'
         - '*.google-analytics.com'
+        - '*.analytics.google.com'
+        - 'cke4.ckeditor.com'
       font-src:
         - 'self'
       frame-src:

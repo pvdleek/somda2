@@ -14,7 +14,7 @@ use OpenApi\Annotations as OA;
 class RailNewsSource
 {
     /**
-     * @ORM\Column(name="snb_id", type="bigint", nullable=false)
+     * @ORM\Column(name="snb_id", type="smallint", nullable=false, options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @JMS\Expose()

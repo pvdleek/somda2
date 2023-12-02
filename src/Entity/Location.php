@@ -25,7 +25,7 @@ class Location
     public const UNKNOWN_NAME = 'Fout!';
 
     /**
-     * @ORM\Column(name="afkid", type="bigint", nullable=false)
+     * @ORM\Column(name="afkid", type="smallint", nullable=false, options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @JMS\Expose()
@@ -76,7 +76,7 @@ class Location
     public bool $spotAllowed = true;
 
     /**
-     * @ORM\Column(name="route_overstaptijd", type="integer", nullable=true)
+     * @ORM\Column(name="route_overstaptijd", type="smallint", nullable=true, options={"unsigned"=true})
      * @JMS\Exclude()
      */
     public ?int $transferTime = null;

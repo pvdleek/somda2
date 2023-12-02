@@ -5,10 +5,13 @@ namespace App\Helpers;
 use App\Entity\Location;
 use App\Entity\Route;
 use App\Entity\RouteList;
-use App\Entity\RouteOperationDays;
 use App\Entity\TrainTable;
 use App\Entity\TrainTableFirstLast;
 use App\Entity\TrainTableYear;
+use App\Repository\Location as RepositoryLocation;
+use App\Repository\RouteList as RepositoryRouteList;
+use App\Repository\RouteOperationDays;
+use App\Repository\TrainTable as RepositoryTrainTable;
 use App\Traits\DateTrait;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -34,6 +37,10 @@ class RouteManagementHelper
 
     public function __construct(
         private readonly ManagerRegistry $doctrine,
+        private readonly RepositoryLocation $repositoryLocation,
+        private readonly RepositoryRouteList $repositoryRouteList,
+        private readonly RepositoryTrainTable $repositoryTrainTable,
+        private readonly RouteOperationDays $repositoryRouteOperationDays,
     ) {
     }
 
@@ -60,7 +67,7 @@ class RouteManagementHelper
         /**
          * @var RouteList $routeList
          */
-        $routeList = $this->doctrine->getRepository(RouteList::class)->find($routeListId);
+        $routeList = $this->repositoryRouteList->find($routeListId);
         if (\is_null($routeList)) {
             throw new AccessDeniedException('This routeList does not exist');
         }
@@ -87,10 +94,7 @@ class RouteManagementHelper
         if (!\is_null($routeNumber)) {
             // Check if the new route-number is in the correct range of the routeList
             if ($routeNumber < $this->routeList->firstNumber || $routeNumber > $this->routeList->lastNumber) {
-                // Find the correct routeList
-                $routeList = $this->doctrine
-                    ->getRepository(RouteList::class)
-                    ->findForRouteNumber($this->routeList->trainTableYear, $routeNumber);
+                $routeList = $this->repositoryRouteList->findForRouteNumber($this->routeList->trainTableYear, $routeNumber);
                 if (\is_null($routeList)) {
                     return false;
                 }
@@ -99,7 +103,7 @@ class RouteManagementHelper
                 $this->routeList = $routeList;
             }
 
-            $this->trainTableLines = $this->doctrine->getRepository(TrainTable::class)->findBy(
+            $this->trainTableLines = $this->repositoryTrainTable->findBy(
                 ['trainTableYear' => $this->routeList->trainTableYear, 'route' => $this->route],
                 ['order' => 'ASC']
             );
@@ -114,7 +118,7 @@ class RouteManagementHelper
         }
 
         if (!isset($this->trainTableLines)) {
-            $this->trainTableLines = $this->doctrine->getRepository(TrainTable::class)->findBy(
+            $this->trainTableLines = $this->repositoryTrainTable->findBy(
                 ['trainTableYear' => $this->routeList->trainTableYear, 'route' => $this->route],
                 ['order' => 'ASC']
             );
@@ -132,7 +136,7 @@ class RouteManagementHelper
             } else {
                 $newRoute = clone($this->route);
             }
-            $newRoute->number = $routeNumber;
+            $newRoute->number = (string) $routeNumber;
         }
         return $newRoute;
     }
@@ -178,9 +182,7 @@ class RouteManagementHelper
                     }
                 }
 
-                $routeOperationDays = $this->doctrine
-                    ->getRepository(RouteOperationDays::class)
-                    ->findByDaysArray($days);
+                $routeOperationDays = $this->repositoryRouteOperationDays->findByDaysArray($days);
                 $resultArray[] = [
                     self::ROUTE_KEY_ROUTE_OPERATION_DAYS => $routeOperationDays,
                     self::ROUTE_KEY_LINES => $routeDayArray[$dayNumber]
@@ -270,9 +272,9 @@ class RouteManagementHelper
         /**
          * @var Location $location
          */
-        $location = $this->doctrine->getRepository(Location::class)->findOneBy(['name' => $locationName]);
+        $location = $this->repositoryLocation->findOneBy(['name' => $locationName]);
         if (\is_null($location)) {
-            $location = $this->doctrine->getRepository(Location::class)->findOneBy(['name' => Location::UNKNOWN_NAME]);
+            $location = $this->repositoryLocation->findOneBy(['name' => Location::UNKNOWN_NAME]);
             $okFlag = false;
         }
         return $location;

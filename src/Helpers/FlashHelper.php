@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Helpers;
 
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 class FlashHelper
 {
@@ -21,6 +22,10 @@ class FlashHelper
         if (!\in_array($type, [self::FLASH_TYPE_INFORMATION, self::FLASH_TYPE_WARNING, self::FLASH_TYPE_ERROR])) {
             $type = self::FLASH_TYPE_ERROR;
         }
-        $this->requestStack->getCurrentRequest()->getSession()->getFlashBag()->add($type, $message);
+        /**
+         * @var Session $session
+         */
+        $session = $this->requestStack->getCurrentRequest()->getSession();
+        $session->getFlashBag()->add($type, $message);
     }
 }

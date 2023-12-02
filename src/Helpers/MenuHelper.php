@@ -3,31 +3,31 @@ declare(strict_types=1);
 
 namespace App\Helpers;
 
-use App\Entity\Block;
-use App\Entity\ForumPostAlert;
 use App\Generics\RoleGenerics;
-use Doctrine\Persistence\ManagerRegistry;
+use App\Repository\Block;
+use App\Repository\ForumPostAlert;
 use Twig\Extension\RuntimeExtensionInterface;
 
 class MenuHelper implements RuntimeExtensionInterface
 {
     public function __construct(
-        private readonly ManagerRegistry $doctrine,
         private readonly AuthorizationHelper $authorizationHelper,
+        private readonly ForumPostAlert $repositoryForumPostAlert,
+        private readonly Block $repositoryBlock,
     ) {
     }
 
     public function getNumberOfOpenForumAlerts(): int
     {
         if ($this->authorizationHelper->isGranted(RoleGenerics::ROLE_ADMIN)) {
-            return $this->doctrine->getRepository(ForumPostAlert::class)->getNumberOfOpenAlerts();
+            return $this->repositoryForumPostAlert->getNumberOfOpenAlerts();
         }
         return 0;
     }
 
     public function getMenuStructure(): array
     {
-        $blocks = $this->doctrine->getRepository(Block::class)->getMenuStructure();
+        $blocks = $this->repositoryBlock->getMenuStructure();
         $allowedBlocks = [];
 
         foreach ($blocks as $block) {

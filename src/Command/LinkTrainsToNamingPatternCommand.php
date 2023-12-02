@@ -29,12 +29,11 @@ class LinkTrainsToNamingPatternCommand extends Command
     {
         /**
          * @var TrainNamePattern[] $patterns
+         */
+        $patterns = $this->doctrine->getRepository(TrainNamePattern::class)->findBy([], ['order' => 'ASC']);
+        /**
          * @var Train[] $trains
          */
-        // Get all naming patterns
-        $patterns = $this->doctrine->getRepository(TrainNamePattern::class)->findBy([], ['order' => 'ASC']);
-
-        // Get all trains
         $trains = $this->doctrine->getRepository(Train::class)->findAll();
 
         foreach ($trains as $train) {

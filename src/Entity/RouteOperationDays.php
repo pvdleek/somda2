@@ -13,7 +13,7 @@ use OpenApi\Annotations as OA;
 class RouteOperationDays
 {
     /**
-     * @ORM\Column(name="rijdagenid", type="bigint", nullable=false)
+     * @ORM\Column(name="rijdagenid", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @JMS\Expose()

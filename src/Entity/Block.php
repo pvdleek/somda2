@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Block
 {
     /**
-     * @ORM\Column(name="blokid", type="bigint", nullable=false)
+     * @ORM\Column(name="blokid", type="smallint", nullable=false, options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -34,7 +34,7 @@ class Block
     public ?string $role = null;
 
     /**
-     * @ORM\Column(name="menu_volgorde", type="integer", nullable=false, options={"default"="1"})
+     * @ORM\Column(name="menu_volgorde", type="smallint", nullable=false, options={"default"="1", "unsigned"=true})
      */
     public int $menuOrder = 1;
 

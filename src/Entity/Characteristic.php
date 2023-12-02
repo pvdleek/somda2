@@ -17,7 +17,7 @@ use OpenApi\Annotations as OA;
 class Characteristic
 {
     /**
-     * @ORM\Column(name="karakteristiek_id", type="bigint", nullable=false)
+     * @ORM\Column(name="karakteristiek_id", type="smallint", nullable=false, options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @JMS\Expose()

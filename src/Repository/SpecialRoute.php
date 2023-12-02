@@ -36,7 +36,7 @@ class SpecialRoute extends ServiceEntityRepository
 
     /**
      * @return SpecialRouteEntity[]
-     * @throws Exception
+     * @throws \Exception
      */
     public function findForFeed(int $limit): array
     {

@@ -20,7 +20,7 @@ use OpenApi\Annotations as OA;
 class Train
 {
     /**
-     * @ORM\Column(name="matid", type="bigint", nullable=false)
+     * @ORM\Column(name="matid", type="integer", nullable=false, options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @JMS\Expose()

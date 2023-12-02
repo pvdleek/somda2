@@ -17,7 +17,7 @@ use OpenApi\Annotations as OA;
 class OfficialFootnote
 {
     /**
-     * @ORM\Column(name="ofo_id", type="bigint", nullable=false)
+     * @ORM\Column(name="ofo_id", type="smallint", nullable=false, options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @JMS\Expose()
@@ -26,7 +26,7 @@ class OfficialFootnote
     public ?int $id = null;
 
     /**
-     * @ORM\Column(name="ofo_footnote_id", type="bigint", nullable=false)
+     * @ORM\Column(name="ofo_footnote_id", type="smallint", nullable=false, options={"unsigned"=true})
      * @JMS\Expose()
      * @OA\Property(description="Unique footnote identifier", type="integer")
      */

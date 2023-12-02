@@ -3,8 +3,9 @@
 namespace App\Helpers;
 
 use App\Entity\RouteList;
-use App\Entity\TrainTableYear;
 use App\Model\RoutesDisplay;
+use App\Repository\RouteList as RepositoryRouteList;
+use App\Repository\TrainTableYear;
 use App\Traits\SortTrait;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -16,6 +17,8 @@ class RoutesDisplayHelper implements RuntimeExtensionInterface
 
     public function __construct(
         private readonly ManagerRegistry $doctrine,
+        private readonly RepositoryRouteList $repositoryRouteList,
+        private readonly TrainTableYear $repositoryTrainTableYear,
     ) {
     }
 
@@ -24,21 +27,14 @@ class RoutesDisplayHelper implements RuntimeExtensionInterface
         $routesDisplay = new RoutesDisplay();
 
         if (\is_null($trainTableYearId) || $trainTableYearId === 0) {
-            $routesDisplay->trainTableYear = $this->doctrine
-                ->getRepository(TrainTableYear::class)
-                ->findTrainTableYearByDate(new \DateTime());
+            $routesDisplay->trainTableYear = $this->repositoryTrainTableYear->findTrainTableYearByDate(new \DateTime());
         } else {
-            $routesDisplay->trainTableYear = $this->doctrine->getRepository(TrainTableYear::class)->find(
-                $trainTableYearId
-            );
+            $routesDisplay->trainTableYear = $this->repositoryTrainTableYear->find($trainTableYearId);
             if (\is_null($routesDisplay->trainTableYear)) {
                 throw new AccessDeniedException('This trainTableYear does not exist');
             }
 
-            $routesDisplay->routeLists = $this->doctrine
-                ->getRepository(RouteList::class)
-                ->findForOverview($routesDisplay->trainTableYear);
-
+            $routesDisplay->routeLists = $this->repositoryRouteList->findForOverview($routesDisplay->trainTableYear);
             if (!\is_null($routeListId)) {
                 $routesDisplay->selectedRouteList = $this->doctrine->getRepository(RouteList::class)->find(
                     $routeListId

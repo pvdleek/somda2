@@ -214,7 +214,7 @@ class OfficialTrainTableHelper
                         ++$this->currentStopNumber;
                         try {
                             $this->saveTrainTable(trim(substr($line, 1, 7)), 'v', substr($line, 9));
-                        } catch (\Exception $exception) {
+                        } catch (\Exception) {
                             $this->scrollToNextIdentificationLine($handle);
                             $this->resetForNewRoutes();
                         }
@@ -222,7 +222,7 @@ class OfficialTrainTableHelper
                     case ';': // Passing location
                         try {
                             $this->saveTrainTable(\trim(\substr($line, 1, 7)), '-');
-                        } catch (\Exception $exception) {
+                        } catch (\Exception) {
                             $this->scrollToNextIdentificationLine($handle);
                             $this->resetForNewRoutes();
                         }
@@ -231,7 +231,7 @@ class OfficialTrainTableHelper
                         ++$this->currentStopNumber;
                         try {
                             $this->saveTrainTable(\trim(\substr($line, 1, 7)), '+', \substr($line, 9));
-                        } catch (\Exception $exception) {
+                        } catch (\Exception) {
                             $this->scrollToNextIdentificationLine($handle);
                             $this->resetForNewRoutes();
                         }
@@ -241,7 +241,7 @@ class OfficialTrainTableHelper
                         try {
                             $this->saveTrainTable(\trim(\substr($line, 1, 7)), 'a', \substr($line, 9, 4));
                             $this->saveTrainTable(\trim(\substr($line, 1, 7)), 'v', \substr($line, 14, 4));
-                        } catch (\Exception $exception) {
+                        } catch (\Exception) {
                             $this->scrollToNextIdentificationLine($handle);
                             $this->resetForNewRoutes();
                         }
@@ -250,7 +250,7 @@ class OfficialTrainTableHelper
                         ++$this->currentStopNumber;
                         try {
                             $this->saveTrainTable(\trim(\substr($line, 1, 7)), 'a', \substr($line, 9));
-                        } catch (\Exception $exception) {
+                        } catch (\Exception) {
                             $this->scrollToNextIdentificationLine($handle);
                             $this->resetForNewRoutes();
                         }
@@ -291,7 +291,7 @@ class OfficialTrainTableHelper
         $route = $this->doctrine->getRepository(Route::class)->findOneBy(['number' => $routeNumber]);
         if (\is_null($route)) {
             $route = new Route();
-            $route->number = $routeNumber;
+            $route->number = (string) $routeNumber;
 
             $this->doctrine->getManager()->persist($route);
         }

@@ -33,13 +33,13 @@ class RouteTrain
     public ?Position $position = null;
 
     /**
-     * @ORM\Column(name="dag", type="integer", nullable=false, options={"default"="1"})
+     * @ORM\Column(name="dag", type="smallint", nullable=false, options={"default"="1", "unsigned"=true})
      * @ORM\Id
      */
     public int $dayNumber = 1;
 
     /**
-     * @ORM\Column(name="spots", type="bigint", nullable=false)
+     * @ORM\Column(name="spots", type="integer", nullable=false, options={"unsigned"=true})
      */
     public int $numberOfSpots = 0;
 

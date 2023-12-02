@@ -15,7 +15,7 @@ use OpenApi\Annotations as OA;
 class RailNews
 {
     /**
-     * @ORM\Column(name="sns_id", type="bigint", nullable=false)
+     * @ORM\Column(name="sns_id", type="integer", nullable=false, options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @JMS\Expose()
@@ -24,9 +24,9 @@ class RailNews
     public ?int $id = null;
 
     /**
-     * @ORM\Column(name="sns_titel", type="string", length=100, nullable=false)
+     * @ORM\Column(name="sns_titel", type="string", length=255, nullable=false)
      * @JMS\Expose()
-     * @OA\Property(description="Title of the news-item", maxLength=100, type="string")
+     * @OA\Property(description="Title of the news-item", maxLength=255, type="string")
      */
     public string $title = '';
 

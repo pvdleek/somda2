@@ -11,6 +11,7 @@ use App\Helpers\FlashHelper;
 use App\Helpers\RoutesDisplayHelper;
 use App\Helpers\TemplateHelper;
 use App\Helpers\UserHelper;
+use App\Repository\TrainTableYear as RepositoryTrainTableYear;
 use Doctrine\Persistence\ManagerRegistry;
 use Dompdf\Dompdf;
 use Dompdf\Options;
@@ -27,6 +28,7 @@ class TrainTableController
         private readonly RoutesDisplayHelper $routesDisplayHelper,
         private readonly RedirectHelper $redirectHelper,
         private readonly FlashHelper $flashHelper,
+        private readonly RepositoryTrainTableYear $repositoryTrainTableYear,
     ) {
     }
 
@@ -38,10 +40,7 @@ class TrainTableController
         $submit = false;
 
         if (\is_null($trainTableYearId)) {
-            $trainTableYearId = $this->doctrine
-                ->getRepository(TrainTableYear::class)
-                ->findTrainTableYearByDate(new \DateTime())
-                ->id;
+            $trainTableYearId = $this->repositoryTrainTableYear->findTrainTableYearByDate(new \DateTime())->id;
         } else {
             $submit = true;
             $this->trainTableHelper->setTrainTableYear($trainTableYearId);
@@ -78,10 +77,7 @@ class TrainTableController
         $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_PASSING_ROUTES);
 
         if (\is_null($dayNumber)) {
-            $trainTableYearId = $this->doctrine
-                ->getRepository(TrainTableYear::class)
-                ->findTrainTableYearByDate(new \DateTime())
-                ->id;
+            $trainTableYearId = $this->repositoryTrainTableYear->findTrainTableYearByDate(new \DateTime())->id;
 
             $dayNumber = date('N');
             $startTime = date('H:i', time() - (60 * 15));
@@ -90,10 +86,7 @@ class TrainTableController
             $passingRoutes = [];
         } else {
             if ($trainTableYearId === 0) {
-                $trainTableYearId = $this->doctrine
-                    ->getRepository(TrainTableYear::class)
-                    ->findTrainTableYearByDate(new \DateTime())
-                    ->id;
+                $trainTableYearId = $this->repositoryTrainTableYear->findTrainTableYearByDate(new \DateTime())->id;
             }
 
             $this->trainTableHelper->setTrainTableYear($trainTableYearId);

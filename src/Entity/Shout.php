@@ -11,14 +11,14 @@ use Doctrine\ORM\Mapping as ORM;
 class Shout
 {
     /**
-     * @ORM\Column(name="sht_id", type="bigint", nullable=false)
+     * @ORM\Column(name="sht_id", type="integer", nullable=false, options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     public ?int $id = null;
 
     /**
-     * @ORM\Column(name="sht_ip", type="bigint", nullable=false)
+     * @ORM\Column(name="sht_ip", type="integer", nullable=false, options={"unsigned"=true})
      */
     public string $ipAddress = '';
 

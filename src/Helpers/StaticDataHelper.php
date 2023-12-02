@@ -9,6 +9,8 @@ use App\Entity\TrainTable;
 use App\Entity\TrainTableYear;
 use App\Entity\User;
 use App\Repository\TrainTable as TrainTableRepository;
+use App\Repository\TrainTableYear as RepositoryTrainTableYear;
+use App\Repository\User as RepositoryUser;
 use App\Traits\DateTrait;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -74,28 +76,43 @@ class StaticDataHelper implements RuntimeExtensionInterface
 
         /**
          * @var Location[] $locationArray
-         * @var Jargon[] $jargonArray
-         * @var User[] $userArray
          */
         $locationArray = $this->doctrine->getRepository(Location::class)->findAll();
         foreach ($locationArray as $location) {
             $this->locations[$location->name] = $location->description;
         }
 
+        /**
+         * @var Jargon[] $jargonArray
+         */
         $jargonArray = $this->doctrine->getRepository(Jargon::class)->findAll();
         foreach ($jargonArray as $jargon) {
             $this->locations[$jargon->term] = $jargon->description;
         }
 
-        $userArray = $this->doctrine->getRepository(User::class)->findActiveForStaticData();
+        /**
+         * @var RepositoryUser $userRepository
+         */
+        $userRepository = $this->doctrine->getRepository(User::class);
+        /**
+         * @var User[] $userArray
+         */
+        $userArray = $userRepository->findActiveForStaticData();
         foreach ($userArray as $user) {
             $this->users['@' . $user['username']] =
                 !\is_null($user['name']) && \strlen($user['name']) > 0 ? $user['name'] : $user['username'];
         }
 
-        $routeArray = $this->doctrine->getRepository(TrainTable::class)->findAllTrainTablesForForum(
-            $this->doctrine->getRepository(TrainTableYear::class)->findTrainTableYearByDate(new \DateTime())
-        );
+        /**
+         * @var TrainTableRepository $trainTableRepository
+         */
+        $trainTableRepository = $this->doctrine->getRepository(TrainTable::class);
+        /**
+         * @var RepositoryTrainTableYear $trainTableYearRepository
+         */
+        $trainTableYearRepository = $this->doctrine->getRepository(TrainTableYear::class);
+
+        $routeArray = $trainTableRepository->findAllTrainTablesForForum($trainTableYearRepository->findTrainTableYearByDate(new \DateTime()));
         $routeTranslation = $this->translator->trans('trainTable.forum.route');
         foreach ($routeArray as $route) {
             $this->routes[$route[TrainTableRepository::FIELD_ROUTE_NUMBER]] = sprintf(

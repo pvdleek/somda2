@@ -27,7 +27,7 @@ class Location extends ServiceEntityRepository
             ->setParameter(self::PARAMETER_SEARCH, strtolower($search));
         try {
             return $queryBuilder->getQuery()->getSingleResult();
-        } catch (NonUniqueResultException | NoResultException $exception) {
+        } catch (NonUniqueResultException | NoResultException) {
             return null;
         }
     }
