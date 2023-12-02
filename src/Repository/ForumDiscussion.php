@@ -301,14 +301,14 @@ class ForumDiscussion extends ServiceEntityRepository
      */
     public function markPostsAsRead(User $user, array $posts): void
     {
-		$maxpostid = 0;
+		$max_post_id = 0;
         foreach ($posts as $post) {
-            if ($post->id > $maxpostid) {
-				$maxpostid = $post->id;
+            if ($post->id > $max_post_id) {
+				$max_post_id = $post->id;
 			}
         }
-        $query = 'REPLACE INTO `somda_forum_last_read` (uid, discussionid, postid) VALUES '.
-            '(' . (string) $user->id . ',' . (string) $this->id . ',' . (string) $maxpostid . ');';
+        $query = 'REPLACE INTO `somda_forum_last_read` (`uid`, `discussionid`, `postid`) VALUES '.
+            '(' . (string) $user->id . ',' . (string) $this->id . ',' . (string) $max_post_id . ');';
 
         $connection = $this->getEntityManager()->getConnection();
         try {
@@ -321,10 +321,10 @@ class ForumDiscussion extends ServiceEntityRepository
 
     public function markAllPostsAsRead(User $user): void
     {
-        $query = 'REPLACE INTO `somda_forum_last_read` (uid, discussionid, postid) ' .
-            ' SELECT ' . (string) $user->id . ' as uid, d.discussionid, p.postid ' .
-            'FROM `somda_forum_discussion` d LEFT JOIN `somda_forum_posts` p ' .
-            'ON p.postid = (select postid from `somda_forum_posts` order by postid desc limit 1)';
+        $query = 'REPLACE INTO `somda_forum_last_read` (`uid`, `discussionid`, `postid`) ' .
+            'SELECT ' . (string) $user->id . ' AS `uid`, `d`.`discussionid`, `p`.`postid` ' .
+            'FROM `somda_forum_discussion` `d` ' .
+            'LEFT JOIN `somda_forum_posts` `p` ON `p`.`postid` = (SELECT `postid` FROM `somda_forum_posts` ORDER BY `postid` DESC LIMIT 1)';
 
         $connection = $this->getEntityManager()->getConnection();
         try {
