@@ -35,7 +35,7 @@ class ForumDiscussion extends ServiceEntityRepository
             $query = '
                 SELECT `d`.`discussionid` AS `id`, `d`.`title` AS `title`, `a`.`uid` AS `author_id`,
                     `a`.`username` AS `author_username`, `d`.`locked` AS `locked`, `d`.`viewed` AS `viewed`,
-                    `f`.`type` AS `forum_type`, TRUE AS `discussion_read`, `p_max`.`timestamp` AS `max_post_timestamp`,
+                    `f`.`type` AS `forum_type`, TRUE AS `discussion_read`, 0 AS `post_last_read`, `p_max`.`timestamp` AS `max_post_timestamp`,
                     COUNT(*) AS `posts`
                 FROM somda_forum_discussion d
                 JOIN somda_forum_forums f ON f.forumid = d.forumid
@@ -53,14 +53,15 @@ class ForumDiscussion extends ServiceEntityRepository
             $query = '
                 SELECT `d`.`discussionid` AS `id`, `d`.`title` AS `title`, `a`.`uid` AS `author_id`,
                     `a`.`username` AS `author_username`, `d`.`locked` AS `locked`, `d`.`viewed` AS `viewed`,
-                    `f`.`type` AS `forum_type`, IF(`r`.`postid` IS NULL, FALSE, TRUE) AS `discussion_read`,
+                    `f`.`type` AS `forum_type`, IF(IFNULL(`r`.`postid`, 0) < p_max.postid, FALSE, TRUE) AS `discussion_read`,
+					IFNULL(`r`.`postid`, 0) AS `post_last_read`,
                     `p_max`.`timestamp` AS `max_post_timestamp`, COUNT(*) AS `posts`
                 FROM somda_forum_discussion d
                 JOIN somda_forum_forums f ON f.forumid = d.forumid
                 JOIN somda_users a ON a.uid = d.authorid
                 JOIN somda_forum_posts p_max ON p_max.discussionid = d.discussionid
-                LEFT JOIN somda_forum_read_' . substr((string) $user->id, -1) . ' r
-                    ON r.uid = ' . (string) $user->id . ' AND r.postid = p_max.postid
+                LEFT JOIN somda_forum_last_read r
+                    ON r.uid = ' . (string) $user->id . ' AND r.discussionid = d.discussionid
                 JOIN somda_forum_posts p_count ON p_count.discussionid = d.discussionid
                 INNER JOIN (' . $maxQuery . ') m ON m.disc_id = d.discussionid
                 WHERE p_max.timestamp = m.max_date_time
@@ -98,7 +99,7 @@ class ForumDiscussion extends ServiceEntityRepository
             $query = '
                 SELECT `d`.`discussionid` AS `id`, `d`.`title` AS `title`, `a`.`uid` AS `author_id`,
                     `a`.`username` AS `author_username`, `d`.`locked` AS `locked`, `d`.`viewed` AS `viewed`,
-                    TRUE AS `discussion_read`, `p_max`.`timestamp` AS `max_post_timestamp`, COUNT(*) AS `posts`
+                    TRUE AS `discussion_read`, 0 AS `post_last_read`, `p_max`.`timestamp` AS `max_post_timestamp`, COUNT(*) AS `posts`
                 FROM somda_forum_discussion d
                 JOIN somda_users a ON a.uid = d.authorid
                 JOIN somda_forum_posts p_max ON p_max.discussionid = d.discussionid
@@ -111,13 +112,14 @@ class ForumDiscussion extends ServiceEntityRepository
             $query = '
                 SELECT `d`.`discussionid` AS `id`, `d`.`title` AS `title`, `a`.`uid` AS `author_id`,
                     `a`.`username` AS `author_username`, `d`.`locked` AS `locked`, `d`.`viewed` AS `viewed`,
-                    IF(`r`.`postid` IS NULL, FALSE, TRUE) AS `discussion_read`,
+                    IF(IFNULL(`r`.`postid`, 0) < p_max.postid, FALSE, TRUE) AS `discussion_read`,
+					IFNULL(`r`.`postid`, 0) AS `post_last_read`,
                     `p_max`.`timestamp` AS `max_post_timestamp`, COUNT(*) AS `posts`
                 FROM somda_forum_discussion d
                 JOIN somda_users a ON a.uid = d.authorid
                 JOIN somda_forum_posts p_max ON p_max.discussionid = d.discussionid
-                LEFT JOIN somda_forum_read_' . substr((string) $user->id, -1) . ' r
-                    ON r.uid = ' . (string) $user->id . ' AND r.postid = p_max.postid
+                LEFT JOIN somda_forum_last_read r
+                    ON r.uid = ' . (string) $user->id . ' AND r.discussionid = d.discussionid
                 JOIN somda_forum_posts p_count ON p_count.discussionid = d.discussionid
                 INNER JOIN (' . $maxQuery . ') m ON m.disc_id = d.discussionid
                 WHERE d.forumid = :forumid AND p_max.timestamp = m.max_date_time
@@ -149,14 +151,15 @@ class ForumDiscussion extends ServiceEntityRepository
             SELECT `d`.`discussionid` AS `id`, `d`.`title` AS `title`, `a`.`uid` AS `author_id`,
                 `f`.`alerting` AS `alerting`,
                 `a`.`username` AS `author_username`, `d`.`locked` AS `locked`, `d`.`viewed` AS `viewed`,
-                IF(`r`.`postid` IS NULL, FALSE, TRUE) AS `discussion_read`,
+                IF(IFNULL(`r`.`postid`, 0) < p_max.postid, FALSE, TRUE) AS `discussion_read`,
+				IFNULL(`r`.`postid`, 0) AS `post_last_read`,
                 `p_max`.`timestamp` AS `max_post_timestamp`, COUNT(*) AS `posts`
             FROM somda_forum_discussion d
             JOIN somda_users a ON a.uid = d.authorid
             JOIN somda_forum_posts p_max ON p_max.discussionid = d.discussionid
             INNER JOIN somda_forum_favorites f ON f.discussionid = d.discussionid AND f.uid = :userId
-            LEFT JOIN somda_forum_read_' . substr((string) $user->id, -1) . ' r
-                ON r.uid = :userId AND r.postid = p_max.postid
+            LEFT JOIN somda_forum_last_read r
+                    ON r.uid = ' . (string) $user->id . ' AND r.discussionid = d.discussionid
             JOIN somda_forum_posts p_count ON p_count.discussionid = d.discussionid
             INNER JOIN (' . $maxQuery . ') m ON m.disc_id = d.discussionid
             WHERE p_max.timestamp = m.max_date_time
@@ -183,17 +186,18 @@ class ForumDiscussion extends ServiceEntityRepository
         $query = '
             SELECT `d`.`discussionid` AS `id`, `d`.`title` AS `title`, `a`.`uid` AS `author_id`,
                 `a`.`username` AS `author_username`, `d`.`locked` AS `locked`, `d`.`viewed` AS `viewed`,
-                IF(`r`.`postid` IS NULL, FALSE, TRUE) AS `discussion_read`,
+                FALSE AS `discussion_read`,
+				IFNULL(`r`.`postid`, 0) AS `post_last_read`,
                 `p_max`.`timestamp` AS `max_post_timestamp`, COUNT(*) AS `posts`
             FROM somda_forum_discussion d
             JOIN somda_forum_forums f ON f.forumid = d.forumid
             JOIN somda_users a ON a.uid = d.authorid
             JOIN somda_forum_posts p_max ON p_max.discussionid = d.discussionid
-            LEFT JOIN somda_forum_read_' . substr((string) $user->id, -1) . ' r
-                ON r.uid = ' . (string) $user->id . ' AND r.postid = p_max.postid
+            LEFT JOIN somda_forum_last_read r
+                    ON r.uid = ' . (string) $user->id . ' AND r.discussionid = d.discussionid
             JOIN somda_forum_posts p_count ON p_count.discussionid = d.discussionid
             INNER JOIN (' . $maxQuery . ') m ON m.disc_id = d.discussionid
-            WHERE p_max.timestamp = m.max_date_time AND f.type != :moderatorForumType AND `r`.`postid` IS NULL
+            WHERE p_max.timestamp = m.max_date_time AND f.type != :moderatorForumType AND (`r`.`postid` IS NULL OR `r`.`postid` < p_max.postid)
             GROUP BY `id`, `title`, `author_id`, `viewed`, m.max_date_time, `discussion_read`, `max_post_timestamp`
             ORDER BY m.max_date_time DESC';
 
@@ -278,20 +282,16 @@ class ForumDiscussion extends ServiceEntityRepository
 
     public function getNumberOfReadPosts(ForumDiscussionEntity $discussion, User $user): int
     {
-        $queryBuilder = $this->getEntityManager()
-            ->createQueryBuilder()
-            ->select('COUNT(p.id)')
-            ->from('App\Entity\ForumRead' . \substr((string) $user->id, -1), 'r')
-            ->join('r.post', 'p')
-            ->andWhere('p.discussion = :' . ForumPostForm::FIELD_DISCUSSION)
-            ->setParameter(ForumPostForm::FIELD_DISCUSSION, $discussion)
-            ->andWhere('r.user = :user')
-            ->setParameter('user', $user);
-        try {
-            return (int) $queryBuilder->getQuery()->getSingleScalarResult();
-        } catch (\Exception $exception) {
-            return 0;
-        }
+       $query = '
+            SELECT COUNT(`p`.`postid`) as number
+            FROM somda_forum_posts p
+            LEFT JOIN somda_forum_last_read r
+                ON r.uid = ' . (string) $user->id . ' AND r.discussionid = p.discussionid
+            WHERE p.discussionid = ' . (string) $discussion->id . ' AND p.postid > IFNULL(`r`.`postid`, 0);';
+        $connection = $this->getEntityManager()->getConnection();
+        $statement = $connection->prepare($query);
+        $result = $statement->executeQuery()->fetchAssociative();
+        return $result === false ? 0 : $result['number'];
     }
 
     /**
@@ -299,14 +299,18 @@ class ForumDiscussion extends ServiceEntityRepository
      */
     public function markPostsAsRead(User $user, array $posts): void
     {
-        $query = 'INSERT IGNORE INTO `somda_forum_read_'  . \substr((string) $user->id, -1) . '` (postid, uid) VALUES ';
+		$maxpostid = 0;
         foreach ($posts as $post) {
-            $query .= '(' . (string) $post->id . ',' . (string) $user->id . '),';
+            if ($post->id > $maxpostid) {
+				$maxpostid = $post->id;
+			}
         }
+        $query = 'REPLACE INTO `somda_forum_last_read` (uid, discussionid, postid) VALUES '.
+            '(' . (string) $user->id . ',' . (string) $this->id . ',' . (string) $maxpostid . ');';
 
         $connection = $this->getEntityManager()->getConnection();
         try {
-            $statement = $connection->prepare(\substr($query, 0, -1));
+            $statement = $connection->prepare($query);
             $statement->executeStatement();
         } catch (DBALDriverException | DBALException $exception) {
             return;
@@ -315,8 +319,10 @@ class ForumDiscussion extends ServiceEntityRepository
 
     public function markAllPostsAsRead(User $user): void
     {
-        $query = 'INSERT IGNORE INTO `somda_forum_read_'  . \substr((string) $user->id, -1) . '` (postid, uid) ' .
-            ' SELECT postid, ' . (string) $user->id . ' FROM `somda_forum_posts`';
+        $query = 'REPLACE INTO `somda_forum_last_read` (uid, discussionid, postid) ' .
+            ' SELECT ' . (string) $user->id . ' as uid, d.discussionid, p.postid ' .
+            'FROM `somda_forum_discussion` d LEFT JOIN `somda_forum_posts` p ' .
+            'ON p.postid = (select postid from `somda_forum_posts` order by postid desc limit 1)';
 
         $connection = $this->getEntityManager()->getConnection();
         try {

@@ -46,7 +46,7 @@ class ForumOverviewHelper
                 if ((int) $forum['type'] !== ForumForum::TYPE_ARCHIVE) {
                     $unreadDiscussions = $this->doctrine
                         ->getRepository(ForumForum::class)
-                        ->getNumberOfUnreadPostsInForum((int) $forum['id'], $this->userHelper->getUser());
+                        ->getNumberOfUnreadDiscussionsInForum((int) $forum['id'], $this->userHelper->getUser());
                 }
             } elseif ((int) $forum['type'] === ForumForum::TYPE_MODERATORS_ONLY) {
                 // Guest is not allowed to view this category

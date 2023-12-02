@@ -140,6 +140,11 @@ class ForumForumController extends AbstractFOSRestController
      *                 type="string",
      *             ),
      *             @OA\Property(
+     *                 description="Identifier of the last post in the discussion read by the user",
+     *                 property="post_last_read",
+     *                 type="integer",
+     *             ),
+     *             @OA\Property(
      *                 description="Timestamp of the last post in this discussion (Y-m-d H:i:s)",
      *                 property="max_post_timestamp",
      *                 type="string",
