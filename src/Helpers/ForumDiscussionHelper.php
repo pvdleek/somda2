@@ -74,7 +74,7 @@ class ForumDiscussionHelper
         );
 
         if ($this->userHelper->userIsLoggedIn()) {
-            $this->forumDiscussionRepository->markPostsAsRead($this->userHelper->getUser(), $posts);
+            $this->forumDiscussionRepository->markPostsAsRead($this->userHelper->getUser(), $this->discussion, $posts);
         }
 
         return $posts;
@@ -100,9 +100,8 @@ class ForumDiscussionHelper
             [ForumPostForm::FIELD_TIMESTAMP => $newToOld ? 'DESC' : 'ASC']
         );
 
-        $markPostsAsRead = $this->userHelper->userIsLoggedIn() ? (bool)$this->userHelper->getPreferenceByKey(UserPreference::KEY_APP_MARK_FORUM_READ)->value : false;
-        if ($markPostsAsRead) {
-            $this->forumDiscussionRepository->markPostsAsRead($this->userHelper->getUser(), $posts);
+        if ($this->userHelper->userIsLoggedIn() ? (bool)$this->userHelper->getPreferenceByKey(UserPreference::KEY_APP_MARK_FORUM_READ)->value : false) {
+            $this->forumDiscussionRepository->markPostsAsRead($this->userHelper->getUser(), $this->discussion, $posts);
         }
 
         return $posts;

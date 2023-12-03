@@ -283,14 +283,16 @@ class ForumDiscussion extends ServiceEntityRepository
 
     public function getNumberOfReadPosts(ForumDiscussionEntity $discussion, User $user): int
     {
-       $query = '
-            SELECT COUNT(`p`.`postid`) as number
-            FROM somda_forum_posts p
-            LEFT JOIN somda_forum_last_read r
-                ON r.uid = ' . (string) $user->id . ' AND r.discussionid = p.discussionid
-            WHERE p.discussionid = ' . (string) $discussion->id . ' AND p.postid > IFNULL(`r`.`postid`, 0);';
+       $query = 'SELECT COUNT(`p`.`postid`) AS `number`
+            FROM `somda_forum_posts` `p`
+            LEFT JOIN `somda_forum_last_read` `r` ON `r`.`uid` = :user_id AND `r`.`discussionid` = `p`.`discussionid`
+            WHERE `p`.`discussionid` = :discussion_id AND `p`.`postid` <= IFNULL(`r`.`postid`, 0)';
+
         $connection = $this->getEntityManager()->getConnection();
         $statement = $connection->prepare($query);
+        $statement->bindValue('user_id', $user->id);
+        $statement->bindValue('discussion_id', $discussion->id);
+
         $result = $statement->executeQuery()->fetchAssociative();
 
         return $result === false ? 0 : $result['number'];
@@ -299,7 +301,7 @@ class ForumDiscussion extends ServiceEntityRepository
     /**
      * @param ForumPost[] $posts
      */
-    public function markPostsAsRead(User $user, array $posts): void
+    public function markPostsAsRead(User $user, ForumDiscussionEntity $discussion, array $posts): void
     {
 		$max_post_id = 0;
         foreach ($posts as $post) {
@@ -307,12 +309,15 @@ class ForumDiscussion extends ServiceEntityRepository
 				$max_post_id = $post->id;
 			}
         }
-        $query = 'REPLACE INTO `somda_forum_last_read` (`uid`, `discussionid`, `postid`) VALUES '.
-            '(' . (string) $user->id . ',' . (string) $this->id . ',' . (string) $max_post_id . ');';
+        $query = 'REPLACE INTO `somda_forum_last_read` (`uid`, `discussionid`, `postid`) VALUES (:user_id, :discussion_id, :max_post_id)';
 
         $connection = $this->getEntityManager()->getConnection();
+        $statement = $connection->prepare($query);
+        $statement->bindValue('user_id', $user->id);
+        $statement->bindValue('discussion_id', $discussion->id);
+        $statement->bindValue('max_post_id', $max_post_id);
+
         try {
-            $statement = $connection->prepare($query);
             $statement->executeStatement();
         } catch (DBALDriverException | DBALException) {
             return;
