@@ -14,7 +14,7 @@ use OpenApi\Annotations as OA;
 class ForumCategory
 {
     /**
-     * @ORM\Column(name="catid", type="bigint", nullable=false)
+     * @ORM\Column(name="catid", type="smallint", nullable=false, options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @JMS\Expose()
@@ -30,7 +30,7 @@ class ForumCategory
     public string $name = '';
 
     /**
-     * @ORM\Column(name="volgorde", type="integer", nullable=false, options={"default"="1"})
+     * @ORM\Column(name="volgorde", type="smallint", nullable=false, options={"default"="1", "unsigned"=true})
      * @JMS\Expose()
      * @OA\Property(description="The order in which to display the forums", type="integer")
      */

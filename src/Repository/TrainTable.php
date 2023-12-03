@@ -125,7 +125,7 @@ class TrainTable extends ServiceEntityRepository
             ->andWhere('o.' . $this->getDayName($dayNumber - 1) .' = TRUE');
         try {
             return (int) $queryBuilder->getQuery()->getSingleScalarResult() > 0;
-        } catch (NonUniqueResultException | NoResultException $exception) {
+        } catch (NonUniqueResultException | NoResultException) {
             return false;
         }
     }

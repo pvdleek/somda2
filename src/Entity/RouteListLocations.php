@@ -26,14 +26,14 @@ class RouteListLocations
     public ?RouteList $routeList = null;
 
     /**
-     * @ORM\Column(name="type", type="integer", nullable=false, options={"default"="1"})
+     * @ORM\Column(name="type", type="smallint", nullable=false, options={"default"="1", "unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
      */
     public int $type = 1;
 
     /**
-     * @ORM\Column(name="volgorde", type="integer", nullable=false, options={"default"="1"})
+     * @ORM\Column(name="volgorde", type="smallint", nullable=false, options={"default"="1", "unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
      */

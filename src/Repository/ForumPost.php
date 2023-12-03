@@ -47,7 +47,7 @@ class ForumPost extends ServiceEntityRepository
             $statement = $connection->prepare($query);
             $statement->bindValue('userId', $user->id);
             return $statement->executeQuery()->fetchAllAssociative();
-        } catch (DBALException | DBALDriverException $exception) {
+        } catch (DBALException | DBALDriverException) {
             return [];
         }
     }

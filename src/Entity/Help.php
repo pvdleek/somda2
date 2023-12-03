@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Help
 {
     /**
-     * @ORM\Column(name="contentid", type="bigint", nullable=false)
+     * @ORM\Column(name="contentid", type="integer", nullable=false, options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */

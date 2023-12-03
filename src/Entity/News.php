@@ -14,7 +14,7 @@ use OpenApi\Annotations as OA;
 class News
 {
     /**
-     * @ORM\Column(name="newsid", type="bigint", nullable=false)
+     * @ORM\Column(name="newsid", type="smallint", nullable=false, options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @JMS\Expose()

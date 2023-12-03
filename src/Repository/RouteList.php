@@ -30,7 +30,7 @@ class RouteList extends ServiceEntityRepository
             ->setMaxResults(1);
         try {
             return $queryBuilder->getQuery()->getSingleResult();
-        } catch (NonUniqueResultException | NoResultException $exception) {
+        } catch (NonUniqueResultException | NoResultException) {
             return null;
         }
     }

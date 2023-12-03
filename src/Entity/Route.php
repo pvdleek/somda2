@@ -23,7 +23,7 @@ class Route
     public const SPECIAL_CHECKING = 'SCHOUW';
 
     /**
-     * @ORM\Column(name="treinid", type="bigint", nullable=false)
+     * @ORM\Column(name="treinid", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @JMS\Expose()

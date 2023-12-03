@@ -23,7 +23,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class RouteList
 {
     /**
-     * @ORM\Column(name="id", type="bigint", nullable=false)
+     * @ORM\Column(name="id", type="integer", nullable=false, options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @JMS\Expose()
@@ -32,14 +32,14 @@ class RouteList
     public ?int $id = null;
 
     /**
-     * @ORM\Column(name="nr_start", type="integer", nullable=false, options={"default"="1"})
+     * @ORM\Column(name="nr_start", type="integer", nullable=false, options={"default"="1", "unsigned"=true})
      * @JMS\Expose()
      * @OA\Property(description="First number of the series", type="integer")
      */
     public int $firstNumber = 1;
 
     /**
-     * @ORM\Column(name="nr_eind", type="integer", nullable=false, options={"default"="2"})
+     * @ORM\Column(name="nr_eind", type="integer", nullable=false, options={"default"="2", "unsigned"=true})
      * @Assert\GreaterThan(propertyPath="firstNumber", message="Het eindnummer moet meer zijn dan het startnummer")
      * @JMS\Expose()
      * @OA\Property(description="Last number of the series", type="integer")

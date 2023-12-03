@@ -25,7 +25,7 @@ class StatisticBlock
     public ?\DateTime $date = null;
 
     /**
-     * @ORM\Column(name="pageviews", type="bigint", nullable=false)
+     * @ORM\Column(name="pageviews", type="integer", nullable=false, options={"unsigned"=true})
      */
     public int $views = 0;
 }

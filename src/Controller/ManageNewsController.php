@@ -48,7 +48,7 @@ class ManageNewsController
         $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_ADMIN_NEWS);
 
         $news = $this->formHelper->getDoctrine()->getRepository(News::class)->find($id);
-        if (\is_null($news)) {
+        if (null === $news) {
             $news = new News();
             $news->timestamp = new \DateTime();
         }
@@ -56,7 +56,7 @@ class ManageNewsController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            if (is_null($news->id)) {
+            if (null === $news->id) {
                 $this->formHelper->getDoctrine()->getManager()->persist($news);
                 return $this->formHelper->finishFormHandling('Bericht toegevoegd', RouteGenerics::ROUTE_MANAGE_NEWS);
             }
@@ -100,7 +100,7 @@ class ManageNewsController
         $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_ADMIN_RAIL_NEWS);
 
         $railNews = $this->formHelper->getDoctrine()->getRepository(RailNews::class)->find($id);
-        if (\is_null($railNews)) {
+        if (null === $railNews) {
             throw new AccessDeniedException('This rail-news item does not exist');
         }
         $form = $this->formHelper->getFactory()->create(RailNewsForm::class, $railNews);

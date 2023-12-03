@@ -26,7 +26,7 @@ class OfficialTrainTable
     use DateTrait;
 
     /**
-     * @ORM\Column(name="ott_id", type="bigint", nullable=false)
+     * @ORM\Column(name="ott_id", type="integer", nullable=false, options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @JMS\Expose()
@@ -35,7 +35,7 @@ class OfficialTrainTable
     public ?int $id = null;
 
     /**
-     * @ORM\Column(name="ott_order", type="integer", nullable=false, options={"default"="1"})
+     * @ORM\Column(name="ott_order", type="smallint", nullable=false, options={"default"="1", "unsigned"=true})
      * @JMS\Expose()
      * @OA\Property(description="The order in which the items should be displayed", type="integer")
      */
@@ -56,7 +56,7 @@ class OfficialTrainTable
     public string $action = '-';
 
     /**
-     * @ORM\Column(name="ott_time", type="integer", nullable=true)
+     * @ORM\Column(name="ott_time", type="smallint", nullable=true, options={"unsigned"=true})
      * @JMS\Exclude()
      * @OA\Property(
      *     description="The time of the trainTable action (hh:mm, 24-hour clock, GMT+1 Amsterdam timezone)",

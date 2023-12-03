@@ -80,7 +80,7 @@ class UserInfo
     public ?\DateTime $birthDate = null;
 
     /**
-     * @ORM\Column(name="mob_tel", type="bigint", nullable=true)
+     * @ORM\Column(name="mob_tel", type="bigint", nullable=true, options={"unsigned"=true})
      * @Assert\Length(
      *     min = 11,
      *     max = 11,

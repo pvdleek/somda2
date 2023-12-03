@@ -25,7 +25,7 @@ class Statistic extends ServiceEntityRepository
             ->from(StatisticEntity::class, 's');
         try {
             return (int) $queryBuilder->getQuery()->getSingleScalarResult();
-        } catch (NonUniqueResultException | NoResultException $exception) {
+        } catch (NonUniqueResultException | NoResultException) {
             return 0;
         }
     }
@@ -77,7 +77,7 @@ class Statistic extends ServiceEntityRepository
             ->setMaxResults(1);
         try {
             return new \DateTime($queryBuilder->getQuery()->getSingleScalarResult());
-        } catch (NonUniqueResultException | NoResultException $exception) {
+        } catch (NonUniqueResultException | NoResultException) {
             return new \DateTime();
         }
     }

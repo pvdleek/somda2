@@ -44,7 +44,7 @@ class SpotFilter
         $this->dayNumber = (int) $parameters[1];
         try {
             $this->spotDate = \strlen($parameters[2]) > 0 ? \DateTime::createFromFormat('d-m-Y', $parameters[2]) : null;
-        } catch (\Exception $exception) {
+        } catch (\Exception) {
             $this->spotDate = null;
         }
         $this->trainNumber = \strlen($parameters[3]) > 0 ? $parameters[3] : null;

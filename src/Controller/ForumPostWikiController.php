@@ -26,7 +26,7 @@ class ForumPostWikiController
          * @var ForumPost $post
          */
         $post = $this->doctrine->getRepository(ForumPost::class)->find($id);
-        if (\is_null($post)) {
+        if (null === $post) {
             throw new AccessDeniedException('This post does not exist');
         }
 

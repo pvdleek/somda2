@@ -65,7 +65,7 @@ class UpdateRouteTrainsCommand extends Command
                 'position' => $position,
                 'dayNumber' => $routeItem['dayOfWeek'],
             ]);
-            if (\is_null($routeTrain)) {
+            if (null === $routeTrain) {
                 $routeTrain = new RouteTrain();
                 $routeTrain->trainTableYear = $trainTableYear;
                 $routeTrain->route = $route;

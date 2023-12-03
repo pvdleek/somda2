@@ -32,7 +32,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public const API_TOKEN_VALIDITY = '+1 year';
 
     /**
-     * @ORM\Column(name="uid", type="bigint", nullable=false)
+     * @ORM\Column(name="uid", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @JMS\Expose()
@@ -48,7 +48,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public bool $active = false;
 
     /**
-     * @ORM\Column(name="spots_ok", type="integer", nullable=false)
+     * @ORM\Column(name="spots_ok", type="smallint", nullable=false, options={"unsigned"=true})
      * @JMS\Exclude()
      */
     public int $spotsOk = 0;

@@ -62,10 +62,6 @@ class TrainController
 
         $isAdministrator = $this->userHelper->getUser()->hasRole('ROLE_ADMIN_TRAIN_COMPOSITIONS');
 
-        /**
-         * @var TrainComposition $trainComposition
-         */
-
         if ($id === 0 && !\is_null($typeId) && $isAdministrator) {
             $trainCompositionType = $this->formHelper
                 ->getDoctrine()
@@ -80,6 +76,9 @@ class TrainController
 
             $this->formHelper->getDoctrine()->getManager()->persist($trainComposition);
         } else {
+            /**
+             * @var TrainComposition $trainComposition
+             */
             $trainComposition = $this->formHelper->getDoctrine()->getRepository(TrainComposition::class)->find($id);
             if (\is_null($trainComposition)) {
                 throw new AccessDeniedException('This trainComposition does not exist');
@@ -156,7 +155,6 @@ class TrainController
     {
         /**
          * @var TrainComposition $trainComposition
-         * @var TrainCompositionProposition $trainProposition
          */
         $trainComposition = $this->formHelper->getDoctrine()->getRepository(TrainComposition::class)->find($trainId);
         if (\is_null($trainComposition)) {
@@ -168,6 +166,9 @@ class TrainController
             throw new AccessDeniedException('This user does not exist');
         }
 
+        /**
+         * @var TrainCompositionProposition $trainProposition
+         */
         $trainProposition = $this->formHelper
             ->getDoctrine()
             ->getRepository(TrainCompositionProposition::class)

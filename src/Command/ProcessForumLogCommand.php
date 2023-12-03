@@ -120,7 +120,7 @@ class ProcessForumLogCommand extends Command
     private function getSearchWord(string $word): ForumSearchWord
     {
         $forumSearchWord = $this->doctrine->getRepository(ForumSearchWord::class)->findOneBy(['word' => $word]);
-        if (\is_null($forumSearchWord)) {
+        if (null === $forumSearchWord) {
             $forumSearchWord = new ForumSearchWord();
             $forumSearchWord->word = $word;
 

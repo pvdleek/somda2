@@ -13,7 +13,7 @@ use OpenApi\Annotations as OA;
 class Position
 {
     /**
-     * @ORM\Column(name="posid", type="bigint", nullable=false)
+     * @ORM\Column(name="posid", type="smallint", nullable=false, options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @JMS\Expose()

@@ -59,4 +59,10 @@
             <arg value="--show-info=true" />
         </exec>
     </target>
+
+    <target name="phpstan">
+        <exec executable="vendor/bin/phpstan">
+            <arg value="analyse" />
+        </exec>
+    </target>
 </project>

@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Ddar
 {
     /**
-     * @ORM\Column(name="id", type="bigint", nullable=false)
+     * @ORM\Column(name="id", type="smallint", nullable=false, options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -25,7 +25,7 @@ class Ddar
     public ?Train $train = null;
 
     /**
-     * @ORM\Column(name="stam", type="integer", nullable=true)
+     * @ORM\Column(name="stam", type="smallint", nullable=true, options={"unsigned"=true})
      */
     public ?int $trunkNumber = null;
 

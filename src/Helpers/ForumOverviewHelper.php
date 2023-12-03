@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Helpers;
 
 use App\Entity\ForumForum;
+use App\Repository\ForumForum as RepositoryForumForum;
 use App\Traits\SortTrait;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -20,10 +21,13 @@ class ForumOverviewHelper
 
     public function getCategoryArray(): array
     {
+        /**
+         * @var RepositoryForumForum $forumForumRepository
+         */
+        $forumForumRepository = $this->doctrine->getRepository(ForumForum::class);
+
         $categories = [];
-        $forums = $this->doctrine->getRepository(ForumForum::class)->findAllAndGetArray(
-            $this->userHelper->userIsLoggedIn() ? $this->userHelper->getUser()->id : null
-        );
+        $forums = $forumForumRepository->findAllAndGetArray($this->userHelper->userIsLoggedIn() ? $this->userHelper->getUser()->id : null);
         foreach ($forums as $forum) {
             if (!isset($categories[$forum['categoryId']])) {
                 $categories[$forum['categoryId']] = [

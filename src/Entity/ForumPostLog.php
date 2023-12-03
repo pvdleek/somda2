@@ -16,7 +16,7 @@ class ForumPostLog
     public const ACTION_VALUES = [self::ACTION_POST_NEW, self::ACTION_POST_EDIT];
 
     /**
-     * @ORM\Column(name="id", type="bigint", nullable=false)
+     * @ORM\Column(name="id", type="integer", nullable=false, options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -29,7 +29,7 @@ class ForumPostLog
     public ?ForumPost $post = null;
 
     /**
-     * @ORM\Column(name="actie", type="integer", nullable=false, options={"default"=ForumPostLog::ACTION_POST_NEW})
+     * @ORM\Column(name="actie", type="smallint", nullable=false, options={"default"=ForumPostLog::ACTION_POST_NEW, "unsigned"=true})
      * @Assert\Choice(choices=ForumPostLog::ACTION_VALUES)
      */
     public int $action = self::ACTION_POST_NEW;

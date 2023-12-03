@@ -7,9 +7,12 @@ use App\Entity\RailNews;
 use App\Entity\RailNewsSource;
 use App\Entity\RailNewsSourceFeed;
 use Doctrine\Persistence\ManagerRegistry;
+use FeedIo\Adapter\Guzzle\Client as GuzzleClient;
 use FeedIo\Feed\ItemInterface;
 use FeedIo\FeedIo;
 use FeedIo\Reader\ReadErrorException;
+use GuzzleHttp\Client;
+use Psr\Log\NullLogger;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -48,11 +51,14 @@ class GetRailNewsCommand extends Command
         [self::TITLE_ONLY => true, self::POSITIVE_WORD => ' NS ', self::NEGATIVE_WORD => 'SNS'],
     ];
 
+    private FeedIo $feedIo;
+
     public function __construct(
         private readonly ManagerRegistry $doctrine,
-        private readonly FeedIo $feedIo,
     ) {
         parent::__construct();
+
+        $this->feedIo = new FeedIo(new GuzzleClient(new Client()), new NullLogger());
     }
 
     /**
@@ -70,8 +76,7 @@ class GetRailNewsCommand extends Command
              */
             try {
                 $items = $this->feedIo->read($feed->url, null, new \DateTime('-1 day'))->getFeed();
-            } catch (ReadErrorException $exception) {
-                $output->writeln($exception->getMessage());
+            } catch (ReadErrorException) {
                 continue;
             }
             foreach ($items as $item) {
@@ -88,7 +93,7 @@ class GetRailNewsCommand extends Command
     private function isArticleMatch(ItemInterface $item): bool
     {
         // Disapprove news-items in the future
-        if (!\is_null($item->getLastModified()) && $item->getLastModified() > new \DateTime()) {
+        if (null !== $item->getLastModified() && $item->getLastModified() > new \DateTime()) {
             return false;
         }
 
@@ -111,6 +116,10 @@ class GetRailNewsCommand extends Command
 
     private function isWordMatch(array $wordMatch, ItemInterface $item): bool
     {
+        if (null === $item->getTitle() || null === $item->getContent()) {
+            return false;
+        }
+
         if ($wordMatch[self::TITLE_ONLY]) {
             return \stripos($item->getTitle(), $wordMatch[self::POSITIVE_WORD]) !== false;
         }
@@ -124,7 +133,7 @@ class GetRailNewsCommand extends Command
         $railNewsByTitle = $this->doctrine->getRepository(RailNews::class)->findOneBy(
             ['title' => $item->getTitle()]
         );
-        return !\is_null($railNewsByTitle);
+        return null !== $railNewsByTitle;
     }
 
     private function getItemDescription(ItemInterface $item): string
@@ -146,7 +155,7 @@ class GetRailNewsCommand extends Command
             ['url' => $item->getLink()]
         );
 
-        if (\is_null($railNews)) {
+        if (null === $railNews) {
             $railNews = new RailNews();
             $railNews->title = $item->getTitle();
             $railNews->url = $item->getLink();

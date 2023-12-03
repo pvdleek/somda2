@@ -26,7 +26,7 @@ class PollVote
     public ?User $user = null;
 
     /**
-     * @ORM\Column(name="vote", type="integer", nullable=false, options={"default"="0"})
+     * @ORM\Column(name="vote", type="smallint", nullable=false, options={"default"="0", "unsigned"=true})
      */
     public int $vote = 0;
 }

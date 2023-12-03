@@ -30,9 +30,9 @@ class TrainTableYear extends ServiceEntityRepository
             ->setMaxResults(1);
         try {
             return $queryBuilder->getQuery()->getSingleResult();
-        } catch (NoResultException $exception) {
+        } catch (NoResultException) {
             return new TrainTableYearEntity();
-        } catch (NonUniqueResultException $exception) {
+        } catch (NonUniqueResultException) {
             $queryBuilder = $this->getEntityManager()
                 ->createQueryBuilder()
                 ->select('t')

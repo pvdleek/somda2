@@ -28,7 +28,7 @@ class ForumPost
     public const WIKI_CHECK_VALUES = [self::WIKI_CHECK_NOT_CHECKED, self::WIKI_CHECK_OK, self::WIKI_CHECK_N_A];
 
     /**
-     * @ORM\Column(name="postid", type="bigint", nullable=false)
+     * @ORM\Column(name="postid", type="integer", nullable=false, options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @JMS\Expose()
@@ -95,7 +95,7 @@ class ForumPost
     public bool $signatureOn = false;
 
     /**
-     * @ORM\Column(name="wiki_check", type="integer", nullable=false)
+     * @ORM\Column(name="wiki_check", type="smallint", nullable=false, options={"default"=ForumPost::WIKI_CHECK_NOT_CHECKED, "unsigned"=true})
      * @Assert\Choice(choices=ForumPost::WIKI_CHECK_VALUES)
      * @JMS\Exclude()
      */

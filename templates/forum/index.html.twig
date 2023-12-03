@@ -15,7 +15,6 @@
                 <tr>
                     <th colspan="2">{{ 'forum.category' | trans }}</th>
                     <th>{{ 'forum.number.discussions' | trans }}</th>
-                    {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}<th>Aantal ongelezen discussies</th>{% endif %}
                 </tr>
                 {% for category in categories %}
                     {% if category['forums'] | length > 0 %}
@@ -25,13 +24,6 @@
                                 <td><i class="fas fa-{% if forum['type'] == constant('App\\Entity\\ForumForum::TYPE_ARCHIVE') %}archive{% else %}comments{% endif %}"></i></td>
                                 <td><a href="{{ path('forum_forum', { 'id': forum['id'], 'name': forum['name'] }) }}">{{ forum['name'] }}</a></td>
                                 <td>{{ forum['numberOfDiscussions'] }}</td>
-                                {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-                                    {% if forum['type'] == constant('App\\Entity\\ForumForum::TYPE_ARCHIVE') %}
-                                        <td>n.v.t.</td>
-                                    {% else %}
-                                        <td>{{ forum['numberOfUnreadDiscussions'] }}</td>
-                                    {% endif %}
-                                {% endif %}
                             </tr>
                         {% endfor %}
                     {% endif %}

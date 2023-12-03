@@ -27,14 +27,14 @@ class BannerController
          * @var Banner $banner
          */
         $banner = $this->doctrine->getRepository(Banner::class)->find($id);
-        if (is_null($banner)) {
+        if (null === $banner) {
             return $this->redirectHelper->redirectToRoute('home');
         }
 
         $bannerHit = new BannerHit();
         $bannerHit->banner = $banner;
         $bannerHit->timestamp = new \DateTime();
-        $bannerHit->ipAddress = ip2long($request->getClientIp());
+        $bannerHit->ipAddress = \ip2long($request->getClientIp());
 
         $this->doctrine->getManager()->persist($bannerHit);
         $this->doctrine->getManager()->flush();

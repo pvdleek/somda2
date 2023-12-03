@@ -15,7 +15,7 @@ use Doctrine\ORM\Mapping as ORM;
 class ForumSearchWord
 {
     /**
-     * @ORM\Column(name="woord_id", type="bigint", nullable=false)
+     * @ORM\Column(name="woord_id", type="integer", nullable=false, options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */

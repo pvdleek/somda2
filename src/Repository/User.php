@@ -35,7 +35,7 @@ class User extends ServiceEntityRepository
             ->andWhere('u.active = TRUE');
         try {
             return (int) $queryBuilder->getQuery()->getSingleScalarResult();
-        } catch (NonUniqueResultException | NoResultException $exception) {
+        } catch (NonUniqueResultException | NoResultException) {
             return 0;
         }
     }
@@ -55,7 +55,7 @@ class User extends ServiceEntityRepository
             ->setParameter('today', new \DateTime());
         try {
             return (int) $queryBuilder->getQuery()->getSingleScalarResult();
-        } catch (NonUniqueResultException | NoResultException $exception) {
+        } catch (NonUniqueResultException | NoResultException) {
             return 0;
         }
     }

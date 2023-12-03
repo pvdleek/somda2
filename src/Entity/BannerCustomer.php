@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 class BannerCustomer
 {
     /**
-     * @ORM\Column(name="id", type="bigint", nullable=false)
+     * @ORM\Column(name="id", type="smallint", nullable=false, options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -24,17 +24,17 @@ class BannerCustomer
     public string $name = '';
 
     /**
-     * @ORM\Column(name="max_views", type="integer", nullable=true)
+     * @ORM\Column(name="max_views", type="integer", nullable=true, options={"unsigned"=true})
      */
     public ?int $maxViews = null;
 
     /**
-     * @ORM\Column(name="max_hits", type="integer", nullable=true)
+     * @ORM\Column(name="max_hits", type="integer", nullable=true, options={"unsigned"=true})
      */
     public ?int $maxHits = null;
 
     /**
-     * @ORM\Column(name="max_days", type="integer", nullable=true)
+     * @ORM\Column(name="max_days", type="smallint", nullable=true, options={"unsigned"=true})
      */
     public ?int $maxDays = null;
 

@@ -45,7 +45,7 @@ class ForumPostFavoriteController
     {
         $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_USER);
 
-        if (\is_null($favorite = $this->getFavorite($id))) {
+        if (null === ($favorite = $this->getFavorite($id))) {
             return new JsonResponse();
         }
 
@@ -63,7 +63,7 @@ class ForumPostFavoriteController
         $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_USER);
 
         $discussion = $this->doctrine->getRepository(ForumDiscussion::class)->find($id);
-        if (\is_null($discussion)) {
+        if (null === $discussion) {
             return new JsonResponse();
         }
 
@@ -84,7 +84,7 @@ class ForumPostFavoriteController
     {
         $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_USER);
 
-        if (\is_null($favorite = $this->getFavorite($id))) {
+        if (null === ($favorite = $this->getFavorite($id))) {
             return new JsonResponse();
         }
 
@@ -102,7 +102,7 @@ class ForumPostFavoriteController
         $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_USER);
 
         $post = $this->doctrine->getRepository(ForumPost::class)->find($id);
-        if (\is_null($post)) {
+        if (null === $post) {
             return new JsonResponse();
         }
 
@@ -124,7 +124,7 @@ class ForumPostFavoriteController
         $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_USER);
 
         $post = $this->doctrine->getRepository(ForumPost::class)->find($id);
-        if (\is_null($post)) {
+        if (null === $post) {
             return new JsonResponse();
         }
 
@@ -134,7 +134,7 @@ class ForumPostFavoriteController
         $favorite = $this->doctrine->getRepository(ForumPostFavorite::class)->findOneBy(
             ['post' => $post, 'user' => $this->userHelper->getUser()]
         );
-        if (\is_null($favorite)) {
+        if (null === $favorite) {
             return new JsonResponse();
         }
 
@@ -147,7 +147,7 @@ class ForumPostFavoriteController
     private function getFavorite(int $id): ?ForumFavorite
     {
         $discussion = $this->doctrine->getRepository(ForumDiscussion::class)->find($id);
-        if (\is_null($discussion)) {
+        if (null === $discussion) {
             return null;
         }
 
@@ -157,7 +157,7 @@ class ForumPostFavoriteController
         $favorite = $this->doctrine->getRepository(ForumFavorite::class)->findOneBy(
             ['discussion' => $discussion, 'user' => $this->userHelper->getUser()]
         );
-        if (\is_null($favorite)) {
+        if (null === $favorite) {
             return null;
         }
 

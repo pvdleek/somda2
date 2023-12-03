@@ -160,20 +160,16 @@ class ProfileController extends AbstractFOSRestController
 
         $preferences = (array) \json_decode($request->getContent(), true);
         if (isset($preferences['forum_signature'])) {
-            $this->userHelper->getPreferenceByKey(UserPreference::KEY_FORUM_SIGNATURE)->value =
-                $preferences['forum_signature'];
+            $this->userHelper->getPreferenceByKey(UserPreference::KEY_FORUM_SIGNATURE)->value = $preferences['forum_signature'];
         }
         if (isset($preferences['forum_new_to_old'])) {
-            $this->userHelper->getPreferenceByKey(UserPreference::KEY_FORUM_NEW_TO_OLD)->value =
-                (bool)$preferences['forum_new_to_old'];
+            $this->userHelper->getPreferenceByKey(UserPreference::KEY_FORUM_NEW_TO_OLD)->value = $preferences['forum_new_to_old'];
         }
         if (isset($preferences['app_mark_forum_read'])) {
-            $this->userHelper->getPreferenceByKey(UserPreference::KEY_APP_MARK_FORUM_READ)->value =
-                (bool)$preferences['app_mark_forum_read'];
+            $this->userHelper->getPreferenceByKey(UserPreference::KEY_APP_MARK_FORUM_READ)->value = $preferences['app_mark_forum_read'];
         }
         if (isset($preferences['default_spot_place'])) {
-            $this->userHelper->getPreferenceByKey(UserPreference::KEY_DEFAULT_SPOT_LOCATION)->value =
-                $preferences['default_spot_place'];
+            $this->userHelper->getPreferenceByKey(UserPreference::KEY_DEFAULT_SPOT_LOCATION)->value = $preferences['default_spot_place'];
         }
 
         $this->doctrine->getManager()->flush();
