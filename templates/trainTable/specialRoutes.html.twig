@@ -1,16 +1,19 @@
 {% extends('base.html.twig') %}
 
 {% block content %}
-    <table>
-        <tr>
-            <th>{{ 'general.output.date' | trans }}</th>
-            <th>{{ 'general.output.title' | trans }}</th>
-        </tr>
-        {% for specialRoute in specialRoutes %}
+    <br />
+    <div align="center">
+        <table>
             <tr>
-                <td>{{ specialRoute.startDate | displayDateTime }}{% if specialRoute.endDate is not null %} {{ 'general.date.till' | trans }} {{ specialRoute.endDate | displayDateTime }}{% endif %}</td>
-                <td><a href="{{ path('special_route', { 'id': specialRoute.id }) }}">{{ specialRoute.title }}</a></td>
+                <th>{{ 'general.output.date' | trans }}</th>
+                <th>{{ 'general.output.title' | trans }}</th>
             </tr>
-        {% endfor %}
-    </table>
+            {% for specialRoute in specialRoutes %}
+                <tr>
+                    <td>{{ specialRoute.startDate | displayDateTime }}{% if specialRoute.endDate is not null %} {{ 'general.date.till' | trans }} {{ specialRoute.endDate | displayDateTime }}{% endif %}</td>
+                    <td><a href="{{ path('special_route', { 'id': specialRoute.id }) }}">{{ specialRoute.title }}</a></td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
 {% endblock %}

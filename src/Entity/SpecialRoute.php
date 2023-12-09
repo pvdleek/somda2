@@ -20,11 +20,6 @@ class SpecialRoute
     public ?int $id = null;
 
     /**
-     * @ORM\Column(name="werkzaamheden", type="boolean", nullable=false)
-     */
-    public bool $construction = false;
-
-    /**
      * @ORM\Column(name="pubdatum", type="datetime", nullable=true)
      */
     public ?\DateTime $publicationTimestamp = null;

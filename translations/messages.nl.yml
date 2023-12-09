@@ -110,7 +110,6 @@ dashboard:
     spots: 'Recente spots'
     weer: 'Het actuele weer'
     welcome: 'Welkom op Somda'
-    werkzaamheden: 'Werkzaamheden'
 location:
   search:
     character: 'Zoek naar verkortingen<br />die starten met'

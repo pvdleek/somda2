@@ -44,6 +44,8 @@ class HomeController
             ->findBy(['active' => true, 'approved' => true], [RailNewsForm::FIELD_TIMESTAMP => 'DESC'], 5);
 
         $layout = $this->userHelper->getPreferenceByKey(UserPreference::KEY_HOME_LAYOUT)->value;
+        // SpecialRoutes-construction no longer exists
+        $layout = \str_replace('werkzaamheden', '', $layout);
         if (!$this->userHelper->userIsLoggedIn()) {
             $layout = \str_replace('foutespots', '', $layout);
         }
@@ -82,11 +84,7 @@ class HomeController
     private function loadDataForSpecialRoutes(array $layout, array &$layoutData): void
     {
         if (\in_array('drgl', $layout) || \in_array('drgl-min', $layout)) {
-            $layoutData['specialRoutes'] = $this->doctrine->getRepository(SpecialRoute::class)->findForDashboard(false);
-        }
-        if (\in_array('werkzaamheden', $layout) || \in_array('werkzaamheden-min', $layout)) {
-            $layoutData['specialRoutesConstruction'] =
-                $this->doctrine->getRepository(SpecialRoute::class)->findForDashboard(true);
+            $layoutData['specialRoutes'] = $this->doctrine->getRepository(SpecialRoute::class)->findForDashboard();
         }
     }
 

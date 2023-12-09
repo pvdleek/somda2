@@ -17,7 +17,7 @@ class SpecialRoute extends ServiceEntityRepository
      * @return SpecialRouteEntity[]
      * @throws \Exception
      */
-    public function findForDashboard(bool $construction): array
+    public function findForDashboard(): array
     {
         $today = new \DateTime();
         $today->setTime(0, 0);
@@ -26,8 +26,6 @@ class SpecialRoute extends ServiceEntityRepository
             ->select('s')
             ->from(SpecialRouteEntity::class, 's')
             ->andWhere('s.public = TRUE')
-            ->andWhere('s.construction = :construction')
-            ->setParameter('construction', $construction)
             ->andWhere('(s.startDate >= :today AND s.endDate IS NULL) OR s.endDate >= :today')
             ->setParameter('today', $today)
             ->addOrderBy('s.startDate', 'ASC');
