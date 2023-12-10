@@ -45,7 +45,7 @@ class HomeController
 
         $layout = $this->userHelper->getPreferenceByKey(UserPreference::KEY_HOME_LAYOUT)->value;
         // SpecialRoutes-construction no longer exists
-        $layout = \str_replace('werkzaamheden', '', $layout);
+        $layout = \str_replace(['werkzaamheden', 'werkzaamheden-min'], '', $layout);
         if (!$this->userHelper->userIsLoggedIn()) {
             $layout = \str_replace('foutespots', '', $layout);
         }
