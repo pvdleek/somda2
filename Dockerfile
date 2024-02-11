@@ -1,8 +1,8 @@
-FROM php:8.2.7-fpm-alpine3.17
+FROM php:8.2.15-fpm-alpine3.18
 
 # Composer - https://getcomposer.org/download/
-ARG COMPOSER_VERSION="2.5.8"
-ARG COMPOSER_SUM="f07934fad44f9048c0dc875a506cca31cc2794d6aebfc1867f3b1fbf48dce2c5"
+ARG COMPOSER_VERSION="2.7.1"
+ARG COMPOSER_SUM="1ffd0be3f27e237b1ae47f9e8f29f96ac7f50a0bd9eef4f88cdbe94dd04bfff0"
 
 # Install dependencies
 RUN set -eux \
@@ -228,6 +228,7 @@ RUN php composer.phar install --no-plugins --no-scripts
 RUN php composer.phar dump-autoload --no-dev --classmap-authoritative
 RUN php bin/console cache:clear --env=prod
 RUN php bin/console assets:install html
+COPY .env.prod ./.env
 RUN php bin/console cache:clear --env=prod
 
 RUN chown -R www-data:www-data *
