@@ -3,9 +3,9 @@
 namespace App\Form;
 
 use App\Generics\FormGenerics;
-use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -33,11 +33,7 @@ class UserMail extends AbstractType
                 FormGenerics::KEY_LABEL => 'Geef het onderwerp van jouw bericht',
                 FormGenerics::KEY_REQUIRED => true,
             ])
-            ->add('text', CKEditorType::class, [
-                FormGenerics::KEY_ATTRIBUTES => [
-                    FormGenerics::KEY_ATTRIBUTES_ROWS => 10,
-                    FormGenerics::KEY_ATTRIBUTES_COLS => 80,
-                ],
+            ->add('text', HiddenType::class, [
                 FormGenerics::KEY_LABEL => 'Jouw bericht',
                 FormGenerics::KEY_REQUIRED => true,
             ]);

@@ -296,10 +296,6 @@ forum_discussion_moderate_split:
   requirements: { id: \d+ }
   controller: App\Controller\ForumModerateController::splitAction
 
-forum_discussion_post_reply_example:
-  path: /forum/reactie-voorbeeld/
-  methods: [POST]
-  controller: App\Controller\ForumPostController::replyExampleAction
 forum_discussion_post_reply:
   path: /forum/p{id}/reageren/
   methods: [GET, POST]

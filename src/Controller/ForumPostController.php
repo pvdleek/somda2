@@ -105,21 +105,6 @@ class ForumPostController
         ]);
     }
 
-    /**
-     * @throws \Exception
-     */
-    public function replyExampleAction(Request $request): JsonResponse
-    {
-        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_USER);
-
-        $text = (string) $request->request->get('text');
-        $postText = new ForumPostText();
-        $postText->text = \str_replace("\n", ' ', $text);
-        $post = new ForumPost();
-        $post->text = $postText;
-        return new JsonResponse(['data' => $this->forumHelper->getDisplayForumPost($post)]);
-    }
-
     private function handleFavoritesForAddedPost(ForumDiscussion $discussion): void
     {
         foreach ($discussion->getFavorites() as $favorite) {

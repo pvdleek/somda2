@@ -3,12 +3,12 @@
 {% block content %}
     <div class="panel">
         <div class="panel-title">Beheer nieuwsbericht</div>
+        <div id="text_editor"></div>
         <div class="panel-content panel-no-background">
             {{ form_start(form, { 'attr': { 'id': 'news_form' } }) }}
                 <table>
                     <tr><td><strong>Datum</strong></td><td>{{ news.timestamp | displayDateTime(true) }}</td></tr>
                     {{ form_row(form.title) }}
-                    {{ form_row(form.text) }}
                     {{ form_row(form.archived) }}
                     <tr>
                         <td>&nbsp;</td>
@@ -21,4 +21,14 @@
             {{ form_end(form) }}
         </div>
     </div>
+{% endblock %}
+
+{% block javascripts %}
+    {% include('ckeditor.js.html.twig') %}
+
+    <script>
+        $('#news_form').submit(function() {
+            $('#news_text').val(window.editor.getData());
+        });
+    </script>
 {% endblock %}

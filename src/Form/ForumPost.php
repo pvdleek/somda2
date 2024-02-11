@@ -3,16 +3,16 @@
 namespace App\Form;
 
 use App\Generics\FormGenerics;
-use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ForumPost extends AbstractType
 {
-    private const QUOTE_HTML = '<blockquote><strong>Quote</strong><hr />%s (%s): %s<hr /></blockquote><br />';
+    private const QUOTE_HTML = '<blockquote><strong>Quote</strong><br />%s (%s):<hr />%s<hr /></blockquote><br />';
 
     public const FIELD_EDIT_AS_MODERATOR = 'editAsModerator';
     public const FIELD_TITLE = 'title';
@@ -37,17 +37,14 @@ class ForumPost extends AbstractType
         }
 
         $builder
-            ->add('text', CKEditorType::class, [
-                FormGenerics::KEY_ATTRIBUTES => [
-                    FormGenerics::KEY_ATTRIBUTES_ROWS => 10,
-                    FormGenerics::KEY_ATTRIBUTES_COLS => 80,
-                ],
+            ->add('text', HiddenType::class, [
                 FormGenerics::KEY_DATA => $data,
                 FormGenerics::KEY_LABEL => 'Jouw reactie',
                 FormGenerics::KEY_REQUIRED => true,
             ])
             ->add('signatureOn', CheckboxType::class, [
                 FormGenerics::KEY_LABEL => 'Handtekening gebruiken',
+                FormGenerics::KEY_REQUIRED => false,
             ]);
 
         if (!\is_null($options[self::OPTION_EDITED_POST])) {

@@ -4,6 +4,7 @@
     <div class="panel">
         {{ form_start(form, { 'attr': { 'id': 'mail_form' } }) }}
             <div class="panel-title">E-mail versturen naar gebruiker "{{ user.username }}"</div>
+            <div id="text_editor"></div>
             <div class="panel-content">
                 <table>
                     {{ form_rest(form) }}
@@ -18,4 +19,14 @@
             </div>
         {{ form_end(form) }}
     </div>
+{% endblock %}
+
+{% block javascripts %}
+    {% include('ckeditor.js.html.twig') %}
+
+    <script>
+        $('#mail_form').submit(function() {
+            $('#user_mail_text').val(window.editor.getData());
+        });
+    </script>
 {% endblock %}

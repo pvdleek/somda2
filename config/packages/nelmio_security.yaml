@@ -22,7 +22,6 @@ nelmio_security:
         - 'self'
         - '*.google-analytics.com'
         - '*.analytics.google.com'
-        - 'cke4.ckeditor.com'
       font-src:
         - 'self'
       frame-src:
@@ -32,6 +31,7 @@ nelmio_security:
         - 'unsafe-eval'
         - 'unsafe-inline'
         - 'unpkg.com'
+        - 'cdn.ckeditor.com'
         - 'code.jquery.com'
         - '*.datatables.net'
         - '*.fontawesome.com'

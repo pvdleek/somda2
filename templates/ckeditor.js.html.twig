@@ -1,0 +1,93 @@
+<script src="https://cdn.ckeditor.com/ckeditor5/41.1.0/super-build/ckeditor.js"></script>
+<script src="https://cdn.ckeditor.com/ckeditor5/41.1.0/super-build/translations/nl.js"></script>
+<script>
+    function SpecialCharactersEmoji(editor) {
+        editor.plugins.get('SpecialCharacters').addItems('Emoji', [
+            { title: 'Grijnzend gezicht', character: '😀' },
+            { title: 'Lachend gezicht met open mond', character: '😃' },
+            { title: 'Stralend gezicht met open mond en lachende ogen', character: '😄' },
+            { title: 'Grijnzend gezicht met lachende ogen', character: '😁' },
+            { title: 'Licht fronzend gezicht', character: '🙁' },
+            { title: 'Lachend gezicht met open mond en gesloten ogen', character: '😆' },
+            { title: 'Lachend gezicht met open mond en zweetdruppel', character: '😅' },
+            { title: 'Gezicht met opengevallen mond', character: '😲' },
+            { title: 'Over de grond rollen van het lachen', character: '🤣' },
+            { title: 'Gezicht met tranen van vreugde', character: '😂' },
+            { title: 'Huilend gezicht', character: '😢' },
+            { title: 'Enigszins lachend gezicht', character: '🙂' },
+            { title: 'Gezicht ondersteboven', character: '🙃' },
+            { title: 'Knipogend gezicht', character: '😉' },
+            { title: 'Lachend gezicht', character: '😊' },
+            { title: 'Lachend gezicht met halo', character: '😇' },
+            { title: 'Lachend gezicht met stervormige ogen', character: '🤩' },
+            { title: 'Gezicht dat van lekker eten geniet', character: '🥲' },
+            { title: 'Gezicht met uitgestoken tong', character: '😛' },
+            { title: 'Gezicht met uitgestoken tong en knipoog', character: '😜' },
+            { title: 'Gek gezicht', character: '🤪' },
+            { title: 'Gezicht met uitgestoken tong en dichtgeknepen ogen', character: '😝' },
+            { title: 'Gezicht met geld in de mond', character: '🤑' },
+            { title: 'Gezicht met handen uitgestoken voor een knuffel', character: '🤗' },
+            { title: 'Gezicht met open ogen en hand over de mond', character: '🤭' },
+            { title: 'Tot stilte manend gezicht', character: '🤫' },
+            { title: 'Nadenkend gezicht', character: '🤔' },
+            { title: 'Gezicht met een rits als mond', character: '🤐' },
+            { title: 'Gezicht met opgetrokken wenkbrauw', character: '🤨' },
+            { title: 'Neutraal gezicht', character: '😐' },
+            { title: 'Boos gezicht', character: '😒' },
+            { title: 'Duim omhoog', character: '👍' },
+            { title: 'Duim omlaag', character: '👍' },
+            { title: 'Gloeilamp', character: '💡' },
+        ], { label: 'Emoticons' });
+    }
+
+    CKEDITOR.ClassicEditor
+        .create(document.querySelector('#text_editor'), {
+            toolbar: {
+                items: [
+                    'undo', 'redo', '|',
+                    'bold', 'italic', 'strikethrough', 'underline', 'horizontalLine', 'removeFormat', '|',
+                    'link', '|',
+                    'numberedList', 'bulletedList', 'blockQuote', '|',
+                    'specialCharacters', '|',
+                    'sourceEditing'
+                ],
+                shouldNotGroupWhenFull: true
+            },
+            language: 'nl',
+            link: {
+                decorators: {
+                    addTargetToExternalLinks: true,
+                    defaultProtocol: 'https://'
+                }
+            },
+            placeholder: 'Schrijf hier je bericht...',
+            plugins: [
+                'Essentials',
+                'Paragraph',
+                'Bold',
+                'Italic',
+                'Strikethrough',
+                'Underline',
+                'HorizontalLine',
+                'RemoveFormat',
+                'Link',
+                'List',
+                'BlockQuote',
+                'SpecialCharacters',
+                'SpecialCharactersEssentials',
+                SpecialCharactersEmoji,
+                'SourceEditing'
+            ]
+        })
+        .then(editor => {
+            window.editor = editor;
+            editor.setData("{{ form.text.vars.value|replace({'"': "'", "\n": '', "\r": '', "\t": ''})|raw }}");
+        });
+
+    $(document).ready(function() {
+        window.editor.focus();
+        window.editor.model.change(writer => {
+            writer.setSelection(writer.createPositionAt(editor.model.document.getRoot(), 'end'));
+        });
+    });
+</script>

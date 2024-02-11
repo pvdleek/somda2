@@ -3,6 +3,7 @@
 {% block content %}
     <div class="panel">
         <div class="panel-title">Beheer bijzondere rit</div>
+        <div id="text_editor"></div>
         <div class="panel-content panel-no-background">
             {{ form_start(form, { 'attr': { 'id': 'special_route_form' } }) }}
                 <table>
@@ -12,7 +13,6 @@
                     {{ form_row(form.title) }}
                     <tr><td>&nbsp;</td><td id="special_route_item_image"><img alt="image" src="{{ asset('images/materieel/' ~ specialRoute.image) }}" /></td></tr>
                     {{ form_row(form.image) }}
-                    {{ form_row(form.text) }}
                     {{ form_row(form.public) }}
                     <tr>
                         <td>&nbsp;</td>
@@ -37,6 +37,14 @@
             $('#special_route_image').on('change', function () {
                 $('#special_route_item_image').html('<img alt="image" src="/images/materieel/' + $(this).val() + '" />');
             }).trigger('change');
+        });
+    </script>
+
+    {% include('ckeditor.js.html.twig') %}
+
+    <script>
+        $('#special_route_form').submit(function() {
+            $('#special_route_text').val(window.editor.getData());
         });
     </script>
 {% endblock %}

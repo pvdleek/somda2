@@ -468,6 +468,10 @@ span.edit_text {
 .wiki-block table, .wiki-block table td {
     border: none;
 }
+ol {
+    list-style-type: decimal;
+    padding-inline-start: 20px;
+}
 
 /**********************/
 /*** Special routes ***/

@@ -4,9 +4,9 @@ namespace App\Form;
 
 use App\Entity\ForumDiscussion as ForumDiscussionEntity;
 use App\Generics\FormGenerics;
-use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -20,12 +20,7 @@ class ForumDiscussion extends AbstractType
                 FormGenerics::KEY_LABEL => 'Onderwerp van de discussie',
                 FormGenerics::KEY_REQUIRED => true,
             ])
-            ->add('text', CKEditorType::class, [
-                FormGenerics::KEY_ATTRIBUTES => [
-                    FormGenerics::KEY_ATTRIBUTES_ROWS => 10,
-                    FormGenerics::KEY_ATTRIBUTES_COLS => 80,
-                ],
-                FormGenerics::KEY_LABEL => 'Jouw bericht',
+            ->add('text', HiddenType::class, [
                 FormGenerics::KEY_MAPPED => false,
                 FormGenerics::KEY_REQUIRED => true,
             ])

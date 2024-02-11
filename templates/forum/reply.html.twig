@@ -3,15 +3,14 @@
 {% block content %}
     <div class="panel">
         <div class="panel-title"><i class="fas fa-comments"></i> {{ post.discussion.title }}</div>
+        <div id="text_editor"></div>
         <div class="panel-content panel-no-background">
             {{ form_start(form, { 'attr': { 'id': 'reply_form' } }) }}
                 <table>
-                    {{ form_row(form.text) }}
                     {{ form_row(form.signatureOn) }}
                     {% if form.postAsModerator is defined %}{{ form_row(form.postAsModerator) }}{% endif %}
                     <tr>
-                        <td>&nbsp;</td>
-                        <td>
+                        <td colspan="2">
                             <a class="somda-button" href="#" id="reply_button" onclick="disableMeAndSubmitForm('reply_button', 'reply_form'); return false;">Reageer</a>
                             <a class="somda-button" href="{{ path('forum_discussion', { 'id': post.discussion.id, 'name': (post.discussion.title | slug) }) }}">Terug naar de discussie</a>
                         </td>
@@ -19,9 +18,6 @@
                 </table>
             {{ form_end(form) }}
         </div>
-
-        {% include 'forum/example.html.twig' with { 'user': app.user } only %}
-        <br />
 
         {% for post in lastPosts %}
             <table align="center">
@@ -32,5 +28,11 @@
 {% endblock %}
 
 {% block javascripts %}
-    {{ include('forum/example.js.html.twig') }}
+    {% include('ckeditor.js.html.twig') %}
+
+    <script>
+        $('#reply_form').submit(function() {
+            $('#forum_post_text').val(window.editor.getData());
+        });
+    </script>
 {% endblock %}

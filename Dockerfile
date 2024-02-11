@@ -227,7 +227,6 @@ COPY translations translations/
 RUN php composer.phar install --no-plugins --no-scripts
 RUN php composer.phar dump-autoload --no-dev --classmap-authoritative
 RUN php bin/console cache:clear --env=prod
-RUN php bin/console ckeditor:install --tag=4.22.1
 RUN php bin/console assets:install html
 RUN php bin/console cache:clear --env=prod
 

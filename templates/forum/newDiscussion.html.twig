@@ -3,11 +3,11 @@
 {% block content %}
     <div class="panel">
         <div class="panel-title"><i class="fas fa-comments"></i> Nieuwe discussie</div>
+        <div id="text_editor"></div>
         <div class="panel-content panel-no-background">
             {{ form_start(form, { 'attr': { 'id': 'discussion_form' } }) }}
             <table>
                 {{ form_row(form.title) }}
-                {{ form_row(form.text) }}
                 {{ form_row(form.signatureOn) }}
                 <tr>
                     <td>&nbsp;</td>
@@ -19,12 +19,15 @@
             </table>
             {{ form_end(form) }}
         </div>
-
-        {% include 'forum/example.html.twig' with { 'user': app.user } only %}
-
     </div>
 {% endblock %}
 
 {% block javascripts %}
-    {{ include('forum/example.js.html.twig') }}
+    {% include('ckeditor.js.html.twig') %}
+
+    <script>
+        $('#discussion_form').submit(function() {
+            $('#forum_discussion_text').val(window.editor.getData());
+        });
+    </script>
 {% endblock %}
