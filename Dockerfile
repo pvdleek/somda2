@@ -4,6 +4,8 @@ FROM php:8.2.15-fpm-alpine3.18
 ARG COMPOSER_VERSION="2.7.1"
 ARG COMPOSER_SUM="1ffd0be3f27e237b1ae47f9e8f29f96ac7f50a0bd9eef4f88cdbe94dd04bfff0"
 
+ENV COMPOSER_ALLOW_SUPERUSER=1 
+
 # Install dependencies
 RUN set -eux \
     && apk add --no-cache \
@@ -212,10 +214,9 @@ WORKDIR /var/www
 RUN apk add --no-cache tzdata
 ENV TZ Europe/Amsterdam
 
-COPY .env.local ./.env
+COPY .env.prod ./.env
 COPY composer.json ./
 COPY composer.lock ./
-COPY composer.phar ./
 COPY symfony.lock ./
 COPY bin bin/
 COPY config config/
@@ -224,11 +225,10 @@ COPY src src/
 COPY templates templates/
 COPY translations translations/
 
-RUN php composer.phar install --no-plugins --no-scripts
-RUN php composer.phar dump-autoload --no-dev --classmap-authoritative
+RUN composer install --no-plugins --no-scripts
+RUN composer dump-autoload --no-dev --classmap-authoritative
 RUN php bin/console cache:clear --env=prod
 RUN php bin/console assets:install html
-COPY .env.prod ./.env
 RUN php bin/console cache:clear --env=prod
 
 RUN chown -R www-data:www-data *
