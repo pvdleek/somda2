@@ -3,10 +3,10 @@
 {% block content %}
     <br />
     <div class="center">
+        <div id="text_editor"></div>
         {{ form_start(form, { 'attr': { 'id': 'discussion_form' } }) }}
         <table>
             {{ form_row(form.title) }}
-            {{ form_row(form.text) }}
             {{ form_row(form.signatureOn) }}
             <tr>
                 <td>&nbsp;</td>
@@ -19,4 +19,14 @@
         {{ form_end(form) }}
     </div>
     <br />
+{% endblock %}
+
+{% block javascripts %}
+    {% include('ckeditor.js.html.twig') %}
+
+    <script>
+        $('#discussion_form').submit(function() {
+            $('#forum_discussion_text').val(window.editor.getData());
+        });
+    </script>
 {% endblock %}

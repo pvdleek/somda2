@@ -3,10 +3,10 @@
 {% block content %}
     <div><i class="fas fa-comments"></i> {{ post.discussion.title }}</div>
 
+    <div id="text_editor"></div>
     {{ form_start(form, { 'attr': { 'id': 'edit_form' } }) }}
         <table>
             {% if form.title is defined %}{{ form_row(form.title) }}{% endif %}
-            {{ form_row(form.text) }}
             {{ form_row(form.signatureOn) }}
             {{ form_row(form.editReason) }}
             {% if form.editAsModerator is defined %}{{ form_row(form.editAsModerator) }}{% endif %}
@@ -19,4 +19,14 @@
             </tr>
         </table>
     {{ form_end(form) }}
+{% endblock %}
+
+{% block javascripts %}
+    {% include('ckeditor.js.html.twig') %}
+
+    <script>
+        $('#edit_form').submit(function() {
+            $('#forum_post_text').val(window.editor.getData());
+        });
+    </script>
 {% endblock %}

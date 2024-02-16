@@ -3,9 +3,9 @@
 {% block content %}
     <div><i class="fas fa-comments"></i> {{ post.discussion.title }}</div>
 
+    <div id="text_editor"></div>
     {{ form_start(form, { 'attr': { 'id': 'reply_form' } }) }}
         <table>
-            {{ form_row(form.text) }}
             {{ form_row(form.signatureOn) }}
             <tr>
                 <td>&nbsp;</td>
@@ -24,4 +24,14 @@
             {% include 'mobile/forum/post.html.twig' with { 'mayPost': false, 'userIsModerator': false, 'postIsUnread': false } %}
         </table>
     {% endfor %}
+{% endblock %}
+
+{% block javascripts %}
+    {% include('ckeditor.js.html.twig') %}
+
+    <script>
+        $('#reply_form').submit(function() {
+            $('#forum_post_text').val(window.editor.getData());
+        });
+    </script>
 {% endblock %}
