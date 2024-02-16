@@ -37,6 +37,7 @@ class CleanupUsersCommand extends Command
         foreach ($users as $user) {
             $numberOfPosts = $this->doctrine->getRepository(ForumPost::class)->findBy(['author' => $user]);
             if (\count($user->getSpots()) < 1 && \count($numberOfPosts) < 1) {
+                $output->writeln('Removing user: ' . $user->getUsername() . ' (id ' . $user->id . ')');
                 foreach ($user->getPreferences() as $preference) {
                     $this->doctrine->getManager()->remove($preference);
                 }
