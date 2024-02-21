@@ -41,7 +41,9 @@ class CleanupUsersCommand extends Command
                 foreach ($user->getPreferences() as $preference) {
                     $this->doctrine->getManager()->remove($preference);
                 }
+                $this->doctrine->getManager()->flush();
                 $this->doctrine->getManager()->remove($user->info);
+                $this->doctrine->getManager()->flush();
                 $this->doctrine->getManager()->remove($user);
                 $this->doctrine->getManager()->flush();
             }
