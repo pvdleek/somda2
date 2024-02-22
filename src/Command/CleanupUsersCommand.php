@@ -42,8 +42,10 @@ class CleanupUsersCommand extends Command
                     $this->doctrine->getManager()->remove($preference);
                 }
                 $this->doctrine->getManager()->flush();
-                $this->doctrine->getManager()->remove($user->info);
-                $this->doctrine->getManager()->flush();
+                if (null !== $user->info) {
+                    $this->doctrine->getManager()->remove($user->info);
+                    $this->doctrine->getManager()->flush();
+                }
                 $this->doctrine->getManager()->remove($user);
                 $this->doctrine->getManager()->flush();
             }
