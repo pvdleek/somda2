@@ -151,8 +151,12 @@ table.forum-post {
     height: 0.5rem;
 }
 blockquote {
-    margin-inline-start: 1rem;
-    margin-block-start: 1rem;
-    margin-block-end: 0;
-    margin-inline-end: 0;
+    background: #F9F9F9;
+    border-left: 10px solid #1D679F;
+    font-style: italic;
+    margin: 1.5em 10px;
+    padding: 0.5em 10px;
+}
+blockquote p {
+    display: inline;
 }
