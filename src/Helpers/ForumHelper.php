@@ -26,7 +26,7 @@ class ForumHelper implements RuntimeExtensionInterface
         if ($post->text->newStyle) {
             $text = \strip_tags(
                 \str_replace(['&nbsp;', "\r\n", '<p>&nbsp;</p>'], ' ', $post->text->text),
-                '<br><p><a><img><ul><ol><li><blockquote><strong><em><s><hr><i>'
+                '<br><p><a><img><ul><ol><li><blockquote><strong><em><s><u><hr><i>'
             );
             $text = $this->replaceLinks($text);
         } else {
