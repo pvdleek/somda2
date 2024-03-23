@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Command;
 
 use App\Entity\ForumPost;
+use App\Entity\Log;
 use App\Entity\User;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -38,14 +39,20 @@ class CleanupUsersCommand extends Command
             $numberOfPosts = $this->doctrine->getRepository(ForumPost::class)->findBy(['author' => $user]);
             if (\count($user->getSpots()) < 1 && \count($numberOfPosts) < 1) {
                 $output->writeln('Removing user: ' . $user->getUsername() . ' (id ' . $user->id . ')');
+
+                $this->doctrine->getRepository(Log::class)->removeByUser($user);
+                $this->doctrine->getManager()->flush();
+
                 foreach ($user->getPreferences() as $preference) {
                     $this->doctrine->getManager()->remove($preference);
                 }
                 $this->doctrine->getManager()->flush();
+
                 if (null !== $user->info) {
                     $this->doctrine->getManager()->remove($user->info);
                     $this->doctrine->getManager()->flush();
                 }
+
                 $this->doctrine->getManager()->remove($user);
                 $this->doctrine->getManager()->flush();
             }

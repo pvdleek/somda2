@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Table(name="somda_logging")
  * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\Log")
  */
 class Log
 {
