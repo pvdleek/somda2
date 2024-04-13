@@ -65,14 +65,16 @@ class UpdateStatisticsCommand extends Command
         $statement->executeStatement();
 
         // Update for the spots and forum-posts
-        $query = 'UPDATE `somda_stats` `s` SET spots =
-            (SELECT COUNT(*) FROM `somda_spots` `sp` WHERE `sp`.`datum` = `s`.`datum` AND `sp`.`datum` > :'.self::DATE_PERIOD_WEEK_AGO.')';
+        $query = 'UPDATE `somda_stats` `s` SET `spots` =
+            (SELECT COUNT(*) FROM `somda_spots` `sp` WHERE `sp`.`datum` = `s`.`datum` AND `sp`.`datum` > :'.self::DATE_PERIOD_WEEK_AGO.')
+            WHERE `s`.`datum` > :'.self::DATE_PERIOD_WEEK_AGO;
         $statement = $connection->prepare($query);
         $statement->bindValue(self::DATE_PERIOD_WEEK_AGO, $weekAgo->format(DateGenerics::DATE_FORMAT_DATABASE));
         $statement->executeStatement();
-        $query = 'UPDATE `somda_stats` `s` SET posts =
+        $query = 'UPDATE `somda_stats` `s` SET `posts` =
             (SELECT COUNT(*) FROM `somda_forum_posts` `f`
-            WHERE DATE(`f`.`timestamp`) = `s`.`datum` AND `f`.`timestamp` > :'.self::DATE_PERIOD_WEEK_AGO.')';
+            WHERE DATE(`f`.`timestamp`) = `s`.`datum` AND `f`.`timestamp` > :'.self::DATE_PERIOD_WEEK_AGO.')
+            WHERE `s`.`datum` > :'.self::DATE_PERIOD_WEEK_AGO;
         $statement = $connection->prepare($query);
         $statement->bindValue(self::DATE_PERIOD_WEEK_AGO, $weekAgo->format(DateGenerics::DATE_FORMAT_DATABASE));
         $statement->executeStatement();
