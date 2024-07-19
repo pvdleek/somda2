@@ -1,4 +1,4 @@
-FROM 10.62.181.2:5000/base_image
+FROM pvdleek/server-configuration:base_image
 
 WORKDIR /var/www
 
