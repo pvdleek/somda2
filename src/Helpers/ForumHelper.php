@@ -34,7 +34,7 @@ class ForumHelper implements RuntimeExtensionInterface
         }
         $text = \nl2br($this->replaceStaticData($text));
 
-        if (!\is_null($post->editTimestamp)) {
+        if (null !== $post->editTimestamp) {
             $text .= '<br /><br /><i><span class="edit_text">Laatst bewerkt door ' . $post->editor->username .
                 ' op ' . $post->editTimestamp->format('d-m-Y H:i').
                 (\strlen($post->editReason ?? '') > 0 ? ', reden: ' . $post->editReason : '') . '</span></i>';

@@ -101,11 +101,11 @@ class TrainTableHelper
     public function getTrainTableLines(): array
     {
         $this->clearErrorMessages();
-        if (\is_null($this->getTrainTableYear())) {
+        if (null === $this->getTrainTableYear()) {
             $this->addErrorMessage($this->translator->trans('general.error.trainTableIndex'));
             return [];
         }
-        if (\is_null($this->getRoute())) {
+        if (null === $this->getRoute()) {
             $this->addErrorMessage($this->translator->trans('general.error.route'));
             return [];
         }
@@ -122,11 +122,11 @@ class TrainTableHelper
     public function getRoutePredictions(): array
     {
         $this->clearErrorMessages();
-        if (\is_null($this->getTrainTableYear())) {
+        if (null === $this->getTrainTableYear()) {
             $this->addErrorMessage($this->translator->trans('general.error.trainTableIndex'));
             return [];
         }
-        if (\is_null($this->getRoute())) {
+        if (null === $this->getRoute()) {
             $this->addErrorMessage($this->translator->trans('general.error.route'));
             return [];
         }
@@ -140,25 +140,25 @@ class TrainTableHelper
     public function getPassingRoutes(int $dayNumber = null, string $startTime = null, string $endTime = null): array
     {
         $this->clearErrorMessages();
-        if (\is_null($this->getTrainTableYear())) {
+        if (null === $this->getTrainTableYear()) {
             $this->addErrorMessage($this->translator->trans('general.error.trainTableIndex'));
             return [];
         }
-        if (\is_null($this->getLocation())) {
+        if (null === $this->getLocation()) {
             $this->addErrorMessage($this->translator->trans('general.error.location'));
             return [];
         }
 
-        if (\is_null($dayNumber)) {
+        if (null === $dayNumber) {
             $dayNumber = date('N');
         }
 
-        if (!\is_null($startTime)) {
+        if (null !== $startTime) {
             $startTimeDatabase = $this->timeDisplayToDatabase($startTime);
         } else {
             $startTimeDatabase = $this->timeDisplayToDatabase(date('H:i'));
         }
-        if (!\is_null($endTime)) {
+        if (null !== $endTime) {
             $endTimeDatabase = $this->timeDisplayToDatabase($endTime);
             if ($startTimeDatabase > $endTimeDatabase) {
                 $this->addErrorMessage($this->translator->trans('passingRoutes.error.dayBorderCrossed'));

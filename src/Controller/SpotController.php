@@ -51,7 +51,7 @@ class SpotController
         $spotFilter = new SpotFilter();
         $spots = null;
 
-        if (!\is_null($searchParameters)) {
+        if (null !== $searchParameters) {
             $spotFilter->createFromSearchParameters(explode('/', $searchParameters));
 
             if (!$spotFilter->isValid()) {
@@ -71,7 +71,7 @@ class SpotController
             'maxMonths' => $maxMonths,
             'location' => $spotFilter->location,
             TemplateHelper::PARAMETER_DAY_NUMBER => $spotFilter->dayNumber,
-            'spotDate' => !\is_null($spotFilter->spotDate) ? $spotFilter->spotDate->format('d-m-Y') : null,
+            'spotDate' => null !== $spotFilter->spotDate ? $spotFilter->spotDate->format('d-m-Y') : null,
             'trainNumber' => $spotFilter->trainNumber,
             'routeNumber' => $spotFilter->routeNumber,
             'spots' => $spots,

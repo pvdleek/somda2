@@ -119,7 +119,7 @@ class MySpotsController
         $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_SPOTS_EDIT);
 
         $spot = $this->formHelper->getDoctrine()->getRepository(Spot::class)->find($id);
-        if (\is_null($spot) || $spot->user !== $this->userHelper->getUser()) {
+        if (null === $spot || $spot->user !== $this->userHelper->getUser()) {
             throw new AccessDeniedException('This spot does not exist or does not belong to the user');
         }
         $form = $this->formHelper->getFactory()->create(SpotForm::class, $spot);
@@ -151,11 +151,11 @@ class MySpotsController
     public function deleteAction(int $id): RedirectResponse
     {
         $spot = $this->formHelper->getDoctrine()->getRepository(Spot::class)->find($id);
-        if (\is_null($spot) || $spot->user !== $this->userHelper->getUser()) {
+        if (null === $spot || $spot->user !== $this->userHelper->getUser()) {
             throw new AccessDeniedException('This spot does not exist or does not belong to the user');
         }
 
-        if (!\is_null($spot->extra)) {
+        if (null !== $spot->extra) {
             $this->formHelper->getDoctrine()->getManager()->remove($spot->extra);
         }
         $this->formHelper->getDoctrine()->getManager()->remove($spot);

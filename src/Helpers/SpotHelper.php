@@ -45,7 +45,7 @@ class SpotHelper implements RuntimeExtensionInterface
 
     private function getDisplayTrain(Train $train): string
     {
-        if (!\is_null($train->namePattern)) {
+        if (null !== $train->namePattern) {
             return $train->namePattern->name . ' ' . $train->number;
         }
         return $train->number;

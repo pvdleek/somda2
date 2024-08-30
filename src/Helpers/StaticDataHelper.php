@@ -37,7 +37,7 @@ class StaticDataHelper implements RuntimeExtensionInterface
      */
     public function getLocations(): array
     {
-        if (\is_null($this->locations)) {
+        if (null === $this->locations) {
             $this->loadStaticData();
         }
         return $this->locations;
@@ -48,7 +48,7 @@ class StaticDataHelper implements RuntimeExtensionInterface
      */
     public function getUsers(): array
     {
-        if (\is_null($this->users)) {
+        if (null === $this->users) {
             $this->loadStaticData();
         }
         return $this->users;
@@ -59,7 +59,7 @@ class StaticDataHelper implements RuntimeExtensionInterface
      */
     public function getRoutes(): array
     {
-        if (\is_null($this->routes)) {
+        if (null === $this->routes) {
             $this->loadStaticData();
         }
         return $this->routes;
@@ -100,7 +100,7 @@ class StaticDataHelper implements RuntimeExtensionInterface
         $userArray = $userRepository->findActiveForStaticData();
         foreach ($userArray as $user) {
             $this->users['@' . $user['username']] =
-                !\is_null($user['name']) && \strlen($user['name']) > 0 ? $user['name'] : $user['username'];
+                null !== $user['name'] && \strlen($user['name']) > 0 ? $user['name'] : $user['username'];
         }
 
         /**
@@ -134,7 +134,7 @@ class StaticDataHelper implements RuntimeExtensionInterface
     {
         $seriesRouteNumber = 100 * \floor($route[TrainTableRepository::FIELD_ROUTE_NUMBER] / 100);
         if (!isset($this->routes[$seriesRouteNumber])) {
-            if (!\is_null($route[TrainTableRepository::FIELD_SECTION])
+            if (null !== $route[TrainTableRepository::FIELD_SECTION]
                 && \strlen($route[TrainTableRepository::FIELD_SECTION]) > 0
             ) {
                 $this->routes[$seriesRouteNumber] = sprintf(

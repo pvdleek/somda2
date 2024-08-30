@@ -37,7 +37,7 @@ class ProfileController
      */
     public function indexAction(Request $request, int $id = null): Response|RedirectResponse
     {
-        if (\is_null($id)) {
+        if (null === $id) {
             if (!$this->userHelper->userIsLoggedIn()) {
                 throw new AccessDeniedException('The user is not logged in');
             }
@@ -75,7 +75,7 @@ class ProfileController
          * @var User $user
          */
         $user = $this->doctrine->getRepository(User::class)->find($id);
-        if (\is_null($user)) {
+        if (null === $user) {
             throw new AccessDeniedException('This user does not exist');
         }
 

@@ -103,12 +103,12 @@ class FeedProvider implements FeedProviderInterface
      */
     private function getSpots(): array
     {
-        if (\is_null($this->trainFilter)) {
+        if (null === $this->trainFilter) {
             return $this->repositorySpot->findBy([], ['timestamp' => 'DESC'], $this->limit);
         }
 
         $train = $this->repositoryTrain->findOneBy(['number' => $this->trainFilter]);
-        if (!\is_null($train)) {
+        if (null !== $train) {
             return $this->repositorySpot->findBy(['train' => $train], ['timestamp' => 'DESC'], $this->limit);
         }
 
@@ -121,7 +121,7 @@ class FeedProvider implements FeedProviderInterface
         foreach ($specialRoutes as $specialRoute) {
             $author = new ItemAuthor($this->userHelper->getAdministratorUser());
 
-            $date = \is_null($specialRoute->endDate) ? $specialRoute->startDate->format(DateGenerics::DATE_FORMAT) :
+            $date = null === $specialRoute->endDate ? $specialRoute->startDate->format(DateGenerics::DATE_FORMAT) :
                 $specialRoute->startDate->format(DateGenerics::DATE_FORMAT) . ' t/m ' .
                 $specialRoute->endDate->format(DateGenerics::DATE_FORMAT);
 

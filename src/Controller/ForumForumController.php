@@ -51,7 +51,7 @@ class ForumForumController
          * @var ForumForum $forum
          */
         $forum = $this->doctrine->getRepository(ForumForum::class)->find($id);
-        if (\is_null($forum)) {
+        if (null === $forum) {
             return $this->redirectHelper->redirectToRoute(RouteGenerics::ROUTE_FORUM);
         }
 

@@ -80,7 +80,7 @@ class KernelListener implements EventSubscriberInterface
             );
         }
 
-        if (!\is_null($this->userHelper->getUser())
+        if (null !== $this->userHelper->getUser()
             && $this->userHelper->getUser()->banExpireTimestamp >= new \DateTime()
         ) {
             throw new AccessDeniedException(
@@ -126,7 +126,7 @@ class KernelListener implements EventSubscriberInterface
          * @var User $user
          */
         $user = $event->getAuthenticationToken()->getUser();
-        if (\is_null($user->apiToken)) {
+        if (null === $user->apiToken) {
             // Generate an API token for this user
             $user->apiToken = \uniqid('', true);
         }

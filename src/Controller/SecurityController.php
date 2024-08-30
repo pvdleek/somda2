@@ -123,7 +123,7 @@ class SecurityController
         $existingUsername = $this->formHelper->getDoctrine()->getRepository(User::class)->findOneBy(
             [UserForm::FIELD_USERNAME => $form->get(UserForm::FIELD_USERNAME)->getData()]
         );
-        if (!\is_null($existingUsername)) {
+        if (null !== $existingUsername) {
             $form->get(UserForm::FIELD_USERNAME)->addError(
                 new FormError('De gebruikersnaam die je hebt gekozen is al in gebruik, kies een andere gebruikersnaam')
             );
@@ -141,7 +141,7 @@ class SecurityController
         $existingEmail = $this->formHelper->getDoctrine()->getRepository(User::class)->findOneBy(
             [UserForm::FIELD_EMAIL => $form->get(UserForm::FIELD_EMAIL)->getData()]
         );
-        if (!\is_null($existingEmail)) {
+        if (null !== $existingEmail) {
             $form->get(UserForm::FIELD_EMAIL)->addError(
                 new FormError('Het e-mailadres dat je hebt gekozen is al in gebruik, probeer het opnieuw')
             );
@@ -179,7 +179,7 @@ class SecurityController
          * @var User $user
          */
         $user = $this->formHelper->getDoctrine()->getRepository(User::class)->find($id);
-        if (\is_null($user)) {
+        if (null === $user) {
             throw new AccessDeniedException('This user does not exist');
         }
 
@@ -224,7 +224,7 @@ class SecurityController
             $form->get(UserActivate::FIELD_KEY)->addError(
                 new FormError('De activatie-sleutel is niet correct, probeer het opnieuw')
             );
-        } elseif (!\is_null($key)) {
+        } elseif (null !== $key) {
             $form->get(UserActivate::FIELD_KEY)->setData($key);
         }
 
@@ -248,7 +248,7 @@ class SecurityController
             $user = $this->formHelper->getDoctrine()->getRepository(User::class)->findOneBy(
                 [UserForm::FIELD_EMAIL => $form->get(UserForm::FIELD_EMAIL)->getData()]
             );
-            if (!\is_null($user)) {
+            if (null !== $user) {
                 $newPassword = $this->getRandomPassword(12);
                 $user->password = (string)password_hash($newPassword, PASSWORD_DEFAULT);
                 $this->formHelper->getDoctrine()->getManager()->flush();

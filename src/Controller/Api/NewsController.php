@@ -43,12 +43,12 @@ class NewsController extends AbstractFOSRestController
     {
         $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_API_USER);
 
-        if (!\is_null($id)) {
+        if (null !== $id) {
             /**
              * @var News $news
              */
             $news = $this->doctrine->getRepository(News::class)->find($id);
-            if (\is_null($news)) {
+            if (null === $news) {
                 return $this->handleView($this->view(['error' => 'This news-item does not exist'], 404));
             }
 
@@ -87,7 +87,7 @@ class NewsController extends AbstractFOSRestController
     {
         $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_API_USER);
 
-        $limit = \is_null($limit) ? 25 : \min($limit, 100);
+        $limit = (null === $limit) ? 25 : \min($limit, 100);
 
         /**
          * @var RailNews[] $news

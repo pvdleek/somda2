@@ -86,7 +86,7 @@ class SecurityController extends AbstractFOSRestController
         $user = $this->doctrine->getRepository(User::class)->findOneBy(
             ['id' => $id, 'active' => true, 'apiToken' => $token]
         );
-        if (\is_null($user) || $user->apiTokenExpiryTimestamp <= new \DateTime()) {
+        if (null === $user || $user->apiTokenExpiryTimestamp <= new \DateTime()) {
             return $this->handleView($this->view(['error' => 'This token is not valid'], 401));
         }
 

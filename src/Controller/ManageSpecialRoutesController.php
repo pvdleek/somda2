@@ -42,7 +42,7 @@ class ManageSpecialRoutesController
         $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_ADMIN_SPECIAL_ROUTES);
 
         $specialRoute = $this->formHelper->getDoctrine()->getRepository(SpecialRoute::class)->find($id);
-        if (\is_null($specialRoute)) {
+        if (null === $specialRoute) {
             $specialRoute = new SpecialRoute();
             $specialRoute->startDate = new \DateTime('+1 day');
             $specialRoute->publicationTimestamp = new \DateTime();
@@ -51,7 +51,7 @@ class ManageSpecialRoutesController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            if (\is_null($specialRoute->id)) {
+            if (null === $specialRoute->id) {
                 $this->formHelper->getDoctrine()->getManager()->persist($specialRoute);
                 return $this->formHelper->finishFormHandling('Rit toegevoegd', 'manage_special_routes');
             }

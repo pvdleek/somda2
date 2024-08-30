@@ -79,7 +79,7 @@ class HomeController extends AbstractFOSRestController
 
         // Get the last forum topic where a response was posted
         $discussion = $this->doctrine->getRepository(ForumDiscussion::class)->findLastDiscussion();
-        $lastForumPost = \is_null($discussion) ? null : [
+        $lastForumPost = null === $discussion ? null : [
             'discussionId' => $discussion['id'],
             'discussionTitle' => $discussion['title'],
             'discussionLocked' => $discussion['locked'],

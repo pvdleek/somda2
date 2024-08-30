@@ -73,7 +73,7 @@ class SpotInputController
         $spots = [];
         foreach ($idArray as $id) {
             $spot = $this->formHelper->getDoctrine()->getRepository(Spot::class)->find($id);
-            if (\is_null($spot) || $spot->user !== $this->userHelper->getUser()) {
+            if (null === $spot || $spot->user !== $this->userHelper->getUser()) {
                 throw new AccessDeniedException('This spot does not exist or does not belong to the user');
             }
 

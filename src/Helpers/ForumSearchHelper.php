@@ -43,7 +43,7 @@ class ForumSearchHelper implements RuntimeExtensionInterface
         $results = null;
         foreach ($searchWords as $word) {
             $result = $this->repositoryForumSearchWord->searchByWords([$word]);
-            if (\is_null($results)) {
+            if (null === $results) {
                 $results = $result;
             } else {
                 $results = \array_intersect($results, $result);

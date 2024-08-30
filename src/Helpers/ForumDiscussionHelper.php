@@ -112,7 +112,7 @@ class ForumDiscussionHelper
      */
     public function getNumberOfPages(): int
     {
-        if (\is_null($this->numberOfPages)) {
+        if (null === $this->numberOfPages) {
             throw new WrongMethodError('Execute the getPosts() method first');
         }
 
@@ -124,7 +124,7 @@ class ForumDiscussionHelper
      */
     public function getNumberOfPosts(): int
     {
-        if (\is_null($this->numberOfPosts)) {
+        if (null === $this->numberOfPosts) {
             throw new WrongMethodError('Execute the getPosts() method first');
         }
 
@@ -136,7 +136,7 @@ class ForumDiscussionHelper
      */
     public function getPageNumber(): int
     {
-        if (\is_null($this->pageNumber)) {
+        if (null === $this->pageNumber) {
             throw new WrongMethodError('Execute the getPosts() method first');
         }
 
@@ -153,7 +153,7 @@ class ForumDiscussionHelper
      */
     public function getNumberOfReadPosts(): int
     {
-        if (\is_null($this->numberOfReadPosts)) {
+        if (null === $this->numberOfReadPosts) {
             throw new WrongMethodError('Execute the getPosts() method first');
         }
         return $this->numberOfReadPosts;
@@ -170,11 +170,11 @@ class ForumDiscussionHelper
      */
     private function setForumJump(int $requestedPageNumber = null, int $requestedPostId = null): void
     {
-        if (!\is_null($requestedPostId)) {
+        if (null !== $requestedPostId) {
             $this->forumJump = 'p' . $requestedPostId;
             return;
         }
-        if (\is_null($requestedPageNumber)
+        if (null === $requestedPageNumber
             && $this->discussion->forum->type !== ForumForum::TYPE_ARCHIVE
             && $this->userHelper->userIsLoggedIn()
         ) {
@@ -188,12 +188,12 @@ class ForumDiscussionHelper
      */
     private function setPageNumber(bool $newToOld, int $requestedPageNumber = null, int $postId = null): void
     {
-        if (!\is_null($requestedPageNumber)) {
+        if (null !== $requestedPageNumber) {
             $this->pageNumber = \max($requestedPageNumber, 1);
             return;
         }
 
-        if (!\is_null($postId)) {
+        if (null !== $postId) {
             // A specific post was requested, so we go to this post
             $postNumber = $this->forumDiscussionRepository->getPostNumberInDiscussion($this->discussion, $postId);
             $this->pageNumber = (int)floor($postNumber / ForumGenerics::MAX_POSTS_PER_PAGE) + 1;

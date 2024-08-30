@@ -74,7 +74,7 @@ class ForumDiscussionController extends AbstractFOSRestController
          * @var ForumDiscussion $discussion
          */
         $discussion = $this->doctrine->getRepository(ForumDiscussion::class)->find($id);
-        if (\is_null($discussion)) {
+        if (null === $discussion) {
             throw new AccessDeniedException('This discussion does not exist');
         }
 

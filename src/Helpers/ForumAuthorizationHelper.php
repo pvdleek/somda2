@@ -10,11 +10,11 @@ class ForumAuthorizationHelper
 {
     public function mayView(ForumForum $forum, User $user = null): bool
     {
-        if ($forum->type === ForumForum::TYPE_PUBLIC || (!\is_null($user) && $user->hasRole(RoleGenerics::ROLE_ADMIN))) {
+        if ($forum->type === ForumForum::TYPE_PUBLIC || (null !== $user) && $user->hasRole(RoleGenerics::ROLE_ADMIN)) {
             return true;
         }
         if (\in_array($forum->type, [ForumForum::TYPE_LOGGED_IN, ForumForum::TYPE_ARCHIVE])) {
-            return !\is_null($user);
+            return null !== $user;
         }
         return \in_array($user, $forum->getModerators());
     }
@@ -25,14 +25,14 @@ class ForumAuthorizationHelper
             return false;
         }
         if (\in_array($forum->type, [ForumForum::TYPE_PUBLIC, ForumForum::TYPE_LOGGED_IN])) {
-            return !\is_null($user);
+            return null !== $user;
         }
         return \in_array($user, $forum->getModerators()) || $user->hasRole(RoleGenerics::ROLE_ADMIN);
     }
 
     public function userIsModerator(ForumForum $forum, User $user = null): bool
     {
-        return !\is_null($user)
+        return null !== $user
             && (\in_array($user, $forum->getModerators()) || $user->hasRole(RoleGenerics::ROLE_ADMIN));
     }
 }

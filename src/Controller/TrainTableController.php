@@ -39,7 +39,7 @@ class TrainTableController
     {
         $submit = false;
 
-        if (\is_null($trainTableYearId)) {
+        if (null === $trainTableYearId) {
             $trainTableYearId = $this->repositoryTrainTableYear->findTrainTableYearByDate(new \DateTime())->id;
         } else {
             $submit = true;
@@ -76,7 +76,7 @@ class TrainTableController
     ): Response {
         $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_PASSING_ROUTES);
 
-        if (\is_null($dayNumber)) {
+        if (null === $dayNumber) {
             $trainTableYearId = $this->repositoryTrainTableYear->findTrainTableYearByDate(new \DateTime())->id;
 
             $dayNumber = date('N');
@@ -180,11 +180,11 @@ class TrainTableController
     public function specialRoutesAction(int $id = null): Response
     {
         $specialRoute = null;
-        if (!\is_null($id)) {
+        if (null !== $id) {
             $specialRoute = $this->doctrine->getRepository(SpecialRoute::class)->find($id);
         }
 
-        if (\is_null($specialRoute)) {
+        if (null === $specialRoute) {
             $specialRoutes = $this->doctrine
                 ->getRepository(SpecialRoute::class)
                 ->findBy([], ['startDate' => 'DESC']);

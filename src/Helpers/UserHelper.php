@@ -35,7 +35,7 @@ class UserHelper implements RuntimeExtensionInterface
 
     public function getUser(): ?User
     {
-        if (\is_null($this->user)) {
+        if (null === $this->user) {
             $this->user = $this->security->getUser();
         }
 
@@ -57,7 +57,7 @@ class UserHelper implements RuntimeExtensionInterface
         $user = $this->doctrine->getRepository(User::class)->findOneBy(
             ['id' => $userId, 'active' => true, 'apiToken' => $apiToken]
         );
-        if (!\is_null($user)) {
+        if (null !== $user) {
             $this->user = $user;
             $this->security->login($user, 'form_login', 'main');
         }
@@ -87,11 +87,11 @@ class UserHelper implements RuntimeExtensionInterface
          * @var UserPreference $userPreference
          */
         $userPreference = $this->doctrine->getRepository(UserPreference::class)->findOneBy(['key' => $key]);
-        if (\is_null($userPreference)) {
+        if (null === $userPreference) {
             throw new UnknownUserPreferenceKey('Preference with key "' . $key . '" does not exist');
         }
 
-        if (!\is_null($this->getUser())) {
+        if (null !== $this->getUser()) {
             foreach ($this->getUser()->getPreferences() as $preference) {
                 if ($preference->preference === $userPreference) {
                     return $preference;
@@ -103,7 +103,7 @@ class UserHelper implements RuntimeExtensionInterface
         $userPreferenceValue = new UserPreferenceValue();
         $userPreferenceValue->preference = $userPreference;
         $userPreferenceValue->value = $userPreference->defaultValue;
-        if (!\is_null($user = $this->getUser())) {
+        if (null !== $user = $this->getUser()) {
             $userPreferenceValue->user = $user;
             $this->doctrine->getManager()->persist($userPreferenceValue);
             $this->doctrine->getManager()->flush();

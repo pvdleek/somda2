@@ -63,7 +63,7 @@ class Spot extends ServiceEntityRepository
             ->leftJoin('s.extra', 'e')
             ->addOrderBy('s.timestamp', 'DESC');
 
-        if (!\is_null($trainTableYear)) {
+        if (null !== $trainTableYear) {
             $queryBuilder
                 ->addSelect('tt.time AS spotTime')
                 ->leftJoin(
@@ -120,7 +120,7 @@ class Spot extends ServiceEntityRepository
             ->createQueryBuilder()
             ->select('COUNT(s.id)')
             ->from(SpotEntity::class, 's');
-        if (!\is_null($user)) {
+        if (null !== $user) {
             $queryBuilder->andWhere('s.user = :user')->setParameter('user', $user);
         }
         try {
@@ -175,7 +175,7 @@ class Spot extends ServiceEntityRepository
      */
     private function applySpotFilter(QueryBuilder $queryBuilder, SpotFilter $spotFilter, int $maxMonths): void
     {
-        if (!\is_null($spotFilter->location)) {
+        if (null !== $spotFilter->location) {
             $queryBuilder
                 ->andWhere('l.name = :location')
                 ->setParameter(self::FIELD_LOCATION, $spotFilter->location);
@@ -185,7 +185,7 @@ class Spot extends ServiceEntityRepository
                 ->andWhere('DAYOFWEEK(s.spotDate) = :dayNumber')
                 ->setParameter('dayNumber', $spotFilter->dayNumber);
         }
-        if (\is_null($spotFilter->spotDate)) {
+        if (null === $spotFilter->spotDate) {
             $queryBuilder
                 ->andWhere('s.timestamp > :minDate')
                 ->setParameter('minDate', new \DateTime('-' . $maxMonths . ' months'));
@@ -287,7 +287,7 @@ class Spot extends ServiceEntityRepository
 
     private function filterOnSpotDate(QueryBuilder $queryBuilder, ?\DateTime $spotDate = null): void
     {
-        if (!\is_null($spotDate)) {
+        if (null !== $spotDate) {
             $queryBuilder
                 ->andWhere('DATE(s.spotDate) = :' . self::FIELD_SPOT_DATE)
                 ->setParameter(self::FIELD_SPOT_DATE, $spotDate->format(DateGenerics::DATE_FORMAT_DATABASE));
@@ -296,7 +296,7 @@ class Spot extends ServiceEntityRepository
 
     private function filterOnLocation(QueryBuilder $queryBuilder, ?string $location = null): void
     {
-        if (!\is_null($location)) {
+        if (null !== $location) {
             $queryBuilder
                 ->andWhere('l.name LIKE :location')
                 ->setParameter(self::FIELD_LOCATION, '%' . $location . '%');
@@ -305,7 +305,7 @@ class Spot extends ServiceEntityRepository
 
     private function filterOnTrainNumber(QueryBuilder $queryBuilder, bool $exact, ?string $trainNumber = null): void
     {
-        if (!\is_null($trainNumber)) {
+        if (null !== $trainNumber) {
             if ($exact) {
                 if (\strpos($trainNumber, '*') !== false) {
                     // The train-number contains a wildcard
@@ -327,7 +327,7 @@ class Spot extends ServiceEntityRepository
 
     private function filterOnRouteNumber(QueryBuilder $queryBuilder, bool $exact, ?string $routeNumber = null): void
     {
-        if (!\is_null($routeNumber)) {
+        if (null !== $routeNumber) {
             if ($exact) {
                 if (\strpos($routeNumber, '*') !== false) {
                     // The route-number contains a wildcard

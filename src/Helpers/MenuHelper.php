@@ -41,7 +41,7 @@ class MenuHelper implements RuntimeExtensionInterface
 
     private function isAuthorizedForBlock(array $block): bool
     {
-        if (\is_null($block['role']) || $this->authorizationHelper->isGranted(RoleGenerics::ROLE_ADMIN)) {
+        if (null === $block['role'] || $this->authorizationHelper->isGranted(RoleGenerics::ROLE_ADMIN)) {
             return true;
         }
         return \substr($block['role'], 0, 10) !== 'ROLE_ADMIN' || $this->authorizationHelper->isGranted($block['role']);

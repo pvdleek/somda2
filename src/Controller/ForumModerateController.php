@@ -110,13 +110,13 @@ class ForumModerateController
          */
         $oldestPost = null;
         foreach ($discussion1->getPosts() as $post) {
-            if (\is_null($oldestPost) || $post->timestamp < $oldestPost->timestamp) {
+            if (null === $oldestPost || $post->timestamp < $oldestPost->timestamp) {
                 $oldestPost = $post;
             }
             $post->discussion = $newDiscussion;
         }
         foreach ($discussion2->getPosts() as $post) {
-            if (\is_null($oldestPost) || $post->timestamp < $oldestPost->timestamp) {
+            if (null === $oldestPost || $post->timestamp < $oldestPost->timestamp) {
                 $oldestPost = $post;
             }
             $post->discussion = $newDiscussion;
@@ -176,7 +176,7 @@ class ForumModerateController
          * @var ForumDiscussion $discussion
          */
         $discussion = $this->formHelper->getDoctrine()->getRepository(ForumDiscussion::class)->find($id);
-        if (\is_null($discussion)
+        if (null === $discussion
             || !$this->forumAuthHelper->userIsModerator($discussion->forum, $this->userHelper->getUser())
         ) {
             throw new AccessDeniedException('The discussion does not exist of the user cannot moderate it');

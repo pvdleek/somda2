@@ -25,14 +25,14 @@ class ForumPost extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $data = '';
-        if (!\is_null($options[self::OPTION_QUOTED_POST])) {
+        if (null !== $options[self::OPTION_QUOTED_POST]) {
             $data = \sprintf(
                 self::QUOTE_HTML,
                 $options[self::OPTION_QUOTED_POST]->author->username,
                 $options[self::OPTION_QUOTED_POST]->timestamp->format('d-m-Y H:i:s'),
                 $options[self::OPTION_QUOTED_POST]->text->text
             );
-        } elseif (!\is_null($options[self::OPTION_EDITED_POST])) {
+        } elseif (null !== $options[self::OPTION_EDITED_POST]) {
             $data = $options[self::OPTION_EDITED_POST]->text->text;
         }
 
@@ -47,7 +47,7 @@ class ForumPost extends AbstractType
                 FormGenerics::KEY_REQUIRED => false,
             ]);
 
-        if (!\is_null($options[self::OPTION_EDITED_POST])) {
+        if (null !== $options[self::OPTION_EDITED_POST]) {
             $builder->add('editReason', TextType::class, [
                 FormGenerics::KEY_LABEL => 'Reden voor bewerking (optioneel)',
                 FormGenerics::KEY_REQUIRED => false,

@@ -95,7 +95,7 @@ class ForumDiscussion extends ServiceEntityRepository
             JOIN somda_forum_discussion d ON d.discussionid = p.discussionid
             WHERE d.forumid = :forumid
             GROUP BY disc_id';
-        if (\is_null($user)) {
+        if (null === $user) {
             $query = '
                 SELECT `d`.`discussionid` AS `id`, `d`.`title` AS `title`, `a`.`uid` AS `author_id`,
                     `a`.`username` AS `author_username`, `d`.`locked` AS `locked`, `d`.`viewed` AS `viewed`,
@@ -126,7 +126,7 @@ class ForumDiscussion extends ServiceEntityRepository
                 GROUP BY `id`, `title`, `author_id`, `viewed`, m.max_date_time, `discussion_read`, `max_post_timestamp`
                 ORDER BY m.max_date_time DESC';
         }
-        if (!\is_null($limit)) {
+        if (null !== $limit) {
             $query .= ' LIMIT 0, ' . $limit;
         }
         $connection = $this->getEntityManager()->getConnection();

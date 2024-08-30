@@ -73,7 +73,7 @@ class SomdaController
 
     public function disclaimerAction(string $choice = null): Response|RedirectResponse
     {
-        if (!\is_null($choice) && \in_array($choice, [User::COOKIE_OK, User::COOKIE_NOT_OK])) {
+        if (null !== $choice && \in_array($choice, [User::COOKIE_OK, User::COOKIE_NOT_OK])) {
             $this->userHelper->getUser()->cookieOk = $choice;
 
             return $this->formHelper->finishFormHandling(

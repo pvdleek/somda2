@@ -39,7 +39,7 @@ class ForumDiscussionController
          * @var ForumDiscussion $discussion
          */
         $discussion = $this->formHelper->getDoctrine()->getRepository(ForumDiscussion::class)->find($id);
-        if (\is_null($discussion)) {
+        if (null === $discussion) {
             return $this->formHelper->getRedirectHelper()->redirectToRoute(RouteGenerics::ROUTE_FORUM);
         }
 
@@ -104,7 +104,7 @@ class ForumDiscussionController
          * @var ForumForum $forum
          */
         $forum = $this->formHelper->getDoctrine()->getRepository(ForumForum::class)->find($id);
-        if (\is_null($forum) || !$this->forumAuthHelper->mayPost($forum, $this->userHelper->getUser())) {
+        if (null === $forum || !$this->forumAuthHelper->mayPost($forum, $this->userHelper->getUser())) {
             return $this->formHelper->getRedirectHelper()->redirectToRoute(RouteGenerics::ROUTE_FORUM);
         }
 

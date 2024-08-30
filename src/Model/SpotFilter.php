@@ -53,10 +53,10 @@ class SpotFilter
 
     public function isValid(): bool
     {
-        return !\is_null($this->location)
+        return null !== $this->location
             || $this->dayNumber > 0
-            || !\is_null($this->spotDate)
-            || !\is_null($this->trainNumber)
-            || !\is_null($this->routeNumber);
+            || null !== $this->spotDate
+            || null !== $this->trainNumber
+            || null !== $this->routeNumber;
     }
 }

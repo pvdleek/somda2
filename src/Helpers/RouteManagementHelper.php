@@ -68,7 +68,7 @@ class RouteManagementHelper
          * @var RouteList $routeList
          */
         $routeList = $this->repositoryRouteList->find($routeListId);
-        if (\is_null($routeList)) {
+        if (null === $routeList) {
             throw new AccessDeniedException('This routeList does not exist');
         }
         $this->routeList = $routeList;
@@ -77,12 +77,12 @@ class RouteManagementHelper
     public function setRouteFromId(int $routeId): void
     {
         $route = null;
-        if (!\is_null($routeId) && $routeId > 0) {
+        if (null !== $routeId && $routeId > 0) {
             /**
              * @var Route $route
              */
             $route = $this->doctrine->getRepository(Route::class)->find($routeId);
-            if (\is_null($route)) {
+            if (null === $route) {
                 throw new AccessDeniedException('This route does not exist');
             }
         }
@@ -91,11 +91,11 @@ class RouteManagementHelper
 
     public function setTrainTableLines(?int $routeNumber = null): bool
     {
-        if (!\is_null($routeNumber)) {
+        if (null !== $routeNumber) {
             // Check if the new route-number is in the correct range of the routeList
             if ($routeNumber < $this->routeList->firstNumber || $routeNumber > $this->routeList->lastNumber) {
                 $routeList = $this->repositoryRouteList->findForRouteNumber($this->routeList->trainTableYear, $routeNumber);
-                if (\is_null($routeList)) {
+                if (null === $routeList) {
                     return false;
                 }
                 // We set this after the negative return, so te original routeList can still be retrieved from
@@ -130,8 +130,8 @@ class RouteManagementHelper
     private function getNewRouteFromNumber(int $routeNumber): Route
     {
         $newRoute = $this->doctrine->getRepository(Route::class)->findOneBy(['number' => $routeNumber]);
-        if (\is_null($newRoute)) {
-            if (\is_null($this->route)) {
+        if (null === $newRoute) {
+            if (null === $this->route) {
                 $newRoute = new Route();
             } else {
                 $newRoute = clone($this->route);
@@ -273,7 +273,7 @@ class RouteManagementHelper
          * @var Location $location
          */
         $location = $this->repositoryLocation->findOneBy(['name' => $locationName]);
-        if (\is_null($location)) {
+        if (null === $location) {
             $location = $this->repositoryLocation->findOneBy(['name' => Location::UNKNOWN_NAME]);
             $okFlag = false;
         }

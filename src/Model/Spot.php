@@ -54,7 +54,7 @@ class Spot
 
     public function getDisplaySpotTime(): string
     {
-        if (!\is_null($this->spotTime)) {
+        if (null !== $this->spotTime) {
             return $this->timeDatabaseToDisplay($this->spotTime);
         }
         return '';

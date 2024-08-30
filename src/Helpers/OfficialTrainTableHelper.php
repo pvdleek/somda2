@@ -51,7 +51,7 @@ class OfficialTrainTableHelper
                         $firstDate = \DateTime::createFromFormat('dmY', substr($line, 5, 8));
                         break;
                     case '#': // Unique identification, followed by the valid days
-                        if (\is_null($firstDate)) {
+                        if (null === $firstDate) {
                             throw new \Exception('No validity record found before footnote');
                         }
                         $footnoteId = (int) \substr($line, 1);
@@ -91,7 +91,7 @@ class OfficialTrainTableHelper
                         $transporter = $this->doctrine->getRepository(Transporter::class)->findOneBy(
                             ['iffCode' => $iffCode]
                         );
-                        if (\is_null($transporter)) {
+                        if (null === $transporter) {
                             $transporter = new Transporter();
                             $transporter->iffCode = $iffCode;
                             $transporter->name = $description;
@@ -121,7 +121,7 @@ class OfficialTrainTableHelper
                         $characteristic = $this->doctrine->getRepository(Characteristic::class)->findOneBy(
                             ['name' => $name]
                         );
-                        if (\is_null($characteristic)) {
+                        if (null === $characteristic) {
                             $characteristic = new Characteristic();
                             $characteristic->name = $name;
                             $characteristic->description = $description;
@@ -155,14 +155,14 @@ class OfficialTrainTableHelper
                         $locationCategory = $this->doctrine->getRepository(LocationCategory::class)->findOneBy(
                             ['code' => $countryCode]
                         );
-                        if (\is_null($locationCategory)) {
+                        if (null === $locationCategory) {
                             throw new \Exception('Country with code ' . $countryCode . ' not found');
                         }
 
                         $location = $this->doctrine->getRepository(Location::class)->findOneBy(
                             ['name' => $abbreviation]
                         );
-                        if (\is_null($location)) {
+                        if (null === $location) {
                             $location = new Location();
                             $location->name = $abbreviation;
                             $location->description = $description;
@@ -289,7 +289,7 @@ class OfficialTrainTableHelper
     private function getOrCreateRoute(int $routeNumber): Route
     {
         $route = $this->doctrine->getRepository(Route::class)->findOneBy(['number' => $routeNumber]);
-        if (\is_null($route)) {
+        if (null === $route) {
             $route = new Route();
             $route->number = (string) $routeNumber;
 
@@ -308,7 +308,7 @@ class OfficialTrainTableHelper
          * @var Transporter $transporter
          */
         $transporter = $this->doctrine->getRepository(Transporter::class)->findOneBy(['iffCode' => $iffCode]);
-        if (\is_null($transporter)) {
+        if (null === $transporter) {
             throw new \Exception('Transport with code ' . $iffCode . ' not found');
         }
         return $transporter;
@@ -319,13 +319,13 @@ class OfficialTrainTableHelper
      */
     private function saveTrainTable(string $locationName, string $action, string $time = null): void
     {
-        if (\is_null($this->footnote)) {
+        if (null === $this->footnote) {
             throw new \Exception(
                 'Footnote is missing for saving train-table, location ' . $locationName . ', action '. $action .
                 ', time ' . $time . ', first route ' . $this->routes[0]->route->number
             );
         }
-        if (\is_null($this->characteristic)) {
+        if (null === $this->characteristic) {
             throw new \Exception(
                 'Characteristic is missing for saving train-table, location ' . $locationName . ', action '. $action .
                 ', time ' . $time . ', first route ' . $this->routes[0]->route->number
@@ -333,7 +333,7 @@ class OfficialTrainTableHelper
         }
 
         $location = $this->doctrine->getRepository(Location::class)->findOneBy(['name' => $locationName]);
-        if (\is_null($location)) {
+        if (null === $location) {
             throw new \Exception(
                 'Location not found when saving train-table, location ' . $locationName . ', action '. $action .
                 ', time ' . $time . ', first route ' . $this->routes[0]->route->number
@@ -347,7 +347,7 @@ class OfficialTrainTableHelper
                 $trainTable = new OfficialTrainTable();
                 $trainTable->order = $route->order;
                 $trainTable->location = $location;
-                $trainTable->time = \is_null($time) ? null : $trainTable->timeDisplayToDatabase(trim($time));
+                $trainTable->time = null === $time ? null : $trainTable->timeDisplayToDatabase(trim($time));
                 $trainTable->action = $action;
                 $trainTable->route = $route->route;
                 $trainTable->transporter = $route->transporter;

@@ -24,12 +24,12 @@ class NewsController
 
     public function indexAction(int $id = null): Response
     {
-        if (!\is_null($id)) {
+        if (null !== $id) {
             /**
              * @var News $news
              */
             $news = $this->doctrine->getRepository(News::class)->find($id);
-            if (\is_null($news)) {
+            if (null === $news) {
                 throw new AccessDeniedException('This news-item does not exist');
             }
 

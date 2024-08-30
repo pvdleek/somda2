@@ -73,7 +73,7 @@ class SpotController extends AbstractFOSRestController
         $spotFilter = new SpotFilter();
         $spots = null;
 
-        if (!\is_null($searchParameters)) {
+        if (null !== $searchParameters) {
             $spotFilter->createFromSearchParameters(\explode('/', $searchParameters));
 
             if (!$spotFilter->isValid()) {

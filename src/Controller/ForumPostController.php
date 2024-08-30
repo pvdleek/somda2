@@ -51,7 +51,7 @@ class ForumPostController
          */
         $quotedPost = $this->formHelper->getDoctrine()->getRepository(ForumPost::class)->find($id);
         if (!$this->forumAuthHelper->mayPost($quotedPost->discussion->forum, $this->userHelper->getUser())
-            || \is_null($quotedPost) || $quotedPost->discussion->locked
+            || null === $quotedPost || $quotedPost->discussion->locked
         ) {
             throw new AccessDeniedException(
                 'The quoted post does not exist, the discussion is locked or the user may not view the discussion'

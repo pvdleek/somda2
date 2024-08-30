@@ -100,7 +100,7 @@ class ManageTrainTablesController
         $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_ADMIN_TRAINTABLE_EDIT);
 
         $trainTableYear = $this->formHelper->getDoctrine()->getRepository(TrainTableYear::class)->find($yearId);
-        if (\is_null($trainTableYear)) {
+        if (null === $trainTableYear) {
             throw new AccessDeniedException('This trainTableYear does not exist');
         }
         $this->routeMgmtHelper->setRouteListFromId($routeListId);

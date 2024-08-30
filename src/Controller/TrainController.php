@@ -33,9 +33,9 @@ class TrainController
     {
         $type = null;
         $trains = [];
-        if (!\is_null($typeId)) {
+        if (null !== $typeId) {
             $type = $this->formHelper->getDoctrine()->getRepository(TrainCompositionType::class)->find($typeId);
-            if (\is_null($type)) {
+            if (null === $type) {
                 throw new AccessDeniedException('This trainCompositionType does not exist');
             }
 
@@ -62,12 +62,12 @@ class TrainController
 
         $isAdministrator = $this->userHelper->getUser()->hasRole('ROLE_ADMIN_TRAIN_COMPOSITIONS');
 
-        if ($id === 0 && !\is_null($typeId) && $isAdministrator) {
+        if ($id === 0 && null !== $typeId && $isAdministrator) {
             $trainCompositionType = $this->formHelper
                 ->getDoctrine()
                 ->getRepository(TrainCompositionType::class)
                 ->find($typeId);
-            if (\is_null($trainCompositionType)) {
+            if (null === $trainCompositionType) {
                 throw new AccessDeniedException('This trainCompositionType does not exist');
             }
 
@@ -80,7 +80,7 @@ class TrainController
              * @var TrainComposition $trainComposition
              */
             $trainComposition = $this->formHelper->getDoctrine()->getRepository(TrainComposition::class)->find($id);
-            if (\is_null($trainComposition)) {
+            if (null === $trainComposition) {
                 throw new AccessDeniedException('This trainComposition does not exist');
             }
         }
@@ -123,7 +123,7 @@ class TrainController
             ->getDoctrine()
             ->getRepository(TrainCompositionProposition::class)
             ->findOneBy(['composition' => $trainComposition, 'user' => $this->userHelper->getUser()]);
-        if (\is_null($trainProposition)) {
+        if (null === $trainProposition) {
             $trainProposition = new TrainCompositionProposition();
             $trainProposition->setFromTrainComposition($trainComposition);
             $trainProposition->user = $this->userHelper->getUser();
@@ -157,12 +157,12 @@ class TrainController
          * @var TrainComposition $trainComposition
          */
         $trainComposition = $this->formHelper->getDoctrine()->getRepository(TrainComposition::class)->find($trainId);
-        if (\is_null($trainComposition)) {
+        if (null === $trainComposition) {
             throw new AccessDeniedException('This trainComposition does not exist');
         }
 
         $user = $this->formHelper->getDoctrine()->getRepository(User::class)->find($userId);
-        if (\is_null($user)) {
+        if (null === $user) {
             throw new AccessDeniedException('This user does not exist');
         }
 
@@ -173,7 +173,7 @@ class TrainController
             ->getDoctrine()
             ->getRepository(TrainCompositionProposition::class)
             ->findOneBy(['composition' => $trainComposition, 'user' => $user]);
-        if (\is_null($trainProposition)) {
+        if (null === $trainProposition) {
             throw new AccessDeniedException('This trainCompositionProposition does not exist');
         }
 

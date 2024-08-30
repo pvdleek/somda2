@@ -60,7 +60,7 @@ class FeedController
          * @var Location $location
          */
         $location = $this->doctrine->getRepository(Location::class)->findOneBy(['name' => $locationName]);
-        if (\is_null($location)) {
+        if (null === $location) {
             $this->doText($image, 'Het opgegeven station ' . $locationName . ' is niet bekend in Somda');
             return new Response(\imagepng($image), 200, ['Content-Type' => 'image/png']);
         }
