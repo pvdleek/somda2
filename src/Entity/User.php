@@ -188,6 +188,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $preferences;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="News")
+     * @ORM\JoinTable(name="somda_news_read",
+     *      joinColumns={@ORM\JoinColumn(name="uid", referencedColumnName="uid")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="newsid", referencedColumnName="newsid")}
+     * )
+     * @JMS\Exclude()
+     */
+    private $newsReads;
+
     public function __construct()
     {
         $this->groups = new ArrayCollection();
@@ -196,6 +206,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->moderatedForums = new ArrayCollection();
         $this->spots = new ArrayCollection();
         $this->preferences = new ArrayCollection();
+        $this->newsReads = new ArrayCollection();
     }
 
     public function getUserIdentifier(): string
@@ -346,6 +357,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getPreferences(): array
     {
         return $this->preferences->toArray();
+    }
+
+    public function removeAllNewsRead(): void
+    {
+        foreach ($this->newsReads->toArray() as $newsRead) {
+            $this->newsReads->removeElement($newsRead);
+        }
     }
 
     /**

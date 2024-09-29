@@ -43,6 +43,8 @@ class CleanupUsersCommand extends Command
                 $this->doctrine->getRepository(Log::class)->removeByUser($user);
                 $this->doctrine->getManager()->flush();
 
+                $user->removeAllNewsRead();
+
                 foreach ($user->getPreferences() as $preference) {
                     $this->doctrine->getManager()->remove($preference);
                 }
