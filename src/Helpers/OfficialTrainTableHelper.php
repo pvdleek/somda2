@@ -42,34 +42,40 @@ class OfficialTrainTableHelper
      */
     public function processFootnotes(): void
     {
-        $firstDate = null;
+        $first_date = null;
         $handle = \fopen($this->directory . '/footnote.dat', 'r');
         if ($handle) {
             while (($line = \fgets($handle)) !== false) {
                 switch (\substr($line, 0, 1)) {
                     case '@': // Validity
-                        $firstDate = \DateTime::createFromFormat('dmY', substr($line, 5, 8));
+                        $first_date = \DateTime::createFromFormat('dmY', substr($line, 5, 8));
                         break;
                     case '#': // Unique identification, followed by the valid days
-                        if (null === $firstDate) {
+                        if (null === $first_date) {
                             throw new \Exception('No validity record found before footnote');
                         }
-                        $footnoteId = (int) \substr($line, 1);
+                        $footnote_id = (int) \substr($line, 1);
                         $validDays = \str_split(\fgets($handle));
                         foreach ($validDays as $position => $validDay) {
                             if ($validDay === '1') {
-                                $date = clone($firstDate);
+                                $date = clone($first_date);
                                 $date->modify('+' . $position . ' days');
 
-                                $footnote = new OfficialFootnote();
-                                $footnote->date = $date;
-                                $footnote->footnoteId = $footnoteId;
+                                $footnote = $this->doctrine->getRepository(OfficialFootnote::class)->findOneBy(
+                                    ['date' => $date, 'footnoteId' => $footnote_id]
+                                );
+                                if (null === $footnote) {
+                                    $footnote = new OfficialFootnote();
+                                    $footnote->date = $date;
+                                    $footnote->footnoteId = $footnote_id;
 
-                                $this->doctrine->getManager()->persist($footnote);
-                                $this->doctrine->getManager()->flush();
-                                $this->doctrine->getManager()->clear();
+                                    $this->doctrine->getManager()->persist($footnote);
+                                }
                             }
                         }
+                        $this->doctrine->getManager()->flush();
+                        $this->doctrine->getManager()->clear();
+
                         break;
                 }
             }
@@ -202,7 +208,7 @@ class OfficialTrainTableHelper
                         break;
                     case '-': // Footnote
                         $this->footnote = $this->doctrine->getRepository(OfficialFootnote::class)->findOneBy(
-                            ['footnoteId' => (int) \substr($line, 1, 5)]
+                            ['footnote_id$footnote_id' => (int) \substr($line, 1, 5)]
                         );
                         break;
                     case '&': // Characteristic

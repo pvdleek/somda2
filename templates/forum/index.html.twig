@@ -23,7 +23,13 @@
                             <tr>
                                 <td><i class="fas fa-{% if forum['type'] == constant('App\\Entity\\ForumForum::TYPE_ARCHIVE') %}archive{% else %}comments{% endif %}"></i></td>
                                 <td><a href="{{ path('forum_forum', { 'id': forum['id'], 'name': forum['name'] }) }}">{{ forum['name'] }}</a></td>
-                                <td>{{ forum['numberOfDiscussions'] }}</td>
+                                <td>
+                                    {{ forum['numberOfDiscussions'] }}
+                                    {% if is_granted('IS_AUTHENTICATED_REMEMBERED')
+                                        and forum['type'] != constant('App\\Entity\\ForumForum::TYPE_MODERATORS_ONLY')
+                                        and forum['type'] != constant('App\\Entity\\ForumForum::TYPE_ARCHIVE')
+                                    %}({{ forum['numberOfUnreadDiscussions'] }} ongelezen){% endif %}
+                                </td>
                             </tr>
                         {% endfor %}
                     {% endif %}

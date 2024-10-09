@@ -44,11 +44,8 @@ class HomeController
             ->findBy(['active' => true, 'approved' => true], [RailNewsForm::FIELD_TIMESTAMP => 'DESC'], 5);
 
         $layout = $this->userHelper->getPreferenceByKey(UserPreference::KEY_HOME_LAYOUT)->value;
-        // SpecialRoutes-construction no longer exists
-        $layout = \str_replace(['werkzaamheden-min', 'werkzaamheden'], '', $layout);
-        if (!$this->userHelper->userIsLoggedIn()) {
-            $layout = \str_replace('foutespots', '', $layout);
-        }
+        // SpecialRoutes-construction and wrong-spots no longer exist
+        $layout = \str_replace(['werkzaamheden-min', 'werkzaamheden', 'foutespots'], '', $layout);
         $layout = \array_filter(\explode(';', $layout));
 
         $layoutData = [];
@@ -73,7 +70,7 @@ class HomeController
                 $this->doctrine->getRepository(User::class)->countActive();
             $layoutData[self::KEY_DASHBOARD]['pageViews'] =
                 $this->doctrine->getRepository(Statistic::class)->countPageViews();
-            $layoutData[self::KEY_DASHBOARD]['spots'] = $this->doctrine->getRepository(Spot::class)->countAll();
+            $layoutData[self::KEY_DASHBOARD]['spots'] = $this->doctrine->getRepository(Statistic::class)->countSpots();
             $layoutData[self::KEY_DASHBOARD]['statistics'] =
                 $this->doctrine->getRepository(Statistic::class)->findLastDays(3);
             $layoutData[self::KEY_DASHBOARD]['birthdayUsers'] =
@@ -98,18 +95,7 @@ class HomeController
         if (\in_array(self::KEY_FORUM, $layout) || \in_array('forum-min', $layout)) {
             $layoutData[self::KEY_FORUM] = $this->doctrine
                 ->getRepository(ForumDiscussion::class)
-                ->findForDashboard($limit, [$_ENV['WRONG_SPOTS_FORUM_ID']], $this->userHelper->getUser());
-        }
-        if (\in_array('foutespots', $layout) || \in_array('foutespots-min', $layout)) {
-            /**
-             * @var ForumForum $forum
-             */
-            $forum = $this->doctrine->getRepository(ForumForum::class)->find($_ENV['WRONG_SPOTS_FORUM_ID']);
-            $layoutData[self::KEY_FORUM_SPOTS]['id'] = $forum->id;
-            $layoutData[self::KEY_FORUM_SPOTS]['name'] = $forum->name;
-            $layoutData[self::KEY_FORUM_SPOTS]['discussions'] = $this->doctrine
-                ->getRepository(ForumDiscussion::class)
-                ->findByForum($forum, $this->userHelper->getUser());
+                ->findForDashboard($limit, $this->userHelper->getUser());
         }
     }
 

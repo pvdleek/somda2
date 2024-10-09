@@ -131,12 +131,6 @@ class ProfileController extends AbstractFOSRestController
      * @OA\Post(
      *     @OA\Parameter(in="formData", name="forum_signature", required=false, @OA\Schema(type="string", maxLength=200)),
      *     @OA\Parameter(in="formData", name="forum_new_to_old", required=true, @OA\Schema(type="integer", default=0, enum={0,1})),
-     *     @OA\Parameter(
-     *         in="formData",
-     *         name="app_mark_forum_read",
-     *         required=true,
-     *         @OA\Schema(type="integer", enum={0,1}, default=0),
-     *     ),
      *     @OA\Parameter(in="formData", name="default_spot_place", required=false, @OA\Schema(type="string", maxLength=200)),
      * )
      * @OA\Response(
@@ -164,9 +158,6 @@ class ProfileController extends AbstractFOSRestController
         }
         if (isset($preferences['forum_new_to_old'])) {
             $this->userHelper->getPreferenceByKey(UserPreference::KEY_FORUM_NEW_TO_OLD)->value = $preferences['forum_new_to_old'];
-        }
-        if (isset($preferences['app_mark_forum_read'])) {
-            $this->userHelper->getPreferenceByKey(UserPreference::KEY_APP_MARK_FORUM_READ)->value = $preferences['app_mark_forum_read'];
         }
         if (isset($preferences['default_spot_place'])) {
             $this->userHelper->getPreferenceByKey(UserPreference::KEY_DEFAULT_SPOT_LOCATION)->value = $preferences['default_spot_place'];

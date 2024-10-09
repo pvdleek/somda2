@@ -100,10 +100,6 @@ class ForumDiscussionHelper
             [ForumPostForm::FIELD_TIMESTAMP => $newToOld ? 'DESC' : 'ASC']
         );
 
-        if ($this->userHelper->userIsLoggedIn() ? (bool)$this->userHelper->getPreferenceByKey(UserPreference::KEY_APP_MARK_FORUM_READ)->value : false) {
-            $this->forumDiscussionRepository->markPostsAsRead($this->userHelper->getUser(), $this->discussion, $posts);
-        }
-
         return $posts;
     }
 
@@ -175,6 +171,7 @@ class ForumDiscussionHelper
             return;
         }
         if (null === $requestedPageNumber
+            && $this->discussion->forum->type !== ForumForum::TYPE_MODERATORS_ONLY
             && $this->discussion->forum->type !== ForumForum::TYPE_ARCHIVE
             && $this->userHelper->userIsLoggedIn()
         ) {
@@ -200,7 +197,10 @@ class ForumDiscussionHelper
             return;
         }
 
-        if ($this->discussion->forum->type !== ForumForum::TYPE_ARCHIVE && $this->userHelper->userIsLoggedIn()) {
+        if ($this->discussion->forum->type !== ForumForum::TYPE_MODERATORS_ONLY
+            && $this->discussion->forum->type !== ForumForum::TYPE_ARCHIVE
+            && $this->userHelper->userIsLoggedIn()
+        ) {
             // Neither a specific page or post were requested but the user is logged in,
             // so we will go to the first unread post in the discussion
             $this->pageNumber = (int) \floor($this->getNumberOfReadPosts() / ForumGenerics::MAX_POSTS_PER_PAGE) + 1;
@@ -216,7 +216,7 @@ class ForumDiscussionHelper
     private function setNumberOfReadPosts(): void
     {
         if ($this->userHelper->userIsLoggedIn()) {
-            if ($this->discussion->forum->type === ForumForum::TYPE_ARCHIVE) {
+            if ($this->discussion->forum->type === ForumForum::TYPE_MODERATORS_ONLY || $this->discussion->forum->type === ForumForum::TYPE_ARCHIVE) {
                 $this->numberOfReadPosts = 9999999;
                 return;
             }

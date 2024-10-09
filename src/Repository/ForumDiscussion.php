@@ -23,7 +23,7 @@ class ForumDiscussion extends ServiceEntityRepository
     /**
      * @throws \Exception
      */
-    public function findForDashboard(int $limit, array $excludeForums, User $user = null): array
+    public function findForDashboard(int $limit, User $user = null): array
     {
         $maxQuery = '
             SELECT p.discussionid AS disc_id, MAX(p.timestamp) AS max_date_time
@@ -43,9 +43,7 @@ class ForumDiscussion extends ServiceEntityRepository
                 JOIN somda_forum_posts p_max ON p_max.discussionid = d.discussionid
                 JOIN somda_forum_posts p_count ON p_count.discussionid = d.discussionid
                 INNER JOIN (' . $maxQuery . ') m ON m.disc_id = d.discussionid
-                WHERE p_max.timestamp = m.max_date_time
-                    AND f.type != :moderatorForumType
-                    AND f.forumid NOT IN (:excludeForums)
+                WHERE p_max.timestamp = m.max_date_time AND f.type != :moderatorForumType
                 GROUP BY id, title, author_id, viewed, m.max_date_time, max_post_timestamp
                 ORDER BY m.max_date_time DESC
                 LIMIT 0, ' . $limit;
@@ -64,9 +62,7 @@ class ForumDiscussion extends ServiceEntityRepository
                     ON r.uid = ' . (string) $user->id . ' AND r.discussionid = d.discussionid
                 JOIN somda_forum_posts p_count ON p_count.discussionid = d.discussionid
                 INNER JOIN (' . $maxQuery . ') m ON m.disc_id = d.discussionid
-                WHERE p_max.timestamp = m.max_date_time
-                    AND f.type != :moderatorForumType
-                    AND f.forumid NOT IN (:excludeForums)
+                WHERE p_max.timestamp = m.max_date_time AND f.type != :moderatorForumType
                 GROUP BY `id`, `title`, `author_id`, `viewed`, m.max_date_time, `discussion_read`, `max_post_timestamp`
                 ORDER BY m.max_date_time DESC
                 LIMIT 0, ' . $limit;
@@ -79,7 +75,6 @@ class ForumDiscussion extends ServiceEntityRepository
                 'minDate',
                 date(DateGenerics::DATE_FORMAT_DATABASE, mktime(0, 0, 0, date('m'), date('d') - 100, date('Y')))
             );
-            $statement->bindValue('excludeForums', implode(',', $excludeForums));
             $statement->bindValue('moderatorForumType', ForumForum::TYPE_MODERATORS_ONLY);
             return $statement->executeQuery()->fetchAllAssociative();
         } catch (DBALDriverException) {

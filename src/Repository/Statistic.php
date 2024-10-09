@@ -30,6 +30,19 @@ class Statistic extends ServiceEntityRepository
         }
     }
 
+    public function countSpots(): int
+    {
+        $queryBuilder = $this->getEntityManager()
+            ->createQueryBuilder()
+            ->select('SUM(s.numberOfSpots)')
+            ->from(StatisticEntity::class, 's');
+        try {
+            return (int) $queryBuilder->getQuery()->getSingleScalarResult();
+        } catch (NonUniqueResultException | NoResultException) {
+            return 0;
+        }
+    }
+
     /**
      * @return StatisticEntity[]
      * @throws \Exception

@@ -18,7 +18,6 @@ class UserPreference
     public const KEY_HOME_MAX_SPECIAL_ROUTES = 'max_drgls';
     public const KEY_HOME_MAX_SPOTS = 'max_spots';
     public const KEY_HOME_MAX_FORUM_POSTS = 'max_posts';
-    public const KEY_HOME_MAX_FORUM_POSTS_WRONG_SPOTS = 'max_foutespots';
     public const KEY_HOME_DISPLAY_POLL_AFTER_VOTING = 'display_poll';
 
     public const KEY_FORCE_DESKTOP = 'force_desktop';
@@ -38,15 +37,12 @@ class UserPreference
 
     public const KEY_MAIL_LAST_MINUTE_SPECIAL_ROUTE = 'mail_drgls';
 
-    public const KEY_APP_MARK_FORUM_READ = 'app_mark_forum_read';
-
     public const KEY_VALUES = [
         self::KEY_HOME_LAYOUT,
         self::KEY_HOME_MAX_NEWS,
         self::KEY_HOME_MAX_SPECIAL_ROUTES,
         self::KEY_HOME_MAX_SPOTS,
         self::KEY_HOME_MAX_FORUM_POSTS,
-        self::KEY_HOME_MAX_FORUM_POSTS_WRONG_SPOTS,
         self::KEY_HOME_DISPLAY_POLL_AFTER_VOTING,
         self::KEY_MY_SPOTS_DEFAULT_NUMBER,
         self::KEY_MY_SPOTS_DEFAULT_OFFSET,
@@ -59,7 +55,6 @@ class UserPreference
         self::KEY_FORUM_NEW_TO_OLD,
         self::KEY_FORUM_MAIL_FOR_ALL_FAVORITES,
         self::KEY_MAIL_LAST_MINUTE_SPECIAL_ROUTE,
-        self::KEY_APP_MARK_FORUM_READ,
     ];
 
     /**

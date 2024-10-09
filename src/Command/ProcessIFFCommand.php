@@ -12,7 +12,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 #[AsCommand(
     name: 'app:process-iff',
-    description: 'Process the IFF files from NS',
+    description: 'Process the IFF files from NS via the "NDOV loket"',
     hidden: false,
 )]
 
@@ -30,7 +30,6 @@ class ProcessIFFCommand extends Command
     protected function configure(): void
     {
         $this
-            ->addArgument('directory', InputArgument::REQUIRED)
             ->addOption('footnotes', 'f', InputOption::VALUE_NONE, 'Process the footnotes')
             ->addOption('companies', 'c', InputOption::VALUE_NONE, 'Process the companies')
             ->addOption('characteristics', 'a', InputOption::VALUE_NONE, 'Process the characteristics')
@@ -43,7 +42,9 @@ class ProcessIFFCommand extends Command
      */
     protected function execute(InputInterface $input = null, OutputInterface $output = null): int
     {
-        $this->trainTableHelper->setDirectory($input->getArgument('directory'));
+        // Get the ZIP from the NDOV loket and extract it to the directory
+        $this->getZipFile('https://data.ndovloket.nl/ns/ns-latest.zip');
+        $this->trainTableHelper->setDirectory('/tmp');
 
         if ($input->getOption('footnotes') === true) {
             $this->trainTableHelper->processFootnotes();
@@ -62,5 +63,15 @@ class ProcessIFFCommand extends Command
         }
 
         return 0;
+    }
+
+    private function getZipFile(string $zip_file): void
+    {
+        \file_put_contents('/tmp/iff.zip', \file_get_contents($zip_file));
+
+        $zip = new \ZipArchive();
+        $zip->open('/tmp/iff.zip');
+        $zip->extractTo('/tmp');
+        $zip->close();
     }
 }

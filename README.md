@@ -23,7 +23,7 @@ Somda has the following system requirements:
 
 Setting up a local environment requires the following steps:
 - Clone the repository
-- Copy the file `.env` to `env.local` in the root and adjust it to your environment. The keys WRONG_SPOTS_FORUM_ID, NS_API_PRIMARY_KEY and NS_API_SECONDARY_KEY are not important at this stage.
+- Copy the file `.env` to `env.local` in the root and adjust it to your environment. The keys NS_API_PRIMARY_KEY and NS_API_SECONDARY_KEY are not important at this stage.
 - Import the database scripts into your local database in this order:
   - `database/empty_database.sql`
   - `database/basic_data.sql`

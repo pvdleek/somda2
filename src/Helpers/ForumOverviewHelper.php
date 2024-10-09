@@ -47,7 +47,7 @@ class ForumOverviewHelper
                     continue;
                 }
 
-                if ((int) $forum['type'] !== ForumForum::TYPE_ARCHIVE) {
+                if ((int) $forum['type'] !== ForumForum::TYPE_ARCHIVE && (int) $forum['type'] !== ForumForum::TYPE_MODERATORS_ONLY) {
                     $unreadDiscussions = $this->doctrine
                         ->getRepository(ForumForum::class)
                         ->getNumberOfUnreadDiscussionsInForum((int) $forum['id'], $this->userHelper->getUser());

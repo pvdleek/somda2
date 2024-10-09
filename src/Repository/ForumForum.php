@@ -28,7 +28,6 @@ class ForumForum extends ServiceEntityRepository
             FROM `somda_forum_forums` `f`
             JOIN `somda_forum_cats` `c` ON `c`.`catid` = `f`.`catid`
             LEFT JOIN `somda_forum_discussion` `d` ON `d`.`forumid` = `f`.`forumid`
-            LEFT JOIN `somda_forum_posts` `p` ON `p`.`discussionid` = `d`.`discussionid`
             LEFT JOIN `somda_forum_mods` `m` ON `m`.`forumid` = `f`.`forumid` AND `m`.`uid` = :userId
             GROUP BY `f`.`forumid`';
 
@@ -45,26 +44,26 @@ class ForumForum extends ServiceEntityRepository
     public function getNumberOfUnreadDiscussionsInForum(int $forumId, User $user): int
     {
         $maxQuery = '
-            SELECT p.discussionid AS disc_id, MAX(p.timestamp) AS max_date_time
-            FROM somda_forum_posts p
-            JOIN somda_forum_discussion d ON d.discussionid = p.discussionid
-            WHERE d.forumid = :forumId
-            GROUP BY disc_id';
+            SELECT `p`.`discussionid` AS `disc_id`, MAX(`p`.`timestamp`) AS `max_date_time`
+            FROM `somda_forum_posts` `p`
+            JOIN `somda_forum_discussion` `d` ON `d`.`discussionid` = `p`.`discussionid`
+            WHERE `d`.`forumid` = :forumId
+            GROUP BY `disc_id`';
         $query = '
-            SELECT SUM(IF(IFNULL(`r`.`postid`, 0) < p_max.postid, 1, 0)) AS `number_of_discussions_unread`
-            FROM somda_forum_discussion d
-            JOIN somda_users a ON a.uid = d.authorid
-            JOIN somda_forum_posts p_max ON p_max.discussionid = d.discussionid
-            LEFT JOIN somda_forum_last_read r
-                ON r.uid = ' . (string) $user->id . ' AND r.discussionid = d.discussionid
-            INNER JOIN (' . $maxQuery . ') m ON m.disc_id = d.discussionid
-            WHERE d.forumid = :forumId AND p_max.timestamp = m.max_date_time
+            SELECT SUM(IF(IFNULL(`r`.`postid`, 0) < `p_max`.`postid`, 1, 0)) AS `number_of_discussions_unread`
+            FROM `somda_forum_discussion` `d`
+            JOIN `somda_users` `a` ON `a`.`uid` = `d`.`authorid`
+            JOIN `somda_forum_posts` `p_max` ON `p_max`.`discussionid` = `d`.`discussionid`
+            LEFT JOIN `somda_forum_last_read` `r` ON `r`.`uid` = :userId AND `r`.`discussionid` = `d`.`discussionid`
+            INNER JOIN (' . $maxQuery . ') `m` ON `m`.`disc_id` = `d`.`discussionid`
+            WHERE `d`.`forumid` = :forumId AND `p_max`.`timestamp` = `m`.`max_date_time`
             GROUP BY `d`.`forumid`';
         $connection = $this->getEntityManager()->getConnection();
         try {
             $statement = $connection->prepare($query);
             $statement->bindValue('forumId', $forumId, ParameterType::INTEGER);
-            return (int) $statement->executeQuery()->fetchOne()[0];
+            $statement->bindValue('userId', $user->id, ParameterType::INTEGER);
+            return (int) $statement->executeQuery()->fetchOne();
         } catch (DBALException | DBALDriverException | ErrorException) {
             return 0;
         }
