@@ -203,6 +203,11 @@ class ForumDiscussionHelper
         ) {
             // Neither a specific page or post were requested but the user is logged in,
             // so we will go to the first unread post in the discussion
+            if ($this->numberOfReadPosts === $this->numberOfPosts) {
+                $this->pageNumber = (int) \floor(($this->getNumberOfReadPosts() - 1) / ForumGenerics::MAX_POSTS_PER_PAGE) + 1;
+                return;
+            }
+
             $this->pageNumber = (int) \floor($this->getNumberOfReadPosts() / ForumGenerics::MAX_POSTS_PER_PAGE) + 1;
             if ($newToOld) {
                 $this->pageNumber = \max($this->numberOfPages - $this->pageNumber, 1);
