@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\ForumDiscussion;
-use App\Entity\ForumForum;
 use App\Entity\News;
 use App\Entity\RailNews;
 use App\Entity\SpecialRoute;
@@ -44,8 +43,6 @@ class HomeController
             ->findBy(['active' => true, 'approved' => true], [RailNewsForm::FIELD_TIMESTAMP => 'DESC'], 5);
 
         $layout = $this->userHelper->getPreferenceByKey(UserPreference::KEY_HOME_LAYOUT)->value;
-        // SpecialRoutes-construction and wrong-spots no longer exist
-        $layout = \str_replace(['werkzaamheden-min', 'werkzaamheden', 'foutespots'], '', $layout);
         $layout = \array_filter(\explode(';', $layout));
 
         $layoutData = [];

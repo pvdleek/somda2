@@ -107,7 +107,6 @@ dashboard:
     shortcuts: 'Snelkoppelingen'
     spoornieuws: 'Spoornieuws'
     spots: 'Recente spots'
-    weer: 'Het actuele weer'
     welcome: 'Welkom op Somda'
 location:
   search:
