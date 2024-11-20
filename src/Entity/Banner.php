@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="somda_banner")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\Banner")
  */
 class Banner
 {

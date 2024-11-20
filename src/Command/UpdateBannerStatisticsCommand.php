@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Command;
 
 use App\Entity\Banner;
+use App\Repository\Banner as BannerRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -42,11 +43,15 @@ class UpdateBannerStatisticsCommand extends Command
         }
 
         // De-activate banners that should stop
-        $banners = $this->doctrine->getRepository(Banner::class)->findBy(['active' => true]);
+        /**
+         * @var BannerRepository $banner_repository
+         */
+        $banner_repository = $this->doctrine->getRepository(Banner::class);
+        $banners = $banner_repository->findBy(['active' => true]);
         foreach ($banners as $banner) {
             if (null !== $banner->endTimestamp && $banner->endTimestamp <= new \DateTime() ||
-                $banner->maxHits >= \count($banner->getBannerHits()) ||
-                $banner->maxViews >= \count($banner->getBannerViews())
+                $banner->maxHits >= $banner_repository->getNumberOfHits($banner) ||
+                $banner->maxViews >= $banner_repository->getNumberOfViews($banner)
             ) {
                 $banner->active = false;
             }
