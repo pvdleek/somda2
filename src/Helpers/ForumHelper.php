@@ -99,7 +99,7 @@ class ForumHelper implements RuntimeExtensionInterface
             }
             $replace = [
                 'http://www.somda.nl', 'http://somda.nl', 'http://test.somda.nl',
-                'https://www.somda.nl', 'https://somda.nl', 'https://test.somda.nl'
+                'https://somda.nl', 'https://somda.nl', 'https://test.somda.nl'
             ];
             $text = \str_replace($replace, $server, $text);
         }
