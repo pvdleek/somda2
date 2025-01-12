@@ -43,9 +43,7 @@ class UpdateLocationsCommand extends Command
         /**
          * @var LocationCategory $notValidCategory
          */
-        $notValidCategory = $this->doctrine->getRepository(LocationCategory::class)->find(
-            LocationCategory::NO_LONGER_VALID_ID
-        );
+        $notValidCategory = $this->doctrine->getRepository(LocationCategory::class)->find(LocationCategory::NO_LONGER_VALID_ID);
 
         foreach ($result['payload'] as $station) {
             $category = $this->doctrine->getRepository(LocationCategory::class)->findOneBy(
@@ -59,9 +57,7 @@ class UpdateLocationsCommand extends Command
             }
 
             $locationName = \ucfirst(\strtolower($station['code']));
-            $location = $this->doctrine->getRepository(Location::class)->findOneBy(
-                ['name' => $locationName, 'category' => $category]
-            );
+            $location = $this->doctrine->getRepository(Location::class)->findOneBy(['name' => $locationName]);
             if (null === $location) {
                 $location = new Location();
                 $location->name = $locationName;
@@ -76,6 +72,8 @@ class UpdateLocationsCommand extends Command
 
             if (isset($station['eindDatum']) && new \DateTime($station['eindDatum']) < new \DateTime()) {
                 $location->category = $notValidCategory;
+            } else {
+                $location->category = $category;
             }
 
             $this->doctrine->getManager()->flush();
