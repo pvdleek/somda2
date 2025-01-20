@@ -6,7 +6,7 @@
 }
 
 .menu {
-    background: #246da5;
+    background: var(--main-background-dark-color);
     border-radius: 5px;
     margin: 10px 10px 0 10px;
     height: 3rem;
@@ -29,7 +29,7 @@
     padding: 0.5rem 0;
 }
 .menu > ol > .menu-item:hover {
-    background: #2b84c8;
+    background: var(--main-hover-light-color);
 }
 .menu > ol > .menu-item:after {
     content: "";
@@ -39,7 +39,7 @@
     border-radius: 20%;
     bottom: 0.4rem;
     left: calc(50% - 25px);
-    background: #fff;
+    background: var(--main-text-light-color);
     will-change: transform;
     -webkit-transform: scale(0);
     -moz-transform: scale(0);
@@ -64,7 +64,7 @@
     text-align: center;
 }
 .menu-item a, .menu-item span {
-    color: #FFF;
+    color: var(--main-text-light-color);
     display: block;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -83,13 +83,13 @@
 }
 .sub-menu .menu-item {
     animation: enter 0s ease forwards;
-    background: #246da5;
+    background: var(--main-background-dark-color);
     opacity: 0;
     padding: 0.25rem 0;
     transform-origin: bottom;
 }
 .sub-menu .menu-item:hover {
-    background: #2b84c8;
+    background: var(--main-hover-light-color);
 }
 .sub-menu .menu-item a {
     padding: 0 0.25rem;
@@ -116,7 +116,7 @@
     }
     .menu > ol {
         display: none;
-        background: #246da5;
+        background: var(--main-background-dark-color);
         flex-direction: column;
         justify-content: center;
         height: 100vh;

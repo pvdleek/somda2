@@ -2,7 +2,6 @@
 /*** Generic ***/
 /***************/
 h1 {
-    color: #3a3a3a;
     font-size: 2.3em;
     font-style: normal;
     font-weight: normal;
@@ -11,7 +10,6 @@ h1 {
     margin: .75em 0;
 }
 h2 {
-    color: #1B5E92;
     font-size: 2em;
     font-style: normal;
     font-weight: normal;
@@ -20,37 +18,30 @@ h2 {
     margin: .75em 0;
 }
 body {
-    color: #515151;
+    color: var(--main-text-color);
     font-family: Verdana, Arial, sans-serif;
     font-size: 80%;
     letter-spacing: 0;
     line-height: 150%;
 }
-.webp body {
-    background: #dce9f7 url(../images/design/body-background.webp) repeat-x 0 top;
-}
-.no-webp body {
-    background: #dce9f7 url(../images/design/body-background.png) repeat-x 0 top;
-}
 #wrap {
-    background: #fff;
     margin: 10px auto 0 auto;
     max-width: 1280px;
     position: relative;
 }
 
 hr {
-    background-color: #538eba;
+    background-color: var(--main-background-dark-color);
     border: 0;
-    color: #538eba;
+    color: var(--main-background-dark-color);
     height: 1px;
 }
 a {
-    color: #246da5;
+    color: var(--main-background-dark-color);
     text-decoration: underline;
 }
 a:hover {
-    color: #2b84c8;
+    color: var(--main-hover-light-color);
     text-decoration: none;
 }
 a img {
@@ -61,8 +52,8 @@ span[title] {
     border-bottom: 1px dotted;
 }
 span[title]:hover:after {
-    background-color: #d2e2f1;
-    border: 1px solid #246da5;
+    background-color: var(--main-background-light-color);
+    border: 1px solid var(--main-background-dark-color);
     content: attr(title);
     padding: 5px;
     position: absolute;
@@ -103,21 +94,20 @@ input[type="radio"] + label.required:after {
     content: '';
 }
 input.with-error {
-    border: 1px solid red;
+    border: 1px solid var(--alert-error-color);
 }
 
 /********************/
 /*** Table design ***/
 /********************/
 table {
-    border: 1px solid #C2D2E1;
     border-collapse: collapse;
     border-spacing: 0;
 }
 table th {
-    background-color: #1D679F;
-    border: 1px solid #C2D2E1;
-    color: #fff;
+    background-color: var(--main-background-dark-color);
+    border: 1px solid var(--main-background-light-color);
+    color: var(--main-text-light-color);
     font-weight: bold;
     padding: 5px;
 }
@@ -129,43 +119,42 @@ table th a {
     text-decoration: none;
 }
 table th a:hover {
-    color: #fff;
+    color: var(--main-text-light-color);
 }
 table td {
-    background-color: #d2e2f1;
-    border: 1px solid #c2d2e1;
-    color: #515151;
+    background-color: var(--main-background-light-color);
+    color: var(--main-text-color);
     padding: 5px;
     vertical-align: top;
 }
 
 table.dataTable tr.odd td {
-    background-color: #c2d2e1;
-    border: 1px solid #d2e2f1;
+    background-color: var(--main-background-dark-color);
+    border: 1px solid var(--main-background-light-color);
 }
 table.dataTable tr:hover td {
-    background-color: #2b84c8;
-    color: #fff;
+    background-color: var(--main-hover-light-color);
+    color: var(--main-text-light-color);
 }
 table.dataTable tr td a:hover {
-    color: #fff;
+    color: var(--main-text-light-color);
 }
 table.dataTable tr td span[title]:hover {
-    color: #515151;
+    color: var(--main-text-color);
 }
 
 /**************/
 /*** Header ***/
 /**************/
 #header {
+    background-color: var(--header-background-color);
+    border-radius: 5px;
+    color: var(--header-text-color);
     height: 101px;
     width: 100%;
 }
-.webp #header {
-    background: #f2f2f2 url(../images/design/header-main.webp) repeat-x 0 top;
-}
-.no-webp #header {
-    background: #f2f2f2 url(../images/design/header-main.png) repeat-x 0 top;
+#header_image {
+    background-size: contain;
 }
 #logo-graphic h1 {
     margin: 0;
@@ -202,12 +191,12 @@ table.dataTable tr td span[title]:hover {
     margin-bottom: 10px;
 }
 .news-flash .news-flash-title a {
-    color: #515151;
+    color: var(--header-text-color);
     font-size: 1.3em;
     text-decoration: none;
 }
 .news-flash .news-flash-title a:hover {
-    color: #246da5;
+    color: var(--main-background-dark-color);
 }
 
 /***************/
@@ -222,7 +211,7 @@ table.dataTable tr td span[title]:hover {
 a.rail-news-title {
     text-decoration: none;
     line-height: 1.1em;
-    color: #246DA5;
+    color: var(--main-background-dark-color);
 }
 a.rail-news-title:hover {
     color: #121517;
@@ -261,21 +250,21 @@ a.rail-news-title:hover {
 }
 
 .home-panel .panel-title, .panel .panel-title {
-    background-color: #246da5;
+    background-color: var(--main-background-dark-color);
     border-radius: 5px 5px 0 0;
-    color: #fff;
+    color: var(--main-text-light-color);
     font-weight: bold;
     margin: 0;
     padding: 5px 5px 5px 10px;
 }
 .home-panel .panel-title a, .panel .panel-title a, .panel .panel-footer a {
-    color: #fff;
+    color: var(--main-text-light-color);
 }
 .home-panel .panel-title a:hover, .panel .panel-title a:hover, .panel .panel-footer a:hover {
     color: #bbb;
 }
 .home-panel .panel-content, .panel .panel-content {
-    background-color: #d2e2f1;
+    background-color: var(--main-background-light-color);
     border-radius: 0 0 5px 5px;
     display: block;
     padding: 10px;
@@ -287,9 +276,9 @@ a.rail-news-title:hover {
     display: none;
 }
 .panel .panel-footer {
-    background-color: #246da5;
+    background-color: var(--main-background-dark-color);
     border-radius: 0 0 5px 5px;
-    color: #fff;
+    color: var(--main-text-light-color);
     font-weight: bold;
     margin: 0;
     padding: 5px 5px 5px 10px;
@@ -302,7 +291,7 @@ a.rail-news-title:hover {
     float: right;
 }
 .home-panel .panel-actions a {
-    color: #fff !important;
+    color: var(--main-text-light-color) !important;
 }
 .panel-buttons {
     text-align: center;
@@ -362,8 +351,8 @@ a.rail-news-title:hover {
 /*** Footer ***/
 /**************/
 #footer {
-    background-color: #1E69A3;
-    color: #FFFFFF;
+    background-color: var(--main-background-dark-color);
+    color: var(--main-text-light-color);
     font: .90em/100% "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
     height: 50px;
     margin: 0 auto;
@@ -373,23 +362,17 @@ a.rail-news-title:hover {
     width: 100%;
 }
 #footer a {
-    color: #BBBBBB;
+    color: #bbb;
     text-decoration: none;
 }
 #footer a:hover {
-    color: #FFFFFF;
+    color: var(--main-text-light-color);
 }
 .ftr-left {
     float: left;
     height: 50px;
     padding-top: 19px;
     width: 150px;
-}
-.webp .ftr-left {
-    background: url(../images/design/footer-left.webp) no-repeat left 20px transparent;
-}
-.no-webp .ftr-left {
-    background: url(../images/design/footer-left.png) no-repeat left 20px transparent;
 }
 .ftr-center {
     font-weight: bold;
@@ -409,18 +392,12 @@ a.rail-news-title:hover {
     text-align: right;
     width: 150px;
 }
-.webp .ftr-right {
-    background: url(../images/design/footer-right.webp) no-repeat right 20px transparent;
-}
-.no-webp .ftr-right {
-    background: url(../images/design/footer-right.png) no-repeat right 20px transparent;
-}
 
 /*************/
 /*** Forum ***/
 /*************/
 table.forum {
-    background-color: #D2E2F1;
+    background-color: var(--main-background-light-color);
     width: 100%;
 }
 td.info {
@@ -449,7 +426,7 @@ span.edit_text {
     font-size: 8px;
 }
 .favorite-box {
-    color: #FFF;
+    color: var(--main-text-light-color);
     float: right;
     padding-right: 5px;
 }
@@ -459,8 +436,8 @@ span.edit_text {
     padding-right: 10px;
 }
 .wiki-block {
-    background-color: #D2E2F1;
-    border: 1px solid #B2C2D1;
+    background-color: var(--main-background-light-color);
+    border: 1px solid var(--main-background-dark-color);
     margin: 8px;
     padding: 8px;
     font-size: 13pt;
@@ -474,7 +451,7 @@ ol {
 }
 blockquote {
     background: #F9F9F9;
-    border-left: 10px solid #1D679F;
+    border-left: 10px solid var(--main-background-dark-color);
     font-style: italic;
     margin: 1.5em 10px;
     padding: 0.5em 10px;
@@ -550,10 +527,10 @@ ul.about {
 /**************************/
 table.design tr.proposition-row td {
     background-color: #A46A1F;
-    color: #FFFFFF;
+    color: var(--main-text-light-color);
 }
 table.design tr.proposition-row a {
-    color: #FFFFFF;
+    color: var(--main-text-light-color);
     text-decoration: underline;
 }
 table.design tr.proposition-row a:hover {

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="no-webp" lang="nl" xml:lang="nl" xmlns="http://www.w3.org/1999/xhtml">
+<html lang="nl" xml:lang="nl" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     {% if app.user and app.user.cookieOk == constant('App\\Entity\\User::COOKIE_OK') %}
         <script async src="https://www.googletagmanager.com/gtag/js?id=UA-2723197-1"></script>
@@ -13,7 +13,7 @@
         </script>
     {% endif %}
 
-    <link rel="apple-touch-icon" href="{{ asset('images/logos-somda/app-logo.png') }}" />
+    <link rel="apple-touch-icon" href="{{ asset('images/logo-app.webp') }}" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
 
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
@@ -30,22 +30,17 @@
     <title>{% if pageTitle is defined %}{{ pageTitle }} - {% endif %}Somda</title>
 
     <link href="{{ asset('css/base.css') }}?version={{ 'css/base.css' | fileTimestamp }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('css/design-1.css') }}?version={{ 'css/design-1.css' | fileTimestamp }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('css/mobile.css') }}?version={{ 'css/mobile.css' | fileTimestamp }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('css/font-awesome-5.13.0-min.css') }}?version={{ 'css/font-awesome-5.13.0-min.css' | fileTimestamp }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('css/font-awesome-brands-5.13.0-min.css') }}?version={{ 'css/font-awesome-brands-5.13.0-min.css' | fileTimestamp }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('css/font-awesome-solid-5.13.0-min.css') }}?version={{ 'css/font-awesome-solid-5.13.0-min.css' | fileTimestamp }}" rel="stylesheet" type="text/css" />
 
-    <style type="text/css">
-        #header_image {
-            background: url('{{ asset('images/logos-somda/logo-' ~ imageNumber ~ '.png') }}') no-repeat;
-        }
-    </style>
-
     <link href="{{ asset('favicon.ico') }}" rel="shortcut icon" type="image/x-icon" />
 </head>
 <body>
     <div id="container">
-        <div id="header"><img alt="Somda" src="{{ asset('images/logos-somda/logo-' ~ imageNumber ~ '.png') }}" /></div>
+        <div id="header"><img alt="Somda" src="{{ asset('images/logo-1.webp') }}" /></div>
 
         <div id="menu">
             <a href="{{ path('home') }}">Home</a> -

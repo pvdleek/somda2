@@ -56,7 +56,7 @@ table th a {
     color: #aaa !important;
 }
 table.forum-overview td {
-    border-bottom: 1px #246da5 solid;
+    border-bottom: 1px var(--main-background-dark-color) solid;
     padding-bottom: 0.5rem;
     padding-top: 0.5rem;
 }

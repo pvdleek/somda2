@@ -1,0 +1,24 @@
+:root {
+    --main-text-color: #3a3a33;
+    --main-text-light-color: #fff;
+    --main-background-dark-color: #4d6a72;
+    --main-background-light-color: #f8f8ef;
+    --main-border-light-color: #b5d4fe;
+    --main-hover-light-color: #303029;
+
+    --header-background-color: #f8f8ef;
+    --header-text-color: #3a3a33;
+
+    --button-text-color: #fff;
+    --button-alternative-color: #d7a23a;
+
+    --alert-info-background: #d4ffff;
+    --alert-info-color: #acae89;
+    --alert-warn-background: #fceac6;
+    --alert-warn-color: #ffd5a3;
+    --alert-error-background: #ffd5a3;
+    --alert-error-color: #ffb992;
+}
+#header_image {
+    background: url('/images/logo-2.webp') no-repeat center center;
+}

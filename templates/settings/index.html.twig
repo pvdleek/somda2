@@ -7,11 +7,11 @@
             {{ form_start(form, { 'attr': { 'id': 'settings_form' } }) }}
                 <table>
                     <tr><th colspan="2">Layout van de home-pagina</th></tr>
+                    {{ form_row(form.design) }}
                     {{ form_row(form.max_news) }}
                     {{ form_row(form.max_drgls) }}
                     {{ form_row(form.max_spots) }}
                     {{ form_row(form.max_posts) }}
-                    {{ form_row(form.display_poll) }}
 
                     <tr><td colspan="2">&nbsp;</td></tr>
                     <tr><th colspan="2">Gebruik van de mobiele website</th></tr>

@@ -1,7 +1,7 @@
 {% extends('baseExport.html.twig') %}
 
 {% block content %}
-    Doorkomststaat voor {{ trainTableIndex.name }} van {{ locationName }} op {{ ('general.date.days.' ~ dayNumber) | trans | lower }} van {{ startTime }} tot {{ endTime }}
+    Doorkomststaat voor {{ trainTableIndex.name }} van {{ locationName }} op {{ ('general.date.days.' ~ (dayNumber - 1)) | trans | lower }} van {{ startTime }} tot {{ endTime }}
     <br />
     <br />
 

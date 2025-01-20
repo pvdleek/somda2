@@ -14,11 +14,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 class UserPreference
 {
     public const KEY_HOME_LAYOUT = 'layout';
+    public const KEY_HOME_DESIGN = 'design';
     public const KEY_HOME_MAX_NEWS = 'max_news';
     public const KEY_HOME_MAX_SPECIAL_ROUTES = 'max_drgls';
     public const KEY_HOME_MAX_SPOTS = 'max_spots';
     public const KEY_HOME_MAX_FORUM_POSTS = 'max_posts';
-    public const KEY_HOME_DISPLAY_POLL_AFTER_VOTING = 'display_poll';
 
     public const KEY_FORCE_DESKTOP = 'force_desktop';
 
@@ -39,11 +39,11 @@ class UserPreference
 
     public const KEY_VALUES = [
         self::KEY_HOME_LAYOUT,
+        self::KEY_HOME_DESIGN,
         self::KEY_HOME_MAX_NEWS,
         self::KEY_HOME_MAX_SPECIAL_ROUTES,
         self::KEY_HOME_MAX_SPOTS,
         self::KEY_HOME_MAX_FORUM_POSTS,
-        self::KEY_HOME_DISPLAY_POLL_AFTER_VOTING,
         self::KEY_MY_SPOTS_DEFAULT_NUMBER,
         self::KEY_MY_SPOTS_DEFAULT_OFFSET,
         self::KEY_MY_SPOTS_SORT_ORDER_1,

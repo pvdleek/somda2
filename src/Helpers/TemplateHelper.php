@@ -103,9 +103,9 @@ class TemplateHelper
         }
 
         return \array_merge($viewParameters, [
+            'design_number' => $this->userHelper->getPreferenceByKey(UserPreference::KEY_HOME_DESIGN)->value,
             'headerType' =>  $headerType,
             'headerContent' => $headerContent,
-            'imageNumber' => \random_int(1, 11),
             'menuStructure' => $this->menuHelper->getMenuStructure(),
             'nrOfOpenForumAlerts' => $this->menuHelper->getNumberOfOpenForumAlerts(),
             'blockHelp' => $this->getBlockHelp(),
