@@ -37,7 +37,7 @@ hr {
     height: 1px;
 }
 a {
-    color: var(--main-background-dark-color);
+    color: var(--main-text-link-color);
     text-decoration: underline;
 }
 a:hover {
@@ -196,7 +196,7 @@ table.dataTable tr td span[title]:hover {
     text-decoration: none;
 }
 .news-flash .news-flash-title a:hover {
-    color: var(--main-background-dark-color);
+    color: var(--header-text-hover-color);
 }
 
 /***************/

@@ -3,7 +3,7 @@ FROM pvdleek/server-configuration:base_image
 WORKDIR /var/www
 
 RUN apk add --no-cache tzdata
-ENV TZ Europe/Amsterdam
+ENV TZ=Europe/Amsterdam
 
 COPY .env.prod ./.env
 COPY composer.json ./

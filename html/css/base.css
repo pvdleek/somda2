@@ -32,10 +32,10 @@ div.center {
 /*** Button ***/
 /**************/
 .somda-button {
-    background-color: var(--main-background-dark-color);
-    border: 1px solid var(--main-background-dark-color);
+    background-color: var(--button-background-color);
+    border: 1px solid var(--button-inverse-color);
     border-radius: 5px;
-    color: var(--button-text-color) !important;
+    color: var(--button-inverse-color) !important;
     display: inline-block;
     font-weight: bold;
     margin: 2px;
@@ -44,14 +44,15 @@ div.center {
     text-decoration: none;
 }
 .somda-button:hover, .somda-button:focus {
-    background-color: var(--button-text-color);
-    color: var(--main-background-dark-color) !important;
+    background-color: var(--button-inverse-color);
+    border: 1px solid var(--button-background-color) !important;
+    color: var(--button-background-color) !important;
 }
 .donation-button {
     background-color: var(--button-alternative-color);
     border: 1px solid var(--button-alternative-color);
     border-radius: 5px;
-    color: var(--button-text-color);
+    color: var(--button-inverse-color);
     display: inline-block;
     font-weight: bold;
     margin: 2px;
@@ -60,7 +61,7 @@ div.center {
     text-decoration: none;
 }
 .donation-button:hover, .donation-button:focus {
-    background-color: var(--button-text-color);
+    background-color: var(--button-inverse-color);
     color: var(--button-alternative-color);
 }
 

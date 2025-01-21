@@ -1,6 +1,7 @@
 :root {
     --main-text-color: #283944;
     --main-text-light-color: #ccf6ff;
+    --main-text-link-color: #283944;
     --main-background-dark-color: #283944;
     --main-background-light-color: #ccf6ff;
     --main-border-light-color: #6e372a;
@@ -8,8 +9,10 @@
 
     --header-background-color: #42535f;
     --header-text-color: #ccf6ff;
+    --header-text-hover-color: #283944;
 
-    --button-text-color: #fff;
+    --button-background-color: #283944;
+    --button-inverse-color: #fff;
     --button-alternative-color: #f17255;
 
     --alert-info-background: #9ee082;
