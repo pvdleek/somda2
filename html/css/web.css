@@ -129,18 +129,11 @@ table td {
 }
 
 table.dataTable tr.odd td {
+    background-color: var(--main-background-light-color);
+}
+table.dataTable tr:hover td, table.dataTable tr:hover td a, table.dataTable tr:hover td span[title] {
     background-color: var(--main-background-dark-color);
-    border: 1px solid var(--main-background-light-color);
-}
-table.dataTable tr:hover td {
-    background-color: var(--main-hover-light-color);
     color: var(--main-text-light-color);
-}
-table.dataTable tr td a:hover {
-    color: var(--main-text-light-color);
-}
-table.dataTable tr td span[title]:hover {
-    color: var(--main-text-color);
 }
 
 /**************/
