@@ -83,12 +83,12 @@ class FeedProvider implements FeedProviderInterface
                 ->setTitle($this->spotHelper->getDisplaySpot($spot, true))
                 ->setPublicId($this->router->generate(
                     'spots_search',
-                    ['maxMonths' => 12, 'searchParameters' => '/0/' . $spot->train->number . '/'],
+                    ['maxMonths' => 1, 'searchParameters' => '/0//' . $spot->train->number . '/'],
                     UrlGeneratorInterface::ABSOLUTE_URL
                 ))
                 ->setLink($this->router->generate(
                     'spots_search',
-                    ['maxMonths' => 12, 'searchParameters' => '/0//' . $spot->route->number],
+                    ['maxMonths' => 1, 'searchParameters' => '/0///' . $spot->route->number],
                     UrlGeneratorInterface::ABSOLUTE_URL
                 ))
                 ->setLastModified($spot->timestamp)
