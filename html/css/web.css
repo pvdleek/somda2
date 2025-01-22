@@ -214,7 +214,7 @@ a.rail-news-title {
     color: var(--main-background-dark-color);
 }
 a.rail-news-title:hover {
-    color: #121517;
+    color: var(--main-text-color);
 }
 
 /************/
