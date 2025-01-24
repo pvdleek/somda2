@@ -1,22 +1,84 @@
 {% extends 'base.html.twig' %}
 
 {% block content %}
-    <br />
-    <div class="center">
-        {% if error %}
-            <p class="alert">{{ error.messageKey | trans(error.messageData, 'security') }}</p>
-        {% endif %}
+    <div class="login-container{% if 'register' == view %} active{% endif %}">
+        <div class="form-box login">
+            {% if error %}
+                <p class="alert">{{ error.messageKey | trans(error.messageData, 'security') }}</p>
+            {% endif %}
+            <form action="{{ path('login') }}" id="login_form" method="post">
+                <h1>Inloggen bij Somda</h1>
+                <div class="input-box">
+                    <input name="_username" placeholder="Geef je gebruikersnaam" required="required" type="text" /><i class="fas fa-user"></i>
+                </div>
+                <div class="input-box">
+                    <input name="_password" placeholder="Geef je wachtwoord" required="required" type="password" /><i class="fas fa-lock"></i>
+                </div>
+                <div class="forgot-link">
+                    <a href="{{ path('lost_password') }}">Wachtwoord vergeten?</a>
+                </div>
+                <a class="somda-button" href="#" id="login_button" onclick="disableMeAndSubmitForm('login_button', 'login_form'); return false;">Inloggen bij Somda</a>
+            </form>
+        </div>
+        
+        <div class="form-box register">
+            {{ form_start(register_form, { 'action': path('register'), 'attr': { 'id': 'register_form' } }) }}
+                {% set messages = [] %}
+                {% for child in register_form.children %}
+                    {% for error in child.vars.errors %}
+                        {% set messages = messages|merge([error.message]) %}
+                    {% endfor %}
+                {% endfor %}
+                {% if messages|length %}
+                    <p class="alert">{% for message in messages %}{{ message }}{% if not loop.last %}<br /><br />{% endif %}{% endfor %}</p>
+                {% endif %}
 
-        <form method="post">
-            <table>
-                <tr><th><label for="username">Geef je gebruikersnaam</label></th><td><input id="username" maxlength="20" name="_username" size="20" type="text" value="{{ lastUsername }}" /></td></tr>
-                <tr><th><label for="password">Geef je wachtwoord</label></th><td><input id="password" name="_password" size="20" type="password" /></td></tr>
-                <tr><th>&nbsp;</th><td><label for="remember_me"><input id="remember_me" name="_remember_me" type="checkbox" /> Blijf ingelogd</label></td></tr>
-                <tr><td colspan="2"><input class="somda-button" type="submit" value="Inloggen bij Somda "/></td></tr>
-            </table>
-        </form>
-        <br /><p class="info info-max-width">Neem <a href="{{ path('contact') }}">contact op</a> als je jouw gebruikersnaam niet meer weet.</p>
-        <br /><p class="info info-max-width">Nog geen gebruikersnaam en wachtwoord? <a href="{{ path('register') }}">Registreer je gratis en vrijblijvend</a><br />Wachtwoord vergeten? <a href="{{ path('lost_password') }}">Vraag een nieuw wachtwoord aan</a></p>
+                <h1>Account aanmaken</h1>
+                <div class="input-box">
+                    {{ form_widget(register_form.email) }}
+                    <i class="fas fa-envelope"></i>
+                </div>
+                <div class="input-box">
+                    {{ form_widget(register_form.username) }}
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="input-box">
+                    {{ form_widget(register_form.plainPassword) }}
+                    <i class="fas fa-lock"></i>
+                </div>
+                <a class="somda-button" href="#" id="register_button" onclick="disableMeAndSubmitForm('register_button', 'register_form'); return false;">Maak account</a>
+            {{ form_end(register_form) }}
+        </div>
+
+        <div class="toggle-box">
+            <div class="toggle-panel toggle-left">
+                <h1>Welkom terug bij Somda!</h1>
+                <p>Heb je nog geen account?</p>
+                <a class="somda-button" href="#" id="toggle_register_button" onclick="return false;">Registreer je gratis</a>
+            </div>
+
+            <div class="toggle-panel toggle-right">
+                <h1>Welkom bij Somda!</h1>
+                <p>Heb je al een account?</p>
+                <a class="somda-button" href="#" id="toggle_login_button" onclick="return false;">Inloggen</a>
+            </div>
+        </div>
     </div>
-    <br />
+{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/login.css') }}" />
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        $('#toggle_register_button').click(() => {
+            window.history.pushState({}, '', '{{ path('register') }}');
+            $('.login-container').addClass('active');
+        });
+        $('#toggle_login_button').click(() => {
+            window.history.pushState({}, '', '{{ path('login') }}');
+            $('.login-container').removeClass('active');
+        });
+    </script>
 {% endblock %}

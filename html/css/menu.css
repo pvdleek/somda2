@@ -27,6 +27,7 @@
 .menu > ol > .menu-item {
     flex: 1;
     padding: 0.5rem 0;
+    z-index: 10;
 }
 .menu > ol > .menu-item:hover {
     background: var(--main-hover-light-color);

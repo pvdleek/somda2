@@ -24,12 +24,17 @@ class User extends AbstractType
     {
         $builder
             ->add(self::FIELD_EMAIL, TextType::class, [
-                FormGenerics::KEY_ATTRIBUTES => [FormGenerics::KEY_ATTRIBUTES_MAX_LENGTH => 255],
-                FormGenerics::KEY_LABEL => 'Geef jouw e-mailadres',
+                FormGenerics::KEY_ATTRIBUTES => [
+                    FormGenerics::KEY_ATTRIBUTES_MAX_LENGTH => 255,
+                    FormGenerics::KEY_PLACEHOLDER => 'Geef jouw e-mailadres',
+                ],
                 FormGenerics::KEY_REQUIRED => true,
             ])
             ->add(self::FIELD_USERNAME, TextType::class, [
-                FormGenerics::KEY_ATTRIBUTES => [FormGenerics::KEY_ATTRIBUTES_MAX_LENGTH => 10],
+                FormGenerics::KEY_ATTRIBUTES => [
+                    FormGenerics::KEY_ATTRIBUTES_MAX_LENGTH => 20,
+                    FormGenerics::KEY_PLACEHOLDER => 'Kies een gebruikersnaam',
+                ],
                 FormGenerics::KEY_CONSTRAINTS => [
                     new Length([
                         ConstraintGenerics::MAX => 20,
@@ -43,17 +48,18 @@ class User extends AbstractType
                             'De gebruikersnaam mag alleen letters, cijfers of een liggend streepje bevatten',
                     ])
                 ],
-                FormGenerics::KEY_LABEL => 'Kies een gebruikersnaam (maximaal 20 karakters)',
                 FormGenerics::KEY_REQUIRED => true,
             ])
             ->add(self::FIELD_PLAIN_PASSWORD, PasswordType::class, [
+                FormGenerics::KEY_ATTRIBUTES => [
+                    FormGenerics::KEY_PLACEHOLDER => 'Kies een wachtwoord',
+                ],
                 FormGenerics::KEY_CONSTRAINTS => [
                     new Length([
                         ConstraintGenerics::MIN => 8,
                         ConstraintGenerics::MIN_MESSAGE => 'Het wachtwoord moet minimaal 8 karakters lang zijn',
                     ]),
                 ],
-                FormGenerics::KEY_LABEL => 'Kies een wachtwoord',
                 FormGenerics::KEY_MAPPED => false,
                 FormGenerics::KEY_REQUIRED => true,
             ]);

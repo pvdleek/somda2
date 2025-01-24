@@ -44,9 +44,11 @@ class SecurityController
         }
 
         return $this->templateHelper->render('security/login.html.twig', [
-            TemplateHelper::PARAMETER_PAGE_TITLE => 'Inloggen',
-            'lastUsername' => is_null($username) ? $authenticationUtils->getLastUsername() : $username,
-            'error' => $authenticationUtils->getLastAuthenticationError()
+            TemplateHelper::PARAMETER_PAGE_TITLE => 'Inloggen of account maken bij Somda',
+            'lastUsername' => null === $username ? $authenticationUtils->getLastUsername() : $username,
+            'error' => $authenticationUtils->getLastAuthenticationError(),
+            'register_form' => $this->formHelper->getFactory()->create(UserForm::class, new User())->createView(),
+            'view' => 'login',
         ]);
     }
 
@@ -112,9 +114,12 @@ class SecurityController
             }
         }
 
-        return $this->templateHelper->render('security/register.html.twig', [
-            TemplateHelper::PARAMETER_PAGE_TITLE => 'Nieuw account aanmaken',
-            TemplateHelper::PARAMETER_FORM => $form->createView(),
+        return $this->templateHelper->render('security/login.html.twig', [
+            TemplateHelper::PARAMETER_PAGE_TITLE => 'Inloggen of account maken bij Somda',
+            'lastUsername' => null,
+            'error' => null,
+            'register_form' => $form->createView(),
+            'view' => 'register',
         ]);
     }
 

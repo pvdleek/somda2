@@ -22,6 +22,7 @@ class FormGenerics
     public const KEY_INVALID_MESSAGE = 'invalid_message';
     public const KEY_LABEL = 'label';
     public const KEY_MAPPED = 'mapped';
+    public const KEY_PLACEHOLDER = 'placeholder';
     public const KEY_PREFERRED_CHOICES = 'preferred_choices';
     public const KEY_QUERY_BUILDER = 'query_builder';
     public const KEY_REQUIRED = 'required';
