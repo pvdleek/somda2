@@ -9,7 +9,7 @@
             <form action="{{ path('login') }}" id="login_form" method="post">
                 <h1>Inloggen bij Somda</h1>
                 <div class="input-box">
-                    <input name="_username" placeholder="Geef je gebruikersnaam" required="required" type="text" /><i class="fas fa-user"></i>
+                    <input name="_username" placeholder="Geef je gebruikersnaam" required="required" type="text" value="{{ lastUsername }}" /><i class="fas fa-user"></i>
                 </div>
                 <div class="input-box">
                     <input name="_password" placeholder="Geef je wachtwoord" required="required" type="password" /><i class="fas fa-lock"></i>

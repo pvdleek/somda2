@@ -116,7 +116,7 @@ class SecurityController
 
         return $this->templateHelper->render('security/login.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Inloggen of account maken bij Somda',
-            'lastUsername' => null,
+            'lastUsername' => '',
             'error' => null,
             'register_form' => $form->createView(),
             'view' => 'register',
