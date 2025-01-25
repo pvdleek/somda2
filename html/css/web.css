@@ -287,6 +287,7 @@ a.rail-news-title:hover {
     color: var(--main-text-light-color) !important;
 }
 .panel-buttons {
+    margin-top: 20px;
     text-align: center;
 }
 
