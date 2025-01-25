@@ -153,7 +153,7 @@ class ForumModerateController
         // Create the new discussion
         $newDiscussion = new ForumDiscussion();
         $newDiscussion->forum = $discussion->forum;
-        $newDiscussion->title = 'Verwijderd uit ' . $discussion->title;
+        $newDiscussion->title = \substr('Verwijderd uit ' . $discussion->title, 0, 75);
         $newDiscussion->author = $firstPost->author;
         $this->formHelper->getDoctrine()->getManager()->persist($newDiscussion);
 
