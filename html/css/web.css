@@ -147,7 +147,7 @@ table.dataTable tr:hover td, table.dataTable tr:hover td a, table.dataTable tr:h
     width: 100%;
 }
 #header_image {
-    background-size: contain;
+    background-size: contain !important;
 }
 #logo-graphic h1 {
     margin: 0;

@@ -20,8 +20,7 @@ nelmio_security:
         - 'none'
       connect-src:
         - 'self'
-        - '*.google-analytics.com'
-        - '*.analytics.google.com'
+        - 'analytics.ahrefs.com'
       font-src:
         - 'self'
       frame-src:
@@ -31,12 +30,11 @@ nelmio_security:
         - 'unsafe-eval'
         - 'unsafe-inline'
         - 'unpkg.com'
+        - 'analytics.ahrefs.com'
         - 'cdn.ckeditor.com'
         - 'code.jquery.com'
         - '*.datatables.net'
         - '*.fontawesome.com'
-        - '*.googletagmanager.com'
-        - '*.google-analytics.com'
       style-src:
         - 'self'
         - 'unsafe-inline'
@@ -52,7 +50,6 @@ nelmio_security:
         - 'code.jquery.com'
         - '*.buienradar.nl'
         - '*.datatables.net'
-        - '*.google-analytics.com'
         - '*.tradetracker.net'
       block-all-mixed-content: true
       upgrade-insecure-requests: true

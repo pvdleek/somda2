@@ -1,22 +1,12 @@
 <!DOCTYPE html>
 <html lang="nl" xml:lang="nl" xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    {% if app.user and app.user.cookieOk == constant('App\\Entity\\User::COOKIE_OK') %}
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-X99V3JXCCW"></script>
-        <script>
-            window.dataLayer = window.dataLayer || [];
-            function gtag() {
-                dataLayer.push(arguments);
-            }
-            gtag('js', new Date());
-            gtag('config', 'G-X99V3JXCCW');
-        </script>
-    {% endif %}
+    <script async data-key="ZUw8GOWAuVwCYp1kIQg7mQ" src="https://analytics.ahrefs.com/analytics.js" ></script>
 
     <link rel="preconnect" href="https://code.jquery.com/" />
 
     <link href="{{ asset('css/base.css') }}?version={{ 'css/base.css' | fileTimestamp }}" rel="stylesheet" type="text/css" />
-    <link href="{{ asset('css/design-' ~ design_number ~ '.css') }}?version={{ ('css/design-' ~ design_number ~ '.css') | fileTimestamp }}" rel="stylesheet" type="text/css" />
+    {% if design_number is not null %}<link href="{{ asset('css/design-' ~ design_number ~ '.css') }}?version={{ ('css/design-' ~ design_number ~ '.css') | fileTimestamp }}" rel="stylesheet" type="text/css" />{% endif %}
     <link href="{{ asset('css/web.css') }}?version={{ 'css/web.css' | fileTimestamp }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('css/menu.css') }}?version={{ 'css/menu.css' | fileTimestamp }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('css/bootstrap-pagination-3.0.3-min.css') }}?version={{ 'css/bootstrap-pagination-3.0.3-min.css' | fileTimestamp }}" rel="stylesheet" type="text/css" />
@@ -73,6 +63,46 @@
     {% block javascripts %}{% endblock %}
 
     <script>
+        {% if design_number is null %}
+            // Detect whether the user prefers dark mode
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                loadMode('somda_dark_mode');
+            } else {
+                loadMode('somda_light_mode');
+            }
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+                if (event.matches) {
+                    unloadMode('somda_light_mode');
+                    loadMode('somda_dark_mode');
+                } else {
+                    unloadMode('somda_dark_mode');
+                    loadMode('somda_light_mode');
+                }
+            });
+
+            function unloadMode(id)
+            {
+                let element = document.getElementById(id);
+                element.parentNode.removeChild(element);
+            }
+
+            function loadMode(id)
+            {
+                let css = 'somda_dark_mode' == id ?
+                    '{{ asset('css/design-5.css') }}?version={{ ('css/design-5.css') | fileTimestamp }}' :
+                    '{{ asset('css/design-2.css') }}?version={{ ('css/design-2.css') | fileTimestamp }}';
+                if (!document.getElementById(id)) {
+                    let link = document.createElement('link');
+                    link.id = id;
+                    link.rel = 'stylesheet';
+                    link.type = 'text/css';
+                    link.href = css;
+                    link.media = 'all';
+                    document.getElementsByTagName('head')[0].appendChild(link);
+                }
+            }
+        {% endif %}
+
         function initializeImages() {
             let imgDefer = document.getElementsByTagName('img');
             for (let image = 0; image < imgDefer.length; image++) {

@@ -81,35 +81,39 @@ class UserHelper implements RuntimeExtensionInterface
     /**
      * @throws \Exception
      */
-    public function getPreferenceByKey(string $key): UserPreferenceValue
+    public function getPreferenceByKey(string $key, bool $no_default = false): ?UserPreferenceValue
     {
         /**
          * @var UserPreference $userPreference
          */
-        $userPreference = $this->doctrine->getRepository(UserPreference::class)->findOneBy(['key' => $key]);
-        if (null === $userPreference) {
+        $user_preference = $this->doctrine->getRepository(UserPreference::class)->findOneBy(['key' => $key]);
+        if (null === $user_preference) {
             throw new UnknownUserPreferenceKey('Preference with key "' . $key . '" does not exist');
         }
 
         if (null !== $this->getUser()) {
             foreach ($this->getUser()->getPreferences() as $preference) {
-                if ($preference->preference === $userPreference) {
+                if ($preference->preference === $user_preference) {
                     return $preference;
                 }
             }
         }
 
+        if ($no_default) {
+            return null;
+        }
+
         // Get the default value for this key and save if user is logged in
-        $userPreferenceValue = new UserPreferenceValue();
-        $userPreferenceValue->preference = $userPreference;
-        $userPreferenceValue->value = $userPreference->defaultValue;
+        $user_preference_value = new UserPreferenceValue();
+        $user_preference_value->preference = $user_preference;
+        $user_preference_value->value = $user_preference->defaultValue;
         if (null !== $user = $this->getUser()) {
-            $userPreferenceValue->user = $user;
-            $this->doctrine->getManager()->persist($userPreferenceValue);
+            $user_preference_value->user = $user;
+            $this->doctrine->getManager()->persist($user_preference_value);
             $this->doctrine->getManager()->flush();
         }
 
-        return $userPreferenceValue;
+        return $user_preference_value;
     }
 
     /**

@@ -24,11 +24,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
-    public const COOKIE_UNKNOWN = '0';
-    public const COOKIE_NOT_OK = 'nok';
-    public const COOKIE_OK = 'ok';
-    public const COOKIE_VALUES = [self::COOKIE_UNKNOWN, self::COOKIE_NOT_OK, self::COOKIE_OK];
-
     public const API_TOKEN_VALIDITY = '+1 year';
 
     /**
@@ -92,13 +87,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @OA\Property(description="Email address of the user", maxLength=100, type="string")
      */
     public string $email = '';
-
-    /**
-     * @ORM\Column(name="cookie_ok", type="string", length=3, nullable=false)
-     * @Assert\Choice(choices=User::COOKIE_VALUES)
-     * @JMS\Exclude()
-     */
-    public string $cookieOk = self::COOKIE_UNKNOWN;
 
     /**
      * @ORM\Column(name="actkey", type="string", length=13, nullable=true)

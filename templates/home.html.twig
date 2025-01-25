@@ -2,15 +2,6 @@
 
 {% block content %}
     {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-        {% if app.user.cookieOk == constant('App\\Entity\\User::COOKIE_UNKNOWN') %}
-            <br /><p class="warn">Somda maakt gebruik van <a href="{{ path('disclaimer') }}">cookies</a>. Voor het gebruik van <a href="{{ path('disclaimer') }}">cookies</a> voor Google Analytics is jouw toestemming vereist.
-            <br />Het weigeren van het opslaan van cookies heeft geen effect op het functioneren van Somda.
-            <br /><br /><a href="{{ path('disclaimer_choice', { 'choice': constant('App\\Entity\\User::COOKIE_OK') }) }}">Ja, Somda mag cookies op mijn PC opslaan ten behoeve van Google Analytics</a>
-            <br /><a href="{{ path('disclaimer_choice', { 'choice': constant('App\\Entity\\User::COOKIE_NOT_OK') }) }}">Nee, Somda mag geen cookies op mijn PC opslaan ten behoeve van Google Analytics</a></p>
-            <p class="info">Een uitgebreide uitleg over cookies is <a href="{{ path('disclaimer') }}">hier</a> te vinden.</p>
-        {% endif %}
-
-        <br />
         <div class="panel-buttons">
             <a class="somda-button" href="{{ path('settings') }}">Mijn instellingen</a>
             <a class="somda-button" href="{{ path('profile') }}">Mijn profiel</a>

@@ -119,7 +119,7 @@ location:
   name: 'Verkorting'
   description: 'Omschrijving'
   category: 'Categorie'
-  credits: 'De co&ouml;rdinaten voor de verkortingen op de Google kaart komen van <a href="http://www.spoornieuws.nl/" target="_blank">Dennis</a>'
+  credits: 'De co&ouml;rdinaten voor de verkortingen op de kaart komen van <a href="http://www.spoornieuws.nl/" target="_blank">Dennis</a>'
   additions: 'Aanvullingen of verbeteringen kunnen in <a href="%s">dit topic in het forum</a> worden doorgegeven.'
 uic:
   explanation:

@@ -1,17 +1,7 @@
 <!DOCTYPE html>
 <html lang="nl" xml:lang="nl" xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    {% if app.user and app.user.cookieOk == constant('App\\Entity\\User::COOKIE_OK') %}
-        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-2723197-1"></script>
-        <script>
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){
-                dataLayer.push(arguments);
-            }
-            gtag('js', new Date());
-            gtag('config', 'UA-2723197-1');
-        </script>
-    {% endif %}
+    <script async data-key="ZUw8GOWAuVwCYp1kIQg7mQ" src="https://analytics.ahrefs.com/analytics.js" ></script>
 
     <link rel="apple-touch-icon" href="{{ asset('images/logo-app.webp') }}" />
     <meta name="apple-mobile-web-app-capable" content="yes" />

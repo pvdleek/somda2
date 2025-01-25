@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Entity\User;
 use App\Form\Contact;
 use App\Generics\FormGenerics;
 use App\Helpers\EmailHelper;
@@ -68,21 +67,6 @@ class SomdaController
         return $this->templateHelper->render('somda/contact.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Contact opnemen',
             TemplateHelper::PARAMETER_FORM => $form->createView(),
-        ]);
-    }
-
-    public function disclaimerAction(string $choice = null): Response|RedirectResponse
-    {
-        if (null !== $choice && \in_array($choice, [User::COOKIE_OK, User::COOKIE_NOT_OK])) {
-            $this->userHelper->getUser()->cookieOk = $choice;
-
-            return $this->formHelper->finishFormHandling(
-                'Dankjewel voor het doorgeven van je keuze met betrekking tot de Google Analytics cookie.',
-                'disclaimer'
-            );
-        }
-        return $this->templateHelper->render('somda/disclaimer.html.twig', [
-            TemplateHelper::PARAMETER_PAGE_TITLE => 'Disclaimer en cookies',
         ]);
     }
 }

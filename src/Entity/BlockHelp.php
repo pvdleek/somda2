@@ -23,11 +23,6 @@ class BlockHelp
     public string $text = '';
 
     /**
-     * @ORM\Column(name="google_channel", type="string", length=10, nullable=false)
-     */
-    public string $googleChannel = '0';
-
-    /**
      * @ORM\Column(name="ad_code", type="text", length=65535, nullable=false)
      */
     public string $adCode = '';

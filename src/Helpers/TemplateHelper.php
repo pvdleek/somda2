@@ -103,7 +103,7 @@ class TemplateHelper
         }
 
         return \array_merge($viewParameters, [
-            'design_number' => $this->userHelper->getPreferenceByKey(UserPreference::KEY_HOME_DESIGN)->value,
+            'design_number' => $this->userHelper->getPreferenceByKey(UserPreference::KEY_HOME_DESIGN, true)?->value,
             'headerType' =>  $headerType,
             'headerContent' => $headerContent,
             'menuStructure' => $this->menuHelper->getMenuStructure(),
