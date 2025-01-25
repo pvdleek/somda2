@@ -17,6 +17,9 @@ class ForumDiscussion extends AbstractType
     {
         $builder
             ->add('title', TextType::class, [
+                FormGenerics::KEY_ATTRIBUTES => [
+                    FormGenerics::KEY_ATTRIBUTES_MAX_LENGTH => 75,
+                ],
                 FormGenerics::KEY_LABEL => 'Onderwerp van de discussie',
                 FormGenerics::KEY_REQUIRED => true,
             ])
