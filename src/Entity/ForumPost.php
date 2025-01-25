@@ -13,9 +13,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(
  *     name="somda_forum_posts",
  *     indexes={
- *         @ORM\Index(name="idx_47961_timestamp", columns={"timestamp"}),
- *         @ORM\Index(name="idx_47961_authorid", columns={"authorid"}),
- *         @ORM\Index(name="idx_47961_discussionid", columns={"discussionid"})
+ *         @ORM\Index(name="idx_somda_forum_posts__timestamp", columns={"timestamp"}),
+ *         @ORM\Index(name="idx_somda_forum_posts__authorid", columns={"authorid"}),
+ *         @ORM\Index(name="idx_somda_forum_posts__discussionid", columns={"discussionid"})
  *     }
  * )
  * @ORM\Entity(repositoryClass="App\Repository\ForumPost")

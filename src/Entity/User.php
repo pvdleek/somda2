@@ -16,8 +16,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(
  *     name="somda_users",
  *     indexes={
- *         @ORM\Index(name="idx_49053_uname", columns={"username"}),
- *         @ORM\Index(name="idx_49076_active", columns={"active"}),
+ *         @ORM\Index(name="idx_somda_users__uname", columns={"username"}),
+ *         @ORM\Index(name="idx_somda_users__active", columns={"active"}),
  *     }
  * )
  * @ORM\Entity(repositoryClass="App\Repository\User")
@@ -177,7 +177,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $preferences;
 
     /**
-     * @ORM\ManyToMany(targetEntity="News")
+     * @ORM\ManyToMany(targetEntity="App\Entity\News", mappedBy="userReads")
      * @ORM\JoinTable(name="somda_news_read",
      *      joinColumns={@ORM\JoinColumn(name="uid", referencedColumnName="uid")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="newsid", referencedColumnName="newsid")}

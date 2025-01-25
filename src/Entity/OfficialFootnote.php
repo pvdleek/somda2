@@ -9,15 +9,15 @@ use OpenApi\Annotations as OA;
 /**
  * @ORM\Table(
  *     name="ofo_official_footnote",
- *     indexes={@ORM\Index(name="idx_ofo_footnote_id", columns={"ofo_footnote_id"})},
- *     uniqueConstraints={@ORM\UniqueConstraint(name="idx_ofo_footnote", columns={"ofo_footnote_id", "ofo_date"})}
+ *     indexes={@ORM\Index(name="idx_ofo__footnote_id", columns={"ofo_footnote_id"})},
+ *     uniqueConstraints={@ORM\UniqueConstraint(name="unq_ofo__footnote_id_date", columns={"ofo_footnote_id", "ofo_date"})}
  * )
  * @ORM\Entity
  */
 class OfficialFootnote
 {
     /**
-     * @ORM\Column(name="ofo_id", type="smallint", nullable=false, options={"unsigned"=true})
+     * @ORM\Column(name="ofo_id", type="integer", nullable=false, options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @JMS\Expose()

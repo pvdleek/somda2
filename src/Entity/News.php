@@ -51,7 +51,7 @@ class News
     public bool $archived = false;
 
     /**
-     * @ORM\ManyToMany(targetEntity="User")
+     * @ORM\ManyToMany(targetEntity="App\Entity\User", inversedBy="newsReads")
      * @ORM\JoinTable(name="somda_news_read",
      *      joinColumns={@ORM\JoinColumn(name="newsid", referencedColumnName="newsid")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="uid", referencedColumnName="uid")}

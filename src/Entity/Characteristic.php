@@ -10,7 +10,7 @@ use OpenApi\Annotations as OA;
 /**
  * @ORM\Table(
  *     name="somda_karakteristiek",
- *     uniqueConstraints={@ORM\UniqueConstraint(name="idx_48102_omschrijving", columns={"naam"})}
+ *     uniqueConstraints={@ORM\UniqueConstraint(name="unq_somda_karakteristiek__naam", columns={"naam"})}
  * )
  * @ORM\Entity
  */

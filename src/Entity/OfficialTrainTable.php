@@ -13,10 +13,10 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(
  *     name="ott_official_train_table",
  *     indexes={
- *         @ORM\Index(name="idx_ott_time", columns={"ott_time"}),
- *         @ORM\Index(name="idx_ott_ofo_id", columns={"ott_ofo_id"}),
- *         @ORM\Index(name="idx_ott_location_id", columns={"ott_location_id"}),
- *         @ORM\Index(name="idx_ott_route_id", columns={"ott_route_id"})
+ *         @ORM\Index(name="idx_ott__time", columns={"ott_time"}),
+ *         @ORM\Index(name="idx_ott__ofo_id", columns={"ott_ofo_id"}),
+ *         @ORM\Index(name="idx_ott__location_id", columns={"ott_location_id"}),
+ *         @ORM\Index(name="idx_ott__route_id", columns={"ott_route_id"})
  *     }
  * )
  * @ORM\Entity

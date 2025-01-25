@@ -55,7 +55,7 @@ class SpecialRoute
     public string $text = '';
 
     /**
-     * @ORM\ManyToMany(targetEntity="User")
+     * @ORM\ManyToMany(targetEntity="App\Entity\User")
      * @ORM\JoinTable(name="somda_drgl_read",
      *      joinColumns={@ORM\JoinColumn(name="drglid", referencedColumnName="drglid")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="uid", referencedColumnName="uid")}

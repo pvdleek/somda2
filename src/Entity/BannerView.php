@@ -6,7 +6,7 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table(name="somda_banner_views", indexes={@ORM\Index(name="idx_47831_bannerid", columns={"bannerid"})})
+ * @ORM\Table(name="somda_banner_views", indexes={@ORM\Index(name="idx_somda_banner__bannerid", columns={"bannerid"})})
  * @ORM\Entity
  */
 class BannerView

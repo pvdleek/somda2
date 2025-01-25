@@ -6,7 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table(name="somda_forum_discussion", indexes={@ORM\Index(name="idx_47915_forumid", columns={"forumid"})})
+ * @ORM\Table(name="somda_forum_discussion", indexes={@ORM\Index(name="idx_somda_forum_discussion__forumid", columns={"forumid"})})
  * @ORM\Entity(repositoryClass="App\Repository\ForumDiscussion")
  */
 class ForumDiscussion

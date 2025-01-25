@@ -6,5 +6,5 @@ doctrine_migrations:
       version_column_length: 50
       executed_at_column_name: 'executed_at'
   migrations_paths:
-    'App\Migrations': '%kernel.project_dir%/src/Migrations'
+    'App\Migrations': '%kernel.project_dir%/migrations'
   all_or_nothing: true

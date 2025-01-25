@@ -8,7 +8,7 @@ use OpenApi\Annotations as OA;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Table(name="somda_prefs", indexes={@ORM\Index(name="idx_48215_sleutel", columns={"sleutel"})})
+ * @ORM\Table(name="somda_prefs", indexes={@ORM\Index(name="idx_somda_prefs__sleutel", columns={"sleutel"})})
  * @ORM\Entity
  */
 class UserPreference

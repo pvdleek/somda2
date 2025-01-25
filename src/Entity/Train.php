@@ -12,8 +12,8 @@ use OpenApi\Annotations as OA;
 /**
  * @ORM\Table(
  *     name="somda_mat",
- *     uniqueConstraints={@ORM\UniqueConstraint(name="idx_48117_nummer", columns={"nummer"})},
- *     indexes={@ORM\Index(name="idx_48117_vervoerder_id", columns={"vervoerder_id"})}
+ *     uniqueConstraints={@ORM\UniqueConstraint(name="unq_somda_mat__nummer", columns={"nummer"})},
+ *     indexes={@ORM\Index(name="idx_somda_mat__vervoerder_id", columns={"vervoerder_id"})}
  * )
  * @ORM\Entity(repositoryClass="App\Repository\Train")
  */

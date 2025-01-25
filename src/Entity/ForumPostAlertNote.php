@@ -6,7 +6,7 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table(name="somda_forum_alerts_notes", indexes={@ORM\Index(name="idx_47898_alertid", columns={"alertid"})})
+ * @ORM\Table(name="somda_forum_alerts_notes", indexes={@ORM\Index(name="idx_somda_forum_alerts_notes__alertid", columns={"alertid"})})
  * @ORM\Entity
  */
 class ForumPostAlertNote

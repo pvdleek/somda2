@@ -11,7 +11,7 @@ use OpenApi\Annotations as OA;
 /**
  * @ORM\Table(
  *     name="somda_trein",
- *     uniqueConstraints={@ORM\UniqueConstraint(name="idx_49046_treinnr", columns={"treinnr"})}
+ *     uniqueConstraints={@ORM\UniqueConstraint(name="unq_somda_trein__treinnr", columns={"treinnr"})}
  * )
  * @ORM\Entity
  */
@@ -32,9 +32,9 @@ class Route
     public ?int $id = null;
 
     /**
-     * @ORM\Column(name="treinnr", type="string", length=15, nullable=false)
+     * @ORM\Column(name="treinnr", type="string", length=25, nullable=false)
      * @JMS\Expose()
-     * @OA\Property(description="The route-number", maxLength=15, type="string")
+     * @OA\Property(description="The route-number", maxLength=25, type="string")
      */
     public string $number = '';
 

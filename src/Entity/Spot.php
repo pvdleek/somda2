@@ -12,13 +12,14 @@ use OpenApi\Annotations as OA;
  * @ORM\Table(
  *     name="somda_spots",
  *     uniqueConstraints={@ORM\UniqueConstraint(
- *         name="idx_48259_treinid",
+ *         name="unq_somda_spots__treinid_posid_locatieid_matid_uid_datum",
  *         columns={"treinid", "posid", "locatieid", "matid", "uid", "datum"}
  *     )},
  *     indexes={
- *         @ORM\Index(name="idx_48259_matid", columns={"matid"}),
- *         @ORM\Index(name="idx_48259_datum", columns={"datum"}),
- *         @ORM\Index(name="idx_48259_uid", columns={"uid"})
+ *         @ORM\Index(name="idx_somda_spots__timestamp", columns={"timestamp"}),
+ *         @ORM\Index(name="idx_somda_spots__matid", columns={"matid"}),
+ *         @ORM\Index(name="idx_somda_spots__datum", columns={"datum"}),
+ *         @ORM\Index(name="idx_somda_spots__uid", columns={"uid"})
  *     }
  * )
  * @ORM\Entity(repositoryClass="App\Repository\Spot")

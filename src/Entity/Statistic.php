@@ -6,7 +6,7 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table(name="somda_stats", uniqueConstraints={@ORM\UniqueConstraint(name="idx_date", columns={"datum"})})
+ * @ORM\Table(name="somda_stats", uniqueConstraints={@ORM\UniqueConstraint(name="unq_somda_stats__datum", columns={"datum"})})
  * @ORM\Entity(repositoryClass="App\Repository\Statistic")
  */
 class Statistic

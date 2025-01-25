@@ -12,10 +12,10 @@ use OpenApi\Annotations as OA;
 /**
  * @ORM\Table(
  *     name="somda_verk",
- *     uniqueConstraints={@ORM\UniqueConstraint(name="idx_49103_afkorting_2", columns={"afkorting", "landid"})},
+ *     uniqueConstraints={@ORM\UniqueConstraint(name="unq_somda_verk__afkorting_landid", columns={"afkorting", "landid"})},
  *     indexes={
- *         @ORM\Index(name="idx_49103_landid", columns={"landid"}),
- *         @ORM\Index(name="idx_49103_description", columns={"description"})
+ *         @ORM\Index(name="idx_somda_verk__landid", columns={"landid"}),
+ *         @ORM\Index(name="idx_somda_verk__description", columns={"description"})
  *     }
  * )
  * @ORM\Entity(repositoryClass="App\Repository\Location")

@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Table(
  *     name="somda_mat_patterns",
- *     uniqueConstraints={@ORM\UniqueConstraint(name="idx_48139_volgorde", columns={"volgorde"})}
+ *     uniqueConstraints={@ORM\UniqueConstraint(name="unq_somda_mat_patterns__volgorde", columns={"volgorde"})}
  * )
  * @ORM\Entity
  */

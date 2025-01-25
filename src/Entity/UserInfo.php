@@ -9,7 +9,7 @@ use OpenApi\Annotations as OA;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Table(name="somda_users_info", indexes={@ORM\Index(name="idx_49074_gebdatum", columns={"gebdatum"})})
+ * @ORM\Table(name="somda_users_info")
  * @ORM\Entity
  */
 class UserInfo

@@ -6,7 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table(name="somda_mat_sms", indexes={@ORM\Index(name="idx_48145_typeid", columns={"typeid"})})
+ * @ORM\Table(name="somda_mat_sms", indexes={@ORM\Index(name="unq_somda_mat_sms__typeid", columns={"typeid"})})
  * @ORM\Entity
  */
 class TrainComposition extends TrainCompositionBase

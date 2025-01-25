@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Table(name="somda_forum_forums", indexes={@ORM\Index(name="idx_47937_catid", columns={"catid"})})
+ * @ORM\Table(name="somda_forum_forums", indexes={@ORM\Index(name="idx_somda_forum_forums__catid", columns={"catid"})})
  * @ORM\Entity(repositoryClass="App\Repository\ForumForum")
  */
 class ForumForum
@@ -63,7 +63,7 @@ class ForumForum
     private $discussions;
 
     /**
-     * @ORM\ManyToMany(targetEntity="User", inversedBy="moderatedForums")
+     * @ORM\ManyToMany(targetEntity="App\Entity\User", inversedBy="moderatedForums")
      * @ORM\JoinTable(name="somda_forum_mods",
      *      joinColumns={@ORM\JoinColumn(name="forumid", referencedColumnName="forumid")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="uid", referencedColumnName="uid")}

@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Table(
  *     name="somda_forum_discussion_wiki",
- *     indexes={@ORM\Index(name="idx_47927_discussionid", columns={"discussionid"})}
+ *     indexes={@ORM\Index(name="idx_somda_forum_discussion_wiki__discussionid", columns={"discussionid"})}
  * )
  * @ORM\Entity
  */
