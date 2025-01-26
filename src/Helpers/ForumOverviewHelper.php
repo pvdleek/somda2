@@ -61,6 +61,7 @@ class ForumOverviewHelper
                 'id' => $forum['id'],
                 'type' => $forum['type'],
                 'name' => $forum['name'],
+                'description' => $forum['description'],
                 'order' => $forum['order'],
                 'numberOfDiscussions' => $forum['numberOfDiscussions'],
                 'numberOfUnreadDiscussions' => $unreadDiscussions,

@@ -72,6 +72,7 @@ p.info {
     background: var(--alert-info-background) url(../images/design/icon-info.webp) no-repeat 15px 50%;
     border-bottom: 2px solid var(--alert-info-color);
     border-top: 2px solid var(--alert-info-color);
+    color: var(--main-text-color);
     padding: 5px 20px 5px 45px;
     text-align: left;
 }
@@ -82,6 +83,7 @@ p.warn {
     background: var(--alert-warn-background) url(../images/design/icon-warning.webp) no-repeat 15px 50%;
     border-bottom: 2px solid var(--alert-warn-color);
     border-top: 2px solid var(--alert-warn-color);
+    color: var(--main-text-color);
     padding: 5px 20px 5px 45px;
     text-align: left;
 }
@@ -89,6 +91,7 @@ p.alert {
     background: var(--alert-error-background) url(../images/design/icon-alert.webp) no-repeat 15px 50%;
     border-bottom: 2px solid var(--alert-error-color);
     border-top: 2px solid var(--alert-error-color);
+    color: var(--main-text-color);
     padding: 5px 20px 5px 45px;
     text-align: left;
 }

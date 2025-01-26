@@ -1,40 +1,53 @@
 {% extends('base.html.twig') %}
 
 {% block content %}
-    <br />
-    <a class="somda-button" href="{{ path('forum_search') }}">{{ 'forum.search' | trans }}</a>
-    {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-        <a class="somda-button" href="{{ path('forum_unread') }}">Alle ongelezen berichten</a>
-    {% endif %}
-    <br />
-
-    <div class="panel">
-        <div class="panel-title">Forum overzicht</div>
-        <div class="panel-content">
-            <table>
-                <tr>
-                    <th colspan="2">{{ 'forum.category' | trans }}</th>
-                    <th>{{ 'forum.number.discussions' | trans }}</th>
-                </tr>
-                {% for category in categories %}
-                    {% if category['forums'] | length > 0 %}
-                        <tr><th colspan="4">{{ category['name'] }}</th></tr>
-                        {% for forum in category['forums'] %}
-                            <tr>
-                                <td><i class="fas fa-{% if forum['type'] == constant('App\\Entity\\ForumForum::TYPE_ARCHIVE') %}archive{% else %}comments{% endif %}"></i></td>
-                                <td><a href="{{ path('forum_forum', { 'id': forum['id'], 'name': forum['name'] }) }}">{{ forum['name'] }}</a></td>
-                                <td>
-                                    {{ forum['numberOfDiscussions'] }}
-                                    {% if is_granted('IS_AUTHENTICATED_REMEMBERED')
-                                        and forum['type'] != constant('App\\Entity\\ForumForum::TYPE_MODERATORS_ONLY')
-                                        and forum['type'] != constant('App\\Entity\\ForumForum::TYPE_ARCHIVE')
-                                    %}({{ forum['numberOfUnreadDiscussions'] }} ongelezen){% endif %}
-                                </td>
-                            </tr>
-                        {% endfor %}
-                    {% endif %}
-                {% endfor %}
-            </table>
-        </div>
+    <div class="forum-header">
+        <div class="forum-header-title"><h1 class="panel-title">Forum overzicht</h1></div>
+        {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+            <div class="forum-header-links">
+                <a class="somda-button" href="{{ path('forum_search') }}">{{ 'forum.search' | trans }}</a>
+                <a class="somda-button" href="{{ path('forum_unread') }}">Alle ongelezen berichten</a>
+            </div>
+        {% else %}
+            <div class="forum-header-links-guest">
+                <p class="info">Met een Somda account zie je veel meer informatie en kun je deelnemen aan discussies op het forum.</p>
+                <div>
+                    <a class="somda-button" href="{{ path('register') }}">Maak een account</a>
+                    <a class="somda-button" href="{{ path('login') }}">Inloggen</a>
+                    <a class="somda-button" href="{{ path('forum_search') }}">{{ 'forum.search' | trans }}</a>
+                </div>
+            </div>
+        {% endif %}
     </div>
+
+    {% for category in categories %}
+        {% if category['forums'] | length > 0 %}
+            <div class="forum-category">
+                <h2 class="forum-category-name">{{ category['name'] }}</h2>
+                {% for forum in category['forums'] %}
+                    <div class="forum-forum">
+                        <i class="fas fa-{% if forum['type'] == constant('App\\Entity\\ForumForum::TYPE_ARCHIVE') %}archive{% else %}comments{% endif %}"></i>
+                        <span class="forum-forum-title">
+                            <a href="{{ path('forum_forum', { 'id': forum['id'], 'name': forum['name'] }) }}"><h3>{{ forum['name'] }}</h3></a>
+                            <h4>{{ forum['description'] }}</h4>
+                            {% if forum['type'] == constant('App\\Entity\\ForumForum::TYPE_LOGGED_IN') and not is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                                <p class="info">Deze categorie is alleen toegankelijk voor ingelogde gebruikers</p>
+                            {% endif %}
+                        </span>
+                        <span>
+                            {{ forum['numberOfDiscussions'] }} discussies
+                            {% if is_granted('IS_AUTHENTICATED_REMEMBERED')
+                                and forum['type'] != constant('App\\Entity\\ForumForum::TYPE_MODERATORS_ONLY')
+                                and forum['type'] != constant('App\\Entity\\ForumForum::TYPE_ARCHIVE')
+                            %}<br />({{ forum['numberOfUnreadDiscussions'] }} ongelezen){% endif %}
+                        </span>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endfor %}
+{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/forum.css') }}" />
 {% endblock %}

@@ -22,7 +22,7 @@ class ForumForum extends ServiceEntityRepository
     {
         $query = '
             SELECT `c`.`catid` AS `categoryId`, `c`.`name` AS `categoryName`, `c`.`volgorde` AS `categoryOrder`,
-                `f`.`forumid` AS `id`, `f`.`name` AS `name`, `f`.`type` AS `type`, `f`.`volgorde` AS `order`,
+                `f`.`forumid` AS `id`, `f`.`name` AS `name`, `f`.`description` AS `description`, `f`.`type` AS `type`, `f`.`volgorde` AS `order`,
                 IF(`m`.`uid` = :userId, TRUE, FALSE) AS `userIsModerator`,
                 COUNT(DISTINCT(`d`.`discussionid`)) AS `numberOfDiscussions`
             FROM `somda_forum_forums` `f`
