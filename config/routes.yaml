@@ -407,10 +407,6 @@ disclaimer:
   path: /disclaimer/
   methods: [GET]
   controller: App\Controller\SomdaController::disclaimerAction
-disclaimer_choice:
-  path: /disclaimer/{choice}/
-  methods: [GET]
-  controller: App\Controller\SomdaController::disclaimerAction
 feeds:
   path: /feeds/
   methods: [GET]

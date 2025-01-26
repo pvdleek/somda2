@@ -37,6 +37,13 @@ class SomdaController
         ]);
     }
 
+    public function disclaimerAction(): Response
+    {
+        return $this->templateHelper->render('somda/disclaimer.html.twig', [
+            TemplateHelper::PARAMETER_PAGE_TITLE => 'Somda disclaimer',
+        ]);
+    }
+
     public function contactAction(Request $request): Response|RedirectResponse
     {
         $form = $this->formHelper->getFactory()->create(Contact::class);
