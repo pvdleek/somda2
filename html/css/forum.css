@@ -68,3 +68,72 @@
 .forum-forum span, .forum-forum i, .forum-forum a {
     color: var(--main-text-color);
 }
+
+/************************/
+/*** Forum discussion ***/
+/************************/
+.pagination {
+    margin: 0!important;
+}
+.forum-post {
+    align-items: flex-start;
+    background-color: var(--main-background-light-color);
+    border: 1px solid var(--main-border-light-color);
+    border-radius: 5px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+    min-height: 5rem;
+    padding: 0.5rem;
+}
+.forum-post-text {
+    width: 100%;
+}
+.forum-post-buttons {
+    float: right;
+    margin-top: 10px;
+    margin-right: 10px;
+}
+.forum-post-wiki-check {
+    background-color: var(--main-background-light-color);
+    border: 1px solid var(--main-border-light-color);
+    border-radius: 5px;
+    margin-bottom: 10px;
+    padding: 5px;
+}
+.forum-post-title {
+    border-bottom: 1px dotted var(--main-border-light-color);
+    color: var(--main-text-placeholder-color);
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+}
+.forum-post-user {
+    border-left: 1px dotted var(--main-border-light-color);
+    min-width: 100px;
+    text-align: right;
+}
+.forum-post-banner {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 5px;
+}
+.forum-post-wiki {
+    align-items: center;
+    background-color: var(--main-background-light-color);
+    border: 1px solid var(--main-border-light-color);
+    border-radius: 5px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 8px;
+    padding: 8px;
+}
+.favorite-box {
+    color: var(--main-text-light-color);
+    float: right;
+    padding-right: 5px;
+}

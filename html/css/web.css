@@ -419,25 +419,10 @@ td.buttons {
 span.edit_text {
     font-size: 8px;
 }
-.favorite-box {
-    color: var(--main-text-light-color);
-    float: right;
-    padding-right: 5px;
-}
 .moderator-icons {
     float: right;
     padding-left: 20px;
     padding-right: 10px;
-}
-.wiki-block {
-    background-color: var(--main-background-light-color);
-    border: 1px solid var(--main-background-dark-color);
-    margin: 8px;
-    padding: 8px;
-    font-size: 13pt;
-}
-.wiki-block table, .wiki-block table td {
-    border: none;
 }
 ol {
     list-style-type: decimal;

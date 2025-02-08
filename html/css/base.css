@@ -48,6 +48,9 @@ div.center {
     border: 1px solid var(--button-background-color) !important;
     color: var(--button-background-color) !important;
 }
+.somda-button.small {
+    padding: 3px 10px;
+}
 .donation-button {
     background-color: var(--button-alternative-color);
     border: 1px solid var(--button-alternative-color);
@@ -68,7 +71,7 @@ div.center {
 /**************/
 /*** Alerts ***/
 /**************/
-p.info {
+.info {
     background: var(--alert-info-background) url(../images/design/icon-info.webp) no-repeat 15px 50%;
     border-bottom: 2px solid var(--alert-info-color);
     border-top: 2px solid var(--alert-info-color);
@@ -76,10 +79,10 @@ p.info {
     padding: 5px 20px 5px 45px;
     text-align: left;
 }
-p.info-max-width {
+.info-max-width {
     max-width: 500px;
 }
-p.warn {
+.warn {
     background: var(--alert-warn-background) url(../images/design/icon-warning.webp) no-repeat 15px 50%;
     border-bottom: 2px solid var(--alert-warn-color);
     border-top: 2px solid var(--alert-warn-color);
@@ -87,7 +90,7 @@ p.warn {
     padding: 5px 20px 5px 45px;
     text-align: left;
 }
-p.alert {
+.alert {
     background: var(--alert-error-background) url(../images/design/icon-alert.webp) no-repeat 15px 50%;
     border-bottom: 2px solid var(--alert-error-color);
     border-top: 2px solid var(--alert-error-color);

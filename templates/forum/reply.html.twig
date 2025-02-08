@@ -27,6 +27,10 @@
     </div>
 {% endblock %}
 
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/forum.css') }}" />
+{% endblock %}
+
 {% block javascripts %}
     {% include('ckeditor.js.html.twig') %}
 

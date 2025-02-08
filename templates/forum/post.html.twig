@@ -1,37 +1,49 @@
-<tr>
-    <th class="left-align" colspan="{{ is_granted('IS_AUTHENTICATED_REMEMBERED') ? 2 : 3 }}">
-        {% if userIsModerator %}<input name="sel{{ post.id }}" type="checkbox" />{% endif %}
+{% set post_link = path('forum_discussion_post', { 'id': post.discussion.id, 'name': (post.discussion.title | slug), 'postId': post.id }) %}
+{% set numberOfFavorites = post.numberOfFavorites %}
+
+<div class="forum-post">
+    <div class="forum-post-text">
         <a id="p{{ post.id }}"></a>
         {% if postIsUnread and not firstUnreadAnchorDone %}
             <a id="new_post"></a>
             {% set firstUnreadAnchorDone = true %}
         {% endif %}
-        <a href="{{ path('forum_discussion_post', { 'id': post.discussion.id, 'name': (post.discussion.title | slug), 'postId': post.id }) }}">
-            {% if postIsUnread %}<i class="color-orange fas fa-comment-dots"></i>{% else %}<i class="fas fa-comment"></i>{% endif %}
-        </a> {{ post.timestamp | date('d-m-Y H:i:s') }}
-        {% set numberOfFavorites = post.numberOfFavorites %}
-        {% if numberOfFavorites > 0 %}<i class="fas fa-heart"></i> {{ numberOfFavorites }}{% endif %}
-
-        {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-            <div class="favorite-box" id="favorite_box_{{ post.id }}">
-                {% if app.user.postFavorite(post) %}
-                    <a href="{{ path('forum_favorites') }}" title="Deze discussie staat in jouw favoriete berichten"><i class="fas fa-hand-holding-heart"></i></a>
+        <div class="forum-post-title">
+            <div>
+                {% if userIsModerator %}<input name="sel{{ post.id }}" type="checkbox" />{% endif %}
+                {% if numberOfFavorites > 0 %}<i class="fas fa-heart"></i> {{ numberOfFavorites }}{% endif %}
+                <a href="{{ post_link }}">{% if postIsUnread %}<i class="color-orange fas fa-comment-dots"></i>{% else %}<i class="fas fa-comment"></i>{% endif %}</a>
+                Re: {{ post.discussion.title }} door {{ post.author.username }} op {{ post.timestamp | date('d-m-Y H:i:s') }}
+            </div>
+            {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                {% if userIsModerator and (post.alerts | length) > 0 %}
+                    <div><a class="warn" href="{{ path('forum_discussion_post_alerts', { 'id': post.id }) }}" title="Er zijn meldingen gedaan over dit bericht, klik om ze te bekijken">Meldingen</a></div>
                 {% else %}
-                    <a href="#" onclick="favoritePostAdd({{ post.id }}); return false;" title="Voeg bericht toe aan jouw favoriete berichten"><i class="fas fa-hand-holding-medical"></i></a>
+                    <div><a href="{{ path('forum_discussion_post_alert', { 'id': post.id }) }}" rel="nofollow" title="Klik hier om dit bericht aan de beheerders te melden. Gebruik dit voor bijvoorbeeld overtredingen van forumregels">Meld bericht</a></div>
+                {% endif %}
+                <div class="favorite-box" id="favorite_box_{{ post.id }}">
+                    {% if app.user.postFavorite(post) %}
+                        <a href="{{ path('forum_favorites') }}" title="Deze discussie staat in jouw favoriete berichten"><i class="fas fa-hand-holding-heart"></i></a>
+                    {% else %}
+                        <a href="#" onclick="favoritePostAdd({{ post.id }}); return false;" title="Voeg bericht toe aan jouw favoriete berichten"><i class="fas fa-hand-holding-medical"></i></a>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+        {{ post | displayForumPost | raw }}
+        {% if userIsModerator or (mayPost and not post.discussion.locked) %}
+            <div class="forum-post-buttons">
+                {% if mayPost and not post.discussion.locked %}
+                    <a class="somda-button small" href="{{ path('forum_discussion_post_reply', { 'id': post.id }) }}">Reageer</a>
+                    <a class="somda-button small" href="{{ path('forum_discussion_post_quote', { 'id': post.id }) }}">Quote</a>
+                {% endif %}
+                {% if userIsModerator or (mayPost and not post.discussion.locked and post.author == app.user) %}
+                    <a class="somda-button small" href="{{ path('forum_discussion_post_edit', { 'id': post.id }) }}">Bewerk</a>
                 {% endif %}
             </div>
         {% endif %}
-    </th>
-    {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-        <th>
-            <a href="{{ path('forum_discussion_post_alert', { 'id': post.id }) }}" rel="nofollow" title="Klik hier om dit bericht aan de beheerders te melden. Gebruik dit voor bijvoorbeeld overtredingen van forumregels"><font color="#FFFFFF">Meld bericht</font></a>
-            {% if userIsModerator and (post.alerts | length) > 0 %}
-                <br /><a href="{{ path('forum_discussion_post_alerts', { 'id': post.id }) }}" title="Er zijn meldingen gedaan over dit bericht, klik om ze te bekijken"><span color="#DD1111">Meldingen</span></a>
-            {% endif %}
-        </th>
-    {% endif %}
-</tr><tr>
-    <td class="info" nowrap="nowrap">
+    </div>
+    <div class="forum-post-user">
         {{ post.author.id | displayUser(post.author.username) | raw }}
         {% if post.author in post.discussion.forum.moderators %}
             <br /><strong>Moderator</strong>
@@ -58,19 +70,5 @@
         {% if post.author.info.flickrAccount | length > 0 %}
             <a href="https://www.flickr.com/photos/{{ post.author.info.flickrAccount }}" rel="ugc noopener" target="_blank"><i class="fab fa-flickr" title="Flickr {{ post.author.info.flickrAccount }}"></i></a>
         {% endif %}
-    </td>
-    <td class="text">{{ post | displayForumPost | raw }}</td>
-    <td class="buttons">
-        {% if userIsModerator or (mayPost and not post.discussion.locked) %}
-            {% if mayPost and not post.discussion.locked %}
-                <a class="somda-button" href="{{ path('forum_discussion_post_reply', { 'id': post.id }) }}">Reageer</a>
-                <a class="somda-button" href="{{ path('forum_discussion_post_quote', { 'id': post.id }) }}">Quote</a>
-            {% endif %}
-            {% if userIsModerator or (mayPost and not post.discussion.locked and post.author == app.user) %}
-                <a class="somda-button" href="{{ path('forum_discussion_post_edit', { 'id': post.id }) }}">Bewerk</a>
-            {% endif %}
-        {% else %}
-            &nbsp;
-        {% endif %}
-    </td>
-</tr>
+    </div>
+</div>
