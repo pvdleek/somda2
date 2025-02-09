@@ -4,18 +4,21 @@
 
     {% block wiki %}
         {% if discussion.wikis | length > 0 %}
-            <div class="forum-post-wiki">
-                <div>
-                    Deze forumdiscussie is gekoppeld aan de <a href="http://www.railwiki.nl/" rel="noopener" target="_blank">RailWiki.nl</a> pagina{% if discussion.wikis | length > 1 %}'s{% endif %}):
-                    <br /><br />
-                    {% for wiki in discussion.wikis %}
-                        <a href="http://www.railwiki.nl/index.php/{{ wiki.wiki }}" rel="noopener" target="_blank">{{ wiki.title ? wiki.title : wiki.wiki }}</a>
-                        {% if not loop.last %} - {% endif %}
-                    {% endfor %}
-                </div>
-                <div>
-                    <a href="http://www.railwiki.nl/" rel="noopener" target="_blank"><img alt="RailWiki.nl" height="110" src="{{ asset('images/railwiki-logo.png') }}" width="296" /></a>
-                </div>
+            <div class="wiki-block">
+                <table>
+                    <tr>
+                        <td align="center">
+                            <br />
+                            Deze forumdiscussie is gekoppeld aan de <a href="http://www.railwiki.nl/" rel="noopener" target="_blank">RailWiki.nl</a> pagina{% if discussion.wikis | length > 1 %}'s{% endif %}):
+                            <br /><br />
+                            {% for wiki in discussion.wikis %}
+                                <a href="http://www.railwiki.nl/index.php/{{ wiki.wiki }}" rel="noopener" target="_blank">{{ wiki.title ? wiki.title : wiki.wiki }}</a>
+                                {% if not loop.last %} - {% endif %}
+                            {% endfor %}
+                        </td>
+                        <td><a href="http://www.railwiki.nl/" rel="noopener" target="_blank"><img alt="RailWiki.nl" height="110" src="{{ asset('images/railwiki-logo-1.webp') }}" width="296" /></a></td>
+                    </tr>
+                </table>
             </div>
         {% endif %}
     {% endblock %}
@@ -74,46 +77,45 @@
 
             {% set firstUnreadAnchorDone = false %}
             {% for post in posts %}
-                {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-                    {% if newToOld %}
-                        {% set postIsUnread = loop.index <= ((numberOfPosts - numberOfReadPosts) - (constant('App\\Generics\\ForumGenerics::MAX_POSTS_PER_PAGE') * (pageNumber - 1))) %}
-                    {% else %}
-                        {% set postIsUnread = loop.index > (numberOfReadPosts - (constant('App\\Generics\\ForumGenerics::MAX_POSTS_PER_PAGE') * (pageNumber - 1))) %}
-                    {% endif %}
+                {% if newToOld %}
+                    {% set postIsUnread = loop.index <= ((numberOfPosts - numberOfReadPosts) - (constant('App\\Generics\\ForumGenerics::MAX_POSTS_PER_PAGE') * (pageNumber - 1))) %}
                 {% else %}
-                    {% set postIsUnread = false %}
+                    {% set postIsUnread = loop.index > (numberOfReadPosts - (constant('App\\Generics\\ForumGenerics::MAX_POSTS_PER_PAGE') * (pageNumber - 1))) %}
                 {% endif %}
                 {% if loop.index == 5 or loop.index == 55 %}
                     {% if forumBanner is not null %}
-                        <div class="forum-post-banner">
-                            <a href="{{ path('banner_click_out', { 'id': forumBanner.id }) }}" rel="sponsored noopener" target="_blank">
+                        <br /><table align="center"><tr>
+                            <td><a href="{{ path('banner_click_out', { 'id': forumBanner.id }) }}" rel="sponsored noopener" target="_blank">
                                 <img alt="{{ forumBanner.customer.name }} {{ forumBanner.description }}" height="150" src="{{ asset('images/banners/' ~ forumBanner.image) }}" />
-                            </a>
-                            <div class="forum-post-banner-link"><a href="{{ path('advertise') }}">advertentie</a></div>
-                        </div>
+                            </a></td>
+                            <td><a href="{{ path('advertise') }}">advertentie</a></td>
+                        </tr></table><br />
                     {% else %}
-                        <div class="forum-post-banner">
-                            <iframe height="90" src="https://rotator.tradetracker.net/?r=89736&amp;t=iframe" scrolling="no" width="728"></iframe></td>
-                        </div>
+                        <table align="center"><tr>
+                            <td><iframe height="90" src="https://rotator.tradetracker.net/?r=89736&amp;t=iframe" scrolling="no" width="728"></iframe></td>
+                        </tr></table><br />
                     {% endif %}
                 {% elseif loop.index == 30 %}
-                    <div class="forum-post-banner">
-                        <p class="warn">Tevreden over Somda? Overweeg dan eens een <a href="{{ path('about') }}">vrijwillige donatie</a>, alvast bedankt!</p>
-                    </div>
+                    <br /><table align="center"><tr>
+                        <td><p class="warn">Tevreden over Somda? Overweeg dan eens een <a href="{{ path('about') }}">vrijwillige donatie</a>, alvast bedankt!</p></td>
+                    </tr></table><br />
                 {% endif %}
 
-                {% include('forum/post.html.twig') %}
-                {% if is_granted('ROLE_ADMIN_WIKI') and (discussion.wikis | length) > 0 %}
-                    <div class="forum-post-wiki-check">Railwiki.nl:
-                        {% if post.wikiCheck == 0 %}
-                            <span id="wiki_{{ post.id }}" class="background-color-orange">Nog te controleren - <a href="#" onclick="wikiCheck({{ post.id }}, 'ok'); return false;">Markeer als gecontroleerd</a> - <a href="#" onclick="wikiCheck({{ post.id }}, 'na'); return false;">Markeer als niet relevante inhoud</a></span>
-                        {% elseif post.wikiCheck == 1 %}
-                            Verwerkt in de wiki door {{ post.wikiChecker.id | displayUser(post.wikiChecker.username) | raw }}
-                        {% else %}
-                            Geen relevante inhoud, gecontroleerd door {{ post.wikiChecker.id | displayUser(post.wikiChecker.username) | raw }}
-                        {% endif %}
-                    </div>
-                {% endif %}
+                <table align="center">
+                    {% include('forum/post.html.twig') %}
+                    {% if is_granted('ROLE_ADMIN_WIKI') and (discussion.wikis | length) > 0 %}
+                        <tr><td colspan="3">Railwiki.nl:
+                            {% if post.wikiCheck == 0 %}
+                                <span id="wiki_{{ post.id }}" class="background-color-orange">Nog te controleren - <a href="#" onclick="wikiCheck({{ post.id }}, 'ok'); return false;">Markeer als gecontroleerd</a> - <a href="#" onclick="wikiCheck({{ post.id }}, 'na'); return false;">Markeer als niet relevante inhoud</a></span>
+                            {% elseif post.wikiCheck == 1 %}
+                                Verwerkt in de wiki door {{ post.wikiChecker.id | displayUser(post.wikiChecker.username) | raw }}
+                            {% else %}
+                                Geen relevante inhoud, gecontroleerd door {{ post.wikiChecker.id | displayUser(post.wikiChecker.username) | raw }}
+                            {% endif %}
+                        </td></tr>
+                    {% endif %}
+                </table>
+                <br />
             {% endfor %}
 
             {% if not firstUnreadAnchorDone and not newToOld %}<a id="new_post"></a>{% endif %}
@@ -127,10 +129,6 @@
 
     {{ block('wiki') }}
 
-{% endblock %}
-
-{% block stylesheets %}
-    <link rel="stylesheet" href="{{ asset('css/forum.css') }}" />
 {% endblock %}
 
 {% block javascripts %}
