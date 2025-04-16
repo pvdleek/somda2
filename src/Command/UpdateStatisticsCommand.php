@@ -31,7 +31,7 @@ class UpdateStatisticsCommand extends Command
     /**
      * @throws \Exception
      */
-    protected function execute(InputInterface $input = null, OutputInterface $output = null): int
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $today = new \DateTime();
         $yesterday = new \DateTime('-1 day');

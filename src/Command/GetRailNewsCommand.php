@@ -64,7 +64,7 @@ class GetRailNewsCommand extends Command
     /**
      * @throws \Exception
      */
-    protected function execute(InputInterface $input = null, OutputInterface $output = null): int
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         /**
          * @var RailNewsSourceFeed[] $feeds

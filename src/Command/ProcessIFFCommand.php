@@ -40,7 +40,7 @@ class ProcessIFFCommand extends Command
     /**
      * @throws \Exception
      */
-    protected function execute(InputInterface $input = null, OutputInterface $output = null): int
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         // Get the ZIP from the NDOV loket and extract it to the directory
         $this->getZipFile('https://data.ndovloket.nl/ns/ns-latest.zip');

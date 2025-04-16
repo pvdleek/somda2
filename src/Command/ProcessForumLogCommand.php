@@ -30,7 +30,7 @@ class ProcessForumLogCommand extends Command
         parent::__construct();
     }
 
-    protected function execute(InputInterface $input = null, OutputInterface $output = null): int
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $store = new SemaphoreStore();
         $factory = new LockFactory($store);
