@@ -7,7 +7,7 @@
 		<div class="news-flash">
 			{% if headerType == 'banner' %}
 				<a href="{{ path('banner_click_out', { 'id': headerContent.id }) }}" rel="noopener sponsored" target="_blank">
-					<img alt="{{ headerContent.customer.name }} {{ headerContent.description }}" height="100" src="{{ asset('images/banners/' ~ headerContent.image) }}" />
+					<img alt="{{ headerContent.customer.name }} {{ headerContent.description }}" height="130" src="{{ asset('images/banners/' ~ headerContent.image) }}" />
 				</a>
 			{% else %}
 				<div class="news-flash-title"><a href="{{ headerContent.url }}" rel="noopener" target="_blank">{{ headerContent.title }}</a></div>

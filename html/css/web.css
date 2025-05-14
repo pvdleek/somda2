@@ -143,7 +143,7 @@ table.dataTable tr:hover td, table.dataTable tr:hover td a, table.dataTable tr:h
     background-color: var(--header-background-color);
     border-radius: 5px;
     color: var(--header-text-color);
-    height: 101px;
+    height: 131px;
     width: 100%;
 }
 #header_image {
@@ -172,7 +172,7 @@ table.dataTable tr:hover td, table.dataTable tr:hover td a, table.dataTable tr:h
     text-indent: -8000em;
 }
 .news-flash {
-    height: 100px;
+    height: 130px;
     overflow: hidden;
     position: absolute;
     right: 15px;
