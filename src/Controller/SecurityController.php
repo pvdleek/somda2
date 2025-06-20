@@ -178,7 +178,7 @@ class SecurityController
         }
     }
 
-    public function activateAction(Request $request, int $id, string $key = null): Response|RedirectResponse
+    public function activateAction(Request $request, int $id, ?string $key = null): Response|RedirectResponse
     {
         /**
          * @var User $user
@@ -199,7 +199,6 @@ class SecurityController
                 $userGroup = $this->formHelper->getDoctrine()->getRepository(Group::class)->find(4);
                 $userGroup->addUser($user);
                 
-                $user->active = true;
                 $user->activationKey = null;
                 $user->addRole('ROLE_USER')->addGroup($userGroup);
                 $this->formHelper->getDoctrine()->getManager()->flush();
@@ -219,7 +218,7 @@ class SecurityController
 
                 $this->formHelper->getFlashHelper()->add(
                     FlashHelper::FLASH_TYPE_INFORMATION,
-                    'Jouw account is geactiveerd, je kunt nu inloggen'
+                    'Jouw account is geactiveerd, je kunt na controle door een beheerder inloggen'
                 );
                 return $this->formHelper->getRedirectHelper()->redirectToRoute(
                     'login_with_username',
