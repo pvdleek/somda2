@@ -73,7 +73,7 @@ class ForumDiscussion extends ServiceEntityRepository
             $statement = $connection->prepare($query);
             $statement->bindValue(
                 'minDate',
-                date(DateGenerics::DATE_FORMAT_DATABASE, mktime(0, 0, 0, date('m'), date('d') - 100, date('Y')))
+                \date(DateGenerics::DATE_FORMAT_DATABASE, \mktime(0, 0, 0, \date('m'), \date('d') - 30, \date('Y')))
             );
             $statement->bindValue('moderatorForumType', ForumForum::TYPE_MODERATORS_ONLY);
             return $statement->executeQuery()->fetchAllAssociative();
