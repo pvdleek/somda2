@@ -43,6 +43,7 @@
                         {% else %}
                             <a href="#" onclick="favoriteAdd(); return false;">Voeg discussie toe</a> aan <a href="{{ path('forum_favorites') }}">jouw favorieten</a>
                         {% endif %}
+                        <br /><a href="{{ path('forum_unread') }}">Bekijk alle ongelezen berichten</a>
                     </span>
                 {% endif %}
                 {% if discussion.locked %}

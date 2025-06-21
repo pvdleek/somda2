@@ -1,7 +1,6 @@
 {% extends('mobile/base.html.twig') %}
 
 {% block content %}
-
     {% block wiki %}
         {% if discussion.wikis | length > 0 %}
             <table>
@@ -106,6 +105,9 @@
 
     {{ block('paginator') }}
 
+    {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+        <a href="{{ path('forum_unread') }}">Bekijk alle ongelezen berichten</a>
+    {% endif %}
 {% endblock %}
 
 {% block javascripts %}
