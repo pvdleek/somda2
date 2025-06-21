@@ -323,7 +323,7 @@ class OfficialTrainTableHelper
     /**
      * @throws \Exception
      */
-    private function saveTrainTable(string $locationName, string $action, string $time = null): void
+    private function saveTrainTable(string $locationName, string $action, ?string $time = null): void
     {
         if (null === $this->footnote) {
             throw new \Exception(

@@ -29,7 +29,7 @@ class ManageRouteListsController
     /**
      * @throws \Exception
      */
-    public function routeListsAction(int $id = null): Response
+    public function routeListsAction(?int $id = null): Response
     {
         $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_ADMIN_ROUTE_NUMBER_LIST);
 

@@ -39,7 +39,7 @@ class NewsController extends AbstractFOSRestController
      * )
      * @OA\Tag(name="News")
      */
-    public function indexAction(int $id = null): Response
+    public function indexAction(?int $id = null): Response
     {
         $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_API_USER);
 
@@ -83,7 +83,7 @@ class NewsController extends AbstractFOSRestController
      * )
      * @OA\Tag(name="News")
      */
-    public function railNewsAction(int $limit = null): Response
+    public function railNewsAction(?int $limit = null): Response
     {
         $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_API_USER);
 

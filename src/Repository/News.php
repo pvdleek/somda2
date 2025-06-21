@@ -20,9 +20,9 @@ class News extends ServiceEntityRepository
     /**
      * @return array<int, array<string, mixed>>
      */
-    public function findForDashboard(int $limit, User $user = null): array
+    public function findForDashboard(int $limit, ?User $user = null): array
     {
-        if (is_null($user)) {
+        if (null === $user) {
             $query = '
                 SELECT `newsid` AS `id`, `title`, `timestamp`, TRUE AS `news_read`
                 FROM somda_news

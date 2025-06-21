@@ -257,9 +257,7 @@ class SpotInputHelper
 
         if (\is_numeric($route->number)) {
             if (\count($route->getTrainTables()) > 0
-                && \is_null(
-                    $route->getTrainTableFirstLastByDay($this->trainTableYear->id, $spotInput->spotDate->format('N'))
-                )
+                && null === $route->getTrainTableFirstLastByDay($this->trainTableYear->id, $spotInput->spotDate->format('N'))
             ) {
                 $spotInput->feedbackFlag += Spot::INPUT_FEEDBACK_ROUTE_NOT_ON_DAY;
                 return $route;

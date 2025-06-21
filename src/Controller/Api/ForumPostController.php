@@ -56,9 +56,7 @@ class ForumPostController extends AbstractFOSRestController
          * @var ForumDiscussion $discussion
          */
         $discussion = $this->formHelper->getDoctrine()->getRepository(ForumDiscussion::class)->find($discussionId);
-        if (is_null($discussion)
-            || !$this->forumAuthHelper->mayPost($discussion->forum, $this->userHelper->getUser())
-        ) {
+        if (null === $discussion || !$this->forumAuthHelper->mayPost($discussion->forum, $this->userHelper->getUser())) {
             throw new AccessDeniedException('This discussion does not exist or the user may not post');
         }
 

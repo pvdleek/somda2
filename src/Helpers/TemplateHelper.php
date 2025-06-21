@@ -38,7 +38,7 @@ class TemplateHelper
     ) {
     }
 
-    public function render(string $view, array $parameters = [], Response $response = null): Response
+    public function render(string $view, array $parameters = [], ?Response $response = null): Response
     {
         try {
             $content = $this->twig->render($this->getCorrectView($view), $this->getParameters($parameters));
@@ -120,7 +120,7 @@ class TemplateHelper
         $block = $this->doctrine->getRepository(Block::class)->findOneBy(
             ['route' => $this->requestStack->getCurrentRequest()->get('_route')]
         );
-        if (null !== $block && !\is_null($block->blockHelp)) {
+        if (null !== $block && null !== $block->blockHelp) {
             return $block->blockHelp;
         }
 

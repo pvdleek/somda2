@@ -35,7 +35,7 @@ class TrainTableController
     /**
      * @throws \Exception
      */
-    public function indexAction(int $trainTableYearId = null, string $routeNumber = null): Response
+    public function indexAction(?int $trainTableYearId = null, ?string $routeNumber = null): Response
     {
         $submit = false;
 
@@ -68,11 +68,11 @@ class TrainTableController
      * @throws \Exception
      */
     public function passingRoutesAction(
-        int $trainTableYearId = null,
-        string $locationName = null,
-        int $dayNumber = null,
-        string $startTime = null,
-        string $endTime = null
+        ?int $trainTableYearId = null,
+        ?string $locationName = null,
+        ?int $dayNumber = null,
+        ?string $startTime = null,
+        ?string $endTime = null
     ): Response {
         $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_PASSING_ROUTES);
 
@@ -162,7 +162,7 @@ class TrainTableController
         ]);
     }
 
-    public function routeOverviewAction(int $trainTableYearId = null, int $routeListId = null): Response
+    public function routeOverviewAction(?int $trainTableYearId = null, ?int $routeListId = null): Response
     {
         $routesDisplay = $this->routesDisplayHelper->getRoutesDisplay($trainTableYearId, $routeListId);
 
@@ -177,7 +177,7 @@ class TrainTableController
         ]);
     }
 
-    public function specialRoutesAction(int $id = null): Response
+    public function specialRoutesAction(?int $id = null): Response
     {
         $specialRoute = null;
         if (null !== $id) {

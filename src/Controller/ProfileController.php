@@ -35,7 +35,7 @@ class ProfileController
     /**
      * @throws \Exception
      */
-    public function indexAction(Request $request, int $id = null): Response|RedirectResponse
+    public function indexAction(Request $request, ?int $id = null): Response|RedirectResponse
     {
         if (null === $id) {
             if (!$this->userHelper->userIsLoggedIn()) {

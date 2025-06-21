@@ -56,7 +56,7 @@ class TrainController
     /**
      * @throws \Exception
      */
-    public function editAction(Request $request, int $id, int $typeId = null): Response|RedirectResponse
+    public function editAction(Request $request, int $id, ?int $typeId = null): Response|RedirectResponse
     {
         $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_USER);
 

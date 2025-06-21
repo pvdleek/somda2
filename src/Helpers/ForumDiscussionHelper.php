@@ -53,7 +53,7 @@ class ForumDiscussionHelper
      * @return ForumPost[]
      * @throws WrongMethodError
      */
-    public function getPosts(bool $newToOld, int $requestedPageNumber = null, int $requestedPostId = null): array
+    public function getPosts(bool $newToOld, ?int $requestedPageNumber = null, ?int $requestedPostId = null): array
     {
         $this->setNumberOfPostsAndPages();
         $this->setNumberOfReadPosts();
@@ -164,7 +164,7 @@ class ForumDiscussionHelper
     /**
      * This function should always be called before setPageNumber for that function modifies the pageNumber
      */
-    private function setForumJump(int $requestedPageNumber = null, int $requestedPostId = null): void
+    private function setForumJump(?int $requestedPageNumber = null, ?int $requestedPostId = null): void
     {
         if (null !== $requestedPostId) {
             $this->forumJump = 'p' . $requestedPostId;
@@ -183,7 +183,7 @@ class ForumDiscussionHelper
      * This function should always be called after setForumJump for this function modifies the pageNumber
      * @throws WrongMethodError
      */
-    private function setPageNumber(bool $newToOld, int $requestedPageNumber = null, int $postId = null): void
+    private function setPageNumber(bool $newToOld, ?int $requestedPageNumber = null, ?int $postId = null): void
     {
         if (null !== $requestedPageNumber) {
             $this->pageNumber = \max($requestedPageNumber, 1);

@@ -300,7 +300,7 @@ class TrainTableController extends AbstractFOSRestController
      * )
      * @OA\Tag(name="Train-tables")
      */
-    public function routeOverviewAction(int $trainTableYearId = null, int $routeListId = null): Response
+    public function routeOverviewAction(?int $trainTableYearId = null, ?int $routeListId = null): Response
     {
         $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_API_USER);
 

@@ -22,7 +22,7 @@ class RoutesDisplayHelper implements RuntimeExtensionInterface
     ) {
     }
 
-    public function getRoutesDisplay(int $trainTableYearId = null, int $routeListId = null): RoutesDisplay
+    public function getRoutesDisplay(?int $trainTableYearId = null, ?int $routeListId = null): RoutesDisplay
     {
         $routesDisplay = new RoutesDisplay();
 

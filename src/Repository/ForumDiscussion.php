@@ -23,7 +23,7 @@ class ForumDiscussion extends ServiceEntityRepository
     /**
      * @throws \Exception
      */
-    public function findForDashboard(int $limit, User $user = null): array
+    public function findForDashboard(int $limit, ?User $user = null): array
     {
         $maxQuery = '
             SELECT p.discussionid AS disc_id, MAX(p.timestamp) AS max_date_time
@@ -31,7 +31,7 @@ class ForumDiscussion extends ServiceEntityRepository
             JOIN somda_forum_discussion d ON d.discussionid = p.discussionid
             WHERE p.timestamp > :minDate
             GROUP BY disc_id';
-        if (is_null($user)) {
+        if (null === $user) {
             $query = '
                 SELECT `d`.`discussionid` AS `id`, `d`.`title` AS `title`, `a`.`uid` AS `author_id`,
                     `a`.`username` AS `author_username`, `d`.`locked` AS `locked`, `d`.`viewed` AS `viewed`,
@@ -82,7 +82,7 @@ class ForumDiscussion extends ServiceEntityRepository
         }
     }
 
-    public function findByForum(ForumForum $forum, User $user = null, int $limit = null): array
+    public function findByForum(ForumForum $forum, ?User $user = null, ?int $limit = null): array
     {
         $maxQuery = '
             SELECT p.discussionid AS disc_id, MAX(p.timestamp) AS max_date_time

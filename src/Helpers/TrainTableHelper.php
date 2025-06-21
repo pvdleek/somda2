@@ -137,7 +137,7 @@ class TrainTableHelper
         );
     }
 
-    public function getPassingRoutes(int $dayNumber = null, string $startTime = null, string $endTime = null): array
+    public function getPassingRoutes(?int $dayNumber = null, ?string $startTime = null, ?string $endTime = null): array
     {
         $this->clearErrorMessages();
         if (null === $this->getTrainTableYear()) {

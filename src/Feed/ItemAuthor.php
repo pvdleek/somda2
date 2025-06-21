@@ -33,7 +33,7 @@ class ItemAuthor implements AuthorInterface
     /**
      * @throws UnusedItemAuthorMethod
      */
-    public function setEmail(string $email = null): AuthorInterface
+    public function setEmail(?string $email = null): AuthorInterface
     {
         throw new UnusedItemAuthorMethod(self::SETTER_EXCEPTION_MESSAGE);
     }
@@ -41,7 +41,7 @@ class ItemAuthor implements AuthorInterface
     /**
      * @throws UnusedItemAuthorMethod
      */
-    public function setName(string $name = null): AuthorInterface
+    public function setName(?string $name = null): AuthorInterface
     {
         throw new UnusedItemAuthorMethod(self::SETTER_EXCEPTION_MESSAGE);
     }
@@ -49,7 +49,7 @@ class ItemAuthor implements AuthorInterface
     /**
      * @throws UnusedItemAuthorMethod
      */
-    public function setUri(string $uri = null): AuthorInterface
+    public function setUri(?string $uri = null): AuthorInterface
     {
         throw new UnusedItemAuthorMethod(self::SETTER_EXCEPTION_MESSAGE);
     }

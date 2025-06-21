@@ -66,7 +66,7 @@ class SpotController extends AbstractFOSRestController
      * @OA\Response(response=504, description="The request timed out, try again with extra filters")
      * @OA\Tag(name="Spots")
      */
-    public function indexAction(int $maxMonths = 1, string $searchParameters = null): Response
+    public function indexAction(int $maxMonths = 1, ?string $searchParameters = null): Response
     {
         $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_API_USER);
 

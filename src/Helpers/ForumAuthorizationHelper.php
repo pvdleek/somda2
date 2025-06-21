@@ -8,7 +8,7 @@ use App\Generics\RoleGenerics;
 
 class ForumAuthorizationHelper
 {
-    public function mayView(ForumForum $forum, User $user = null): bool
+    public function mayView(ForumForum $forum, ?User $user = null): bool
     {
         if ($forum->type === ForumForum::TYPE_PUBLIC || (null !== $user) && $user->hasRole(RoleGenerics::ROLE_ADMIN)) {
             return true;
@@ -19,7 +19,7 @@ class ForumAuthorizationHelper
         return \in_array($user, $forum->getModerators());
     }
 
-    public function mayPost(ForumForum $forum, User $user = null): bool
+    public function mayPost(ForumForum $forum, ?User $user = null): bool
     {
         if (!$this->mayView($forum, $user) || $forum->type === ForumForum::TYPE_ARCHIVE) {
             return false;
@@ -30,7 +30,7 @@ class ForumAuthorizationHelper
         return \in_array($user, $forum->getModerators()) || $user->hasRole(RoleGenerics::ROLE_ADMIN);
     }
 
-    public function userIsModerator(ForumForum $forum, User $user = null): bool
+    public function userIsModerator(ForumForum $forum, ?User $user = null): bool
     {
         return null !== $user
             && (\in_array($user, $forum->getModerators()) || $user->hasRole(RoleGenerics::ROLE_ADMIN));

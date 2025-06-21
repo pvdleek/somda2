@@ -22,7 +22,7 @@ class NewsController
     ) {
     }
 
-    public function indexAction(int $id = null): Response
+    public function indexAction(?int $id = null): Response
     {
         if (null !== $id) {
             /**

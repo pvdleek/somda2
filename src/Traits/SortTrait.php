@@ -5,7 +5,7 @@ namespace App\Traits;
 
 trait SortTrait
 {
-    public function sortByFieldFilter(array $content, string $sortBy = null, string $direction = 'asc'): array
+    public function sortByFieldFilter(array $content, ?string $sortBy = null, string $direction = 'asc'): array
     {
         // Unfortunately have to suppress warnings here due to __get function causing usort to think that the array
         // has been modified: "usort(): Array was modified by the user comparison function"

@@ -37,7 +37,7 @@ class SecurityController
     /**
      * @throws \Exception
      */
-    public function loginAction(AuthenticationUtils $authenticationUtils, string $username = null): Response
+    public function loginAction(AuthenticationUtils $authenticationUtils, ?string $username = null): Response
     {
         if ($this->userHelper->userIsLoggedIn()) {
             return $this->formHelper->getRedirectHelper()->redirectToRoute('home');

@@ -47,7 +47,7 @@ class LocationController extends AbstractFOSRestController
      * )
      * @OA\Tag(name="Locations")
      */
-    public function indexAction(string $searchMethod = null, string $search = null): Response
+    public function indexAction(?string $searchMethod = null, ?string $search = null): Response
     {
         $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_API_USER);
 

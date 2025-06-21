@@ -30,7 +30,7 @@ class ManageTrainTablesController
     /**
      * @throws \Exception
      */
-    public function manageAction(int $yearId = null, int $routeListId = null): Response
+    public function manageAction(?int $yearId = null, ?int $routeListId = null): Response
     {
         $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_ADMIN_TRAINTABLE_EDIT);
 
@@ -49,7 +49,7 @@ class ManageTrainTablesController
         ]);
     }
 
-    public function manageRouteAction(Request $request, int $routeListId, int $routeId, int $routeNumber = null): Response|RedirectResponse
+    public function manageRouteAction(Request $request, int $routeListId, int $routeId, ?int $routeNumber = null): Response|RedirectResponse
     {
         $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_ADMIN_TRAINTABLE_EDIT);
 

@@ -24,7 +24,7 @@ class LocationController
     ) {
     }
 
-    public function indexAction(string $searchMethod = null, string $search = null): Response
+    public function indexAction(?string $searchMethod = null, ?string $search = null): Response
     {
         $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_ABBREVIATIONS);
 
