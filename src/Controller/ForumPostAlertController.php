@@ -17,10 +17,12 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 class ForumPostAlertController
 {
     public function __construct(
+        private readonly SluggerInterface $slugger,
         private readonly UserHelper $userHelper,
         private readonly FormHelper $formHelper,
         private readonly EmailHelper $emailHelper,
@@ -82,7 +84,7 @@ class ForumPostAlertController
             return $this->formHelper->finishFormHandling('', 'forum_discussion_post', [
                 'id' => $post->discussion->id,
                 'postId' => $post->id,
-                'name' => \urlencode($post->discussion->title)
+                'name' => $this->slugger->slug($post->discussion->title)
             ]);
         }
 

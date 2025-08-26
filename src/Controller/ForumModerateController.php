@@ -17,6 +17,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 class ForumModerateController
 {
@@ -25,6 +26,7 @@ class ForumModerateController
     public const ACTION_MOVE = 'move';
 
     public function __construct(
+        private readonly SluggerInterface $slugger,
         private readonly FormHelper $formHelper,
         private readonly UserHelper $userHelper,
         private readonly TemplateHelper $templateHelper,
@@ -59,7 +61,7 @@ class ForumModerateController
 
         return $this->formHelper->getRedirectHelper()->redirectToRoute(
             RouteGenerics::ROUTE_FORUM_DISCUSSION,
-            ['id' => $discussion->id, 'name' => urlencode($discussion->title)]
+            ['id' => $discussion->id, 'name' => $this->slugger->slug($discussion->title)]
         );
     }
 
@@ -92,7 +94,7 @@ class ForumModerateController
 
             return $this->formHelper->finishFormHandling('', RouteGenerics::ROUTE_FORUM_DISCUSSION, [
                 'id' => $newDiscussion->id,
-                'name' => \urlencode($newDiscussion->title)
+                'name' => $this->slugger->slug($newDiscussion->title)
             ]);
         }
 
@@ -166,7 +168,7 @@ class ForumModerateController
 
         return $this->formHelper->getRedirectHelper()->redirectToRoute(
             RouteGenerics::ROUTE_FORUM_DISCUSSION,
-            ['id' => $newDiscussion->id, 'name' => urlencode($newDiscussion->title)]
+            ['id' => $newDiscussion->id, 'name' => $this->slugger->slug($newDiscussion->title)]
         );
     }
 

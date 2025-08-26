@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Controller;
@@ -7,7 +8,6 @@ use App\Entity\ForumDiscussion;
 use App\Entity\ForumFavorite;
 use App\Entity\ForumPost;
 use App\Entity\ForumPostLog;
-use App\Entity\ForumPostText;
 use App\Form\ForumPost as ForumPostForm;
 use App\Generics\FormGenerics;
 use App\Generics\RoleGenerics;
@@ -21,15 +21,16 @@ use App\Helpers\UserHelper;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 class ForumPostController
 {
     public function __construct(
+        private readonly SluggerInterface $slugger,
         private readonly UserHelper $userHelper,
         private readonly FormHelper $formHelper,
         private readonly ForumAuthorizationHelper $forumAuthHelper,
@@ -87,7 +88,7 @@ class ForumPostController
 
             return $this->formHelper->finishFormHandling('', RouteGenerics::ROUTE_FORUM_DISCUSSION, [
                 'id' => $quotedPost->discussion->id,
-                'name' => urlencode($quotedPost->discussion->title)
+                'name' => $this->slugger->slug($quotedPost->discussion->title),
             ]);
         }
 
@@ -170,7 +171,7 @@ class ForumPostController
 
             return $this->formHelper->finishFormHandling('', RouteGenerics::ROUTE_FORUM_DISCUSSION, [
                 'id' => $post->discussion->id,
-                'name' => \urlencode($post->discussion->title)
+                'name' => $this->slugger->slug($post->discussion->title)
             ]);
         }
 

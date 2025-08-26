@@ -18,10 +18,12 @@ use App\Helpers\UserHelper;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 class ForumDiscussionController
 {
     public function __construct(
+        private readonly SluggerInterface $slugger,
         private readonly UserHelper $userHelper,
         private readonly FormHelper $formHelper,
         private readonly ForumAuthorizationHelper $forumAuthHelper,
@@ -126,7 +128,7 @@ class ForumDiscussionController
 
             return $this->formHelper->finishFormHandling('', RouteGenerics::ROUTE_FORUM_DISCUSSION, [
                 'id' => $forumDiscussion->id,
-                'name' => \urlencode($forumDiscussion->title)
+                'name' => $this->slugger->slug($forumDiscussion->title)
             ]);
         }
 
