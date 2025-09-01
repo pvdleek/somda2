@@ -6,26 +6,26 @@
         <div class="panel-content">
             <label for="trainTableYear">Selecteer het dienstregelings-jaar</label>
             <select id="trainTableYear" name="trainTableYear">
-                {% for trainTableYear in trainTableYears %}
-                    <option {% if trainTableYear == selectedTrainTableYear %}selected="selected" {% endif %}value="{{ trainTableYear.id }}">{{ trainTableYear.name }}</option>
+                {% for train_table_year in train_table_years %}
+                    <option {% if train_table_year == selected_train_table_year %}selected="selected" {% endif %}value="{{ train_table_year.id }}">{{ train_table_year.name }}</option>
                 {% endfor %}
             </select>
             <a class="somda-button" href="#" onclick="manageTrainTableYear(); return false;">Toon treinseries</a>
 
-            {% if routeLists | length %}
+            {% if route_lists|length %}
                 <br /><br />
                 <label for="routeList">Selecteer de serie</label>
                 <select id="routeList" name="routeList">
-                    {% for routeList in routeLists %}
-                        <option {% if routeList == selectedRouteList %}selected="selected" {% endif %}value="{{ routeList.id }}">
-                            {{ routeList.firstNumber }}-{{ routeList.lastNumber }} - {{ routeList.characteristic.name }} - {{ routeList.transporter.name }}
+                    {% for route_list in route_lists %}
+                        <option {% if route_list == selected_route_list %}selected="selected" {% endif %}value="{{ route_list.id }}">
+                            {{ route_list.first_number }}-{{ route_list.last_number }} - {{ route_list.characteristic.name }} - {{ route_list.transporter.name }}
                         </option>
                     {% endfor %}
                 </select>
                 <a class="somda-button" href="#" onclick="manageTrainTableYearRouteList(); return false;">Toon treinen</a>
             {% endif %}
 
-            {% if routes | length %}
+            {% if routes|length %}
                 <br /><br />
                 <table>
                     <tr>
@@ -42,22 +42,22 @@
                     {% for route in routes %}
                         <tr>
                             <td>{{ route.number }}</td>
-                            <td>{{ route.trainTableFirstLastByDay(selectedTrainTableYear.id, 1) ? route.trainTableFirstLastByDay(selectedTrainTableYear.id, 1).firstLocation.name ~ ' - ' ~ route.trainTableFirstLastByDay(selectedTrainTableYear.id, 1).lastLocation.name }}</td>
-                            <td>{{ route.trainTableFirstLastByDay(selectedTrainTableYear.id, 2) ? route.trainTableFirstLastByDay(selectedTrainTableYear.id, 2).firstLocation.name ~ ' - ' ~ route.trainTableFirstLastByDay(selectedTrainTableYear.id, 2).lastLocation.name }}</td>
-                            <td>{{ route.trainTableFirstLastByDay(selectedTrainTableYear.id, 3) ? route.trainTableFirstLastByDay(selectedTrainTableYear.id, 3).firstLocation.name ~ ' - ' ~ route.trainTableFirstLastByDay(selectedTrainTableYear.id, 3).lastLocation.name }}</td>
-                            <td>{{ route.trainTableFirstLastByDay(selectedTrainTableYear.id, 4) ? route.trainTableFirstLastByDay(selectedTrainTableYear.id, 4).firstLocation.name ~ ' - ' ~ route.trainTableFirstLastByDay(selectedTrainTableYear.id, 4).lastLocation.name }}</td>
-                            <td>{{ route.trainTableFirstLastByDay(selectedTrainTableYear.id, 5) ? route.trainTableFirstLastByDay(selectedTrainTableYear.id, 5).firstLocation.name ~ ' - ' ~ route.trainTableFirstLastByDay(selectedTrainTableYear.id, 5).lastLocation.name }}</td>
-                            <td>{{ route.trainTableFirstLastByDay(selectedTrainTableYear.id, 6) ? route.trainTableFirstLastByDay(selectedTrainTableYear.id, 6).firstLocation.name ~ ' - ' ~ route.trainTableFirstLastByDay(selectedTrainTableYear.id, 6).lastLocation.name }}</td>
-                            <td>{{ route.trainTableFirstLastByDay(selectedTrainTableYear.id, 7) ? route.trainTableFirstLastByDay(selectedTrainTableYear.id, 7).firstLocation.name ~ ' - ' ~ route.trainTableFirstLastByDay(selectedTrainTableYear.id, 7).lastLocation.name }}</td>
+                            <td>{{ route.trainTableFirstLastByDay(selected_train_table_year.id, 1) ? route.trainTableFirstLastByDay(selected_train_table_year.id, 1).first_location.name ~ ' - ' ~ route.trainTableFirstLastByDay(selected_train_table_year.id, 1).last_location.name }}</td>
+                            <td>{{ route.trainTableFirstLastByDay(selected_train_table_year.id, 2) ? route.trainTableFirstLastByDay(selected_train_table_year.id, 2).first_location.name ~ ' - ' ~ route.trainTableFirstLastByDay(selected_train_table_year.id, 2).last_location.name }}</td>
+                            <td>{{ route.trainTableFirstLastByDay(selected_train_table_year.id, 3) ? route.trainTableFirstLastByDay(selected_train_table_year.id, 3).first_location.name ~ ' - ' ~ route.trainTableFirstLastByDay(selected_train_table_year.id, 3).last_location.name }}</td>
+                            <td>{{ route.trainTableFirstLastByDay(selected_train_table_year.id, 4) ? route.trainTableFirstLastByDay(selected_train_table_year.id, 4).first_location.name ~ ' - ' ~ route.trainTableFirstLastByDay(selected_train_table_year.id, 4).last_location.name }}</td>
+                            <td>{{ route.trainTableFirstLastByDay(selected_train_table_year.id, 5) ? route.trainTableFirstLastByDay(selected_train_table_year.id, 5).first_location.name ~ ' - ' ~ route.trainTableFirstLastByDay(selected_train_table_year.id, 5).last_location.name }}</td>
+                            <td>{{ route.trainTableFirstLastByDay(selected_train_table_year.id, 6) ? route.trainTableFirstLastByDay(selected_train_table_year.id, 6).first_location.name ~ ' - ' ~ route.trainTableFirstLastByDay(selected_train_table_year.id, 6).last_location.name }}</td>
+                            <td>{{ route.trainTableFirstLastByDay(selected_train_table_year.id, 7) ? route.trainTableFirstLastByDay(selected_train_table_year.id, 7).first_location.name ~ ' - ' ~ route.trainTableFirstLastByDay(selected_train_table_year.id, 7).last_location.name }}</td>
                             <td>
-                                <a href="{{ path('manage_train_table', { 'routeListId': selectedRouteList.id, 'routeId': route.id }) }}">Bewerk</a>
+                                <a href="{{ path('manage_train_table', { 'route_list_id': selected_route_list.id, 'route_id': route.id }) }}">Bewerk</a>
                                 - <a href="#" onclick="addTrainTable({{ route.id }}); return false;">Kopieer</a>
-                                - <a href="{{ path('manage_train_table_delete', { 'yearId': selectedTrainTableYear.id, 'routeListId': selectedRouteList.id, 'routeId': route.id }) }}">Verwijder</a>
+                                - <a href="{{ path('manage_train_table_delete', { 'year_id': selected_train_table_year.id, 'route_list_id': selected_route_list.id, 'route_id': route.id }) }}">Verwijder</a>
                             </td>
                         </tr>
                     {% endfor %}
                 </table>
-            {% elseif selectedRouteList is not null %}
+            {% elseif selected_route_list is not null %}
                 <p class="info">Geen treinen gevonden</p>
                 <br /><a href="#" onclick="addTrainTable(); return false;">Voeg een trein toe</a>
             {% endif %}
@@ -69,25 +69,25 @@
     <script>
         function manageTrainTableYear()
         {
-            let location = '{{ path('manage_train_tables_year', { 'yearId': 9999 }) }}';
+            let location = '{{ path('manage_train_tables_year', { 'year_id': 9999 }) }}';
             location = location.replace('/9999/', '/' + $('#trainTableYear').val() + '/');
             document.location = location;
         }
 
         function manageTrainTableYearRouteList()
         {
-            let location = '{{ path('manage_train_tables_year_route_list', { 'yearId': 1234, 'routeListId': 5678 }) }}';
+            let location = '{{ path('manage_train_tables_year_route_list', { 'year_id': 1234, 'route_list_id': 5678 }) }}';
             location = location.replace('/1234/', '/' + $('#trainTableYear').val() + '/');
             location = location.replace('/5678/', '/' + $('#routeList').val() + '/');
             document.location = location;
         }
 
-        {% if selectedRouteList is not null %}
+        {% if selected_route_list is not null %}
             function addTrainTable(routeIdToCopy)
             {
-                let location = '{{ path('manage_train_table_add', { 'routeListId': selectedRouteList.id, 'routeId': 1234, 'routeNumber': 5678 }) }}';
+                let location = '{{ path('manage_train_table_add', { 'route_list_id': selected_route_list.id, 'routeId': 1234, 'route_number': 5678 }) }}';
                 location = location.replace('/1234/', '/' + (routeIdToCopy ? routeIdToCopy : 0) + '/');
-                location = location.replace('/5678/', '/' + prompt('Geef het treinnummer:', '{{ selectedRouteList.firstNumber | slice(0, (selectedRouteList.firstNumber | length) - 2) }}') + '/');
+                location = location.replace('/5678/', '/' + prompt('Geef het treinnummer:', '{{ selected_route_list.first_number|slice(0, (selected_route_list.first_number | length) - 2) }}') + '/');
                 document.location = location;
             }
         {% endif %}

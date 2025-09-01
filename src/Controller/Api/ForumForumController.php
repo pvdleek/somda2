@@ -1,15 +1,15 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Controller\Api;
 
-use App\Entity\ForumCategory;
-use App\Entity\ForumDiscussion;
 use App\Entity\ForumForum;
 use App\Generics\RoleGenerics;
 use App\Helpers\ForumAuthorizationHelper;
 use App\Helpers\ForumOverviewHelper;
 use App\Helpers\UserHelper;
+use App\Repository\ForumDiscussionRepository;
 use App\Traits\SortTrait;
 use Doctrine\Persistence\ManagerRegistry;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
@@ -23,9 +23,10 @@ class ForumForumController extends AbstractFOSRestController
 
     public function __construct(
         private readonly ManagerRegistry $doctrine,
-        private readonly UserHelper $userHelper,
-        private readonly ForumAuthorizationHelper $forumAuthHelper,
-        private readonly ForumOverviewHelper $forumOverviewHelper,
+        private readonly ForumAuthorizationHelper $forum_authorization_helper,
+        private readonly ForumOverviewHelper $forum_overview_helper,
+        private readonly UserHelper $user_helper,
+        private readonly ForumDiscussionRepository $forum_discussion_repository,
     ) {
     }
 
@@ -54,7 +55,7 @@ class ForumForumController extends AbstractFOSRestController
      *             ),
      *             @OA\Property(
      *                 description="The total number of discussions in this forum",
-     *                 property="numberOfDiscussions",
+     *                 property="number_of_discussions",
      *                 type="integer",
      *             ),
      *             @OA\Property(
@@ -69,21 +70,21 @@ class ForumForumController extends AbstractFOSRestController
      */
     public function indexAction(): Response
     {
-        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_API_USER);
+        $this->user_helper->denyAccessUnlessGranted(RoleGenerics::ROLE_API_USER);
 
-        $categories = $this->sortByFieldFilter($this->forumOverviewHelper->getCategoryArray(), 'order');
-        
+        $categories = $this->sortByFieldFilter($this->forum_overview_helper->getCategoryArray(), 'order');
+
         $forums = [];
         foreach ($categories as $id => $category) {
-            $categoryForums = $this->sortByFieldFilter($category['forums'], 'order');
-            foreach (\array_keys($categoryForums) as $key) {
-                $categoryForums[$key]['category'] = [
+            $category_forums = $this->sortByFieldFilter($category['forums'], 'order');
+            foreach (\array_keys($category_forums) as $key) {
+                $category_forums[$key]['category'] = [
                     'id' => $id,
                     'name' => $category['name'],
                     'order' => $category['order'],
                 ];
             }
-            $forums = \array_merge($forums, $categoryForums);
+            $forums = \array_merge($forums, $category_forums);
         }
 
         return $this->handleView($this->view(['data' => $forums], 200));
@@ -156,7 +157,7 @@ class ForumForumController extends AbstractFOSRestController
      */
     public function forumAction(int $id): Response
     {
-        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_API_USER);
+        $this->user_helper->denyAccessUnlessGranted(RoleGenerics::ROLE_API_USER);
 
         /**
          * @var ForumForum $forum
@@ -166,12 +167,10 @@ class ForumForumController extends AbstractFOSRestController
             return $this->indexAction();
         }
 
-        $discussions = $this->doctrine
-            ->getRepository(ForumDiscussion::class)
-            ->findByForum($forum, $this->userHelper->getUser(), 50);
+        $discussions = $this->forum_discussion_repository->findByForum($forum, $this->user_helper->getUser(), 50);
         return $this->handleView($this->view([
             'meta' => ['user_is_moderator' =>
-                $this->forumAuthHelper->userIsModerator($forum, $this->userHelper->getUser()),
+                $this->forum_authorization_helper->userIsModerator($forum, $this->user_helper->getUser()),
             ],
             'data' => $discussions,
         ], 200));

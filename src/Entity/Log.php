@@ -1,56 +1,40 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
+use App\Repository\LogRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Table(name="somda_logging")
- * @ORM\Entity
- * @ORM\Entity(repositoryClass="App\Repository\Log")
- */
+#[ORM\Entity(repositoryClass: LogRepository::class)]
+#[ORM\Table(name: 'somda_logging')]
 class Log
 {
-    /**
-     * @ORM\Column(name="logid", type="integer", nullable=false, options={"unsigned"=true})
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(name: 'logid', nullable: false, options: ['unsigned' => true])]
     public ?int $id = null;
 
-    /**
-     * @ORM\Column(name="datumtijd", type="datetime", nullable=false)
-     */
+    #[ORM\Column(name: 'datumtijd', type: 'datetime', nullable: true)]
     public ?\DateTime $timestamp = null;
+    
+    #[ORM\Column(name: 'ip', nullable: false, options: ['default' => 0, 'unsigned' => true])]
+    public int $ip_address = 0;
 
-    /**
-     * @ORM\Column(name="ip", type="integer", nullable=false, options={"unsigned"=true})
-     */
-    public int $ipAddress = 0;
-
-    /**
-     * @ORM\Column(name="route", type="string", nullable=false)
-     */
+    #[ORM\Column(length: 255, nullable: false, options: ['default' => ''])]
     public string $route = '';
 
-    /**
-     * @ORM\Column(name="route_parameters", type="array", nullable=false)
-     */
-    public array $routeParameters = [];
+    #[ORM\Column(name: 'route_parameters', type: 'json', nullable: false, options: ['default' => '[]'])]
+    public array $route_parameters = [];
 
-    /**
-     * @ORM\Column(name="duration", type="float", precision=5, scale=2, nullable=true)
-     */
+    #[ORM\Column(precision: 5, scale: 2, nullable: true)]
     public ?float $duration = null;
 
-    /**
-     * @ORM\Column(name="memory_usage", type="float", precision=8, scale=3, nullable=true)
-     */
-    public ?float $memoryUsage = null;
+    #[ORM\Column(precision: 8, scale: 3, nullable: true)]
+    public ?float $memory_usage = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User")
-     * @ORM\JoinColumn(name="uid", referencedColumnName="uid")
-     */
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\JoinColumn(name: 'uid', referencedColumnName: 'uid')]
     public ?User $user = null;
 }

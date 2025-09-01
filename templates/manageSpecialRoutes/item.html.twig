@@ -7,9 +7,9 @@
         <div class="panel-content panel-no-background">
             {{ form_start(form, { 'attr': { 'id': 'special_route_form' } }) }}
                 <table>
-                    {{ form_row(form.startDate) }}
+                    {{ form_row(form.start_date) }}
                     <tr><td><label for="toggle_single_day">Bijzondere rit voor 1 dag</label></td><td><input checked="checked" id="toggle_single_day" type="checkbox" /></td></tr>
-                    {{ form_row(form.endDate) }}
+                    {{ form_row(form.end_date) }}
                     {{ form_row(form.title) }}
                     <tr><td>&nbsp;</td><td id="special_route_item_image"><img alt="image" src="{{ asset('images/materieel/' ~ specialRoute.image) }}" /></td></tr>
                     {{ form_row(form.image) }}
@@ -31,7 +31,7 @@
     <script>
         $(document).ready(function() {
             $('#toggle_single_day').on('change', function () {
-                $('#special_route_endDate').attr('disabled', $(this).is(':checked'));
+                $('#special_route_end_date').attr('disabled', $(this).is(':checked'));
             }).trigger('change');
 
             $('#special_route_image').on('change', function () {

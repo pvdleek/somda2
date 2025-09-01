@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Controller;
@@ -72,8 +73,8 @@ class SecurityController
                     $form->get(UserForm::FIELD_PLAIN_PASSWORD)->getData(),
                     PASSWORD_DEFAULT
                 );
-                $user->activationKey = uniqid();
-                $user->registerTimestamp = new \DateTime();
+                $user->activation_key = \uniqid();
+                $user->register_timestamp = new \DateTime();
                 $this->formHelper->getDoctrine()->getManager()->persist($user);
 
                 $userInfo = new UserInfo();
@@ -88,7 +89,7 @@ class SecurityController
                     $user,
                     'Jouw registratie bij Somda',
                     'register',
-                    ['userId' => $user->id, 'activationKey' => $user->activationKey]
+                    ['user_id' => $user->id, 'activationKey' => $user->activation_key]
                 )) {
                     $this->formHelper->getFlashHelper()->add(
                         FlashHelper::FLASH_TYPE_INFORMATION,
@@ -192,14 +193,14 @@ class SecurityController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            if ($form->get(UserActivate::FIELD_KEY)->getData() === $user->activationKey) {
+            if ($form->get(UserActivate::FIELD_KEY)->getData() === $user->activation_key) {
                 /**
                  * @var Group $userGroup
                  */
                 $userGroup = $this->formHelper->getDoctrine()->getRepository(Group::class)->find(4);
                 $userGroup->addUser($user);
                 
-                $user->activationKey = null;
+                $user->activation_key = null;
                 $user->addRole('ROLE_USER')->addGroup($userGroup);
                 $this->formHelper->getDoctrine()->getManager()->flush();
 

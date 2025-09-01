@@ -1,11 +1,11 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Controller\Api;
 
 use App\Entity\ForumDiscussion;
 use App\Entity\ForumFavorite;
-use App\Entity\ForumPost;
 use App\Form\ForumPost as ForumPostForm;
 use App\Generics\RoleGenerics;
 use App\Helpers\EmailHelper;
@@ -32,7 +32,7 @@ class ForumPostController extends AbstractFOSRestController
     /**
      * @throws \Exception
      * @OA\Post(
-     *     @OA\Parameter(in="formData", name="signatureOn", @OA\Schema(type="integer", enum={0,1})),
+     *     @OA\Parameter(in="formData", name="signature_on", @OA\Schema(type="integer", enum={0,1})),
      *     @OA\Parameter(in="formData", name="text", @OA\Schema(type="string"))
      * )
      * @OA\Response(
@@ -44,7 +44,7 @@ class ForumPostController extends AbstractFOSRestController
      * )
      * @OA\Tag(name="Forum")
      */
-    public function replyAction(Request $request, int $discussionId): Response
+    public function replyAction(Request $request, int $discussion_id): Response
     {
         $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_API_USER);
 
@@ -55,7 +55,7 @@ class ForumPostController extends AbstractFOSRestController
         /**
          * @var ForumDiscussion $discussion
          */
-        $discussion = $this->formHelper->getDoctrine()->getRepository(ForumDiscussion::class)->find($discussionId);
+        $discussion = $this->formHelper->getDoctrine()->getRepository(ForumDiscussion::class)->find($discussion_id);
         if (null === $discussion || !$this->forumAuthHelper->mayPost($discussion->forum, $this->userHelper->getUser())) {
             throw new AccessDeniedException('This discussion does not exist or the user may not post');
         }
@@ -64,7 +64,7 @@ class ForumPostController extends AbstractFOSRestController
         $post = $this->formHelper->addPost(
             $discussion,
             $this->userHelper->getUser(),
-            (bool)$postInformation['signatureOn'],
+            (bool)$postInformation['signature_on'],
             $postInformation['text']
         );
         $this->handleFavoritesForAddedPost($discussion);

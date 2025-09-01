@@ -1,46 +1,47 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
+use App\Repository\TrainTableYearRepository;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as JMS;
 use OpenApi\Annotations as OA;
 
-/**
- * @ORM\Table(name="somda_tdr_drgl")
- * @ORM\Entity(repositoryClass="App\Repository\TrainTableYear")
- */
+#[ORM\Entity(repositoryClass: TrainTableYearRepository::class)]
+#[ORM\Table(name: 'somda_tdr_drgl')]
 class TrainTableYear
 {
     /**
-     * @ORM\Column(name="tdr_nr", type="smallint", nullable=false, options={"unsigned"=true})
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      * @JMS\Expose()
      * @OA\Property(description="Unique identifier", type="integer")
      */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(name: 'tdr_nr', type: 'smallint', nullable: false, options: ['unsigned' => true])]
     public ?int $id = null;
 
     /**
-     * @ORM\Column(name="naam", type="string", length=10, nullable=false)
      * @JMS\Expose()
      * @OA\Property(description="Name of the trainTableYear", maxLength=10, type="string")
      */
+    #[ORM\Column(name: 'naam', length: 10, nullable: false, options: ['default' => ''])]
     public string $name = '';
 
     /**
-     * @ORM\Column(name="start_datum", type="date", nullable=false)
      * @JMS\Expose()
      * @OA\Property(description="The start-date (00:00:00)")
      */
-    public ?\DateTime $startDate = null;
+    #[ORM\Column(name: 'start_datum', type: 'date', nullable: true)]
+    public ?\DateTime $start_date = null;
 
     /**
-     * @ORM\Column(name="eind_datum", type="date", nullable=false)
      * @JMS\Expose()
      * @OA\Property(description="The end-date (23:59:59)")
      */
-    public ?\DateTime $endDate = null;
+    #[ORM\Column(name: 'eind_datum', type: 'date', nullable: true)]
+    public ?\DateTime $end_date = null;
 
     /**
      * @throws \Exception
@@ -49,6 +50,6 @@ class TrainTableYear
      */
     public function isActive(): bool
     {
-        return $this->startDate <= new \DateTime() && $this->endDate >= new \DateTime();
+        return $this->start_date <= new \DateTime() && $this->end_date >= new \DateTime();
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use App\Entity\SpecialRoute;
@@ -11,7 +13,7 @@ use App\Helpers\FlashHelper;
 use App\Helpers\RoutesDisplayHelper;
 use App\Helpers\TemplateHelper;
 use App\Helpers\UserHelper;
-use App\Repository\TrainTableYear as RepositoryTrainTableYear;
+use App\Repository\TrainTableYearRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Dompdf\Dompdf;
 use Dompdf\Options;
@@ -22,45 +24,45 @@ class TrainTableController
 {
     public function __construct(
         private readonly ManagerRegistry $doctrine,
-        private readonly UserHelper $userHelper,
-        private readonly TemplateHelper $templateHelper,
-        private readonly TrainTableHelper $trainTableHelper,
-        private readonly RoutesDisplayHelper $routesDisplayHelper,
-        private readonly RedirectHelper $redirectHelper,
-        private readonly FlashHelper $flashHelper,
-        private readonly RepositoryTrainTableYear $repositoryTrainTableYear,
+        private readonly UserHelper $user_helper,
+        private readonly TemplateHelper $template_helper,
+        private readonly TrainTableHelper $train_table_helper,
+        private readonly RoutesDisplayHelper $routes_display_helper,
+        private readonly RedirectHelper $redirect_helper,
+        private readonly FlashHelper $flash_helper,
+        private readonly TrainTableYearRepository $train_table_year_repository,
     ) {
     }
 
     /**
      * @throws \Exception
      */
-    public function indexAction(?int $trainTableYearId = null, ?string $routeNumber = null): Response
+    public function indexAction(?int $train_table_year_id = null, ?string $route_number = null): Response
     {
         $submit = false;
 
-        if (null === $trainTableYearId) {
-            $trainTableYearId = $this->repositoryTrainTableYear->findTrainTableYearByDate(new \DateTime())->id;
+        if (null === $train_table_year_id) {
+            $train_table_year_id = $this->train_table_year_repository->findTrainTableYearByDate(new \DateTime())->id;
         } else {
             $submit = true;
-            $this->trainTableHelper->setTrainTableYear($trainTableYearId);
-            $this->trainTableHelper->setRoute($routeNumber);
+            $this->train_table_helper->setTrainTableYear($train_table_year_id);
+            $this->train_table_helper->setRoute($route_number);
         }
 
-        $trainTableLines = $submit ? $this->trainTableHelper->getTrainTableLines() : [];
-        $routePredictions = $submit ? $this->trainTableHelper->getRoutePredictions() : [];
-        foreach ($this->trainTableHelper->getErrorMessages() as $message) {
-            $this->flashHelper->add(FlashHelper::FLASH_TYPE_ERROR, $message);
+        $train_table_lines = $submit ? $this->train_table_helper->getTrainTableLines() : [];
+        $route_predictions = $submit ? $this->train_table_helper->getRoutePredictions() : [];
+        foreach ($this->train_table_helper->getErrorMessages() as $message) {
+            $this->flash_helper->add(FlashHelper::FLASH_TYPE_ERROR, $message);
         }
 
-        return $this->templateHelper->render('trainTable/index.html.twig', [
+        return $this->template_helper->render('trainTable/index.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Dienstregeling van een trein',
             TemplateHelper::PARAMETER_TRAIN_TABLE_INDICES =>
                 $this->doctrine->getRepository(TrainTableYear::class)->findAll(),
-            TemplateHelper::PARAMETER_TRAIN_TABLE_INDEX_NUMBER => $trainTableYearId,
-            'routeNumber' => $routeNumber,
-            'trainTableLines' => $trainTableLines,
-            'routePredictions' => $routePredictions,
+            TemplateHelper::PARAMETER_TRAIN_TABLE_INDEX_NUMBER => $train_table_year_id,
+            'route_number' => $route_number,
+            'trainTableLines' => $train_table_lines,
+            'routePredictions' => $route_predictions,
         ]);
     }
 
@@ -68,47 +70,47 @@ class TrainTableController
      * @throws \Exception
      */
     public function passingRoutesAction(
-        ?int $trainTableYearId = null,
-        ?string $locationName = null,
-        ?int $dayNumber = null,
-        ?string $startTime = null,
-        ?string $endTime = null
+        ?int $train_table_year_id = null,
+        ?string $location_name = null,
+        ?int $day_number = null,
+        ?string $start_time = null,
+        ?string $end_time = null
     ): Response {
-        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_PASSING_ROUTES);
+        $this->user_helper->denyAccessUnlessGranted(RoleGenerics::ROLE_PASSING_ROUTES);
 
-        if (null === $dayNumber) {
-            $trainTableYearId = $this->repositoryTrainTableYear->findTrainTableYearByDate(new \DateTime())->id;
+        if (null === $day_number) {
+            $train_table_year_id = $this->train_table_year_repository->findTrainTableYearByDate(new \DateTime())->id;
 
-            $dayNumber = date('N');
-            $startTime = date('H:i', time() - (60 * 15));
-            $endTime = date('H:i', time() + (60 * 45));
+            $day_number = \date('N');
+            $start_time = \date('H:i', time() - (60 * 15));
+            $end_time = \date('H:i', time() + (60 * 45));
 
             $passingRoutes = [];
         } else {
-            if ($trainTableYearId === 0) {
-                $trainTableYearId = $this->repositoryTrainTableYear->findTrainTableYearByDate(new \DateTime())->id;
+            if ($train_table_year_id === 0) {
+                $train_table_year_id = $this->train_table_year_repository->findTrainTableYearByDate(new \DateTime())->id;
             }
 
-            $this->trainTableHelper->setTrainTableYear($trainTableYearId);
-            $this->trainTableHelper->setLocation($locationName);
+            $this->train_table_helper->setTrainTableYear($train_table_year_id);
+            $this->train_table_helper->setLocation($location_name);
 
-            $passingRoutes = $this->trainTableHelper->getPassingRoutes($dayNumber, $startTime, $endTime);
+            $passingRoutes = $this->train_table_helper->getPassingRoutes($day_number, $start_time, $end_time);
         }
 
-        foreach ($this->trainTableHelper->getErrorMessages() as $message) {
-            $this->flashHelper->add(FlashHelper::FLASH_TYPE_ERROR, $message);
+        foreach ($this->train_table_helper->getErrorMessages() as $message) {
+            $this->flash_helper->add(FlashHelper::FLASH_TYPE_ERROR, $message);
         }
 
-        return $this->templateHelper->render('trainTable/passingRoutes.html.twig', [
+        return $this->template_helper->render('trainTable/passingRoutes.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Doorkomststaat',
             TemplateHelper::PARAMETER_TRAIN_TABLE_INDICES =>
                 $this->doctrine->getRepository(TrainTableYear::class)->findAll(),
-            TemplateHelper::PARAMETER_TRAIN_TABLE_INDEX_NUMBER => $trainTableYearId,
-            TemplateHelper::PARAMETER_TRAIN_TABLE_INDEX => $this->trainTableHelper->getTrainTableYear(),
-            'locationName' => $locationName,
-            TemplateHelper::PARAMETER_DAY_NUMBER => $dayNumber,
-            'startTime' => $startTime,
-            'endTime' => $endTime,
+            TemplateHelper::PARAMETER_TRAIN_TABLE_INDEX_NUMBER => $train_table_year_id,
+            TemplateHelper::PARAMETER_TRAIN_TABLE_INDEX => $this->train_table_helper->getTrainTableYear(),
+            'location_name' => $location_name,
+            TemplateHelper::PARAMETER_DAY_NUMBER => $day_number,
+            'start_time' => $start_time,
+            'end_time' => $end_time,
             'passingRoutes' => $passingRoutes,
         ]);
     }
@@ -117,63 +119,63 @@ class TrainTableController
      * @throws \Exception
      */
     public function passingRoutesExportAction(
-        int $trainTableYearId,
-        string $locationName,
-        int $dayNumber,
-        string $startTime,
-        string $endTime,
-        int $spotterVersion
+        int $train_table_year_id,
+        string $location_name,
+        int $day_number,
+        string $start_time,
+        string $end_time,
+        int $spotter_version,
     ): RedirectResponse {
-        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_PASSING_ROUTES);
+        $this->user_helper->denyAccessUnlessGranted(RoleGenerics::ROLE_PASSING_ROUTES);
 
-        $this->trainTableHelper->setTrainTableYear($trainTableYearId);
-        $this->trainTableHelper->setLocation($locationName);
+        $this->train_table_helper->setTrainTableYear($train_table_year_id);
+        $this->train_table_helper->setLocation($location_name);
 
-        $passingRoutes = $this->trainTableHelper->getPassingRoutes($dayNumber, $startTime, $endTime);
+        $passing_routes = $this->train_table_helper->getPassingRoutes($day_number, $start_time, $end_time);
 
-        $html = $this->templateHelper->render('trainTable/passingRoutesExport.html.twig', [
-            TemplateHelper::PARAMETER_TRAIN_TABLE_INDEX_NUMBER => $trainTableYearId,
-            TemplateHelper::PARAMETER_TRAIN_TABLE_INDEX => $this->trainTableHelper->getTrainTableYear(),
-            'locationName' => $locationName,
-            TemplateHelper::PARAMETER_DAY_NUMBER => $dayNumber,
-            'startTime' => $startTime,
-            'endTime' => $endTime,
-            'passingRoutes' => $passingRoutes,
-            'spotterVersion' => $spotterVersion === 1,
+        $html = $this->template_helper->render('trainTable/passingRoutesExport.html.twig', [
+            TemplateHelper::PARAMETER_TRAIN_TABLE_INDEX_NUMBER => $train_table_year_id,
+            TemplateHelper::PARAMETER_TRAIN_TABLE_INDEX => $this->train_table_helper->getTrainTableYear(),
+            'location_name' => $location_name,
+            TemplateHelper::PARAMETER_DAY_NUMBER => $day_number,
+            'start_time' => $start_time,
+            'end_time' => $end_time,
+            'passingRoutes' => $passing_routes,
+            'spotter_version' => 1 === $spotter_version,
         ])->getContent();
 
-        $pdfOptions = new Options();
-        $pdfOptions->set('defaultFont', 'Arial');
-        $pdfOptions->set('isHtml5ParserEnabled', true);
+        $pdf_options = new Options();
+        $pdf_options->set('defaultFont', 'Arial');
+        $pdf_options->set('isHtml5ParserEnabled', true);
 
-        $domPdf = new Dompdf($pdfOptions);
-        $domPdf->loadHtml($html);
+        $dom_pdf = new Dompdf($pdf_options);
+        $dom_pdf->loadHtml($html);
 
-        $domPdf->setPaper('A4', 'landscape');
-        $domPdf->render();
-        $domPdf->stream('doorkomststaat.pdf', ['attachment' => true]);
+        $dom_pdf->setPaper('A4', 'landscape');
+        $dom_pdf->render();
+        $dom_pdf->stream('doorkomststaat.pdf', ['attachment' => true]);
 
-        return $this->redirectHelper->redirectToRoute('passing_routes_search', [
-            'trainTableYearId' => $trainTableYearId,
-            'locationName' => $locationName,
-            'dayNumber' => $dayNumber,
-            'startTime' => $startTime,
-            'endTime' => $endTime,
+        return $this->redirect_helper->redirectToRoute('passing_routes_search', [
+            'train_table_year_id' => $train_table_year_id,
+            'location_name' => $location_name,
+            'day_number' => $day_number,
+            'start_time' => $start_time,
+            'end_time' => $end_time,
         ]);
     }
 
-    public function routeOverviewAction(?int $trainTableYearId = null, ?int $routeListId = null): Response
+    public function routeOverviewAction(?int $train_table_year_id = null, ?int $route_list_id = null): Response
     {
-        $routesDisplay = $this->routesDisplayHelper->getRoutesDisplay($trainTableYearId, $routeListId);
+        $routes_display = $this->routes_display_helper->getRoutesDisplay($train_table_year_id, $route_list_id);
 
-        return $this->templateHelper->render('trainTable/routeOverview.html.twig', [
+        return $this->template_helper->render('trainTable/routeOverview.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Overzicht treinnummers',
             TemplateHelper::PARAMETER_TRAIN_TABLE_INDICES =>
                 $this->doctrine->getRepository(TrainTableYear::class)->findAll(),
-            TemplateHelper::PARAMETER_TRAIN_TABLE_INDEX_NUMBER => $routesDisplay->trainTableYear->id,
-            'routeLists' => $routesDisplay->routeLists,
-            'selectedRouteList' => $routesDisplay->selectedRouteList,
-            'routes' => $routesDisplay->routes,
+            TemplateHelper::PARAMETER_TRAIN_TABLE_INDEX_NUMBER => $routes_display->train_table_year->id,
+            'route_lists' => $routes_display->route_lists,
+            'selected_route_list' => $routes_display->selected_route_list,
+            'routes' => $routes_display->routes,
         ]);
     }
 
@@ -187,14 +189,14 @@ class TrainTableController
         if (null === $specialRoute) {
             $specialRoutes = $this->doctrine
                 ->getRepository(SpecialRoute::class)
-                ->findBy([], ['startDate' => 'DESC']);
-            return $this->templateHelper->render('trainTable/specialRoutes.html.twig', [
+                ->findBy([], ['start_date' => 'DESC']);
+            return $this->template_helper->render('trainTable/specialRoutes.html.twig', [
                 TemplateHelper::PARAMETER_PAGE_TITLE => 'Bijzondere ritten',
                 'specialRoutes' => $specialRoutes,
             ]);
         }
 
-        return $this->templateHelper->render('trainTable/specialRoute.html.twig', [
+        return $this->template_helper->render('trainTable/specialRoute.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Bijzondere rit ' . $specialRoute->title,
             'specialRoute' => $specialRoute,
         ]);

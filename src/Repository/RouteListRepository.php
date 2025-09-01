@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Repository;
@@ -10,23 +11,23 @@ use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
 use Doctrine\Persistence\ManagerRegistry;
 
-class RouteList extends ServiceEntityRepository
+class RouteListRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, RouteListEntity::class);
     }
 
-    public function findForRouteNumber(TrainTableYear $trainTableYear, int $routeNumber): ?RouteListEntity
+    public function findForRouteNumber(TrainTableYear $train_table_year, int $route_number): ?RouteListEntity
     {
         $queryBuilder = $this->getEntityManager()
             ->createQueryBuilder()
             ->select('r')
             ->from(RouteListEntity::class, 'r')
-            ->andWhere('r.trainTableYear = :trainTableYear')
-            ->setParameter('trainTableYear', $trainTableYear)
-            ->andWhere(':routeNumber BETWEEN r.firstNumber AND r.lastNumber')
-            ->setParameter('routeNumber', $routeNumber)
+            ->andWhere('r.train_table_year = :train_table_year')
+            ->setParameter('train_table_year', $train_table_year)
+            ->andWhere(':route_number BETWEEN r.first_number AND r.last_number')
+            ->setParameter('route_number', $route_number)
             ->setMaxResults(1);
         try {
             return $queryBuilder->getQuery()->getSingleResult();
@@ -38,16 +39,16 @@ class RouteList extends ServiceEntityRepository
     /**
      * @return RouteListEntity[]
      */
-    public function findForOverview(TrainTableYear $trainTableYear): array
+    public function findForOverview(TrainTableYear $train_table_year): array
     {
         $queryBuilder = $this->getEntityManager()
             ->createQueryBuilder()
             ->select('r')
             ->from(RouteListEntity::class, 'r')
-            ->andWhere('r.trainTableYear = :trainTableYear')
-            ->setParameter('trainTableYear', $trainTableYear)
+            ->andWhere('r.train_table_year = :train_table_year')
+            ->setParameter('train_table_year', $train_table_year)
             ->join('r.routes', 'routes')
-            ->addOrderBy('r.firstNumber', 'ASC');
+            ->addOrderBy('r.first_number', 'ASC');
         return $queryBuilder->getQuery()->getResult();
     }
 }

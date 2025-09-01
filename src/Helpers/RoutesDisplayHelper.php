@@ -4,8 +4,8 @@ namespace App\Helpers;
 
 use App\Entity\RouteList;
 use App\Model\RoutesDisplay;
-use App\Repository\RouteList as RepositoryRouteList;
-use App\Repository\TrainTableYear;
+use App\Repository\RouteListRepository;
+use App\Repository\TrainTableYearRepository;
 use App\Traits\SortTrait;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -17,37 +17,35 @@ class RoutesDisplayHelper implements RuntimeExtensionInterface
 
     public function __construct(
         private readonly ManagerRegistry $doctrine,
-        private readonly RepositoryRouteList $repositoryRouteList,
-        private readonly TrainTableYear $repositoryTrainTableYear,
+        private readonly RouteListRepository $route_list_repository,
+        private readonly TrainTableYearRepository $train_table_year_repository,
     ) {
     }
 
-    public function getRoutesDisplay(?int $trainTableYearId = null, ?int $routeListId = null): RoutesDisplay
+    public function getRoutesDisplay(?int $train_table_year_id = null, ?int $route_list_id = null): RoutesDisplay
     {
-        $routesDisplay = new RoutesDisplay();
+        $routes_display = new RoutesDisplay();
 
-        if (null === $trainTableYearId || $trainTableYearId === 0) {
-            $routesDisplay->trainTableYear = $this->repositoryTrainTableYear->findTrainTableYearByDate(new \DateTime());
+        if (null === $train_table_year_id || $train_table_year_id === 0) {
+            $routes_display->train_table_year = $this->train_table_year_repository->findTrainTableYearByDate(new \DateTime());
         } else {
-            $routesDisplay->trainTableYear = $this->repositoryTrainTableYear->find($trainTableYearId);
-            if (null === $routesDisplay->trainTableYear) {
-                throw new AccessDeniedException('This trainTableYear does not exist');
+            $routes_display->train_table_year = $this->train_table_year_repository->find($train_table_year_id);
+            if (null === $routes_display->train_table_year) {
+                throw new AccessDeniedException('This train_table_year does not exist');
             }
 
-            $routesDisplay->routeLists = $this->repositoryRouteList->findForOverview($routesDisplay->trainTableYear);
-            if (null !== $routeListId) {
-                $routesDisplay->selectedRouteList = $this->doctrine->getRepository(RouteList::class)->find(
-                    $routeListId
-                );
-                if (null === $routesDisplay->selectedRouteList) {
-                    throw new AccessDeniedException('This routeList does not exist');
+            $routes_display->route_lists = $this->route_list_repository->findForOverview($routes_display->train_table_year);
+            if (null !== $route_list_id) {
+                $routes_display->selected_route_list = $this->doctrine->getRepository(RouteList::class)->find($route_list_id);
+                if (null === $routes_display->selected_route_list) {
+                    throw new AccessDeniedException('This route_list does not exist');
                 }
 
-                $routes = $routesDisplay->selectedRouteList->getRoutes();
-                $routesDisplay->routes = $this->sortByFieldFilter($routes, 'number');
+                $routes = $routes_display->selected_route_list->getRoutes();
+                $routes_display->routes = $this->sortByFieldFilter($routes, 'number');
             }
         }
 
-        return $routesDisplay;
+        return $routes_display;
     }
 }

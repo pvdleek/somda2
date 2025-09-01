@@ -53,27 +53,27 @@ class FormHelper
         return $this->redirectHelper;
     }
 
-    public function finishFormHandling(string $flashMessage, string $route, array $routeParameters = []): RedirectResponse
+    public function finishFormHandling(string $flash_message, string $route, array $route_parameters = []): RedirectResponse
     {
         $this->doctrine->getManager()->flush();
 
-        if (\strlen($flashMessage) > 0) {
-            $this->flashHelper->add(FlashHelper::FLASH_TYPE_INFORMATION, $flashMessage);
+        if (\strlen($flash_message) > 0) {
+            $this->flashHelper->add(FlashHelper::FLASH_TYPE_INFORMATION, $flash_message);
         }
 
-        return $this->redirectHelper->redirectToRoute($route, $routeParameters);
+        return $this->redirectHelper->redirectToRoute($route, $route_parameters);
     }
 
     /**
      * @throws \Exception
      */
-    public function addPost(ForumDiscussion $discussion, User $user, bool $signatureOn, string $text): ForumPost
+    public function addPost(ForumDiscussion $discussion, User $user, bool $signature_on, string $text): ForumPost
     {
         $post = new ForumPost();
         $post->author = $user;
         $post->timestamp = new \DateTime();
         $post->discussion = $discussion;
-        $post->signatureOn = $signatureOn;
+        $post->signature_on = $signature_on;
         $this->doctrine->getManager()->persist($post);
 
         $postText = new ForumPostText();

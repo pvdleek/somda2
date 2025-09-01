@@ -1,11 +1,13 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Command;
 
 use App\Entity\ForumPost;
-use App\Entity\Log;
 use App\Entity\User;
+use App\Repository\LogRepository;
+use App\Repository\UserRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -22,6 +24,8 @@ class CleanupUsersCommand extends Command
 {
     public function __construct(
         private readonly ManagerRegistry $doctrine,
+        private readonly LogRepository $log_repository,
+        private readonly UserRepository $user_repository,
     ) {
         parent::__construct();
     }
@@ -34,13 +38,13 @@ class CleanupUsersCommand extends Command
         /**
          * @var User[] $users
          */
-        $users = $this->doctrine->getRepository(User::class)->findNonActivated();
+        $users = $this->user_repository->findNonActivated();
         foreach ($users as $user) {
-            $numberOfPosts = $this->doctrine->getRepository(ForumPost::class)->findBy(['author' => $user]);
-            if (\count($user->getSpots()) < 1 && \count($numberOfPosts) < 1) {
+            $number_of_posts = $this->doctrine->getRepository(ForumPost::class)->findBy(['author' => $user]);
+            if (\count($user->getSpots()) < 1 && \count($number_of_posts) < 1) {
                 $output->writeln('Removing user: ' . $user->getUsername() . ' (id ' . $user->id . ')');
 
-                $this->doctrine->getRepository(Log::class)->removeByUser($user);
+                $this->log_repository->removeByUser($user);
                 $this->doctrine->getManager()->flush();
 
                 $user->removeAllNewsRead();

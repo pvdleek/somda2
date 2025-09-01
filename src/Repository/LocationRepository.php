@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repository;
 
 use App\Entity\Location as LocationEntity;
@@ -8,7 +10,7 @@ use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
 use Doctrine\Persistence\ManagerRegistry;
 
-class Location extends ServiceEntityRepository
+class LocationRepository extends ServiceEntityRepository
 {
     private const PARAMETER_SEARCH = 'search';
 

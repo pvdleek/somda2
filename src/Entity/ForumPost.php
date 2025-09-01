@@ -1,25 +1,24 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
+use App\Repository\ForumPostRepository;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as JMS;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use OpenApi\Annotations as OA;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Table(
- *     name="somda_forum_posts",
- *     indexes={
- *         @ORM\Index(name="idx_somda_forum_posts__timestamp", columns={"timestamp"}),
- *         @ORM\Index(name="idx_somda_forum_posts__authorid", columns={"authorid"}),
- *         @ORM\Index(name="idx_somda_forum_posts__discussionid", columns={"discussionid"})
- *     }
- * )
- * @ORM\Entity(repositoryClass="App\Repository\ForumPost")
- */
+#[ORM\Entity(repositoryClass: ForumPostRepository::class)]
+#[ORM\Table(name: 'somda_forum_posts', indexes: [
+    new ORM\Index(name: 'idx_somda_forum_posts__timestamp', columns: ['timestamp']),
+    new ORM\Index(name: 'idx_somda_forum_posts__authorid', columns: ['authorid']),
+    new ORM\Index(name: 'idx_somda_forum_posts__discussionid', columns: ['discussionid']),
+])]
 class ForumPost
 {
     public const WIKI_CHECK_NOT_CHECKED = 0;
@@ -28,117 +27,112 @@ class ForumPost
     public const WIKI_CHECK_VALUES = [self::WIKI_CHECK_NOT_CHECKED, self::WIKI_CHECK_OK, self::WIKI_CHECK_N_A];
 
     /**
-     * @ORM\Column(name="postid", type="integer", nullable=false, options={"unsigned"=true})
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      * @JMS\Expose()
      * @OA\Property(description="Unique identifier", type="integer")
      */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(name: 'postid', nullable: false, options: ['unsigned' => true])]
     public ?int $id = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User")
-     * @ORM\JoinColumn(name="authorid", referencedColumnName="uid")
      * @JMS\Expose()
      * @OA\Property(description="The author of the post", ref=@Model(type=User::class))
      */
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\JoinColumn(name: 'authorid', referencedColumnName: 'uid')]
     public ?User $author = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\ForumDiscussion", inversedBy="posts")
-     * @ORM\JoinColumn(name="discussionid", referencedColumnName="discussionid")
      * @JMS\Exclude()
      */
+    #[ORM\ManyToOne(targetEntity: ForumDiscussion::class, inversedBy: 'posts')]
+    #[ORM\JoinColumn(name: 'discussionid', referencedColumnName: 'discussionid')]
     public ?ForumDiscussion $discussion = null;
 
     /**
-     * @ORM\Column(name="timestamp", type="datetime", nullable=false)
      * @JMS\Expose()
      * @OA\Property(description="ISO-8601 timestamp of the post (Y-m-dTH:i:sP)", type="string")
      */
+    #[ORM\Column(nullable: true)]
     public ?\DateTime $timestamp = null;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\ForumPostText", mappedBy="post")
      * @JMS\Expose()
      * @OA\Property(description="The text of the post", ref=@Model(type=ForumPostText::class))
      */
+    #[ORM\OneToOne(targetEntity: ForumPostText::class, mappedBy: 'post', cascade: ['persist', 'remove'])]
     public ?ForumPostText $text = null;
 
     /**
-     * @ORM\Column(name="edit_timestamp", type="datetime", nullable=true)
      * @JMS\Expose()
      * @OA\Property(description="ISO-8601 timestamp of the post edit (Y-m-dTH:i:sP)", type="string")
      */
-    public ?\DateTime $editTimestamp = null;
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    public ?\DateTime $edit_timestamp = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User")
-     * @ORM\JoinColumn(name="edit_uid", referencedColumnName="uid")
      * @JMS\Expose()
      * @OA\Property(description="The user that edited the post", ref=@Model(type=User::class))
      */
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\JoinColumn(name: 'edit_uid', referencedColumnName: 'uid')]
     public ?User $editor = null;
 
     /**
-     * @ORM\Column(name="edit_reason", type="string", length=50, nullable=true)
      * @JMS\Expose()
      * @OA\Property(description="Reason for editing the post", maxLength=50, type="string")
      */
-    public ?string $editReason = null;
+    #[ORM\Column(length: 50, nullable: true)]
+    public ?string $edit_reason = null;
 
     /**
-     * @ORM\Column(name="sign_on", type="boolean", nullable=false)
      * @JMS\Expose()
      * @OA\Property(description="Whether the signature of the author is included", type="boolean")
      */
-    public bool $signatureOn = false;
+    #[ORM\Column(name: 'sign_on', nullable: false, options: ['default' => false])]
+    public bool $signature_on = false;
 
     /**
-     * @ORM\Column(name="wiki_check", type="smallint", nullable=false, options={"default"=ForumPost::WIKI_CHECK_NOT_CHECKED, "unsigned"=true})
-     * @Assert\Choice(choices=ForumPost::WIKI_CHECK_VALUES)
      * @JMS\Exclude()
      */
-    public int $wikiCheck = self::WIKI_CHECK_NOT_CHECKED;
+    #[ORM\Column(type: 'smallint', nullable: false, options: ['default' => self::WIKI_CHECK_NOT_CHECKED, 'unsigned' => true])]
+    #[Assert\Choice(choices: self::WIKI_CHECK_VALUES)]
+    public int $wiki_check = self::WIKI_CHECK_NOT_CHECKED;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User")
-     * @ORM\JoinColumn(name="wiki_uid", referencedColumnName="uid")
      * @JMS\Exclude()
      */
-    public ?User $wikiChecker = null;
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\JoinColumn(name: 'wiki_uid', referencedColumnName: 'uid')]
+    public ?User $wiki_checker = null;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\ForumPostAlert", mappedBy="post")
      * @JMS\Exclude()
      */
-    private $alerts;
+    #[ORM\OneToMany(targetEntity: ForumPostAlert::class, mappedBy: 'post')]
+    private Collection $alerts;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\ForumPostLog", mappedBy="post")
      * @JMS\Exclude()
      */
-    private $logs;
+    #[ORM\OneToMany(targetEntity: ForumPostLog::class, mappedBy: 'post')]
+    private Collection $logs;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\ForumSearchList", mappedBy="post")
      * @JMS\Exclude()
      */
-    private $searchLists;
+    #[ORM\OneToMany(targetEntity: ForumSearchList::class, mappedBy: 'post')]
+    private Collection $search_lists;
 
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\ForumPostFavorite", mappedBy="post")
-     */
-    private $favorites;
+    #[ORM\OneToMany(targetEntity: ForumPostFavorite::class, mappedBy: 'post')]
+    private Collection $favorites;
 
-    /**
-     *
-     */
     public function __construct()
     {
         $this->alerts = new ArrayCollection();
         $this->logs = new ArrayCollection();
-        $this->searchLists = new ArrayCollection();
+        $this->search_lists = new ArrayCollection();
         $this->favorites = new ArrayCollection();
     }
 
@@ -174,7 +168,7 @@ class ForumPost
 
     public function addSearchList(ForumSearchList $forumSearchList): ForumPost
     {
-        $this->searchLists[] = $forumSearchList;
+        $this->search_lists[] = $forumSearchList;
         $forumSearchList->post = $this;
         return $this;
     }
@@ -184,7 +178,7 @@ class ForumPost
      */
     public function getSearchLists(): array
     {
-        return $this->searchLists->toArray();
+        return $this->search_lists->toArray();
     }
 
     public function addFavorite(ForumPostFavorite $forumPostFavorite): ForumPost

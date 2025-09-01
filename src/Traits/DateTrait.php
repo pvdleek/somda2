@@ -37,9 +37,9 @@ trait DateTrait
         return ($hours <= 9 ? '0' : '') . $hours . ':' . ($minutes <= 9 ? '0' : '') . $minutes;
     }
 
-    public function getDayName(int $dayNumber): string
+    public function getDayName(int $day_number): string
     {
-        switch ($dayNumber) {
+        switch ($day_number) {
             case 0:
                 $day = 'monday';
                 break;

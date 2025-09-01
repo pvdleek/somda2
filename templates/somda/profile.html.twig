@@ -23,10 +23,10 @@
             <div class="panel-title">Profiel van gebruiker "{{ user.username }}"</div>
             <div class="panel-content">
                 {% if is_granted(constant('App\\Generics\\RoleGenerics::ROLE_ADMIN')) %}
-                    {% if (user.banExpireTimestamp | date('Y-m-d')) > ('now' | date('Y-m-d')) %}
-                        <p class="warn">Deze gebruiker is geband tot {{ user.banExpireTimestamp | displayDateTime }} - <a href="{{ path('manage_ban', { 'id': user.id }) }}">Bewerk</a></p>
-                    {% elseif user.banExpireTimestamp is not null %}
-                        <p class="info">Deze gebruiker was geband tot {{ user.banExpireTimestamp | displayDateTime }} - <a href="{{ path('manage_ban', { 'id': user.id }) }}">Opnieuw bannen</a></p>
+                    {% if (user.ban_expire_timestamp | date('Y-m-d')) > ('now' | date('Y-m-d')) %}
+                        <p class="warn">Deze gebruiker is geband tot {{ user.ban_expire_timestamp | displayDateTime }} - <a href="{{ path('manage_ban', { 'id': user.id }) }}">Bewerk</a></p>
+                    {% elseif user.ban_expire_timestamp is not null %}
+                        <p class="info">Deze gebruiker was geband tot {{ user.ban_expire_timestamp | displayDateTime }} - <a href="{{ path('manage_ban', { 'id': user.id }) }}">Opnieuw bannen</a></p>
                     {% else %}
                         <br /><a href="{{ path('manage_ban', { 'id': user.id }) }}">Bannen</a>
                     {% endif %}
@@ -57,7 +57,7 @@
                             </td>
                         </tr><tr>
                             <th align="right">{{ 'profile.birthDate' | trans }}</th>
-                            <td align="left">{% if user.info.birthDate is not null %}{{ user.info.birthDate | displayDateTime }}{% else %}Onbekend{% endif %}</td>
+                            <td align="left">{% if user.info.birth_date is not null %}{{ user.info.birth_date | displayDateTime }}{% else %}Onbekend{% endif %}</td>
                         </tr>
                         <tr>
                             <th>&nbsp;</th>
@@ -65,10 +65,10 @@
                         </tr>
                         <tr>
                             <th align="right">{{ 'profile.registrationDate' | trans }}</th>
-                            <td align="left">{{ user.registerTimestamp | displayDateTime }}</td>
+                            <td align="left">{{ user.register_timestamp | displayDateTime }}</td>
                         </tr><tr>
                             <th align="right">{{ 'profile.lastVisit' | trans }}</th>
-                            <td align="left">{{ user.lastVisit is null ? ('general.error.unknown' | trans) : (user.lastVisit | displayDateTime(true)) }}</td>
+                            <td align="left">{{ user.last_visit is null ? ('general.error.unknown' | trans) : (user.last_visit | displayDateTime(true)) }}</td>
                         </tr><tr>
                             <th align="right">{{ 'profile.website' | trans }}</th>
                             <td align="left">{{ user.info.website }}</td>
@@ -87,7 +87,7 @@
                 $('#user_info_avatar').on('change', function () {
                     $('#user_avatar').html('<img alt="avatar" src="/images/avatar/' + $(this).val() + '" />');
                 });
-                $('#user_info_mobilePhone').mask('31699999999').click(function () {
+                $('#user_info_mobile_phone').mask('31699999999').click(function () {
                     $(this).focus();
                 });
             });

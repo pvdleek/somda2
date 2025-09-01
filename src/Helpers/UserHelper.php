@@ -52,10 +52,10 @@ class UserHelper implements RuntimeExtensionInterface
         }
     }
 
-    public function setFromApiRequest(int $userId, string $apiToken): void
+    public function setFromApiRequest(int $user_id, string $api_token): void
     {
         $user = $this->doctrine->getRepository(User::class)->findOneBy(
-            ['id' => $userId, 'active' => true, 'apiToken' => $apiToken]
+            ['id' => $user_id, 'active' => true, 'api_token' => $api_token]
         );
         if (null !== $user) {
             $this->user = $user;
@@ -63,12 +63,12 @@ class UserHelper implements RuntimeExtensionInterface
         }
     }
 
-    public function getAdministratorUser(): UserInterface
+    public function getAdministratorUser(): User
     {
         return $this->doctrine->getRepository(User::class)->find(self::ADMINISTRATOR_UID);
     }
 
-    public function getModeratorUser(): UserInterface
+    public function getModeratorUser(): User
     {
         return $this->doctrine->getRepository(User::class)->find(self::MODERATOR_UID);
     }
@@ -84,7 +84,7 @@ class UserHelper implements RuntimeExtensionInterface
     public function getPreferenceByKey(string $key, bool $no_default = false): ?UserPreferenceValue
     {
         /**
-         * @var UserPreference $userPreference
+         * @var UserPreference $user_preference
          */
         $user_preference = $this->doctrine->getRepository(UserPreference::class)->findOneBy(['key' => $key]);
         if (null === $user_preference) {
@@ -106,7 +106,7 @@ class UserHelper implements RuntimeExtensionInterface
         // Get the default value for this key and save if user is logged in
         $user_preference_value = new UserPreferenceValue();
         $user_preference_value->preference = $user_preference;
-        $user_preference_value->value = $user_preference->defaultValue;
+        $user_preference_value->value = $user_preference->default_value;
         if (null !== $user = $this->getUser()) {
             $user_preference_value->user = $user;
             $this->doctrine->getManager()->persist($user_preference_value);

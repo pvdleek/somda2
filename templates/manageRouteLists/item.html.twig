@@ -6,8 +6,8 @@
         <div class="panel-content panel-no-background">
             {{ form_start(form, { 'attr': { 'id': 'route_list_form' } }) }}
                 <table>
-                    {{ form_row(form.firstNumber) }}
-                    {{ form_row(form.lastNumber) }}
+                    {{ form_row(form.first_number) }}
+                    {{ form_row(form.last_number) }}
                     {{ form_row(form.transporter) }}
                     {{ form_row(form.characteristic) }}
                     {{ form_row(form.section) }}
@@ -15,7 +15,7 @@
                         <td>&nbsp;</td>
                         <td>
                             <a class="somda-button" href="#" id="route_list_button" onclick="disableMeAndSubmitForm('route_list_button', 'route_list_form'); return false;">Opslaan</a>
-                            <a class="somda-button" href="{{ path('manage_route_lists_year', { 'id': routeList.trainTableYear.id }) }}">Terug naar het overzicht</a>
+                            <a class="somda-button" href="{{ path('manage_route_lists_year', { 'id': route_list.trainTableYear.id }) }}">Terug naar het overzicht</a>
                         </td>
                     </tr>
                 </table>

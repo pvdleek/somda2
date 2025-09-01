@@ -3,7 +3,7 @@
 {% block content %}
     <div class="panel">
         <div class="panel-title">
-            {{ specialRoute.startDate | displayDateTime }}{% if specialRoute.endDate is not null %}{{ 'general.date.till' | trans }} {{ specialRoute.endDate | displayDateTime }}{% endif %}
+            {{ specialRoute.start_date|displayDateTime }}{% if specialRoute.end_date is not null %}{{ 'general.date.till' | trans }} {{ specialRoute.end_date|displayDateTime }}{% endif %}
             {{ specialRoute.title }}
         </div>
         <div class="panel-content">

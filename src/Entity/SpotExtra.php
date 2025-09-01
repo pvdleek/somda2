@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Entity;
@@ -7,30 +8,28 @@ use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as JMS;
 use OpenApi\Annotations as OA;
 
-/**
- * @ORM\Table(name="somda_spots_extra")
- * @ORM\Entity
- */
+#[ORM\Entity]
+#[ORM\Table(name: 'somda_spots_extra')]
 class SpotExtra
 {
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Spot", inversedBy="extra")
-     * @ORM\JoinColumn(name="spotid", referencedColumnName="spotid")
-     * @ORM\Id
      * @JMS\Exclude()
      */
+    #[ORM\Id]
+    #[ORM\OneToOne(targetEntity: Spot::class, inversedBy: 'extra')]
+    #[ORM\JoinColumn(name: 'spotid', referencedColumnName: 'spotid')]
     public ?Spot $spot = null;
 
     /**
-     * @ORM\Column(name="extra", type="string", length=255, nullable=false)
      * @JMS\Expose()
      * @OA\Property(description="Extra information", maxLength=255, type="string")
      */
+    #[ORM\Column(length: 255, nullable: false, options: ['default' => ''])]
     public string $extra = '';
 
     /**
-     * @ORM\Column(name="user_extra", type="string", length=255, nullable=false)
      * @JMS\Exclude()
      */
-    public string $userExtra = '';
+    #[ORM\Column(length: 255, nullable: false, options: ['default' => ''])]
+    public string $user_extra = '';
 }

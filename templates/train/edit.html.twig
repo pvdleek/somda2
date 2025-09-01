@@ -10,14 +10,14 @@
                     {% if attribute(form, 'car' ~ car) is defined %}{{ form_row(attribute(form, 'car' ~ car)) }}{% endif %}
                 {% endfor %}
                 {{ form_row(form.note) }}
-                {% if form.lastUpdateTimestamp is defined %}{{ form_row(form.lastUpdateTimestamp) }}{% endif %}
+                {% if form.last_update_timestamp is defined %}{{ form_row(form.last_update_timestamp) }}{% endif %}
                 {% if form.extra is defined %}{{ form_row(form.extra) }}{% endif %}
                 {% if form.indexLine is defined %}{{ form_row(form.indexLine) }}{% endif %}
                 <tr>
                     <td>&nbsp;</td>
                     <td>
                         <a class="somda-button" href="#" id="composition_button" onclick="disableMeAndSubmitForm('composition_button', 'composition_form'); return false;">Opslaan</a>
-                        <a class="somda-button" href="{{ path('train_compositions_type', { 'typeId': trainComposition.type.id }) }}">Terug naar het overzicht</a>
+                        <a class="somda-button" href="{{ path('train_compositions_type', { 'type_id': trainComposition.type.id }) }}">Terug naar het overzicht</a>
                     </td>
                 </tr>
             </table>

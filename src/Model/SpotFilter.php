@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Model;
@@ -18,45 +19,45 @@ class SpotFilter
      * @JMS\Expose()
      * @OA\Property(description="The day-number", enum={1,2,3,4,5,6,7}, type="integer")
      */
-    public int $dayNumber = 0;
+    public int $day_number = 0;
 
     /**
      * @JMS\Expose()
      * @OA\Property(description="ISO-8601 timestamp of the spot (Y-m-dTH:i:sP)", type="string")
      */
-    public ?\DateTime $spotDate = null;
+    public ?\DateTime $spot_date = null;
 
     /**
      * @JMS\Expose()
      * @OA\Property(description="The train-number", type="string")
      */
-    public ?string $trainNumber = null;
+    public ?string $train_number = null;
 
     /**
      * @JMS\Expose()
      * @OA\Property(description="The route-number", type="string")
      */
-    public ?string $routeNumber = null;
+    public ?string $route_number = null;
 
     public function createFromSearchParameters(array $parameters): void
     {
         $this->location = \strlen($parameters[0]) > 0 ? $parameters[0] : null;
-        $this->dayNumber = (int) $parameters[1];
+        $this->day_number = (int) $parameters[1];
         try {
-            $this->spotDate = \strlen($parameters[2]) > 0 ? \DateTime::createFromFormat('d-m-Y', $parameters[2]) : null;
+            $this->spot_date = \strlen($parameters[2]) > 0 ? \DateTime::createFromFormat('d-m-Y', $parameters[2]) : null;
         } catch (\Exception) {
-            $this->spotDate = null;
+            $this->spot_date = null;
         }
-        $this->trainNumber = \strlen($parameters[3]) > 0 ? $parameters[3] : null;
-        $this->routeNumber = \strlen($parameters[4]) > 0 ? $parameters[4] : null;
+        $this->train_number = \strlen($parameters[3]) > 0 ? $parameters[3] : null;
+        $this->route_number = \strlen($parameters[4]) > 0 ? $parameters[4] : null;
     }
 
     public function isValid(): bool
     {
         return null !== $this->location
-            || $this->dayNumber > 0
-            || null !== $this->spotDate
-            || null !== $this->trainNumber
-            || null !== $this->routeNumber;
+            || $this->day_number > 0
+            || null !== $this->spot_date
+            || null !== $this->train_number
+            || null !== $this->route_number;
     }
 }

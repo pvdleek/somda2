@@ -15,8 +15,8 @@
                 </td>
             </tr>
             <tr>
-                <th><label for="routeNumber">{{ 'general.input.route' | trans }}</label></th>
-                <td><input id="routeNumber" maxlength="8" name="routeNumber" size="10" type="text" value="{{ routeNumber }}" /></td>
+                <th><label for="route_number">{{ 'general.input.route' | trans }}</label></th>
+                <td><input id="route_number" maxlength="8" name="route_number" size="10" type="text" value="{{ route_number }}" /></td>
             </tr>
             <tr>
                 <th>&nbsp;</th>
@@ -27,24 +27,24 @@
 
         {% if trainTableLines | length %}
             <table>
-                <tr><th colspan="7">{{ 'trainTable.output.title' | trans | format(routeNumber) }}</th></tr>
+                <tr><th colspan="7">{{ 'trainTable.output.title' | trans | format(route_number) }}</th></tr>
                 <tr>
-                    {% for dayNumber in 0..6 %}
-                        <th>{{ ('general.date.days.' ~ dayNumber) | trans }}</th>
+                    {% for day_number in 0..6 %}
+                        <th>{{ ('general.date.days.' ~ day_number) | trans }}</th>
                     {% endfor %}
                 </tr>
                 <tr>
-                    {% for dayNumber in 1..7 %}
+                    {% for day_number in 1..7 %}
                         <td>
                             {% for routeTrain in routePredictions %}
-                                {% if routeTrain.dayNumber == dayNumber %}
+                                {% if routeTrain.day_number == day_number %}
                                     {{ 'trainTable.output.planned.title' | trans }}:
-                                    <span title="{{ 'trainTable.output.planned.base' | trans | format(routeTrain.numberOfSpots) }}">{{ routeTrain.trainNamePattern.name }}{% if routeTrain.position.name | length > 0 %} ({{ routeTrain.position.name }}){% endif %}</span><br />
+                                    <span title="{{ 'trainTable.output.planned.base' | trans | format(routeTrain.number_of_spots) }}">{{ routeTrain.train_name_pattern.name }}{% if routeTrain.position.name | length > 0 %} ({{ routeTrain.position.name }}){% endif %}</span><br />
                                 {% endif %}
                             {% endfor %}
                             <table>
                                 {% for trainTable in trainTableLines %}
-                                    {% if trainTable.routeOperationDays.runningOnDay(dayNumber - 1) %}
+                                    {% if trainTable.routeOperationDays.runningOnDay(day_number - 1) %}
                                         <tr>
                                             <td><span title="{{ trainTable.location.description }}">{{ trainTable.location.name }}</span></td>
                                             <td>{{ trainTable.action }}</td>
@@ -57,7 +57,7 @@
                     {% endfor %}
                 </tr>
             </table>
-        {% elseif routeNumber is not null %}
+        {% elseif route_number is not null %}
             <p class="warn">{{ 'trainTable.output.notFound' | trans }}</p>
         {% endif %}
         <br />
@@ -67,9 +67,9 @@
 {% block javascripts %}
     <script>
         function searchTrainTable() {
-            let location = '{{ path('train_table_search', { 'trainTableYearId': 9999, 'routeNumber': 'routeNumber' }) }}';
+            let location = '{{ path('train_table_search', { 'train_table_year_id': 9999, 'route_number': 'route_number' }) }}';
             location = location.replace('9999', $('#trainTableIndex').val());
-            location = location.replace('routeNumber', $('#routeNumber').val());
+            location = location.replace('route_number', $('#route_number').val());
             document.location = location;
         }
     </script>

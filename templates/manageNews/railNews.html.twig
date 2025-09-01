@@ -42,15 +42,15 @@
          */
         function disapprove()
         {
-            let idList = '';
+            let id_list = '';
             $('.news-checkbox input:checkbox:checked').each(function () {
-                idList += $(this).attr('id').substring(5) + ',';
+                id_list += $(this).attr('id').substring(5) + ',';
             });
 
             $.ajax({
                 type: 'POST',
                 url: '{{ path('manage_rail_news_disapprove') }}',
-                data: idList,
+                data: id_list,
                 success: function () {
                     location.reload();
                 },

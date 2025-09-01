@@ -1,58 +1,43 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
+use App\Repository\ForumPostAlertRepository;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Table(name="somda_forum_alerts", indexes={@ORM\Index(name="idx_somda_forum_alerts__postid", columns={"postid"})})
- * @ORM\Entity(repositoryClass="App\Repository\ForumPostAlert")
- */
+#[ORM\Entity(repositoryClass: ForumPostAlertRepository::class)]
+#[ORM\Table(name: 'somda_forum_alerts', indexes: [new ORM\Index(name: 'idx_somda_forum_alerts__postid', columns: ['postid'])])]
 class ForumPostAlert
 {
-    /**
-     * @ORM\Column(name="id", type="integer", nullable=false, options={"unsigned"=true})
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(nullable: false, options: ['unsigned' => true])]
     public ?int $id = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\ForumPost", inversedBy="alerts")
-     * @ORM\JoinColumn(name="postid", referencedColumnName="postid")
-     */
+    #[ORM\ManyToOne(targetEntity: ForumPost::class, inversedBy: 'alerts')]
+    #[ORM\JoinColumn(name: 'postid', referencedColumnName: 'postid')]
     public ?ForumPost $post = null;
 
-    /**
-     * @ORM\Column(name="closed", type="boolean", nullable=false)
-     */
+    #[ORM\Column(nullable: false, options: ['default' => false])]
     public bool $closed = false;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User")
-     * @ORM\JoinColumn(name="senderid", referencedColumnName="uid")
-     */
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\JoinColumn(name: 'senderid', referencedColumnName: 'uid')]
     public ?User $sender = null;
 
-    /**
-     * @ORM\Column(name="timestamp", type="datetime", nullable=false)
-     */
+    #[ORM\Column(nullable: true)]
     public ?\DateTime $timestamp = null;
 
-    /**
-     * @ORM\Column(name="comment", type="text", length=0, nullable=true)
-     */
+    #[ORM\Column(type: 'text', nullable: true)]
     public ?string $comment = null;
 
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\ForumPostAlertNote", mappedBy="alert")
-     */
-    private $notes;
+    #[ORM\OneToMany(targetEntity: ForumPostAlertNote::class, mappedBy: 'alert')]
+    private Collection $notes;
 
-    /**
-     *
-     */
     public function __construct()
     {
         $this->notes = new ArrayCollection();

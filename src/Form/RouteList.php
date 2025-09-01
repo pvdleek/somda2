@@ -22,7 +22,7 @@ class RouteList extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('firstNumber', NumberType::class, [
+            ->add('first_number', NumberType::class, [
                 FormGenerics::KEY_CONSTRAINTS => [
                     new GreaterThan([
                         ConstraintGenerics::MESSAGE => 'Het startnummer moet minimaal 1 zijn',
@@ -38,7 +38,7 @@ class RouteList extends AbstractType
                 FormGenerics::KEY_REQUIRED => true,
                 FormGenerics::KEY_SCALE => 0,
             ])
-            ->add('lastNumber', NumberType::class, [
+            ->add('last_number', NumberType::class, [
                 FormGenerics::KEY_CONSTRAINTS => [
                     new GreaterThan([
                         ConstraintGenerics::MESSAGE => 'Het eindnummer moet minimaal 1 zijn',

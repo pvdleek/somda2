@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Model;
@@ -11,27 +12,27 @@ class Spot
 
     public int $id;
 
-    public \DateTime $spotDate;
+    public \DateTime $spot_date;
 
-    public ?int $spotTime;
+    public ?int $spot_time;
 
-    public string $routeNumber;
+    public string $route_number;
 
-    public string $positionName;
+    public string $position_name;
 
-    public string $trainNumber;
+    public string $train_number;
 
-    public ?string $namePatternName;
+    public ?string $name_pattern_name;
 
     public ?string $extra;
 
-    public int $spotterId;
+    public int $spotter_id;
 
-    public string $spotterUsername;
+    public string $spotter_username;
 
-    public string $locationName;
+    public string $location_name;
 
-    public string $locationDescription;
+    public string $location_description;
 
     /**
      * @param array $queryResult - A result array from the findRecentWithSpotFilter function in the Spot repository
@@ -39,23 +40,23 @@ class Spot
     public function __construct(array $queryResult)
     {
         $this->id = (int) $queryResult['id'];
-        $this->spotDate = $queryResult['spotDate'];
-        $this->spotTime = isset($queryResult['spotTime']) ? $queryResult['spotTime'] : null;
-        $this->routeNumber = $queryResult['routeNumber'];
-        $this->positionName = $queryResult['positionName'];
-        $this->trainNumber = $queryResult['trainNumber'];
-        $this->namePatternName = $queryResult['namePatternName'];
+        $this->spot_date = $queryResult['spot_date'];
+        $this->spot_time = isset($queryResult['spot_time']) ? $queryResult['spot_time'] : null;
+        $this->route_number = $queryResult['route_number'];
+        $this->position_name = $queryResult['position_name'];
+        $this->train_number = $queryResult['train_number'];
+        $this->name_pattern_name = $queryResult['name_pattern_name'];
         $this->extra = $queryResult['extra'];
-        $this->spotterId = (int) $queryResult['spotterId'];
-        $this->spotterUsername = $queryResult['spotterUsername'];
-        $this->locationName = $queryResult['locationName'];
-        $this->locationDescription = $queryResult['locationDescription'];
+        $this->spotter_id = (int) $queryResult['spotter_id'];
+        $this->spotter_username = $queryResult['spotter_username'];
+        $this->location_name = $queryResult['location_name'];
+        $this->location_description = $queryResult['location_description'];
     }
 
     public function getDisplaySpotTime(): string
     {
-        if (null !== $this->spotTime) {
-            return $this->timeDatabaseToDisplay($this->spotTime);
+        if (null !== $this->spot_time) {
+            return $this->timeDatabaseToDisplay($this->spot_time);
         }
         return '';
     }

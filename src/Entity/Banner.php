@@ -1,110 +1,80 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Repository\BannerRepository;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Table(name="somda_banner")
- * @ORM\Entity(repositoryClass="App\Repository\Banner")
- */
+#[ORM\Entity(repositoryClass: BannerRepository::class)]
+#[ORM\Table(name: 'somda_banner')]
 class Banner
 {
     const LOCATION_HEADER = 'header';
     const LOCATION_FORUM = 'forum';
 
-    /**
-     * @ORM\Column(name="bannerid", type="smallint", nullable=false, options={"unsigned"=true})
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(name: 'bannerid', type: 'smallint', options: ['unsigned' => true])]
     public ?int $id = null;
 
-    /**
-     * @ORM\Column(name="code", type="string", length=6, nullable=true)
-     */
+    #[ORM\Column(length: 6, nullable: true)]
     public ?string $code = null;
 
-    /**
-     * @ORM\Column(name="active", type="boolean", nullable=false, options={"default"=false})
-     */
+    #[ORM\Column(options: ['default' => false])]
     public bool $active = false;
 
-    /**
-     * @ORM\Column(name="location", type="string", length=6, nullable=false, options={"default"="header"})
-     */
+    #[ORM\Column(length: 6, nullable: false, options: ['default' => self::LOCATION_HEADER])]
     public string $location = self::LOCATION_HEADER;
 
-    /**
-     * @ORM\Column(name="description", type="text", length=0, nullable=true)
-     */
+    #[ORM\Column(type: 'text', nullable: true)]
     public ?string $description = null;
 
-    /**
-     * @ORM\Column(name="link", type="string", length=255, nullable=false)
-     */
+    #[ORM\Column(length: 255, nullable: false, options: ['default' => ''])]
     public string $link = '';
 
-    /**
-     * @ORM\Column(name="image", type="string", length=100, nullable=true)
-     */
+    #[ORM\Column(length: 100, nullable: true)]
     public ?string $image = null;
 
-    /**
-     * @ORM\Column(name="email", type="string", length=50, nullable=false)
-     */
+    #[ORM\Column(length: 50, nullable: false, options: ['default' => ''])]
     public string $email = '';
 
-    /**
-     * @ORM\Column(name="max_views", type="integer", nullable=false, options={"default"="0", "unsigned"=true})
-     */
-    public int $maxViews = 0;
+    #[ORM\Column(options: ['default' => 0])]
+    public int $max_views = 0;
 
-    /**
-     * @ORM\Column(name="max_hits", type="integer", nullable=false, options={"default"="0", "unsigned"=true})
-     */
-    public int $maxHits = 0;
+    #[ORM\Column(options: ['default' => 0])]
+    public int $max_hits = 0;
 
-    /**
-     * @ORM\Column(name="start_date", type="datetime", nullable=true)
-     */
-    public ?\DateTime $startTimestamp;
+    #[ORM\Column(name: 'start_date', type: 'datetime', nullable: true)]
+    public ?\DateTime $start_timestamp;
 
-    /**
-     * @ORM\Column(name="end_date", type="datetime", nullable=true)
-     */
-    public ?\DateTime $endTimestamp;
+    #[ORM\Column(name: 'end_date', type: 'datetime', nullable: true)]
+    public ?\DateTime $end_timestamp;
 
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\BannerHit", mappedBy="banner")
-     */
-    private $bannerHits;
+    #[ORM\OneToMany(targetEntity: BannerHit::class, mappedBy: 'banner')]
+    /** @var Collection<int, BannerHit> */
+    private Collection $banner_hits;
 
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\BannerView", mappedBy="banner")
-     */
-    private $bannerViews;
+    #[ORM\OneToMany(targetEntity: BannerView::class, mappedBy: 'banner')]
+    /** @var Collection<int, BannerView> */
+    private Collection $banner_views;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\BannerCustomer", inversedBy="banners")
-     * @ORM\JoinColumn(name="customerid", referencedColumnName="id")
-     */
+    #[ORM\ManyToOne(targetEntity: BannerCustomer::class, inversedBy: 'banners')]
+    #[ORM\JoinColumn(name: 'customerid', referencedColumnName: 'id')]
     public BannerCustomer $customer;
 
-    /**
-     *
-     */
     public function __construct()
     {
-        $this->bannerHits = new ArrayCollection();
-        $this->bannerViews = new ArrayCollection();
+        $this->banner_hits = new ArrayCollection();
+        $this->banner_views = new ArrayCollection();
     }
 
     public function addBannerHit(BannerHit $bannerHit): Banner
     {
-        $this->bannerHits[] = $bannerHit;
+        $this->banner_hits[] = $bannerHit;
         return $this;
     }
 
@@ -113,12 +83,12 @@ class Banner
      */
     public function getBannerHits(): array
     {
-        return $this->bannerHits->toArray();
+        return $this->banner_hits->toArray();
     }
 
     public function addBannerView(BannerView $bannerView): Banner
     {
-        $this->bannerViews[] = $bannerView;
+        $this->banner_views[] = $bannerView;
         return $this;
     }
 
@@ -127,6 +97,6 @@ class Banner
      */
     public function getBannerViews(): array
     {
-        return $this->bannerViews->toArray();
+        return $this->banner_views->toArray();
     }
 }

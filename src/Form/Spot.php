@@ -18,7 +18,7 @@ class Spot extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('spotDate', DateType::class, [
+            ->add('spot_date', DateType::class, [
                 FormGenerics::KEY_ATTRIBUTES => [FormGenerics::KEY_CLASS=> 'datepicker'],
                 FormGenerics::KEY_FORMAT=> 'dd-MM-yyyy',
                 FormGenerics::KEY_HTML5 => false,
@@ -60,8 +60,8 @@ class Spot extends AbstractType
                 FormGenerics::KEY_MAPPED => false,
                 FormGenerics::KEY_REQUIRED => false,
             ])
-            ->add('userExtra', TextType::class, [
-                FormGenerics::KEY_DATA => $options['data']->extra ? $options['data']->extra->userExtra : null,
+            ->add('user_extra', TextType::class, [
+                FormGenerics::KEY_DATA => $options['data']->extra ? $options['data']->extra->user_extra : null,
                 FormGenerics::KEY_LABEL => 'Verborgen informatie',
                 FormGenerics::KEY_MAPPED => false,
                 FormGenerics::KEY_REQUIRED => false,

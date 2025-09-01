@@ -27,7 +27,7 @@ class ForumDiscussion extends AbstractType
                 FormGenerics::KEY_MAPPED => false,
                 FormGenerics::KEY_REQUIRED => true,
             ])
-            ->add('signatureOn', CheckboxType::class, [
+            ->add('signature_on', CheckboxType::class, [
                 FormGenerics::KEY_LABEL => 'Handtekening gebruiken',
                 FormGenerics::KEY_MAPPED => false,
             ]);

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Controller;
@@ -34,7 +35,7 @@ class BannerController
         $bannerHit = new BannerHit();
         $bannerHit->banner = $banner;
         $bannerHit->timestamp = new \DateTime();
-        $bannerHit->ipAddress = \ip2long($request->getClientIp());
+        $bannerHit->ip_address = \ip2long($request->getClientIp());
 
         $this->doctrine->getManager()->persist($bannerHit);
         $this->doctrine->getManager()->flush();

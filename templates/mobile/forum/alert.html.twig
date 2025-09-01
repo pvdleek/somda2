@@ -13,7 +13,7 @@
             <tr>
                 <td colspan="2">
                     <a class="somda-button" href="#" onclick="$('#alert_form').submit(); return false;">Meld bericht</a>
-                    <a class="somda-button" href="{{ path('forum_discussion_post', { 'id': post.discussion.id, 'postId': post.id, 'name': (post.discussion.title | slug )}) }}">Terug naar het bericht</a>
+                    <a class="somda-button" href="{{ path('forum_discussion_post', { 'id': post.discussion.id, 'post_id': post.id, 'name': (post.discussion.title | slug )}) }}">Terug naar het bericht</a>
                 </td>
             </tr>
         </table>

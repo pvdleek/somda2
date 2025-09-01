@@ -12,44 +12,44 @@ use App\Entity\TrainNamePattern;
 use App\Entity\TrainTableYear;
 use App\Entity\User;
 use App\Model\SpotInput;
-use App\Repository\Position as RepositoryPosition;
-use App\Repository\TrainTable;
-use App\Repository\TrainTableYear as RepositoryTrainTableYear;
+use App\Repository\PositionRepository;
+use App\Repository\TrainTableRepository;
+use App\Repository\TrainTableYearRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 class SpotInputHelper
 {
-    private ?TrainTableYear $trainTableYear = null;
+    private ?TrainTableYear $train_table_year = null;
 
-    private array $positionArray = [];
+    private array $position_array = [];
 
-    private array $trainNamePatterns = [];
+    private array $train_name_patterns = [];
 
     private bool $initialized = false;
 
     public function __construct(
         private readonly ManagerRegistry $doctrine,
-        private readonly FlashHelper $flashHelper,
-        private readonly TrainTable $repositoryTrainTable,
+        private readonly FlashHelper $flash_helper,
+        private readonly TrainTableRepository $train_table_repository,
     ) {
     }
 
-    private function initialize(\DateTime $spotDate): void
+    private function initialize(\DateTime $spot_date): void
     {
         if (!$this->initialized) {
             /**
-             * @var RepositoryPosition $positionRepository
+             * @var PositionRepository $position_repository
              */
-            $positionRepository = $this->doctrine->getRepository(Position::class);
-            $this->positionArray = $positionRepository->getAllAsArray();
+            $position_repository = $this->doctrine->getRepository(Position::class);
+            $this->position_array = $position_repository->getAllAsArray();
 
-            $this->trainNamePatterns = $this->doctrine->getRepository(TrainNamePattern::class)->findBy([], ['order' => 'ASC']);
+            $this->train_name_patterns = $this->doctrine->getRepository(TrainNamePattern::class)->findBy([], ['order' => 'ASC']);
 
             /**
-             * @var RepositoryTrainTableYear $trainTableYearRepository
+             * @var TrainTableYearRepository $train_table_year_repository
              */
-            $trainTableYearRepository = $this->doctrine->getRepository(TrainTableYear::class);
-            $this->trainTableYear = $trainTableYearRepository->findTrainTableYearByDate($spotDate);
+            $train_table_year_repository = $this->doctrine->getRepository(TrainTableYear::class);
+            $this->train_table_year = $train_table_year_repository->findTrainTableYearByDate($spot_date);
 
             $this->initialized = true;
         }
@@ -58,93 +58,93 @@ class SpotInputHelper
     /**
      * @return int[]
      */
-    public function processSpotLines(array $spotLines, User $user, \DateTime $spotDate, Location $baseLocation): array
+    public function processSpotLines(array $spot_lines, User $user, \DateTime $spot_date, Location $base_location): array
     {
-        $this->initialize($spotDate);
+        $this->initialize($spot_date);
 
-        $spotIdArray = [];
+        $spot_id_array = [];
 
-        foreach ($spotLines as $lineNumber => $spotLine) {
-            $spotInput = $this->createSpotInputModelFromLine($baseLocation, $spotLine);
-            $spotInput->spotDate = $spotDate;
-            $spotInput->user = $user;
+        foreach ($spot_lines as $lineNumber => $spotLine) {
+            $spot_input = $this->createSpotInputModelFromLine($base_location, $spotLine);
+            $spot_input->spot_date = $spot_date;
+            $spot_input->user = $user;
 
-            if (null !== $spotId = $this->processSpotInput($spotInput)) {
-                $spotIdArray[] = $spotId;
+            if (null !== $spot_id = $this->processSpotInput($spot_input)) {
+                $spot_id_array[] = $spot_id;
             } else {
-                $this->flashHelper->add('error', 'Spot op regel ' . ($lineNumber + 1) . ' is al ingevoerd!');
+                $this->flash_helper->add('error', 'Spot op regel ' . ($lineNumber + 1) . ' is al ingevoerd!');
             }
         }
 
-        return $spotIdArray;
+        return $spot_id_array;
     }
 
-    public function processSpotInput(SpotInput $spotInput): ?int
+    public function processSpotInput(SpotInput $spot_input): ?int
     {
-        $this->initialize($spotInput->spotDate);
+        $this->initialize($spot_input->spot_date);
 
-        $train = $this->getTrainFromSpotInput($spotInput);
-        $route = $this->getRouteFromSpotInput($spotInput);
+        $train = $this->getTrainFromSpotInput($spot_input);
+        $route = $this->getRouteFromSpotInput($spot_input);
 
         /**
          * @var Position $position
          */
-        $position = $this->doctrine->getRepository(Position::class)->find($spotInput->positionId);
+        $position = $this->doctrine->getRepository(Position::class)->find($spot_input->position_id);
 
-        if (null === $spotInput->location) {
+        if (null === $spot_input->location) {
             // We cannot process a spot without a location
             return null;
         }
 
-        if (null === $spotInput->existingSpotId) {
+        if (null === $spot_input->existingSpotId) {
             // Search for an existing spot
-            $existingSpot = $this->doctrine->getRepository(Spot::class)->findOneBy([
-                'spotDate' => $spotInput->spotDate,
+            $existing_spot = $this->doctrine->getRepository(Spot::class)->findOneBy([
+                'spot_date' => $spot_input->spot_date,
                 'position' => $position,
-                'location' => $spotInput->location,
+                'location' => $spot_input->location,
                 'route' => $route,
                 'train' => $train,
-                'user' => $spotInput->user,
+                'user' => $spot_input->user,
             ]);
-            if (null !== $existingSpot) {
+            if (null !== $existing_spot) {
                 return null;
             }
 
             $spot = new Spot();
-            $spot->user = $spotInput->user;
+            $spot->user = $spot_input->user;
         } else {
             // Update the existing spot
-            $spot = $this->doctrine->getRepository(Spot::class)->find($spotInput->existingSpotId);
+            $spot = $this->doctrine->getRepository(Spot::class)->find($spot_input->existingSpotId);
             if (null === $spot) {
                 return null;
             }
         }
 
         $spot->timestamp = new \DateTime();
-        $spot->spotDate = $spotInput->spotDate;
-        $spot->dayNumber = (int) $spotInput->spotDate->format('N');
+        $spot->spot_date = $spot_input->spot_date;
+        $spot->day_number = (int) $spot_input->spot_date->format('N');
         $spot->train = $train;
         $train->addSpot($spot);
         $spot->route = $route;
         $route->addSpot($spot);
         $spot->position = $position;
-        $spot->location = $spotInput->location;
-        $spotInput->location->addSpot($spot);
-        $spot->inputFeedbackFlag = $spotInput->feedbackFlag;
-        if (\strlen($spotInput->extra) > 0 || \strlen($spotInput->userExtra) > 0) {
+        $spot->location = $spot_input->location;
+        $spot_input->location->addSpot($spot);
+        $spot->input_feedback_flag = $spot_input->feedback_flag;
+        if (\strlen($spot_input->extra) > 0 || \strlen($spot_input->user_extra) > 0) {
             if (null !== $spot->extra) {
-                $spotExtra = $spot->extra;
+                $spot_extra = $spot->extra;
             } else {
-                $spotExtra = new SpotExtra();
-                $spotExtra->spot = $spot;
-                $this->doctrine->getManager()->persist($spotExtra);
+                $spot_extra = new SpotExtra();
+                $spot_extra->spot = $spot;
+                $this->doctrine->getManager()->persist($spot_extra);
             }
-            $spotExtra->extra = $spotInput->extra;
-            $spotExtra->userExtra = $spotInput->userExtra ?? '';
-            $spot->extra = $spotExtra;
-        } elseif (null !== $spotExtra = $spot->extra) {
+            $spot_extra->extra = $spot_input->extra;
+            $spot_extra->user_extra = $spot_input->user_extra ?? '';
+            $spot->extra = $spot_extra;
+        } elseif (null !== $spot_extra = $spot->extra) {
             $spot->extra = null;
-            $this->doctrine->getManager()->remove($spotExtra);
+            $this->doctrine->getManager()->remove($spot_extra);
         }
 
         $this->doctrine->getManager()->persist($spot);
@@ -153,48 +153,48 @@ class SpotInputHelper
         return $spot->id;
     }
 
-    private function createSpotInputModelFromLine(Location $baseLocation, string $spotLine): SpotInput
+    private function createSpotInputModelFromLine(Location $base_location, string $spot_line): SpotInput
     {
-        $spotInput = new SpotInput();
-        $spotInput->location = $baseLocation;
-        $spotInput->positionId = 1;
-        $spotInput->extra = '';
+        $spot_input = new SpotInput();
+        $spot_input->location = $base_location;
+        $spot_input->position_id = 1;
+        $spot_input->extra = '';
 
-        $spotPart = \explode(' ', $spotLine);
+        $spot_part = \explode(' ', $spot_line);
 
-        $spotInput->trainNumber = $this->getNextLineItem($spotPart, $spotInput);
-        $spotInput->routeNumber = $this->getNextLineItem($spotPart, $spotInput);
+        $spot_input->train_number = $this->getNextLineItem($spot_part, $spot_input);
+        $spot_input->route_number = $this->getNextLineItem($spot_part, $spot_input);
 
-        if (count($spotPart) > 0) {
-            $nextPart = $this->getNextLineItem($spotPart, $spotInput);
+        if (count($spot_part) > 0) {
+            $nextPart = $this->getNextLineItem($spot_part, $spot_input);
 
-            if (\in_array(\strtoupper($nextPart), $this->positionArray, true)) {
+            if (\in_array(\strtoupper($nextPart), $this->position_array, true)) {
                 // The argument is a position
-                $spotInput->positionId = \array_search(\strtoupper($nextPart), $this->positionArray);
-                $nextPart = \trim(\array_shift($spotPart));
+                $spot_input->position_id = \array_search(\strtoupper($nextPart), $this->position_array);
+                $nextPart = \trim(\array_shift($spot_part));
             }
 
-            if (null !== $nextPart && $this->isLineItemLocation($nextPart, $spotInput)) {
-                $nextPart = \trim(\array_shift($spotPart));
+            if (null !== $nextPart && $this->isLineItemLocation($nextPart, $spot_input)) {
+                $nextPart = \trim(\array_shift($spot_part));
             }
 
             // The rest of the parts form the extra information
-            $spotInput->extra = $nextPart . ' ' . \implode(' ', $spotPart);
+            $spot_input->extra = $nextPart . ' ' . \implode(' ', $spot_part);
         }
 
-        return $spotInput;
+        return $spot_input;
     }
 
-    private function getNextLineItem(array &$spotPart, SpotInput $spotInput): string
+    private function getNextLineItem(array &$spot_part, SpotInput $spot_input): string
     {
-        $item = \trim(\array_shift($spotPart));
-        if ($this->isLineItemLocation($item, $spotInput)) {
-            return \trim(\array_shift($spotPart));
+        $item = \trim(\array_shift($spot_part));
+        if ($this->isLineItemLocation($item, $spot_input)) {
+            return \trim(\array_shift($spot_part));
         }
         return $item;
     }
 
-    private function isLineItemLocation(string $item, SpotInput $spotInput): bool
+    private function isLineItemLocation(string $item, SpotInput $spot_input): bool
     {
         if (\substr($item, 0, 1) === '|' && \substr($item, -1) === '|') {
             /**
@@ -203,34 +203,36 @@ class SpotInputHelper
             $location = $this->doctrine->getRepository(Location::class)->findOneBy(
                 ['name' => \substr($item, 1, \strlen($item) - 2)]
             );
-            $spotInput->location = $location;
+            $spot_input->location = $location;
+
             return true;
         }
+        
         return false;
     }
 
-    private function getTrainFromSpotInput(SpotInput $spotInput): Train
+    private function getTrainFromSpotInput(SpotInput $spot_input): Train
     {
         /**
          * @var Train $train
          */
-        $train = $this->doctrine->getRepository(Train::class)->findOneBy(['number' => $spotInput->trainNumber]);
+        $train = $this->doctrine->getRepository(Train::class)->findOneBy(['number' => $spot_input->train_number]);
         if (null !== $train) {
             return $train;
         }
 
         $train = new Train();
-        $train->number = $spotInput->trainNumber;
+        $train->number = $spot_input->train_number;
 
         // Try find a match for the number in all patterns
-        foreach ($this->trainNamePatterns as $pattern) {
-            if (\preg_match('#' . $pattern->pattern . '#', $spotInput->trainNumber)) {
-                $train->namePattern = $pattern;
+        foreach ($this->train_name_patterns as $pattern) {
+            if (\preg_match('#' . $pattern->pattern . '#', $spot_input->train_number)) {
+                $train->name_pattern = $pattern;
                 break;
             }
         }
 
-        $spotInput->feedbackFlag += null === $train->namePattern
+        $spot_input->feedback_flag += null === $train->name_pattern
             ? Spot::INPUT_FEEDBACK_TRAIN_NEW_NO_PATTERN : Spot::INPUT_FEEDBACK_TRAIN_NEW;
 
         $this->doctrine->getManager()->persist($train);
@@ -238,17 +240,17 @@ class SpotInputHelper
         return $train;
     }
 
-    private function getRouteFromSpotInput(SpotInput $spotInput): Route
+    private function getRouteFromSpotInput(SpotInput $spot_input): Route
     {
         /**
          * @var Route $route
          */
-        $route = $this->doctrine->getRepository(Route::class)->findOneBy(['number' => $spotInput->routeNumber]);
+        $route = $this->doctrine->getRepository(Route::class)->findOneBy(['number' => $spot_input->route_number]);
         if (null === $route) {
             $route = new Route();
-            $route->number = $spotInput->routeNumber;
+            $route->number = $spot_input->route_number;
 
-            $spotInput->feedbackFlag += Spot::INPUT_FEEDBACK_ROUTE_NEW;
+            $spot_input->feedback_flag += Spot::INPUT_FEEDBACK_ROUTE_NEW;
 
             $this->doctrine->getManager()->persist($route);
 
@@ -257,20 +259,20 @@ class SpotInputHelper
 
         if (\is_numeric($route->number)) {
             if (\count($route->getTrainTables()) > 0
-                && null === $route->getTrainTableFirstLastByDay($this->trainTableYear->id, $spotInput->spotDate->format('N'))
+                && null === $route->getTrainTableFirstLastByDay($this->train_table_year->id, $spot_input->spot_date->format('N'))
             ) {
-                $spotInput->feedbackFlag += Spot::INPUT_FEEDBACK_ROUTE_NOT_ON_DAY;
+                $spot_input->feedback_flag += Spot::INPUT_FEEDBACK_ROUTE_NOT_ON_DAY;
                 return $route;
             }
 
-            $trainTableExists = $this->repositoryTrainTable->isExistingForSpot(
-                $this->trainTableYear,
+            $train_table_exists = $this->train_table_repository->isExistingForSpot(
+                $this->train_table_year,
                 $route,
-                $spotInput->location,
-                $spotInput->spotDate->format('N')
+                $spot_input->location,
+                $spot_input->spot_date->format('N')
             );
-            if (!$trainTableExists) {
-                $spotInput->feedbackFlag += Spot::INPUT_FEEDBACK_ROUTE_NOT_ON_LOCATION;
+            if (!$train_table_exists) {
+                $spot_input->feedback_flag += Spot::INPUT_FEEDBACK_ROUTE_NOT_ON_LOCATION;
             }
         }
 

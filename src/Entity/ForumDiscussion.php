@@ -1,68 +1,49 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
+use App\Repository\ForumDiscussionRepository;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Table(name="somda_forum_discussion", indexes={@ORM\Index(name="idx_somda_forum_discussion__forumid", columns={"forumid"})})
- * @ORM\Entity(repositoryClass="App\Repository\ForumDiscussion")
- */
+#[ORM\Entity(repositoryClass: ForumDiscussionRepository::class)]
+#[ORM\Table(name: 'somda_forum_discussion', indexes: [new ORM\Index(name: 'idx_somda_forum_discussion__forumid', columns: ['forumid'])])]
 class ForumDiscussion
 {
-    /**
-     * @ORM\Column(name="discussionid", type="integer", nullable=false, options={"unsigned"=true})
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(name: 'discussionid', nullable: false, options: ['unsigned' => true])]
     public ?int $id = null;
 
-    /**
-     * @ORM\Column(name="title", type="string", length=75, nullable=false)
-     */
+    #[ORM\Column(length: 75, nullable: false, options: ['default' => ''])]
     public string $title = '';
 
-    /**
-     * @ORM\Column(name="viewed", type="integer", nullable=false, options={"default"=0, "unsigned"=true})
-     */
+    #[ORM\Column(nullable: false, options: ['default' => 0, 'unsigned' => true])]
     public int $viewed = 0;
 
-    /**
-     * @ORM\Column(name="locked", type="boolean", nullable=false, options={"default"=false})
-     */
+    #[ORM\Column(nullable: false, options: ['default' => false])]
     public bool $locked = false;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\ForumForum", inversedBy="discussions")
-     * @ORM\JoinColumn(name="forumid", referencedColumnName="forumid")
-     */
+    #[ORM\ManyToOne(targetEntity: ForumForum::class, inversedBy: 'discussions')]
+    #[ORM\JoinColumn(name: 'forumid', referencedColumnName: 'forumid')]
     public ?ForumForum $forum = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User")
-     * @ORM\JoinColumn(name="authorid", referencedColumnName="uid")
-     */
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\JoinColumn(name: 'authorid', referencedColumnName: 'uid')]
     public ?User $author = null;
 
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\ForumPost", mappedBy="discussion")
-     */
-    private $posts;
+    #[ORM\OneToMany(mappedBy: 'discussion', targetEntity: ForumPost::class)]
+    private Collection $posts;
 
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\ForumDiscussionWiki", mappedBy="discussion")
-     */
-    private $wikis;
+    #[ORM\OneToMany(mappedBy: 'discussion', targetEntity: ForumDiscussionWiki::class)]
+    private Collection $wikis;
 
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\ForumFavorite", mappedBy="discussion")
-     */
-    private $favorites;
+    #[ORM\OneToMany(mappedBy: 'discussion', targetEntity: ForumFavorite::class)]
+    private Collection $favorites;
 
-    /**
-     *
-     */
     public function __construct()
     {
         $this->posts = new ArrayCollection();

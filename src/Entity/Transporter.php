@@ -1,58 +1,58 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as JMS;
 use OpenApi\Annotations as OA;
 
-/**
- * @ORM\Table(
- *     name="somda_vervoerder",
- *     uniqueConstraints={@ORM\UniqueConstraint(name="unq_somda_vervoerder__omschrijving", columns={"omschrijving"})}
- * )
- * @ORM\Entity
- */
+#[ORM\Entity]
+#[ORM\Table(name: 'somda_vervoerder', uniqueConstraints: [new ORM\UniqueConstraint(name: 'unq_somda_vervoerder__omschrijving', columns: ['omschrijving'])])]
 class Transporter
 {
     /**
-     * @ORM\Column(name="vervoerder_id", type="smallint", nullable=false, options={"unsigned"=true})
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      * @JMS\Expose()
      * @OA\Property(description="Unique identifier", type="integer")
      */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(name: 'vervoerder_id', type: 'smallint', nullable: false, options: ['unsigned' => true])]
     public ?int $id = null;
 
     /**
-     * @ORM\Column(name="omschrijving", type="string", length=50, nullable=false)
      * @JMS\Expose()
      * @OA\Property(description="Name of the transporter", maxLength=50, type="string")
      */
+    #[ORM\Column(name: 'omschrijving', length: 50, nullable: false, options: ['default' => ''])]
     public string $name = '';
 
     /**
-     * @ORM\Column(name="iff_code", type="integer", nullable=true, options={"unsigned"=true})
      * @JMS\Expose()
      * @OA\Property(description="Official IFF code", type="integer")
      */
+    #[ORM\Column(name: 'iff_code', nullable: true, options: ['unsigned' => true])]
     public ?int $iffCode = null;
 
     /**
      * @JMS\Exclude()
      */
-    private $trains;
+    #[ORM\OneToMany(targetEntity: Train::class, mappedBy: 'transporter')]
+    private Collection $trains;
 
     /**
      * @JMS\Exclude()
      */
-    private $routeLists;
+    #[ORM\OneToMany(targetEntity: RouteList::class, mappedBy: 'transporter')]
+    private Collection $route_lists;
 
     public function __construct()
     {
         $this->trains = new ArrayCollection();
-        $this->routeLists = new ArrayCollection();
+        $this->route_lists = new ArrayCollection();
     }
 
     public function addTrain(Train $train): Transporter
@@ -69,9 +69,9 @@ class Transporter
         return $this->trains->toArray();
     }
 
-    public function addRouteList(RouteList $routeList): Transporter
+    public function addRouteList(RouteList $route_list): Transporter
     {
-        $this->routeLists[] = $routeList;
+        $this->route_lists[] = $route_list;
         return $this;
     }
 
@@ -80,6 +80,6 @@ class Transporter
      */
     public function getRouteLists(): array
     {
-        return $this->routeLists->toArray();
+        return $this->route_lists->toArray();
     }
 }

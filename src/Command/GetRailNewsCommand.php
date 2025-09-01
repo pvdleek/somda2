@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Command;
@@ -9,6 +10,7 @@ use App\Entity\RailNewsSourceFeed;
 use Doctrine\Persistence\ManagerRegistry;
 use FeedIo\Adapter\Guzzle\Client as GuzzleClient;
 use FeedIo\Feed\ItemInterface;
+use FeedIo\FeedInterface;
 use FeedIo\FeedIo;
 use FeedIo\Reader\ReadErrorException;
 use GuzzleHttp\Client;
@@ -72,7 +74,7 @@ class GetRailNewsCommand extends Command
         $feeds = $this->doctrine->getRepository(RailNewsSourceFeed::class)->findAll();
         foreach ($feeds as $feed) {
             /**
-             * @var ItemInterface[] $items
+             * @var FeedInterface $items
              */
             try {
                 $items = $this->feedIo->read($feed->url, null, new \DateTime('-1 day'))->getFeed();
@@ -80,7 +82,7 @@ class GetRailNewsCommand extends Command
                 continue;
             }
             foreach ($items as $item) {
-                if ((!$feed->filterResults || $this->isArticleMatch($item)) && !$this->isItemExists($item)) {
+                if ((!$feed->filter_results || $this->isArticleMatch($item)) && !$this->isItemExists($item)) {
                     $this->saveItem($feed->source, $item, $this->getItemDescription($item));
                 }
             }
@@ -163,11 +165,11 @@ class GetRailNewsCommand extends Command
             $railNews->timestamp = $item->getLastModified() ?? new \DateTime();
             $railNews->approved = false;
             $railNews->active = false;
-            $railNews->automaticUpdates = true;
+            $railNews->automatic_updates = true;
             $railNews->source = $source;
 
             $this->doctrine->getManager()->persist($railNews);
-        } elseif ($railNews->automaticUpdates) {
+        } elseif ($railNews->automatic_updates) {
             $railNews->title = $item->getTitle();
             $railNews->url = $item->getLink();
             $railNews->introduction = \html_entity_decode($description, ENT_NOQUOTES, 'UTF-8');

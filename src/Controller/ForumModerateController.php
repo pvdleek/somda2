@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Controller;
@@ -27,39 +28,39 @@ class ForumModerateController
 
     public function __construct(
         private readonly SluggerInterface $slugger,
-        private readonly FormHelper $formHelper,
-        private readonly UserHelper $userHelper,
-        private readonly TemplateHelper $templateHelper,
-        private readonly ForumAuthorizationHelper $forumAuthHelper,
+        private readonly FormHelper $form_helper,
+        private readonly UserHelper $user_helper,
+        private readonly TemplateHelper $template_helper,
+        private readonly ForumAuthorizationHelper $forum_authorization_helper,
     ) {
     }
 
     public function indexAction(Request $request, int $id, string $action): Response|RedirectResponse
     {
-        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_USER);
+        $this->user_helper->denyAccessUnlessGranted(RoleGenerics::ROLE_USER);
 
         $discussion = $this->getDiscussion($id);
 
         if ($action === self::ACTION_CLOSE && !$discussion->locked) {
             $discussion->locked = true;
-            $this->formHelper->getDoctrine()->getManager()->flush();
+            $this->form_helper->getDoctrine()->getManager()->flush();
         } elseif ($action === self::ACTION_OPEN && $discussion->locked) {
             $discussion->locked = false;
-            $this->formHelper->getDoctrine()->getManager()->flush();
+            $this->form_helper->getDoctrine()->getManager()->flush();
         } elseif ($action === self::ACTION_MOVE) {
-            $form = $this->formHelper->getFactory()->create(ForumDiscussionMove::class, $discussion);
+            $form = $this->form_helper->getFactory()->create(ForumDiscussionMove::class, $discussion);
             $form->handleRequest($request);
             if (!$form->isSubmitted() || !$form->isValid()) {
-                return $this->templateHelper->render('forum/discussionMove.html.twig', [
+                return $this->template_helper->render('forum/discussionMove.html.twig', [
                     TemplateHelper::PARAMETER_PAGE_TITLE => 'Forum - ' . $discussion->title,
                     TemplateHelper::PARAMETER_DISCUSSION => $discussion,
                     TemplateHelper::PARAMETER_FORM => $form->createView()
                 ]);
             }
-            $this->formHelper->getDoctrine()->getManager()->flush();
+            $this->form_helper->getDoctrine()->getManager()->flush();
         }
 
-        return $this->formHelper->getRedirectHelper()->redirectToRoute(
+        return $this->form_helper->getRedirectHelper()->redirectToRoute(
             RouteGenerics::ROUTE_FORUM_DISCUSSION,
             ['id' => $discussion->id, 'name' => $this->slugger->slug($discussion->title)]
         );
@@ -67,7 +68,7 @@ class ForumModerateController
 
     public function combineAction(Request $request, int $id1, int $id2): Response|RedirectResponse
     {
-        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_USER);
+        $this->user_helper->denyAccessUnlessGranted(RoleGenerics::ROLE_USER);
 
         $discussion1 = $this->getDiscussion($id1);
         $discussion2 = $this->getDiscussion($id2);
@@ -76,29 +77,29 @@ class ForumModerateController
             throw new AccessDeniedException("The forums of the discussions to be combined do not match");
         }
 
-        $newDiscussion = new ForumDiscussion();
-        $newDiscussion->forum = $discussion1->forum;
-
-        $form = $this->formHelper->getFactory()->create(ForumDiscussionCombine::class, $newDiscussion);
+        $new_discussion = (new ForumDiscussion());
+        $new_discussion->forum = $discussion1->forum;
+        
+        $form = $this->form_helper->getFactory()->create(ForumDiscussionCombine::class, $new_discussion);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $oldestPost = $this->movePostsAndGetOldest($discussion1, $discussion2, $newDiscussion);
+            $oldestPost = $this->movePostsAndGetOldest($discussion1, $discussion2, $new_discussion);
 
-            $newDiscussion->author = $oldestPost->author;
-            $newDiscussion->title = $form->get('title')->getData();
-            $newDiscussion->viewed = (int) $discussion1->viewed + (int) $discussion2->viewed;
-            $this->formHelper->getDoctrine()->getManager()->persist($newDiscussion);
-            $this->formHelper->getDoctrine()->getManager()->remove($discussion1);
-            $this->formHelper->getDoctrine()->getManager()->remove($discussion2);
-            $this->formHelper->getDoctrine()->getManager()->flush();
+            $new_discussion->author = $oldestPost->author;
+            $new_discussion->title = $form->get('title')->getData();
+            $new_discussion->viewed = (int) $discussion1->viewed + (int) $discussion2->viewed;
+            $this->form_helper->getDoctrine()->getManager()->persist($new_discussion);
+            $this->form_helper->getDoctrine()->getManager()->remove($discussion1);
+            $this->form_helper->getDoctrine()->getManager()->remove($discussion2);
+            $this->form_helper->getDoctrine()->getManager()->flush();
 
-            return $this->formHelper->finishFormHandling('', RouteGenerics::ROUTE_FORUM_DISCUSSION, [
-                'id' => $newDiscussion->id,
-                'name' => $this->slugger->slug($newDiscussion->title)
+            return $this->form_helper->finishFormHandling('', RouteGenerics::ROUTE_FORUM_DISCUSSION, [
+                'id' => $new_discussion->id,
+                'name' => $this->slugger->slug($new_discussion->title)
             ]);
         }
 
-        return $this->templateHelper->render('forum/discussionCombine.html.twig', [
+        return $this->template_helper->render('forum/discussionCombine.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Forum - ' . $discussion1->title,
             'discussion1' => $discussion1,
             'discussion2' => $discussion2,
@@ -106,69 +107,68 @@ class ForumModerateController
         ]);
     }
 
-    private function movePostsAndGetOldest(ForumDiscussion $discussion1, ForumDiscussion $discussion2, ForumDiscussion $newDiscussion): ForumPost {
+    private function movePostsAndGetOldest(ForumDiscussion $discussion1, ForumDiscussion $discussion2, ForumDiscussion $new_discussion): ForumPost {
         /**
-         * @var ForumPost $oldestPost
+         * @var ForumPost|null $oldest_post
          */
-        $oldestPost = null;
+        $oldest_post = null;
         foreach ($discussion1->getPosts() as $post) {
-            if (null === $oldestPost || $post->timestamp < $oldestPost->timestamp) {
-                $oldestPost = $post;
+            if (null === $oldest_post || $post->timestamp < $oldest_post->timestamp) {
+                $oldest_post = $post;
             }
-            $post->discussion = $newDiscussion;
+            $post->discussion = $new_discussion;
         }
         foreach ($discussion2->getPosts() as $post) {
-            if (null === $oldestPost || $post->timestamp < $oldestPost->timestamp) {
-                $oldestPost = $post;
+            if (null === $oldest_post || $post->timestamp < $oldest_post->timestamp) {
+                $oldest_post = $post;
             }
-            $post->discussion = $newDiscussion;
+            $post->discussion = $new_discussion;
         }
 
         // Move the favorites
         foreach ($discussion1->getFavorites() as $favorite) {
-            $favorite->discussion = $newDiscussion;
+            $favorite->discussion = $new_discussion;
         }
         foreach ($discussion2->getFavorites() as $favorite) {
-            $favorite->discussion = $newDiscussion;
+            $favorite->discussion = $new_discussion;
         }
 
         // Move the wikis
         foreach ($discussion1->getWikis() as $wiki) {
-            $wiki->discussion = $newDiscussion;
+            $wiki->discussion = $new_discussion;
         }
         foreach ($discussion2->getWikis() as $wiki) {
-            $wiki->discussion = $newDiscussion;
+            $wiki->discussion = $new_discussion;
         }
 
-        return $oldestPost;
+        return $oldest_post;
     }
 
-    public function splitAction(int $id, string $postIds): RedirectResponse
+    public function splitAction(int $id, string $post_ids): RedirectResponse
     {
-        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_USER);
+        $this->user_helper->denyAccessUnlessGranted(RoleGenerics::ROLE_USER);
 
         $discussion = $this->getDiscussion($id);
 
-        $postIds = \array_filter(\explode(',', $postIds));
-        $firstPost = $this->formHelper->getDoctrine()->getRepository(ForumPost::class)->find($postIds[0]);
+        $post_ids = \array_filter(\explode(',', $post_ids));
+        $first_post = $this->form_helper->getDoctrine()->getRepository(ForumPost::class)->find($post_ids[0]);
 
-        // Create the new discussion
-        $newDiscussion = new ForumDiscussion();
-        $newDiscussion->forum = $discussion->forum;
-        $newDiscussion->title = \substr('Verwijderd uit ' . $discussion->title, 0, 75);
-        $newDiscussion->author = $firstPost->author;
-        $this->formHelper->getDoctrine()->getManager()->persist($newDiscussion);
+        $new_discussion = new ForumDiscussion();
+        $new_discussion->forum = $discussion->forum;
+        $new_discussion->title = \substr('Verwijderd uit ' . $discussion->title, 0, 75);
+        $new_discussion->author = $first_post->author;
+        $this->form_helper->getDoctrine()->getManager()->persist($new_discussion);
 
-        foreach ($postIds as $postId) {
-            $post = $this->formHelper->getDoctrine()->getRepository(ForumPost::class)->find($postId);
-            $post->discussion = $newDiscussion;
+        foreach ($post_ids as $post_id) {
+            $post = $this->form_helper->getDoctrine()->getRepository(ForumPost::class)->find($post_id);
+            $post->discussion = $new_discussion;
         }
 
-        $this->formHelper->getDoctrine()->getManager()->flush();
+        $this->form_helper->getDoctrine()->getManager()->flush();
 
-        return $this->formHelper->getRedirectHelper()->redirectToRoute(
+        return $this->form_helper->getRedirectHelper()->redirectToRoute(
             RouteGenerics::ROUTE_FORUM_DISCUSSION,
-            ['id' => $newDiscussion->id, 'name' => $this->slugger->slug($newDiscussion->title)]
+            ['id' => $new_discussion->id, 'name' => $this->slugger->slug($new_discussion->title)]
         );
     }
 
@@ -177,10 +177,8 @@ class ForumModerateController
         /**
          * @var ForumDiscussion $discussion
          */
-        $discussion = $this->formHelper->getDoctrine()->getRepository(ForumDiscussion::class)->find($id);
-        if (null === $discussion
-            || !$this->forumAuthHelper->userIsModerator($discussion->forum, $this->userHelper->getUser())
-        ) {
+        $discussion = $this->form_helper->getDoctrine()->getRepository(ForumDiscussion::class)->find($id);
+        if (null === $discussion || !$this->forum_authorization_helper->userIsModerator($discussion->forum, $this->user_helper->getUser())) {
             throw new AccessDeniedException('The discussion does not exist of the user cannot moderate it');
         }
         return $discussion;

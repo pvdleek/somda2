@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repository;
 
 use App\Entity\RouteOperationDays as RouteOperationDaysEntity;
@@ -8,7 +10,7 @@ use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
 use Doctrine\Persistence\ManagerRegistry;
 
-class RouteOperationDays extends ServiceEntityRepository
+class RouteOperationDaysRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {

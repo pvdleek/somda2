@@ -1,10 +1,10 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Controller;
 
 use App\Entity\News;
-use App\Entity\RailNews;
 use App\Form\RailNews as RailNewsForm;
 use App\Form\News as NewsForm;
 use App\Generics\RoleGenerics;
@@ -12,6 +12,8 @@ use App\Generics\RouteGenerics;
 use App\Helpers\FormHelper;
 use App\Helpers\TemplateHelper;
 use App\Helpers\UserHelper;
+use App\Repository\NewsRepository;
+use App\Repository\RailNewsRepository;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,22 +23,21 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 class ManageNewsController
 {
     public function __construct(
-        private readonly UserHelper $userHelper,
-        private readonly FormHelper $formHelper,
-        private readonly TemplateHelper $templateHelper,
+        private readonly UserHelper $user_helper,
+        private readonly FormHelper $form_helper,
+        private readonly TemplateHelper $template_helper,
+        private readonly NewsRepository $news_repository,
+        private readonly RailNewsRepository $rail_news_repository,
     ) {
     }
 
     public function indexAction(): Response
     {
-        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_ADMIN_NEWS);
+        $this->user_helper->denyAccessUnlessGranted(RoleGenerics::ROLE_ADMIN_NEWS);
 
-        return $this->templateHelper->render('manageNews/index.html.twig', [
+        return $this->template_helper->render('manageNews/index.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Beheer nieuws',
-            'news' => $this->formHelper
-                ->getDoctrine()
-                ->getRepository(News::class)
-                ->findBy([], [NewsForm::FIELD_TIMESTAMP => 'DESC']),
+            'news' => $this->news_repository->findBy([], [NewsForm::FIELD_TIMESTAMP => 'DESC']),
         ]);
     }
 
@@ -45,25 +46,25 @@ class ManageNewsController
      */
     public function editAction(Request $request, int $id): Response|RedirectResponse
     {
-        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_ADMIN_NEWS);
+        $this->user_helper->denyAccessUnlessGranted(RoleGenerics::ROLE_ADMIN_NEWS);
 
-        $news = $this->formHelper->getDoctrine()->getRepository(News::class)->find($id);
+        $news = $this->news_repository->find($id);
         if (null === $news) {
             $news = new News();
             $news->timestamp = new \DateTime();
         }
-        $form = $this->formHelper->getFactory()->create(NewsForm::class, $news);
+        $form = $this->form_helper->getFactory()->create(NewsForm::class, $news);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             if (null === $news->id) {
-                $this->formHelper->getDoctrine()->getManager()->persist($news);
-                return $this->formHelper->finishFormHandling('Bericht toegevoegd', RouteGenerics::ROUTE_MANAGE_NEWS);
+                $this->form_helper->getDoctrine()->getManager()->persist($news);
+                return $this->form_helper->finishFormHandling('Bericht toegevoegd', RouteGenerics::ROUTE_MANAGE_NEWS);
             }
-            return $this->formHelper->finishFormHandling('Bericht bijgewerkt', RouteGenerics::ROUTE_MANAGE_NEWS);
+            return $this->form_helper->finishFormHandling('Bericht bijgewerkt', RouteGenerics::ROUTE_MANAGE_NEWS);
         }
 
-        return $this->templateHelper->render('manageNews/item.html.twig', [
+        return $this->template_helper->render('manageNews/item.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Beheer nieuwsbericht',
             'news' => $news,
             TemplateHelper::PARAMETER_FORM => $form->createView(),
@@ -72,23 +73,21 @@ class ManageNewsController
 
     public function railNewsAction(): Response
     {
-        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_ADMIN_RAIL_NEWS);
+        $this->user_helper->denyAccessUnlessGranted(RoleGenerics::ROLE_ADMIN_RAIL_NEWS);
 
-        return $this->templateHelper->render('manageNews/railNews.html.twig', [
+        return $this->template_helper->render('manageNews/railNews.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Beheer spoornieuws',
-            'railNews' => $this->formHelper->getDoctrine()
-                ->getRepository(RailNews::class)
-                ->findForManagement(100)
+            'railNews' => $this->rail_news_repository->findForManagement(100)
         ]);
     }
 
     public function railNewsDisapproveAction(Request $request): JsonResponse
     {
-        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_ADMIN_RAIL_NEWS);
+        $this->user_helper->denyAccessUnlessGranted(RoleGenerics::ROLE_ADMIN_RAIL_NEWS);
 
         $ids = \array_filter(\explode(',', \array_keys($request->request->all())[0]));
         foreach ($ids as $id) {
-            $railNews = $this->formHelper->getDoctrine()->getRepository(RailNews::class)->find($id);
+            $railNews = $this->rail_news_repository->find($id);
             $railNews->approved = true;
         }
 
@@ -97,21 +96,21 @@ class ManageNewsController
 
     public function railNewsEditAction(Request $request, int $id): Response|RedirectResponse
     {
-        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_ADMIN_RAIL_NEWS);
+        $this->user_helper->denyAccessUnlessGranted(RoleGenerics::ROLE_ADMIN_RAIL_NEWS);
 
-        $railNews = $this->formHelper->getDoctrine()->getRepository(RailNews::class)->find($id);
+        $railNews = $this->rail_news_repository->find($id);
         if (null === $railNews) {
             throw new AccessDeniedException('This rail-news item does not exist');
         }
-        $form = $this->formHelper->getFactory()->create(RailNewsForm::class, $railNews);
+        $form = $this->form_helper->getFactory()->create(RailNewsForm::class, $railNews);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $railNews->approved = true;
-            return $this->formHelper->finishFormHandling('Bericht bijgewerkt', RouteGenerics::ROUTE_MANAGE_RAIL_NEWS);
+            return $this->form_helper->finishFormHandling('Bericht bijgewerkt', RouteGenerics::ROUTE_MANAGE_RAIL_NEWS);
         }
 
-        return $this->templateHelper->render('manageNews/railNewsItem.html.twig', [
+        return $this->template_helper->render('manageNews/railNewsItem.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Beheer spoornieuws bericht',
             'railNews' => $railNews,
             TemplateHelper::PARAMETER_FORM => $form->createView(),

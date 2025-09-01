@@ -67,7 +67,7 @@
                 <tr id="favorite_post_row_{{ favorite.post.id }}">
                     <td><a href="#" onclick="removePost({{ favorite.post.id }}); return false;"><i class="fas fa-times" title="Verwijder bericht uit je favorieten"></i></a></td>
                     <td><i class="fas fa-comment"></i></td>
-                    <td><a href="{{ path('forum_discussion_post', { 'id': favorite.post.discussion.id, 'name': (favorite.post.discussion.title | slug), 'postId': favorite.post.id }) }}">{{ favorite.post.discussion.title }}</a></td>
+                    <td><a href="{{ path('forum_discussion_post', { 'id': favorite.post.discussion.id, 'name': (favorite.post.discussion.title | slug), 'post_id': favorite.post.id }) }}">{{ favorite.post.discussion.title }}</a></td>
                     <td>{{ favorite.post | displayForumPost | raw }}</td>
                     <td>{{ favorite.post.timestamp | date('d-m-Y H:i:s') }}<br />{{ favorite.post.author.id | displayUser(favorite.post.author.username) | raw }}</td>
                 </tr>
@@ -81,41 +81,41 @@
 {% block javascripts %}
     <script>
         /**
-         * @param {int} discussionId
+         * @param {int} discussion_id
          * @param {boolean} alertingOn
          */
-        function toggleAlerting(discussionId, alertingOn)
+        function toggleAlerting(discussion_id, alertingOn)
         {
             $.ajax({
-                url: '{{ path('forum_favorite_toggle', { 'id': '1234', 'alerting': 0 }) }}'.replace('0', alertingOn ? '1' : '0').replace('1234', discussionId),
+                url: '{{ path('forum_favorite_toggle', { 'id': '1234', 'alerting': 0 }) }}'.replace('0', alertingOn ? '1' : '0').replace('1234', discussion_id),
             });
             if (alertingOn) {
-                $('#alerting_' + discussionId).html('Ja<br /><a href="#" onclick="toggleAlerting(' + discussionId + ', false); return false;">Zet uit</a>');
+                $('#alerting_' + discussion_id).html('Ja<br /><a href="#" onclick="toggleAlerting(' + discussion_id + ', false); return false;">Zet uit</a>');
             } else {
-                $('#alerting_' + discussionId).html('Nee<br /><a href="#" onclick="toggleAlerting(' + discussionId + ', true); return false;">Zet aan</a>');
+                $('#alerting_' + discussion_id).html('Nee<br /><a href="#" onclick="toggleAlerting(' + discussion_id + ', true); return false;">Zet aan</a>');
             }
         }
 
         /**
-         * @param {int} discussionId
+         * @param {int} discussion_id
          */
-        function remove(discussionId)
+        function remove(discussion_id)
         {
             $.ajax({
-                url: '{{ path('forum_favorite_remove', { 'id': '1234' }) }}'.replace('/1234/', '/' + discussionId + '/'),
+                url: '{{ path('forum_favorite_remove', { 'id': '1234' }) }}'.replace('/1234/', '/' + discussion_id + '/'),
             });
-            $('#favorite_row_' + discussionId).remove();
+            $('#favorite_row_' + discussion_id).remove();
         }
 
         /**
-         * @param {int} postId
+         * @param {int} post_id
          */
-        function removePost(postId)
+        function removePost(post_id)
         {
             $.ajax({
-                url: '{{ path('forum_favorite_post_remove', { 'id': '1234' }) }}'.replace('/1234/', '/' + postId + '/'),
+                url: '{{ path('forum_favorite_post_remove', { 'id': '1234' }) }}'.replace('/1234/', '/' + post_id + '/'),
             });
-            $('#favorite_post_row_' + postId).remove();
+            $('#favorite_post_row_' + post_id).remove();
         }
     </script>
 {% endblock %}

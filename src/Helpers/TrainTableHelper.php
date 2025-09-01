@@ -7,8 +7,8 @@ use App\Entity\Route;
 use App\Entity\RouteTrain;
 use App\Entity\TrainTable;
 use App\Entity\TrainTableYear;
-use App\Repository\Location as LocationRepository;
-use App\Repository\TrainTable as RepositoryTrainTable;
+use App\Repository\LocationRepository;
+use App\Repository\TrainTableRepository;
 use App\Traits\DateTrait;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -20,7 +20,7 @@ class TrainTableHelper
     /**
      * @var TrainTableYear|null
      */
-    private ?TrainTableYear $trainTableYear = null;
+    private ?TrainTableYear $train_table_year = null;
 
     /**
      * @var Route|null
@@ -35,29 +35,29 @@ class TrainTableHelper
     /**
      * @var string[]
      */
-    private array $errorMessages = [];
+    private array $error_messages = [];
 
     public function __construct(
         private readonly ManagerRegistry $doctrine,
         private readonly TranslatorInterface $translator,
-        private readonly LocationRepository $repositoryLocation,
-        private readonly RepositoryTrainTable $repositoryTrainTable,
+        private readonly LocationRepository $location_repository,
+        private readonly TrainTableRepository $train_table_repository,
     ) {
     }
 
-    public function setTrainTableYear(int $trainTableYearId)
+    public function setTrainTableYear(int $train_table_year_id): void
     {
-        $this->trainTableYear = $this->doctrine->getRepository(TrainTableYear::class)->find($trainTableYearId);
+        $this->train_table_year = $this->doctrine->getRepository(TrainTableYear::class)->find($train_table_year_id);
     }
 
     public function getTrainTableYear(): ?TrainTableYear
     {
-        return $this->trainTableYear;
+        return $this->train_table_year;
     }
 
-    public function setRoute(string $routeNumber): void
+    public function setRoute(string $route_number): void
     {
-        $this->route = $this->doctrine->getRepository(Route::class)->findOneBy(['number' => $routeNumber]);
+        $this->route = $this->doctrine->getRepository(Route::class)->findOneBy(['number' => $route_number]);
     }
 
     public function getRoute(): ?Route
@@ -65,9 +65,9 @@ class TrainTableHelper
         return $this->route;
     }
 
-    public function setLocation(string $locationName): void
+    public function setLocation(string $location_name): void
     {
-        $this->location = $this->repositoryLocation->findOneByName($locationName);
+        $this->location = $this->location_repository->findOneByName($location_name);
     }
 
     public function getLocation(): ?Location
@@ -77,8 +77,8 @@ class TrainTableHelper
 
     private function addErrorMessage(string $message): void
     {
-        if (!\in_array($message, $this->errorMessages)) {
-            $this->errorMessages[] = $message;
+        if (!\in_array($message, $this->error_messages)) {
+            $this->error_messages[] = $message;
         }
     }
 
@@ -87,12 +87,12 @@ class TrainTableHelper
      */
     public function getErrorMessages(): array
     {
-        return $this->errorMessages;
+        return $this->error_messages;
     }
 
-    public function clearErrorMessages()
+    public function clearErrorMessages(): void
     {
-        $this->errorMessages = [];
+        $this->error_messages = [];
     }
 
     /**
@@ -111,7 +111,7 @@ class TrainTableHelper
         }
 
         return $this->doctrine->getRepository(TrainTable::class)->findBy(
-            ['trainTableYear' => $this->getTrainTableYear(), 'route' => $this->getRoute()],
+            ['train_table_year' => $this->getTrainTableYear(), 'route' => $this->getRoute()],
             ['order' => 'ASC']
         );
     }
@@ -132,12 +132,12 @@ class TrainTableHelper
         }
 
         return $this->doctrine->getRepository(RouteTrain::class)->findBy(
-            ['trainTableYear' => $this->getTrainTableYear(), 'route' => $this->getRoute()],
-            ['dayNumber' => 'ASC']
+            ['train_table_year' => $this->getTrainTableYear(), 'route' => $this->getRoute()],
+            ['day_number' => 'ASC']
         );
     }
 
-    public function getPassingRoutes(?int $dayNumber = null, ?string $startTime = null, ?string $endTime = null): array
+    public function getPassingRoutes(?int $day_number = null, ?string $start_time = null, ?string $end_time = null): array
     {
         $this->clearErrorMessages();
         if (null === $this->getTrainTableYear()) {
@@ -149,31 +149,31 @@ class TrainTableHelper
             return [];
         }
 
-        if (null === $dayNumber) {
-            $dayNumber = date('N');
+        if (null === $day_number) {
+            $day_number = date('N');
         }
 
-        if (null !== $startTime) {
-            $startTimeDatabase = $this->timeDisplayToDatabase($startTime);
+        if (null !== $start_time) {
+            $start_time_database = $this->timeDisplayToDatabase($start_time);
         } else {
-            $startTimeDatabase = $this->timeDisplayToDatabase(date('H:i'));
+            $start_time_database = $this->timeDisplayToDatabase(date('H:i'));
         }
-        if (null !== $endTime) {
-            $endTimeDatabase = $this->timeDisplayToDatabase($endTime);
-            if ($startTimeDatabase > $endTimeDatabase) {
+        if (null !== $end_time) {
+            $end_time_database = $this->timeDisplayToDatabase($end_time);
+            if ($start_time_database > $end_time_database) {
                 $this->addErrorMessage($this->translator->trans('passingRoutes.error.dayBorderCrossed'));
-                $endTimeDatabase = 1440;
+                $end_time_database = 1440;
             }
         } else {
-            $endTimeDatabase = $startTimeDatabase + 120;
+            $end_time_database = $start_time_database + 120;
         }
 
-        return $this->repositoryTrainTable->findPassingRoutes(
+        return $this->train_table_repository->findPassingRoutes(
             $this->getTrainTableYear(),
             $this->getLocation(),
-            $dayNumber,
-            $startTimeDatabase,
-            $endTimeDatabase
+            $day_number,
+            $start_time_database,
+            $end_time_database
         );
     }
 }

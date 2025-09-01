@@ -16,16 +16,16 @@
                 {% for alert in alerts %}
                     <tr>
                         <td>{{ alert.closed ? 'Afgehandeld' : 'Open' }}</td>
-                        <td>{{ alert.discussionTitle }}</td>
+                        <td>{{ alert.discussion_title }}</td>
                         <td>
-                            {% for key, senderId in alert.senderIds | split(',') %}
-                                {{ senderId | displayUser((alert.senderUsernames | split(','))[key]) | raw }}<br />
+                            {% for key, senderId in alert.sender_ids|split(',') %}
+                                {{ senderId | displayUser((alert.sender_usernames | split(','))[key]) | raw }}<br />
                             {% endfor %}
                         </td>
-                        <td>{{ alert.numberOfAlerts }}</td>
-                        <td>{{ alert.numberOfNotes }}</td>
+                        <td>{{ alert.number_of_alerts }}</td>
+                        <td>{{ alert.number_of_notes }}</td>
                         <td>
-                            <a class="somda-button" href="{{ path('forum_discussion_post', { 'id': alert.discussionId, 'name': (alert.discussionTitle | slug), 'postId': alert.postId }) }}">Bekijk bericht</a>
+                            <a class="somda-button" href="{{ path('forum_discussion_post', { 'id': alert.discussion_id, 'name': (alert.discussion_title | slug), 'post_id': alert.postId }) }}">Bekijk bericht</a>
                             <a class="somda-button" href="{{ path('forum_discussion_post_alerts', { 'id': alert.postId }) }}">Bekijk melding</a>
                         </td>
                     </tr>

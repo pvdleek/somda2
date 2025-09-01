@@ -12,15 +12,15 @@
             <th><label for="max_months">Bekijk spots van maximaal</label></th>
             <td>
                 <select id="max_months" name="max_months">
-                    <option {{ maxMonths == 1 ? 'selected="selected" ' }}value="1">1 maand oud</option>
-                    <option {{ maxMonths == 3 ? 'selected="selected" ' }}value="3">3 maanden oud</option>
-                    <option {{ maxMonths == 6 ? 'selected="selected" ' }}value="6">6 maanden oud</option>
-                    <option {{ maxMonths == 12 ? 'selected="selected" ' }}value="12">1 jaar oud</option>
-                    <option {{ maxMonths == 24 ? 'selected="selected" ' }}value="24">2 jaar oud</option>
-                    <option {{ maxMonths == 36 ? 'selected="selected" ' }}value="36">3 jaar oud</option>
-                    <option {{ maxMonths == 48 ? 'selected="selected" ' }}value="48">4 jaar oud</option>
-                    <option {{ maxMonths == 60 ? 'selected="selected" ' }}value="60">5 jaar oud</option>
-                    <option {{ maxMonths == 999 ? 'selected="selected" ' }}value="999">onbeperkt</option>
+                    <option {{ max_months == 1 ? 'selected="selected" ' }}value="1">1 maand oud</option>
+                    <option {{ max_months == 3 ? 'selected="selected" ' }}value="3">3 maanden oud</option>
+                    <option {{ max_months == 6 ? 'selected="selected" ' }}value="6">6 maanden oud</option>
+                    <option {{ max_months == 12 ? 'selected="selected" ' }}value="12">1 jaar oud</option>
+                    <option {{ max_months == 24 ? 'selected="selected" ' }}value="24">2 jaar oud</option>
+                    <option {{ max_months == 36 ? 'selected="selected" ' }}value="36">3 jaar oud</option>
+                    <option {{ max_months == 48 ? 'selected="selected" ' }}value="48">4 jaar oud</option>
+                    <option {{ max_months == 60 ? 'selected="selected" ' }}value="60">5 jaar oud</option>
+                    <option {{ max_months == 999 ? 'selected="selected" ' }}value="999">onbeperkt</option>
                 </select>
             </td>
         </tr>
@@ -35,9 +35,9 @@
             <th><label for="day_number">Filter op weekdag</label></th>
             <td>
                 <select id="day_number" name="day_number">
-                    <option {{ dayNumber is null ? 'selected="selected" ' }}value="0">-</option>
-                    {% for dayNumberSelect in 1..7 %}
-                        <option {{ dayNumber == dayNumberSelect ? 'selected="selected" ' }}value="{{ dayNumberSelect }}">{{ ('general.date.days.' ~ (dayNumberSelect - 1)) | trans }}</option>
+                    <option {{ day_number is null ? 'selected="selected" ' }}value="0">-</option>
+                    {% for day_number_select in 1..7 %}
+                        <option {{ day_number == day_number_select ? 'selected="selected" ' }}value="{{ day_number_select }}">{{ ('general.date.days.' ~ (day_number_select - 1)) | trans }}</option>
                     {% endfor %}
                 </select>
                 <a href="#" onclick="$('#day_number').val('0'); return false;"><i class="fas fa-trash-alt"></i></a>
@@ -45,15 +45,15 @@
         </tr>
         <tr>
             <th><label for="spot_date">Filter op datum</label></th>
-            <td><input class="datepicker" id="spot_date" name="spot_date" size="10" type="text" value="{{ spotDate }}"/> <a href="#" onclick="$('#spot_date').val(''); return false;"><i class="fas fa-trash-alt"></i></a></td>
+            <td><input class="datepicker" id="spot_date" name="spot_date" size="10" type="text" value="{{ spot_date }}"/> <a href="#" onclick="$('#spot_date').val(''); return false;"><i class="fas fa-trash-alt"></i></a></td>
         </tr>
         <tr>
             <th><label for="train_number">Filter op materieelnummer</label></th>
-            <td><input id="train_number" name="train_number" size="10" type="text" value="{{ trainNumber }}"/> <a href="#" onclick="$('#train_number').val(''); return false;"><i class="fas fa-trash-alt"></i></a></td>
+            <td><input id="train_number" name="train_number" size="10" type="text" value="{{ train_number }}"/> <a href="#" onclick="$('#train_number').val(''); return false;"><i class="fas fa-trash-alt"></i></a></td>
         </tr>
         <tr>
             <th><label for="route_number">Filter op treinnummer</label></th>
-            <td><input id="route_number" name="route_number" size="10" type="text" value="{{ routeNumber }}" /> <a href="#" onclick="$('#route_number').val(''); return false;"><i class="fas fa-trash-alt"></i></a></td>
+            <td><input id="route_number" name="route_number" size="10" type="text" value="{{ route_number }}" /> <a href="#" onclick="$('#route_number').val(''); return false;"><i class="fas fa-trash-alt"></i></a></td>
         </tr>
         <tr>
             <th>&nbsp;</th>
@@ -86,24 +86,24 @@
                     <tbody>
                         {% for spot in spots %}
                             <tr>
-                                <td>{{ spot.trainNumber }}</td>
-                                <td>{{ spot.namePatternName }} {{ spot.trainNumber }}</td>
-                                <td>{{ spot.routeNumber }}</td>
+                                <td>{{ spot.train_number }}</td>
+                                <td>{{ spot.name_pattern_name }} {{ spot.train_number }}</td>
+                                <td>{{ spot.route_number }}</td>
                                 <td>
-                                    {% if spot.routeNumber matches '/^\\d+$/' %}
-                                        <a href="{{ path('spots_to_train_table', { 'routeNumber': spot.routeNumber, 'date': spot.spotDate | date('Y-m-d') }) }}" title="Bekijk de dienstregeling van trein {{ spot.routeNumber }}">{{ spot.routeNumber }}</a>
+                                    {% if spot.route_number matches '/^\\d+$/' %}
+                                        <a href="{{ path('spots_to_train_table', { 'route_number': spot.route_number, 'date': spot.spot_date | date('Y-m-d') }) }}" title="Bekijk de dienstregeling van trein {{ spot.route_number }}">{{ spot.route_number }}</a>
                                     {% else %}
-                                        {{ spot.routeNumber }}
+                                        {{ spot.route_number }}
                                     {% endif %}
                                 </td>
-                                <td>{{ spot.positionName }}</td>
+                                <td>{{ spot.position_name }}</td>
                                 <td>{{ spot.extra }}</td>
-                                <td>{{ spot.spotDate | date('Y-m-d') }}</td>
-                                <td>{{ spot.spotDate | displayDateTime }} {{ spot.displaySpotTime }}</td>
-                                <td>{{ spot.spotterUsername }}</td>
-                                <td>{{ spot.spotterId | displayUser(spot.spotterUsername) | raw }}</td>
-                                <td>{{ spot.locationName }}</td>
-                                <td><span title="{{ spot.locationDescription }}">{{ spot.locationName }}</span></td>
+                                <td>{{ spot.spot_date|date('Y-m-d') }}</td>
+                                <td>{{ spot.spot_date|displayDateTime }} {{ spot.displaySpotTime }}</td>
+                                <td>{{ spot.spotter_username }}</td>
+                                <td>{{ spot.spotter_id|displayUser(spot.spotter_username) | raw }}</td>
+                                <td>{{ spot.location_name }}</td>
+                                <td><span title="{{ spot.location_description }}">{{ spot.location_name }}</span></td>
                             </tr>
                         {% else %}
                             <tr><td colspan="7">Er zijn geen spots gevonden met de ingestelde filters</td></tr>
@@ -139,7 +139,7 @@
         {{ include('partials/locationAutoComplete.js.twig') }}
 
         function searchSpots() {
-            let location = '{{ path('spots_search', { 'maxMonths': 1, 'searchParameters': 'myParameters' }) }}';
+            let location = '{{ path('spots_search', { 'max_months': 1, 'search_parameters': 'myParameters' }) }}';
             location = location.replace('/1/', '/' + $('#max_months').val() + '/');
             location = location.replace('myParameters', $('#location').val() + '/' + $('#day_number').val() + '/' + $('#spot_date').val() + '/' + $('#train_number').val() + '/' + $('#route_number').val());
             document.location = location;

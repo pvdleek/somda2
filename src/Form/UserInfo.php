@@ -22,7 +22,7 @@ class UserInfo extends AbstractType
                 FormGenerics::KEY_LABEL => 'Jouw avatar',
                 FormGenerics::KEY_REQUIRED => true,
             ])
-            ->add('birthDate', DateType::class, [
+            ->add('birth_date', DateType::class, [
                 FormGenerics::KEY_ATTRIBUTES => [FormGenerics::KEY_CLASS=> 'birthday-picker'],
                 FormGenerics::KEY_FORMAT=> 'dd-MM-yyyy',
                 FormGenerics::KEY_HTML5 => false,
@@ -43,7 +43,7 @@ class UserInfo extends AbstractType
                 FormGenerics::KEY_LABEL => 'Jouw geslacht',
                 FormGenerics::KEY_REQUIRED => true,
             ])
-            ->add('mobilePhone', TextType::class, [
+            ->add('mobile_phone', TextType::class, [
                 FormGenerics::KEY_LABEL => 'Jouw mobiele nummer',
                 FormGenerics::KEY_REQUIRED => false,
             ])
@@ -55,19 +55,19 @@ class UserInfo extends AbstractType
                 FormGenerics::KEY_LABEL => 'Jouw website',
                 FormGenerics::KEY_REQUIRED => false,
             ])
-            ->add('facebookAccount', TextType::class, [
+            ->add('facebook_account', TextType::class, [
                 FormGenerics::KEY_LABEL => 'Jouw Facebook account',
                 FormGenerics::KEY_REQUIRED => false,
             ])
-            ->add('flickrAccount', TextType::class, [
+            ->add('flickr_account', TextType::class, [
                 FormGenerics::KEY_LABEL => 'Jouw Flickr account',
                 FormGenerics::KEY_REQUIRED => false,
             ])
-            ->add('twitterAccount', TextType::class, [
+            ->add('twitter_account', TextType::class, [
                 FormGenerics::KEY_LABEL => 'Jouw Twitter account',
                 FormGenerics::KEY_REQUIRED => false,
             ])
-            ->add('youtubeAccount', TextType::class, [
+            ->add('youtube_account', TextType::class, [
                 FormGenerics::KEY_LABEL => 'Jouw Youtube account',
                 FormGenerics::KEY_REQUIRED => false,
             ]);

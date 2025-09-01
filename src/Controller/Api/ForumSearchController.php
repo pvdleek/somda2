@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Controller\Api;
@@ -22,7 +23,7 @@ class ForumSearchController extends AbstractFOSRestController
      * @OA\Parameter(
      *     description="Search method to use, 'all' to have all words match, 'some' to let any word match",
      *     in="path",
-     *     name="searchMethod",
+     *     name="search_method",
      *     @OA\Schema(type="string", enum={"all","some"}),
      * )
      * @OA\Parameter(
@@ -72,12 +73,12 @@ class ForumSearchController extends AbstractFOSRestController
      * )
      * @OA\Tag(name="Forum")
      */
-    public function indexAction(string $searchMethod, string $terms): Response
+    public function indexAction(string $search_method, string $terms): Response
     {
         $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_API_USER);
 
         $results = $this->forumSearchHelper->getSearchResults(
-            $searchMethod,
+            $search_method,
             $this->forumSearchHelper->getSearchWords($terms)
         );
         return $this->handleView(

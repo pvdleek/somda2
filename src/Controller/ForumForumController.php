@@ -1,9 +1,9 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Entity\ForumDiscussion;
 use App\Entity\ForumForum;
 use App\Generics\RouteGenerics;
 use App\Helpers\ForumAuthorizationHelper;
@@ -11,6 +11,7 @@ use App\Helpers\ForumOverviewHelper;
 use App\Helpers\RedirectHelper;
 use App\Helpers\TemplateHelper;
 use App\Helpers\UserHelper;
+use App\Repository\ForumDiscussionRepository;
 use App\Traits\SortTrait;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -22,24 +23,25 @@ class ForumForumController
 
     public function __construct(
         private readonly ManagerRegistry $doctrine,
-        private readonly UserHelper $userHelper,
-        private readonly TemplateHelper $templateHelper,
-        private readonly RedirectHelper $redirectHelper,
-        private readonly ForumAuthorizationHelper $forumAuthHelper,
-        private readonly ForumOverviewHelper $forumOverviewHelper,
+        private readonly ForumAuthorizationHelper $forum_authorization_helper,
+        private readonly ForumOverviewHelper $forum_overview_helper,
+        private readonly RedirectHelper $redirect_helper,
+        private readonly TemplateHelper $template_helper,
+        private readonly UserHelper $user_helper,
+        private readonly ForumDiscussionRepository $forum_discussion_repository,
     ) {
     }
 
     public function indexAction(): Response
     {
-        $categories = $this->forumOverviewHelper->getCategoryArray();
+        $categories = $this->forum_overview_helper->getCategoryArray();
 
         foreach ($categories as $id => $category) {
             $categories[$id]['forums'] = $this->sortByFieldFilter($category['forums'], 'order');
         }
         $categories = $this->sortByFieldFilter($categories, 'order');
 
-        return $this->templateHelper->render('forum/index.html.twig', [
+        return $this->template_helper->render('forum/index.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Forum - Overzicht',
             'categories' => $categories
         ]);
@@ -52,17 +54,14 @@ class ForumForumController
          */
         $forum = $this->doctrine->getRepository(ForumForum::class)->find($id);
         if (null === $forum) {
-            return $this->redirectHelper->redirectToRoute(RouteGenerics::ROUTE_FORUM);
+            return $this->redirect_helper->redirectToRoute(RouteGenerics::ROUTE_FORUM);
         }
 
-        $discussions = $this->doctrine
-            ->getRepository(ForumDiscussion::class)
-            ->findByForum($forum, $this->userHelper->getUser());
-        return $this->templateHelper->render('forum/forum.html.twig', [
+        return $this->template_helper->render('forum/forum.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Forum - ' . $forum->name,
             TemplateHelper::PARAMETER_FORUM => $forum,
-            'userIsModerator' => $this->forumAuthHelper->userIsModerator($forum, $this->userHelper->getUser()),
-            'discussions' => $discussions,
+            'userIsModerator' => $this->forum_authorization_helper->userIsModerator($forum, $this->user_helper->getUser()),
+            'discussions' => $this->forum_discussion_repository->findByForum($forum, $this->user_helper->getUser()),
         ]);
     }
 }

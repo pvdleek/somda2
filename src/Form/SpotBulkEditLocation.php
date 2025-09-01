@@ -29,7 +29,7 @@ class SpotBulkEditLocation extends AbstractType
                 FormGenerics::KEY_QUERY_BUILDER => function (EntityRepository $repository) {
                     return $repository
                         ->createQueryBuilder('l')
-                        ->andWhere('l.spotAllowed = TRUE')
+                        ->andWhere('l.spot_allowed = TRUE')
                         ->orderBy('l.name', 'ASC');
                 },
                 FormGenerics::KEY_REQUIRED => true,

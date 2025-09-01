@@ -12,8 +12,8 @@
 		</div>
 		<div>
 			{% for statistic in layoutData[constant('App\\Controller\\HomeController::KEY_DASHBOARD')]['statistics'] %}
-				<strong>{{ statistic.timestamp | displayDateTime(false, true) }} - {{ statistic.visitorsTotal }} bezoekers</strong>
-				<br />{{ statistic.numberOfSpots }} spot(s) &amp; {{ statistic.numberOfPosts }} forumbericht(en).
+				<strong>{{ statistic.timestamp | displayDateTime(false, true) }} - {{ statistic.visitors_total }} bezoekers</strong>
+				<br />{{ statistic.number_of_spots }} spot(s) &amp; {{ statistic.number_of_posts }} forumbericht(en).
 				<br /><br />
 			{% endfor %}
 		</div>

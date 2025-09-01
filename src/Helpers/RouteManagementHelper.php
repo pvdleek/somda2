@@ -8,10 +8,10 @@ use App\Entity\RouteList;
 use App\Entity\TrainTable;
 use App\Entity\TrainTableFirstLast;
 use App\Entity\TrainTableYear;
-use App\Repository\Location as RepositoryLocation;
-use App\Repository\RouteList as RepositoryRouteList;
-use App\Repository\RouteOperationDays;
-use App\Repository\TrainTable as RepositoryTrainTable;
+use App\Repository\LocationRepository;
+use App\Repository\RouteListRepository;
+use App\Repository\RouteOperationDaysRepository;
+use App\Repository\TrainTableRepository;
 use App\Traits\DateTrait;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -26,7 +26,7 @@ class RouteManagementHelper
     private const ROUTE_LINE_KEY_ACTION = 'action';
     private const ROUTE_LINE_KEY_TIME = 'time';
 
-    private ?RouteList $routeList = null;
+    private ?RouteList $route_list = null;
 
     private ?Route $route = null;
 
@@ -37,16 +37,16 @@ class RouteManagementHelper
 
     public function __construct(
         private readonly ManagerRegistry $doctrine,
-        private readonly RepositoryLocation $repositoryLocation,
-        private readonly RepositoryRouteList $repositoryRouteList,
-        private readonly RepositoryTrainTable $repositoryTrainTable,
-        private readonly RouteOperationDays $repositoryRouteOperationDays,
+        private readonly LocationRepository $location_repository,
+        private readonly RouteListRepository $route_list_repository,
+        private readonly TrainTableRepository $train_table_repository,
+        private readonly RouteOperationDaysRepository $route_operation_days_repository,
     ) {
     }
 
     public function getRouteList(): RouteList
     {
-        return $this->routeList;
+        return $this->route_list;
     }
 
     public function getRoute(): ?Route
@@ -62,26 +62,26 @@ class RouteManagementHelper
         return $this->trainTableLines;
     }
 
-    public function setRouteListFromId(int $routeListId): void
+    public function setRouteListFromId(int $route_list_id): void
     {
         /**
-         * @var RouteList $routeList
+         * @var RouteList $route_list
          */
-        $routeList = $this->repositoryRouteList->find($routeListId);
-        if (null === $routeList) {
+        $route_list = $this->route_list_repository->find($route_list_id);
+        if (null === $route_list) {
             throw new AccessDeniedException('This routeList does not exist');
         }
-        $this->routeList = $routeList;
+        $this->route_list = $route_list;
     }
 
-    public function setRouteFromId(int $routeId): void
+    public function setRouteFromId(int $route_id): void
     {
         $route = null;
-        if (null !== $routeId && $routeId > 0) {
+        if (null !== $route_id && $route_id > 0) {
             /**
              * @var Route $route
              */
-            $route = $this->doctrine->getRepository(Route::class)->find($routeId);
+            $route = $this->doctrine->getRepository(Route::class)->find($route_id);
             if (null === $route) {
                 throw new AccessDeniedException('This route does not exist');
             }
@@ -89,37 +89,37 @@ class RouteManagementHelper
         $this->route = $route;
     }
 
-    public function setTrainTableLines(?int $routeNumber = null): bool
+    public function setTrainTableLines(?int $route_number = null): bool
     {
-        if (null !== $routeNumber) {
+        if (null !== $route_number) {
             // Check if the new route-number is in the correct range of the routeList
-            if ($routeNumber < $this->routeList->firstNumber || $routeNumber > $this->routeList->lastNumber) {
-                $routeList = $this->repositoryRouteList->findForRouteNumber($this->routeList->trainTableYear, $routeNumber);
-                if (null === $routeList) {
+            if ($route_number < $this->route_list->first_number || $route_number > $this->route_list->last_number) {
+                $route_list = $this->route_list_repository->findForRouteNumber($this->route_list->train_table_year, $route_number);
+                if (null === $route_list) {
                     return false;
                 }
                 // We set this after the negative return, so te original routeList can still be retrieved from
                 // the getter to redirect to the correct screen
-                $this->routeList = $routeList;
+                $this->route_list = $route_list;
             }
 
-            $this->trainTableLines = $this->repositoryTrainTable->findBy(
-                ['trainTableYear' => $this->routeList->trainTableYear, 'route' => $this->route],
+            $this->trainTableLines = $this->train_table_repository->findBy(
+                ['train_table_year' => $this->route_list->train_table_year, 'route' => $this->route],
                 ['order' => 'ASC']
             );
 
-            $this->route = $this->getNewRouteFromNumber($routeNumber);
+            $this->route = $this->getNewRouteFromNumber($route_number);
 
-            if (!in_array($this->routeList, $this->route->getRouteLists())) {
-                $this->route->addRouteList($this->routeList);
-                $this->routeList->addRoute($this->route);
+            if (!in_array($this->route_list, $this->route->getRouteLists())) {
+                $this->route->addRouteList($this->route_list);
+                $this->route_list->addRoute($this->route);
             }
             $this->doctrine->getManager()->persist($this->route);
         }
 
         if (!isset($this->trainTableLines)) {
-            $this->trainTableLines = $this->repositoryTrainTable->findBy(
-                ['trainTableYear' => $this->routeList->trainTableYear, 'route' => $this->route],
+            $this->trainTableLines = $this->train_table_repository->findBy(
+                ['train_table_year' => $this->route_list->train_table_year, 'route' => $this->route],
                 ['order' => 'ASC']
             );
         }
@@ -127,90 +127,90 @@ class RouteManagementHelper
         return true;
     }
 
-    private function getNewRouteFromNumber(int $routeNumber): Route
+    private function getNewRouteFromNumber(int $route_number): Route
     {
-        $newRoute = $this->doctrine->getRepository(Route::class)->findOneBy(['number' => $routeNumber]);
-        if (null === $newRoute) {
+        $new_route = $this->doctrine->getRepository(Route::class)->findOneBy(['number' => $route_number]);
+        if (null === $new_route) {
             if (null === $this->route) {
-                $newRoute = new Route();
+                $new_route = new Route();
             } else {
-                $newRoute = clone($this->route);
+                $new_route = clone($this->route);
             }
-            $newRoute->number = (string) $routeNumber;
+            $new_route->number = (string) $route_number;
         }
-        return $newRoute;
+        return $new_route;
     }
 
-    public function handlePost(int $routeId, array $submittedFields): bool
+    public function handlePost(int $route_id, array $submitted_fields): bool
     {
-        if ($routeId === 0) {
-            if (!\in_array($this->routeList, $this->route->getRouteLists())) {
-                $this->route->addRouteList($this->routeList);
-                $this->routeList->addRoute($this->route);
+        if ($route_id === 0) {
+            if (!\in_array($this->route_list, $this->route->getRouteLists())) {
+                $this->route->addRouteList($this->route_list);
+                $this->route_list->addRoute($this->route);
             }
             $this->doctrine->getManager()->persist($this->route);
         }
 
-        $this->removeExistingTrainTablesFromRoute($this->routeList->trainTableYear, $this->route);
-        $routeDayArray = $this->getUniqueRouteDayArray($this->getRouteDayArray($submittedFields));
-        return $this->saveRouteDay($routeDayArray, $this->routeList->trainTableYear, $this->route);
+        $this->removeExistingTrainTablesFromRoute($this->route_list->train_table_year, $this->route);
+        $routeDayArray = $this->getUniqueRouteDayArray($this->getRouteDayArray($submitted_fields));
+        return $this->saveRouteDay($routeDayArray, $this->route_list->train_table_year, $this->route);
     }
 
-    private function getRouteDayArray(array $submittedFields): array
+    private function getRouteDayArray(array $submitted_fields): array
     {
-        $routeDayArray = [];
-        foreach ($submittedFields as $key => $value) {
+        $route_day_array = [];
+        foreach ($submitted_fields as $key => $value) {
             $keyPart = \explode('_', $key);
-            $routeDayArray[(int) $keyPart[1]][(int) $keyPart[2]][$keyPart[0]] = $value;
+            $route_day_array[(int) $keyPart[1]][(int) $keyPart[2]][$keyPart[0]] = $value;
         }
-        return $routeDayArray;
+        return $route_day_array;
     }
 
-    private function getUniqueRouteDayArray(array $routeDayArray): array
+    private function getUniqueRouteDayArray(array $route_day_array): array
     {
-        $resultArray = [];
-        for ($dayNumber = 1; $dayNumber <= 7; ++$dayNumber) {
-            if (isset($routeDayArray[$dayNumber])) {
+        $result_array = [];
+        for ($day_number = 1; $day_number <= 7; ++$day_number) {
+            if (isset($route_day_array[$day_number])) {
                 $days = $this->getEmptyDaysArray();
-                $days[$this->getDayName($dayNumber - 1)] = true;
-                for ($checkDayNumber = $dayNumber + 1; $checkDayNumber <= 7; ++$checkDayNumber) {
-                    if (isset($routeDayArray[$checkDayNumber])
-                        && $routeDayArray[$dayNumber] === $routeDayArray[$checkDayNumber]
+                $days[$this->getDayName($day_number - 1)] = true;
+                for ($check_day_number = $day_number + 1; $check_day_number <= 7; ++$check_day_number) {
+                    if (isset($route_day_array[$check_day_number])
+                        && $route_day_array[$day_number] === $route_day_array[$check_day_number]
                     ) {
-                        $days[$this->getDayName($checkDayNumber - 1)] = true;
-                        unset($routeDayArray[$checkDayNumber]);
+                        $days[$this->getDayName($check_day_number - 1)] = true;
+                        unset($route_day_array[$check_day_number]);
                     }
                 }
 
-                $routeOperationDays = $this->repositoryRouteOperationDays->findByDaysArray($days);
-                $resultArray[] = [
-                    self::ROUTE_KEY_ROUTE_OPERATION_DAYS => $routeOperationDays,
-                    self::ROUTE_KEY_LINES => $routeDayArray[$dayNumber]
+                $route_operation_days = $this->route_operation_days_repository->findByDaysArray($days);
+                $result_array[] = [
+                    self::ROUTE_KEY_ROUTE_OPERATION_DAYS => $route_operation_days,
+                    self::ROUTE_KEY_LINES => $route_day_array[$day_number]
                 ];
             }
         }
 
-        return $resultArray;
+        return $result_array;
     }
 
     private function getEmptyDaysArray(): array
     {
         $result = [];
-        for ($dayNumber = 1; $dayNumber <= 7; ++$dayNumber) {
-            $result[$this->getDayName($dayNumber - 1)] = false;
+        for ($day_number = 1; $day_number <= 7; ++$day_number) {
+            $result[$this->getDayName($day_number - 1)] = false;
         }
         return $result;
     }
 
-    private function removeExistingTrainTablesFromRoute(TrainTableYear $trainTableYear, Route $route): void
+    private function removeExistingTrainTablesFromRoute(TrainTableYear $train_table_year, Route $route): void
     {
         foreach ($route->getTrainTables() as $trainTable) {
-            if ($trainTableYear === $trainTable->trainTableYear) {
+            if ($train_table_year === $trainTable->train_table_year) {
                 $this->doctrine->getManager()->remove($trainTable);
             }
         }
         foreach ($route->getTrainTableFirstLasts() as $trainTableFirstLast) {
-            if ($trainTableYear === $trainTableFirstLast->trainTableYear) {
+            if ($train_table_year === $trainTableFirstLast->train_table_year) {
                 $this->doctrine->getManager()->remove($trainTableFirstLast);
             }
         }
@@ -218,64 +218,61 @@ class RouteManagementHelper
         $this->doctrine->getManager()->flush();
     }
 
-    private function saveRouteDay(array $routeDayArray, TrainTableYear $trainTableYear, Route $route): bool
+    private function saveRouteDay(array $route_day_array, TrainTableYear $train_table_year, Route $route): bool
     {
-        $okFlag = true;
+        $ok_flag = true;
 
-        foreach ($routeDayArray as $routeDay) {
+        foreach ($route_day_array as $route_day) {
             $order = 1;
-            foreach ($routeDay[self::ROUTE_KEY_LINES] as $routeDayLine) {
-                $trainTable = new TrainTable();
-                $trainTable->order = $order;
-                $trainTable->action = $routeDayLine[self::ROUTE_LINE_KEY_ACTION];
-                $trainTable->time = $this->timeDisplayToDatabase($routeDayLine[self::ROUTE_LINE_KEY_TIME]);
-                $trainTable->trainTableYear = $trainTableYear;
-                $trainTable->route = $route;
-                $trainTable->routeOperationDays = $routeDay[self::ROUTE_KEY_ROUTE_OPERATION_DAYS];
-                $trainTable->location = $this->findLocation($routeDayLine[self::ROUTE_LINE_KEY_LOCATION], $okFlag);
+            foreach ($route_day[self::ROUTE_KEY_LINES] as $route_day_line) {
+                $train_table = new TrainTable();
+                $train_table->order = $order;
+                $train_table->action = $route_day_line[self::ROUTE_LINE_KEY_ACTION];
+                $train_table->time = $this->timeDisplayToDatabase($route_day_line[self::ROUTE_LINE_KEY_TIME]);
+                $train_table->train_table_year = $train_table_year;
+                $train_table->route = $route;
+                $train_table->routeOperationDays = $route_day[self::ROUTE_KEY_ROUTE_OPERATION_DAYS];
+                $train_table->location = $this->findLocation($route_day_line[self::ROUTE_LINE_KEY_LOCATION], $ok_flag);
 
-                $this->doctrine->getManager()->persist($trainTable);
+                $this->doctrine->getManager()->persist($train_table);
                 ++$order;
             }
 
-            for ($dayNumber = 1; $dayNumber <= 7; ++$dayNumber) {
-                if ($routeDay[self::ROUTE_KEY_ROUTE_OPERATION_DAYS]->isRunningOnDay($dayNumber - 1)) {
-                    $lastLine = end($routeDay[self::ROUTE_KEY_LINES]);
-                    $firstLine = reset($routeDay[self::ROUTE_KEY_LINES]);
+            for ($day_number = 1; $day_number <= 7; ++$day_number) {
+                if ($route_day[self::ROUTE_KEY_ROUTE_OPERATION_DAYS]->isRunningOnDay($day_number - 1)) {
+                    $lastLine = end($route_day[self::ROUTE_KEY_LINES]);
+                    $firstLine = reset($route_day[self::ROUTE_KEY_LINES]);
 
-                    $trainTableFirstLast = new TrainTableFirstLast();
-                    $trainTableFirstLast->trainTableYear = $trainTableYear;
-                    $trainTableFirstLast->route = $route;
-                    $trainTableFirstLast->dayNumber = $dayNumber;
-                    $trainTableFirstLast->firstLocation =
-                        $this->findLocation($firstLine[self::ROUTE_LINE_KEY_LOCATION], $okFlag);
-                    $trainTableFirstLast->firstAction = $firstLine[self::ROUTE_LINE_KEY_ACTION];
-                    $trainTableFirstLast->firstTime =
-                        $this->timeDisplayToDatabase($firstLine[self::ROUTE_LINE_KEY_TIME]);
-                    $trainTableFirstLast->lastLocation =
-                        $this->findLocation($lastLine[self::ROUTE_LINE_KEY_LOCATION], $okFlag);
-                    $trainTableFirstLast->lastAction = $lastLine[self::ROUTE_LINE_KEY_ACTION];
-                    $trainTableFirstLast->lastTime = $this->timeDisplayToDatabase($lastLine[self::ROUTE_LINE_KEY_TIME]);
+                    $train_table_first_last = new TrainTableFirstLast();
+                    $train_table_first_last->train_table_year = $train_table_year;
+                    $train_table_first_last->route = $route;
+                    $train_table_first_last->day_number = $day_number;
+                    $train_table_first_last->first_location = $this->findLocation($firstLine[self::ROUTE_LINE_KEY_LOCATION], $ok_flag);
+                    $train_table_first_last->first_action = $firstLine[self::ROUTE_LINE_KEY_ACTION];
+                    $train_table_first_last->first_time = $this->timeDisplayToDatabase($firstLine[self::ROUTE_LINE_KEY_TIME]);
+                    $train_table_first_last->last_location = $this->findLocation($lastLine[self::ROUTE_LINE_KEY_LOCATION], $ok_flag);
+                    $train_table_first_last->last_action = $lastLine[self::ROUTE_LINE_KEY_ACTION];
+                    $train_table_first_last->last_time = $this->timeDisplayToDatabase($lastLine[self::ROUTE_LINE_KEY_TIME]);
 
-                    $this->doctrine->getManager()->persist($trainTableFirstLast);
+                    $this->doctrine->getManager()->persist($train_table_first_last);
                 }
             }
 
             $this->doctrine->getManager()->flush();
         }
 
-        return $okFlag;
+        return $ok_flag;
     }
 
-    private function findLocation(string $locationName, bool &$okFlag): Location
+    private function findLocation(string $location_name, bool &$ok_flag): Location
     {
         /**
          * @var Location $location
          */
-        $location = $this->repositoryLocation->findOneBy(['name' => $locationName]);
+        $location = $this->location_repository->findOneBy(['name' => $location_name]);
         if (null === $location) {
-            $location = $this->repositoryLocation->findOneBy(['name' => Location::UNKNOWN_NAME]);
-            $okFlag = false;
+            $location = $this->location_repository->findOneBy(['name' => Location::UNKNOWN_NAME]);
+            $ok_flag = false;
         }
         return $location;
     }

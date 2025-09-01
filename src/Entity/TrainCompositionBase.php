@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Entity;
@@ -33,8 +34,8 @@ abstract class TrainCompositionBase
 
     public ?string $note;
 
-    public function getCar(int $carNumber): ?string
+    public function getCar(int $car_number): ?string
     {
-        return $this->{'car' . $carNumber};
+        return $this->{'car' . $car_number};
     }
 }

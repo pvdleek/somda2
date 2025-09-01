@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Controller\Api;
@@ -23,7 +24,7 @@ class TrainTableYearController extends AbstractFOSRestController
     /**
      * @OA\Response(
      *     response=200,
-     *     description="Returns all trainTableYears in the Somda database",
+     *     description="Returns all train_table_years in the Somda database",
      *     @OA\Schema(
      *         @OA\Property(property="data", type="array", @OA\Items(ref=@Model(type=TrainTableYear::class)))
      *     )
@@ -34,7 +35,7 @@ class TrainTableYearController extends AbstractFOSRestController
     {
         $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_API_USER);
 
-        $trainTableYears = $this->doctrine->getRepository(TrainTableYear::class)->findAll();
-        return $this->handleView($this->view($trainTableYears, 200));
+        $train_table_years = $this->doctrine->getRepository(TrainTableYear::class)->findAll();
+        return $this->handleView($this->view($train_table_years, 200));
     }
 }

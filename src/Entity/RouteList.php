@@ -1,89 +1,90 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Repository\RouteListRepository;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as JMS;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use OpenApi\Annotations as OA;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Table(
- *     name="somda_tdr_treinnummerlijst",
- *     indexes={
- *         @ORM\Index(name="idx_somda_tdr_treinnummerlijst__nr_start", columns={"nr_start"}),
- *         @ORM\Index(name="idx_somda_tdr_treinnummerlijst__nr_eind", columns={"nr_eind"})
- *     }
- * )
- * @ORM\Entity(repositoryClass="App\Repository\RouteList")
- */
+#[ORM\Entity(repositoryClass: RouteListRepository::class)]
+#[ORM\Table(
+    name: 'somda_tdr_treinnummerlijst',
+    indexes: [
+        new ORM\Index(name: 'idx_somda_tdr_treinnummerlijst__nr_start', columns: ['nr_start']),
+        new ORM\Index(name: 'idx_somda_tdr_treinnummerlijst__nr_eind', columns: ['nr_eind']),
+    ]
+)]
 class RouteList
 {
     /**
-     * @ORM\Column(name="id", type="integer", nullable=false, options={"unsigned"=true})
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      * @JMS\Expose()
      * @OA\Property(description="Unique identifier", type="integer")
      */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(nullable: false, options: ['unsigned' => true])]
     public ?int $id = null;
 
     /**
-     * @ORM\Column(name="nr_start", type="integer", nullable=false, options={"default"="1", "unsigned"=true})
      * @JMS\Expose()
      * @OA\Property(description="First number of the series", type="integer")
      */
-    public int $firstNumber = 1;
+    #[ORM\Column(name: 'nr_start', nullable: false, options: ['default' => 1, 'unsigned' => true])]
+    public int $first_number = 1;
 
     /**
-     * @ORM\Column(name="nr_eind", type="integer", nullable=false, options={"default"="2", "unsigned"=true})
-     * @Assert\GreaterThan(propertyPath="firstNumber", message="Het eindnummer moet meer zijn dan het startnummer")
      * @JMS\Expose()
      * @OA\Property(description="Last number of the series", type="integer")
      */
-    public int $lastNumber = 2;
+    #[ORM\Column(name: 'nr_eind', nullable: false, options: ['default' => 2, 'unsigned' => true])]
+    #[Assert\GreaterThan(propertyPath: 'first_number', message: 'Het eindnummer moet meer zijn dan het startnummer')]
+    public int $last_number = 2;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\TrainTableYear")
-     * @ORM\JoinColumn(name="tdr_nr", referencedColumnName="tdr_nr")
      * @JMS\Exclude()
      */
-    public ?TrainTableYear $trainTableYear = null;
+    #[ORM\ManyToOne(targetEntity: TrainTableYear::class)]
+    #[ORM\JoinColumn(name: 'tdr_nr', referencedColumnName: 'tdr_nr')]
+    public ?TrainTableYear $train_table_year = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Transporter")
-     * @ORM\JoinColumn(name="vervoerder_id", referencedColumnName="vervoerder_id")
      * @JMS\Expose()
      * @OA\Property(description="The transporter for this series", ref=@Model(type=Transporter::class))
      */
+    #[ORM\ManyToOne(targetEntity: Transporter::class, inversedBy: 'route_lists')]
+    #[ORM\JoinColumn(name: 'vervoerder_id', referencedColumnName: 'vervoerder_id')]
     public ?Transporter $transporter = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Characteristic")
-     * @ORM\JoinColumn(name="karakteristiek_id", referencedColumnName="karakteristiek_id")
      * @JMS\Expose()
      * @OA\Property(description="The characteristic for this series", ref=@Model(type=Characteristic::class))
      */
+    #[ORM\ManyToOne(targetEntity: Characteristic::class)]
+    #[ORM\JoinColumn(name: 'karakteristiek_id', referencedColumnName: 'karakteristiek_id')]
     public ?Characteristic $characteristic = null;
 
     /**
-     * @ORM\Column(name="traject", type="string", length=75, nullable=true)
      * @JMS\Exclude()
      */
+    #[ORM\Column(name: 'traject', type: 'string', length: 75, nullable: true)]
     public ?string $section = null;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Route", inversedBy="routeLists")
-     * @ORM\JoinTable(name="somda_tdr_trein_treinnummerlijst",
-     *     joinColumns={@ORM\JoinColumn(name="treinnummerlijst_id", referencedColumnName="id")},
-     *     inverseJoinColumns={@ORM\JoinColumn(name="treinid", referencedColumnName="treinid")}
-     * )
      * @JMS\Exclude()
      */
-    private $routes;
+    #[ORM\ManyToMany(targetEntity: Route::class, inversedBy: 'route_lists')]
+    #[ORM\JoinTable(name: 'somda_tdr_trein_treinnummerlijst',
+        joinColumns: [new ORM\JoinColumn(name: 'treinnummerlijst_id', referencedColumnName: 'id')],
+        inverseJoinColumns: [new ORM\JoinColumn(name: 'treinid', referencedColumnName: 'treinid')]
+    )]
+    private Collection $routes;
 
     public function __construct()
     {

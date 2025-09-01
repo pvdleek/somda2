@@ -35,11 +35,11 @@
                             {% endif %}
                         </span>
                         <span>
-                            {{ forum['numberOfDiscussions'] }} discussies
+                            {{ forum['number_of_discussions'] }} discussies
                             {% if is_granted('IS_AUTHENTICATED_REMEMBERED')
                                 and forum['type'] != constant('App\\Entity\\ForumForum::TYPE_MODERATORS_ONLY')
                                 and forum['type'] != constant('App\\Entity\\ForumForum::TYPE_ARCHIVE')
-                            %}<br />({{ forum['numberOfUnreadDiscussions'] }} ongelezen){% endif %}
+                            %}<br />({{ forum['number_of_unread_discussions'] }} ongelezen){% endif %}
                         </span>
                     </div>
                 {% endfor %}

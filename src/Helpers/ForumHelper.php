@@ -23,7 +23,7 @@ class ForumHelper implements RuntimeExtensionInterface
      */
     public function getDisplayForumPost(ForumPost $post): string
     {
-        if ($post->text->newStyle) {
+        if ($post->text->new_style) {
             $text = \strip_tags(
                 \str_replace(['&nbsp;', "\r\n", '<p>&nbsp;</p>'], ' ', $post->text->text),
                 '<br><p><a><img><ul><ol><li><blockquote><strong><em><s><u><hr><i>'
@@ -34,12 +34,12 @@ class ForumHelper implements RuntimeExtensionInterface
         }
         $text = \nl2br($this->replaceStaticData($text));
 
-        if (null !== $post->editTimestamp) {
+        if (null !== $post->edit_timestamp) {
             $text .= '<br /><br /><i><span class="edit_text">Laatst bewerkt door ' . $post->editor->username .
-                ' op ' . $post->editTimestamp->format('d-m-Y H:i').
-                (\strlen($post->editReason ?? '') > 0 ? ', reden: ' . $post->editReason : '') . '</span></i>';
+                ' op ' . $post->edit_timestamp->format('d-m-Y H:i').
+                (\strlen($post->edit_reason ?? '') > 0 ? ', reden: ' . $post->edit_reason : '') . '</span></i>';
         }
-        if ($post->signatureOn && strlen($signature = $this->userHelper->getSignatureForUser($post->author)) > 0) {
+        if ($post->signature_on && strlen($signature = $this->userHelper->getSignatureForUser($post->author)) > 0) {
             $text .= '<br /><br /><hr style="margin-left:0; width:15%;" />' . $signature;
         }
 

@@ -19,7 +19,7 @@ use Twig\Environment;
 
 class TemplateHelper
 {
-    public const PARAMETER_DAY_NUMBER = 'dayNumber';
+    public const PARAMETER_DAY_NUMBER = 'day_number';
     public const PARAMETER_DISCUSSION = 'discussion';
     public const PARAMETER_FORM = 'form';
     public const PARAMETER_FORUM = 'forum';
@@ -90,7 +90,7 @@ class TemplateHelper
             $bannerView = new BannerView();
             $bannerView->banner = $headerContent;
             $bannerView->timestamp = new \DateTime();
-            $bannerView->ipAddress = \ip2long($this->requestStack->getCurrentRequest()->getClientIp());
+            $bannerView->ip_address = \ip2long($this->requestStack->getCurrentRequest()->getClientIp());
             $this->doctrine->getManager()->persist($bannerView);
             $this->doctrine->getManager()->flush();
         } else {
@@ -108,7 +108,7 @@ class TemplateHelper
             'headerContent' => $headerContent,
             'menuStructure' => $this->menuHelper->getMenuStructure(),
             'nrOfOpenForumAlerts' => $this->menuHelper->getNumberOfOpenForumAlerts(),
-            'blockHelp' => $this->getBlockHelp(),
+            'block_help' => $this->getBlockHelp(),
         ]);
     }
 
@@ -120,8 +120,8 @@ class TemplateHelper
         $block = $this->doctrine->getRepository(Block::class)->findOneBy(
             ['route' => $this->requestStack->getCurrentRequest()->get('_route')]
         );
-        if (null !== $block && null !== $block->blockHelp) {
-            return $block->blockHelp;
+        if (null !== $block && null !== $block->block_help) {
+            return $block->block_help;
         }
 
         return null;

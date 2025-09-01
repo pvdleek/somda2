@@ -1,35 +1,27 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Table(name="somda_banner_hits")
- * @ORM\Entity
- */
+#[ORM\Entity]
+#[ORM\Table(name: 'somda_banner_hits')]
 class BannerHit
 {
-    /**
-     * @ORM\Column(name="id", type="integer", nullable=false, options={"unsigned"=true})
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(nullable: false, options: ['unsigned' => true])]
     public ?int $id = null;
 
-    /**
-     * @ORM\Column(name="timestamp", type="datetime", nullable=false)
-     */
+    #[ORM\Column(nullable: true)]
     public ?\DateTime $timestamp = null;
 
-    /**
-     * @ORM\Column(name="ip_address", type="bigint", nullable=false)
-     */
-    public int $ipAddress = 0;
+    #[ORM\Column(name: 'ip_address', type: 'bigint', nullable: false, options: ['default' => 0, 'unsigned' => true])]
+    public int $ip_address = 0;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Banner", inversedBy="bannerHits")
-     * @ORM\JoinColumn(name="bannerid", referencedColumnName="bannerid")
-     */
+    #[ORM\ManyToOne(targetEntity: Banner::class, inversedBy: 'banner_hits')]
+    #[ORM\JoinColumn(name: 'bannerid', referencedColumnName: 'bannerid')]
     public ?Banner $banner = null;
 }

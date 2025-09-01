@@ -1,13 +1,14 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Command;
 
-use App\Entity\ForumDiscussion;
 use App\Entity\ForumPost;
 use App\Entity\ForumPostLog;
 use App\Entity\ForumSearchList;
 use App\Entity\ForumSearchWord;
+use App\Repository\ForumDiscussionRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -26,6 +27,7 @@ class ProcessForumLogCommand extends Command
 {
     public function __construct(
         private readonly ManagerRegistry $doctrine,
+        private readonly ForumDiscussionRepository $forum_discussion_repository,
     ) {
         parent::__construct();
     }
@@ -38,27 +40,25 @@ class ProcessForumLogCommand extends Command
 
         if ($lock->acquire()) {
             /**
-             * @var ForumPostLog[] $forumLogs
+             * @var ForumPostLog[] $forum_logs
              */
-            $forumLogs = $this->doctrine->getRepository(ForumPostLog::class)->findBy([], ['id' => 'DESC']);
-            foreach ($forumLogs as $forumLog) {
-                $this->removeAllWordsForPost($forumLog->post);
+            $forum_logs = $this->doctrine->getRepository(ForumPostLog::class)->findBy([], ['id' => 'DESC']);
+            foreach ($forum_logs as $forum_log) {
+                $this->removeAllWordsForPost($forum_log->post);
 
-                $words = $this->getCleanWordsFromText($forumLog->post->text->text);
-                $postNrInDiscussion = $this->doctrine
-                    ->getRepository(ForumDiscussion::class)
-                    ->getPostNumberInDiscussion($forumLog->post->discussion, $forumLog->post->id);
-                if ($postNrInDiscussion === 0) {
+                $words = $this->getCleanWordsFromText($forum_log->post->text->text);
+                $post_number_in_discussion = $this->forum_discussion_repository->getPostNumberInDiscussion($forum_log->post->discussion, $forum_log->post->id);
+                if (0 === $post_number_in_discussion) {
                     // This is the first post in the discussion, we need to include the title
-                    $titleWords = $this->getCleanWordsFromText($forumLog->post->discussion->title);
-                    $this->processWords($titleWords, $forumLog->post, true);
+                    $title_words = $this->getCleanWordsFromText($forum_log->post->discussion->title);
+                    $this->processWords($title_words, $forum_log->post, true);
                     $this->doctrine->getManager()->flush();
 
-                    $words = \array_diff($words, $titleWords);
+                    $words = \array_diff($words, $title_words);
                 }
-                $this->processWords($words, $forumLog->post);
+                $this->processWords($words, $forum_log->post);
 
-                $this->doctrine->getManager()->remove($forumLog);
+                $this->doctrine->getManager()->remove($forum_log);
                 $this->doctrine->getManager()->flush();
             }
             $lock->release();
@@ -70,9 +70,8 @@ class ProcessForumLogCommand extends Command
     private function removeAllWordsForPost(ForumPost $post): void
     {
         // Remove all words linked to this post, we will add them below
-        $forumSearchLists = $this->doctrine->getRepository(ForumSearchList::class)->findBy(['post' => $post]);
-        foreach ($forumSearchLists as $forumSearchList) {
-            $this->doctrine->getManager()->remove($forumSearchList);
+        foreach ($this->doctrine->getRepository(ForumSearchList::class)->findBy(['post' => $post]) as $forum_search_list) {
+            $this->doctrine->getManager()->remove($forum_search_list);
         }
         $this->doctrine->getManager()->flush();
     }
@@ -119,26 +118,26 @@ class ProcessForumLogCommand extends Command
 
     private function getSearchWord(string $word): ForumSearchWord
     {
-        $forumSearchWord = $this->doctrine->getRepository(ForumSearchWord::class)->findOneBy(['word' => $word]);
-        if (null === $forumSearchWord) {
-            $forumSearchWord = new ForumSearchWord();
-            $forumSearchWord->word = $word;
+        $forum_search_word = $this->doctrine->getRepository(ForumSearchWord::class)->findOneBy(['word' => $word]);
+        if (null === $forum_search_word) {
+            $forum_search_word = new ForumSearchWord();
+            $forum_search_word->word = $word;
 
-            $this->doctrine->getManager()->persist($forumSearchWord);
+            $this->doctrine->getManager()->persist($forum_search_word);
         }
 
-        return $forumSearchWord;
+        return $forum_search_word;
     }
 
     private function processWords(array $words, ForumPost $post, bool $title = false): void
     {
         foreach ($words as $word) {
-            $forumSearchList = new ForumSearchList();
-            $forumSearchList->word = $this->getSearchWord($word);
-            $forumSearchList->post = $post;
-            $forumSearchList->title = $title;
+            $forum_search_list = new ForumSearchList();
+            $forum_search_list->word = $this->getSearchWord($word);
+            $forum_search_list->post = $post;
+            $forum_search_list->title = $title;
 
-            $this->doctrine->getManager()->persist($forumSearchList);
+            $this->doctrine->getManager()->persist($forum_search_list);
         }
     }
 }

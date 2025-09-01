@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Controller;
@@ -52,7 +53,7 @@ class SpotInputController
                 return $this->formHelper->finishFormHandling(
                     'Spot(s) opgeslagen',
                     'spot_input_feedback',
-                    ['idList' => \implode('/', $spotIdArray)]
+                    ['id_list' => \implode('/', $spotIdArray)]
                 );
             }
 
@@ -65,11 +66,11 @@ class SpotInputController
         ]);
     }
 
-    public function feedbackAction(string $idList): Response
+    public function feedbackAction(string $id_list): Response
     {
         $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_SPOTS_NEW);
 
-        $idArray = \array_filter(\explode('/', $idList));
+        $idArray = \array_filter(\explode('/', $id_list));
         $spots = [];
         foreach ($idArray as $id) {
             $spot = $this->formHelper->getDoctrine()->getRepository(Spot::class)->find($id);

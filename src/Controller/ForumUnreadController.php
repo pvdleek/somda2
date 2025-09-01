@@ -1,34 +1,34 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Entity\ForumDiscussion;
 use App\Generics\RoleGenerics;
 use App\Helpers\RedirectHelper;
 use App\Helpers\TemplateHelper;
 use App\Helpers\UserHelper;
-use Doctrine\Persistence\ManagerRegistry;
+use App\Repository\ForumDiscussionRepository;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 class ForumUnreadController
 {
     public function __construct(
-        private readonly ManagerRegistry $doctrine,
-        private readonly UserHelper $userHelper,
-        private readonly TemplateHelper $templateHelper,
-        private readonly RedirectHelper $redirectHelper,
+        private readonly UserHelper $user_helper,
+        private readonly TemplateHelper $template_helper,
+        private readonly RedirectHelper $redirect_helper,
+        private readonly ForumDiscussionRepository $forum_discussion_repository,
     ) {
     }
 
     public function indexAction(): Response
     {
-        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_USER);
+        $this->user_helper->denyAccessUnlessGranted(RoleGenerics::ROLE_USER);
 
-        $discussions = $this->doctrine->getRepository(ForumDiscussion::class)->findUnread($this->userHelper->getUser());
+        $discussions = $this->forum_discussion_repository->findUnread($this->user_helper->getUser());
 
-        return $this->templateHelper->render('forum/unread.html.twig', [
+        return $this->template_helper->render('forum/unread.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Ongelezen zaken',
             'discussions' => $discussions,
         ]);
@@ -36,10 +36,10 @@ class ForumUnreadController
 
     public function markReadAction(): RedirectResponse
     {
-        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_USER);
+        $this->user_helper->denyAccessUnlessGranted(RoleGenerics::ROLE_USER);
 
-        $this->doctrine->getRepository(ForumDiscussion::class)->markAllPostsAsRead($this->userHelper->getUser());
+        $this->forum_discussion_repository->markAllPostsAsRead($this->user_helper->getUser());
 
-        return $this->redirectHelper->redirectToRoute('forum_unread');
+        return $this->redirect_helper->redirectToRoute('forum_unread');
     }
 }

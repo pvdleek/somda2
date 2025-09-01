@@ -18,11 +18,11 @@
 
             <table>
                 <tr><th>Vervoerder</th><th>Nummer</th><th>Naam</th></tr>
-                {% set lastTransporterId = 0 %}
+                {% set last_transporter_id = 0 %}
                 {% for train in trains %}
                     <tr>
-                        <td>{% if lastTransporterId != train.transporterId %}<a name="t{{ train.transporterId }}"></a> {{ train.transporterName }}{% else %}&nbsp;{% endif %}</td>
-                        <td>{{ train.namePatternName }} <i class="fas fa-train"></i> <a href="{{ path('spots_search', { 'maxMonths': 12, 'searchParameters': '///' ~ train.number ~ '/' }) }}" title="Bekijk alle spots van trein {{ train.number }}">{{ train.number }}</a></td>
+                        <td>{% if last_transporter_id != train.transporter_id %}<a name="t{{ train.transporter_id }}"></a> {{ train.transporter_name }}{% else %}&nbsp;{% endif %}</td>
+                        <td>{{ train.name_pattern_name }} <i class="fas fa-train"></i> <a href="{{ path('spots_search', { 'max_months': 12, 'search_parameters': '///' ~ train.number ~ '/' }) }}" title="Bekijk alle spots van trein {{ train.number }}">{{ train.number }}</a></td>
                         <td>{{ train.name }}</td>
                     </tr>
                 {% endfor %}

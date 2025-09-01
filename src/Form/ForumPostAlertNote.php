@@ -21,7 +21,7 @@ class ForumPostAlertNote extends AbstractType
                 FormGenerics::KEY_LABEL => 'Voeg commentaar toe',
                 FormGenerics::KEY_REQUIRED => true,
             ])
-            ->add('sentToReporter', CheckboxType::class, [
+            ->add('sent_to_reporter', CheckboxType::class, [
                 FormGenerics::KEY_LABEL => 'Stuur dit commentaar naar de melder van het bericht',
                 FormGenerics::KEY_REQUIRED => false,
             ]);

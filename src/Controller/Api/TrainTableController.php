@@ -1,18 +1,17 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Controller\Api;
 
-use App\Entity\Route;
-use App\Entity\RouteList;
 use App\Entity\RouteOperationDays;
-use App\Entity\TrainTable;
 use App\Entity\TrainTableYear;
 use App\Generics\RoleGenerics;
 use App\Helpers\RouteOperationDaysHelper;
 use App\Helpers\RoutesDisplayHelper;
 use App\Helpers\TrainTableHelper;
 use App\Helpers\UserHelper;
+use App\Repository\TrainTableYearRepository;
 use App\Traits\DateTrait;
 use Doctrine\Persistence\ManagerRegistry;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
@@ -26,24 +25,25 @@ class TrainTableController extends AbstractFOSRestController
 
     public function __construct(
         private readonly ManagerRegistry $doctrine,
-        private readonly UserHelper $userHelper,
-        private readonly TrainTableHelper $trainTableHelper,
-        private readonly RouteOperationDaysHelper $daysHelper,
-        private readonly RoutesDisplayHelper $routesDisplayHelper,
+        private readonly RoutesDisplayHelper $routes_display_helper,
+        private readonly RouteOperationDaysHelper $days_helper,
+        private readonly TrainTableHelper $train_table_helper,
+        private readonly UserHelper $user_helper,
+        private readonly TrainTableYearRepository $train_table_year_repository,
     ) {
     }
 
     /**
      * @OA\Parameter(
-     *     description="The unique identifier of the trainTableYear, 0 for the current trainTableYear",
+     *     description="The unique identifier of the train_table_year, 0 for the current train_table_year",
      *     in="path",
-     *     name="trainTableYearId",
+     *     name="train_table_year_id",
      *     @OA\Schema(type="integer", default="0"),
      * )
-     * @OA\Parameter(description="The routeNumber", in="path", name="routeNumber", @OA\Schema(type="integer"))
+     * @OA\Parameter(description="The route_number", in="path", name="route_number", @OA\Schema(type="integer"))
      * @OA\Response(
      *     response=200,
-     *     description="The train-table for the requested routeNumber",
+     *     description="The train-table for the requested route_number",
      *     @OA\Schema(
      *         @OA\Property(
      *             property="filters",
@@ -70,43 +70,40 @@ class TrainTableController extends AbstractFOSRestController
      * )
      * @OA\Tag(name="Train-tables")
      */
-    public function indexAction(int $trainTableYearId, int $routeNumber): Response
+    public function indexAction(int $train_table_year_id, int $route_number): Response
     {
-        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_API_USER);
+        $this->user_helper->denyAccessUnlessGranted(RoleGenerics::ROLE_API_USER);
 
-        if ($trainTableYearId === 0) {
-            $trainTableYearId = $this->doctrine
-                ->getRepository(TrainTableYear::class)
-                ->findTrainTableYearByDate(new \DateTime())
-                ->id;
+        if ($train_table_year_id === 0) {
+            $train_table_year_id = $this->train_table_year_repository->findTrainTableYearByDate(new \DateTime())->id;
         }
 
-        $this->trainTableHelper->setTrainTableYear($trainTableYearId);
-        $this->trainTableHelper->setRoute((string) $routeNumber);
-        $trainTableLines = $this->trainTableHelper->getTrainTableLines();
+        $this->train_table_helper->setTrainTableYear($train_table_year_id);
+        $this->train_table_helper->setRoute((string) $route_number);
+        $train_table_lines = $this->train_table_helper->getTrainTableLines();
 
-        $daysFilter = [];
-        foreach ($trainTableLines as $trainTableLine) {
-            if (\array_search($trainTableLine->routeOperationDays->id, $daysFilter) === false) {
-                $daysFilter[] = $trainTableLine->routeOperationDays->id;
+        $days_filter = [];
+        foreach ($train_table_lines as $train_table_line) {
+            if (\array_search($train_table_line->routeOperationDays->id, $days_filter) === false) {
+                $days_filter[] = $train_table_line->routeOperationDays->id;
             }
         }
-        $daysFilter = array_values(array_unique($daysFilter));
+        $days_filter = array_values(array_unique($days_filter));
 
-        $daysLegend = [];
+        $days_legend = [];
         /**
-         * @var RouteOperationDays[] $routeOperationDays
+         * @var RouteOperationDays[] $route_operation_days
          */
-        $routeOperationDays = $this->doctrine->getRepository(RouteOperationDays::class)->findAll();
-        foreach ($routeOperationDays as $routeOperationDay) {
-            $daysLegend[$routeOperationDay->id] = $this->daysHelper->getDisplay($routeOperationDay, true);
+        $route_operation_days = $this->doctrine->getRepository(RouteOperationDays::class)->findAll();
+        foreach ($route_operation_days as $routeOperationDay) {
+            $days_legend[$routeOperationDay->id] = $this->days_helper->getDisplay($routeOperationDay, true);
         }
 
         return $this->handleView(
             $this->view([
-                'filters' => ['days' => $daysFilter],
-                'legend' => ['days' => $daysLegend],
-                'data' => $trainTableLines,
+                'filters' => ['days' => $days_filter],
+                'legend' => ['days' => $days_legend],
+                'data' => $train_table_lines,
             ], 200)
         );
     }
@@ -115,31 +112,31 @@ class TrainTableController extends AbstractFOSRestController
      * @OA\Parameter(
      *     description="The unique identifier of the trainTableYear, 0 for the current trainTableYear",
      *     in="path",
-     *     name="trainTableYearId",
+     *     name="train_table_year_id",
      *     @OA\Schema(type="integer", default="0"),
      * )
      * @OA\Parameter(
      *     description="The abbreviation of the location requested, for example Ut",
      *     in="path",
-     *     name="locationName",
+     *     name="location_name",
      *     @OA\Schema(type="string"),
      * )
      * @OA\Parameter(
      *     description="The day-number for which to get the passing-routes",
      *     in="path",
-     *     name="dayNumber",
+     *     name="day_number",
      *     @OA\Schema(type="integer", enum={1,2,3,4,5,6,7}),
      * )
      * @OA\Parameter(
      *     description="The start-time for the passing-routes: hh:mm, hh.mm or hh",
      *     in="path",
-     *     name="startTime",
+     *     name="start_time",
      *     @OA\Schema(type="string"),
      * )
      * @OA\Parameter(
      *     description="The end-time for the passing-routes: hh:mm, hh.mm or hh",
      *     in="path",
-     *     name="endTime",
+     *     name="end_time",
      *     @OA\Schema(type="string"),
      * )
      * @OA\Response(
@@ -196,7 +193,7 @@ class TrainTableController extends AbstractFOSRestController
      *                 @OA\Property(
      *                     description="The name of the transporter of this route",
      *                     maxLength=35,
-     *                     property="transporterName",
+     *                     property="transporter_name",
      *                     type="string",
      *                 ),
      *                 @OA\Property(
@@ -223,48 +220,45 @@ class TrainTableController extends AbstractFOSRestController
      * @OA\Tag(name="Train-tables")
      */
     public function passingRoutesAction(
-        int $trainTableYearId,
-        string $locationName,
-        int $dayNumber,
-        string $startTime,
-        string $endTime
+        int $train_table_year_id,
+        string $location_name,
+        int $day_number,
+        string $start_time,
+        string $end_time
     ): Response {
-        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_API_USER);
+        $this->user_helper->denyAccessUnlessGranted(RoleGenerics::ROLE_API_USER);
 
-        if ($trainTableYearId === 0) {
-            $trainTableYearId = $this->doctrine
-                ->getRepository(TrainTableYear::class)
-                ->findTrainTableYearByDate(new \DateTime())
-                ->id;
+        if ($train_table_year_id === 0) {
+            $train_table_year_id = $this->train_table_year_repository->findTrainTableYearByDate(new \DateTime())->id;
         }
 
-        $this->trainTableHelper->setTrainTableYear($trainTableYearId);
-        $this->trainTableHelper->setLocation($locationName);
+        $this->train_table_helper->setTrainTableYear($train_table_year_id);
+        $this->train_table_helper->setLocation($location_name);
 
-        $passingRoutes = $this->trainTableHelper->getPassingRoutes($dayNumber, $startTime, $endTime);
+        $passing_routes = $this->train_table_helper->getPassingRoutes($day_number, $start_time, $end_time);
 
-        if (\count($messages = $this->trainTableHelper->getErrorMessages()) > 0) {
+        if (\count($messages = $this->train_table_helper->getErrorMessages()) > 0) {
             return $this->handleView($this->view(['errors' => $messages], 400));
         }
 
-        foreach ($passingRoutes as $index => $passingRoute) {
-            $passingRoutes[$index]['time'] = $this->timeDatabaseToDisplay($passingRoute['time']);
+        foreach ($passing_routes as $index => $passing_route) {
+            $passing_routes[$index]['time'] = $this->timeDatabaseToDisplay($passing_route['time']);
         }
 
-        return $this->handleView($this->view(['data' => $passingRoutes], 200));
+        return $this->handleView($this->view(['data' => $passing_routes], 200));
     }
 
     /**
      * @OA\Parameter(
-     *     description="The unique identifier of the trainTableYear, 0 for the current trainTableYear",
+     *     description="The unique identifier of the train_table_year, 0 for the current train_table_year",
      *     in="path",
-     *     name="trainTableYearId",
+     *     name="train_table_year_id",
      *     @OA\Schema(type="integer", default="0"),
      * )
      * @OA\Parameter(
-     *     description="The unique identifier of the routeListId",
+     *     description="The unique identifier of the route_list_id",
      *     in="path",
-     *     name="routeListId",
+     *     name="route_list_id",
      *     @OA\Schema(type="integer"),
      * )
      * @OA\Response(
@@ -275,7 +269,7 @@ class TrainTableController extends AbstractFOSRestController
      *             property="filters",
      *             type="object",
      *             @OA\Property(
-     *                 property="trainTableYears",
+     *                 property="train_table_years",
      *                 type="array",
      *                 @OA\Items(ref=@Model(type=TrainTableYear::class)),
      *             ),
@@ -285,7 +279,7 @@ class TrainTableController extends AbstractFOSRestController
      *                 @OA\Items(ref=@Model(type=RouteList::class)),
      *             ),
      *             @OA\Property(
-     *                 property="selectedRouteList",
+     *                 property="selected_route_list",
      *                 ref=@Model(type=RouteList::class),
      *                 type="object",
      *             ),
@@ -300,27 +294,24 @@ class TrainTableController extends AbstractFOSRestController
      * )
      * @OA\Tag(name="Train-tables")
      */
-    public function routeOverviewAction(?int $trainTableYearId = null, ?int $routeListId = null): Response
+    public function routeOverviewAction(?int $train_table_year_id = null, ?int $route_list_id = null): Response
     {
-        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_API_USER);
+        $this->user_helper->denyAccessUnlessGranted(RoleGenerics::ROLE_API_USER);
 
-        if ($trainTableYearId === 0) {
-            $trainTableYearId = $this->doctrine
-                ->getRepository(TrainTableYear::class)
-                ->findTrainTableYearByDate(new \DateTime())
-                ->id;
+        if ($train_table_year_id === 0) {
+            $train_table_year_id = $this->train_table_year_repository->findTrainTableYearByDate(new \DateTime())->id;
         }
 
-        $routesDisplay = $this->routesDisplayHelper->getRoutesDisplay($trainTableYearId, $routeListId);
+        $routes_display = $this->routes_display_helper->getRoutesDisplay($train_table_year_id, $route_list_id);
 
         return $this->handleView(
             $this->view([
                 'filters' => [
-                    'trainTableYears' => $this->doctrine->getRepository(TrainTableYear::class)->findAll(),
-                    'routeLists' => $routesDisplay->routeLists,
-                    'selectedRouteList' => $routesDisplay->selectedRouteList,
+                    'train_table_years' => $this->doctrine->getRepository(TrainTableYear::class)->findAll(),
+                    'route_lists' => $routes_display->route_lists,
+                    'selected_route_list' => $routes_display->selected_route_list,
                 ],
-                'data' => $routesDisplay->routes,
+                'data' => $routes_display->routes,
             ], 200)
         );
     }

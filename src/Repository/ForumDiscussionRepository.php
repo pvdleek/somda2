@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repository;
 
 use App\Entity\ForumDiscussion as ForumDiscussionEntity;
@@ -13,7 +15,7 @@ use Doctrine\DBAL\Exception as DBALException;
 use Doctrine\DBAL\Driver\Exception as DBALDriverException;
 use Doctrine\Persistence\ManagerRegistry;
 
-class ForumDiscussion extends ServiceEntityRepository
+class ForumDiscussionRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
@@ -25,7 +27,7 @@ class ForumDiscussion extends ServiceEntityRepository
      */
     public function findForDashboard(int $limit, ?User $user = null): array
     {
-        $maxQuery = '
+        $max_query = '
             SELECT p.discussionid AS disc_id, MAX(p.timestamp) AS max_date_time
             FROM somda_forum_posts p
             JOIN somda_forum_discussion d ON d.discussionid = p.discussionid
@@ -42,11 +44,11 @@ class ForumDiscussion extends ServiceEntityRepository
                 JOIN somda_users a ON a.uid = d.authorid
                 JOIN somda_forum_posts p_max ON p_max.discussionid = d.discussionid
                 JOIN somda_forum_posts p_count ON p_count.discussionid = d.discussionid
-                INNER JOIN (' . $maxQuery . ') m ON m.disc_id = d.discussionid
+                INNER JOIN ('.$max_query.') m ON m.disc_id = d.discussionid
                 WHERE p_max.timestamp = m.max_date_time AND f.type != :moderatorForumType
                 GROUP BY id, title, author_id, viewed, m.max_date_time, max_post_timestamp
                 ORDER BY m.max_date_time DESC
-                LIMIT 0, ' . $limit;
+                LIMIT 0, '.$limit;
         } else {
             $query = '
                 SELECT `d`.`discussionid` AS `id`, `d`.`title` AS `title`, `a`.`uid` AS `author_id`,
@@ -61,11 +63,11 @@ class ForumDiscussion extends ServiceEntityRepository
                 LEFT JOIN somda_forum_last_read r
                     ON r.uid = ' . (string) $user->id . ' AND r.discussionid = d.discussionid
                 JOIN somda_forum_posts p_count ON p_count.discussionid = d.discussionid
-                INNER JOIN (' . $maxQuery . ') m ON m.disc_id = d.discussionid
+                INNER JOIN ('.$max_query.') m ON m.disc_id = d.discussionid
                 WHERE p_max.timestamp = m.max_date_time AND f.type != :moderatorForumType
                 GROUP BY `id`, `title`, `author_id`, `viewed`, m.max_date_time, `discussion_read`, `max_post_timestamp`
                 ORDER BY m.max_date_time DESC
-                LIMIT 0, ' . $limit;
+                LIMIT 0, '.$limit;
         }
 
         $connection = $this->getEntityManager()->getConnection();
@@ -73,7 +75,7 @@ class ForumDiscussion extends ServiceEntityRepository
             $statement = $connection->prepare($query);
             $statement->bindValue(
                 'minDate',
-                \date(DateGenerics::DATE_FORMAT_DATABASE, \mktime(0, 0, 0, \date('m'), \date('d') - 30, \date('Y')))
+                \date(DateGenerics::DATE_FORMAT_DATABASE, \mktime(0, 0, 0, (int) \date('m'), (int) \date('d') - 30, (int) \date('Y')))
             );
             $statement->bindValue('moderatorForumType', ForumForum::TYPE_MODERATORS_ONLY);
             return $statement->executeQuery()->fetchAllAssociative();
@@ -88,7 +90,7 @@ class ForumDiscussion extends ServiceEntityRepository
             SELECT p.discussionid AS disc_id, MAX(p.timestamp) AS max_date_time
             FROM somda_forum_posts p
             JOIN somda_forum_discussion d ON d.discussionid = p.discussionid
-            WHERE d.forumid = :forumid
+            WHERE d.forumid = :forum_id
             GROUP BY disc_id';
         if (null === $user) {
             $query = '
@@ -100,7 +102,7 @@ class ForumDiscussion extends ServiceEntityRepository
                 JOIN somda_forum_posts p_max ON p_max.discussionid = d.discussionid
                 JOIN somda_forum_posts p_count ON p_count.discussionid = d.discussionid
                 INNER JOIN (' . $maxQuery . ') m ON m.disc_id = d.discussionid
-                WHERE d.forumid = :forumid AND p_max.timestamp = m.max_date_time
+                WHERE d.forumid = :forum_id AND p_max.timestamp = m.max_date_time
                 GROUP BY id, title, author_id, viewed, m.max_date_time, max_post_timestamp
                 ORDER BY m.max_date_time DESC';
         } else {
@@ -117,7 +119,7 @@ class ForumDiscussion extends ServiceEntityRepository
                     ON r.uid = ' . (string) $user->id . ' AND r.discussionid = d.discussionid
                 JOIN somda_forum_posts p_count ON p_count.discussionid = d.discussionid
                 INNER JOIN (' . $maxQuery . ') m ON m.disc_id = d.discussionid
-                WHERE d.forumid = :forumid AND p_max.timestamp = m.max_date_time
+                WHERE d.forumid = :forum_id AND p_max.timestamp = m.max_date_time
                 GROUP BY `id`, `title`, `author_id`, `viewed`, m.max_date_time, `discussion_read`, `max_post_timestamp`
                 ORDER BY m.max_date_time DESC';
         }
@@ -127,7 +129,7 @@ class ForumDiscussion extends ServiceEntityRepository
         $connection = $this->getEntityManager()->getConnection();
         try {
             $statement = $connection->prepare($query);
-            $statement->bindValue('forumid', $forum->id);
+            $statement->bindValue('forum_id', $forum->id);
             return $statement->executeQuery()->fetchAllAssociative();
         } catch (DBALDriverException | DBALException) {
             return [];
@@ -140,7 +142,7 @@ class ForumDiscussion extends ServiceEntityRepository
             SELECT p.discussionid AS disc_id, MAX(p.timestamp) AS max_date_time
             FROM somda_forum_posts p
             JOIN somda_forum_discussion d ON d.discussionid = p.discussionid
-            INNER JOIN somda_forum_favorites f ON f.discussionid = d.discussionid AND f.uid = :userId
+            INNER JOIN somda_forum_favorites f ON f.discussionid = d.discussionid AND f.uid = :user_id
             GROUP BY disc_id';
         $query = '
             SELECT `d`.`discussionid` AS `id`, `d`.`title` AS `title`, `a`.`uid` AS `author_id`,
@@ -152,7 +154,7 @@ class ForumDiscussion extends ServiceEntityRepository
             FROM somda_forum_discussion d
             JOIN somda_users a ON a.uid = d.authorid
             JOIN somda_forum_posts p_max ON p_max.discussionid = d.discussionid
-            INNER JOIN somda_forum_favorites f ON f.discussionid = d.discussionid AND f.uid = :userId
+            INNER JOIN somda_forum_favorites f ON f.discussionid = d.discussionid AND f.uid = :user_id
             LEFT JOIN somda_forum_last_read r
                     ON r.uid = ' . (string) $user->id . ' AND r.discussionid = d.discussionid
             JOIN somda_forum_posts p_count ON p_count.discussionid = d.discussionid
@@ -163,7 +165,7 @@ class ForumDiscussion extends ServiceEntityRepository
         $connection = $this->getEntityManager()->getConnection();
         try {
             $statement = $connection->prepare($query);
-            $statement->bindValue('userId', $user->id);
+            $statement->bindValue('user_id', $user->id);
             return $statement->executeQuery()->fetchAllAssociative();
         } catch (DBALDriverException | DBALException) {
             return [];
@@ -261,7 +263,7 @@ class ForumDiscussion extends ServiceEntityRepository
         }
     }
 
-    public function getPostNumberInDiscussion(ForumDiscussionEntity $discussion, int $postId): int
+    public function getPostNumberInDiscussion(ForumDiscussionEntity $discussion, int $post_id): int
     {
         $queryBuilder = $this->getEntityManager()
             ->createQueryBuilder()
@@ -270,8 +272,8 @@ class ForumDiscussion extends ServiceEntityRepository
             ->andWhere('p.discussion = :' . ForumPostForm::FIELD_DISCUSSION)
             ->setParameter(ForumPostForm::FIELD_DISCUSSION, $discussion)
             ->addOrderBy('p.timestamp', 'ASC');
-        $postIds = \array_column($queryBuilder->getQuery()->getResult(), 'id');
-        $position = \array_search($postId, $postIds);
+        $post_ids = \array_column($queryBuilder->getQuery()->getResult(), 'id');
+        $position = \array_search($post_id, $post_ids);
 
         return $position === false ? 0 : $position;
     }

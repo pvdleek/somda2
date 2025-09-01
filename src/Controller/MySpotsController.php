@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Controller;
@@ -16,6 +17,7 @@ use App\Helpers\UserHelper;
 use App\Model\DataTableOrder;
 use App\Model\SpotFilter;
 use App\Model\SpotInput;
+use App\Repository\SpotRepository;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -33,33 +35,34 @@ class MySpotsController
     private const BULK_ACTION_LOCATION = 'location';
 
     public function __construct(
-        private readonly FormHelper $formHelper,
-        private readonly UserHelper $userHelper,
-        private readonly TemplateHelper $templateHelper,
-        private readonly SpotInputHelper $spotInputHelper,
+        private readonly FormHelper $form_helper,
+        private readonly UserHelper $user_helper,
+        private readonly TemplateHelper $template_helper,
+        private readonly SpotInputHelper $spot_input_helper,
+        private readonly SpotRepository $spot_repository,
     ) {
     }
 
     public function indexAction(): Response
     {
-        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_SPOTS_EDIT);
+        $this->user_helper->denyAccessUnlessGranted(RoleGenerics::ROLE_SPOTS_EDIT);
 
-        return $this->templateHelper->render('spots/mySpots.html.twig', [
+        return $this->template_helper->render('spots/mySpots.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Mijn spots',
         ]);
     }
 
     public function jsonAction(Request $request): JsonResponse
     {
-        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_SPOTS_EDIT);
+        $this->user_helper->denyAccessUnlessGranted(RoleGenerics::ROLE_SPOTS_EDIT);
 
         $columns = $request->get('columns');
-        $spotFilter = $this->getSpotFilterFromRequest($columns);
+        $spot_filter = $this->getSpotFilterFromRequest($columns);
 
-        $orderArray = $request->get('order');
-        $spotOrder = [];
-        foreach ($orderArray as $key => $order) {
-            $spotOrder[$key] = new DataTableOrder(
+        $order_array = $request->get('order');
+        $spot_order = [];
+        foreach ($order_array as $key => $order) {
+            $spot_order[$key] = new DataTableOrder(
                 $columns[$order['column']][self::COLUMN_DATA],
                 \strtolower($order['dir']) === 'asc'
             );
@@ -67,22 +70,17 @@ class MySpotsController
 
         $response = [
             'draw' => $request->get('draw'),
-            'recordsTotal' => $this->formHelper->getDoctrine()->getRepository(Spot::class)->countAll(
-                $this->userHelper->getUser()
-            ),
-            'recordsFiltered' => $this->formHelper->getDoctrine()->getRepository(Spot::class)->countForMySpots(
-                $this->userHelper->getUser(),
-                $spotFilter
-            ),
+            'recordsTotal' => $this->spot_repository->countAll($this->user_helper->getUser()),
+            'recordsFiltered' => $this->spot_repository->countForMySpots($this->user_helper->getUser(), $spot_filter),
             self::COLUMN_DATA => [],
         ];
 
-        $spots = $this->formHelper->getDoctrine()->getRepository(Spot::class)->findForMySpots(
-            $this->userHelper->getUser(),
-            $spotFilter,
+        $spots = $this->spot_repository->findForMySpots(
+            $this->user_helper->getUser(),
+            $spot_filter,
             (int) $request->get('length'),
             (int) $request->get('start'),
-            $spotOrder
+            $spot_order
         );
         foreach ($spots as $spot) {
             $response[self::COLUMN_DATA][] = $spot->toArray();
@@ -93,56 +91,56 @@ class MySpotsController
 
     private function getSpotFilterFromRequest(array $columns): SpotFilter
     {
-        $spotFilter = new SpotFilter();
+        $spot_filter = new SpotFilter();
         foreach ($columns as $column) {
             if (\strlen($column[self::COLUMN_SEARCH][self::COLUMN_SEARCH_VALUE]) > 0) {
-                if ($column[self::COLUMN_DATA] === 'spotDate') {
-                    $spotFilter->spotDate = \DateTime::createFromFormat(
+                if ($column[self::COLUMN_DATA] === 'spot_date') {
+                    $spot_filter->spot_date = \DateTime::createFromFormat(
                         'd-m-Y',
                         $column[self::COLUMN_SEARCH][self::COLUMN_SEARCH_VALUE]
                     );
                 } elseif ($column[self::COLUMN_DATA] === 'location') {
-                    $spotFilter->location = $column[self::COLUMN_SEARCH][self::COLUMN_SEARCH_VALUE];
+                    $spot_filter->location = $column[self::COLUMN_SEARCH][self::COLUMN_SEARCH_VALUE];
                 } elseif ($column[self::COLUMN_DATA] === 'train') {
-                    $spotFilter->trainNumber = $column[self::COLUMN_SEARCH][self::COLUMN_SEARCH_VALUE];
+                    $spot_filter->train_number = $column[self::COLUMN_SEARCH][self::COLUMN_SEARCH_VALUE];
                 } elseif ($column[self::COLUMN_DATA] === 'route') {
-                    $spotFilter->routeNumber = $column[self::COLUMN_SEARCH][self::COLUMN_SEARCH_VALUE];
+                    $spot_filter->route_number = $column[self::COLUMN_SEARCH][self::COLUMN_SEARCH_VALUE];
                 }
             }
         }
 
-        return $spotFilter;
+        return $spot_filter;
     }
 
     public function editAction(Request $request, int $id): Response|RedirectResponse
     {
-        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_SPOTS_EDIT);
+        $this->user_helper->denyAccessUnlessGranted(RoleGenerics::ROLE_SPOTS_EDIT);
 
-        $spot = $this->formHelper->getDoctrine()->getRepository(Spot::class)->find($id);
-        if (null === $spot || $spot->user !== $this->userHelper->getUser()) {
+        $spot = $this->form_helper->getDoctrine()->getRepository(Spot::class)->find($id);
+        if (null === $spot || $spot->user !== $this->user_helper->getUser()) {
             throw new AccessDeniedException('This spot does not exist or does not belong to the user');
         }
-        $form = $this->formHelper->getFactory()->create(SpotForm::class, $spot);
+        $form = $this->form_helper->getFactory()->create(SpotForm::class, $spot);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $spotInput = new SpotInput();
-            $spotInput->existingSpotId = $spot->id;
-            $spotInput->user = $this->userHelper->getUser();
-            $spotInput->spotDate = $form->get('spotDate')->getData();
-            $spotInput->trainNumber = $form->get('train')->getData();
-            $spotInput->routeNumber = $form->get('route')->getData();
-            $spotInput->positionId = $form->get('position')->getData()->id;
-            $spotInput->location = $form->get('location')->getData();
-            $spotInput->extra = $form->get('extra')->getData() ?? '';
-            $spotInput->userExtra = $form->get('userExtra')->getData();
+            $spot_input = new SpotInput();
+            $spot_input->existingSpotId = $spot->id;
+            $spot_input->user = $this->user_helper->getUser();
+            $spot_input->spot_date = $form->get('spot_date')->getData();
+            $spot_input->train_number = $form->get('train')->getData();
+            $spot_input->route_number = $form->get('route')->getData();
+            $spot_input->position_id = $form->get('position')->getData()->id;
+            $spot_input->location = $form->get('location')->getData();
+            $spot_input->extra = $form->get('extra')->getData() ?? '';
+            $spot_input->user_extra = $form->get('user_extra')->getData();
 
-            $this->spotInputHelper->processSpotInput($spotInput);
+            $this->spot_input_helper->processSpotInput($spot_input);
 
-            return $this->formHelper->finishFormHandling('Spot bijgewerkt', 'my_spots');
+            return $this->form_helper->finishFormHandling('Spot bijgewerkt', 'my_spots');
         }
 
-        return $this->templateHelper->render('spots/edit.html.twig', [
+        return $this->template_helper->render('spots/edit.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Bewerk spot',
             TemplateHelper::PARAMETER_FORM => $form->createView(),
         ]);
@@ -150,33 +148,33 @@ class MySpotsController
 
     public function deleteAction(int $id): RedirectResponse
     {
-        $spot = $this->formHelper->getDoctrine()->getRepository(Spot::class)->find($id);
-        if (null === $spot || $spot->user !== $this->userHelper->getUser()) {
+        $spot = $this->form_helper->getDoctrine()->getRepository(Spot::class)->find($id);
+        if (null === $spot || $spot->user !== $this->user_helper->getUser()) {
             throw new AccessDeniedException('This spot does not exist or does not belong to the user');
         }
 
         if (null !== $spot->extra) {
-            $this->formHelper->getDoctrine()->getManager()->remove($spot->extra);
+            $this->form_helper->getDoctrine()->getManager()->remove($spot->extra);
         }
-        $this->formHelper->getDoctrine()->getManager()->remove($spot);
+        $this->form_helper->getDoctrine()->getManager()->remove($spot);
 
-        return $this->formHelper->finishFormHandling('Spot verwijderd', 'my_spots');
+        return $this->form_helper->finishFormHandling('Spot verwijderd', 'my_spots');
     }
 
     /**
      * @throws \Exception
      */
-    public function bulkAction(Request $request, string $type, string $idList): Response|RedirectResponse
+    public function bulkAction(Request $request, string $type, string $id_list): Response|RedirectResponse
     {
-        $idArray = \array_filter(\explode(',', $idList));
+        $id_array = \array_filter(\explode(',', $id_list));
 
         if (self::BULK_ACTION_DATE === $type) {
-            $form = $this->formHelper->getFactory()->create(SpotBulkEditDate::class);
+            $form = $this->form_helper->getFactory()->create(SpotBulkEditDate::class);
         } elseif (self::BULK_ACTION_LOCATION === $type) {
-            $form = $this->formHelper->getFactory()->create(
+            $form = $this->form_helper->getFactory()->create(
                 SpotBulkEditLocation::class,
                 null,
-                ['defaultLocation' => $this->userHelper->getDefaultLocation()]
+                ['defaultLocation' => $this->user_helper->getDefaultLocation()]
             );
         } else {
             throw new AccessDeniedHttpException();
@@ -184,29 +182,23 @@ class MySpotsController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $spots = $this->formHelper
-                ->getDoctrine()
-                ->getRepository(Spot::class)
-                ->findByIdsAndUser($idArray, $this->userHelper->getUser());
+            $spots = $this->spot_repository->findByIdsAndUser($id_array, $this->user_helper->getUser());
             foreach ($spots as $spot) {
                 if (self::BULK_ACTION_DATE === $type) {
-                    $spot->spotDate = $form->get('date')->getData();
+                    $spot->spot_date = $form->get('date')->getData();
                 } else {
                     $spot->location = $form->get('location')->getData();
                 }
             }
 
-            $this->formHelper->getDoctrine()->getManager()->flush();
-            $this->formHelper->getFlashHelper()->add(FlashHelper::FLASH_TYPE_INFORMATION, 'Spots aangepast');
+            $this->form_helper->getDoctrine()->getManager()->flush();
+            $this->form_helper->getFlashHelper()->add(FlashHelper::FLASH_TYPE_INFORMATION, 'Spots aangepast');
 
-            return $this->formHelper->getRedirectHelper()->redirectToRoute('my_spots');
+            return $this->form_helper->getRedirectHelper()->redirectToRoute('my_spots');
         }
 
-        $spots = $this->formHelper
-            ->getDoctrine()
-            ->getRepository(Spot::class)
-            ->findByIdsAndUserForDisplay($idArray, $this->userHelper->getUser());
-        return $this->templateHelper->render('spots/editBulk.html.twig', [
+        $spots = $this->spot_repository->findByIdsAndUserForDisplay($id_array, $this->user_helper->getUser());
+        return $this->template_helper->render('spots/editBulk.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Bewerk meerdere spots',
             TemplateHelper::PARAMETER_FORM => $form->createView(),
             'spots' => $spots,

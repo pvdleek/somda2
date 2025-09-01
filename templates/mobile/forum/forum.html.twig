@@ -44,20 +44,20 @@
     {% if userIsModerator %}
         <script>
             function moderateCombine() {
-                let discussionId1 = 0;
-                let discussionId2 = 0;
+                let discussion_id1 = 0;
+                let discussion_id2 = 0;
                 let checkboxes = document.getElementsByTagName('input');
                 for (let box = 0; box < checkboxes.length; box++)  {
                     if (checkboxes[box].type === 'checkbox' && checkboxes[box].checked) {
-                        if (discussionId1 > 0) {
-                            discussionId2 = parseInt(checkboxes[box].name.substr(3));
+                        if (discussion_id1 > 0) {
+                            discussion_id2 = parseInt(checkboxes[box].name.substr(3));
                             break;
                         }
-                        discussionId1 = parseInt(checkboxes[box].name.substr(3));
+                        discussion_id1 = parseInt(checkboxes[box].name.substr(3));
                     }
                 }
-                if (discussionId1 > 0 && discussionId2 > 0) {
-                    document.location = '{{ path('forum_discussion_moderate_combine', { 'id1': 1234, 'id2': 5678 }) }}'.replace('/1234/', '/' + discussionId1 + '/').replace('/5678/', '/' + discussionId2 + '/');
+                if (discussion_id1 > 0 && discussion_id2 > 0) {
+                    document.location = '{{ path('forum_discussion_moderate_combine', { 'id1': 1234, 'id2': 5678 }) }}'.replace('/1234/', '/' + discussion_id1 + '/').replace('/5678/', '/' + discussion_id2 + '/');
                 } else {
                     alert('Selecteer 2 discussies om te combineren');
                 }

@@ -1,30 +1,23 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Table(name="somda_help")
- * @ORM\Entity
- */
+#[ORM\Entity]
+#[ORM\Table(name: 'somda_help')]
 class Help
 {
-    /**
-     * @ORM\Column(name="contentid", type="integer", nullable=false, options={"unsigned"=true})
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(name: 'contentid', nullable: false, options: ['unsigned' => true])]
     public ?int $id = null;
 
-    /**
-     * @ORM\Column(name="titel", type="text", length=255, nullable=false)
-     */
+    #[ORM\Column(name: 'titel', type: 'text', nullable: false, options: ['default' => ''])]
     public string $title = '';
 
-    /**
-     * @ORM\Column(name="template", type="text", length=255, nullable=false)
-     */
+    #[ORM\Column(nullable: false, options: ['default' => ''])]
     public string $template = '';
 }

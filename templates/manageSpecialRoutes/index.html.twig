@@ -13,7 +13,7 @@
                 </tr>
                 {% for specialRoute in specialRoutes %}
                     <tr>
-                        <td>{{ specialRoute.endDate is null ? (specialRoute.startDate | date('d-m-Y')) : ((specialRoute.startDate | date('d-m-Y')) ~ ' t/m ' ~ (specialRoute.endDate | date('d-m-Y'))) }}</td>
+                        <td>{{ specialRoute.end_date is null ? (specialRoute.start_date|date('d-m-Y')) : ((specialRoute.start_date|date('d-m-Y')) ~ ' t/m ' ~ (specialRoute.end_date|date('d-m-Y'))) }}</td>
                         <td>{{ specialRoute.public ? 'Ja' : 'Nee' }}</td>
                         <td>{{ specialRoute.title }}</td>
                         <td><a href="{{ path('manage_special_route', { 'id': specialRoute.id }) }}">Bewerk</a></td>

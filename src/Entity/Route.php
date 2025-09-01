@@ -1,20 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as JMS;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use OpenApi\Annotations as OA;
 
-/**
- * @ORM\Table(
- *     name="somda_trein",
- *     uniqueConstraints={@ORM\UniqueConstraint(name="unq_somda_trein__treinnr", columns={"treinnr"})}
- * )
- * @ORM\Entity
- */
+#[ORM\Entity]
+#[ORM\Table(name: 'somda_trein', uniqueConstraints: [new ORM\UniqueConstraint(name: 'unq_somda_trein__treinnr', columns: ['treinnr'])])]
 class Route
 {
     public const SPECIAL_NO_SERVICE = 'GDST';
@@ -23,57 +21,58 @@ class Route
     public const SPECIAL_CHECKING = 'SCHOUW';
 
     /**
-     * @ORM\Column(name="treinid", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      * @JMS\Expose()
      * @OA\Property(description="Unique identifier", type="integer")
      */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(name: 'treinid', nullable: false, options: ['unsigned' => true])]
     public ?int $id = null;
 
     /**
-     * @ORM\Column(name="treinnr", type="string", length=25, nullable=false)
      * @JMS\Expose()
      * @OA\Property(description="The route-number", maxLength=25, type="string")
      */
+    #[ORM\Column(name: 'treinnr', length: 25, nullable: false, options: ['default' => ''])]
     public string $number = '';
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\TrainTable", mappedBy="route")
      * @JMS\Exclude()
      */
-    private $trainTables;
+    #[ORM\OneToMany(targetEntity: TrainTable::class, mappedBy: 'route')]
+    private Collection $train_tables;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\TrainTableFirstLast", mappedBy="route")
      * @JMS\Expose()
      * @OA\Property(description="The days on which this route runs", ref=@Model(type=TrainTableFirstLast::class))
      */
-    private $trainTableFirstLasts;
+    #[ORM\OneToMany(targetEntity: TrainTableFirstLast::class, mappedBy: 'route')]
+    private Collection $train_table_first_lasts;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\RouteList", mappedBy="routes")
      * @JMS\Exclude()
      */
-    private $routeLists;
+    #[ORM\ManyToMany(targetEntity: RouteList::class, mappedBy: 'routes')]
+    private Collection $route_lists;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Spot", mappedBy="route")
      * @JMS\Exclude()
      */
-    private $spots;
+    #[ORM\OneToMany(targetEntity: Spot::class, mappedBy: 'route')]
+    private Collection $spots;
 
     public function __construct()
     {
-        $this->trainTables = new ArrayCollection();
-        $this->trainTableFirstLasts = new ArrayCollection();
-        $this->routeLists = new ArrayCollection();
+        $this->train_tables = new ArrayCollection();
+        $this->train_table_first_lasts = new ArrayCollection();
+        $this->route_lists = new ArrayCollection();
         $this->spots = new ArrayCollection();
     }
 
     public function addTrainTable(TrainTable $trainTable): Route
     {
-        $this->trainTables[] = $trainTable;
+        $this->train_tables[] = $trainTable;
+        
         return $this;
     }
 
@@ -82,12 +81,13 @@ class Route
      */
     public function getTrainTables(): array
     {
-        return $this->trainTables->toArray();
+        return $this->train_tables->toArray();
     }
 
     public function addTrainTableFirstLast(TrainTableFirstLast $trainTableFirstLast): Route
     {
-        $this->trainTableFirstLasts[] = $trainTableFirstLast;
+        $this->train_table_first_lasts[] = $trainTableFirstLast;
+
         return $this;
     }
 
@@ -96,14 +96,14 @@ class Route
      */
     public function getTrainTableFirstLasts(): array
     {
-        return $this->trainTableFirstLasts->toArray();
+        return $this->train_table_first_lasts->toArray();
     }
 
-    public function getTrainTableFirstLastByDay(int $trainTableYearId, int $dayNumber): ?TrainTableFirstLast
+    public function getTrainTableFirstLastByDay(int $train_table_year_id, int $day_number): ?TrainTableFirstLast
     {
         foreach ($this->getTrainTableFirstLasts() as $trainTableFirstLast) {
-            if ($trainTableYearId === $trainTableFirstLast->trainTableYear->id
-                && $dayNumber === $trainTableFirstLast->dayNumber
+            if ($train_table_year_id === $trainTableFirstLast->train_table_year->id
+                && $day_number === $trainTableFirstLast->day_number
             ) {
                 return $trainTableFirstLast;
             }
@@ -111,9 +111,10 @@ class Route
         return null;
     }
 
-    public function addRouteList(RouteList $routeList): Route
+    public function addRouteList(RouteList $route_list): Route
     {
-        $this->routeLists[] = $routeList;
+        $this->route_lists[] = $route_list;
+
         return $this;
     }
 
@@ -122,18 +123,20 @@ class Route
      */
     public function getRouteLists(): array
     {
-        return $this->routeLists->toArray();
+        return $this->route_lists->toArray();
     }
 
-    public function removeRouteList(RouteList $routeList): Route
+    public function removeRouteList(RouteList $route_list): Route
     {
-        $this->routeLists->removeElement($routeList);
+        $this->route_lists->removeElement($route_list);
+
         return $this;
     }
 
     public function addSpot(Spot $spot): Route
     {
         $this->spots[] = $spot;
+
         return $this;
     }
 

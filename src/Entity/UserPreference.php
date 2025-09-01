@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -7,10 +9,8 @@ use JMS\Serializer\Annotation as JMS;
 use OpenApi\Annotations as OA;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Table(name="somda_prefs", indexes={@ORM\Index(name="idx_somda_prefs__sleutel", columns={"sleutel"})})
- * @ORM\Entity
- */
+#[ORM\Entity]
+#[ORM\Table(name: 'somda_prefs', indexes: [new ORM\Index(name: 'idx_somda_prefs__sleutel', columns: ['sleutel'])])]
 class UserPreference
 {
     public const KEY_HOME_LAYOUT = 'layout';
@@ -58,45 +58,45 @@ class UserPreference
     ];
 
     /**
-     * @ORM\Column(name="prefid", type="integer", nullable=false, options={"unsigned"=true})
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      * @JMS\Exclude()
      */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(name: 'prefid', nullable: false, options: ['unsigned' => true])]
     public ?int $id = null;
 
     /**
-     * @ORM\Column(name="sleutel", type="string", length=25, nullable=false)
-     * @Assert\Choice(choices=UserPreference::KEY_VALUES)
      * @JMS\Expose()
      * @OA\Property(description="Unique identifier", maxLength=25, type="string")
      */
+    #[ORM\Column(name: 'sleutel', length: 25, nullable: false, options: ['default' => ''])]
+    #[Assert\Choice(choices: self::KEY_VALUES)]
     public string $key = '';
 
     /**
-     * @ORM\Column(name="type", type="string", length=50, nullable=false)
      * @JMS\Expose()
      * @OA\Property(description="Type of the value", maxLength=50, type="string")
      */
+    #[ORM\Column(length: 50, nullable: false, options: ['default' => ''])]
     public string $type = '';
 
     /**
-     * @ORM\Column(name="description", type="string", length=90, nullable=false)
      * @JMS\Expose()
      * @OA\Property(description="Description of the setting", maxLength=90, type="string")
      */
+    #[ORM\Column(length: 90, nullable: false, options: ['default' => ''])]
     public string $description = '';
 
     /**
-     * @ORM\Column(name="default_value", type="string", length=200, nullable=false)
      * @JMS\Expose()
      * @OA\Property(description="Default value", maxLength=200, type="string")
      */
-    public string $defaultValue = '';
+    #[ORM\Column(name: 'default_value', length: 200, nullable: false, options: ['default' => ''])]
+    public string $default_value = '';
 
     /**
-     * @ORM\Column(name="volgorde", type="smallint", nullable=false, options={"unsigned"=true})
      * @JMS\Exclude()
      */
+    #[ORM\Column(name: 'volgorde', type: 'smallint', nullable: false, options: ['default' => 0, 'unsigned' => true])]
     public int $order = 0;
 }

@@ -1,45 +1,34 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Table(name="somda_groups")
- * @ORM\Entity
- */
+#[ORM\Entity]
+#[ORM\Table(name: 'somda_groups')]
 class Group
 {
-    /**
-     * @ORM\Column(name="groupid", type="smallint", nullable=false, options={"unsigned"=true})
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(name: 'groupid', type: 'smallint', nullable: false, options: ['unsigned' => true])]
     public ?int $id = null;
 
-    /**
-     * @ORM\Column(name="name", type="string", length=15, nullable=false)
-     */
+    #[ORM\Column(length: 15, nullable: false, options: ['default' => ''])]
     public string $name = '';
 
-    /**
-     * @ORM\Column(name="roles", type="array", nullable=false)
-     */
+    #[ORM\Column(type: 'array', nullable: false, options: ['default' => []])]
     public array $roles = [];
 
-    /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\User", inversedBy="groups")
-     * @ORM\JoinTable(name="somda_users_groups",
-     *      joinColumns={@ORM\JoinColumn(name="groupid", referencedColumnName="groupid")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="uid", referencedColumnName="uid")}
-     * )
-     */
-    private $users;
+    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'groups')]
+    #[ORM\JoinTable(name: 'somda_users_groups')]
+    #[ORM\JoinColumn(name: 'groupid', referencedColumnName: 'groupid')]
+    #[ORM\InverseJoinColumn(name: 'uid', referencedColumnName: 'uid')]
+    private Collection $users;
 
-    /**
-     *
-     */
     public function __construct()
     {
         $this->users = new ArrayCollection();

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Repository;
@@ -10,7 +11,7 @@ use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
 use Doctrine\Persistence\ManagerRegistry;
 
-class Statistic extends ServiceEntityRepository
+class StatisticRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
@@ -21,7 +22,7 @@ class Statistic extends ServiceEntityRepository
     {
         $queryBuilder = $this->getEntityManager()
             ->createQueryBuilder()
-            ->select('SUM(s.visitorsTotal)')
+            ->select('SUM(s.visitors_total)')
             ->from(StatisticEntity::class, 's');
         try {
             return (int) $queryBuilder->getQuery()->getSingleScalarResult();
@@ -34,7 +35,7 @@ class Statistic extends ServiceEntityRepository
     {
         $queryBuilder = $this->getEntityManager()
             ->createQueryBuilder()
-            ->select('SUM(s.numberOfSpots)')
+            ->select('SUM(s.number_of_spots)')
             ->from(StatisticEntity::class, 's');
         try {
             return (int) $queryBuilder->getQuery()->getSingleScalarResult();
@@ -64,12 +65,12 @@ class Statistic extends ServiceEntityRepository
             ->createQueryBuilder()
             ->select('YEAR(s.timestamp) AS year')
             ->addSelect('MONTH(s.timestamp) AS month')
-            ->addSelect('SUM(s.visitorsHome) AS visitorsHome')
-            ->addSelect('SUM(s.visitorsFunctions) AS visitorsFunctions')
-            ->addSelect('SUM(s.visitorsTotal) AS visitorsTotal')
-            ->addSelect('SUM(s.visitorsUnique) AS visitorsUnique')
-            ->addSelect('SUM(s.numberOfSpots) AS numberOfSpots')
-            ->addSelect('SUM(s.numberOfPosts) AS numberOfPosts')
+            ->addSelect('SUM(s.visitors_home) AS visitors_home')
+            ->addSelect('SUM(s.visitors_functions) AS visitors_functions')
+            ->addSelect('SUM(s.visitors_total) AS visitors_total')
+            ->addSelect('SUM(s.visitors_unique) AS visitors_unique')
+            ->addSelect('SUM(s.number_of_spots) AS number_of_spots')
+            ->addSelect('SUM(s.number_of_posts) AS number_of_posts')
             ->from(StatisticEntity::class, 's')
             ->addGroupBy('year')
             ->addGroupBy('month')
@@ -112,11 +113,11 @@ class Statistic extends ServiceEntityRepository
     private function getBusiestFieldName(int $type): string
     {
         if ($type === StatisticBusiest::TYPE_PAGE_VIEWS) {
-            return 'visitorsTotal';
+            return 'visitors_total';
         }
         if ($type === StatisticBusiest::TYPE_SPOTS) {
-            return 'numberOfSpots';
+            return 'number_of_spots';
         }
-        return 'numberOfPosts';
+        return 'number_of_posts';
     }
 }

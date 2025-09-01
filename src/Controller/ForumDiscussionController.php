@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use App\Entity\Banner;
@@ -35,7 +37,7 @@ class ForumDiscussionController
     /**
      * @throws \Exception
      */
-    public function indexAction(Request $request, int $id, ?int $pageNumber = null, ?int $postId = null): Response|RedirectResponse
+    public function indexAction(Request $request, int $id, ?int $page_number = null, ?int $post_id = null): Response|RedirectResponse
     {
         /**
          * @var ForumDiscussion $discussion
@@ -49,7 +51,7 @@ class ForumDiscussionController
             (bool)$this->userHelper->getPreferenceByKey(UserPreference::KEY_FORUM_NEW_TO_OLD)->value : false;
 
         $this->discussionHelper->setDiscussion($discussion);
-        $posts = $this->discussionHelper->getPosts($newToOld, $pageNumber, $postId);
+        $posts = $this->discussionHelper->getPosts($newToOld, $page_number, $post_id);
 
         return $this->templateHelper->render('forum/discussion.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Forum - ' . $discussion->title,
@@ -57,8 +59,8 @@ class ForumDiscussionController
                 $this->forumAuthHelper->userIsModerator($discussion->forum, $this->userHelper->getUser()),
             TemplateHelper::PARAMETER_DISCUSSION => $discussion,
             'numberOfPages' => $this->discussionHelper->getNumberOfPages(),
-            'numberOfPosts' => $this->discussionHelper->getNumberOfPosts(),
-            'pageNumber' => $this->discussionHelper->getPageNumber(),
+            'number_of_posts' => $this->discussionHelper->getNumberOfPosts(),
+            'page_number' => $this->discussionHelper->getPageNumber(),
             'newToOld' => $newToOld,
             'posts' => $posts,
             'mayPost' => $this->forumAuthHelper->mayPost($discussion->forum, $this->userHelper->getUser()),
@@ -80,19 +82,19 @@ class ForumDiscussionController
             return null;
         }
         /**
-         * @var Banner $forumBanner
+         * @var Banner $forum_banner
          */
-        $forumBanner = $banners[\random_int(0, \count($banners) - 1)];
+        $forum_banner = $banners[\random_int(0, \count($banners) - 1)];
 
         // Create a view for this banner
-        $bannerView = new BannerView();
-        $bannerView->banner = $forumBanner;
-        $bannerView->timestamp = new \DateTime();
-        $bannerView->ipAddress = (int) \inet_pton($request->getClientIp());
-        $this->formHelper->getDoctrine()->getManager()->persist($bannerView);
+        $banner_view = new BannerView();
+        $banner_view->banner = $forum_banner;
+        $banner_view->timestamp = new \DateTime();
+        $banner_view->ip_address = (int) \inet_pton($request->getClientIp());
+        $this->formHelper->getDoctrine()->getManager()->persist($banner_view);
         $this->formHelper->getDoctrine()->getManager()->flush();
 
-        return $forumBanner;
+        return $forum_banner;
     }
 
     /**
@@ -110,25 +112,25 @@ class ForumDiscussionController
             return $this->formHelper->getRedirectHelper()->redirectToRoute(RouteGenerics::ROUTE_FORUM);
         }
 
-        $forumDiscussion = new ForumDiscussion();
-        $forumDiscussion->forum = $forum;
-        $forumDiscussion->author = $this->userHelper->getUser();
+        $forum_discussion = new ForumDiscussion();
+        $forum_discussion->forum = $forum;
+        $forum_discussion->author = $this->userHelper->getUser();
 
-        $form = $this->formHelper->getFactory()->create(ForumDiscussionForm::class, $forumDiscussion);
+        $form = $this->formHelper->getFactory()->create(ForumDiscussionForm::class, $forum_discussion);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $this->formHelper->addPost(
-                $forumDiscussion,
+                $forum_discussion,
                 $this->userHelper->getUser(),
-                $form->get('signatureOn')->getData(),
+                $form->get('signature_on')->getData(),
                 $form->get('text')->getData()
             );
-            $this->formHelper->getDoctrine()->getManager()->persist($forumDiscussion);
+            $this->formHelper->getDoctrine()->getManager()->persist($forum_discussion);
             $this->formHelper->getDoctrine()->getManager()->flush();
 
             return $this->formHelper->finishFormHandling('', RouteGenerics::ROUTE_FORUM_DISCUSSION, [
-                'id' => $forumDiscussion->id,
-                'name' => $this->slugger->slug($forumDiscussion->title)
+                'id' => $forum_discussion->id,
+                'name' => $this->slugger->slug($forum_discussion->title)
             ]);
         }
 

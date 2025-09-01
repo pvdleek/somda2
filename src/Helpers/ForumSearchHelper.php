@@ -6,7 +6,7 @@ namespace App\Helpers;
 use App\Entity\ForumSearchWord;
 use App\Form\ForumSearch;
 use App\Model\ForumSearchResult;
-use App\Repository\ForumSearchWord as RepositoryForumSearchWord;
+use App\Repository\ForumSearchWordRepository;
 use Twig\Extension\RuntimeExtensionInterface;
 
 class ForumSearchHelper implements RuntimeExtensionInterface
@@ -14,7 +14,7 @@ class ForumSearchHelper implements RuntimeExtensionInterface
     public const MAX_RESULTS = 100;
 
     public function __construct(
-        private readonly RepositoryForumSearchWord $repositoryForumSearchWord,
+        private readonly ForumSearchWordRepository $forum_search_word_repository,
     ) {
     }
 
@@ -25,7 +25,7 @@ class ForumSearchHelper implements RuntimeExtensionInterface
     {
         $words = \array_filter(\explode(' ', $data));
         foreach ($words as $key => $word) {
-            $words[$key] = $this->repositoryForumSearchWord->findOneBy(['word' => $word]);
+            $words[$key] = $this->forum_search_word_repository->findOneBy(['word' => $word]);
         }
         return $words;
     }
@@ -34,15 +34,15 @@ class ForumSearchHelper implements RuntimeExtensionInterface
      * @param ForumSearchWord[] $searchWords
      * @return ForumSearchResult[]
      */
-    public function getSearchResults(string $searchMethod, array $searchWords): array
+    public function getSearchResults(string $search_method, array $searchWords): array
     {
-        if ($searchMethod === ForumSearch::METHOD_SOME) {
-            return $this->repositoryForumSearchWord->searchByWords($searchWords);
+        if ($search_method === ForumSearch::METHOD_SOME) {
+            return $this->forum_search_word_repository->searchByWords($searchWords);
         }
 
         $results = null;
         foreach ($searchWords as $word) {
-            $result = $this->repositoryForumSearchWord->searchByWords([$word]);
+            $result = $this->forum_search_word_repository->searchByWords([$word]);
             if (null === $results) {
                 $results = $result;
             } else {

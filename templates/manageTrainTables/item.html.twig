@@ -15,36 +15,36 @@
                         </th>
                     </tr>
                     <tr>
-                        {% for dayNumber in 1..7 %}
+                        {% for day_number in 1..7 %}
                             <th>
-                                <span class="time-modify-control-left"><a href="#" onclick="modifyTimes({{ dayNumber }}, true); return false;">+30</a></span>
-                                {{ ('general.date.days.' ~ (dayNumber - 1)) | trans }}
-                                <span class="time-modify-control-right"><a href="#" onclick="modifyTimes({{ dayNumber }}, false); return false;">-30</a></span>
+                                <span class="time-modify-control-left"><a href="#" onclick="modifyTimes({{ day_number }}, true); return false;">+30</a></span>
+                                {{ ('general.date.days.' ~ (day_number - 1)) | trans }}
+                                <span class="time-modify-control-right"><a href="#" onclick="modifyTimes({{ day_number }}, false); return false;">-30</a></span>
                             </th>
                         {% endfor %}
                     </tr>
                     <tr>
-                        {% for dayNumber in 1..7 %}
+                        {% for day_number in 1..7 %}
                             {% set rowNumber = 1 %}
                             <td>
-                                <table id="train_table_{{ dayNumber }}">
+                                <table id="train_table_{{ day_number }}">
                                     {% for trainTable in trainTableLines %}
-                                        {% if trainTable.routeOperationDays.runningOnDay(dayNumber - 1) %}
-                                            <tr id="row_{{ dayNumber }}_{{ rowNumber }}">
+                                        {% if trainTable.routeOperationDays.runningOnDay(day_number - 1) %}
+                                            <tr id="row_{{ day_number }}_{{ rowNumber }}">
                                                 <td class="icon-controls">
                                                     <a href="#" onclick="moveRowUp($(this).parent().parent()); return false;" title="Rij naar boven verplaatsen"><i class="fas fa-angle-double-up"></i></a>
                                                     <a href="#" onclick="$(this).parent().parent().remove(); return false;" title="Rij verwijderen"><i class="fas fa-times"></i></a>
                                                     <a href="#" onclick="moveRowDown($(this).parent().parent()); return false;" title="Rij naar beneden verplaatsen"><i class="fas fa-angle-double-down"></i></a>
                                                 </td>
-                                                <td><input class="location-picker{{ trainTable.location.name == constant('App\\Entity\\Location::UNKNOWN_NAME') ? ' with-error' }}" name="location_{{ dayNumber }}_{{ rowNumber }}" size="6" type="text" value="{{ trainTable.location.name }}" /></td>
+                                                <td><input class="location-picker{{ trainTable.location.name == constant('App\\Entity\\Location::UNKNOWN_NAME') ? ' with-error' }}" name="location_{{ day_number }}_{{ rowNumber }}" size="6" type="text" value="{{ trainTable.location.name }}" /></td>
                                                 <td>
-                                                    <select name="action_{{ dayNumber }}_{{ rowNumber }}">
+                                                    <select name="action_{{ day_number }}_{{ rowNumber }}">
                                                         {% for action in constant('App\\Entity\\TrainTable::ACTION_VALUES') %}
                                                             <option {{ trainTable.action == action ? 'selected="selected" ' }}value="{{ action }}">{{ action }}</option>
                                                         {% endfor %}
                                                     </select>
                                                 </td>
-                                                <td><input class="time-picker time-day-{{ dayNumber }}" name="time_{{ dayNumber }}_{{ rowNumber }}" size="8" type="text" value="{{ trainTable.time | displayTime }}" /></td>
+                                                <td><input class="time-picker time-day-{{ day_number }}" name="time_{{ day_number }}_{{ rowNumber }}" size="8" type="text" value="{{ trainTable.time | displayTime }}" /></td>
                                             </tr>
 
                                             {% set rowNumber = rowNumber + 1 %}
@@ -55,15 +55,15 @@
                         {% endfor %}
                     </tr>
                     <tr>
-                        {% for dayNumber in 1..7 %}
+                        {% for day_number in 1..7 %}
                             <td>
-                                <a class="somda-button" href="#" onclick="addRow({{ dayNumber }}); return false;">Rij toevoegen</a>
-                                <br /><a class="somda-button" href="#" onclick="removeDay({{ dayNumber }}); return false;">Hele dag verwijderen</a>
-                                <br /><select class="copy-day" id="copy_day_{{ dayNumber }}">
+                                <a class="somda-button" href="#" onclick="addRow({{ day_number }}); return false;">Rij toevoegen</a>
+                                <br /><a class="somda-button" href="#" onclick="removeDay({{ day_number }}); return false;">Hele dag verwijderen</a>
+                                <br /><select class="copy-day" id="copy_day_{{ day_number }}">
                                     <option disabled="disabled" selected="selected" value="0">Kopieer naar</option>
-                                    {% for copyToDayNumber in 1..7 %}
-                                        {% if copyToDayNumber != dayNumber %}
-                                            <option value="{{ copyToDayNumber }}">{{ ('general.date.days.' ~ (copyToDayNumber - 1)) | trans }}</option>
+                                    {% for copy_to_day_number in 1..7 %}
+                                        {% if copy_to_day_number != day_number %}
+                                            <option value="{{ copy_to_day_number }}">{{ ('general.date.days.' ~ (copy_to_day_number - 1)) | trans }}</option>
                                         {% endif %}
                                     {% endfor %}
                                 </select>
@@ -73,7 +73,7 @@
                     <tr>
                         <td colspan="7">
                             <a class="somda-button" href="#" id="train_table_button" onclick="disableMeAndSubmitForm('train_table_button', 'train_table_form'); return false;">Opslaan</a>
-                            <a class="somda-button" href="{{ path('manage_train_tables_year_route_list', { 'yearId': routeList.trainTableYear.id, 'routeListId': routeList.id }) }}">Terug naar het overzicht</a>
+                            <a class="somda-button" href="{{ path('manage_train_tables_year_route_list', { 'year_id': routeList.trainTableYear.id, 'route_list_id': routeList.id }) }}">Terug naar het overzicht</a>
                         </td>
                     </tr>
                 </table>
@@ -86,45 +86,45 @@
     <script src="{{ asset('js/jquery.clockpicker-0.0.7.js') }}?version={{ 'js/jquery.clockpicker-0.0.7.js' | fileTimestamp }}"></script>
     <script>
         /**
-         * @param {int} dayNumber
+         * @param {int} day_number
          */
-        function addRow(dayNumber)
+        function addRow(day_number)
         {
             let newRowNumber = 1;
-            let lastRow = $('#train_table_' + dayNumber + ' tr:last');
+            let lastRow = $('#train_table_' + day_number + ' tr:last');
             if (lastRow.attr('id') !== undefined) {
                 newRowNumber = parseInt(lastRow.attr('id').substr(6)) + 1;
             }
 
             const html =
-                '<tr id="row_' + dayNumber + '_' + newRowNumber + '">' +
+                '<tr id="row_' + day_number + '_' + newRowNumber + '">' +
                 '<td class="icon-controls">' +
                 '<a href="#" onclick="moveRowUp($(this).parent().parent()); return false;" title="Rij naar boven verplaatsen"><i class="fas fa-angle-double-up"></i></a>' +
                 '<a href="#" onclick="$(this).parent().parent().remove(); return false;" title="Rij verwijderen"><i class="fas fa-times"></i></a>' +
                 '<a href="#" onclick="moveRowDown($(this).parent().parent()); return false;" title="Rij naar beneden verplaatsen"><i class="fas fa-angle-double-down"></i></a>' +
                 '</td>' +
-                '<td><input class="location-picker" name="location_' + dayNumber + '_' + newRowNumber + '" size="6" type="text" /></td>' +
-                '<td><select name="action_' + dayNumber + '_' + newRowNumber + '">' +
+                '<td><input class="location-picker" name="location_' + day_number + '_' + newRowNumber + '" size="6" type="text" /></td>' +
+                '<td><select name="action_' + day_number + '_' + newRowNumber + '">' +
                 {% for action in constant('App\\Entity\\TrainTable::ACTION_VALUES') %}'<option value="{{ action }}">{{ action }}</option>' +{% endfor %}
                 '</select></td>' +
-                '<td><input class="time-picker time-day-' + dayNumber + '" name="time_' + dayNumber + '_' + newRowNumber + '" size="8" type="text" /></td>' +
+                '<td><input class="time-picker time-day-' + day_number + '" name="time_' + day_number + '_' + newRowNumber + '" size="8" type="text" /></td>' +
                 '</tr>';
 
             if (lastRow.attr('id') !== undefined) {
                 lastRow.after(html);
             } else {
-                $('#train_table_' + dayNumber).append(html);
+                $('#train_table_' + day_number).append(html);
             }
 
             initialize();
         }
 
         /**
-         * @param {int} dayNumber
+         * @param {int} day_number
          */
-        function removeDay(dayNumber)
+        function removeDay(day_number)
         {
-            $('#train_table_' + dayNumber).empty();
+            $('#train_table_' + day_number).empty();
         }
 
         /**
@@ -158,42 +158,42 @@
         }
 
         /**
-         * @param {int} dayNumber
+         * @param {int} day_number
          * @param row1
          * @param row2
          */
-        function switchRows(dayNumber, row1, row2)
+        function switchRows(day_number, row1, row2)
         {
             let row1Number = parseInt(row1.attr('id').substr(6));
             let row2Number = parseInt(row2.attr('id').substr(6));
 
             row1.after(row2);
             row1.attr('id', row2.attr('id'));
-            row2.attr('id', 'row_' + dayNumber + '_' + row1Number);
+            row2.attr('id', 'row_' + day_number + '_' + row1Number);
 
-            row1.find('input[name="location_' + dayNumber + '_' + row1Number + '"]').attr('name', 'location_' + dayNumber + '_' + row2Number);
-            row1.find('select[name="action_' + dayNumber + '_' + row1Number + '"]').attr('name', 'action_' + dayNumber + '_' + row2Number);
-            row1.find('input[name="time_' + dayNumber + '_' + row1Number + '"]').attr('name', 'time_' + dayNumber + '_' + row2Number);
+            row1.find('input[name="location_' + day_number + '_' + row1Number + '"]').attr('name', 'location_' + day_number + '_' + row2Number);
+            row1.find('select[name="action_' + day_number + '_' + row1Number + '"]').attr('name', 'action_' + day_number + '_' + row2Number);
+            row1.find('input[name="time_' + day_number + '_' + row1Number + '"]').attr('name', 'time_' + day_number + '_' + row2Number);
 
-            row2.find('input[name="location_' + dayNumber + '_' + row2Number + '"]').attr('name', 'location_' + dayNumber + '_' + row1Number);
-            row2.find('select[name="action_' + dayNumber + '_' + row2Number + '"]').attr('name', 'action_' + dayNumber + '_' + row1Number);
-            row2.find('input[name="time_' + dayNumber + '_' + row2Number + '"]').attr('name', 'time_' + dayNumber + '_' + row1Number);
+            row2.find('input[name="location_' + day_number + '_' + row2Number + '"]').attr('name', 'location_' + day_number + '_' + row1Number);
+            row2.find('select[name="action_' + day_number + '_' + row2Number + '"]').attr('name', 'action_' + day_number + '_' + row1Number);
+            row2.find('input[name="time_' + day_number + '_' + row2Number + '"]').attr('name', 'time_' + day_number + '_' + row1Number);
 
             initialize();
         }
 
         /**
-         * @param {int} dayNumber
+         * @param {int} day_number
          */
-        function verifyTimeRow(dayNumber)
+        function verifyTimeRow(day_number)
         {
-            $('.time-day-' + dayNumber).each(function () {
+            $('.time-day-' + day_number).each(function () {
                 $(this).removeClass('with-error');
 
                 const rowNumber = parseInt($(this).attr('name').substr(7));
 
                 if (rowNumber > 1) {
-                    const previousTimeString = $('input[name="time_' + dayNumber + '_' + (rowNumber - 1) + '"').val();
+                    const previousTimeString = $('input[name="time_' + day_number + '_' + (rowNumber - 1) + '"').val();
                     const previousTime = new Date(0, 0, 0, parseInt(previousTimeString.substr(0, 2)), parseInt(previousTimeString.substr(3, 2)), 0);
                     const currentTime = new Date(0, 0, 0, parseInt($(this).val().substr(0, 2)), parseInt($(this).val().substr(3, 2)), 0);
 
@@ -209,16 +209,16 @@
          */
         function modifyAllTimes(increase)
         {
-            {% for dayNumber in 1..7 %}modifyTimes({{ dayNumber }}, increase);{% endfor %}
+            {% for day_number in 1..7 %}modifyTimes({{ day_number }}, increase);{% endfor %}
         }
 
         /**
-         * @param {int} dayNumber
+         * @param {int} day_number
          * @param {boolean} increase
          */
-        function modifyTimes(dayNumber, increase)
+        function modifyTimes(day_number, increase)
         {
-            $('.time-day-' + dayNumber).each(function () {
+            $('.time-day-' + day_number).each(function () {
                 let newTime = new Date();
                 newTime.setHours(parseInt($(this).val().substr(0, 2)));
                 newTime.setMinutes(parseInt($(this).val().substr(3, 2))  + (increase ? 30 : -30));
@@ -246,18 +246,18 @@
             initialize();
 
             $('.copy-day').on('change', function () {
-                const dayNumberSource = $(this).attr('id').substr(9);
-                const dayNumberTarget = $(this).val();
+                const day_number_source = $(this).attr('id').substr(9);
+                const day_number_target = $(this).val();
 
-                let html = $('#train_table_' + dayNumberSource).html();
-                html = replaceAll(html, 'train_table_' + dayNumberSource, 'train_table_' + dayNumberTarget);
-                html = replaceAll(html, 'row_' + dayNumberSource + '_', 'row_' + dayNumberTarget + '_');
-                html = replaceAll(html, 'location_' + dayNumberSource + '_', 'location_' + dayNumberTarget + '_');
-                html = replaceAll(html, 'action_' + dayNumberSource + '_', 'action_' + dayNumberTarget + '_');
-                html = replaceAll(html, 'time_' + dayNumberSource + '_', 'time_' + dayNumberTarget + '_');
-                html = replaceAll(html, 'time-day-' + dayNumberSource, 'time-day-' + dayNumberTarget);
+                let html = $('#train_table_' + day_number_source).html();
+                html = replaceAll(html, 'train_table_' + day_number_source, 'train_table_' + day_number_target);
+                html = replaceAll(html, 'row_' + day_number_source + '_', 'row_' + day_number_target + '_');
+                html = replaceAll(html, 'location_' + day_number_source + '_', 'location_' + day_number_target + '_');
+                html = replaceAll(html, 'action_' + day_number_source + '_', 'action_' + day_number_target + '_');
+                html = replaceAll(html, 'time_' + day_number_source + '_', 'time_' + day_number_target + '_');
+                html = replaceAll(html, 'time-day-' + day_number_source, 'time-day-' + day_number_target);
 
-                $('#train_table_' + dayNumberTarget).html(html);
+                $('#train_table_' + day_number_target).html(html);
                 $(this).val(0);
 
                 initialize();

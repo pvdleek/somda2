@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Command;
@@ -56,11 +57,11 @@ class UpdateLocationsCommand extends Command
                 $this->doctrine->getManager()->persist($category);
             }
 
-            $locationName = \ucfirst(\strtolower($station['code']));
-            $location = $this->doctrine->getRepository(Location::class)->findOneBy(['name' => $locationName]);
+            $location_name = \ucfirst(\strtolower($station['code']));
+            $location = $this->doctrine->getRepository(Location::class)->findOneBy(['name' => $location_name]);
             if (null === $location) {
                 $location = new Location();
-                $location->name = $locationName;
+                $location->name = $location_name;
                 $location->category = $category;
 
                 $this->doctrine->getManager()->persist($location);

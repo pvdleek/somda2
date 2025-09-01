@@ -1,76 +1,59 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Repository\SpecialRouteRepository;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Table(name="somda_drgl")
- * @ORM\Entity(repositoryClass="App\Repository\SpecialRoute")
- */
+#[ORM\Entity(repositoryClass: SpecialRouteRepository::class)]
+#[ORM\Table(name: 'somda_drgl')]
 class SpecialRoute
 {
-    /**
-     * @ORM\Column(name="drglid", type="integer", nullable=false, options={"unsigned"=true})
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(name: 'drglid', nullable: false, options: ['unsigned' => true])]
     public ?int $id = null;
 
-    /**
-     * @ORM\Column(name="pubdatum", type="datetime", nullable=true)
-     */
-    public ?\DateTime $publicationTimestamp = null;
+    #[ORM\Column(name: 'pubdatum', type: 'datetime', nullable: true)]
+    public ?\DateTime $publication_timestamp = null;
 
-    /**
-     * @ORM\Column(name="datum", type="date", nullable=false)
-     */
-    public ?\DateTime $startDate = null;
+    #[ORM\Column(name: 'datum', type: 'date', nullable: true)]
+    public ?\DateTime $start_date = null;
 
-    /**
-     * @ORM\Column(name="einddatum", type="date", nullable=true)
-     */
-    public ?\DateTime $endDate = null;
+    #[ORM\Column(name: 'einddatum', type: 'date', nullable: true)]
+    public ?\DateTime $end_date = null;
 
-    /**
-     * @ORM\Column(name="public", type="boolean", nullable=false)
-     */
+    #[ORM\Column(nullable: false, options: ['default' => false])]
     public bool $public = false;
 
-    /**
-     * @ORM\Column(name="title", type="string", length=75, nullable=false)
-     */
+    #[ORM\Column(length: 75, nullable: false, options: ['default' => ''])]
     public string $title = '';
 
-    /**
-     * @ORM\Column(name="image", type="string", length=20, nullable=false)
-     */
+    #[ORM\Column(length: 20, nullable: false, options: ['default' => ''])]
     public string $image = '';
 
-    /**
-     * @ORM\Column(name="text", type="text", length=0, nullable=false)
-     */
+    #[ORM\Column(type: 'text', nullable: false, options: ['default' => ''])]
     public string $text = '';
 
-    /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\User")
-     * @ORM\JoinTable(name="somda_drgl_read",
-     *      joinColumns={@ORM\JoinColumn(name="drglid", referencedColumnName="drglid")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="uid", referencedColumnName="uid")}
-     * )
-     */
-    private $userReads;
+    #[ORM\ManyToMany(targetEntity: User::class)]
+    #[ORM\JoinTable(name: 'somda_drgl_read', 
+        joinColumns: [new ORM\JoinColumn(name: 'drglid', referencedColumnName: 'drglid')], 
+        inverseJoinColumns: [new ORM\JoinColumn(name: 'uid', referencedColumnName: 'uid')]
+    )]
+    private Collection $user_reads;
 
     public function __construct()
     {
-        $this->userReads = new ArrayCollection();
+        $this->user_reads = new ArrayCollection();
     }
 
     public function addUserRead(User $user): SpecialRoute
     {
-        $this->userReads[] = $user;
+        $this->user_reads[] = $user;
         return $this;
     }
 
@@ -79,6 +62,6 @@ class SpecialRoute
      */
     public function getUserReads(): array
     {
-        return $this->userReads->toArray();
+        return $this->user_reads->toArray();
     }
 }

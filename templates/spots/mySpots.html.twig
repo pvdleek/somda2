@@ -144,7 +144,7 @@
                     },
                     {
                         'render': function (data, type, row) {
-                            return '<span title="' + row['locationDescription'] + '">' + data + '</span>';
+                            return '<span title="' + row['location_description'] + '">' + data + '</span>';
                         },
                         'targets': 4,
                     },
@@ -160,12 +160,12 @@
                 ],
                 'columns': [
                     { 'data': null },
-                    { 'data': 'spotDate' },
+                    { 'data': 'spot_date' },
                     { 'data': 'train' },
                     { 'data': 'route' },
                     { 'data': 'location' },
                     { 'data': 'extra' },
-                    { 'data': 'userExtra' },
+                    { 'data': 'user_extra' },
                     { 'data': null },
                 ],
                 initComplete: function () {
@@ -272,10 +272,10 @@
             });
 
             $('#my_spots_bulk_edit_date').on('click', function () {
-                document.location = '{{ path('my_spots_bulk_edit_date', { 'idList': '1234' }) }}'.replace('/1234/', '/' + rowsSelected.join(',') + '/');
+                document.location = '{{ path('my_spots_bulk_edit_date', { 'id_list': '1234' }) }}'.replace('/1234/', '/' + rowsSelected.join(',') + '/');
             });
             $('#my_spots_bulk_edit_location').on('click', function () {
-                document.location = '{{ path('my_spots_bulk_edit_location', { 'idList': '1234' }) }}'.replace('/1234/', '/' + rowsSelected.join(',') + '/');
+                document.location = '{{ path('my_spots_bulk_edit_location', { 'id_list': '1234' }) }}'.replace('/1234/', '/' + rowsSelected.join(',') + '/');
             });
         });
     </script>

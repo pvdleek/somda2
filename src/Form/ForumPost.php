@@ -42,13 +42,13 @@ class ForumPost extends AbstractType
                 FormGenerics::KEY_LABEL => 'Jouw reactie',
                 FormGenerics::KEY_REQUIRED => true,
             ])
-            ->add('signatureOn', CheckboxType::class, [
+            ->add('signature_on', CheckboxType::class, [
                 FormGenerics::KEY_LABEL => 'Handtekening gebruiken',
                 FormGenerics::KEY_REQUIRED => false,
             ]);
 
         if (null !== $options[self::OPTION_EDITED_POST]) {
-            $builder->add('editReason', TextType::class, [
+            $builder->add('edit_reason', TextType::class, [
                 FormGenerics::KEY_LABEL => 'Reden voor bewerking (optioneel)',
                 FormGenerics::KEY_REQUIRED => false,
             ]);

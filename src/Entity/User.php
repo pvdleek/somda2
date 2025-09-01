@@ -1,9 +1,12 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as JMS;
 use Nelmio\ApiDocBundle\Annotation\Model;
@@ -12,189 +15,174 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Table(
- *     name="somda_users",
- *     indexes={
- *         @ORM\Index(name="idx_somda_users__uname", columns={"username"}),
- *         @ORM\Index(name="idx_somda_users__active", columns={"active"}),
- *     }
- * )
- * @ORM\Entity(repositoryClass="App\Repository\User")
- */
+#[ORM\Entity(repositoryClass: UserRepository::class)]
+#[ORM\Table(name: 'somda_users', indexes: [
+    new ORM\Index(name: 'idx_somda_users__uname', columns: ['username']),
+    new ORM\Index(name: 'idx_somda_users__active', columns: ['active']),
+])]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     public const API_TOKEN_VALIDITY = '+1 year';
 
     /**
-     * @ORM\Column(name="uid", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      * @JMS\Expose()
      * @OA\Property(description="Unique identifier", type="integer")
      */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(name: 'uid')]
     public ?int $id = null;
 
     /**
-     * @ORM\Column(name="active", type="boolean", nullable=false)
      * @JMS\Expose()
      * @OA\Property(description="Is the user active", type="boolean")
      */
+    #[ORM\Column(nullable: false, options: ['default' => false])]
     public bool $active = false;
 
     /**
-     * @ORM\Column(name="spots_ok", type="smallint", nullable=false, options={"unsigned"=true})
-     * @JMS\Exclude()
-     */
-    public int $spotsOk = 0;
-
-    /**
-     * @ORM\Column(name="username", type="string", length=20, nullable=false)
-     * @Assert\NotBlank()
-     * @Assert\Length(
-     *     min = 2,
-     *     max = 20,
-     *     minMessage = "De gebruikersnaam moet minimaal 2 karakters lang zijn",
-     *     maxMessage = "De gebruikersnaam mag maximaal 20 karakters lang zijn"
-     * )
      * @JMS\Expose()
      * @OA\Property(description="Username", maxLength=20, type="string")
      */
+    #[ORM\Column(length: 20, nullable: false, options: ['default' => ''])]
+    #[Assert\NotBlank()]
+    #[Assert\Length(min: 2, max: 20, minMessage: 'De gebruikersnaam moet minimaal 2 karakters lang zijn', maxMessage: 'De gebruikersnaam mag maximaal 20 karakters lang zijn')]
     public string $username = '';
 
     /**
-     * @ORM\Column(name="name", type="string", length=100, nullable=true)
      * @JMS\Expose()
      * @OA\Property(description="Real name of the user", maxLength=100, type="string")
      */
+    #[ORM\Column(length: 100, nullable: true, options: ['default' => ''])]
     public ?string $name = null;
 
     /**
-     * @ORM\Column(name="password", type="string", length=255, nullable=false)
      * @JMS\Exclude()
      */
+    #[ORM\Column(length: 255, nullable: false, options: ['default' => ''])]
     public string $password = '';
 
     /**
-     * @ORM\Column(name="email", type="string", length=100, nullable=false)
-     * @Assert\NotBlank()
-     * @Assert\Email(message="Dit is geen geldig e-mailadres")
-     * @Assert\Length(
-     *     max = 100,
-     *     maxMessage = "Het e-mailadres mag maximaal 100 karakters lang zijn"
-     * )
      * @JMS\Expose()
      * @OA\Property(description="Email address of the user", maxLength=100, type="string")
      */
+    #[Assert\NotBlank]
+    #[Assert\Email(message: 'Dit is geen geldig e-mailadres')]
+    #[Assert\Length(
+        max: 100,
+        maxMessage: 'Het e-mailadres mag maximaal 100 karakters lang zijn'
+    )]
+    #[ORM\Column(length: 100, nullable: false, options: ['default' => ''])]
     public string $email = '';
 
     /**
-     * @ORM\Column(name="actkey", type="string", length=13, nullable=true)
      * @JMS\Exclude()
      */
-    public ?string $activationKey = null;
+    #[ORM\Column(name: 'actkey', length: 13, nullable: true)]
+    public ?string $activation_key = null;
 
     /**
-     * @ORM\Column(name="regdate", type="datetime", nullable=false)
      * @JMS\Expose()
      * @OA\Property(description="ISO-8601 timestamp of the registration of the user (Y-m-dTH:i:sP)", type="string")
      */
-    public ?\DateTime $registerTimestamp = null;
+    #[ORM\Column(name: 'regdate', type: 'datetime', nullable: true)]
+    public ?\DateTime $register_timestamp = null;
 
     /**
-     * @ORM\Column(name="ban_expire_timestamp", type="datetime", nullable=true)
      * @JMS\Exclude()
      */
-    public ?\DateTime $banExpireTimestamp = null;
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    public ?\DateTime $ban_expire_timestamp = null;
 
     /**
-     * @ORM\Column(name="last_visit", type="datetime", nullable=true)
      * @JMS\Expose()
      * @OA\Property(description="ISO-8601 timestamp of the last visit of the user (Y-m-dTH:i:sP)", type="string")
      */
-    public ?\DateTime $lastVisit = null;
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    public ?\DateTime $last_visit = null;
 
     /**
-     * @ORM\Column(name="api_token", type="string", length=23, nullable=true)
      * @JMS\Expose()
      * @OA\Property(description="Token of the user, if logged in", maxLength=23, type="string")
      */
-    public ?string $apiToken = null;
+    #[ORM\Column(type: 'string', length: 23, nullable: true)]
+    public ?string $api_token = null;
 
     /**
-     * @ORM\Column(name="api_token_expiry_timestamp", type="datetime", nullable=true)
      * @JMS\Exclude()
      */
-    public ?\DateTime $apiTokenExpiryTimestamp = null;
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    public ?\DateTime $api_token_expiry_timestamp = null;
 
     /**
-     * @ORM\Column(name="roles", type="array", nullable=false)
      * @JMS\Exclude()
      */
+    #[ORM\Column(type: 'array', nullable: false, options: ['default' => 'a:0:{}'])]
     public array $roles = [];
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\UserInfo", mappedBy="user")
      * @JMS\Expose()
      */
+    #[ORM\OneToOne(targetEntity: UserInfo::class, mappedBy: 'user', cascade: ['persist', 'remove'])]
     public ?UserInfo $info = null;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Group", mappedBy="users")
      * @JMS\Exclude()
      */
-    private $groups;
+    #[ORM\ManyToMany(targetEntity: Group::class, mappedBy: 'users')]
+    private Collection $groups;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\ForumFavorite", mappedBy="user")
      * @JMS\Exclude()
      */
-    private $forumFavorites;
+    #[ORM\OneToMany(targetEntity: ForumFavorite::class, mappedBy: 'user')]
+    private Collection $forum_favorites;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\ForumPostFavorite", mappedBy="user")
      * @JMS\Exclude()
      */
-    private $forumPostFavorites;
+    #[ORM\OneToMany(targetEntity: ForumPostFavorite::class, mappedBy: 'user')]
+    private Collection $forum_post_favorites;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\ForumForum", mappedBy="moderators")
      * @JMS\Exclude()
      */
-    private $moderatedForums;
+    #[ORM\ManyToMany(targetEntity: ForumForum::class, mappedBy: 'moderators')]
+    private Collection $moderated_forums;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Spot", mappedBy="user")
      * @JMS\Exclude()
      */
-    private $spots;
+    #[ORM\OneToMany(targetEntity: Spot::class, mappedBy: 'user')]
+    private Collection $spots;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\UserPreferenceValue", mappedBy="user")
      * @JMS\Expose()
      * @OA\Property(description="The user-settings", ref=@Model(type=UserPreferenceValue::class))
      */
-    private $preferences;
+    #[ORM\OneToMany(targetEntity: UserPreferenceValue::class, mappedBy: 'user', cascade: ['persist', 'remove'])]
+    private Collection $preferences;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\News", mappedBy="userReads")
-     * @ORM\JoinTable(name="somda_news_read",
-     *      joinColumns={@ORM\JoinColumn(name="uid", referencedColumnName="uid")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="newsid", referencedColumnName="newsid")}
-     * )
      * @JMS\Exclude()
      */
-    private $newsReads;
+    #[ORM\ManyToMany(targetEntity: News::class, mappedBy: 'user_reads')]
+    #[ORM\JoinTable(
+        name: 'somda_news_read',
+        joinColumns: [new ORM\JoinColumn(name: 'uid', referencedColumnName: 'uid')],
+        inverseJoinColumns: [new ORM\JoinColumn(name: 'newsid', referencedColumnName: 'newsid')]
+    )]
+    private Collection $news_reads;
 
     public function __construct()
     {
         $this->groups = new ArrayCollection();
-        $this->forumFavorites = new ArrayCollection();
-        $this->forumPostFavorites = new ArrayCollection();
-        $this->moderatedForums = new ArrayCollection();
+        $this->forum_favorites = new ArrayCollection();
+        $this->forum_post_favorites = new ArrayCollection();
+        $this->moderated_forums = new ArrayCollection();
         $this->spots = new ArrayCollection();
         $this->preferences = new ArrayCollection();
-        $this->newsReads = new ArrayCollection();
+        $this->news_reads = new ArrayCollection();
     }
 
     public function getUserIdentifier(): string
@@ -257,9 +245,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->groups->toArray();
     }
 
-    public function addForumFavorite(ForumFavorite $forumFavorite): User
+    public function addForumFavorite(ForumFavorite $forum_favorite): User
     {
-        $this->forumFavorites[] = $forumFavorite;
+        $this->forum_favorites[] = $forum_favorite;
         return $this;
     }
 
@@ -268,7 +256,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getForumFavorites(): array
     {
-        return $this->forumFavorites->toArray();
+        return $this->forum_favorites->toArray();
     }
 
     public function isForumFavorite(ForumDiscussion $discussion): bool
@@ -281,9 +269,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return false;
     }
 
-    public function addForumPostFavorite(ForumPostFavorite $forumPostFavorite): User
+    public function addForumPostFavorite(ForumPostFavorite $forum_post_favorite): User
     {
-        $this->forumPostFavorites[] = $forumPostFavorite;
+        $this->forum_post_favorites[] = $forum_post_favorite;
         return $this;
     }
 
@@ -292,7 +280,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getForumPostFavorites(): array
     {
-        return $this->forumPostFavorites->toArray();
+        return $this->forum_post_favorites->toArray();
     }
 
     public function isPostFavorite(ForumPost $post): bool
@@ -305,9 +293,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return false;
     }
 
-    public function addModeratedForum(ForumForum $forumForum): User
+    public function addModeratedForum(ForumForum $forum_forum): User
     {
-        $this->moderatedForums[] = $forumForum;
+        $this->moderated_forums[] = $forum_forum;
         return $this;
     }
 
@@ -316,7 +304,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getModeratedForums(): array
     {
-        return $this->moderatedForums->toArray();
+        return $this->moderated_forums->toArray();
     }
 
     public function addSpot(Spot $spot): User
@@ -333,9 +321,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->spots->toArray();
     }
 
-    public function addPreference(UserPreferenceValue $userPreferenceValue): User
+    public function addPreference(UserPreferenceValue $user_preference_value): User
     {
-        $this->preferences[] = $userPreferenceValue;
+        $this->preferences[] = $user_preference_value;
         return $this;
     }
 
@@ -349,8 +337,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function removeAllNewsRead(): void
     {
-        foreach ($this->newsReads->toArray() as $newsRead) {
-            $this->newsReads->removeElement($newsRead);
+        foreach ($this->news_reads->toArray() as $news_read) {
+            $this->news_reads->removeElement($news_read);
         }
     }
 

@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
+use App\Repository\TrainTableRepository;
 use App\Traits\DateTrait;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as JMS;
@@ -9,17 +12,15 @@ use Nelmio\ApiDocBundle\Annotation\Model;
 use OpenApi\Annotations as OA;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Table(
- *     name="somda_tdr",
- *     indexes={
- *         @ORM\Index(name="idx_somda_tdr__tijd", columns={"tijd"}),
- *         @ORM\Index(name="idx_somda_tdr__locatieid", columns={"locatieid"}),
- *         @ORM\Index(name="idx_somda_tdr__treinid", columns={"treinid"})
- *     }
- * )
- * @ORM\Entity(repositoryClass="App\Repository\TrainTable")
- */
+#[ORM\Entity(repositoryClass: TrainTableRepository::class)]
+#[ORM\Table(
+    name: 'somda_tdr',
+    indexes: [
+        new ORM\Index(name: 'idx_somda_tdr__tijd', columns: ['tijd']),
+        new ORM\Index(name: 'idx_somda_tdr__locatieid', columns: ['locatieid']),
+        new ORM\Index(name: 'idx_somda_tdr__treinid', columns: ['treinid']),
+    ]
+)]
 class TrainTable
 {
     use DateTrait;
@@ -27,24 +28,22 @@ class TrainTable
     public const ACTION_VALUES = ['v', '-', '+', 'a'];
 
     /**
-     * @ORM\Column(name="tdrid", type="integer", nullable=false, options={"unsigned"=true})
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      * @JMS\Expose()
      * @OA\Property(description="Unique identifier", type="integer")
      */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(name: 'tdrid', nullable: false, options: ['unsigned' => true])]
     public ?int $id = null;
 
     /**
-     * @ORM\Column(name="orderid", type="integer", nullable=false, options={"default"="1", "unsigned"=true})
      * @JMS\Expose()
      * @OA\Property(description="The order in which the items should be displayed", type="integer")
      */
+    #[ORM\Column(name: 'orderid', type: 'integer', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     public int $order = 1;
 
     /**
-     * @ORM\Column(name="actie", type="string", length=1, nullable=false, options={"default"="-"})
-     * @Assert\Choice(choices=TrainTable::ACTION_VALUES)
      * @JMS\Expose()
      * @OA\Property(
      *     description="The action on the location: 'v' for departure, '-' for a drivethrough,\
@@ -54,10 +53,11 @@ class TrainTable
      *     type="string",
      * )
      */
+    #[ORM\Column(name: 'actie', length: 1, nullable: false, options: ['default' => '-'])]
+    #[Assert\Choice(choices: self::ACTION_VALUES)]
     public string $action = '-';
 
     /**
-     * @ORM\Column(name="tijd", type="smallint", nullable=false, options={"default"="0", "unsigned"=true})
      * @JMS\Exclude()
      * @OA\Property(
      *     description="The time of the trainTable action (hh:mm, 24-hour clock, GMT+1 Amsterdam timezone)",
@@ -65,52 +65,47 @@ class TrainTable
      *     type="string",
      * )
      */
+    #[ORM\Column(name: 'tijd', type: 'smallint', nullable: false, options: ['default' => 0, 'unsigned' => true])]
     public int $time = 0;
 
     /**
-     * @ORM\Column(name="spoor", type="string", length=3, nullable=true)
-     * @JMS\Exclude()
-     */
-    public ?string $track = null;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\TrainTableYear")
-     * @ORM\JoinColumn(name="tdr_nr", referencedColumnName="tdr_nr")
      * @JMS\Expose()
      * @OA\Property(
      *     description="The trainTableYear to which this trainTable belongs",
      *     ref=@Model(type=TrainTableYear::class),
      * )
      */
-    public ?TrainTableYear $trainTableYear = null;
+    #[ORM\ManyToOne(targetEntity: TrainTableYear::class)]
+    #[ORM\JoinColumn(name: 'tdr_nr', referencedColumnName: 'tdr_nr')]
+    public ?TrainTableYear $train_table_year = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Route", inversedBy="trainTables")
-     * @ORM\JoinColumn(name="treinid", referencedColumnName="treinid")
      * @JMS\Exclude()
      */
+    #[ORM\ManyToOne(targetEntity: Route::class, inversedBy: 'train_tables')]
+    #[ORM\JoinColumn(name: 'treinid', referencedColumnName: 'treinid')]
     public ?Route $route = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\RouteOperationDays")
-     * @ORM\JoinColumn(name="rijdagenid", referencedColumnName="rijdagenid")
      * @JMS\Expose()
      * @OA\Property(
      *     description="The days on which this route operates",
      *     ref=@Model(type=RouteOperationDays::class),
      * )
      */
+    #[ORM\ManyToOne(targetEntity: RouteOperationDays::class)]
+    #[ORM\JoinColumn(name: 'rijdagenid', referencedColumnName: 'rijdagenid')]
     public ?RouteOperationDays $routeOperationDays = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Location", inversedBy="trainTables")
-     * @ORM\JoinColumn(name="locatieid", referencedColumnName="afkid")
      * @JMS\Expose()
      * @OA\Property(
      *     description="The location of the trainTable action",
      *     ref=@Model(type=Location::class),
      * )
      */
+    #[ORM\ManyToOne(targetEntity: Location::class, inversedBy: 'train_tables')]
+    #[ORM\JoinColumn(name: 'locatieid', referencedColumnName: 'afkid')]
     public ?Location $location = null;
 
     /**

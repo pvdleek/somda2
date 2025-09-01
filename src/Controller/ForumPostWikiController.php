@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Controller;
@@ -30,8 +31,8 @@ class ForumPostWikiController
             throw new AccessDeniedException('This post does not exist');
         }
 
-        $post->wikiCheck = $operation === 'ok' ? ForumPost::WIKI_CHECK_OK : ForumPost::WIKI_CHECK_N_A;
-        $post->wikiChecker = $this->userHelper->getUser();
+        $post->wiki_check = $operation === 'ok' ? ForumPost::WIKI_CHECK_OK : ForumPost::WIKI_CHECK_N_A;
+        $post->wiki_checker = $this->userHelper->getUser();
         $this->doctrine->getManager()->flush();
 
         return new JsonResponse();

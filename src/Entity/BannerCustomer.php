@@ -1,60 +1,44 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Table(name="somda_banner_customer")
- * @ORM\Entity
- */
+#[ORM\Entity]
+#[ORM\Table(name: 'somda_banner_customer')]
 class BannerCustomer
 {
-    /**
-     * @ORM\Column(name="id", type="smallint", nullable=false, options={"unsigned"=true})
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'smallint', nullable: false, options: ['unsigned' => true])]
     public ?int $id = null;
 
-    /**
-     * @ORM\Column(name="name", type="string", length=6, nullable=false)
-     */
+    #[ORM\Column(length: 6, nullable: false, options: ['default' => ''])]
     public string $name = '';
 
-    /**
-     * @ORM\Column(name="max_views", type="integer", nullable=true, options={"unsigned"=true})
-     */
-    public ?int $maxViews = null;
+    #[ORM\Column(nullable: true, options: ['unsigned' => true])]
+    public ?int $max_views = null;
 
-    /**
-     * @ORM\Column(name="max_hits", type="integer", nullable=true, options={"unsigned"=true})
-     */
-    public ?int $maxHits = null;
+    #[ORM\Column(nullable: true, options: ['unsigned' => true])]
+    public ?int $max_hits = null;
 
-    /**
-     * @ORM\Column(name="max_days", type="smallint", nullable=true, options={"unsigned"=true})
-     */
-    public ?int $maxDays = null;
+    #[ORM\Column(nullable: true, options: ['unsigned' => true])]
+    public ?int $max_days = null;
 
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Banner", mappedBy="customer")
-     */
-    private $banners;
+    #[ORM\OneToMany(mappedBy: 'customer', targetEntity: 'App\Entity\Banner')]
+    private Collection $banners;
 
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\BannerCustomerUser", mappedBy="customer")
-     */
-    private $customerUsers;
+    #[ORM\OneToMany(mappedBy: 'customer', targetEntity: 'App\Entity\BannerCustomerUser')]
+    private Collection $customer_users;
 
-    /**
-     *
-     */
     public function __construct()
     {
         $this->banners = new ArrayCollection();
-        $this->customerUsers = new ArrayCollection();
+        $this->customer_users = new ArrayCollection();
     }
 
     public function addBanner(Banner $banner): BannerCustomer
@@ -73,7 +57,7 @@ class BannerCustomer
 
     public function addCustomerUser(BannerCustomerUser $customerUser): BannerCustomer
     {
-        $this->customerUsers[] = $customerUser;
+        $this->customer_users[] = $customerUser;
         return $this;
     }
 
@@ -82,6 +66,6 @@ class BannerCustomer
      */
     public function getCustomerUsers(): array
     {
-        return $this->customerUsers->toArray();
+        return $this->customer_users->toArray();
     }
 }

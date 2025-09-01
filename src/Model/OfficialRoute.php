@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Model;
 
 use App\Entity\Route;
@@ -18,7 +20,7 @@ class OfficialRoute
 
     public Transporter $transporter;
 
-    public int $firstStopNumber;
+    public int $first_stop_number;
 
-    public int $lastStopNumber;
+    public int $last_stop_number;
 }

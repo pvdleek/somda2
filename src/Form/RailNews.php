@@ -34,7 +34,7 @@ class RailNews extends AbstractType
             ->add('active', CheckboxType::class, [
                 FormGenerics::KEY_LABEL => 'Bericht goedgekeurd',
             ])
-            ->add('automaticUpdates', CheckboxType::class, [
+            ->add('automatic_updates', CheckboxType::class, [
                 FormGenerics::KEY_LABEL => 'Bericht automatisch bijwerken',
             ]);
     }

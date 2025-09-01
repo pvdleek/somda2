@@ -79,7 +79,7 @@ location:
   methods: [GET]
   controller: App\Controller\LocationController::indexAction
 location_search:
-  path: /verkortingen/{searchMethod}/{search}/
+  path: /verkortingen/{search_method}/{search}/
   methods: [GET]
   controller: App\Controller\LocationController::indexAction
 location_json:
@@ -103,37 +103,37 @@ train_table:
   methods: [GET]
   controller: App\Controller\TrainTableController::indexAction
 train_table_search:
-  path: /dienstregeling/{trainTableYearId}/{routeNumber}/
+  path: /dienstregeling/{train_table_year_id}/{route_number}/
   methods: [GET]
-  requirements: { trainTableYearId: \d+ }
+  requirements: { train_table_year_id: \d+ }
   controller: App\Controller\TrainTableController::indexAction
 passing_routes:
   path: /doorkomststaat/
   methods: [GET]
   controller: App\Controller\TrainTableController::passingRoutesAction
 passing_routes_search:
-  path: /doorkomststaat/{trainTableYearId}/{locationName}/{dayNumber}/{startTime}/{endTime}/
+  path: /doorkomststaat/{train_table_year_id}/{location_name}/{day_number}/{start_time}/{end_time}/
   methods: [GET]
-  requirements: { trainTableYearId: \d+, dayNumber: \d+ }
+  requirements: { train_table_year_id: \d+, day_number: \d+ }
   controller: App\Controller\TrainTableController::passingRoutesAction
 passing_routes_export:
-  path: /doorkomststaat/{trainTableYearId}/{locationName}/{dayNumber}/{startTime}/{endTime}/exporteren/{spotterVersion}/
+  path: /doorkomststaat/{train_table_year_id}/{location_name}/{day_number}/{start_time}/{end_time}/exporteren/{spotter_version}/
   methods: [GET]
-  requirements: { trainTableYearId: \d+, dayNumber: \d+ }
+  requirements: { train_table_year_id: \d+, day_number: \d+ }
   controller: App\Controller\TrainTableController::passingRoutesExportAction
 route_overview:
   path: /overzicht-treinnummers/
   methods: [GET]
   controller: App\Controller\TrainTableController::routeOverviewAction
 route_overview_year:
-  path: /overzicht-treinnummers/{trainTableYearId}/
+  path: /overzicht-treinnummers/{train_table_year_id}/
   methods: [GET]
-  requirements: { trainTableYearId: \d+ }
+  requirements: { train_table_year_id: \d+ }
   controller: App\Controller\TrainTableController::routeOverviewAction
 route_overview_year_route_list:
-  path: /overzicht-treinnummers/{trainTableYearId}/{routeListId}/
+  path: /overzicht-treinnummers/{train_table_year_id}/{route_list_id}/
   methods: [GET]
-  requirements: { trainTableYearId: \d+, routeListId: \d+ }
+  requirements: { train_table_year_id: \d+, route_list_id: \d+ }
   controller: App\Controller\TrainTableController::routeOverviewAction
 special_routes:
   path: /drgl/
@@ -153,21 +153,21 @@ spot_input:
   methods: [GET, POST]
   controller: App\Controller\SpotInputController::indexAction
 spot_input_feedback:
-  path: /invoer-feedback/{idList}
+  path: /invoer-feedback/{id_list}
   methods: [GET]
-  requirements: { idList: .+ }
+  requirements: { id_list: .+ }
   controller: App\Controller\SpotInputController::feedbackAction
 spots:
   path: /spots/
   methods: [GET]
   controller: App\Controller\SpotController::indexAction
 spots_search:
-  path: /spots/{maxMonths}/{searchParameters}
+  path: /spots/{max_months}/{search_parameters}
   methods: [GET]
-  requirements: { maxMonths: '1|3|6|12|24|36|48|60|999', searchParameters: .+ }
+  requirements: { max_months: '1|3|6|12|24|36|48|60|999', search_parameters: .+ }
   controller: App\Controller\SpotController::indexAction
 spots_to_train_table:
-  path: /spots/naar-dienstregeling/{routeNumber}/{date}/
+  path: /spots/naar-dienstregeling/{route_number}/{date}/
   methods: [GET]
   controller: App\Controller\SpotController::redirectToTrainTableAction
 my_spots:
@@ -189,16 +189,16 @@ my_spots_delete:
   requirements: { id: \d+ }
   controller: App\Controller\MySpotsController::deleteAction
 my_spots_bulk_edit_date:
-  path: /mijn-spots/bulk-bewerken/datum/{idList}/
+  path: /mijn-spots/bulk-bewerken/datum/{id_list}/
   methods: [GET, POST]
   defaults: { 'type': 'date' }
-  requirements: { idList: .+ }
+  requirements: { id_list: .+ }
   controller: App\Controller\MySpotsController::bulkAction
 my_spots_bulk_edit_location:
-  path: /mijn-spots/bulk-bewerken/locatie/{idList}/
+  path: /mijn-spots/bulk-bewerken/locatie/{id_list}/
   methods: [GET, POST]
   defaults: { 'type': 'location' }
-  requirements: { idList: .+ }
+  requirements: { id_list: .+ }
   controller: App\Controller\MySpotsController::bulkAction
 pois:
   path: /spotpunten/
@@ -218,14 +218,14 @@ train_compositions:
   methods: [GET]
   controller: App\Controller\TrainController::indexAction
 train_compositions_type:
-  path: /materieel-samenstellingen/{typeId}/
+  path: /materieel-samenstellingen/{type_id}/
   methods: [GET]
-  requirements: { typeId: \d+ }
+  requirements: { type_id: \d+ }
   controller: App\Controller\TrainController::indexAction
 train_composition_add:
-  path: /materieel-samenstelling/toevoegen/{typeId}/
+  path: /materieel-samenstelling/toevoegen/{type_id}/
   methods: [GET, POST]
-  requirements: { typeId: \d+ }
+  requirements: { type_id: \d+ }
   defaults: { 'id': 0 }
   controller: App\Controller\TrainController::editAction
 train_composition_edit:
@@ -234,9 +234,9 @@ train_composition_edit:
   requirements: { id: \d+ }
   controller: App\Controller\TrainController::editAction
 train_composition_check:
-  path: /materieel-samenstelling/controleren/{trainId}/{userId}/{approved}/
+  path: /materieel-samenstelling/controleren/{train_id}/{user_id}/{approved}/
   methods: [GET, POST]
-  requirements: { trainId: \d+, userId: \d+, approved: '0|1' }
+  requirements: { train_id: \d+, user_id: \d+, approved: '0|1' }
   controller: App\Controller\TrainController::checkAction
 ddar_trains:
   path: /ddar/
@@ -270,14 +270,14 @@ forum_discussion:
   requirements: { id: \d+ }
   controller: App\Controller\ForumDiscussionController::indexAction
 forum_discussion_page:
-  path: /forum/{id}/{pageNumber}/{name}/
+  path: /forum/{id}/{page_number}/{name}/
   methods: [GET]
-  requirements: { id: \d+, pageNumber: \d+ }
+  requirements: { id: \d+, page_number: \d+ }
   controller: App\Controller\ForumDiscussionController::indexAction
 forum_discussion_post:
-  path: /forum/{id}/p{postId}/{name}/
+  path: /forum/{id}/p{post_id}/{name}/
   methods: [GET]
-  requirements: { id: \d+, postId: \d+ }
+  requirements: { id: \d+, post_id: \d+ }
   controller: App\Controller\ForumDiscussionController::indexAction
 
 forum_discussion_moderate:
@@ -291,7 +291,7 @@ forum_discussion_moderate_combine:
   requirements: { id1: \d+, id2: \d+ }
   controller: App\Controller\ForumModerateController::combineAction
 forum_discussion_moderate_split:
-  path: /forum/{id}/moderate/split/{postIds}/
+  path: /forum/{id}/moderate/split/{post_ids}/
   methods: [GET, POST]
   requirements: { id: \d+ }
   controller: App\Controller\ForumModerateController::splitAction
@@ -465,19 +465,19 @@ feed_json:
   methods: [GET]
   defaults: { _controller: Debril\RssAtomBundle\Controller\StreamController::indexAction, 'format': 'json', 'id': 'spots|special-routes' }
 feed_image:
-  path: /feeds/image/{locationName}/
+  path: /feeds/image/{location_name}/
   methods: [GET]
-  requirements: { locationName: '[a-zA-z]{1,10}' }
+  requirements: { location_name: '[a-zA-z]{1,10}' }
   controller: App\Controller\FeedController::imageAction
 feed_image_with_day_number:
-  path: /feeds/image/{locationName}/{dayNumber}/
+  path: /feeds/image/{location_name}/{day_number}/
   methods: [GET]
-  requirements: { locationName: '[a-zA-z]{1,10}', dayNumber: '[1-7]' }
+  requirements: { location_name: '[a-zA-z]{1,10}', day_number: '[1-7]' }
   controller: App\Controller\FeedController::imageAction
 feed_image_with_start_time:
-  path: /feeds/image/{locationName}/{dayNumber}/{startTime}/
+  path: /feeds/image/{location_name}/{day_number}/{start_time}/
   methods: [GET]
-  requirements: { locationName: '[a-zA-z]{1,10}', dayNumber: '[1-7]', startTime: '[0-9]{2}:[0-9]{2}' }
+  requirements: { location_name: '[a-zA-z]{1,10}', day_number: '[1-7]', start_time: '[0-9]{2}:[0-9]{2}' }
   controller: App\Controller\FeedController::imageAction
 
 ##############
@@ -532,29 +532,29 @@ manage_train_tables:
   methods: [GET]
   controller: App\Controller\ManageTrainTablesController::manageAction
 manage_train_tables_year:
-  path: /beheer-dienstregelingen/{yearId}/
+  path: /beheer-dienstregelingen/{year_id}/
   methods: [GET]
-  requirements: { yearId: \d+ }
+  requirements: { year_id: \d+ }
   controller: App\Controller\ManageTrainTablesController::manageAction
 manage_train_tables_year_route_list:
-  path: /beheer-dienstregelingen/{yearId}/{routeListId}/
+  path: /beheer-dienstregelingen/{year_id}/{route_list_id}/
   methods: [GET]
-  requirements: { yearId: \d+, routeListId: \d+ }
+  requirements: { year_id: \d+, route_list_id: \d+ }
   controller: App\Controller\ManageTrainTablesController::manageAction
 manage_train_table:
-  path: /beheer-dienstregeling/{routeListId}/{routeId}/
+  path: /beheer-dienstregeling/{route_list_id}/{route_id}/
   methods: [GET, POST]
-  requirements: { routeListId: \d+, routeId: \d+ }
+  requirements: { route_list_id: \d+, route_id: \d+ }
   controller: App\Controller\ManageTrainTablesController::manageRouteAction
 manage_train_table_add:
-  path: /beheer-dienstregeling/{routeListId}/{routeId}/{routeNumber}/
+  path: /beheer-dienstregeling/{route_list_id}/{route_id}/{route_number}/
   methods: [GET, POST]
-  requirements: { routeListId: \d+, routeId: \d+, routeNumber: \d+ }
+  requirements: { route_list_id: \d+, route_id: \d+, route_number: \d+ }
   controller: App\Controller\ManageTrainTablesController::manageRouteAction
 manage_train_table_delete:
-  path: /beheer-dienstregeling/verwijder/{yearId}/{routeListId}/{routeId}/
+  path: /beheer-dienstregeling/verwijder/{year_id}/{route_list_id}/{route_id}/
   methods: [GET, POST]
-  requirements: { yearId: \d+, routeListId: \d+, routeId: \d+ }
+  requirements: { year_id: \d+, route_list_id: \d+, route_id: \d+ }
   controller: App\Controller\ManageTrainTablesController::deleteRouteAction
 
 manage_pois:
@@ -592,7 +592,7 @@ manage_route_lists_year:
   requirements: { id: \d+ }
   controller: App\Controller\ManageRouteListsController::routeListsAction
 manage_route_list:
-  path: /beheer-treinnummerlijst-item/{yearId}/{id}/
+  path: /beheer-treinnummerlijst-item/{year_id}/{id}/
   methods: [GET, POST]
-  requirements: { yearId: \d+, id: \d+ }
+  requirements: { year_id: \d+, id: \d+ }
   controller: App\Controller\ManageRouteListsController::routeListAction

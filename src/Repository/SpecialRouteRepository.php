@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repository;
 
 use App\Entity\SpecialRoute as SpecialRouteEntity;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
-class SpecialRoute extends ServiceEntityRepository
+class SpecialRouteRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
@@ -26,9 +28,9 @@ class SpecialRoute extends ServiceEntityRepository
             ->select('s')
             ->from(SpecialRouteEntity::class, 's')
             ->andWhere('s.public = TRUE')
-            ->andWhere('(s.startDate >= :today AND s.endDate IS NULL) OR s.endDate >= :today')
+            ->andWhere('(s.start_date >= :today AND s.end_date IS NULL) OR s.end_date >= :today')
             ->setParameter('today', $today)
-            ->addOrderBy('s.startDate', 'ASC');
+            ->addOrderBy('s.start_date', 'ASC');
         return $queryBuilder->getQuery()->getResult();
     }
 
@@ -43,9 +45,9 @@ class SpecialRoute extends ServiceEntityRepository
             ->select('s')
             ->from(SpecialRouteEntity::class, 's')
             ->andWhere('s.public = TRUE')
-            ->andWhere('(s.startDate >= :today AND s.endDate IS NULL) OR s.endDate >= :today')
+            ->andWhere('(s.start_date >= :today AND s.end_date IS NULL) OR s.end_date >= :today')
             ->setParameter('today', new \DateTime())
-            ->addOrderBy('s.startDate', 'ASC')
+            ->addOrderBy('s.start_date', 'ASC')
             ->setMaxResults($limit);
         return $queryBuilder->getQuery()->getResult();
     }

@@ -1,121 +1,106 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Repository\LocationRepository;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as JMS;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use OpenApi\Annotations as OA;
 
-/**
- * @ORM\Table(
- *     name="somda_verk",
- *     uniqueConstraints={@ORM\UniqueConstraint(name="unq_somda_verk__afkorting_landid", columns={"afkorting", "landid"})},
- *     indexes={
- *         @ORM\Index(name="idx_somda_verk__landid", columns={"landid"}),
- *         @ORM\Index(name="idx_somda_verk__description", columns={"description"})
- *     }
- * )
- * @ORM\Entity(repositoryClass="App\Repository\Location")
- */
+#[ORM\Entity(repositoryClass: LocationRepository::class)]
+#[ORM\Table(
+    name: 'somda_verk',
+    uniqueConstraints: [new ORM\UniqueConstraint(name: 'unq_somda_verk__afkorting_landid', columns: ['afkorting', 'landid'])],
+    indexes: [new ORM\Index(name: 'idx_somda_verk__landid', columns: ['landid']), new ORM\Index(name: 'idx_somda_verk__description', columns: ['description'])]
+)]
 class Location
 {
     public const UNKNOWN_NAME = 'Fout!';
 
     /**
-     * @ORM\Column(name="afkid", type="smallint", nullable=false, options={"unsigned"=true})
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      * @JMS\Expose()
      * @OA\Property(description="Unique identifier", type="integer")
      */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(name: 'afkid', type: 'smallint', nullable: false, options: ['unsigned' => true])]
     public ?int $id = null;
 
     /**
-     * @ORM\Column(name="afkorting", type="string", length=10, nullable=false)
      * @JMS\Expose()
      * @OA\Property(description="Abbreviation of the location", maxLength=10, type="string")
      */
+    #[ORM\Column(name: 'afkorting', length: 10, nullable: false, options: ['default' => ''])]
     public string $name = '';
 
     /**
-     * @ORM\Column(name="latitude", type="float", precision=10, scale=0, nullable=true)
      * @JMS\Expose()
      * @OA\Property(description="Latitude of the location", type="float")
      */
+    #[ORM\Column(precision: 10, scale: 0, nullable: true)]
     public ?float $latitude = null;
 
     /**
-     * @ORM\Column(name="longitude", type="float", precision=10, scale=0, nullable=true)
      * @JMS\Expose()
      * @OA\Property(description="Longitude of the location", type="float")
      */
+    #[ORM\Column(precision: 10, scale: 0, nullable: true)]
     public ?float $longitude = null;
 
     /**
-     * @ORM\Column(name="description", type="string", length=100, nullable=false)
      * @JMS\Expose()
      * @OA\Property(description="Description of the location", maxLength=100, type="string")
      */
+    #[ORM\Column(length: 100, nullable: false, options: ['default' => ''])]
     public string $description = '';
 
     /**
-     * @ORM\Column(name="traject", type="string", length=15, nullable=true)
-     * @JMS\Expose()
-     * @OA\Property(description="Route where this location is located", maxLength=15, type="string")
-     */
-    public ?string $routeDescription = null;
-
-    /**
-     * @ORM\Column(name="spot_allowed", type="boolean", nullable=false)
      * @JMS\Expose()
      * @OA\Property(description="Is the location currently active (allowed to add spots)", type="boolean")
      */
-    public bool $spotAllowed = true;
+    #[ORM\Column(nullable: false, options: ['default' => true])]
+    public bool $spot_allowed = true;
 
     /**
-     * @ORM\Column(name="route_overstaptijd", type="smallint", nullable=true, options={"unsigned"=true})
-     * @JMS\Exclude()
-     */
-    public ?int $transferTime = null;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\LocationCategory", inversedBy="locations")
-     * @ORM\JoinColumn(name="landid", referencedColumnName="verk_catid")
      * @JMS\Expose()
      * @OA\Property(
      *     description="The category to which this location belongs",
      *     ref=@Model(type=LocationCategory::class),
      * )
      */
+    #[ORM\ManyToOne(targetEntity: LocationCategory::class, inversedBy: 'locations')]
+    #[ORM\JoinColumn(name: 'landid', referencedColumnName: 'verk_catid')]
     public LocationCategory $category;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\TrainTable", mappedBy="location")
      * @JMS\Exclude()
      */
-    private $trainTables;
+    #[ORM\OneToMany(targetEntity: TrainTable::class, mappedBy: 'location')]
+    private Collection $train_tables;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Spot", mappedBy="location")
      * @JMS\Exclude()
      */
-    private $spots;
+    #[ORM\OneToMany(targetEntity: Spot::class, mappedBy: 'location')]
+    private Collection $spots;
 
     /**
      *
      */
     public function __construct()
     {
-        $this->trainTables = new ArrayCollection();
+        $this->train_tables = new ArrayCollection();
         $this->spots = new ArrayCollection();
     }
 
     public function addTrainTable(TrainTable $trainTable): Location
     {
-        $this->trainTables[] = $trainTable;
+        $this->train_tables[] = $trainTable;
         return $this;
     }
 
@@ -124,7 +109,7 @@ class Location
      */
     public function getTrainTables(): array
     {
-        return $this->trainTables->toArray();
+        return $this->train_tables->toArray();
     }
 
     public function addSpot(Spot $spot): Location

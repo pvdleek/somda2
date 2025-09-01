@@ -1,6 +1,6 @@
 <picture><source srcset="{{ absolute_url(asset('images/logo-1.webp')) }}" /><img alt="Somda" src="{{ absolute_url(asset('images/logo-1.webp')) }}" /></picture>
 <br />
-<br />Dit <a href="{{ url('forum_discussion_post', { 'id': post.discussion.id, 'postId': post.id, 'name': (post.discussion.title | slug) }) }}">Somda forumbericht</a> is gemeld.
+<br />Dit <a href="{{ url('forum_discussion_post', { 'id': post.discussion.id, 'post_id': post.id, 'name': (post.discussion.title | slug) }) }}">Somda forumbericht</a> is gemeld.
 <br />
 <br />De melder is {{ user.username }} ({{ user.email }})
 <br />

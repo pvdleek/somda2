@@ -39,7 +39,7 @@
         {% include('header.html.twig') %}
         {% include('navigation.html.twig') %}
         {% include 'partials/errorMessages.html.twig' %}
-        {% if blockHelp is defined and blockHelp is not null %}<p class="info">{{ blockHelp.text | raw }}</p>{% endif %}
+        {% if block_help is defined and block_help is not null %}<p class="info">{{ block_help.text | raw }}</p>{% endif %}
         {% block content %}{% endblock %}
         {% include('footer.html.twig') %}
     </div>

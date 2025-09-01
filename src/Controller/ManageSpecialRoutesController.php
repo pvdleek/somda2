@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use App\Entity\SpecialRoute;
@@ -30,7 +32,7 @@ class ManageSpecialRoutesController
             'specialRoutes' => $this->formHelper
                 ->getDoctrine()
                 ->getRepository(SpecialRoute::class)
-                ->findBy([], ['startDate' => 'DESC']),
+                ->findBy([], ['start_date' => 'DESC']),
         ]);
     }
 
@@ -44,8 +46,8 @@ class ManageSpecialRoutesController
         $specialRoute = $this->formHelper->getDoctrine()->getRepository(SpecialRoute::class)->find($id);
         if (null === $specialRoute) {
             $specialRoute = new SpecialRoute();
-            $specialRoute->startDate = new \DateTime('+1 day');
-            $specialRoute->publicationTimestamp = new \DateTime();
+            $specialRoute->start_date = new \DateTime('+1 day');
+            $specialRoute->publication_timestamp = new \DateTime();
         }
         $form = $this->formHelper->getFactory()->create(SpecialRouteForm::class, $specialRoute);
 

@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repository;
 
 use App\Entity\ForumPostAlert as ForumPostAlertEntity;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
-class ForumPostAlert extends ServiceEntityRepository
+class ForumPostAlertRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
@@ -39,13 +41,13 @@ class ForumPostAlert extends ServiceEntityRepository
         $queryBuilder = $this->getEntityManager()
             ->createQueryBuilder()
             ->select('f.closed')
-            ->addSelect('GROUP_CONCAT(DISTINCT u.id ORDER BY u.id SEPARATOR \',\') AS senderIds')
-            ->addSelect('GROUP_CONCAT(DISTINCT u.username ORDER BY u.id SEPARATOR \',\') AS senderUsernames')
-            ->addSelect('d.id AS discussionId')
-            ->addSelect('d.title AS discussionTitle')
-            ->addSelect('p.id AS postId')
-            ->addSelect('COUNT(DISTINCT(f.id)) AS numberOfAlerts')
-            ->addSelect('COUNT(DISTINCT(n.id)) AS numberOfNotes')
+            ->addSelect('GROUP_CONCAT(DISTINCT u.id ORDER BY u.id SEPARATOR \',\') AS sender_ids')
+            ->addSelect('GROUP_CONCAT(DISTINCT u.username ORDER BY u.id SEPARATOR \',\') AS sender_usernames')
+            ->addSelect('d.id AS discussion_id')
+            ->addSelect('d.title AS discussion_title')
+            ->addSelect('p.id AS post_id')
+            ->addSelect('COUNT(DISTINCT(f.id)) AS number_of_alerts')
+            ->addSelect('COUNT(DISTINCT(n.id)) AS number_of_notes')
             ->from(ForumPostAlertEntity::class, 'f')
             ->join('f.sender', 'u')
             ->join('f.post', 'p')

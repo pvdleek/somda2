@@ -1,42 +1,29 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Table(
- *     name="somda_mat_patterns",
- *     uniqueConstraints={@ORM\UniqueConstraint(name="unq_somda_mat_patterns__volgorde", columns={"volgorde"})}
- * )
- * @ORM\Entity
- */
+#[ORM\Entity]
+#[ORM\Table(name: 'somda_mat_patterns', uniqueConstraints: [new ORM\UniqueConstraint(name: 'unq_somda_mat_patterns__volgorde', columns: ['volgorde'])])]
 class TrainNamePattern
 {
-    /**
-     * @ORM\Column(name="id", type="integer", nullable=false, options={"unsigned"=true})
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(nullable: false, options: ['unsigned' => true])]
     public ?int $id = null;
 
-    /**
-     * @ORM\Column(name="volgorde", type="smallint", nullable=false, options={"default"="1", "unsigned"=true})
-     */
+    #[ORM\Column(name: 'volgorde', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     public int $order = 1;
 
-    /**
-     * @ORM\Column(name="pattern", type="string", length=80, nullable=false, options={"default"=""})
-     */
+    #[ORM\Column(length: 80, nullable: false, options: ['default' => ''])] 
     public string $pattern = '';
 
-    /**
-     * @ORM\Column(name="naam", type="string", length=50, nullable=false, options={"default"=""})
-     */
+    #[ORM\Column(name: 'naam', length: 50, nullable: false, options: ['default' => ''])]
     public string $name = '';
 
-    /**
-     * @ORM\Column(name="tekening", type="string", length=30, nullable=true)
-     */
+    #[ORM\Column(name: 'tekening', length: 30, nullable: true)]
     public ?string $image = null;
 }

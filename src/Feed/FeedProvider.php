@@ -6,9 +6,9 @@ use App\Entity\Spot;
 use App\Generics\DateGenerics;
 use App\Helpers\SpotHelper;
 use App\Helpers\UserHelper;
-use App\Repository\SpecialRoute as RepositorySpecialRoute;
-use App\Repository\Spot as RepositorySpot;
-use App\Repository\Train as RepositoryTrain;
+use App\Repository\SpecialRouteRepository;
+use App\Repository\SpotRepository;
+use App\Repository\TrainRepository;
 use Debril\RssAtomBundle\Exception\FeedException\FeedNotFoundException;
 use Debril\RssAtomBundle\Provider\FeedProviderInterface;
 use FeedIo\Feed;
@@ -22,15 +22,15 @@ class FeedProvider implements FeedProviderInterface
 {
     private int $limit = 10;
 
-    private ?string $trainFilter = null;
+    private ?string $train_filter = null;
 
     public function __construct(
-        private readonly UserHelper $userHelper,
-        private readonly SpotHelper $spotHelper,
+        private readonly UserHelper $user_helper,
+        private readonly SpotHelper $spot_helper,
         private readonly RouterInterface $router,
-        private readonly RepositorySpecialRoute $repositorySpecialRoute,
-        private readonly RepositorySpot $repositorySpot,
-        private readonly RepositoryTrain $repositoryTrain,
+        private readonly SpecialRouteRepository $special_route_repository,
+        private readonly SpotRepository $spot_repository,
+        private readonly TrainRepository $train_repository,
     ) {
     }
 
@@ -42,7 +42,7 @@ class FeedProvider implements FeedProviderInterface
         $feedType = $request->attributes->get('id');
 
         $this->limit = (int) $request->query->get('limit', 10);
-        $this->trainFilter = $request->query->get('train');
+        $this->train_filter = $request->query->get('train');
 
         $feed = new Feed();
         $feed
@@ -69,10 +69,10 @@ class FeedProvider implements FeedProviderInterface
             $item
                 ->setSummary(
                     '<![CDATA[' .
-                    '<spotDate>' . $spot->spotDate->format('Y-m-d') . '</spotDate>' .
+                    '<spotDate>' . $spot->spot_date->format('Y-m-d') . '</spotDate>' .
                     '<trainNumber>' . $spot->train->number . '</trainNumber>' .
                     '<trainName>' .
-                        ($spot->train->namePattern ? $spot->train->namePattern->name : 'unknown') .
+                        ($spot->train->name_pattern ? $spot->train->name_pattern->name : 'unknown') .
                     '</trainName>' .
                     '<locationAbbreviation>' . $spot->location->name . '</locationAbbreviation>' .
                     '<locationDescription>' . $spot->location->description . '</locationDescription>' .
@@ -80,15 +80,15 @@ class FeedProvider implements FeedProviderInterface
                     '<position>' . $spot->position->name . '</position>' .
                     ']]>'
                 )
-                ->setTitle($this->spotHelper->getDisplaySpot($spot, true))
+                ->setTitle($this->spot_helper->getDisplaySpot($spot, true))
                 ->setPublicId($this->router->generate(
                     'spots_search',
-                    ['maxMonths' => 1, 'searchParameters' => '/0//' . $spot->train->number . '/'],
+                    ['max_months' => 1, 'search_parameters' => '/0//' . $spot->train->number . '/'],
                     UrlGeneratorInterface::ABSOLUTE_URL
                 ))
                 ->setLink($this->router->generate(
                     'spots_search',
-                    ['maxMonths' => 1, 'searchParameters' => '/0///' . $spot->route->number],
+                    ['max_months' => 1, 'search_parameters' => '/0///' . $spot->route->number],
                     UrlGeneratorInterface::ABSOLUTE_URL
                 ))
                 ->setLastModified($spot->timestamp)
@@ -103,13 +103,13 @@ class FeedProvider implements FeedProviderInterface
      */
     private function getSpots(): array
     {
-        if (null === $this->trainFilter) {
-            return $this->repositorySpot->findBy([], ['timestamp' => 'DESC'], $this->limit);
+        if (null === $this->train_filter) {
+            return $this->spot_repository->findBy([], ['timestamp' => 'DESC'], $this->limit);
         }
 
-        $train = $this->repositoryTrain->findOneBy(['number' => $this->trainFilter]);
+        $train = $this->train_repository->findOneBy(['number' => $this->train_filter]);
         if (null !== $train) {
-            return $this->repositorySpot->findBy(['train' => $train], ['timestamp' => 'DESC'], $this->limit);
+            return $this->spot_repository->findBy(['train' => $train], ['timestamp' => 'DESC'], $this->limit);
         }
 
         return [];
@@ -117,29 +117,28 @@ class FeedProvider implements FeedProviderInterface
 
     private function getSpecialRouteItems(): \Generator
     {
-        $specialRoutes = $this->repositorySpecialRoute->findForFeed($this->limit);
-        foreach ($specialRoutes as $specialRoute) {
-            $author = new ItemAuthor($this->userHelper->getAdministratorUser());
+        foreach ($this->special_route_repository->findForFeed($this->limit) as $special_route) {
+            $author = new ItemAuthor($this->user_helper->getAdministratorUser());
 
-            $date = null === $specialRoute->endDate ? $specialRoute->startDate->format(DateGenerics::DATE_FORMAT) :
-                $specialRoute->startDate->format(DateGenerics::DATE_FORMAT) . ' t/m ' .
-                $specialRoute->endDate->format(DateGenerics::DATE_FORMAT);
+            $date = null === $special_route->end_date ? $special_route->start_date->format(DateGenerics::DATE_FORMAT) :
+                $special_route->start_date->format(DateGenerics::DATE_FORMAT) . ' t/m ' .
+                $special_route->end_date->format(DateGenerics::DATE_FORMAT);
 
             $item = new Item;
             $item
-                ->setSummary('<![CDATA[' . $specialRoute->text . ']]>')
-                ->setTitle($specialRoute->title . ' - ' . $date)
+                ->setSummary('<![CDATA[' . $special_route->text . ']]>')
+                ->setTitle($special_route->title . ' - ' . $date)
                 ->setPublicId($this->router->generate(
                     'special_route',
-                    ['id' => $specialRoute->id],
+                    ['id' => $special_route->id],
                     UrlGeneratorInterface::ABSOLUTE_URL
                 ))
                 ->setLink($this->router->generate(
                     'special_route',
-                    ['id' => $specialRoute->id],
+                    ['id' => $special_route->id],
                     UrlGeneratorInterface::ABSOLUTE_URL
                 ))
-                ->setLastModified($specialRoute->publicationTimestamp)
+                ->setLastModified($special_route->publication_timestamp)
                 ->setAuthor($author);
 
             yield $item;

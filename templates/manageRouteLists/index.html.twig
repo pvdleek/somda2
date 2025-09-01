@@ -6,13 +6,13 @@
         <div class="panel-content">
             <label for="trainTableYear">Selecteer het dienstregelings-jaar</label>
             <select id="trainTableYear" name="trainTableYear">
-                {% for trainTable in trainTableYears %}
-                    <option {% if trainTable.id == trainTableYear.id %}selected="selected" {% endif %}value="{{ trainTable.id }}">{{ trainTable.name }}</option>
+                {% for train_table in train_table_years %}
+                    <option {% if train_table.id == train_table_year.id %}selected="selected" {% endif %}value="{{ train_table.id }}">{{ train_table.name }}</option>
                 {% endfor %}
             </select>
             <a class="somda-button" href="#" id="manageTrainTableYear" onclick="manageTrainTableYear(); return false;">Toon treinnummerlijst</a>
 
-            {% if routeLists | length %}
+            {% if route_lists|length %}
                 <br /><br />
                 <table>
                     <tr>
@@ -21,16 +21,16 @@
                         <th>Vervoerder</th>
                         <th>Karakteristiek</th>
                         <th>Traject</th>
-                        <th><a href="{{ path('manage_route_list', { 'yearId': trainTableYear.id, 'id': 0 }) }}">Voeg een serie toe</a></th>
+                        <th><a href="{{ path('manage_route_list', { 'year_id': trainTableYear.id, 'id': 0 }) }}">Voeg een serie toe</a></th>
                     </tr>
-                    {% for routeList in routeLists %}
+                    {% for route_list in route_lists %}
                         <tr>
-                            <td>{{ routeList.firstNumber }}</td>
-                            <td>{{ routeList.lastNumber }}</td>
-                            <td>{{ routeList.transporter.name }}</td>
-                            <td>{{ routeList.characteristic.name }} ({{ routeList.characteristic.description }})</td>
-                            <td>{{ routeList.section }}</td>
-                            <td><a href="{{ path('manage_route_list', { 'yearId': trainTableYear.id, 'id': routeList.id }) }}">Bewerk</a></td>
+                            <td>{{ route_list.first_number }}</td>
+                            <td>{{ route_list.last_number }}</td>
+                            <td>{{ route_list.transporter.name }}</td>
+                            <td>{{ route_list.characteristic.name }} ({{ route_list.characteristic.description }})</td>
+                            <td>{{ route_list.section }}</td>
+                            <td><a href="{{ path('manage_route_list', { 'year_id': trainTableYear.id, 'id': route_list.id }) }}">Bewerk</a></td>
                         </tr>
                     {% endfor %}
                 </table>

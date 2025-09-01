@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Controller\Api;
@@ -84,13 +85,13 @@ class SecurityController extends AbstractFOSRestController
         $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_API_USER);
 
         $user = $this->doctrine->getRepository(User::class)->findOneBy(
-            ['id' => $id, 'active' => true, 'apiToken' => $token]
+            ['id' => $id, 'active' => true, 'api_token' => $token]
         );
-        if (null === $user || $user->apiTokenExpiryTimestamp <= new \DateTime()) {
+        if (null === $user || $user->api_token_expiry_timestamp <= new \DateTime()) {
             return $this->handleView($this->view(['error' => 'This token is not valid'], 401));
         }
 
-        $user->apiTokenExpiryTimestamp = new \DateTime(User::API_TOKEN_VALIDITY);
+        $user->api_token_expiry_timestamp = new \DateTime(User::API_TOKEN_VALIDITY);
         try {
             $this->doctrine->getManager()->flush();
         } catch (\Exception) {

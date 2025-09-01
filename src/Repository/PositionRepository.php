@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repository;
 
 use App\Entity\Position as PositionEntity;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
-class Position extends ServiceEntityRepository
+class PositionRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
@@ -23,6 +25,6 @@ class Position extends ServiceEntityRepository
             ->select('p.id')
             ->addSelect('p.name')
             ->from(PositionEntity::class, 'p');
-        return array_column($queryBuilder->getQuery()->getResult(), 'name', 'id');
+        return \array_column($queryBuilder->getQuery()->getResult(), 'name', 'id');
     }
 }

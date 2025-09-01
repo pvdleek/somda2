@@ -1,50 +1,48 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as JMS;
 use OpenApi\Annotations as OA;
 
-/**
- * @ORM\Table(name="somda_forum_cats")
- * @ORM\Entity
- */
+#[ORM\Entity]
+#[ORM\Table(name: 'somda_forum_cats')]
 class ForumCategory
 {
     /**
-     * @ORM\Column(name="catid", type="smallint", nullable=false, options={"unsigned"=true})
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      * @JMS\Expose()
      * @OA\Property(description="Unique identifier", type="integer")
      */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(name: 'catid', type: 'smallint', nullable: false, options: ['unsigned' => true])]
     public ?int $id = null;
 
     /**
-     * @ORM\Column(name="name", type="string", length=30, nullable=false)
      * @JMS\Expose()
      * @OA\Property(description="Name of the category", maxLength=30, type="string")
      */
+    #[ORM\Column(length: 30, nullable: false, options: ['default' => ''])]
     public string $name = '';
 
     /**
-     * @ORM\Column(name="volgorde", type="smallint", nullable=false, options={"default"="1", "unsigned"=true})
      * @JMS\Expose()
      * @OA\Property(description="The order in which to display the forums", type="integer")
      */
+    #[ORM\Column(name: 'volgorde', type: 'smallint', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     public int $order = 1;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\ForumForum", mappedBy="category")
      * @JMS\Exclude()
      */
-    private $forums;
+    #[ORM\OneToMany(targetEntity: ForumForum::class, mappedBy: 'category')]
+    private Collection $forums;
 
-    /**
-     *
-     */
     public function __construct()
     {
         $this->forums = new ArrayCollection();

@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repository;
 
 use App\Entity\Block as BlockEntity;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
-class Block extends ServiceEntityRepository
+class BlockRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
@@ -25,8 +27,8 @@ class Block extends ServiceEntityRepository
             ->from(BlockEntity::class, 'b')
             ->join('b.parent', 'parent')
             ->andWhere('parent.id > 0')
-            ->addOrderBy('parent.menuOrder', 'ASC')
-            ->addOrderBy('b.menuOrder', 'ASC');
+            ->addOrderBy('parent.menu_order', 'ASC')
+            ->addOrderBy('b.menu_order', 'ASC');
         return $queryBuilder->getQuery()->getArrayResult();
     }
 }

@@ -37,7 +37,7 @@ class SpotHelper implements RuntimeExtensionInterface
         return \sprintf(
             $this->translator->trans($translation),
             $this->getDisplayTrain($spot->train),
-            $this->getDisplayDate($spot->spotDate),
+            $this->getDisplayDate($spot->spot_date),
             $this->getDisplayLocation($spot->location, $noHtml),
             $this->getDisplayRoute($spot->route, $spot->position)
         );
@@ -45,8 +45,8 @@ class SpotHelper implements RuntimeExtensionInterface
 
     private function getDisplayTrain(Train $train): string
     {
-        if (null !== $train->namePattern) {
-            return $train->namePattern->name . ' ' . $train->number;
+        if (null !== $train->name_pattern) {
+            return $train->name_pattern->name . ' ' . $train->number;
         }
         return $train->number;
     }

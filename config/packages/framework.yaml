@@ -1,8 +1,13 @@
 framework:
-  secret: '%env(APP_SECRET)%'
-  csrf_protection: false
+  annotations:
+    enabled: false
+  csrf_protection:
+    enabled: false
+  default_locale: 'nl'
+  handle_all_throwables: true
   http_method_override: true
-  validation: { enable_annotations: true }
+  secret: '%env(APP_SECRET)%'
+  # validation: { enable_attributes: true }
 
   trusted_proxies: '10.62.0.0/16'
   trusted_headers: ['x-forwarded-for', 'x-forwarded-host', 'x-forwarded-proto', 'x-forwarded-port', 'x-forwarded-prefix']

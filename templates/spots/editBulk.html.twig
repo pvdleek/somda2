@@ -20,19 +20,19 @@
                 <tbody>
                     {% for spot in spots %}
                         <tr>
-                            <td>{{ spot.namePatternName }} {{ spot.trainNumber }}</td>
+                            <td>{{ spot.name_pattern_name }} {{ spot.train_number }}</td>
                             <td>
-                                {% if spot.routeNumber matches '/^\\d+$/' %}
-                                    <a href="{{ path('spots_to_train_table', { 'routeNumber': spot.routeNumber, 'date': spot.spotDate | date('Y-m-d') }) }}" title="Bekijk de dienstregeling van trein {{ spot.routeNumber }}">{{ spot.routeNumber }}</a>
+                                {% if spot.route_number matches '/^\\d+$/' %}
+                                    <a href="{{ path('spots_to_train_table', { 'route_number': spot.route_number, 'date': spot.spot_date | date('Y-m-d') }) }}" title="Bekijk de dienstregeling van trein {{ spot.route_number }}">{{ spot.route_number }}</a>
                                 {% else %}
-                                    {{ spot.routeNumber }}
+                                    {{ spot.route_number }}
                                 {% endif %}
                             </td>
-                            <td>{{ spot.positionName }}</td>
+                            <td>{{ spot.position_name }}</td>
                             <td>{{ spot.extra }}</td>
-                            <td>{{ spot.spotDate | displayDateTime }}</td>
-                            <td>{{ spot.spotterId | displayUser(spot.spotterUsername) | raw }}</td>
-                            <td><span title="{{ spot.locationDescription }}">{{ spot.locationName }}</span></td>
+                            <td>{{ spot.spot_date|displayDateTime }}</td>
+                            <td>{{ spot.spotter_id|displayUser(spot.spotter_username) | raw }}</td>
+                            <td><span title="{{ spot.location_description }}">{{ spot.location_name }}</span></td>
                         </tr>
                     {% endfor %}
                 </tbody>

@@ -7,14 +7,14 @@
                 <div class="panel-title">Statistieken samenvatting</div>
                 <div class="panel-content">
                     <table align="center">
-                        <tr><td><strong>Start meting</strong></td><td nowrap="nowrap">{{ statisticsSummary.startMeasurement | displayDateTime }}</td></tr>
-                        <tr><td><strong>Totaal aantal pageviews tot nu toe</strong></td><td nowrap="nowrap">{{ statisticsSummary.pageViewsTotal | number_format(0, '', '.') }}</td></tr>
-                        <tr><td><strong>Drukste dag tot nu toe qua pageviews</strong></td><td nowrap="nowrap">{{ statisticsSummary.busiestPageViewsDate | displayDateTime }}</td></tr>
-                        <tr><td><strong>Pageviews</strong></td><td nowrap="nowrap">{{ statisticsSummary.busiestPageViews | number_format(0, '', '.') }}</td></tr>
-                        <tr><td><strong>Drukste dag tot nu toe qua spots</strong></td><td nowrap="nowrap">{{ statisticsSummary.busiestSpotsDate | displayDateTime }}</td></tr>
-                        <tr><td><strong>Spots</strong></td><td nowrap="nowrap">{{ statisticsSummary.busiestSpots | number_format(0, '', '.') }}</td></tr>
-                        <tr><td><strong>Drukste dag tot nu toe qua forumberichten</strong></td><td nowrap="nowrap">{{ statisticsSummary.busiestPostsDate | displayDateTime }}</td></tr>
-                        <tr><td><strong>Forumberichten</strong></td><td nowrap="nowrap">{{ statisticsSummary.busiestPosts | number_format(0, '', '.') }}</td></tr>
+                        <tr><td><strong>Start meting</strong></td><td nowrap="nowrap">{{ statistics_summary.start_measurement | displayDateTime }}</td></tr>
+                        <tr><td><strong>Totaal aantal pageviews tot nu toe</strong></td><td nowrap="nowrap">{{ statistics_summary.pageviews_total | number_format(0, '', '.') }}</td></tr>
+                        <tr><td><strong>Drukste dag tot nu toe qua pageviews</strong></td><td nowrap="nowrap">{{ statistics_summary.busiest_pageviews_date | displayDateTime }}</td></tr>
+                        <tr><td><strong>Pageviews</strong></td><td nowrap="nowrap">{{ statistics_summary.busiest_pageviews | number_format(0, '', '.') }}</td></tr>
+                        <tr><td><strong>Drukste dag tot nu toe qua spots</strong></td><td nowrap="nowrap">{{ statistics_summary.busiest_spots_date | displayDateTime }}</td></tr>
+                        <tr><td><strong>Spots</strong></td><td nowrap="nowrap">{{ statistics_summary.busiest_spots | number_format(0, '', '.') }}</td></tr>
+                        <tr><td><strong>Drukste dag tot nu toe qua forumberichten</strong></td><td nowrap="nowrap">{{ statistics_summary.busiest_posts_date | displayDateTime }}</td></tr>
+                        <tr><td><strong>Forumberichten</strong></td><td nowrap="nowrap">{{ statistics_summary.busiest_posts | number_format(0, '', '.') }}</td></tr>
                     </table>
                     <br />De statistieken worden elk uur bijgewerkt
                 </div>
@@ -33,15 +33,15 @@
                             <td><strong>Spots</strong></td>
                             <td><strong>Forumberichten</strong></td>
                         </tr>
-                        {% for statistic in statisticsPerDay %}
+                        {% for statistic in statistics_per_day %}
                             <tr>
                                 <td><strong>{{ statistic.timestamp | displayDateTime }}</strong></td>
-                                <td align="center">{{ statistic.visitorsHome }}</td>
-                                <td align="center">{{ statistic.visitorsFunctions }}</td>
-                                <td align="center">{{ statistic.visitorsTotal }}</td>
-                                <td align="center">{{ statistic.visitorsUnique }}</td>
-                                <td align="center">{{ statistic.numberOfSpots }}</td>
-                                <td align="center">{{ statistic.numberOfPosts }}</td>
+                                <td align="center">{{ statistic.visitors_home }}</td>
+                                <td align="center">{{ statistic.visitors_functions }}</td>
+                                <td align="center">{{ statistic.visitors_total }}</td>
+                                <td align="center">{{ statistic.visitors_unique }}</td>
+                                <td align="center">{{ statistic.number_of_spots }}</td>
+                                <td align="center">{{ statistic.number_of_posts }}</td>
                             </tr>
                         {% endfor %}
                     </table>
@@ -63,15 +63,15 @@
                             <td><strong>Spots</strong></td>
                             <td><strong>Forumberichten</strong></td>
                         </tr>
-                        {% for statistic in statisticsPerMonth %}
+                        {% for statistic in statistics_per_month %}
                             <tr>
                                 <td><strong>{{ ('general.date.months.' ~ statistic['month']) | trans }} {{ statistic['year'] }}</strong></td>
-                                <td align="center">{{ statistic['visitorsHome'] }}</td>
-                                <td align="center">{{ statistic['visitorsFunctions'] }}</td>
-                                <td align="center">{{ statistic['visitorsTotal'] }}</td>
-                                <td align="center">{{ statistic['visitorsUnique'] }}</td>
-                                <td align="center">{{ statistic['numberOfSpots'] }}</td>
-                                <td align="center">{{ statistic['numberOfPosts'] }}</td>
+                                <td align="center">{{ statistic['visitors_home'] }}</td>
+                                <td align="center">{{ statistic['visitors_functions'] }}</td>
+                                <td align="center">{{ statistic['visitors_total'] }}</td>
+                                <td align="center">{{ statistic['visitors_unique'] }}</td>
+                                <td align="center">{{ statistic['number_of_spots'] }}</td>
+                                <td align="center">{{ statistic['number_of_posts'] }}</td>
                             </tr>
                         {% endfor %}
                     </table>

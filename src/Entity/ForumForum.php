@@ -1,15 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
+use App\Repository\ForumForumRepository;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Table(name="somda_forum_forums", indexes={@ORM\Index(name="idx_somda_forum_forums__catid", columns={"catid"})})
- * @ORM\Entity(repositoryClass="App\Repository\ForumForum")
- */
+#[ORM\Entity(repositoryClass: ForumForumRepository::class)]
+#[ORM\Table(name: 'somda_forum_forums', indexes: [new ORM\Index(name: 'idx_somda_forum_forums__catid', columns: ['catid'])])]
 class ForumForum
 {
     public const TYPE_PUBLIC = 0;
@@ -23,57 +25,39 @@ class ForumForum
         self::TYPE_ARCHIVE
     ];
 
-    /**
-     * @ORM\Column(name="forumid", type="smallint", nullable=false, options={"unsigned"=true})
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(name: 'forumid', type: 'smallint', nullable: false, options: ['unsigned' => true])]
     public ?int $id = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\ForumCategory", inversedBy="forums")
-     * @ORM\JoinColumn(name="catid", referencedColumnName="catid")
-     */
+    #[ORM\ManyToOne(targetEntity: ForumCategory::class, inversedBy: 'forums')]
+    #[ORM\JoinColumn(name: 'catid', referencedColumnName: 'catid')]
     public ?ForumCategory $category = null;
 
-    /**
-     * @ORM\Column(name="name", type="string", length=40, nullable=false)
-     */
+    #[ORM\Column(length: 40, nullable: false, options: ['default' => ''])]
     public string $name = '';
 
-    /**
-     * @ORM\Column(name="description", type="string", length=100, nullable=false)
-     */
+    #[ORM\Column(length: 100, nullable: false, options: ['default' => ''])]
     public string $description = '';
 
-    /**
-     * @ORM\Column(name="volgorde", type="smallint", nullable=false, options={"default"=1, "unsigned"=true})
-     */
+    #[ORM\Column(name: 'volgorde', type: 'smallint', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     public int $order = 1;
 
-    /**
-     * @ORM\Column(name="type", type="smallint", nullable=false, options={"default"=ForumForum::TYPE_LOGGED_IN, "unsigned"=true})
-     * @Assert\Choice(choices=ForumForum::TYPE_VALUES)
-     */
+    #[ORM\Column(type: 'smallint', nullable: false, options: ['default' => ForumForum::TYPE_LOGGED_IN, 'unsigned' => true])]
+    #[Assert\Choice(choices: self::TYPE_VALUES)]
     public int $type = self::TYPE_LOGGED_IN;
 
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\ForumDiscussion", mappedBy="forum")
-     */
-    private $discussions;
+    #[ORM\OneToMany(targetEntity: ForumDiscussion::class, mappedBy: 'forum')]
+    private Collection $discussions;
 
-    /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\User", inversedBy="moderatedForums")
-     * @ORM\JoinTable(name="somda_forum_mods",
-     *      joinColumns={@ORM\JoinColumn(name="forumid", referencedColumnName="forumid")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="uid", referencedColumnName="uid")}
-     * )
-     */
-    private $moderators;
+    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'moderated_forums')]
+    #[ORM\JoinTable(
+        name: 'somda_forum_mods',
+        joinColumns: [new ORM\JoinColumn(name: 'forumid', referencedColumnName: 'forumid')],
+        inverseJoinColumns: [new ORM\JoinColumn(name: 'uid', referencedColumnName: 'uid')]
+    )]
+    private Collection $moderators;
 
-    /**
-     *
-     */
     public function __construct()
     {
         $this->discussions = new ArrayCollection();

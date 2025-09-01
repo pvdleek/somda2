@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Repository;
@@ -7,7 +8,7 @@ use App\Entity\Train as TrainEntity;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
-class Train extends ServiceEntityRepository
+class TrainRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
@@ -23,9 +24,9 @@ class Train extends ServiceEntityRepository
             ->createQueryBuilder()
             ->select('t.number AS number')
             ->addSelect('t.name AS name')
-            ->addSelect('tr.id AS transporterId')
-            ->addSelect('tr.name AS transporterName')
-            ->addSelect('np.name AS namePatternName')
+            ->addSelect('tr.id AS transporter_id')
+            ->addSelect('tr.name AS transporter_name')
+            ->addSelect('np.name AS name_pattern_name')
             ->from(TrainEntity::class, 't')
             ->join('t.transporter', 'tr')
             ->leftJoin('t.namePattern', 'np')

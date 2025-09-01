@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use App\Entity\Location;
-use App\Entity\TrainTableYear;
 use App\Helpers\TemplateHelper;
 use App\Helpers\TrainTableHelper;
-use App\Repository\TrainTable;
+use App\Repository\TrainTableRepository;
+use App\Repository\TrainTableYearRepository;
 use App\Traits\DateTrait;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,26 +23,27 @@ class FeedController
     private const DEFAULT_BACKGROUND_COLOR = 'FFFFFF';
     private const DEFAULT_FOREGROUND_COLOR = '000000';
 
-    private int $foregroundColor = 0;
+    private int $foreground_color = 0;
 
-    private int $lineNumber = 1;
+    private int $line_number = 1;
 
     public function __construct(
         private readonly ManagerRegistry $doctrine,
-        private readonly TemplateHelper $templateHelper,
         private readonly TranslatorInterface $translator,
-        private readonly TrainTableHelper $trainTableHelper,
+        private readonly TemplateHelper $template_helper,
+        private readonly TrainTableHelper $train_table_helper,
+        private readonly TrainTableYearRepository $train_table_year_repository,
     ) {
     }
 
     public function indexAction(): Response
     {
-        return $this->templateHelper->render('somda/feeds.html.twig', [
+        return $this->template_helper->render('somda/feeds.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Feeds',
         ]);
     }
 
-    public function imageAction(Request $request, string $locationName, ?int $dayNumber = null, ?string $startTime = null)
+    public function imageAction(Request $request, string $location_name, ?int $day_number = null, ?string $start_time = null)
     {
         \header('Content-Type: image/png');
 
@@ -51,7 +54,7 @@ class FeedController
             $request->query->get('bg-color', self::DEFAULT_BACKGROUND_COLOR)
         );
         \ImageFill($image, 0, 0, $backgroundColor);
-        $this->foregroundColor = $this->getColorAllocation(
+        $this->foreground_color = $this->getColorAllocation(
             $image,
             $request->query->get('fg-color', self::DEFAULT_FOREGROUND_COLOR)
         );
@@ -59,9 +62,9 @@ class FeedController
         /**
          * @var Location $location
          */
-        $location = $this->doctrine->getRepository(Location::class)->findOneBy(['name' => $locationName]);
+        $location = $this->doctrine->getRepository(Location::class)->findOneBy(['name' => $location_name]);
         if (null === $location) {
-            $this->doText($image, 'Het opgegeven station ' . $locationName . ' is niet bekend in Somda');
+            $this->doText($image, 'Het opgegeven station '.$location_name.' is niet bekend in Somda');
             return new Response(\imagepng($image), 200, ['Content-Type' => 'image/png']);
         }
 
@@ -77,18 +80,18 @@ class FeedController
             );
         }
 
-        $passingRoutes = $this->getPassingRoutes($location, $dayNumber, $startTime);
-        foreach ($passingRoutes as $passingRoute) {
-            $out = $this->timeDatabaseToDisplay($passingRoute['time']) . ' - ';
-            $out .= $this->translator->trans('general.action.' . $passingRoute['action']) . ' trein ';
-            $out .= $passingRoute['route_number'] . ' (' . $passingRoute['fl_first_description'] . ' - ';
-            $out .= $passingRoute['fl_last_description'] . ')';
-            $out .= ' - ' . $passingRoute[TrainTable::FIELD_TRANSPORTER_NAME] . ' ';
-            $out .= $passingRoute[TrainTable::FIELD_CHARACTERISTIC_DESCRIPTION];
+        $passing_routes = $this->getPassingRoutes($location, $day_number, $start_time);
+        foreach ($passing_routes as $passing_route) {
+            $out = $this->timeDatabaseToDisplay($passing_route['time']) . ' - ';
+            $out .= $this->translator->trans('general.action.' . $passing_route['action']) . ' trein ';
+            $out .= $passing_route['route_number'] . ' (' . $passing_route['fl_first_description'] . ' - ';
+            $out .= $passing_route['fl_last_description'] . ')';
+            $out .= ' - ' . $passing_route[TrainTableRepository::FIELD_TRANSPORTER_NAME] . ' ';
+            $out .= $passing_route[TrainTableRepository::FIELD_CHARACTERISTIC_DESCRIPTION];
             $this->doText($image, $out);
         }
 
-        return new Response(imagepng($image), 200, ['Content-Type' => 'image/png']);
+        return new Response(\imagepng($image), 200, ['Content-Type' => 'image/png']);
     }
 
     private function getColorAllocation(\GdImage $id, string $color): int
@@ -108,16 +111,13 @@ class FeedController
         return ImageColorAllocate($id, \hexdec($red), \hexdec($green), \hexdec($blue));
     }
 
-    private function getPassingRoutes(Location $location, ?int $dayNumber, ?string $startTime): array
+    private function getPassingRoutes(Location $location, ?int $day_number, ?string $start_time): array
     {
-        $trainTableYearId = $this->doctrine
-            ->getRepository(TrainTableYear::class)
-            ->findTrainTableYearByDate(new \DateTime())
-            ->id;
-        $this->trainTableHelper->setTrainTableYear($trainTableYearId);
-        $this->trainTableHelper->setLocation($location->name);
+        $train_table_year_id = $this->train_table_year_repository->findTrainTableYearByDate(new \DateTime())->id;
+        $this->train_table_helper->setTrainTableYear($train_table_year_id);
+        $this->train_table_helper->setLocation($location->name);
 
-        return $this->trainTableHelper->getPassingRoutes($dayNumber, $startTime);
+        return $this->train_table_helper->getPassingRoutes($day_number, $start_time);
     }
 
     private function doText(\GdImage $id, string $text): void
@@ -128,7 +128,7 @@ class FeedController
             $text
         );
 
-        \ImageString($id, 2, 5, 15 * ($this->lineNumber - 1), $text, $this->foregroundColor);
-        $this->lineNumber += 1;
+        \ImageString($id, 2, 5, 15 * ($this->line_number - 1), $text, $this->foreground_color);
+        $this->line_number += 1;
     }
 }

@@ -6,9 +6,9 @@
         {% for specialRoute in specialRoutes %}
             <tr>
                 <td>
-                    {{ specialRoute.startDate | displayDateTime(false, true) }}
-                    {% if specialRoute.endDate is not null %} {{ 'general.date.till' | trans }} {{ specialRoute.endDate | displayDateTime(false, true) }}{% endif %}
-                    {{ specialRoute.startDate | date('Y') }}
+                    {{ specialRoute.start_date|displayDateTime(false, true) }}
+                    {% if specialRoute.end_date is not null %} {{ 'general.date.till'|trans }} {{ specialRoute.end_date|displayDateTime(false, true) }}{% endif %}
+                    {{ specialRoute.start_date|date('Y') }}
                 </td>
                 <td><a href="{{ path('special_route', { 'id': specialRoute.id }) }}">{{ specialRoute.title }}</a></td>
             </tr>

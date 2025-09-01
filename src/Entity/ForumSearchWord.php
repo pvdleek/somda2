@@ -1,35 +1,31 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
+use App\Repository\ForumSearchWordRepository;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Table(
- *     name="somda_forum_zoeken_woorden",
- *     uniqueConstraints={@ORM\UniqueConstraint(name="unq_somda_forum_zoeken_woorden__woord", columns={"woord"})}
- * )
- * @ORM\Entity(repositoryClass="App\Repository\ForumSearchWord")
- */
+#[ORM\Entity(repositoryClass: ForumSearchWordRepository::class)]
+#[ORM\Table(
+    name: 'somda_forum_zoeken_woorden',
+    uniqueConstraints: [new ORM\UniqueConstraint(name: 'unq_somda_forum_zoeken_woorden__woord', columns: ['woord'])]
+)]
 class ForumSearchWord
 {
-    /**
-     * @ORM\Column(name="woord_id", type="integer", nullable=false, options={"unsigned"=true})
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(name: 'woord_id', nullable: false, options: ['unsigned' => true])]
     public ?int $id = null;
 
-    /**
-     * @ORM\Column(name="woord", type="string", length=50, nullable=false)
-     */
+    #[ORM\Column(name: 'woord', length: 50, nullable: false, options: ['default' => ''])]
     public string $word = '';
 
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\ForumSearchList", mappedBy="word")
-     */
-    private $lists;
+    #[ORM\OneToMany(targetEntity: ForumSearchList::class, mappedBy: 'word')]
+    private Collection $lists;
 
     public function __construct()
     {

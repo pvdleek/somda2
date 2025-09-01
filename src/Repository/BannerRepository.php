@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repository;
 
 use App\Entity\Banner as BannerEntity;
@@ -8,7 +10,7 @@ use App\Entity\BannerView;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
-class Banner extends ServiceEntityRepository
+class BannerRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {

@@ -6,7 +6,7 @@
             <a id="new_post"></a>
             {% set firstUnreadAnchorDone = true %}
         {% endif %}
-        <a href="{{ path('forum_discussion_post', { 'id': post.discussion.id, 'name': (post.discussion.title | slug), 'postId': post.id }) }}">
+        <a href="{{ path('forum_discussion_post', { 'id': post.discussion.id, 'name': (post.discussion.title | slug), 'post_id': post.id }) }}">
             {% if postIsUnread %}<i class="color-orange fas fa-comment-dots"></i>{% else %}<i class="fas fa-comment"></i>{% endif %}
         </a> {{ post.timestamp | date('d-m-Y H:i:s') }}
         {% set numberOfFavorites = post.numberOfFavorites %}
@@ -46,17 +46,17 @@
             <br />{{ post.author.info.city }}
         {% endif %}
         <br />
-        {% if post.author.info.twitterAccount | length > 0 %}
-            <a href="https://twitter.com/#!/{{ post.author.info.twitterAccount }}" rel="ugc noopener" target="_blank"><i class="fab fa-twitter" title="Twitter {{ post.author.info.twitterAccount }}"></i></a>
+        {% if post.author.info.twitter_account | length > 0 %}
+            <a href="https://twitter.com/#!/{{ post.author.info.twitter_account }}" rel="ugc noopener" target="_blank"><i class="fab fa-twitter" title="Twitter {{ post.author.info.twitter_account }}"></i></a>
         {% endif %}
-        {% if post.author.info.facebookAccount | length > 0 %}
-            <a href="https://www.facebook.com/{{ post.author.info.facebookAccount }}" rel="ugc noopener" target="_blank"><i class="fab fa-facebook" title="Facebook {{ post.author.info.facebookAccount }}"></i></a>
+        {% if post.author.info.facebook_account | length > 0 %}
+            <a href="https://www.facebook.com/{{ post.author.info.facebook_account }}" rel="ugc noopener" target="_blank"><i class="fab fa-facebook" title="Facebook {{ post.author.info.facebook_account }}"></i></a>
         {% endif %}
-        {% if post.author.info.youtubeAccount | length > 0 %}
-            <a href="https://www.youtube.com/{{ post.author.info.youtubeAccount }}" rel="ugc noopener" target="_blank"><i class="fab fa-youtube" title="Youtube {{ post.author.info.youtubeAccount }}"></i></a>
+        {% if post.author.info.youtube_account | length > 0 %}
+            <a href="https://www.youtube.com/{{ post.author.info.youtube_account }}" rel="ugc noopener" target="_blank"><i class="fab fa-youtube" title="Youtube {{ post.author.info.youtube_account }}"></i></a>
         {% endif %}
-        {% if post.author.info.flickrAccount | length > 0 %}
-            <a href="https://www.flickr.com/photos/{{ post.author.info.flickrAccount }}" rel="ugc noopener" target="_blank"><i class="fab fa-flickr" title="Flickr {{ post.author.info.flickrAccount }}"></i></a>
+        {% if post.author.info.flickr_account | length > 0 %}
+            <a href="https://www.flickr.com/photos/{{ post.author.info.flickr_account }}" rel="ugc noopener" target="_blank"><i class="fab fa-flickr" title="Flickr {{ post.author.info.flickr_account }}"></i></a>
         {% endif %}
     </td>
     <td class="text">{{ post | displayForumPost | raw }}</td>

@@ -1,14 +1,12 @@
 nelmio_security:
-  # Prevent framing of the entire site
   clickjacking:
     paths:
       '^/.*': DENY
-  # Prevent re-directions outside the website's domain
+
   external_redirects:
     abort: false
     log: true
 
-  # Prevent inline scripts, unsafe eval, external scripts/images/styles/frames, etc
   csp:
     hosts: []
     content_types: []
@@ -54,14 +52,8 @@ nelmio_security:
       block-all-mixed-content: true
       upgrade-insecure-requests: true
 
-  # Disable content type sniffing for script resources
   content_type:
     nosniff: true
-
-  # Force Microsoft's XSS-Protection with its block mode
-  xss_protection:
-    enabled: true
-    mode_block: true
 
   referrer_policy:
     enabled: true

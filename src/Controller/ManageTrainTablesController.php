@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Controller;
@@ -30,53 +31,52 @@ class ManageTrainTablesController
     /**
      * @throws \Exception
      */
-    public function manageAction(?int $yearId = null, ?int $routeListId = null): Response
+    public function manageAction(?int $year_id = null, ?int $route_list_id = null): Response
     {
         $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_ADMIN_TRAINTABLE_EDIT);
 
-        $routesDisplay = $this->routesDisplayHelper->getRoutesDisplay($yearId, $routeListId);
+        $routes_display = $this->routesDisplayHelper->getRoutesDisplay($year_id, $route_list_id);
 
         return $this->templateHelper->render('manageTrainTables/index.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Beheer dienstregelingen',
-            'trainTableYears' => $this->formHelper
+            'train_table_years' => $this->formHelper
                 ->getDoctrine()
                 ->getRepository(TrainTableYear::class)
-                ->findBy([], ['startDate' => 'DESC']),
-            'selectedTrainTableYear' => $routesDisplay->trainTableYear,
-            'routeLists' => $routesDisplay->routeLists,
-            'selectedRouteList' => $routesDisplay->selectedRouteList,
-            'routes' => $routesDisplay->routes,
+                ->findBy([], ['start_date' => 'DESC']),
+            'selected_train_table_year' => $routes_display->train_table_year,
+            'route_lists' => $routes_display->route_lists,
+            'selected_route_list' => $routes_display->selected_route_list,
+            'routes' => $routes_display->routes,
         ]);
     }
 
-    public function manageRouteAction(Request $request, int $routeListId, int $routeId, ?int $routeNumber = null): Response|RedirectResponse
+    public function manageRouteAction(Request $request, int $route_list_id, int $route_id, ?int $route_number = null): Response|RedirectResponse
     {
         $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_ADMIN_TRAINTABLE_EDIT);
 
-        $this->routeMgmtHelper->setRouteListFromId($routeListId);
-        $this->routeMgmtHelper->setRouteFromId($routeId);
+        $this->routeMgmtHelper->setRouteListFromId($route_list_id);
+        $this->routeMgmtHelper->setRouteFromId($route_id);
 
-        if (!$this->routeMgmtHelper->setTrainTableLines($routeNumber)) {
+        if (!$this->routeMgmtHelper->setTrainTableLines($route_number)) {
             $this->formHelper->getFlashHelper()->add(
                 FlashHelper::FLASH_TYPE_ERROR,
-                'Het door jou opgegeven treinnummer ' . $routeNumber .
-                ' past niet in de vastgelegde treinnummerlijst, neem contact op met het beheer'
+                'Het door jou opgegeven treinnummer '.$route_number.' past niet in de vastgelegde treinnummerlijst, neem contact op met het beheer'
             );
 
             return $this->formHelper->getRedirectHelper()->redirectToRoute('manage_train_tables_year_route_list', [
-                'yearId' => $this->routeMgmtHelper->getRouteList()->trainTableYear->id,
-                'routeListId' => $routeListId
+                'year_id' => $this->routeMgmtHelper->getRouteList()->train_table_year->id,
+                'route_list_id' => $route_list_id
             ]);
         }
 
         if ($request->getMethod() === Request::METHOD_POST) {
-            if ($this->routeMgmtHelper->handlePost($routeId, $request->request->all())) {
+            if ($this->routeMgmtHelper->handlePost($route_id, $request->request->all())) {
                 return $this->formHelper->finishFormHandling(
                     'Trein opgeslagen',
                     'manage_train_tables_year_route_list',
                     [
-                        'yearId' => $this->routeMgmtHelper->getRouteList()->trainTableYear->id,
-                        'routeListId' => $this->routeMgmtHelper->getRouteList()->id,
+                        'year_id' => $this->routeMgmtHelper->getRouteList()->train_table_year->id,
+                        'route_list_id' => $this->routeMgmtHelper->getRouteList()->id,
                     ]
                 );
             }
@@ -95,40 +95,37 @@ class ManageTrainTablesController
         ]);
     }
 
-    public function deleteRouteAction(int $yearId, int $routeListId, int $routeId): RedirectResponse
+    public function deleteRouteAction(int $year_id, int $route_list_id, int $route_id): RedirectResponse
     {
         $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_ADMIN_TRAINTABLE_EDIT);
 
-        $trainTableYear = $this->formHelper->getDoctrine()->getRepository(TrainTableYear::class)->find($yearId);
-        if (null === $trainTableYear) {
-            throw new AccessDeniedException('This trainTableYear does not exist');
+        $train_table_year = $this->formHelper->getDoctrine()->getRepository(TrainTableYear::class)->find($year_id);
+        if (null === $train_table_year) {
+            throw new AccessDeniedException('This train_table_year does not exist');
         }
-        $this->routeMgmtHelper->setRouteListFromId($routeListId);
-        $this->routeMgmtHelper->setRouteFromId($routeId);
+        $this->routeMgmtHelper->setRouteListFromId($route_list_id);
+        $this->routeMgmtHelper->setRouteFromId($route_id);
 
         $route = $this->routeMgmtHelper->getRoute();
         $route->removeRouteList($this->routeMgmtHelper->getRouteList());
         $this->routeMgmtHelper->getRouteList()->removeRoute($route);
 
         foreach ($route->getTrainTables() as $trainTable) {
-            if ($trainTable->trainTableYear === $trainTableYear) {
+            if ($trainTable->train_table_year === $train_table_year) {
                 $this->formHelper->getDoctrine()->getManager()->remove($trainTable);
             }
         }
-        foreach ($route->getTrainTableFirstLasts() as $trainTableFirstLast) {
-            if ($trainTableFirstLast->trainTableYear === $trainTableYear) {
-                $this->formHelper->getDoctrine()->getManager()->remove($trainTableFirstLast);
+        foreach ($route->getTrainTableFirstLasts() as $train_table_first_last) {
+            if ($train_table_first_last->train_table_year === $train_table_year) {
+                $this->formHelper->getDoctrine()->getManager()->remove($train_table_first_last);
             }
         }
         $this->formHelper->getDoctrine()->getManager()->flush();
 
-        $this->formHelper->getFlashHelper()->add(
-            FlashHelper::FLASH_TYPE_INFORMATION,
-            'De dienstregeling is verwijderd'
-        );
+        $this->formHelper->getFlashHelper()->add(FlashHelper::FLASH_TYPE_INFORMATION, 'De dienstregeling is verwijderd');
         return $this->formHelper->getRedirectHelper()->redirectToRoute('manage_train_tables_year_route_list', [
-            'yearId' => $yearId,
-            'routeListId' => $routeListId,
+            'year_id' => $year_id,
+            'route_list_id' => $route_list_id,
         ]);
     }
 }

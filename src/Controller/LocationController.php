@@ -1,11 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use App\Generics\RoleGenerics;
 use App\Entity\Location;
 use App\Helpers\TemplateHelper;
 use App\Helpers\UserHelper;
+use App\Repository\LocationRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,37 +22,38 @@ class LocationController
 
     public function __construct(
         private readonly ManagerRegistry $doctrine,
-        private readonly UserHelper $userHelper,
-        private readonly TemplateHelper $templateHelper,
+        private readonly UserHelper $user_helper,
+        private readonly TemplateHelper $template_helper,
+        private readonly LocationRepository $location_repository,
     ) {
     }
 
-    public function indexAction(?string $searchMethod = null, ?string $search = null): Response
+    public function indexAction(?string $search_method = null, ?string $search = null): Response
     {
-        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_ABBREVIATIONS);
+        $this->user_helper->denyAccessUnlessGranted(RoleGenerics::ROLE_ABBREVIATIONS);
 
-        switch ($searchMethod) {
+        switch ($search_method) {
             case self::SEARCH_METHOD_CHARACTER:
                 if ($search === '*') {
                     $search = '%';
                 }
-                $locations = $this->doctrine->getRepository(Location::class)->findByName($search . '%');
+                $locations = $this->location_repository->findByName($search . '%');
                 break;
             case self::SEARCH_METHOD_SINGLE:
-                $locations = $this->doctrine->getRepository(Location::class)->findByName($search);
+                $locations = $this->location_repository->findByName($search);
                 break;
             case self::SEARCH_METHOD_NAME:
-                $locations = $this->doctrine->getRepository(Location::class)->findByName('%' . $search . '%');
+                $locations = $this->location_repository->findByName('%' . $search . '%');
                 break;
             case self::SEARCH_METHOD_DESCRIPTION:
-                $locations = $this->doctrine->getRepository(Location::class)->findByDescription('%' . $search . '%');
+                $locations = $this->location_repository->findByDescription('%' . $search . '%');
                 break;
             default:
-                $locations = $this->doctrine->getRepository(Location::class)->findAll();
+                $locations = $this->location_repository->findAll();
                 break;
         }
 
-        return $this->templateHelper->render('information/locations.html.twig', [
+        return $this->template_helper->render('information/locations.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Verkortingen',
             'search' => $search,
             'locations' => $locations,
@@ -61,11 +65,11 @@ class LocationController
         /**
          * @var Location[] $locations
          */
-        $locations = $this->doctrine->getRepository(Location::class)->findByName($search);
+        $locations = $this->location_repository->findByName($search);
         if (\count($locations) < 1) {
-            $locations = $this->doctrine->getRepository(Location::class)->findByName('%' . $search . '%');
+            $locations = $this->location_repository->findByName('%' . $search . '%');
             if (\count($locations) < 1) {
-                $locations = $this->doctrine->getRepository(Location::class)->findByDescription('%' . $search . '%');
+                $locations = $this->location_repository->findByDescription('%' . $search . '%');
             }
         }
         $locations = array_slice($locations, 0, 20);
@@ -74,7 +78,7 @@ class LocationController
         foreach ($locations as $location) {
             $json[] = [
                 'id' => $location->id,
-                'label' => $location->name . ' - ' . $location->description,
+                'label' => $location->name.' - '.$location->description,
                 'description' => $location->description,
                 'value' => $location->name
             ];

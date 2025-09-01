@@ -12,19 +12,19 @@ class SpotInput
 
     public User $user;
 
-    public \DateTime $spotDate;
+    public \DateTime $spot_date;
 
-    public string $trainNumber;
+    public string $train_number;
 
-    public string $routeNumber;
+    public string $route_number;
 
     public ?Location $location;
 
-    public int $positionId;
+    public int $position_id;
 
     public string $extra;
 
-    public ?string $userExtra = null;
+    public ?string $user_extra = null;
 
-    public int $feedbackFlag = 0;
+    public int $feedback_flag = 0;
 }

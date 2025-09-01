@@ -1,8 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller\Api;
 
-use App\Entity\User;
 use App\Entity\UserPreference;
 use App\Generics\RoleGenerics;
 use App\Helpers\UserHelper;
@@ -93,14 +94,14 @@ class ProfileController extends AbstractFOSRestController
         $userInformation = (array) \json_decode($request->getContent(), true);
         $user->info->avatar = $userInformation['avatar'];
         if (isset($userInformation['birthDate'])) {
-            $user->info->birthDate = \DateTime::createFromFormat('Y-m-d', $userInformation['birthDate']);
+            $user->info->birth_date = \DateTime::createFromFormat('Y-m-d', $userInformation['birthDate']);
         }
         if (isset($userInformation['city'])) {
             $user->info->city = $userInformation['city'];
         }
         $user->info->gender = (int) $userInformation['gender'];
         if (isset($userInformation['mobilePhone'])) {
-            $user->info->mobilePhone = $userInformation['mobilePhone'];
+            $user->info->mobile_phone = $userInformation['mobilePhone'];
         }
         if (isset($userInformation['skype'])) {
             $user->info->skype = $userInformation['skype'];
@@ -109,16 +110,16 @@ class ProfileController extends AbstractFOSRestController
             $user->info->website = $userInformation['website'];
         }
         if (isset($userInformation['facebookAccount'])) {
-            $user->info->facebookAccount = $userInformation['facebookAccount'];
+            $user->info->facebook_account = $userInformation['facebookAccount'];
         }
         if (isset($userInformation['flickrAccount'])) {
-            $user->info->flickrAccount = $userInformation['flickrAccount'];
+            $user->info->flickr_account = $userInformation['flickrAccount'];
         }
         if (isset($userInformation['twitterAccount'])) {
-            $user->info->twitterAccount = $userInformation['twitterAccount'];
+            $user->info->twitter_account = $userInformation['twitterAccount'];
         }
         if (isset($userInformation['youtubeAccount'])) {
-            $user->info->youtubeAccount = $userInformation['youtubeAccount'];
+            $user->info->youtube_account = $userInformation['youtubeAccount'];
         }
 
         $this->doctrine->getManager()->flush();

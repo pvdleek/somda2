@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repository;
 
 use App\Entity\User as UserEntity;
@@ -8,7 +10,7 @@ use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
 use Doctrine\Persistence\ManagerRegistry;
 
-class User extends ServiceEntityRepository
+class UserRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
@@ -51,7 +53,7 @@ class User extends ServiceEntityRepository
             ->from(UserEntity::class, 'u')
             ->andWhere('u.active = TRUE')
             ->join('u.info', 'i')
-            ->andWhere('i.birthDate = :today')
+            ->andWhere('i.birth_date = :today')
             ->setParameter('today', new \DateTime());
         try {
             return (int) $queryBuilder->getQuery()->getSingleScalarResult();
@@ -69,7 +71,7 @@ class User extends ServiceEntityRepository
             ->createQueryBuilder()
             ->select('u')
             ->from(UserEntity::class, 'u')
-            ->andWhere('u.banExpireTimestamp IS NOT NULL');
+            ->andWhere('u.ban_expire_timestamp IS NOT NULL');
         return $queryBuilder->getQuery()->getResult();
     }
 
@@ -83,9 +85,9 @@ class User extends ServiceEntityRepository
             ->select('u')
             ->from(UserEntity::class, 'u')
             ->andWhere('u.active = FALSE')
-            ->andWhere('u.activationKey IS NOT NULL')
-            ->andWhere('u.registerTimestamp >= :minimumDate')
-            ->andWhere('u.registerTimestamp < :maximumDate')
+            ->andWhere('u.activation_key IS NOT NULL')
+            ->andWhere('u.register_timestamp >= :minimumDate')
+            ->andWhere('u.register_timestamp < :maximumDate')
             ->setParameter('minimumDate', new \DateTime('2016-01-01'))
             ->setParameter('maximumDate', new \DateTime('-5 days'));
         return $queryBuilder->getQuery()->getResult();

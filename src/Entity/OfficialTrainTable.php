@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use App\Traits\DateTrait;
@@ -9,41 +11,34 @@ use Nelmio\ApiDocBundle\Annotation\Model;
 use OpenApi\Annotations as OA;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Table(
- *     name="ott_official_train_table",
- *     indexes={
- *         @ORM\Index(name="idx_ott__time", columns={"ott_time"}),
- *         @ORM\Index(name="idx_ott__ofo_id", columns={"ott_ofo_id"}),
- *         @ORM\Index(name="idx_ott__location_id", columns={"ott_location_id"}),
- *         @ORM\Index(name="idx_ott__route_id", columns={"ott_route_id"})
- *     }
- * )
- * @ORM\Entity
- */
+#[ORM\Entity]
+#[ORM\Table(name: 'ott_official_train_table', indexes: [
+    new ORM\Index(name: 'idx_ott__time', columns: ['ott_time']),
+    new ORM\Index(name: 'idx_ott__ofo_id', columns: ['ott_ofo_id']),
+    new ORM\Index(name: 'idx_ott__location_id', columns: ['ott_location_id']),
+    new ORM\Index(name: 'idx_ott__route_id', columns: ['ott_route_id']),
+])]
 class OfficialTrainTable
 {
     use DateTrait;
 
     /**
-     * @ORM\Column(name="ott_id", type="integer", nullable=false, options={"unsigned"=true})
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      * @JMS\Expose()
      * @OA\Property(description="Unique identifier", type="integer")
      */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(name: 'ott_id', nullable: false, options: ['unsigned' => true])]
     public ?int $id = null;
 
     /**
-     * @ORM\Column(name="ott_order", type="smallint", nullable=false, options={"default"="1", "unsigned"=true})
      * @JMS\Expose()
      * @OA\Property(description="The order in which the items should be displayed", type="integer")
      */
+    #[ORM\Column(name: 'ott_order', type: 'smallint', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     public int $order = 1;
 
     /**
-     * @ORM\Column(name="ott_action", type="string", length=1, nullable=false, options={"default"="-"})
-     * @Assert\Choice(choices=TrainTable::ACTION_VALUES)
      * @JMS\Expose()
      * @OA\Property(
      *     description="The action on the location: 'v' for departure, '-' for a drivethrough,\
@@ -53,10 +48,11 @@ class OfficialTrainTable
      *     type="string",
      * )
      */
+    #[ORM\Column(name: 'ott_action', length: 1, nullable: false, options: ['default' => '-'])]
+    #[Assert\Choice(choices: TrainTable::ACTION_VALUES)]
     public string $action = '-';
 
     /**
-     * @ORM\Column(name="ott_time", type="smallint", nullable=true, options={"unsigned"=true})
      * @JMS\Exclude()
      * @OA\Property(
      *     description="The time of the trainTable action (hh:mm, 24-hour clock, GMT+1 Amsterdam timezone)",
@@ -64,63 +60,64 @@ class OfficialTrainTable
      *     type="string",
      * )
      */
+    #[ORM\Column(name: 'ott_time', type: 'smallint', nullable: true, options: ['unsigned' => true])]
     public ?int $time = null;
 
     /**
-     * @ORM\Column(name="ott_track", type="string", length=3, nullable=true)
      * @JMS\Exclude()
      */
+    #[ORM\Column(name: 'ott_track', length: 3, nullable: true)]
     public ?string $track = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\OfficialFootnote")
-     * @ORM\JoinColumn(name="ott_ofo_id", referencedColumnName="ofo_id")
      * @JMS\Expose()
      * @OA\Property(
      *     description="The footnote to which this trainTable belongs",
      *     ref=@Model(type=OfficialFootnote::class),
      * )
      */
+    #[ORM\ManyToOne(targetEntity: OfficialFootnote::class)]
+    #[ORM\JoinColumn(name: 'ott_ofo_id', referencedColumnName: 'ofo_id')]
     public ?OfficialFootnote $footnote = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Transporter")
-     * @ORM\JoinColumn(name="ott_transporter_id", referencedColumnName="vervoerder_id")
      * @JMS\Expose()
      * @OA\Property(
      *     description="The transporter of this trainTable",
      *     ref=@Model(type=Transporter::class),
      * )
      */
+    #[ORM\ManyToOne(targetEntity: Transporter::class)]
+    #[ORM\JoinColumn(name: 'ott_transporter_id', referencedColumnName: 'vervoerder_id')]
     public ?Transporter $transporter = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Characteristic")
-     * @ORM\JoinColumn(name="ott_characteristic_id", referencedColumnName="karakteristiek_id")
      * @JMS\Expose()
      * @OA\Property(
      *     description="The characteristic of this trainTable",
      *     ref=@Model(type=Characteristic::class),
      * )
      */
+    #[ORM\ManyToOne(targetEntity: Characteristic::class)]
+    #[ORM\JoinColumn(name: 'ott_characteristic_id', referencedColumnName: 'karakteristiek_id')]
     public ?Characteristic $characteristic = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Route", inversedBy="trainTables")
-     * @ORM\JoinColumn(name="ott_route_id", referencedColumnName="treinid")
      * @JMS\Exclude()
      */
+    #[ORM\ManyToOne(targetEntity: Route::class, inversedBy: 'train_tables')]
+    #[ORM\JoinColumn(name: 'ott_route_id', referencedColumnName: 'treinid')]
     public ?Route $route = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Location", inversedBy="trainTables")
-     * @ORM\JoinColumn(name="ott_location_id", referencedColumnName="afkid")
      * @JMS\Expose()
      * @OA\Property(
      *     description="The location of the trainTable action",
      *     ref=@Model(type=Location::class),
      * )
      */
+    #[ORM\ManyToOne(targetEntity: Location::class, inversedBy: 'train_tables')]
+    #[ORM\JoinColumn(name: 'ott_location_id', referencedColumnName: 'afkid')]
     public ?Location $location = null;
 
     /**

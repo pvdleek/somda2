@@ -30,8 +30,8 @@
                             </td>
                             <td>{{ poi.kilometre }}</td>
                             <td>{{ poi.gps }}</td>
-                            <td><a href="{{ poi.googleUrl }}" target="_blank">Google Maps</a></td>
-                            <td><a href="{{ path('passing_routes_search', { 'trainTableYearId': 0, 'dayNumber': ('now' | date('N')) - 1, 'startTime': ('5 minutes ago' | date('H:i')), 'endTime': ('+30 minutes' | date('H:i')), 'locationName': poi.locationForRoutes.name }) }}">Doorkomststaat</a></td>
+                            <td><a href="{{ poi.google_url }}" target="_blank">Google Maps</a></td>
+                            <td><a href="{{ path('passing_routes_search', { 'train_table_year_id': 0, 'day_number': ('now'|date('N')) - 1, 'start_time': ('5 minutes ago'|date('H:i')), 'end_time': ('+30 minutes'|date('H:i')), 'location_name': poi.location_for_routes.name }) }}">Doorkomststaat</a></td>
                             <td><a href="{{ path('pois_detail', { 'id': poi.id }) }}">Details</a></td>
                         </tr>
                     {% endfor %}

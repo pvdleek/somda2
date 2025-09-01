@@ -22,11 +22,11 @@
         {% if numberOfPages > 1 %}
             <div class="forum-spacer-row"></div>
             <strong>Pagina's:</strong>
-            {% if pageNumber > 1 %}<a href="{{ path('forum_discussion_page', { 'id': discussion.id, 'name': (discussion.title | slug), 'pageNumber': (pageNumber - 1) }) }}">«</a>{% endif %}
+            {% if page_number > 1 %}<a href="{{ path('forum_discussion_page', { 'id': discussion.id, 'name': (discussion.title | slug), 'page_number': (page_number - 1) }) }}">«</a>{% endif %}
             {% for page in 1..numberOfPages %}
-                {% if page != pageNumber %}<a href="{{ path('forum_discussion_page', { 'id': discussion.id, 'name': (discussion.title | slug), 'pageNumber': page }) }}">{{ page }}</a>{% else %}{{ page }}{% endif %}
+                {% if page != page_number %}<a href="{{ path('forum_discussion_page', { 'id': discussion.id, 'name': (discussion.title | slug), 'page_number': page }) }}">{{ page }}</a>{% else %}{{ page }}{% endif %}
             {% endfor %}
-            {% if pageNumber < numberOfPages %}<a href="{{ path('forum_discussion_page', { 'id': discussion.id, 'name': (discussion.title | slug), 'pageNumber': (pageNumber + 1) }) }}">»</a>{% endif %}
+            {% if page_number < numberOfPages %}<a href="{{ path('forum_discussion_page', { 'id': discussion.id, 'name': (discussion.title | slug), 'page_number': (page_number + 1) }) }}">»</a>{% endif %}
             <div class="forum-spacer-row"></div>
         {% endif %}
     {% endblock %}
@@ -60,9 +60,9 @@
     {% set firstUnreadAnchorDone = false %}
     {% for post in posts %}
         {% if newToOld %}
-            {% set postIsUnread = loop.index <= ((numberOfPosts - numberOfReadPosts) - (constant('App\\Generics\\ForumGenerics::MAX_POSTS_PER_PAGE') * (pageNumber - 1))) %}
+            {% set postIsUnread = loop.index <= ((number_of_posts - numberOfReadPosts) - (constant('App\\Generics\\ForumGenerics::MAX_POSTS_PER_PAGE') * (page_number - 1))) %}
         {% else %}
-            {% set postIsUnread = loop.index > (numberOfReadPosts - (constant('App\\Generics\\ForumGenerics::MAX_POSTS_PER_PAGE') * (pageNumber - 1))) %}
+            {% set postIsUnread = loop.index > (numberOfReadPosts - (constant('App\\Generics\\ForumGenerics::MAX_POSTS_PER_PAGE') * (page_number - 1))) %}
         {% endif %}
         {% if loop.index == 5 or loop.index == 55 %}
             {% if forumBanner is not null %}
@@ -85,12 +85,12 @@
         {% if is_granted('ROLE_ADMIN_WIKI') and (discussion.wikis | length) > 0 %}
             <table>
                 <tr><td colspan="3">Railwiki.nl:
-                    {% if post.wikiCheck == 0 %}
+                    {% if post.wiki_check == 0 %}
                         <span class="background-color-orange" id="wiki_{{ post.id }}">Nog te controleren - <a href="#" onclick="wikiCheck({{ post.id }}, 'ok'); return false;">Markeer als gecontroleerd</a> - <a href="#" onclick="wikiCheck({{ post.id }}, 'na'); return false;">Markeer als niet relevante inhoud</a></span>
-                    {% elseif post.wikiCheck == 1 %}
-                        Verwerkt in de wiki door {{ post.wikiChecker.id | displayUser(post.wikiChecker.username) | raw }}
+                    {% elseif post.wiki_check == 1 %}
+                        Verwerkt in de wiki door {{ post.wiki_checker.id | displayUser(post.wiki_checker.username) | raw }}
                     {% else %}
-                        Geen relevante inhoud, gecontroleerd door {{ post.wikiChecker.id | displayUser(post.wikiChecker.username) | raw }}
+                        Geen relevante inhoud, gecontroleerd door {{ post.wiki_checker.id | displayUser(post.wiki_checker.username) | raw }}
                     {% endif %}
                 </td></tr>
             </table>
@@ -114,15 +114,15 @@
     {% if is_granted('ROLE_ADMIN_WIKI') %}
         <script>
             /**
-             * @param {integer} postId
+             * @param {integer} post_id
              * @param {string} operation
              */
-            function wikiCheck(postId, operation)
+            function wikiCheck(post_id, operation)
             {
                 $.ajax({
-                    url: '{{ path('forum_post_wiki_check', { 'id': 1234, 'operation': 'ok' }) }}'.replace('/1234/', '/' + postId + '/').replace('ok', operation)
+                    url: '{{ path('forum_post_wiki_check', { 'id': 1234, 'operation': 'ok' }) }}'.replace('/1234/', '/' + post_id + '/').replace('ok', operation)
                 })
-                $('#wiki_' + postId).html('<i class="fas fa-check"></i>');
+                $('#wiki_' + post_id).html('<i class="fas fa-check"></i>');
             }
         </script>
     {% endif %}
@@ -131,15 +131,15 @@
         <script>
             function moderateNew()
             {
-                let postIdList = '';
+                let post_id_list = '';
                 let checkboxes = document.getElementsByTagName('input');
                 for (let box = 0; box < checkboxes.length; box++)  {
                     if (checkboxes[box].type === 'checkbox' && checkboxes[box].checked) {
-                        postIdList += checkboxes[box].name.substr(3) + ',';
+                        post_id_list += checkboxes[box].name.substr(3) + ',';
                     }
                 }
-                if (postIdList.length > 0) {
-                    document.location = '{{ path('forum_discussion_moderate_split', { 'id': discussion.id, 'postIds': 'abc' }) }}'.replace('/abc/', '/' + postIdList + '/');
+                if (post_id_list.length > 0) {
+                    document.location = '{{ path('forum_discussion_moderate_split', { 'id': discussion.id, 'post_ids': 'abc' }) }}'.replace('/abc/', '/' + post_id_list + '/');
                 } else {
                     alert('Selecteer 1 of meer berichten om af te splitsen');
                 }
@@ -149,14 +149,14 @@
 
     <script>
         /**
-         * @param {int} postId
+         * @param {int} post_id
          */
-        function favoritePostAdd(postId)
+        function favoritePostAdd(post_id)
         {
             $.ajax({
-                url: '{{ path('forum_favorite_post_add', { 'id': 1234 }) }}'.replace('/1234/', '/' + postId + '/'),
+                url: '{{ path('forum_favorite_post_add', { 'id': 1234 }) }}'.replace('/1234/', '/' + post_id + '/'),
             });
-            $('#favorite_box_' + postId).html('<a href="{{ path('forum_favorites') }}" title="Deze discussie staat in jouw favoriete berichten"><i class="fas fa-hand-holding-heart"></i></a>');
+            $('#favorite_box_' + post_id).html('<a href="{{ path('forum_favorites') }}" title="Deze discussie staat in jouw favoriete berichten"><i class="fas fa-hand-holding-heart"></i></a>');
         }
     </script>
 {% endblock %}

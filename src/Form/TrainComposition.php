@@ -41,7 +41,7 @@ class TrainComposition extends AbstractType
 
         if ($options[self::OPTION_MANAGEMENT_ROLE]) {
             $builder
-                ->add('lastUpdateTimestamp', DateType::class, [
+                ->add('last_update_timestamp', DateType::class, [
                     FormGenerics::KEY_ATTRIBUTES => [FormGenerics::KEY_CLASS=> 'datepicker'],
                     FormGenerics::KEY_FORMAT=> 'dd-MM-yyyy',
                     FormGenerics::KEY_HTML5 => false,

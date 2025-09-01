@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Repository;
@@ -8,7 +9,7 @@ use App\Form\RailNews as RailNewsForm;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
-class RailNews extends ServiceEntityRepository
+class RailNewsRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {

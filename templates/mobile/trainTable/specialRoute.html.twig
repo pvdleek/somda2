@@ -3,7 +3,7 @@
 {% block content %}
     <table>
         <tr><th>{{ specialRoute.title }}</th></tr>
-        <tr><th>{{ specialRoute.startDate | displayDateTime }}{% if specialRoute.endDate is not null %} {{ 'general.date.till' | trans }} {{ specialRoute.endDate | displayDateTime }}{% endif %}</th></tr>
-        <tr><td class="left-align">{{ specialRoute.text | raw }}</td></tr>
+        <tr><th>{{ specialRoute.start_date|displayDateTime }}{% if specialRoute.end_date is not null %} {{ 'general.date.till'|trans }} {{ specialRoute.end_date|displayDateTime }}{% endif %}</th></tr>
+        <tr><td class="left-align">{{ specialRoute.text|raw }}</td></tr>
     </table>
 {% endblock %}

@@ -7,7 +7,7 @@
         <div class="panel-content panel-no-background">
             {{ form_start(form, { 'attr': { 'id': 'reply_form' } }) }}
                 <table>
-                    {{ form_row(form.signatureOn) }}
+                    {{ form_row(form.signature_on) }}
                     {% if form.postAsModerator is defined %}{{ form_row(form.postAsModerator) }}{% endif %}
                     <tr>
                         <td colspan="2">

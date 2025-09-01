@@ -1,4 +1,4 @@
-<table{% if spotterVersion is defined and spotterVersion %}  style="width:100%"{% endif %}>
+<table{% if spotter_version is defined and spotter_version %}  style="width:100%"{% endif %}>
     <tr>
         <th>{{ 'general.output.time' | trans }}</th>
         <th>{{ 'general.output.route' | trans }}</th>
@@ -6,17 +6,17 @@
         <th>{{ 'general.output.startLocation' | trans }}</th>
         <th>{{ 'general.output.action' | trans }}</th>
         <th>{{ 'general.output.endLocation' | trans }}</th>
-        {% if spotterVersion is defined and spotterVersion %}<th>Spotten</th>{% endif %}
+        {% if spotter_version is defined and spotter_version %}<th>Spotten</th>{% endif %}
     </tr>
     {% for trainTable in passingRoutes %}
         <tr>
             <td nowrap="nowrap">{{ trainTable['time'] | displayTime }}</td>
-            <td nowrap="nowrap"><a href="{{ url('train_table_search', {'trainTableYearId': trainTableIndexNumber, 'routeNumber': trainTable['route_number'] }) }}">{{ trainTable['route_number'] }}</a></td>
-            <td nowrap="nowrap">{{ trainTable[constant('App\\Repository\\TrainTable::FIELD_TRANSPORTER_NAME')] }} - {{ trainTable[constant('App\\Repository\\TrainTable::FIELD_CHARACTERISTIC_DESCRIPTION')] }}</td>
+            <td nowrap="nowrap"><a href="{{ url('train_table_search', {'train_table_year_id': trainTableIndexNumber, 'route_number': trainTable['route_number'] }) }}">{{ trainTable['route_number'] }}</a></td>
+            <td nowrap="nowrap">{{ trainTable[constant('App\\Repository\\TrainTableRepository::FIELD_TRANSPORTER_NAME')] }} - {{ trainTable[constant('App\\Repository\\TrainTableRepository::FIELD_CHARACTERISTIC_DESCRIPTION')] }}</td>
             <td nowrap="nowrap"><span title="{{ trainTable['fl_first_description'] }}">{{ trainTable['fl_first_name'] }}</span> ({{ trainTable['fl_first_time'] | displayTime }})</td>
             <td nowrap="nowrap">{{ ("general.action." ~ trainTable['action']) | trans }}</td>
             <td nowrap="nowrap"><span title="{{ trainTable['fl_last_description'] }}">{{ trainTable['fl_last_name'] }}</span> ({{ trainTable['fl_last_time'] | displayTime }})</td>
-            {% if spotterVersion is defined and spotterVersion %}<td style="width:100%">&nbsp;</td>{% endif %}
+            {% if spotter_version is defined and spotter_version %}<td style="width:100%">&nbsp;</td>{% endif %}
         </tr>
     {% endfor %}
 </table>

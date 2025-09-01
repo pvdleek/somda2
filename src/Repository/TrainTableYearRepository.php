@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repository;
 
 use App\Entity\TrainTableYear as TrainTableYearEntity;
@@ -8,7 +10,7 @@ use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
 use Doctrine\Persistence\ManagerRegistry;
 
-class TrainTableYear extends ServiceEntityRepository
+class TrainTableYearRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
@@ -18,15 +20,15 @@ class TrainTableYear extends ServiceEntityRepository
     /**
      * @throws \Exception
      */
-    public function findTrainTableYearByDate(\DateTime $checkDate): ?TrainTableYearEntity
+    public function findTrainTableYearByDate(\DateTime $check_date): ?TrainTableYearEntity
     {
-        $checkDate->setTime(0, 0);
+        $check_date->setTime(0, 0);
         $queryBuilder = $this->getEntityManager()
             ->createQueryBuilder()
             ->select('t')
             ->from(TrainTableYearEntity::class, 't')
-            ->andWhere(':checkDate BETWEEN t.startDate AND t.endDate')
-            ->setParameter('checkDate', $checkDate)
+            ->andWhere(':checkDate BETWEEN t.start_date AND t.end_date')
+            ->setParameter('checkDate', $check_date)
             ->setMaxResults(1);
         try {
             return $queryBuilder->getQuery()->getSingleResult();

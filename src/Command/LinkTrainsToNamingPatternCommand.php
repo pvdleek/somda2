@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Command;
@@ -38,8 +39,8 @@ class LinkTrainsToNamingPatternCommand extends Command
 
         foreach ($trains as $train) {
             foreach ($patterns as $pattern) {
-                if (\preg_match('#' . $pattern->pattern . '#', $train->number)) {
-                    $train->namePattern = $pattern;
+                if (\preg_match('#'.$pattern->pattern.'#', $train->number)) {
+                    $train->name_pattern = $pattern;
                     break;
                 }
             }

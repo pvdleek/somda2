@@ -6,21 +6,21 @@
         <tr>
             <td><label for="day_number">Dag</label></td>
             <td>
-                <select id="day_number" name="dayNumber">
-                    {% for dayNumberSelect in 0..6 %}
-                        <option {{ dayNumber == dayNumberSelect ? 'selected="selected" ' }}value="{{ dayNumberSelect }}">{{ ('general.date.days.' ~ dayNumberSelect) | trans }}</option>
+                <select id="day_number" name="day_number">
+                    {% for day_number_select in 0..6 %}
+                        <option {{ day_number == day_number_select ? 'selected="selected" ' }}value="{{ day_number_select }}">{{ ('general.date.days.' ~ day_number_select) | trans }}</option>
                     {% endfor %}
                 </select>
             </td>
         </tr><tr>
             <td><label for="time_start">Starttijd</label></td>
-            <td><input id="time_start" size="10" type="text" value="{{ startTime }}" /></td>
+            <td><input id="time_start" size="10" type="text" value="{{ start_time }}" /></td>
         </tr><tr>
             <td><label for="time_end">Eindtijd</label></td>
-            <td><input id="time_end" size="10" type="text" value="{{ endTime }}" /></td>
+            <td><input id="time_end" size="10" type="text" value="{{ end_time }}" /></td>
         </tr><tr>
             <td><label for="location_name">Locatie</label></td>
-            <td><input id="location_name" size="10" type="text" value="{{ locationName }}" /></td>
+            <td><input id="location_name" size="10" type="text" value="{{ location_name }}" /></td>
         </tr><tr>
             <td colspan="2"><a class="somda-button" href="#" onclick="searchPassingRoutes(); return false;">Opvragen</a></td>
         </tr>
@@ -29,12 +29,12 @@
     {% if passingRoutes | length > 0 %}
         <br />
         <table>
-            <tr><th colspan="5">{{ locationName | lower | capitalize }} - {{ startTime }} t/m {{ endTime }} ({{ ('general.date.days.' ~ dayNumber) | trans }})</th></tr>
+            <tr><th colspan="5">{{ location_name | lower | capitalize }} - {{ start_time }} t/m {{ end_time }} ({{ ('general.date.days.' ~ day_number) | trans }})</th></tr>
             <tr><th>Tijd</th><th>Treinnr</th><th>Actie</th><th>Van</th><th>Naar</th></tr>
             {% for trainTable in passingRoutes %}
                 <tr>
                     <td>{{ trainTable['time'] | displayTime }}</td>
-                    <td><a href="{{ path('train_table_search', { 'trainTableYearId': trainTableIndexNumber, 'routeNumber': trainTable['route_number'] }) }}">{{ trainTable[constant('App\\Repository\\TrainTable::FIELD_CHARACTERISTIC_NAME')] }}{{ trainTable['route_number'] }}</a></td>
+                    <td><a href="{{ path('train_table_search', { 'train_table_year_id': trainTableIndexNumber, 'route_number': trainTable['route_number'] }) }}">{{ trainTable[constant('App\\Repository\\TrainTableRepository::FIELD_CHARACTERISTIC_NAME')] }}{{ trainTable['route_number'] }}</a></td>
                     <td>{{ trainTable['action'] }}</td>
                     <td><span title="{{ trainTable['fl_first_description'] }}">{{ trainTable['fl_first_name'] }}</span></td>
                     <td><span title="{{ trainTable['fl_last_description'] }}">{{ trainTable['fl_last_name'] }}</span></td>
@@ -48,11 +48,11 @@
     <script>
         function searchPassingRoutes()
         {
-            let location = '{{ path('passing_routes_search', { 'trainTableYearId': trainTableIndexNumber, 'locationName': 'locationName', 'dayNumber': 1234, 'startTime': 'startTime', 'endTime': 'endTime' }) }}';
-            location = location.replace('locationName', $('#location_name').val());
+            let location = '{{ path('passing_routes_search', { 'train_table_year_id': trainTableIndexNumber, 'location_name': 'location_name', 'day_number': 1234, 'start_time': 'start_time', 'end_time': 'end_time' }) }}';
+            location = location.replace('location_name', $('#location_name').val());
             location = location.replace('1234', $('#day_number').val());
-            location = location.replace('startTime', $('#time_start').val());
-            location = location.replace('endTime', $('#time_end').val());
+            location = location.replace('start_time', $('#time_start').val());
+            location = location.replace('end_time', $('#time_end').val());
             document.location = location;
         }
     </script>

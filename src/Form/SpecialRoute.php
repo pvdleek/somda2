@@ -19,7 +19,7 @@ class SpecialRoute extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('startDate', DateType::class, [
+            ->add('start_date', DateType::class, [
                 FormGenerics::KEY_ATTRIBUTES => [FormGenerics::KEY_CLASS=> 'special-route-datepicker'],
                 FormGenerics::KEY_FORMAT=> 'dd-MM-yyyy',
                 FormGenerics::KEY_HTML5 => false,
@@ -27,7 +27,7 @@ class SpecialRoute extends AbstractType
                 FormGenerics::KEY_REQUIRED => false,
                 FormGenerics::KEY_WIDGET => 'single_text',
             ])
-            ->add('endDate', DateType::class, [
+            ->add('end_date', DateType::class, [
                 FormGenerics::KEY_ATTRIBUTES => [FormGenerics::KEY_CLASS=> 'special-route-datepicker'],
                 FormGenerics::KEY_FORMAT=> 'dd-MM-yyyy',
                 FormGenerics::KEY_HTML5 => false,

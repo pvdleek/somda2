@@ -14,7 +14,7 @@ class UserBan extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('banExpireTimestamp', DateType::class, [
+            ->add('ban_expire_timestamp', DateType::class, [
                 FormGenerics::KEY_ATTRIBUTES => [FormGenerics::KEY_CLASS=> 'ban-datepicker'],
                 FormGenerics::KEY_FORMAT=> 'dd-MM-yyyy',
                 FormGenerics::KEY_HTML5 => false,

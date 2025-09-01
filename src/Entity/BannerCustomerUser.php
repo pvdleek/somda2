@@ -1,52 +1,37 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Table(name="somda_banner_customer_user")
- * @ORM\Entity
- */
+#[ORM\Entity]
+#[ORM\Table(name: 'somda_banner_customer_user')]
 class BannerCustomerUser
 {
-    /**
-     * @ORM\Column(name="allowed_new", type="boolean", nullable=false, options={"default"=false})
-     */
-    public bool $allowedNew = false;
+    #[ORM\Column(nullable: false, options: ['default' => false])]
+    public bool $allowed_new = false;
 
-    /**
-     * @ORM\Column(name="allowed_max_views", type="boolean", nullable=false, options={"default"=false})
-     */
-    public bool $allowedMaxViews = false;
+    #[ORM\Column(nullable: false, options: ['default' => false])]
+    public bool $allowed_max_views = false;
 
-    /**
-     * @ORM\Column(name="allowed_max_hits", type="boolean", nullable=false, options={"default"=false})
-     */
-    public bool $allowedMaxHits = false;
+    #[ORM\Column(nullable: false, options: ['default' => false])]
+    public bool $allowed_max_hits = false;
 
-    /**
-     * @ORM\Column(name="allowed_max_date", type="boolean", nullable=false, options={"default"=false})
-     */
-    public bool $allowedMaxDate = false;
+    #[ORM\Column(nullable: false, options: ['default' => false])]
+    public bool $allowed_max_date = false;
 
-    /**
-     * @ORM\Column(name="allowed_deactivate", type="boolean", nullable=false, options={"default"=false})
-     */
-    public bool $allowedDeactivate = false;
+    #[ORM\Column(nullable: false, options: ['default' => false])]
+    public bool $allowed_deactivate = false;
 
-    /**
-     * @ORM\Id
-     * @ORM\ManyToOne(targetEntity="App\Entity\BannerCustomer", inversedBy="customerUsers")
-     * @ORM\JoinColumn(name="id", referencedColumnName="id")
-     */
+    #[ORM\Id]
+    #[ORM\ManyToOne(targetEntity: BannerCustomer::class, inversedBy: 'customer_users')]
+    #[ORM\JoinColumn(name: 'id', referencedColumnName: 'id')]
     public ?BannerCustomer $customer = null;
 
-    /**
-     * @ORM\Id
-     * @ORM\ManyToOne(targetEntity="App\Entity\User")
-     * @ORM\JoinColumn(name="uid", referencedColumnName="uid")
-     */
+    #[ORM\Id]
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\JoinColumn(name: 'uid', referencedColumnName: 'uid')]
     public ?User $user = null;
 }

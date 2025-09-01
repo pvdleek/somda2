@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Listener;
@@ -31,11 +32,11 @@ class KernelListener implements EventSubscriberInterface
 
     private ?string $route;
 
-    private ?array $routeParameters;
+    private ?array $route_parameters;
 
     public function __construct(
         private readonly ManagerRegistry $doctrine,
-        private readonly UserHelper $userHelper,
+        private readonly UserHelper $user_helper,
     ) {
         $this->stopwatch = new Stopwatch(true);
         $this->stopwatch->start(self::STOPWATCH_NAME);
@@ -68,24 +69,23 @@ class KernelListener implements EventSubscriberInterface
         }
 
         $this->route = (string) $event->getRequest()->attributes->get('_route');
-        $this->routeParameters = (array) $event->getRequest()->attributes->get('_route_params');
+        $this->route_parameters = (array) $event->getRequest()->attributes->get('_route_params');
 
         if ($this->isApiRequest($event)
             && $event->getRequest()->headers->has(UserHelper::KEY_API_USER_ID)
             && $event->getRequest()->headers->has(UserHelper::KEY_API_TOKEN)
         ) {
-            $this->userHelper->setFromApiRequest(
+            $this->user_helper->setFromApiRequest(
                 (int) $event->getRequest()->headers->get(UserHelper::KEY_API_USER_ID),
                 $event->getRequest()->headers->get(UserHelper::KEY_API_TOKEN)
             );
         }
 
-        if (null !== $this->userHelper->getUser()
-            && $this->userHelper->getUser()->banExpireTimestamp >= new \DateTime()
+        if (null !== $this->user_helper->getUser()
+            && $this->user_helper->getUser()->ban_expire_timestamp >= new \DateTime()
         ) {
             throw new AccessDeniedException(
-                'Je kunt tot ' . $this->userHelper->getUser()->banExpireTimestamp->format(DateGenerics::DATE_FORMAT) .
-                ' geen gebruik maken van Somda'
+                'Je kunt tot '.$this->user_helper->getUser()->ban_expire_timestamp->format(DateGenerics::DATE_FORMAT).' geen gebruik maken van Somda'
             );
         }
     }
@@ -105,13 +105,13 @@ class KernelListener implements EventSubscriberInterface
             $stopwatchEvent = $this->stopwatch->stop(self::STOPWATCH_NAME);
 
             $log = new Log();
-            $log->user = $this->userHelper->getUser();
+            $log->user = $this->user_helper->getUser();
             $log->timestamp = new \DateTime();
-            $log->ipAddress = \ip2long($event->getRequest()->getClientIp());
+            $log->ip_address = \ip2long($event->getRequest()->getClientIp());
             $log->route = $this->route ?? '';
-            $log->routeParameters = $this->routeParameters ?? [];
+            $log->route_parameters = $this->route_parameters ?? [];
             $log->duration = $stopwatchEvent->getDuration() / 1000;
-            $log->memoryUsage = \floatval(\sprintf('%+08.3f', $stopwatchEvent->getMemory())) / 1024 / 1024;
+            $log->memory_usage = \floatval(\sprintf('%+08.3f', $stopwatchEvent->getMemory())) / 1024 / 1024;
             $this->doctrine->getManager()->persist($log);
         }
 
@@ -126,11 +126,11 @@ class KernelListener implements EventSubscriberInterface
          * @var User $user
          */
         $user = $event->getAuthenticationToken()->getUser();
-        if (null === $user->apiToken) {
+        if (null === $user->api_token) {
             // Generate an API token for this user
-            $user->apiToken = \uniqid('', true);
+            $user->api_token = \uniqid('', true);
         }
-        $user->apiTokenExpiryTimestamp = new \DateTime(User::API_TOKEN_VALIDITY);
+        $user->api_token_expiry_timestamp = new \DateTime(User::API_TOKEN_VALIDITY);
     }
 
     /**
@@ -138,8 +138,8 @@ class KernelListener implements EventSubscriberInterface
      */
     private function saveVisit(): void
     {
-        if ($this->userHelper->userIsLoggedIn()) {
-            $this->userHelper->getUser()->lastVisit = new \DateTime();
+        if ($this->user_helper->userIsLoggedIn()) {
+            $this->user_helper->getUser()->last_visit = new \DateTime();
         }
     }
 

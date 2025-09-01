@@ -1,29 +1,21 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Table(name="somda_help_text")
- * @ORM\Entity
- */
+#[ORM\Entity]
+#[ORM\Table(name: 'somda_help_text')]
 class BlockHelp
 {
-    /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Block", inversedBy="blockHelp")
-     * @ORM\JoinColumn(name="blokid", referencedColumnName="blokid")
-     * @ORM\Id
-     */
+    #[ORM\OneToOne(targetEntity: Block::class, inversedBy: 'block_help')]
+    #[ORM\JoinColumn(name: 'blokid', referencedColumnName: 'blokid')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     public ?Block $block = null;
 
-    /**
-     * @ORM\Column(name="text", type="text", length=65535, nullable=false)
-     */
+    #[ORM\Column(type: 'text', nullable: false, options: ['default' => ''])]
     public string $text = '';
-
-    /**
-     * @ORM\Column(name="ad_code", type="text", length=65535, nullable=false)
-     */
-    public string $adCode = '';
 }

@@ -38,20 +38,20 @@
                 {% for result in results %}
                     <tr>
                         <td>
-                            {% if result.discussionLocked %}
+                            {% if result.discussion_locked %}
                                 <i class="fas fa-lock"></i>
                             {% else %}
                                 <i class="fas fa-comments"></i>
                             {% endif %}
                         </td>
-                        {% if result.titleMatch %}
-                            <td colspan="2"><a href="{{ path('forum_discussion', { 'id': result.discussionId, 'name': (result.discussionTitle | slug) }) }}">{{ result.discussionTitle }}</a></td>
+                        {% if result.title_match %}
+                            <td colspan="2"><a href="{{ path('forum_discussion', { 'id': result.discussion_id, 'name': (result.discussion_title | slug) }) }}">{{ result.discussion_title }}</a></td>
                         {% else %}
                             <td>&nbsp;</td>
-                            <td><a href="{{ path('forum_discussion_post', { 'id': result.discussionId, 'name': (result.discussionTitle | slug), 'postId': result.postId }) }}">Re: {{ result.discussionTitle }}</a></td>
+                            <td><a href="{{ path('forum_discussion_post', { 'id': result.discussion_id, 'name': (result.discussion_title | slug), 'post_id': result.post_id }) }}">Re: {{ result.discussion_title }}</a></td>
                         {% endif %}
-                        <td>{{ result.authorId | displayUser(result.authorUsername) | raw }}</td>
-                        <td>{{ result.postTimestamp | displayDateTime(true) }}</td>
+                        <td>{{ result.author_id|displayUser(result.author_username) | raw }}</td>
+                        <td>{{ result.post_timestamp|displayDateTime(true) }}</td>
                     </tr>
                 {% endfor %}
             </table>
