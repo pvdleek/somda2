@@ -15,12 +15,12 @@
             {% set minimized = false %}
             {% if module ends with '-min' %}
                 {% set minimized = true %}
-                {% set module = module[:(module | length) - 4] %}
+                {% set module = module[:(module|length) - 4] %}
             {% endif %}
             <div class="home-block" id="home_block_{{ module }}">
                 <div class="home-panel">
                     <div class="panel-title">
-                        {{ ('dashboard.panel.' ~ module) | trans }}
+                        {{ ('dashboard.panel.' ~ module)|trans }}
                         {% if module == 'drgl' %}
                             <a href="{{ path('feed_rss', { 'id': 'specialRoutes' }) }}" rel="noopener" target="_blank"><i class="fas fa-rss rss-link"></i></a>
                         {% elseif module == 'spots' %}

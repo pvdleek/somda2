@@ -27,7 +27,7 @@ class ForumSearchWordRepository extends ServiceEntityRepository
             $word_id_list[] = $word->id;
         }
 
-        $queryBuilder = $this->getEntityManager()
+        $query_builder = $this->getEntityManager()
             ->createQueryBuilder()
             ->addSelect('l.title AS title_match')
             ->addSelect('d.id AS discussion_id')
@@ -46,7 +46,7 @@ class ForumSearchWordRepository extends ServiceEntityRepository
             ->setParameter('word_id_list', $word_id_list)
             ->addOrderBy('l.title', 'DESC')
             ->addOrderBy('p.timestamp', 'DESC');
-        $queryResults = $queryBuilder->getQuery()->getArrayResult();
+        $queryResults = $query_builder->getQuery()->getArrayResult();
 
         $results = [];
         foreach ($queryResults as $queryResult) {

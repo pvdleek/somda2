@@ -47,24 +47,24 @@ class ForumDiscussionController
             return $this->form_helper->getRedirectHelper()->redirectToRoute(RouteGenerics::ROUTE_FORUM);
         }
 
-        $newToOld = $this->user_helper->userIsLoggedIn() ?
+        $new_to_old = $this->user_helper->userIsLoggedIn() ?
             (bool)$this->user_helper->getPreferenceByKey(UserPreference::KEY_FORUM_NEW_TO_OLD)->value : false;
 
         $this->discussion_helper->setDiscussion($discussion);
-        $posts = $this->discussion_helper->getPosts($newToOld, $page_number, $post_id);
+        $posts = $this->discussion_helper->getPosts($new_to_old, $page_number, $post_id);
 
         return $this->template_helper->render('forum/discussion.html.twig', [
-            TemplateHelper::PARAMETER_PAGE_TITLE => 'Forum - ' . $discussion->title,
-            'userIsModerator' =>
+            TemplateHelper::PARAMETER_PAGE_TITLE => 'Forum - '.$discussion->title,
+            'user_is_moderator' =>
                 $this->forum_authorization_helper->userIsModerator($discussion->forum, $this->user_helper->getUser()),
             TemplateHelper::PARAMETER_DISCUSSION => $discussion,
             'numberOfPages' => $this->discussion_helper->getNumberOfPages(),
             'number_of_posts' => $this->discussion_helper->getNumberOfPosts(),
             'page_number' => $this->discussion_helper->getPageNumber(),
-            'newToOld' => $newToOld,
+            'new_to_old' => $new_to_old,
             'posts' => $posts,
-            'mayPost' => $this->forum_authorization_helper->mayPost($discussion->forum, $this->user_helper->getUser()),
-            'numberOfReadPosts' => $this->discussion_helper->getNumberOfReadPosts(),
+            'may_post' => $this->forum_authorization_helper->mayPost($discussion->forum, $this->user_helper->getUser()),
+            'number_of_read_posts' => $this->discussion_helper->getNumberOfReadPosts(),
             'forumBanner' => $this->getForumBanner($request),
             'forumJump' => $this->discussion_helper->getForumJump(),
         ]);
@@ -135,7 +135,7 @@ class ForumDiscussionController
         }
 
         return $this->template_helper->render('forum/newDiscussion.html.twig', [
-            TemplateHelper::PARAMETER_PAGE_TITLE => 'Forum - ' . $forum->name,
+            TemplateHelper::PARAMETER_PAGE_TITLE => 'Forum - '.$forum->name,
             TemplateHelper::PARAMETER_FORM => $form->createView(),
             TemplateHelper::PARAMETER_FORUM => $forum
         ]);

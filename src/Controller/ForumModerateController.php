@@ -52,7 +52,7 @@ class ForumModerateController
             $form->handleRequest($request);
             if (!$form->isSubmitted() || !$form->isValid()) {
                 return $this->template_helper->render('forum/discussionMove.html.twig', [
-                    TemplateHelper::PARAMETER_PAGE_TITLE => 'Forum - ' . $discussion->title,
+                    TemplateHelper::PARAMETER_PAGE_TITLE => 'Forum - '.$discussion->title,
                     TemplateHelper::PARAMETER_DISCUSSION => $discussion,
                     TemplateHelper::PARAMETER_FORM => $form->createView()
                 ]);
@@ -100,7 +100,7 @@ class ForumModerateController
         }
 
         return $this->template_helper->render('forum/discussionCombine.html.twig', [
-            TemplateHelper::PARAMETER_PAGE_TITLE => 'Forum - ' . $discussion1->title,
+            TemplateHelper::PARAMETER_PAGE_TITLE => 'Forum - '.$discussion1->title,
             'discussion1' => $discussion1,
             'discussion2' => $discussion2,
             TemplateHelper::PARAMETER_FORM => $form->createView()
@@ -155,7 +155,7 @@ class ForumModerateController
 
         $new_discussion = new ForumDiscussion();
         $new_discussion->forum = $discussion->forum;
-        $new_discussion->title = \substr('Verwijderd uit ' . $discussion->title, 0, 75);
+        $new_discussion->title = \substr('Verwijderd uit '.$discussion->title, 0, 75);
         $new_discussion->author = $first_post->author;
         $this->form_helper->getDoctrine()->getManager()->persist($new_discussion);
 

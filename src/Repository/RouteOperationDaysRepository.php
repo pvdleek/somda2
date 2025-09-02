@@ -23,16 +23,16 @@ class RouteOperationDaysRepository extends ServiceEntityRepository
      */
     public function findByDaysArray(array $days): ?RouteOperationDaysEntity
     {
-        $queryBuilder = $this->getEntityManager()
+        $query_builder = $this->getEntityManager()
             ->createQueryBuilder()
             ->select('r')
             ->from(RouteOperationDaysEntity::class, 'r');
         foreach ($days as $day => $value) {
-            $queryBuilder->andWhere('r.' . $day . ' = ' . ($value ? 'TRUE' : 'FALSE'));
+            $query_builder->andWhere('r.'.$day.' = '.($value ? 'TRUE' : 'FALSE'));
         }
 
         try {
-            return $queryBuilder->getQuery()->getSingleResult();
+            return $query_builder->getQuery()->getSingleResult();
         } catch (NoResultException | NonUniqueResultException $e) {
             return null;
         }

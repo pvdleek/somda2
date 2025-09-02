@@ -2,29 +2,29 @@
 
 {% block content %}
     <div class="panel">
-        <div class="panel-title">Forum: <a href="{{ path('forum_forum', { 'id': forum.id, 'name': (forum.name | slug) }) }}">{{ forum.category.name }} - {{ forum.name }}</a></div>
+        <div class="panel-title">Forum: <a href="{{ path('forum_forum', { 'id': forum.id, 'name': (forum.name|slug) }) }}">{{ forum.category.name }} - {{ forum.name }}</a></div>
         <div class="panel-content">
             <a class="somda-button" href="{{ path('forum') }}">Terug naar het forumoverzicht</a>
             {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
                 <a class="somda-button" href="{{ path('forum_unread') }}">Ongelezen berichten</a>
                 {% if forum.type != constant('App\\Entity\\ForumForum::TYPE_ARCHIVE') and forum.type != constant('App\\Entity\\ForumForum::TYPE_MODERATORS_ONLY') %}
-                    <a class="somda-button" href="{{ path('forum_forum_new_discussion', { 'id': forum.id }) }}">{{ 'forum.newDiscussion' | trans }}</a>
+                    <a class="somda-button" href="{{ path('forum_forum_new_discussion', { 'id': forum.id }) }}">{{ 'forum.newDiscussion'|trans }}</a>
                 {% endif %}
             {% endif %}
             <br /><br />
 
             <table>
                 <tr>
-                    {% if userIsModerator %}<th><a href="#" onclick="moderateCombine(); return false;"><i class="fas fa-compress-alt" title="Combineer discussies"></i></a></th>{% endif %}
-                    <th colspan="2">{{ 'forum.discussion.subject' | trans }}</th>
-                    <th>{{ 'forum.number.posts' | trans }}</th>
-                    <th>{{ 'forum.author' | trans }}</th>
-                    <th>{{ 'forum.number.viewed' | trans }}</th>
-                    <th>{{ 'forum.lastPost' | trans }}</th>
+                    {% if user_is_moderator %}<th><a href="#" onclick="moderateCombine(); return false;"><i class="fas fa-compress-alt" title="Combineer discussies"></i></a></th>{% endif %}
+                    <th colspan="2">{{ 'forum.discussion.subject'|trans }}</th>
+                    <th>{{ 'forum.number.posts'|trans }}</th>
+                    <th>{{ 'forum.author'|trans }}</th>
+                    <th>{{ 'forum.number.viewed'|trans }}</th>
+                    <th>{{ 'forum.lastPost'|trans }}</th>
                 </tr>
                 {% for discussion in discussions %}
                     <tr>
-                        {% if userIsModerator %}<td><input name="sel{{ discussion.id }}" type="checkbox" /></td>{% endif %}
+                        {% if user_is_moderator %}<td><input name="sel{{ discussion.id }}" type="checkbox" /></td>{% endif %}
                         <td>
                             {% if discussion['locked'] %}
                                 <i class="fas fa-lock"></i>
@@ -35,13 +35,13 @@
                             {% endif %}
                         </td>
                         <td>
-                            <a href="{{ path('forum_discussion', { 'id': discussion['id'], 'name': (discussion['title'] | slug) }) }}">{{ discussion['title'] }}</a>
+                            <a href="{{ path('forum_discussion', { 'id': discussion['id'], 'name': (discussion['title']|slug) }) }}">{{ discussion['title'] }}</a>
                             {% if forum.type != constant('App\\Entity\\ForumForum::TYPE_ARCHIVE') and forum.type != constant('App\\Entity\\ForumForum::TYPE_MODERATORS_ONLY') and not discussion['discussion_read'] %} <i class="color-orange fas fa-comment-dots"></i>{% endif %}
                         </td>
                         <td>{{ discussion['posts'] }}</td>
-                        <td>{{ discussion['author_id'] | displayUser(discussion['author_username']) | raw }}</td>
+                        <td>{{ discussion['author_id']|displayUser(discussion['author_username'])|raw }}</td>
                         <td>{{ discussion['viewed'] }}</td>
-                        <td>{{ discussion['max_post_timestamp'] | displayDateTime(true) }}</td>
+                        <td>{{ discussion['max_post_timestamp']|displayDateTime(true) }}</td>
                     </tr>
                 {% endfor %}
             </table>
@@ -50,7 +50,7 @@
 {% endblock %}
 
 {% block javascripts %}
-    {% if userIsModerator %}
+    {% if user_is_moderator %}
         <script>
             function moderateCombine() {
                 let discussion_id1 = 0;

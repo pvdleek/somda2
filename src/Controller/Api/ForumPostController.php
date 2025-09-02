@@ -80,7 +80,7 @@ class ForumPostController extends AbstractFOSRestController
             if ($favorite->alerting === ForumFavorite::ALERTING_ON) {
                 $this->email_helper->sendEmail(
                     $favorite->user,
-                    'Somda - Nieuwe forumreactie op "' . $discussion->title . '"',
+                    'Somda - Nieuwe forumreactie op "'.$discussion->title.'"',
                     'forum-new-reply',
                     [ForumPostForm::FIELD_DISCUSSION => $discussion]
                 );

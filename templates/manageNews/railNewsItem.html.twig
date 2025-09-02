@@ -6,7 +6,7 @@
         <div class="panel-content panel-no-background">
             {{ form_start(form, { 'attr': { 'id': 'rail_news_form' } }) }}
                 <table>
-                    <tr><td><strong>Datum</strong></td><td>{{ railNews.timestamp | displayDateTime(true) }}</td></tr>
+                    <tr><td><strong>Datum</strong></td><td>{{ railNews.timestamp|displayDateTime(true) }}</td></tr>
                     <tr><td><strong>Bron</strong></td><td><img alt="{{ railNews.source.name }}" class="rail-news-logo-overview" src="{{ asset('images/news-logos/' ~ railNews.source.logo) }}" /></td></tr>
                     <tr><td><strong>Link</strong></td><td><a href="{{ railNews.url }}" rel="noopener" target="_blank">{{ railNews.url }}</a></td></tr>
                     {{ form_row(form.title) }}

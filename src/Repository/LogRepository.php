@@ -18,11 +18,11 @@ class LogRepository extends ServiceEntityRepository
 
     public function removeByUser(User $user): void
     {
-        $queryBuilder = $this->getEntityManager()
+        $query_builder = $this->getEntityManager()
             ->createQueryBuilder()
             ->delete(LogEntity::class, 'l')
             ->where('l.user = :user')
             ->setParameter('user', $user);
-        $queryBuilder->getQuery()->execute();
+        $query_builder->getQuery()->execute();
     }
 }

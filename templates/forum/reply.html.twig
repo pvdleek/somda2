@@ -12,7 +12,7 @@
                     <tr>
                         <td colspan="2">
                             <a class="somda-button" href="#" id="reply_button" onclick="disableMeAndSubmitForm('reply_button', 'reply_form'); return false;">Reageer</a>
-                            <a class="somda-button" href="{{ path('forum_discussion', { 'id': post.discussion.id, 'name': (post.discussion.title | slug) }) }}">Terug naar de discussie</a>
+                            <a class="somda-button" href="{{ path('forum_discussion', { 'id': post.discussion.id, 'name': (post.discussion.title|slug) }) }}">Terug naar de discussie</a>
                         </td>
                     </tr>
                 </table>
@@ -21,7 +21,7 @@
 
         {% for post in lastPosts %}
             <table align="center">
-                {% include 'forum/post.html.twig' with { 'mayPost': false, 'userIsModerator': false, 'postIsUnread': false } %}
+                {% include 'forum/post.html.twig' with { 'may_post': false, 'user_is_moderator': false, 'post_is_unread': false } %}
             </table>
         {% endfor %}
     </div>

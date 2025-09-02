@@ -43,7 +43,7 @@ class TemplateHelper
         try {
             $content = $this->twig->render($this->getCorrectView($view), $this->getParameters($parameters));
         } catch (\Exception $exception) {
-            $this->logger->critical('Error when rendering view "' . $view . '": "' . $exception->getMessage() . '"');
+            $this->logger->critical('Error when rendering view "'.$view.'": "'.$exception->getMessage().'"');
             $content = '';
         }
 
@@ -68,7 +68,7 @@ class TemplateHelper
 
         $detect = new MobileDetect();
         if ($detect->isMobile() && \file_exists(__DIR__.'/../../templates/mobile/'.$view)) {
-            $view = 'mobile/' . $view;
+            $view = 'mobile/'.$view;
         }
 
         return $view;

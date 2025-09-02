@@ -25,13 +25,13 @@
                 <a class="somda-button" href="#" onclick="viewTrainTableYearRouteList(); return false;">Toon treinen</a>
 
                 {% if selected_route_list is not null %}
-                    {% if routes | length %}
+                    {% if routes|length %}
                         <br /><br />
                         <table>
                             <tr>
                                 <th>Treinnummer</th>
                                 {% for day_number in 1..7 %}
-                                    <th>{{ ('general.date.days.' ~ (day_number - 1)) | trans }}</th>
+                                    <th>{{ ('general.date.days.' ~ (day_number - 1))|trans }}</th>
                                 {% endfor %}
                             </tr>
                             {% for route in routes %}

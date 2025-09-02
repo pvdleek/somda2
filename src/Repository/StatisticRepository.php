@@ -20,12 +20,12 @@ class StatisticRepository extends ServiceEntityRepository
 
     public function countPageViews(): int
     {
-        $queryBuilder = $this->getEntityManager()
+        $query_builder = $this->getEntityManager()
             ->createQueryBuilder()
             ->select('SUM(s.visitors_total)')
             ->from(StatisticEntity::class, 's');
         try {
-            return (int) $queryBuilder->getQuery()->getSingleScalarResult();
+            return (int) $query_builder->getQuery()->getSingleScalarResult();
         } catch (NonUniqueResultException | NoResultException) {
             return 0;
         }
@@ -33,12 +33,12 @@ class StatisticRepository extends ServiceEntityRepository
 
     public function countSpots(): int
     {
-        $queryBuilder = $this->getEntityManager()
+        $query_builder = $this->getEntityManager()
             ->createQueryBuilder()
             ->select('SUM(s.number_of_spots)')
             ->from(StatisticEntity::class, 's');
         try {
-            return (int) $queryBuilder->getQuery()->getSingleScalarResult();
+            return (int) $query_builder->getQuery()->getSingleScalarResult();
         } catch (NonUniqueResultException | NoResultException) {
             return 0;
         }
@@ -50,18 +50,18 @@ class StatisticRepository extends ServiceEntityRepository
      */
     public function findLastDays(int $numberOfDays): array
     {
-        $queryBuilder = $this->getEntityManager()
+        $query_builder = $this->getEntityManager()
             ->createQueryBuilder()
             ->select('s')
             ->from(StatisticEntity::class, 's')
             ->orderBy('s.timestamp', 'DESC')
             ->setMaxResults($numberOfDays);
-        return $queryBuilder->getQuery()->getResult();
+        return $query_builder->getQuery()->getResult();
     }
 
     public function getTotalsPerMonth(): array
     {
-        $queryBuilder = $this->getEntityManager()
+        $query_builder = $this->getEntityManager()
             ->createQueryBuilder()
             ->select('YEAR(s.timestamp) AS year')
             ->addSelect('MONTH(s.timestamp) AS month')
@@ -75,7 +75,7 @@ class StatisticRepository extends ServiceEntityRepository
             ->addGroupBy('year')
             ->addGroupBy('month')
             ->orderBy('s.timestamp', 'DESC');
-        return $queryBuilder->getQuery()->getArrayResult();
+        return $query_builder->getQuery()->getArrayResult();
     }
 
     /**
@@ -83,14 +83,14 @@ class StatisticRepository extends ServiceEntityRepository
      */
     public function getFirstDate(): \DateTime
     {
-        $queryBuilder = $this->getEntityManager()
+        $query_builder = $this->getEntityManager()
             ->createQueryBuilder()
             ->select('s.timestamp')
             ->from(StatisticEntity::class, 's')
             ->orderBy('s.timestamp', 'ASC')
             ->setMaxResults(1);
         try {
-            return new \DateTime($queryBuilder->getQuery()->getSingleScalarResult());
+            return new \DateTime($query_builder->getQuery()->getSingleScalarResult());
         } catch (NonUniqueResultException | NoResultException) {
             return new \DateTime();
         }
@@ -98,14 +98,14 @@ class StatisticRepository extends ServiceEntityRepository
 
     public function findBusiest(StatisticBusiest $statisticBusiest): void
     {
-        $queryBuilder = $this->getEntityManager()
+        $query_builder = $this->getEntityManager()
             ->createQueryBuilder()
             ->select('s.timestamp AS timestamp')
-            ->addSelect('s.' . $this->getBusiestFieldName($statisticBusiest->type) . ' AS number')
+            ->addSelect('s.'.$this->getBusiestFieldName($statisticBusiest->type).' AS number')
             ->from(StatisticEntity::class, 's')
-            ->orderBy('s.' . $this->getBusiestFieldName($statisticBusiest->type), 'DESC')
+            ->orderBy('s.'.$this->getBusiestFieldName($statisticBusiest->type), 'DESC')
             ->setMaxResults(1);
-        $result = $queryBuilder->getQuery()->getArrayResult()[0];
+        $result = $query_builder->getQuery()->getArrayResult()[0];
         $statisticBusiest->timestamp = $result['timestamp'];
         $statisticBusiest->number = (int) $result['number'];
     }

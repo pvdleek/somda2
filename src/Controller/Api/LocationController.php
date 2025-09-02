@@ -55,16 +55,16 @@ class LocationController extends AbstractFOSRestController
 
         switch ($search_method) {
             case WebLocationController::SEARCH_METHOD_CHARACTER:
-                $locations = $this->location_repository->findByName($search . '%');
+                $locations = $this->location_repository->findByName($search.'%');
                 break;
             case WebLocationController::SEARCH_METHOD_SINGLE:
                 $locations = $this->location_repository->findByName($search);
                 break;
             case WebLocationController::SEARCH_METHOD_NAME:
-                $locations = $this->location_repository->findByName('%' . $search . '%');
+                $locations = $this->location_repository->findByName('%'.$search.'%');
                 break;
             case WebLocationController::SEARCH_METHOD_DESCRIPTION:
-                $locations = $this->location_repository->findByDescription('%' . $search . '%');
+                $locations = $this->location_repository->findByDescription('%'.$search.'%');
                 break;
             default:
                 $locations = $this->location_repository->findAll();

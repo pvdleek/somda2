@@ -20,7 +20,7 @@ class TrainRepository extends ServiceEntityRepository
      */
     public function findByTransporter(): array
     {
-        $queryBuilder = $this->getEntityManager()
+        $query_builder = $this->getEntityManager()
             ->createQueryBuilder()
             ->select('t.number AS number')
             ->addSelect('t.name AS name')
@@ -32,6 +32,6 @@ class TrainRepository extends ServiceEntityRepository
             ->leftJoin('t.name_pattern', 'np')
             ->addOrderBy('tr.name', 'ASC')
             ->addOrderBy('t.number', 'ASC');
-        return $queryBuilder->getQuery()->getArrayResult();
+        return $query_builder->getQuery()->getArrayResult();
     }
 }

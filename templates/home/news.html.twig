@@ -1,6 +1,6 @@
 <div class="home-news-container">
 	{% for news in layoutData['news'] %}
-		<div>{{ news.timestamp | displayDateTime(true) }}</div>
+		<div>{{ news.timestamp|displayDateTime(true) }}</div>
 		<div><i class="fas fa-newspaper"></i></div>
 		<div>
 			<a class="contentpanel" href="{{ path('news_text', { 'id': news.id }) }}">{{ news.title }}</a>

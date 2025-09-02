@@ -68,7 +68,7 @@ class RouteList extends AbstractType
             ])
             ->add('characteristic', EntityType::class, [
                 FormGenerics::KEY_CHOICE_LABEL => function (Characteristic $characteristic) {
-                    return $characteristic->name . ' (' . $characteristic->description . ')';
+                    return $characteristic->name.' ('.$characteristic->description.')';
                 },
                 FormGenerics::KEY_CHOICE_VALUE => 'id',
                 FormGenerics::KEY_CLASS => Characteristic::class,

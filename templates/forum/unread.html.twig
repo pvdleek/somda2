@@ -9,11 +9,11 @@
 
             <table>
                 <tr>
-                    <th colspan="2">{{ 'forum.discussion.subject' | trans }}</th>
-                    <th>{{ 'forum.number.posts' | trans }}</th>
-                    <th>{{ 'forum.author' | trans }}</th>
-                    <th>{{ 'forum.number.viewed' | trans }}</th>
-                    <th>{{ 'forum.lastPost' | trans }}</th>
+                    <th colspan="2">{{ 'forum.discussion.subject'|trans }}</th>
+                    <th>{{ 'forum.number.posts'|trans }}</th>
+                    <th>{{ 'forum.author'|trans }}</th>
+                    <th>{{ 'forum.number.viewed'|trans }}</th>
+                    <th>{{ 'forum.lastPost'|trans }}</th>
                 </tr>
                 {% for discussion in discussions %}
                     <tr>
@@ -26,11 +26,11 @@
                                 <i class="fas fa-comment"></i>
                             {% endif %}
                         </td>
-                        <td><a href="{{ path('forum_discussion', { 'id': discussion['id'], 'name': (discussion['title'] | slug) }) }}">{{ discussion['title'] }}</a> <i class="fas fa-comment-dots"></i></td>
+                        <td><a href="{{ path('forum_discussion', { 'id': discussion['id'], 'name': (discussion['title']|slug) }) }}">{{ discussion['title'] }}</a> <i class="fas fa-comment-dots"></i></td>
                         <td>{{ discussion['posts'] }}</td>
-                        <td>{{ discussion['author_id'] | displayUser(discussion['author_username']) | raw }}</td>
+                        <td>{{ discussion['author_id']|displayUser(discussion['author_username'])|raw }}</td>
                         <td>{{ discussion['viewed'] }}</td>
-                        <td>{{ discussion['max_post_timestamp'] | displayDateTime(true) }}</td>
+                        <td>{{ discussion['max_post_timestamp']|displayDateTime(true) }}</td>
                     </tr>
                 {% else %}
                     <tr><td colspan="6">Er zijn geen ongelezen forumberichten</td></tr>

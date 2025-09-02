@@ -20,14 +20,14 @@ class ForumPostAlertRepository extends ServiceEntityRepository
      */
     public function getNumberOfOpenAlerts(): int
     {
-        $queryBuilder = $this->getEntityManager()
+        $query_builder = $this->getEntityManager()
             ->createQueryBuilder()
             ->select('COUNT(a.id)')
             ->from(ForumPostAlertEntity::class, 'a')
             ->andWhere('a.closed = FALSE')
             ->setMaxResults(1);
         try {
-            return (int) $queryBuilder->getQuery()->getSingleScalarResult();
+            return (int) $query_builder->getQuery()->getSingleScalarResult();
         } catch (\Exception) {
             return 0;
         }
@@ -38,7 +38,7 @@ class ForumPostAlertRepository extends ServiceEntityRepository
      */
     public function findForOverview(): array
     {
-        $queryBuilder = $this->getEntityManager()
+        $query_builder = $this->getEntityManager()
             ->createQueryBuilder()
             ->select('f.closed')
             ->addSelect('GROUP_CONCAT(DISTINCT u.id ORDER BY u.id SEPARATOR \',\') AS sender_ids')
@@ -57,6 +57,6 @@ class ForumPostAlertRepository extends ServiceEntityRepository
             ->addOrderBy('f.closed', 'ASC')
             ->addOrderBy('f.timestamp', 'DESC')
             ->setMaxResults(100);
-        return $queryBuilder->getQuery()->getArrayResult();
+        return $query_builder->getQuery()->getArrayResult();
     }
 }

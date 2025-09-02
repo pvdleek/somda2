@@ -19,7 +19,7 @@ class ForumDiscussionMove extends AbstractType
     {
         $builder->add('forum', EntityType::class, [
             FormGenerics::KEY_CHOICE_LABEL => function (ForumForum $forum) {
-                return $forum->category->name . ' - ' . $forum->name;
+                return $forum->category->name.' - '.$forum->name;
             },
             FormGenerics::KEY_CLASS => ForumForum::class,
             FormGenerics::KEY_LABEL => 'Kies een nieuw locatie',

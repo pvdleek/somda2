@@ -55,7 +55,7 @@ class KernelListener implements EventSubscriberInterface
     public function onKernelException(ExceptionEvent $event): void
     {
         if ($this->isApiRequest($event)) {
-            $event->setResponse(new Response('{ "error": "' . $event->getThrowable()->getMessage() . '" }'));
+            $event->setResponse(new Response('{ "error": "'.$event->getThrowable()->getMessage().'" }'));
         }
     }
 

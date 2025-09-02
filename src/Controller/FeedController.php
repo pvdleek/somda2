@@ -90,11 +90,11 @@ class FeedController
 
         $passing_routes = $this->getPassingRoutes($location, $day_number, $start_time);
         foreach ($passing_routes as $passing_route) {
-            $out = $this->timeDatabaseToDisplay($passing_route['time']) . ' - ';
-            $out .= $this->translator->trans('general.action.' . $passing_route['action']) . ' trein ';
-            $out .= $passing_route['route_number'] . ' (' . $passing_route['fl_first_description'] . ' - ';
-            $out .= $passing_route['fl_last_description'] . ')';
-            $out .= ' - ' . $passing_route[TrainTableRepository::FIELD_TRANSPORTER_NAME] . ' ';
+            $out = $this->timeDatabaseToDisplay($passing_route['time']).' - ';
+            $out .= $this->translator->trans('general.action.'.$passing_route['action']).' trein ';
+            $out .= $passing_route['route_number'].' ('.$passing_route['fl_first_description'].' - ';
+            $out .= $passing_route['fl_last_description'].')';
+            $out .= ' - '.$passing_route[TrainTableRepository::FIELD_TRANSPORTER_NAME].' ';
             $out .= $passing_route[TrainTableRepository::FIELD_CHARACTERISTIC_DESCRIPTION];
             $this->doText($image, $out);
         }
@@ -113,9 +113,9 @@ class FeedController
         }
 
         if (\strlen($color) === 6) {
-            list($red, $green, $blue) = array($color[0] . $color[1], $color[2] . $color[3], $color[4] . $color[5]);
+            list($red, $green, $blue) = array($color[0].$color[1], $color[2].$color[3], $color[4].$color[5]);
         } elseif (strlen($color) === 3) {
-            list($red, $green, $blue) = array($color[0] . $color[0], $color[1] . $color[1], $color[2] . $color[2]);
+            list($red, $green, $blue) = array($color[0].$color[0], $color[1].$color[1], $color[2].$color[2]);
         } else {
             return ImageColorAllocate($id, 255, 255, 255);
         }

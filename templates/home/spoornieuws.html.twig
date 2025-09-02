@@ -2,7 +2,7 @@
     <img alt="{{ railNews[0].source.name }}" height="25" src="{{ asset('images/news-logos/' ~ railNews[0].source.logo) }}" />
     <a class="rail-news-title" href="{{ railNews[0].url }}" rel="noopener" target="_blank">{{ railNews[0].title }}</a>
 </div>
-<div class="create-date">{{ railNews[0].timestamp | displayDateTime(true) }}</div>
+<div class="create-date">{{ railNews[0].timestamp|displayDateTime(true) }}</div>
 {{ railNews[0].introduction }}
 <br /><a href="{{ railNews[0].url }}" rel="noopener" target="_blank">Lees verder...</a>
 

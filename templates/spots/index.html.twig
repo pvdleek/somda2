@@ -37,7 +37,7 @@
                 <select id="day_number" name="day_number">
                     <option {{ day_number is null ? 'selected="selected" ' }}value="0">-</option>
                     {% for day_number_select in 1..7 %}
-                        <option {{ day_number == day_number_select ? 'selected="selected" ' }}value="{{ day_number_select }}">{{ ('general.date.days.' ~ (day_number_select - 1)) | trans }}</option>
+                        <option {{ day_number == day_number_select ? 'selected="selected" ' }}value="{{ day_number_select }}">{{ ('general.date.days.' ~ (day_number_select - 1))|trans }}</option>
                     {% endfor %}
                 </select>
                 <a href="#" onclick="$('#day_number').val('0'); return false;"><i class="fas fa-trash-alt"></i></a>
@@ -57,7 +57,7 @@
         </tr>
         <tr>
             <th>&nbsp;</th>
-            <td><a class="somda-button" href="#" id="searchSpots" onclick="searchSpots(); return false;">{{ 'general.button.search' | trans }}</a></td>
+            <td><a class="somda-button" href="#" id="searchSpots" onclick="searchSpots(); return false;">{{ 'general.button.search'|trans }}</a></td>
         </tr>
     </table>
     <br />
@@ -91,7 +91,7 @@
                                 <td>{{ spot.route_number }}</td>
                                 <td>
                                     {% if spot.route_number matches '/^\\d+$/' %}
-                                        <a href="{{ path('spots_to_train_table', { 'route_number': spot.route_number, 'date': spot.spot_date | date('Y-m-d') }) }}" title="Bekijk de dienstregeling van trein {{ spot.route_number }}">{{ spot.route_number }}</a>
+                                        <a href="{{ path('spots_to_train_table', { 'route_number': spot.route_number, 'date': spot.spot_date|date('Y-m-d') }) }}" title="Bekijk de dienstregeling van trein {{ spot.route_number }}">{{ spot.route_number }}</a>
                                     {% else %}
                                         {{ spot.route_number }}
                                     {% endif %}
@@ -101,7 +101,7 @@
                                 <td>{{ spot.spot_date|date('Y-m-d') }}</td>
                                 <td>{{ spot.spot_date|displayDateTime }} {{ spot.displaySpotTime }}</td>
                                 <td>{{ spot.spotter_username }}</td>
-                                <td>{{ spot.spotter_id|displayUser(spot.spotter_username) | raw }}</td>
+                                <td>{{ spot.spotter_id|displayUser(spot.spotter_username)|raw }}</td>
                                 <td>{{ spot.location_name }}</td>
                                 <td><span title="{{ spot.location_description }}">{{ spot.location_name }}</span></td>
                             </tr>
@@ -133,7 +133,7 @@
 
 {% block javascripts %}
     <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
-    <script src="{{ asset('js/dateFormat-2019-08-01.js') }}?version={{ 'js/dateFormat-2019-08-01.js' | fileTimestamp }}"></script>
+    <script src="{{ asset('js/dateFormat-2019-08-01.js') }}?version={{ 'js/dateFormat-2019-08-01.js'|fileTimestamp }}"></script>
 
     <script>
         {{ include('partials/locationAutoComplete.js.twig') }}

@@ -14,12 +14,12 @@
             </td>
         </tr><tr>
             <th>&nbsp;</th>
-            <td><a class="somda-button" href="#" id="searchTrains" onclick="searchTrains(); return false;">{{ 'general.button.search' | trans }}</a></td>
+            <td><a class="somda-button" href="#" id="searchTrains" onclick="searchTrains(); return false;">{{ 'general.button.search'|trans }}</a></td>
         </tr>
     </table>
     <br />
 
-    {% if selectedType is not null and trains | length > 0 %}
+    {% if selectedType is not null and trains|length > 0 %}
         <div class="panel">
             <div class="panel-title">
                 {{ selectedType.description }}
@@ -43,13 +43,13 @@
                                     <td>&nbsp;</td>
                                 {% endif %}
                                 <th>&nbsp;</th>
-                                {% for car in 1..constant('App\\Entity\\TrainComposition::NUMBER_OF_CARS') %}{% if selectedType.car(car) is not null %}<th>{{ train.car(car) | raw }}</th>{% endif %}{% endfor %}
+                                {% for car in 1..constant('App\\Entity\\TrainComposition::NUMBER_OF_CARS') %}{% if selectedType.car(car) is not null %}<th>{{ train.car(car)|raw }}</th>{% endif %}{% endfor %}
                                 <th>{{ train.note }}</th>
                                 <th>{{ train.extra }}</th>
                             {% else %}
                                 <td><a href="{{ path('train_composition_edit', { 'id': train.id }) }}"><i class="fas fa-pen"></i></a></td>
                                 <td>{{ train.last_update_timestamp is null ? 'Onbekend' : (train.last_update_timestamp|displayDateTime) }}</td>
-                                {% for car in 1..constant('App\\Entity\\TrainComposition::NUMBER_OF_CARS') %}{% if selectedType.car(car) is not null %}<td>{{ train.car(car) | raw }}</td>{% endif %}{% endfor %}
+                                {% for car in 1..constant('App\\Entity\\TrainComposition::NUMBER_OF_CARS') %}{% if selectedType.car(car) is not null %}<td>{{ train.car(car)|raw }}</td>{% endif %}{% endfor %}
                                 <td>{{ train.note }}</td>
                                 <td>{{ train.extra }}</td>
                             {% endif %}
@@ -61,10 +61,10 @@
                                         <a href="#" onclick="checkProposition({{ train.id }}, {{ proposition.user.id }}, true); return false;">Goed</a>
                                         <br /><a href="#" onclick="checkProposition({{ train.id }}, {{ proposition.user.id }}, false); return false;">Fout</a>
                                     </td>
-                                    <td>{{ proposition.timestamp | displayDateTime(true, true) }}<br />{{ proposition.user.id | displayUser(proposition.user.username) | raw }}</td>
+                                    <td>{{ proposition.timestamp|displayDateTime(true, true) }}<br />{{ proposition.user.id|displayUser(proposition.user.username)|raw }}</td>
                                     {% for car in 1..constant('App\\Entity\\TrainComposition::NUMBER_OF_CARS') %}
                                         {% if selectedType.car(car) is not null %}
-                                            <td{% if train.car(car) != proposition.car(car) %} class="changed"{% endif %}>{{ proposition.car(car) | raw }}</td>
+                                            <td{% if train.car(car) != proposition.car(car) %} class="changed"{% endif %}>{{ proposition.car(car)|raw }}</td>
                                         {% endif %}
                                     {% endfor %}
                                     <td{% if train.note != proposition.note %} class="changed"{% endif %}>{{ proposition.note }}</td>

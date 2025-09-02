@@ -13,7 +13,7 @@
                 </tr>
                 {% for item in news %}
                     <tr>
-                        <td>{{ item.timestamp | displayDateTime(true) }}</td>
+                        <td>{{ item.timestamp|displayDateTime(true) }}</td>
                         <td>{{ item.title }}</td>
                         <td>{{ item.archived ? 'Gearchiveerd' : 'Actief' }}</td>
                         <td><a href="{{ path('manage_news_edit', { 'id': item.id }) }}">Bewerk</a></td>

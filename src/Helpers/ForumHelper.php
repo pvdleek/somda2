@@ -35,12 +35,12 @@ class ForumHelper implements RuntimeExtensionInterface
         $text = \nl2br($this->replaceStaticData($text));
 
         if (null !== $post->edit_timestamp) {
-            $text .= '<br /><br /><i><span class="edit_text">Laatst bewerkt door ' . $post->editor->username .
-                ' op ' . $post->edit_timestamp->format('d-m-Y H:i').
-                (\strlen($post->edit_reason ?? '') > 0 ? ', reden: ' . $post->edit_reason : '') . '</span></i>';
+            $text .= '<br /><br /><i><span class="edit_text">Laatst bewerkt door '.$post->editor->username .
+                ' op '.$post->edit_timestamp->format('d-m-Y H:i').
+                (\strlen($post->edit_reason ?? '') > 0 ? ', reden: '.$post->edit_reason : '').'</span></i>';
         }
         if ($post->signature_on && strlen($signature = $this->user_helper->getSignatureForUser($post->author)) > 0) {
-            $text .= '<br /><br /><hr style="margin-left:0; width:15%;" />' . $signature;
+            $text .= '<br /><br /><hr style="margin-left:0; width:15%;" />'.$signature;
         }
 
         return $text;
@@ -58,7 +58,7 @@ class ForumHelper implements RuntimeExtensionInterface
         $numberOfQuote = 0;
         $numberOfUnquote = 0;
         while (\stripos($text, '%quote%') !== false) {
-            $text = \preg_replace('[%quote%]', '<blockquote><strong>Quote' . '</strong><hr />', $text, 1);
+            $text = \preg_replace('[%quote%]', '<blockquote><strong>Quote'.'</strong><hr />', $text, 1);
             ++$numberOfQuote;
         }
         while (\stripos($text, '%unquote%') !== false) {
@@ -69,7 +69,7 @@ class ForumHelper implements RuntimeExtensionInterface
         // Place extra quotes if necessary
         $doQuotes = $numberOfUnquote - $numberOfQuote;
         for ($doQuote = 0; $doQuote < $doQuotes; ++$doQuote) {
-            $text = '<blockquote><strong>Quote' . '</strong><hr />' . $text;
+            $text = '<blockquote><strong>Quote'.'</strong><hr />'.$text;
         }
         // Place extra unquotes if necessary
         $doQuotes = $numberOfQuote - $numberOfUnquote;
@@ -95,7 +95,7 @@ class ForumHelper implements RuntimeExtensionInterface
         if (isset($_SERVER['HTTP_HOST'])) {
             $server = $_SERVER['HTTP_HOST'];
             if (\substr($server, 0, 4) != 'http') {
-                $server = 'https://' . $server;
+                $server = 'https://'.$server;
             }
             $replace = [
                 'http://www.somda.nl', 'http://somda.nl', 'http://test.somda.nl',
@@ -112,8 +112,8 @@ class ForumHelper implements RuntimeExtensionInterface
         // Replace smileys with percent-codes (%xx%)
         for ($smileyNumber = 1; $smileyNumber <= 18; ++$smileyNumber) {
             $text = \str_replace(
-                '%' . \sprintf('%2d', $smileyNumber) . '%',
-                '<img alt="" src="/images/smileys/' . \sprintf('%2d', $smileyNumber) . '.png" />',
+                '%'.\sprintf('%2d', $smileyNumber).'%',
+                '<img alt="" src="/images/smileys/'.\sprintf('%2d', $smileyNumber).'.png" />',
                 $text
             );
         }
@@ -125,7 +125,7 @@ class ForumHelper implements RuntimeExtensionInterface
             ' :O' => '16', ' :-O' => '16', ' ;)' => '17', ' ;-)' => '17',
         ];
         foreach ($smileys as $smileyCode => $smileyNumber) {
-            $text = \str_replace($smileyCode, '<img alt="" src="/images/smileys/' . $smileyNumber . '.png" />', $text);
+            $text = \str_replace($smileyCode, '<img alt="" src="/images/smileys/'.$smileyNumber.'.png" />', $text);
         }
 
         return $text;
@@ -145,9 +145,9 @@ class ForumHelper implements RuntimeExtensionInterface
             $word = \trim($chunk);
             if (isset($locations[$word])) {
                 $text = \preg_replace(
-                    self::REPLACE_WORD_START . $word . self::REPLACE_WORD_END,
+                    self::REPLACE_WORD_START.$word.self::REPLACE_WORD_END,
                     '\\1<!-- s\\2 --><span class="tooltip" title="' .
-                    \strtolower(\htmlspecialchars($locations[$word])) . '">\\2<!-- s\\2 --></span>\\3',
+                    \strtolower(\htmlspecialchars($locations[$word])).'">\\2<!-- s\\2 --></span>\\3',
                     $text
                 );
             }
@@ -156,15 +156,15 @@ class ForumHelper implements RuntimeExtensionInterface
             $word = \trim($chunk);
             if (isset($users[$word])) {
                 $text = \preg_replace(
-                    self::REPLACE_WORD_START . $word . self::REPLACE_WORD_END,
+                    self::REPLACE_WORD_START.$word.self::REPLACE_WORD_END,
                     '\\1<!-- s\\2 --><span class="tooltip" title="Somda gebruiker ' .
-                        \htmlspecialchars($users[$word]) . '">' . \substr($word, 1) . '<!-- \\2 --></span>\\3',
+                        \htmlspecialchars($users[$word]).'">'.\substr($word, 1).'<!-- \\2 --></span>\\3',
                     $text
                 );
             } elseif (isset($routes[$word])) {
                 $text = \preg_replace(
-                    self::REPLACE_WORD_START . $word . self::REPLACE_WORD_END,
-                    '\\1<!-- s\\2 --><span class="tooltip" title="' . \htmlspecialchars($routes[$word]) .
+                    self::REPLACE_WORD_START.$word.self::REPLACE_WORD_END,
+                    '\\1<!-- s\\2 --><span class="tooltip" title="'.\htmlspecialchars($routes[$word]) .
                         '">\\2<!-- s\\2 --></span>\\3',
                     $text
                 );

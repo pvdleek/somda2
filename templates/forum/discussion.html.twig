@@ -3,13 +3,13 @@
 {% block content %}
 
     {% block wiki %}
-        {% if discussion.wikis | length > 0 %}
+        {% if discussion.wikis|length > 0 %}
             <div class="wiki-block">
                 <table>
                     <tr>
                         <td align="center">
                             <br />
-                            Deze forumdiscussie is gekoppeld aan de <a href="http://www.railwiki.nl/" rel="noopener" target="_blank">RailWiki.nl</a> pagina{% if discussion.wikis | length > 1 %}'s{% endif %}):
+                            Deze forumdiscussie is gekoppeld aan de <a href="http://www.railwiki.nl/" rel="noopener" target="_blank">RailWiki.nl</a> pagina{% if discussion.wikis|length > 1 %}'s{% endif %}):
                             <br /><br />
                             {% for wiki in discussion.wikis %}
                                 <a href="http://www.railwiki.nl/index.php/{{ wiki.wiki }}" rel="noopener" target="_blank">{{ wiki.title ? wiki.title : wiki.wiki }}</a>
@@ -26,7 +26,7 @@
     <div class="panel" style="min-width:98%">
         <div class="panel-title">
             {% block discussionHeader %}
-                {% if userIsModerator %}
+                {% if user_is_moderator %}
                     <span class="moderator-icons">
                         {% if discussion.locked %}
                             <a href="{{ path('forum_discussion_moderate', { 'id': discussion.id, 'action': constant('App\\Controller\\ForumModerateController::ACTION_OPEN') }) }}"><i class="fas fa-lock-open" title="Open discussie"></i></a>
@@ -48,40 +48,40 @@
                 {% endif %}
                 {% if discussion.locked %}
                     <i class="fas fa-lock"></i>
-                {% elseif posts | length > 1 %}
+                {% elseif posts|length > 1 %}
                     <i class="fas fa-comments"></i>
                 {% else %}
                     <i class="fas fa-comment"></i>
                 {% endif %}
                 {{ discussion.title }}
-                <br />Forum: <a href="{{ path('forum_forum', { 'id': discussion.forum.id, 'name': (discussion.forum.name | slug) }) }}">{{ discussion.forum.category.name }} - {{ discussion.forum.name }}</a>
+                <br />Forum: <a href="{{ path('forum_forum', { 'id': discussion.forum.id, 'name': (discussion.forum.name|slug) }) }}">{{ discussion.forum.category.name }} - {{ discussion.forum.name }}</a>
             {% endblock %}
         </div>
         <div class="panel-content panel-no-background">
             {% block paginator %}
                 {% if numberOfPages > 1 %}
                     <ul class="pagination">
-                        {% if page_number > 1 %}<li><a href="{{ path('forum_discussion_page', { 'id': discussion.id, 'name': (discussion.title | slug), 'page_number': (page_number - 1) }) }}">«</a></li>{% endif %}
+                        {% if page_number > 1 %}<li><a href="{{ path('forum_discussion_page', { 'id': discussion.id, 'name': (discussion.title|slug), 'page_number': (page_number - 1) }) }}">«</a></li>{% endif %}
                         {% for page in 1..numberOfPages %}
                             <li><span>
-                                {% if page != page_number %}<a href="{{ path('forum_discussion_page', { 'id': discussion.id, 'name': (discussion.title | slug), 'page_number': page }) }}">{{ page }}</a>{% else %}{{ page }}{% endif %}
+                                {% if page != page_number %}<a href="{{ path('forum_discussion_page', { 'id': discussion.id, 'name': (discussion.title|slug), 'page_number': page }) }}">{{ page }}</a>{% else %}{{ page }}{% endif %}
                             </span></li>
                         {% endfor %}
-                        {% if page_number < numberOfPages %}<li><a href="{{ path('forum_discussion_page', { 'id': discussion.id, 'name': (discussion.title | slug), 'page_number': (page_number + 1) }) }}">»</a></li>{% endif %}
+                        {% if page_number < numberOfPages %}<li><a href="{{ path('forum_discussion_page', { 'id': discussion.id, 'name': (discussion.title|slug), 'page_number': (page_number + 1) }) }}">»</a></li>{% endif %}
                     </ul>
                 {% endif %}
             {% endblock %}
 
-            {% if userIsModerator %}
+            {% if user_is_moderator %}
                 <p>Met geselecteerd: <a href="#" onclick="moderateNew(); return false;"><i class="fas fa-divide" title="Splits af naar een nieuwe discussie"></i></a><br /></p>
             {% endif %}
 
-            {% set firstUnreadAnchorDone = false %}
+            {% set first_unread_anchor_done = false %}
             {% for post in posts %}
-                {% if newToOld %}
-                    {% set postIsUnread = loop.index <= ((number_of_posts - numberOfReadPosts) - (constant('App\\Generics\\ForumGenerics::MAX_POSTS_PER_PAGE') * (page_number - 1))) %}
+                {% if new_to_old %}
+                    {% set post_is_unread = loop.index <= ((number_of_posts - number_of_read_posts) - (constant('App\\Generics\\ForumGenerics::MAX_POSTS_PER_PAGE') * (page_number - 1))) %}
                 {% else %}
-                    {% set postIsUnread = loop.index > (numberOfReadPosts - (constant('App\\Generics\\ForumGenerics::MAX_POSTS_PER_PAGE') * (page_number - 1))) %}
+                    {% set post_is_unread = loop.index > (number_of_read_posts - (constant('App\\Generics\\ForumGenerics::MAX_POSTS_PER_PAGE') * (page_number - 1))) %}
                 {% endif %}
                 {% if loop.index == 5 or loop.index == 55 %}
                     {% if forumBanner is not null %}
@@ -104,14 +104,14 @@
 
                 <table align="center">
                     {% include('forum/post.html.twig') %}
-                    {% if is_granted('ROLE_ADMIN_WIKI') and (discussion.wikis | length) > 0 %}
+                    {% if is_granted('ROLE_ADMIN_WIKI') and (discussion.wikis|length) > 0 %}
                         <tr><td colspan="3">Railwiki.nl:
                             {% if post.wiki_check == 0 %}
                                 <span id="wiki_{{ post.id }}" class="background-color-orange">Nog te controleren - <a href="#" onclick="wikiCheck({{ post.id }}, 'ok'); return false;">Markeer als gecontroleerd</a> - <a href="#" onclick="wikiCheck({{ post.id }}, 'na'); return false;">Markeer als niet relevante inhoud</a></span>
                             {% elseif post.wiki_check == 1 %}
-                                Verwerkt in de wiki door {{ post.wiki_checker.id | displayUser(post.wiki_checker.username) | raw }}
+                                Verwerkt in de wiki door {{ post.wiki_checker.id|displayUser(post.wiki_checker.username)|raw }}
                             {% else %}
-                                Geen relevante inhoud, gecontroleerd door {{ post.wiki_checker.id | displayUser(post.wiki_checker.username) | raw }}
+                                Geen relevante inhoud, gecontroleerd door {{ post.wiki_checker.id|displayUser(post.wiki_checker.username)|raw }}
                             {% endif %}
                         </td></tr>
                     {% endif %}
@@ -119,7 +119,7 @@
                 <br />
             {% endfor %}
 
-            {% if not firstUnreadAnchorDone and not newToOld %}<a id="new_post"></a>{% endif %}
+            {% if not first_unread_anchor_done and not new_to_old %}<a id="new_post"></a>{% endif %}
 
             {{ block('paginator') }}
         </div>
@@ -149,7 +149,7 @@
         </script>
     {% endif %}
 
-    {% if userIsModerator %}
+    {% if user_is_moderator %}
         <script>
             function moderateNew()
             {

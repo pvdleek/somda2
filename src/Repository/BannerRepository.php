@@ -22,7 +22,7 @@ class BannerRepository extends ServiceEntityRepository
      */
     public function getNumberOfHits(BannerEntity $banner): int
     {
-        $queryBuilder = $this->getEntityManager()
+        $query_builder = $this->getEntityManager()
             ->createQueryBuilder()
             ->select('COUNT(bh.id) AS hits')
             ->from(BannerHit::class, 'bh')
@@ -30,7 +30,7 @@ class BannerRepository extends ServiceEntityRepository
             ->setParameter('banner', $banner)
             ->setMaxResults(1);
         try {
-            return (int) $queryBuilder->getQuery()->getSingleScalarResult();
+            return (int) $query_builder->getQuery()->getSingleScalarResult();
         } catch (\Exception) {
             return 0;
         }
@@ -41,7 +41,7 @@ class BannerRepository extends ServiceEntityRepository
      */
     public function getNumberOfViews(BannerEntity $banner): int
     {
-        $queryBuilder = $this->getEntityManager()
+        $query_builder = $this->getEntityManager()
             ->createQueryBuilder()
             ->select('COUNT(bv.id) AS hits')
             ->from(BannerView::class, 'bv')
@@ -49,7 +49,7 @@ class BannerRepository extends ServiceEntityRepository
             ->setParameter('banner', $banner)
             ->setMaxResults(1);
         try {
-            return (int) $queryBuilder->getQuery()->getSingleScalarResult();
+            return (int) $query_builder->getQuery()->getSingleScalarResult();
         } catch (\Exception) {
             return 0;
         }

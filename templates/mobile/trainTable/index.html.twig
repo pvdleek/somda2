@@ -18,12 +18,12 @@
             {% for trainTableLine in trainTableLines %}
                 {% if trainTableLine.routeOperationDays != lastRouteOperationDays %}
                     {% set lastRouteOperationDays = trainTableLine.routeOperationDays %}
-                    <tr><th colspan="3">{{ trainTableLine.routeOperationDays | displayRouteOperationDays }}</th></tr>
+                    <tr><th colspan="3">{{ trainTableLine.routeOperationDays|displayRouteOperationDays }}</th></tr>
                 {% endif %}
                 <tr>
                     <td class="train-table-location">{{ trainTableLine.location.name }} ({{ trainTableLine.location.description }})</td>
                     <td>{{ trainTableLine.action }}</td>
-                    <td class="train-table-time">{{ trainTableLine.time | displayTime }}</td>
+                    <td class="train-table-time">{{ trainTableLine.time|displayTime }}</td>
                 </tr>
             {% else %}
                 <tr><td colspan="3">Er bestaat geen trein met dat treinnummer.<br />Controleer de ingevoerde gegevens.</td></tr>

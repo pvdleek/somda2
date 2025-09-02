@@ -1,6 +1,6 @@
 <div class="home-forum-container">
 	{% for discussion in layoutData['forum'] %}
-		<div>{{ discussion['max_post_timestamp'] | displayDateTime(true, true) }}</div>
+		<div>{{ discussion['max_post_timestamp']|displayDateTime(true, true) }}</div>
 		<div>
 			{% if discussion['forum_type'] == constant('App\\Entity\\ForumForum::TYPE_ARCHIVE') %}
 				<i class="fas fa-archive"></i>
@@ -13,7 +13,7 @@
 			{% endif %}
 		</div>
 		<div>
-			<a href="{{ path('forum_discussion', { 'id': discussion['id'], 'name': (discussion['title'] | slug ) }) }}">{{ discussion['title'] }}</a>
+			<a href="{{ path('forum_discussion', { 'id': discussion['id'], 'name': (discussion['title']|slug ) }) }}">{{ discussion['title'] }}</a>
 			{% if not discussion['discussion_read'] %} <i class="fas fa-comment-dots"></i>{% endif %}
 		</div>
 	{% endfor %}

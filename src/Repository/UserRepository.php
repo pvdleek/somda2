@@ -19,24 +19,24 @@ class UserRepository extends ServiceEntityRepository
 
     public function findActiveForStaticData(): array
     {
-        $queryBuilder = $this->getEntityManager()
+        $query_builder = $this->getEntityManager()
             ->createQueryBuilder()
             ->select('u.username')
             ->addSelect('u.name')
             ->from(UserEntity::class, 'u')
             ->andWhere('u.active = TRUE');
-        return $queryBuilder->getQuery()->getResult();
+        return $query_builder->getQuery()->getResult();
     }
 
     public function countActive(): int
     {
-        $queryBuilder = $this->getEntityManager()
+        $query_builder = $this->getEntityManager()
             ->createQueryBuilder()
             ->select('COUNT(u.id)')
             ->from(UserEntity::class, 'u')
             ->andWhere('u.active = TRUE');
         try {
-            return (int) $queryBuilder->getQuery()->getSingleScalarResult();
+            return (int) $query_builder->getQuery()->getSingleScalarResult();
         } catch (NonUniqueResultException | NoResultException) {
             return 0;
         }
@@ -47,7 +47,7 @@ class UserRepository extends ServiceEntityRepository
      */
     public function countBirthdays(): int
     {
-        $queryBuilder = $this->getEntityManager()
+        $query_builder = $this->getEntityManager()
             ->createQueryBuilder()
             ->select('COUNT(u.id)')
             ->from(UserEntity::class, 'u')
@@ -56,7 +56,7 @@ class UserRepository extends ServiceEntityRepository
             ->andWhere('i.birth_date = :today')
             ->setParameter('today', new \DateTime());
         try {
-            return (int) $queryBuilder->getQuery()->getSingleScalarResult();
+            return (int) $query_builder->getQuery()->getSingleScalarResult();
         } catch (NonUniqueResultException | NoResultException) {
             return 0;
         }
@@ -67,12 +67,12 @@ class UserRepository extends ServiceEntityRepository
      */
     public function findBanned(): array
     {
-        $queryBuilder = $this->getEntityManager()
+        $query_builder = $this->getEntityManager()
             ->createQueryBuilder()
             ->select('u')
             ->from(UserEntity::class, 'u')
             ->andWhere('u.ban_expire_timestamp IS NOT NULL');
-        return $queryBuilder->getQuery()->getResult();
+        return $query_builder->getQuery()->getResult();
     }
 
     /**
@@ -80,7 +80,7 @@ class UserRepository extends ServiceEntityRepository
      */
     public function findNonActivated(): array
     {
-        $queryBuilder = $this->getEntityManager()
+        $query_builder = $this->getEntityManager()
             ->createQueryBuilder()
             ->select('u')
             ->from(UserEntity::class, 'u')
@@ -90,6 +90,6 @@ class UserRepository extends ServiceEntityRepository
             ->andWhere('u.register_timestamp < :maximumDate')
             ->setParameter('minimumDate', new \DateTime('2016-01-01'))
             ->setParameter('maximumDate', new \DateTime('-5 days'));
-        return $queryBuilder->getQuery()->getResult();
+        return $query_builder->getQuery()->getResult();
     }
 }

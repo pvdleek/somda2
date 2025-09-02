@@ -60,7 +60,7 @@ class SomdaController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->email_helper->sendEmail(
                 $this->user_helper->getAdministratorUser(),
-                '[Somda-feedback] ' . $form->get('subject')->getData(),
+                '[Somda-feedback] '.$form->get('subject')->getData(),
                 'contact',
                 [
                     'text' => $form->get('text')->getData(),

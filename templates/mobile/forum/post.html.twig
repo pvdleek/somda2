@@ -1,13 +1,13 @@
 <tr>
     <th class="left-align">
-        {% if userIsModerator %}<input name="sel{{ post.id }}" type="checkbox" />{% endif %}
+        {% if user_is_moderator %}<input name="sel{{ post.id }}" type="checkbox" />{% endif %}
         <a id="p{{ post.id }}"></a>
-        {% if postIsUnread and not firstUnreadAnchorDone %}
+        {% if post_is_unread and not first_unread_anchor_done %}
             <a id="new_post"></a>
-            {% set firstUnreadAnchorDone = true %}
+            {% set first_unread_anchor_done = true %}
         {% endif %}
-        {% if postIsUnread %}<i class="color-orange fas fa-comment-dots"></i>{% else %}<i class="fas fa-comment"></i>{% endif %}
-        {{ post.author.id | displayUser(post.author.username) | raw }} ~ {{ post.timestamp | date('d-m-Y H:i:s') }}
+        {% if post_is_unread %}<i class="color-orange fas fa-comment-dots"></i>{% else %}<i class="fas fa-comment"></i>{% endif %}
+        {{ post.author.id|displayUser(post.author.username)|raw }} ~ {{ post.timestamp|date('d-m-Y H:i:s') }}
         {% set numberOfFavorites = post.numberOfFavorites %}
         {% if numberOfFavorites > 0 %}<i class="fas fa-heart"></i> {{ numberOfFavorites }}{% endif %}
 
@@ -22,18 +22,18 @@
         {% endif %}
     </th>
 </tr>
-<tr><td class="text">{{ post | displayForumPost | raw }}</td></tr>
+<tr><td class="text">{{ post|displayForumPost|raw }}</td></tr>
 <tr>
     <td>
         <div class="forum-spacer-row"></div>
         {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
             <a class="somda-button" href="{{ path('forum_discussion_post_alert', { 'id': post.id }) }}" rel="nofollow" title="Klik hier om dit bericht aan de beheerders te melden. Gebruik dit voor bijvoorbeeld overtredingen van forumregels">Meld</a>
         {% endif %}
-        {% if mayPost and not post.discussion.locked %}
+        {% if may_post and not post.discussion.locked %}
             <a class="somda-button" href="{{ path('forum_discussion_post_reply', { 'id': post.id }) }}">Reageer</a>
             <a class="somda-button" href="{{ path('forum_discussion_post_quote', { 'id': post.id }) }}">Quote</a>
         {% endif %}
-        {% if userIsModerator or (mayPost and not post.discussion.locked and post.author == app.user) %}
+        {% if user_is_moderator or (may_post and not post.discussion.locked and post.author == app.user) %}
             <a class="somda-button" href="{{ path('forum_discussion_post_edit', { 'id': post.id }) }}">Bewerk</a>
         {% endif %}
     </td>

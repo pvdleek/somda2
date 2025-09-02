@@ -88,7 +88,7 @@ class UserHelper implements RuntimeExtensionInterface
          */
         $user_preference = $this->doctrine->getRepository(UserPreference::class)->findOneBy(['key' => $key]);
         if (null === $user_preference) {
-            throw new UnknownUserPreferenceKey('Preference with key "' . $key . '" does not exist');
+            throw new UnknownUserPreferenceKey('Preference with key "'.$key.'" does not exist');
         }
 
         if (null !== $this->getUser()) {

@@ -19,13 +19,13 @@
                         <td>{{ alert.discussion_title }}</td>
                         <td>
                             {% for key, sender_id in alert.sender_ids|split(',') %}
-                                {{ sender_id | displayUser((alert.sender_usernames | split(','))[key]) | raw }}<br />
+                                {{ sender_id|displayUser((alert.sender_usernames|split(','))[key])|raw }}<br />
                             {% endfor %}
                         </td>
                         <td>{{ alert.number_of_alerts }}</td>
                         <td>{{ alert.number_of_notes }}</td>
                         <td>
-                            <a class="somda-button" href="{{ path('forum_discussion_post', { 'id': alert.discussion_id, 'name': (alert.discussion_title | slug), 'post_id': alert.post_id }) }}">Bekijk bericht</a>
+                            <a class="somda-button" href="{{ path('forum_discussion_post', { 'id': alert.discussion_id, 'name': (alert.discussion_title|slug), 'post_id': alert.post_id }) }}">Bekijk bericht</a>
                             <a class="somda-button" href="{{ path('forum_discussion_post_alerts', { 'id': alert.post_id }) }}">Bekijk melding</a>
                         </td>
                     </tr>

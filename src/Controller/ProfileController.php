@@ -62,7 +62,7 @@ class ProfileController
         }
 
         return $this->template_helper->render('somda/profile.html.twig', [
-            TemplateHelper::PARAMETER_PAGE_TITLE => 'Profiel van ' . $user->username,
+            TemplateHelper::PARAMETER_PAGE_TITLE => 'Profiel van '.$user->username,
             'user' => $user,
             TemplateHelper::PARAMETER_FORM => $form ? $form->createView() : null
         ]);
@@ -121,7 +121,7 @@ class ProfileController
         }
 
         return $this->template_helper->render('somda/mail.html.twig', [
-            TemplateHelper::PARAMETER_PAGE_TITLE => 'Mail sturen naar ' . $user->username,
+            TemplateHelper::PARAMETER_PAGE_TITLE => 'Mail sturen naar '.$user->username,
             'user' => $user,
             TemplateHelper::PARAMETER_FORM => $form->createView(),
         ]);

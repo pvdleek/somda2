@@ -12,7 +12,7 @@
                 <td>&nbsp;</td>
                 <td>
                     <a class="somda-button" href="#" onclick="$('#discussion_form').submit(); return false;">Start nieuwe discussie</a>
-                    <a class="somda-button" href="{{ path('forum_forum', { 'id': forum.id, 'name': (forum.name | slug) }) }}">Terug naar de forumcategorie</a>
+                    <a class="somda-button" href="{{ path('forum_forum', { 'id': forum.id, 'name': (forum.name|slug) }) }}">Terug naar de forumcategorie</a>
                 </td>
             </tr>
         </table>

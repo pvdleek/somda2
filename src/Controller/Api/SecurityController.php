@@ -94,7 +94,7 @@ class SecurityController extends AbstractFOSRestController
         try {
             $this->doctrine->getManager()->flush();
         } catch (\Exception) {
-            $this->logger->critical('Failed to set api-token-expiry-timestamp for user ' . $user->id);
+            $this->logger->critical('Failed to set api-token-expiry-timestamp for user '.$user->id);
         }
 
         return $this->handleView($this->view(['data' => $user], 200));

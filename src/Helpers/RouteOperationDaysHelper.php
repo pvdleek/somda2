@@ -19,7 +19,7 @@ class RouteOperationDaysHelper implements RuntimeExtensionInterface
         for ($day = 0; $day < 7; ++$day) {
             if ($routeOperationDays->isRunningOnDay($day)) {
                 $daysArray[] = \strtolower(
-                    $this->translator->trans('general.date.days' . ($short ? 'Short' : '') . '.' . $day)
+                    $this->translator->trans('general.date.days'.($short ? 'Short' : '').'.'.$day)
                 );
             }
         }

@@ -181,7 +181,7 @@ class TrainController
 
         if ($approved === 1) {
             for ($car = 1; $car <= TrainComposition::NUMBER_OF_CARS; ++$car) {
-                $train_composition->{'car' . $car} = $train_proposition->{'car' . $car};
+                $train_composition->{'car'.$car} = $train_proposition->{'car'.$car};
             }
             $train_composition->note = $train_proposition->note;
             $train_composition->last_update_timestamp = $train_proposition->timestamp;

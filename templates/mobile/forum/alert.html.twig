@@ -13,7 +13,7 @@
             <tr>
                 <td colspan="2">
                     <a class="somda-button" href="#" onclick="$('#alert_form').submit(); return false;">Meld bericht</a>
-                    <a class="somda-button" href="{{ path('forum_discussion_post', { 'id': post.discussion.id, 'post_id': post.id, 'name': (post.discussion.title | slug )}) }}">Terug naar het bericht</a>
+                    <a class="somda-button" href="{{ path('forum_discussion_post', { 'id': post.discussion.id, 'post_id': post.id, 'name': (post.discussion.title|slug )}) }}">Terug naar het bericht</a>
                 </td>
             </tr>
         </table>
@@ -22,6 +22,6 @@
     <br />
 
     <table align="center">
-        {% include 'mobile/forum/post.html.twig' with { 'mayPost': false, 'userIsModerator': false, 'postIsUnread': false } %}
+        {% include 'mobile/forum/post.html.twig' with { 'may_post': false, 'user_is_moderator': false, 'post_is_unread': false } %}
     </table>
 {% endblock %}

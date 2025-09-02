@@ -37,16 +37,16 @@ class LocationController
                 if ($search === '*') {
                     $search = '%';
                 }
-                $locations = $this->location_repository->findByName($search . '%');
+                $locations = $this->location_repository->findByName($search.'%');
                 break;
             case self::SEARCH_METHOD_SINGLE:
                 $locations = $this->location_repository->findByName($search);
                 break;
             case self::SEARCH_METHOD_NAME:
-                $locations = $this->location_repository->findByName('%' . $search . '%');
+                $locations = $this->location_repository->findByName('%'.$search.'%');
                 break;
             case self::SEARCH_METHOD_DESCRIPTION:
-                $locations = $this->location_repository->findByDescription('%' . $search . '%');
+                $locations = $this->location_repository->findByDescription('%'.$search.'%');
                 break;
             default:
                 $locations = $this->location_repository->findAll();
@@ -67,9 +67,9 @@ class LocationController
          */
         $locations = $this->location_repository->findByName($search);
         if (\count($locations) < 1) {
-            $locations = $this->location_repository->findByName('%' . $search . '%');
+            $locations = $this->location_repository->findByName('%'.$search.'%');
             if (\count($locations) < 1) {
-                $locations = $this->location_repository->findByDescription('%' . $search . '%');
+                $locations = $this->location_repository->findByDescription('%'.$search.'%');
             }
         }
         $locations = array_slice($locations, 0, 20);

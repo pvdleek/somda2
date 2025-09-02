@@ -6,7 +6,7 @@
 
     <table class="forum-overview">
         <tr><th>Forumdiscussie</th></tr>
-        {% for discussion in discussions | slice(0, 100) %}
+        {% for discussion in discussions|slice(0, 100) %}
             <tr>
                 <td>
                     {% if discussion['locked'] %}
@@ -17,9 +17,9 @@
                         <i class="fas fa-comment"></i>
                     {% endif %}
 
-                    <a href="{{ path('forum_discussion', { 'id': discussion['id'], 'name': (discussion['title'] | slug) }) }}">{{ discussion['title'] }}</a> <i class="fas fa-comment-dots"></i>
+                    <a href="{{ path('forum_discussion', { 'id': discussion['id'], 'name': (discussion['title']|slug) }) }}">{{ discussion['title'] }}</a> <i class="fas fa-comment-dots"></i>
 
-                    <br />Laatste op {{ discussion['max_post_timestamp'] | displayDateTime(true, true) }}
+                    <br />Laatste op {{ discussion['max_post_timestamp']|displayDateTime(true, true) }}
                 </td>
             </tr>
         {% endfor %}

@@ -36,7 +36,7 @@ class UpdateLocationsCommand extends Command
         \curl_setopt($curl, CURLOPT_URL, 'https://gateway.apiportal.ns.nl/reisinformatie-api/api/v2/stations');
         \curl_setopt($curl, CURLOPT_POST, 0);
         \curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-        \curl_setopt($curl, CURLOPT_HTTPHEADER, ['Ocp-Apim-Subscription-Key:' . $_ENV['NS_API_PRIMARY_KEY']]);
+        \curl_setopt($curl, CURLOPT_HTTPHEADER, ['Ocp-Apim-Subscription-Key:'.$_ENV['NS_API_PRIMARY_KEY']]);
 
         $result = (array) \json_decode(\curl_exec($curl), true);
         \curl_close($curl);

@@ -52,12 +52,12 @@ class ForumDiscussionHelper
      * @return ForumPost[]
      * @throws WrongMethodError
      */
-    public function getPosts(bool $newToOld, ?int $requested_page_number = null, ?int $requested_post_id = null): array
+    public function getPosts(bool $new_to_old, ?int $requested_page_number = null, ?int $requested_post_id = null): array
     {
         $this->setNumberOfPostsAndPages();
         $this->setNumberOfReadPosts();
         $this->setForumJump($requested_page_number, $requested_post_id);
-        $this->setPageNumber($newToOld, $requested_page_number, $requested_post_id);
+        $this->setPageNumber($new_to_old, $requested_page_number, $requested_post_id);
 
         $this->discussion->viewed = (int) $this->discussion->viewed + 1;
         $this->doctrine->getManager()->flush();
@@ -67,7 +67,7 @@ class ForumDiscussionHelper
          */
         $posts = $this->forum_post_repository->findBy(
             [ForumPostForm::FIELD_DISCUSSION => $this->discussion],
-            [ForumPostForm::FIELD_TIMESTAMP => $newToOld ? 'DESC' : 'ASC'],
+            [ForumPostForm::FIELD_TIMESTAMP => $new_to_old ? 'DESC' : 'ASC'],
             ForumGenerics::MAX_POSTS_PER_PAGE,
             ($this->page_number - 1) * ForumGenerics::MAX_POSTS_PER_PAGE
         );
@@ -83,7 +83,7 @@ class ForumDiscussionHelper
      * @return ForumPost[]
      * @throws \Exception
      */
-    public function getNonPaginatedPosts(bool $newToOld): array
+    public function getNonPaginatedPosts(bool $new_to_old): array
     {
         $this->setNumberOfPostsAndPages();
         $this->setNumberOfReadPosts();
@@ -96,7 +96,7 @@ class ForumDiscussionHelper
          */
         $posts = $this->forum_post_repository->findBy(
             [ForumPostForm::FIELD_DISCUSSION => $this->discussion],
-            [ForumPostForm::FIELD_TIMESTAMP => $newToOld ? 'DESC' : 'ASC']
+            [ForumPostForm::FIELD_TIMESTAMP => $new_to_old ? 'DESC' : 'ASC']
         );
 
         return $posts;
@@ -166,7 +166,7 @@ class ForumDiscussionHelper
     private function setForumJump(?int $requested_page_number = null, ?int $requested_post_id = null): void
     {
         if (null !== $requested_post_id) {
-            $this->forum_jump = 'p' . $requested_post_id;
+            $this->forum_jump = 'p'.$requested_post_id;
             return;
         }
         if (null === $requested_page_number

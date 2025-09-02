@@ -72,7 +72,7 @@ class SpotInputHelper
             if (null !== $spot_id = $this->processSpotInput($spot_input)) {
                 $spot_id_array[] = $spot_id;
             } else {
-                $this->flash_helper->add('error', 'Spot op regel ' . ($lineNumber + 1) . ' is al ingevoerd!');
+                $this->flash_helper->add('error', 'Spot op regel '.($lineNumber + 1).' is al ingevoerd!');
             }
         }
 
@@ -179,7 +179,7 @@ class SpotInputHelper
             }
 
             // The rest of the parts form the extra information
-            $spot_input->extra = $nextPart . ' ' . \implode(' ', $spot_part);
+            $spot_input->extra = $nextPart.' '.\implode(' ', $spot_part);
         }
 
         return $spot_input;
@@ -226,7 +226,7 @@ class SpotInputHelper
 
         // Try find a match for the number in all patterns
         foreach ($this->train_name_patterns as $pattern) {
-            if (\preg_match('#' . $pattern->pattern . '#', $spot_input->train_number)) {
+            if (\preg_match('#'.$pattern->pattern.'#', $spot_input->train_number)) {
                 $train->name_pattern = $pattern;
                 break;
             }

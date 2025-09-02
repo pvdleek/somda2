@@ -14,7 +14,7 @@ trait DateTrait
             $time .= '.00';
         }
         if (\strpos($time, '.') === false && \strlen($time) === 4) {
-            $time = \substr($time, 0, 2) . '.' . \substr($time, 2, 2);
+            $time = \substr($time, 0, 2).'.'.\substr($time, 2, 2);
         }
 
         $time_part = \explode('.', $time);
@@ -35,7 +35,7 @@ trait DateTrait
 
         $hours = \floor($database_time / 60);
         $minutes = \floor($database_time - ($hours * 60));
-        return ($hours <= 9 ? '0' : '') . $hours . ':' . ($minutes <= 9 ? '0' : '') . $minutes;
+        return ($hours <= 9 ? '0' : '').$hours.':'.($minutes <= 9 ? '0' : '').$minutes;
     }
 
     public function getDayName(int $day_number): string

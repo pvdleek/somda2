@@ -5,14 +5,14 @@
 
     <link rel="preconnect" href="https://code.jquery.com/" />
 
-    <link href="{{ asset('css/base.css') }}?version={{ 'css/base.css' | fileTimestamp }}" rel="stylesheet" type="text/css" />
-    {% if design_number is not null %}<link href="{{ asset('css/design-' ~ design_number ~ '.css') }}?version={{ ('css/design-' ~ design_number ~ '.css') | fileTimestamp }}" rel="stylesheet" type="text/css" />{% endif %}
-    <link href="{{ asset('css/web.css') }}?version={{ 'css/web.css' | fileTimestamp }}" rel="stylesheet" type="text/css" />
-    <link href="{{ asset('css/menu.css') }}?version={{ 'css/menu.css' | fileTimestamp }}" rel="stylesheet" type="text/css" />
-    <link href="{{ asset('css/bootstrap-pagination-3.0.3-min.css') }}?version={{ 'css/bootstrap-pagination-3.0.3-min.css' | fileTimestamp }}" rel="stylesheet" type="text/css" />
-    <link href="{{ asset('css/font-awesome-5.13.0-min.css') }}?version={{ 'css/font-awesome-5.13.0-min.css' | fileTimestamp }}" rel="stylesheet" type="text/css" />
-    <link href="{{ asset('css/font-awesome-brands-5.13.0-min.css') }}?version={{ 'css/font-awesome-brands-5.13.0-min.css' | fileTimestamp }}" rel="stylesheet" type="text/css" />
-    <link href="{{ asset('css/font-awesome-solid-5.13.0-min.css') }}?version={{ 'css/font-awesome-solid-5.13.0-min.css' | fileTimestamp }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('css/base.css') }}?version={{ 'css/base.css'|fileTimestamp }}" rel="stylesheet" type="text/css" />
+    {% if design_number is not null %}<link href="{{ asset('css/design-' ~ design_number ~ '.css') }}?version={{ ('css/design-' ~ design_number ~ '.css')|fileTimestamp }}" rel="stylesheet" type="text/css" />{% endif %}
+    <link href="{{ asset('css/web.css') }}?version={{ 'css/web.css'|fileTimestamp }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('css/menu.css') }}?version={{ 'css/menu.css'|fileTimestamp }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('css/bootstrap-pagination-3.0.3-min.css') }}?version={{ 'css/bootstrap-pagination-3.0.3-min.css'|fileTimestamp }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('css/font-awesome-5.13.0-min.css') }}?version={{ 'css/font-awesome-5.13.0-min.css'|fileTimestamp }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('css/font-awesome-brands-5.13.0-min.css') }}?version={{ 'css/font-awesome-brands-5.13.0-min.css'|fileTimestamp }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('css/font-awesome-solid-5.13.0-min.css') }}?version={{ 'css/font-awesome-solid-5.13.0-min.css'|fileTimestamp }}" rel="stylesheet" type="text/css" />
     <link href="https://code.jquery.com/ui/1.11.4/themes/redmond/jquery-ui.css" rel="stylesheet" type="text/css" />
     {% block stylesheets %}{% endblock %}
 
@@ -39,17 +39,17 @@
         {% include('header.html.twig') %}
         {% include('navigation.html.twig') %}
         {% include 'partials/errorMessages.html.twig' %}
-        {% if block_help is defined and block_help is not null %}<p class="info">{{ block_help.text | raw }}</p>{% endif %}
+        {% if block_help is defined and block_help is not null %}<p class="info">{{ block_help.text|raw }}</p>{% endif %}
         {% block content %}{% endblock %}
         {% include('footer.html.twig') %}
     </div>
 
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-    <script src="{{ asset('js/jquery.maskedinput-1.4.1.js') }}?version={{ 'js/jquery.maskedinput-1.4.1.js' | fileTimestamp }}"></script>
-    <script src="{{ asset('js/jquery-defaults.js') }}?version={{ 'js/jquery-defaults.js' | fileTimestamp }}"></script>
-    <script src="{{ asset('js/jquery-tablesorter.js') }}?version={{ 'js/jquery-tablesorter.js' | fileTimestamp }}"></script>
-    <script src="{{ asset('js/functions.js') }}?version={{ 'js/functions.js' | fileTimestamp }}"></script>
+    <script src="{{ asset('js/jquery.maskedinput-1.4.1.js') }}?version={{ 'js/jquery.maskedinput-1.4.1.js'|fileTimestamp }}"></script>
+    <script src="{{ asset('js/jquery-defaults.js') }}?version={{ 'js/jquery-defaults.js'|fileTimestamp }}"></script>
+    <script src="{{ asset('js/jquery-tablesorter.js') }}?version={{ 'js/jquery-tablesorter.js'|fileTimestamp }}"></script>
+    <script src="{{ asset('js/functions.js') }}?version={{ 'js/functions.js'|fileTimestamp }}"></script>
 
     {# If applicable, jump to the requested forum-post #}
     {% if forumJump is defined and forumJump is not null %}
@@ -89,8 +89,8 @@
             function loadMode(id)
             {
                 let css = 'somda_dark_mode' == id ?
-                    '{{ asset('css/design-5.css') }}?version={{ ('css/design-5.css') | fileTimestamp }}' :
-                    '{{ asset('css/design-2.css') }}?version={{ ('css/design-2.css') | fileTimestamp }}';
+                    '{{ asset('css/design-5.css') }}?version={{ ('css/design-5.css')|fileTimestamp }}' :
+                    '{{ asset('css/design-2.css') }}?version={{ ('css/design-2.css')|fileTimestamp }}';
                 if (!document.getElementById(id)) {
                     let link = document.createElement('link');
                     link.id = id;

@@ -20,11 +20,11 @@ class PositionRepository extends ServiceEntityRepository
      */
     public function getAllAsArray(): array
     {
-        $queryBuilder = $this->getEntityManager()
+        $query_builder = $this->getEntityManager()
             ->createQueryBuilder()
             ->select('p.id')
             ->addSelect('p.name')
             ->from(PositionEntity::class, 'p');
-        return \array_column($queryBuilder->getQuery()->getResult(), 'name', 'id');
+        return \array_column($query_builder->getQuery()->getResult(), 'name', 'id');
     }
 }

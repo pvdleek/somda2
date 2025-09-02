@@ -40,7 +40,7 @@ class SpotRepository extends ServiceEntityRepository
 
     private function getBaseQueryBuilder(?TrainTableYear $train_table_year = null): QueryBuilder
     {
-        $queryBuilder = $this->getEntityManager()
+        $query_builder = $this->getEntityManager()
             ->createQueryBuilder()
             ->select('s.id AS id')
             ->addSelect('s.spot_date AS spot_date')
@@ -65,7 +65,7 @@ class SpotRepository extends ServiceEntityRepository
             ->addOrderBy('s.timestamp', 'DESC');
 
         if (null !== $train_table_year) {
-            $queryBuilder
+            $query_builder
                 ->addSelect('tt.time AS spot_time')
                 ->leftJoin(
                     'r.train_tables',
@@ -83,7 +83,7 @@ class SpotRepository extends ServiceEntityRepository
                 ->addGroupBy('s.id');
         }
 
-        return $queryBuilder;
+        return $query_builder;
     }
 
     /**
@@ -91,12 +91,12 @@ class SpotRepository extends ServiceEntityRepository
      */
     public function findByIdsAndUserForDisplay(array $id_array, User $user): array
     {
-        $queryBuilder = $this->getBaseQueryBuilder()
+        $query_builder = $this->getBaseQueryBuilder()
             ->andWhere('s.id IN (:idArray)')
             ->setParameter('idArray', $id_array)
             ->andWhere('s.user = :user')
             ->setParameter('user', $user);
-        return $queryBuilder->getQuery()->getArrayResult();
+        return $query_builder->getQuery()->getArrayResult();
     }
 
     /**
@@ -104,7 +104,7 @@ class SpotRepository extends ServiceEntityRepository
      */
     public function findByIdsAndUser(array $id_array, User $user): array
     {
-        $queryBuilder = $this->getEntityManager()
+        $query_builder = $this->getEntityManager()
             ->createQueryBuilder()
             ->select('s')
             ->from(SpotEntity::class, 's')
@@ -112,20 +112,20 @@ class SpotRepository extends ServiceEntityRepository
             ->setParameter('idArray', $id_array)
             ->andWhere('s.user = :user')
             ->setParameter('user', $user);
-        return $queryBuilder->getQuery()->getResult();
+        return $query_builder->getQuery()->getResult();
     }
 
     public function countAll(?User $user = null): int
     {
-        $queryBuilder = $this->getEntityManager()
+        $query_builder = $this->getEntityManager()
             ->createQueryBuilder()
             ->select('COUNT(s.id)')
             ->from(SpotEntity::class, 's');
         if (null !== $user) {
-            $queryBuilder->andWhere('s.user = :user')->setParameter('user', $user);
+            $query_builder->andWhere('s.user = :user')->setParameter('user', $user);
         }
         try {
-            return (int) $queryBuilder->getQuery()->getSingleScalarResult();
+            return (int) $query_builder->getQuery()->getSingleScalarResult();
         } catch (NonUniqueResultException | NoResultException) {
             return 0;
         }
@@ -137,7 +137,7 @@ class SpotRepository extends ServiceEntityRepository
      */
     public function findWithSpotFilter(int $max_months, SpotFilter $spot_filter): array
     {
-        $queryBuilder = $this->getEntityManager()
+        $query_builder = $this->getEntityManager()
             ->createQueryBuilder()
             ->select('s')
             ->from(SpotEntity::class, 's')
@@ -145,9 +145,9 @@ class SpotRepository extends ServiceEntityRepository
             ->join('s.route', 'r')
             ->join('s.location', 'l')
             ->addOrderBy('s.timestamp', 'DESC');
-        $this->applySpotFilter($queryBuilder, $spot_filter, $max_months);
+        $this->applySpotFilter($query_builder, $spot_filter, $max_months);
 
-        return $queryBuilder->getQuery()->getResult();
+        return $query_builder->getQuery()->getResult();
     }
 
     /**
@@ -159,10 +159,10 @@ class SpotRepository extends ServiceEntityRepository
         SpotFilter $spot_filter,
         TrainTableYear $train_table_year
     ): array {
-        $queryBuilder = $this->getBaseQueryBuilder($train_table_year);
-        $this->applySpotFilter($queryBuilder, $spot_filter, $max_months);
+        $query_builder = $this->getBaseQueryBuilder($train_table_year);
+        $this->applySpotFilter($query_builder, $spot_filter, $max_months);
 
-        $query_results = $queryBuilder->getQuery()->getArrayResult();
+        $query_results = $query_builder->getQuery()->getArrayResult();
 
         $results = [];
         foreach ($query_results as $query_result) {
@@ -189,10 +189,10 @@ class SpotRepository extends ServiceEntityRepository
         if (null === $spot_filter->spot_date) {
             $query_builder
                 ->andWhere('s.timestamp > :minDate')
-                ->setParameter('minDate', new \DateTime('-' . $max_months . ' months'));
+                ->setParameter('minDate', new \DateTime('-'.$max_months.' months'));
         } else {
             $query_builder
-                ->andWhere('s.spot_date = :' . self::FIELD_SPOT_DATE)
+                ->andWhere('s.spot_date = :'.self::FIELD_SPOT_DATE)
                 ->setParameter(
                     self::FIELD_SPOT_DATE,
                     $spot_filter->spot_date->format(DateGenerics::DATE_FORMAT_DATABASE)
@@ -213,7 +213,7 @@ class SpotRepository extends ServiceEntityRepository
         int $offset,
         array $order_array
     ): array {
-        $queryBuilder = $this->getEntityManager()
+        $query_builder = $this->getEntityManager()
             ->createQueryBuilder()
             ->select('s')
             ->from(SpotEntity::class, 's')
@@ -226,23 +226,23 @@ class SpotRepository extends ServiceEntityRepository
             ->setMaxResults($number_of_records)
             ->setFirstResult($offset);
 
-        $this->filterOnSpotDate($queryBuilder, $spot_filter->spot_date);
-        $this->filterOnLocation($queryBuilder, $spot_filter->location);
-        $this->filterOnTrainNumber($queryBuilder, false, $spot_filter->train_number);
-        $this->filterOnRouteNumber($queryBuilder, false, $spot_filter->route_number);
+        $this->filterOnSpotDate($query_builder, $spot_filter->spot_date);
+        $this->filterOnLocation($query_builder, $spot_filter->location);
+        $this->filterOnTrainNumber($query_builder, false, $spot_filter->train_number);
+        $this->filterOnRouteNumber($query_builder, false, $spot_filter->route_number);
 
         if (\count($order_array) > 0) {
             foreach ($order_array as $order) {
-                $queryBuilder->addOrderBy(self::$orderColumn[$order->column], $order->ascending ? 'ASC' : 'DESC');
+                $query_builder->addOrderBy(self::$orderColumn[$order->column], $order->ascending ? 'ASC' : 'DESC');
             }
         }
 
-        return $queryBuilder->getQuery()->getResult();
+        return $query_builder->getQuery()->getResult();
     }
 
     public function countForMySpots(User $user, SpotFilter $spot_filter): int
     {
-        $queryBuilder = $this->getEntityManager()
+        $query_builder = $this->getEntityManager()
             ->createQueryBuilder()
             ->select('COUNT(s.id)')
             ->from(SpotEntity::class, 's')
@@ -253,13 +253,13 @@ class SpotRepository extends ServiceEntityRepository
             ->andWhere('s.user = :user')
             ->setParameter('user', $user);
 
-        $this->filterOnSpotDate($queryBuilder, $spot_filter->spot_date);
-        $this->filterOnLocation($queryBuilder, $spot_filter->location);
-        $this->filterOnTrainNumber($queryBuilder, false, $spot_filter->train_number);
-        $this->filterOnRouteNumber($queryBuilder, false, $spot_filter->route_number);
+        $this->filterOnSpotDate($query_builder, $spot_filter->spot_date);
+        $this->filterOnLocation($query_builder, $spot_filter->location);
+        $this->filterOnTrainNumber($query_builder, false, $spot_filter->train_number);
+        $this->filterOnRouteNumber($query_builder, false, $spot_filter->route_number);
 
         try {
-            return (int) $queryBuilder->getQuery()->getSingleScalarResult();
+            return (int) $query_builder->getQuery()->getSingleScalarResult();
         } catch (NonUniqueResultException | NoResultException) {
             return 0;
         }
@@ -267,7 +267,7 @@ class SpotRepository extends ServiceEntityRepository
 
     public function findForRouteTrains(\DateTime $check_date): array
     {
-        $queryBuilder = $this->getEntityManager()
+        $query_builder = $this->getEntityManager()
             ->createQueryBuilder()
             ->addSelect('r.id AS route_id')
             ->addSelect('n.id AS pattern_id')
@@ -283,14 +283,14 @@ class SpotRepository extends ServiceEntityRepository
             ->addGroupBy('r.id')
             ->addGroupBy('n.id')
             ->addGroupBy('day_of_week');
-        return $queryBuilder->getQuery()->getArrayResult();
+        return $query_builder->getQuery()->getArrayResult();
     }
 
     private function filterOnSpotDate(QueryBuilder $query_builder, ?\DateTime $spot_date = null): void
     {
         if (null !== $spot_date) {
             $query_builder
-                ->andWhere('DATE(s.spot_date) = :' . self::FIELD_SPOT_DATE)
+                ->andWhere('DATE(s.spot_date) = :'.self::FIELD_SPOT_DATE)
                 ->setParameter(self::FIELD_SPOT_DATE, $spot_date->format(DateGenerics::DATE_FORMAT_DATABASE));
         }
     }
@@ -300,7 +300,7 @@ class SpotRepository extends ServiceEntityRepository
         if (null !== $location) {
             $query_builder
                 ->andWhere('l.name LIKE :location')
-                ->setParameter(self::FIELD_LOCATION, '%' . $location . '%');
+                ->setParameter(self::FIELD_LOCATION, '%'.$location.'%');
         }
     }
 
@@ -321,7 +321,7 @@ class SpotRepository extends ServiceEntityRepository
             } else {
                 $query_builder
                     ->andWhere('t.number LIKE :train_number')
-                    ->setParameter('train_number', '%' . $train_number . '%');
+                    ->setParameter('train_number', '%'.$train_number.'%');
             }
         }
     }
@@ -343,7 +343,7 @@ class SpotRepository extends ServiceEntityRepository
             } else {
                 $query_builder
                     ->andWhere('r.number LIKE :route_number')
-                    ->setParameter('route_number', '%' . $route_number . '%');
+                    ->setParameter('route_number', '%'.$route_number.'%');
             }
         }
     }

@@ -27,7 +27,7 @@ class TrainComposition extends AbstractType
 
         for ($car = 1; $car <= TrainCompositionEntity::NUMBER_OF_CARS; ++$car) {
             if (null !== $train_composition->getType()->getCar($car)) {
-                $builder->add('car' . $car, TextType::class, [
+                $builder->add('car'.$car, TextType::class, [
                     FormGenerics::KEY_ATTRIBUTES => [FormGenerics::KEY_ATTRIBUTES_MAX_LENGTH => 15],
                     FormGenerics::KEY_LABEL => $train_composition->getType()->getCar($car),
                     FormGenerics::KEY_REQUIRED => false,

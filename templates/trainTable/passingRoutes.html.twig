@@ -5,7 +5,7 @@
     <div align="center">
         <table>
             <tr>
-                <th><label for="trainTableIndex">{{ 'general.input.index' | trans }}</label></th>
+                <th><label for="trainTableIndex">{{ 'general.input.index'|trans }}</label></th>
                 <td>
                     <select id="trainTableIndex" name="trainTableIndex">
                         {% for trainTableIndex in trainTableIndices %}
@@ -15,24 +15,24 @@
                 </td>
             </tr>
             <tr>
-                <th><label for="day_number">{{ 'general.input.dayNumber' | trans }}</label></th>
+                <th><label for="day_number">{{ 'general.input.dayNumber'|trans }}</label></th>
                 <td>
                     <select id="day_number" name="day_number">
                         {% for day_number_select in 1..7 %}
-                            <option {{ day_number == day_number_select ? 'selected="selected" ' }}value="{{ day_number_select }}">{{ ('general.date.days.' ~ (day_number_select - 1)) | trans }}</option>
+                            <option {{ day_number == day_number_select ? 'selected="selected" ' }}value="{{ day_number_select }}">{{ ('general.date.days.' ~ (day_number_select - 1))|trans }}</option>
                         {% endfor %}
                     </select>
                 </td>
             </tr>
             <tr>
-                <th><label for="location">{{ 'general.input.location' | trans }}</label></th>
+                <th><label for="location">{{ 'general.input.location'|trans }}</label></th>
                 <td>
                     <input id="location" maxlength="8" name="location" size="10" type="text" value="{{ location_name }}" />
                     <span id="location_description"></span>
                 </td>
             </tr>
             <tr>
-                <th><label for="start_time">{{ 'passingRoutes.input.timeRange' | trans | raw }}</label></th>
+                <th><label for="start_time">{{ 'passingRoutes.input.timeRange'|trans|raw }}</label></th>
                 <td>
                     <input id="start_time" maxlength="5" name="start_time" size="8" type="text" value="{{ start_time }}" />
                     <input id="end_time" maxlength="5" name="end_time" size="8" type="text" value="{{ end_time }}" />
@@ -40,12 +40,12 @@
             </tr>
             <tr>
                 <th>&nbsp;</th>
-                <td><a class="somda-button" href="#" id="searchPassingRoutes" onclick="searchPassingRoutes(); return false;" title="{{ 'passingRoutes.input.button' | trans }}">{{ 'general.button.search' | trans }}</a></td>
+                <td><a class="somda-button" href="#" id="searchPassingRoutes" onclick="searchPassingRoutes(); return false;" title="{{ 'passingRoutes.input.button'|trans }}">{{ 'general.button.search'|trans }}</a></td>
             </tr>
         </table>
         <br />
 
-        {% if passingRoutes | length %}
+        {% if passingRoutes|length %}
             <table class="design">
                 <tr>
                     <td><a href="{{ path('passing_routes_export', { 'train_table_year_id': trainTableIndexNumber, 'location_name': location_name, 'day_number': day_number, 'start_time': start_time, 'end_time': end_time, 'spotter_version': 0 }) }}"><img alt="" height="25" src="{{ asset('images/pdf-icon.png') }}" width="25" /> Exporteer doorkomststaat naar PDF</a></td>

@@ -24,14 +24,14 @@
     </div>
 
     {% if results is defined %}
-        {% if results | length > 0 %}
+        {% if results|length > 0 %}
             {% if moreResults %}
                 <p class="warn">Er werden meer dan 100 resultaten gevonden, verfijn je zoekcriteria voor een beter resultaat</p>
             {% endif %}
             <table>
                 <tr>
-                    <th colspan="3">{{ 'forum.discussion.subject' | trans }}</th>
-                    <th>{{ 'forum.author' | trans }}</th>
+                    <th colspan="3">{{ 'forum.discussion.subject'|trans }}</th>
+                    <th>{{ 'forum.author'|trans }}</th>
                     <th>Datum en tijd</th>
                 </tr>
 
@@ -45,12 +45,12 @@
                             {% endif %}
                         </td>
                         {% if result.title_match %}
-                            <td colspan="2"><a href="{{ path('forum_discussion', { 'id': result.discussion_id, 'name': (result.discussion_title | slug) }) }}">{{ result.discussion_title }}</a></td>
+                            <td colspan="2"><a href="{{ path('forum_discussion', { 'id': result.discussion_id, 'name': (result.discussion_title|slug) }) }}">{{ result.discussion_title }}</a></td>
                         {% else %}
                             <td>&nbsp;</td>
-                            <td><a href="{{ path('forum_discussion_post', { 'id': result.discussion_id, 'name': (result.discussion_title | slug), 'post_id': result.post_id }) }}">Re: {{ result.discussion_title }}</a></td>
+                            <td><a href="{{ path('forum_discussion_post', { 'id': result.discussion_id, 'name': (result.discussion_title|slug), 'post_id': result.post_id }) }}">Re: {{ result.discussion_title }}</a></td>
                         {% endif %}
-                        <td>{{ result.author_id|displayUser(result.author_username) | raw }}</td>
+                        <td>{{ result.author_id|displayUser(result.author_username)|raw }}</td>
                         <td>{{ result.post_timestamp|displayDateTime(true) }}</td>
                     </tr>
                 {% endfor %}

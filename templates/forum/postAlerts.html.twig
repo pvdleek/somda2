@@ -20,12 +20,12 @@
             <br />
 
             {% for alert in post.alerts %}
-                <p class="info">Commentaar van melder <a href="{{ path('profile_view', { 'id': alert.sender.id }) }}">{{ alert.sender.username }}</a> op {{ alert.timestamp | date('d-m-Y') }} om {{ alert.timestamp | date('H:i:s') }}: <strong>{{ alert.comment }}</strong></p>
+                <p class="info">Commentaar van melder <a href="{{ path('profile_view', { 'id': alert.sender.id }) }}">{{ alert.sender.username }}</a> op {{ alert.timestamp|date('d-m-Y') }} om {{ alert.timestamp|date('H:i:s') }}: <strong>{{ alert.comment }}</strong></p>
             {% endfor %}
 
             <table>
                 <tr><th colspan="3">{{ post.discussion.title }}</th></tr>
-                {% include 'forum/post.html.twig' with { 'mayPost': false, 'userIsModerator': false, 'postIsUnread': false } %}
+                {% include 'forum/post.html.twig' with { 'may_post': false, 'user_is_moderator': false, 'post_is_unread': false } %}
             </table>
             <br />
             <table>
@@ -33,8 +33,8 @@
                 {% for alert in post.alerts %}
                     {% for note in alert.notes %}
                         <tr>
-                            <td>{{ note.author.id | displayUser(note.author.username) | raw }}</td>
-                            <td>{{ note.timestamp | date('d-m-Y H:i:s') }}</td>
+                            <td>{{ note.author.id|displayUser(note.author.username)|raw }}</td>
+                            <td>{{ note.timestamp|date('d-m-Y H:i:s') }}</td>
                             <td>{{ note.text }}</td>
                             <td>{{ note.sent_to_reporter ? 'Ja' : 'Nee' }}</td>
                         </tr>
@@ -50,7 +50,7 @@
                         <td>&nbsp;</td>
                         <td>
                             <a class="somda-button" href="#" id="alert_note_button" onclick="disableMeAndSubmitForm('alert_note_button', 'alert_note_form'); return false;">Voeg toe</a>
-                            <a class="somda-button" href="{{ path('forum_discussion_post', { 'id': post.discussion.id, 'post_id': post.id, 'name': (post.discussion.title | slug) }) }}">Terug naar het bericht</a>
+                            <a class="somda-button" href="{{ path('forum_discussion_post', { 'id': post.discussion.id, 'post_id': post.id, 'name': (post.discussion.title|slug) }) }}">Terug naar het bericht</a>
                         </td>
                     </tr>
                 </table>

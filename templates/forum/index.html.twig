@@ -5,7 +5,7 @@
         <div class="forum-header-title"><h1 class="panel-title">Forum overzicht</h1></div>
         {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
             <div class="forum-header-links">
-                <a class="somda-button" href="{{ path('forum_search') }}">{{ 'forum.search' | trans }}</a>
+                <a class="somda-button" href="{{ path('forum_search') }}">{{ 'forum.search'|trans }}</a>
                 <a class="somda-button" href="{{ path('forum_unread') }}">Alle ongelezen berichten</a>
             </div>
         {% else %}
@@ -14,14 +14,14 @@
                 <div>
                     <a class="somda-button" href="{{ path('register') }}">Maak een account</a>
                     <a class="somda-button" href="{{ path('login') }}">Inloggen</a>
-                    <a class="somda-button" href="{{ path('forum_search') }}">{{ 'forum.search' | trans }}</a>
+                    <a class="somda-button" href="{{ path('forum_search') }}">{{ 'forum.search'|trans }}</a>
                 </div>
             </div>
         {% endif %}
     </div>
 
     {% for category in categories %}
-        {% if category['forums'] | length > 0 %}
+        {% if category['forums']|length > 0 %}
             <div class="forum-category">
                 <h2 class="forum-category-name">{{ category['name'] }}</h2>
                 {% for forum in category['forums'] %}

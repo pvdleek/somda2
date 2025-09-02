@@ -2,9 +2,9 @@
 
 {% block content %}
     <div class="panel">
-        <div class="panel-title">{{ news.timestamp | displayDateTime }} - {{ news.title }}</div>
+        <div class="panel-title">{{ news.timestamp|displayDateTime }} - {{ news.title }}</div>
         <div class="panel-content">
-            {{ news.text | raw }}
+            {{ news.text|raw }}
             <br />
             <div class="panel-buttons">
                 <a class="somda-button" href="{{ path('news') }}">Naar het nieuws-overzicht</a>

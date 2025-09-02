@@ -25,7 +25,7 @@ class ForumForumRepository extends ServiceEntityRepository
         $query = '
             SELECT `c`.`catid` AS `categoryId`, `c`.`name` AS `categoryName`, `c`.`volgorde` AS `categoryOrder`,
                 `f`.`forumid` AS `id`, `f`.`name` AS `name`, `f`.`description` AS `description`, `f`.`type` AS `type`, `f`.`volgorde` AS `order`,
-                IF(`m`.`uid` = :user_id, TRUE, FALSE) AS `userIsModerator`,
+                IF(`m`.`uid` = :user_id, TRUE, FALSE) AS `user_is_moderator`,
                 COUNT(DISTINCT(`d`.`discussionid`)) AS `number_of_discussions`
             FROM `somda_forum_forums` `f`
             JOIN `somda_forum_cats` `c` ON `c`.`catid` = `f`.`catid`
@@ -45,7 +45,7 @@ class ForumForumRepository extends ServiceEntityRepository
 
     public function getNumberOfUnreadDiscussionsInForum(int $forum_id, User $user): int
     {
-        $maxQuery = '
+        $max_query = '
             SELECT `p`.`discussionid` AS `disc_id`, MAX(`p`.`timestamp`) AS `max_date_time`
             FROM `somda_forum_posts` `p`
             JOIN `somda_forum_discussion` `d` ON `d`.`discussionid` = `p`.`discussionid`
@@ -57,7 +57,7 @@ class ForumForumRepository extends ServiceEntityRepository
             JOIN `somda_users` `a` ON `a`.`uid` = `d`.`authorid`
             JOIN `somda_forum_posts` `p_max` ON `p_max`.`discussionid` = `d`.`discussionid`
             LEFT JOIN `somda_forum_last_read` `r` ON `r`.`uid` = :user_id AND `r`.`discussionid` = `d`.`discussionid`
-            INNER JOIN (' . $maxQuery . ') `m` ON `m`.`disc_id` = `d`.`discussionid`
+            INNER JOIN ('.$max_query.') `m` ON `m`.`disc_id` = `d`.`discussionid`
             WHERE `d`.`forumid` = :forum_id AND `p_max`.`timestamp` = `m`.`max_date_time`
             GROUP BY `d`.`forumid`';
         $connection = $this->getEntityManager()->getConnection();

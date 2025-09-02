@@ -18,7 +18,7 @@
                         {% for day_number in 1..7 %}
                             <th>
                                 <span class="time-modify-control-left"><a href="#" onclick="modifyTimes({{ day_number }}, true); return false;">+30</a></span>
-                                {{ ('general.date.days.' ~ (day_number - 1)) | trans }}
+                                {{ ('general.date.days.' ~ (day_number - 1))|trans }}
                                 <span class="time-modify-control-right"><a href="#" onclick="modifyTimes({{ day_number }}, false); return false;">-30</a></span>
                             </th>
                         {% endfor %}
@@ -44,7 +44,7 @@
                                                         {% endfor %}
                                                     </select>
                                                 </td>
-                                                <td><input class="time-picker time-day-{{ day_number }}" name="time_{{ day_number }}_{{ rowNumber }}" size="8" type="text" value="{{ trainTable.time | displayTime }}" /></td>
+                                                <td><input class="time-picker time-day-{{ day_number }}" name="time_{{ day_number }}_{{ rowNumber }}" size="8" type="text" value="{{ trainTable.time|displayTime }}" /></td>
                                             </tr>
 
                                             {% set rowNumber = rowNumber + 1 %}
@@ -63,7 +63,7 @@
                                     <option disabled="disabled" selected="selected" value="0">Kopieer naar</option>
                                     {% for copy_to_day_number in 1..7 %}
                                         {% if copy_to_day_number != day_number %}
-                                            <option value="{{ copy_to_day_number }}">{{ ('general.date.days.' ~ (copy_to_day_number - 1)) | trans }}</option>
+                                            <option value="{{ copy_to_day_number }}">{{ ('general.date.days.' ~ (copy_to_day_number - 1))|trans }}</option>
                                         {% endif %}
                                     {% endfor %}
                                 </select>
@@ -83,7 +83,7 @@
 {% endblock %}
 
 {% block javascripts %}
-    <script src="{{ asset('js/jquery.clockpicker-0.0.7.js') }}?version={{ 'js/jquery.clockpicker-0.0.7.js' | fileTimestamp }}"></script>
+    <script src="{{ asset('js/jquery.clockpicker-0.0.7.js') }}?version={{ 'js/jquery.clockpicker-0.0.7.js'|fileTimestamp }}"></script>
     <script>
         /**
          * @param {int} day_number

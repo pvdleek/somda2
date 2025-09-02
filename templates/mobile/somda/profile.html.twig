@@ -18,10 +18,10 @@
         {{ form_end(form) }}
     {% else %}
         {% if is_granted(constant('App\\Generics\\RoleGenerics::ROLE_ADMIN')) %}
-            {% if (user.ban_expire_timestamp | date('Y-m-d')) > ('now' | date('Y-m-d')) %}
-                <p class="warn">Deze gebruiker is geband tot {{ user.ban_expire_timestamp | displayDateTime }} - <a href="{{ path('manage_ban', { 'id': user.id }) }}">Bewerk</a></p>
+            {% if (user.ban_expire_timestamp|date('Y-m-d')) > ('now'|date('Y-m-d')) %}
+                <p class="warn">Deze gebruiker is geband tot {{ user.ban_expire_timestamp|displayDateTime }} - <a href="{{ path('manage_ban', { 'id': user.id }) }}">Bewerk</a></p>
             {% elseif user.ban_expire_timestamp is not null %}
-                <p class="info">Deze gebruiker was geband tot {{ user.ban_expire_timestamp | displayDateTime }} - <a href="{{ path('manage_ban', { 'id': user.id }) }}">Opnieuw bannen</a></p>
+                <p class="info">Deze gebruiker was geband tot {{ user.ban_expire_timestamp|displayDateTime }} - <a href="{{ path('manage_ban', { 'id': user.id }) }}">Opnieuw bannen</a></p>
             {% else %}
                 <br /><a href="{{ path('manage_ban', { 'id': user.id }) }}">Bannen</a>
             {% endif %}
@@ -31,20 +31,20 @@
                 <td valign="top"><img alt="avatar" src="{{ asset('images/avatar/' ~ user.info.avatar) }}" /></td>
                 <th>Profiel van gebruiker "{{ user.username }}"</th>
             </tr><tr>
-                <th align="right">{{ 'profile.username' | trans }}</th>
+                <th align="right">{{ 'profile.username'|trans }}</th>
                 <td align="left">{{ user.username }}</td>
             </tr><tr>
-                <th align="right">{{ 'profile.name' | trans }}</th>
+                <th align="right">{{ 'profile.name'|trans }}</th>
                 <td align="left">{{ user.name }}</td>
             </tr><tr>
-                <th align="right">{{ 'profile.city' | trans }}</th>
+                <th align="right">{{ 'profile.city'|trans }}</th>
                 <td align="left">{{ user.info.city }}</td>
             </tr><tr>
-                <th align="right">{{ 'profile.gender' | trans }}</th>
+                <th align="right">{{ 'profile.gender'|trans }}</th>
                 <td align="left">{{ user.info.gender }}</td>
             </tr><tr>
-                <th align="right">{{ 'profile.birthDate' | trans }}</th>
-                <td align="left">{{ user.info.birth_date | displayDateTime | default('Onbekend') }}</td>
+                <th align="right">{{ 'profile.birthDate'|trans }}</th>
+                <td align="left">{{ user.info.birth_date|displayDateTime|default('Onbekend') }}</td>
             </tr>
             {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
                 <tr>
@@ -53,16 +53,16 @@
                 </tr>
             {% endif %}
             <tr>
-                <th align="right">{{ 'profile.registrationDate' | trans }}</th>
-                <td align="left">{{ user.register_timestamp | displayDateTime }}</td>
+                <th align="right">{{ 'profile.registrationDate'|trans }}</th>
+                <td align="left">{{ user.register_timestamp|displayDateTime }}</td>
             </tr><tr>
-                <th align="right">{{ 'profile.lastVisit' | trans }}</th>
-                <td align="left">{{ user.last_visit is null ? ('general.error.unknown' | trans) : (user.last_visit | displayDateTime(true)) }}</td>
+                <th align="right">{{ 'profile.lastVisit'|trans }}</th>
+                <td align="left">{{ user.last_visit is null ? ('general.error.unknown'|trans) : (user.last_visit|displayDateTime(true)) }}</td>
             </tr><tr>
-                <th align="right">{{ 'profile.website' | trans }}</th>
+                <th align="right">{{ 'profile.website'|trans }}</th>
                 <td align="left">{{ user.info.website }}</td>
             </tr><tr>
-                <th align="right">{{ 'profile.info' | trans }}</th>
+                <th align="right">{{ 'profile.info'|trans }}</th>
                 <td align="left">{{ user.info.info }}</td>
             </tr>
         </table>

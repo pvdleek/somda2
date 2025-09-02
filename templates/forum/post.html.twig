@@ -1,14 +1,14 @@
 <tr>
     <th class="left-align" colspan="{{ is_granted('IS_AUTHENTICATED_REMEMBERED') ? 2 : 3 }}">
-        {% if userIsModerator %}<input name="sel{{ post.id }}" type="checkbox" />{% endif %}
+        {% if user_is_moderator %}<input name="sel{{ post.id }}" type="checkbox" />{% endif %}
         <a id="p{{ post.id }}"></a>
-        {% if postIsUnread and not firstUnreadAnchorDone %}
+        {% if post_is_unread and not first_unread_anchor_done %}
             <a id="new_post"></a>
-            {% set firstUnreadAnchorDone = true %}
+            {% set first_unread_anchor_done = true %}
         {% endif %}
-        <a href="{{ path('forum_discussion_post', { 'id': post.discussion.id, 'name': (post.discussion.title | slug), 'post_id': post.id }) }}">
-            {% if postIsUnread %}<i class="color-orange fas fa-comment-dots"></i>{% else %}<i class="fas fa-comment"></i>{% endif %}
-        </a> {{ post.timestamp | date('d-m-Y H:i:s') }}
+        <a href="{{ path('forum_discussion_post', { 'id': post.discussion.id, 'name': (post.discussion.title|slug), 'post_id': post.id }) }}">
+            {% if post_is_unread %}<i class="color-orange fas fa-comment-dots"></i>{% else %}<i class="fas fa-comment"></i>{% endif %}
+        </a> {{ post.timestamp|date('d-m-Y H:i:s') }}
         {% set numberOfFavorites = post.numberOfFavorites %}
         {% if numberOfFavorites > 0 %}<i class="fas fa-heart"></i> {{ numberOfFavorites }}{% endif %}
 
@@ -25,48 +25,48 @@
     {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
         <th>
             <a href="{{ path('forum_discussion_post_alert', { 'id': post.id }) }}" rel="nofollow" title="Klik hier om dit bericht aan de beheerders te melden. Gebruik dit voor bijvoorbeeld overtredingen van forumregels"><font color="#FFFFFF">Meld bericht</font></a>
-            {% if userIsModerator and (post.alerts | length) > 0 %}
+            {% if user_is_moderator and (post.alerts|length) > 0 %}
                 <br /><a href="{{ path('forum_discussion_post_alerts', { 'id': post.id }) }}" title="Er zijn meldingen gedaan over dit bericht, klik om ze te bekijken"><span color="#DD1111">Meldingen</span></a>
             {% endif %}
         </th>
     {% endif %}
 </tr><tr>
     <td class="info" nowrap="nowrap">
-        {{ post.author.id | displayUser(post.author.username) | raw }}
+        {{ post.author.id|displayUser(post.author.username)|raw }}
         {% if post.author in post.discussion.forum.moderators %}
             <br /><strong>Moderator</strong>
         {% endif %}
-        {% if userIsModerator and post.author.info.company is not null %}
+        {% if user_is_moderator and post.author.info.company is not null %}
             <br /><strong>-- {{ post.author.info.company.name }} --</strong>
         {% endif %}
-        {% if post.author.info.avatar | length > 0 %}
+        {% if post.author.info.avatar|length > 0 %}
             <br /><img alt="{{ post.author.username }}" src="{{ asset('images/avatar/' ~  post.author.info.avatar) }}" />
         {% endif %}
-        {% if post.author.info.city | length > 0 and is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+        {% if post.author.info.city|length > 0 and is_granted('IS_AUTHENTICATED_REMEMBERED') %}
             <br />{{ post.author.info.city }}
         {% endif %}
         <br />
-        {% if post.author.info.twitter_account | length > 0 %}
+        {% if post.author.info.twitter_account|length > 0 %}
             <a href="https://twitter.com/#!/{{ post.author.info.twitter_account }}" rel="ugc noopener" target="_blank"><i class="fab fa-twitter" title="Twitter {{ post.author.info.twitter_account }}"></i></a>
         {% endif %}
-        {% if post.author.info.facebook_account | length > 0 %}
+        {% if post.author.info.facebook_account|length > 0 %}
             <a href="https://www.facebook.com/{{ post.author.info.facebook_account }}" rel="ugc noopener" target="_blank"><i class="fab fa-facebook" title="Facebook {{ post.author.info.facebook_account }}"></i></a>
         {% endif %}
-        {% if post.author.info.youtube_account | length > 0 %}
+        {% if post.author.info.youtube_account|length > 0 %}
             <a href="https://www.youtube.com/{{ post.author.info.youtube_account }}" rel="ugc noopener" target="_blank"><i class="fab fa-youtube" title="Youtube {{ post.author.info.youtube_account }}"></i></a>
         {% endif %}
-        {% if post.author.info.flickr_account | length > 0 %}
+        {% if post.author.info.flickr_account|length > 0 %}
             <a href="https://www.flickr.com/photos/{{ post.author.info.flickr_account }}" rel="ugc noopener" target="_blank"><i class="fab fa-flickr" title="Flickr {{ post.author.info.flickr_account }}"></i></a>
         {% endif %}
     </td>
-    <td class="text">{{ post | displayForumPost | raw }}</td>
+    <td class="text">{{ post|displayForumPost|raw }}</td>
     <td class="buttons">
-        {% if userIsModerator or (mayPost and not post.discussion.locked) %}
-            {% if mayPost and not post.discussion.locked %}
+        {% if user_is_moderator or (may_post and not post.discussion.locked) %}
+            {% if may_post and not post.discussion.locked %}
                 <a class="somda-button" href="{{ path('forum_discussion_post_reply', { 'id': post.id }) }}">Reageer</a>
                 <a class="somda-button" href="{{ path('forum_discussion_post_quote', { 'id': post.id }) }}">Quote</a>
             {% endif %}
-            {% if userIsModerator or (mayPost and not post.discussion.locked and post.author == app.user) %}
+            {% if user_is_moderator or (may_post and not post.discussion.locked and post.author == app.user) %}
                 <a class="somda-button" href="{{ path('forum_discussion_post_edit', { 'id': post.id }) }}">Bewerk</a>
             {% endif %}
         {% else %}

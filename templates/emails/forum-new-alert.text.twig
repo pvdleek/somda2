@@ -1,4 +1,4 @@
-Dit Somda forumbericht is gemeld: {{ url('forum_discussion_post', { 'id': post.discussion.id, 'post_id': post.id, 'name': (post.discussion.title | slug) }) }}
+Dit Somda forumbericht is gemeld: {{ url('forum_discussion_post', { 'id': post.discussion.id, 'post_id': post.id, 'name': (post.discussion.title|slug) }) }}
 
 De melder is {{ user.username }} ({{ user.email }})
 

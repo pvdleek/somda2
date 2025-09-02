@@ -3,14 +3,14 @@
 {% block content %}
     <div class="panel">
         <div class="panel-title">
-            {{ specialRoute.start_date|displayDateTime }}{% if specialRoute.end_date is not null %}{{ 'general.date.till' | trans }} {{ specialRoute.end_date|displayDateTime }}{% endif %}
+            {{ specialRoute.start_date|displayDateTime }}{% if specialRoute.end_date is not null %}{{ 'general.date.till'|trans }} {{ specialRoute.end_date|displayDateTime }}{% endif %}
             {{ specialRoute.title }}
         </div>
         <div class="panel-content">
-            {% if specialRoute.image | length %}
+            {% if specialRoute.image|length %}
                 <span class="special-route-image"><img alt="{{ specialRoute.title }}" src="{{ asset('images/materieel/' ~ specialRoute.image) }}" /></span>
             {% endif %}
-            {{ specialRoute.text | raw }}
+            {{ specialRoute.text|raw }}
         </div>
     </div>
 {% endblock %}

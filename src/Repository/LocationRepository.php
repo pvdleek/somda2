@@ -21,14 +21,14 @@ class LocationRepository extends ServiceEntityRepository
 
     public function findOneByName(string $search): ?LocationEntity
     {
-        $queryBuilder = $this->getEntityManager()
+        $query_builder = $this->getEntityManager()
             ->createQueryBuilder()
             ->select('l')
             ->from(LocationEntity::class, 'l')
-            ->andWhere('LOWER(l.name) = :' . self::PARAMETER_SEARCH)
+            ->andWhere('LOWER(l.name) = :'.self::PARAMETER_SEARCH)
             ->setParameter(self::PARAMETER_SEARCH, strtolower($search));
         try {
-            return $queryBuilder->getQuery()->getSingleResult();
+            return $query_builder->getQuery()->getSingleResult();
         } catch (NonUniqueResultException | NoResultException) {
             return null;
         }
@@ -39,13 +39,13 @@ class LocationRepository extends ServiceEntityRepository
      */
     public function findByName(string $search): array
     {
-        $queryBuilder = $this->getEntityManager()
+        $query_builder = $this->getEntityManager()
             ->createQueryBuilder()
             ->select('l')
             ->from(LocationEntity::class, 'l')
-            ->andWhere('LOWER(l.name) LIKE :' . self::PARAMETER_SEARCH)
+            ->andWhere('LOWER(l.name) LIKE :'.self::PARAMETER_SEARCH)
             ->setParameter(self::PARAMETER_SEARCH, strtolower($search));
-        return $queryBuilder->getQuery()->getResult();
+        return $query_builder->getQuery()->getResult();
     }
 
     /**
@@ -53,12 +53,12 @@ class LocationRepository extends ServiceEntityRepository
      */
     public function findByDescription(string $search): array
     {
-        $queryBuilder = $this->getEntityManager()
+        $query_builder = $this->getEntityManager()
             ->createQueryBuilder()
             ->select('l')
             ->from(LocationEntity::class, 'l')
-            ->andWhere('LOWER(l.description) LIKE :' . self::PARAMETER_SEARCH)
+            ->andWhere('LOWER(l.description) LIKE :'.self::PARAMETER_SEARCH)
             ->setParameter(self::PARAMETER_SEARCH, strtolower($search));
-        return $queryBuilder->getQuery()->getResult();
+        return $query_builder->getQuery()->getResult();
     }
 }

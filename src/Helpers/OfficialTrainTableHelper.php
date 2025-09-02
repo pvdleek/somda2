@@ -43,7 +43,7 @@ class OfficialTrainTableHelper
     public function processFootnotes(): void
     {
         $first_date = null;
-        $handle = \fopen($this->directory . '/footnote.dat', 'r');
+        $handle = \fopen($this->directory.'/footnote.dat', 'r');
         if ($handle) {
             while (($line = \fgets($handle)) !== false) {
                 switch (\substr($line, 0, 1)) {
@@ -59,7 +59,7 @@ class OfficialTrainTableHelper
                         foreach ($validDays as $position => $validDay) {
                             if ($validDay === '1') {
                                 $date = clone($first_date);
-                                $date->modify('+' . $position . ' days');
+                                $date->modify('+'.$position.' days');
 
                                 $footnote = $this->doctrine->getRepository(OfficialFootnote::class)->findOneBy(
                                     ['date' => $date, 'footnote_id' => $footnote_id]
@@ -84,7 +84,7 @@ class OfficialTrainTableHelper
 
     public function processCompanies(): void
     {
-        $handle = fopen($this->directory . '/company.dat', 'r');
+        $handle = fopen($this->directory.'/company.dat', 'r');
         if ($handle) {
             while (($line = \fgets($handle)) !== false) {
                 switch (\substr($line, 0, 1)) {
@@ -114,7 +114,7 @@ class OfficialTrainTableHelper
 
     public function processCharacteristics(): void
     {
-        $handle = \fopen($this->directory . '/trnsmode.dat', 'r');
+        $handle = \fopen($this->directory.'/trnsmode.dat', 'r');
         if ($handle) {
             while (($line = \fgets($handle)) !== false) {
                 switch (\substr($line, 0, 1)) {
@@ -147,7 +147,7 @@ class OfficialTrainTableHelper
      */
     public function processStations(): void
     {
-        $handle = \fopen($this->directory . '/stations.dat', 'r');
+        $handle = \fopen($this->directory.'/stations.dat', 'r');
         if ($handle) {
             while (($line = \fgets($handle)) !== false) {
                 switch (\substr($line, 0, 1)) {
@@ -162,7 +162,7 @@ class OfficialTrainTableHelper
                             ['code' => $countryCode]
                         );
                         if (null === $locationCategory) {
-                            throw new \Exception('Country with code ' . $countryCode . ' not found');
+                            throw new \Exception('Country with code '.$countryCode.' not found');
                         }
 
                         $location = $this->doctrine->getRepository(Location::class)->findOneBy(
@@ -191,7 +191,7 @@ class OfficialTrainTableHelper
     {
         $this->resetForNewRoutes();
 
-        $handle = \fopen($this->directory . '/timetbls.dat', 'r');
+        $handle = \fopen($this->directory.'/timetbls.dat', 'r');
         if ($handle) {
             while (($line = \fgets($handle)) !== false) {
                 switch (\substr($line, 0, 1)) {
@@ -315,7 +315,7 @@ class OfficialTrainTableHelper
          */
         $transporter = $this->doctrine->getRepository(Transporter::class)->findOneBy(['iffCode' => $iffCode]);
         if (null === $transporter) {
-            throw new \Exception('Transport with code ' . $iffCode . ' not found');
+            throw new \Exception('Transport with code '.$iffCode.' not found');
         }
         return $transporter;
     }
@@ -327,22 +327,22 @@ class OfficialTrainTableHelper
     {
         if (null === $this->footnote) {
             throw new \Exception(
-                'Footnote is missing for saving train-table, location ' . $location_name . ', action '. $action .
-                ', time ' . $time . ', first route ' . $this->routes[0]->route->number
+                'Footnote is missing for saving train-table, location '.$location_name.', action '. $action .
+                ', time '.$time.', first route '.$this->routes[0]->route->number
             );
         }
         if (null === $this->characteristic) {
             throw new \Exception(
-                'Characteristic is missing for saving train-table, location ' . $location_name . ', action '. $action .
-                ', time ' . $time . ', first route ' . $this->routes[0]->route->number
+                'Characteristic is missing for saving train-table, location '.$location_name.', action '. $action .
+                ', time '.$time.', first route '.$this->routes[0]->route->number
             );
         }
 
         $location = $this->doctrine->getRepository(Location::class)->findOneBy(['name' => $location_name]);
         if (null === $location) {
             throw new \Exception(
-                'Location not found when saving train-table, location ' . $location_name . ', action '. $action .
-                ', time ' . $time . ', first route ' . $this->routes[0]->route->number
+                'Location not found when saving train-table, location '.$location_name.', action '. $action .
+                ', time '.$time.', first route '.$this->routes[0]->route->number
             );
         }
 

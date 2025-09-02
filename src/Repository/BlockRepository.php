@@ -20,7 +20,7 @@ class BlockRepository extends ServiceEntityRepository
      */
     public function getMenuStructure(): array
     {
-        $queryBuilder = $this->getEntityManager()
+        $query_builder = $this->getEntityManager()
             ->createQueryBuilder()
             ->select('b.id AS id, b.name AS name, b.route AS route, b.role AS role')
             ->addSelect('parent.id AS parent_id, parent.name AS parent_name')
@@ -29,6 +29,6 @@ class BlockRepository extends ServiceEntityRepository
             ->andWhere('parent.id > 0')
             ->addOrderBy('parent.menu_order', 'ASC')
             ->addOrderBy('b.menu_order', 'ASC');
-        return $queryBuilder->getQuery()->getArrayResult();
+        return $query_builder->getQuery()->getArrayResult();
     }
 }

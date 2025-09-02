@@ -10,7 +10,7 @@
                 <tr><th>Provincie</th><td>{{ poi.category.name }}</td></tr>
                 <tr><th>Naam</th><td>{{ poi.name }}</td></tr>
                 <tr><th>Voorbeeld-foto</th><td><img src="/images/spotpunten/{{ poi.photo }}"></td></tr>
-                <tr><th>Locatie</th><td>{{ poi.location.name }} - <a href="{{ path('passing_routes_search', { 'train_table_year_id': 0, 'day_number': ('now'|date('N')) - 1, 'start_time': ('5 minutes ago'|date('H:i')), 'end_time': ('+30 minutes' | date('H:i')), 'location_name': poi.location_for_routes.name }) }}">Doorkomststaat</a></td></tr>
+                <tr><th>Locatie</th><td>{{ poi.location.name }} - <a href="{{ path('passing_routes_search', { 'train_table_year_id': 0, 'day_number': ('now'|date('N')) - 1, 'start_time': ('5 minutes ago'|date('H:i')), 'end_time': ('+30 minutes'|date('H:i')), 'location_name': poi.location_for_routes.name }) }}">Doorkomststaat</a></td></tr>
                 <tr>
                     <th>Traject</th>
                     <td>

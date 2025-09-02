@@ -71,26 +71,26 @@ class FeedProvider implements FeedProviderInterface
             $item
                 ->setSummary(
                     '<![CDATA[' .
-                    '<spotDate>' . $spot->spot_date->format('Y-m-d') . '</spotDate>' .
-                    '<trainNumber>' . $spot->train->number . '</trainNumber>' .
+                    '<spotDate>'.$spot->spot_date->format('Y-m-d').'</spotDate>' .
+                    '<trainNumber>'.$spot->train->number.'</trainNumber>' .
                     '<trainName>' .
                         ($spot->train->name_pattern ? $spot->train->name_pattern->name : 'unknown') .
                     '</trainName>' .
-                    '<locationAbbreviation>' . $spot->location->name . '</locationAbbreviation>' .
-                    '<locationDescription>' . $spot->location->description . '</locationDescription>' .
-                    '<routeNumber>' . $spot->route->number . '</routeNumber>' .
-                    '<position>' . $spot->position->name . '</position>' .
+                    '<locationAbbreviation>'.$spot->location->name.'</locationAbbreviation>' .
+                    '<locationDescription>'.$spot->location->description.'</locationDescription>' .
+                    '<routeNumber>'.$spot->route->number.'</routeNumber>' .
+                    '<position>'.$spot->position->name.'</position>' .
                     ']]>'
                 )
                 ->setTitle($this->spot_helper->getDisplaySpot($spot, true))
                 ->setPublicId($this->router->generate(
                     'spots_search',
-                    ['max_months' => 1, 'search_parameters' => '/0//' . $spot->train->number . '/'],
+                    ['max_months' => 1, 'search_parameters' => '/0//'.$spot->train->number.'/'],
                     UrlGeneratorInterface::ABSOLUTE_URL
                 ))
                 ->setLink($this->router->generate(
                     'spots_search',
-                    ['max_months' => 1, 'search_parameters' => '/0///' . $spot->route->number],
+                    ['max_months' => 1, 'search_parameters' => '/0///'.$spot->route->number],
                     UrlGeneratorInterface::ABSOLUTE_URL
                 ))
                 ->setLastModified($spot->timestamp)
@@ -123,13 +123,13 @@ class FeedProvider implements FeedProviderInterface
             $author = new ItemAuthor($this->user_helper->getAdministratorUser());
 
             $date = null === $special_route->end_date ? $special_route->start_date->format(DateGenerics::DATE_FORMAT) :
-                $special_route->start_date->format(DateGenerics::DATE_FORMAT) . ' t/m ' .
+                $special_route->start_date->format(DateGenerics::DATE_FORMAT).' t/m ' .
                 $special_route->end_date->format(DateGenerics::DATE_FORMAT);
 
             $item = new Item;
             $item
-                ->setSummary('<![CDATA[' . $special_route->text . ']]>')
-                ->setTitle($special_route->title . ' - ' . $date)
+                ->setSummary('<![CDATA['.$special_route->text.']]>')
+                ->setTitle($special_route->title.' - '.$date)
                 ->setPublicId($this->router->generate(
                     'special_route',
                     ['id' => $special_route->id],

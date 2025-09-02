@@ -1,6 +1,6 @@
 Beste {{ user.username }},
 
-Recent heb je een melding gedaan bij de moderators over dit bericht in de discussie "{{ post.discussion.title }}": {{ url('forum_discussion_post', { 'id': post.discussion.id, 'post_id': post.id, 'name': (post.discussion.title | slug) }) }}
+Recent heb je een melding gedaan bij de moderators over dit bericht in de discussie "{{ post.discussion.title }}": {{ url('forum_discussion_post', { 'id': post.discussion.id, 'post_id': post.id, 'name': (post.discussion.title|slug) }) }}
 
 Een moderator heeft hier naar gekeken en jou deze reactie gestuurd:
 {{ note.text }}

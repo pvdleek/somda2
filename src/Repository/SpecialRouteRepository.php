@@ -23,7 +23,7 @@ class SpecialRouteRepository extends ServiceEntityRepository
     {
         $today = new \DateTime();
         $today->setTime(0, 0);
-        $queryBuilder = $this->getEntityManager()
+        $query_builder = $this->getEntityManager()
             ->createQueryBuilder()
             ->select('s')
             ->from(SpecialRouteEntity::class, 's')
@@ -31,7 +31,7 @@ class SpecialRouteRepository extends ServiceEntityRepository
             ->andWhere('(s.start_date >= :today AND s.end_date IS NULL) OR s.end_date >= :today')
             ->setParameter('today', $today)
             ->addOrderBy('s.start_date', 'ASC');
-        return $queryBuilder->getQuery()->getResult();
+        return $query_builder->getQuery()->getResult();
     }
 
     /**
@@ -40,7 +40,7 @@ class SpecialRouteRepository extends ServiceEntityRepository
      */
     public function findForFeed(int $limit): array
     {
-        $queryBuilder = $this->getEntityManager()
+        $query_builder = $this->getEntityManager()
             ->createQueryBuilder()
             ->select('s')
             ->from(SpecialRouteEntity::class, 's')
@@ -49,6 +49,6 @@ class SpecialRouteRepository extends ServiceEntityRepository
             ->setParameter('today', new \DateTime())
             ->addOrderBy('s.start_date', 'ASC')
             ->setMaxResults($limit);
-        return $queryBuilder->getQuery()->getResult();
+        return $query_builder->getQuery()->getResult();
     }
 }

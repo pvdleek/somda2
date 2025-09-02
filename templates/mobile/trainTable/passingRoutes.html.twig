@@ -8,7 +8,7 @@
             <td>
                 <select id="day_number" name="day_number">
                     {% for day_number_select in 0..6 %}
-                        <option {{ day_number == day_number_select ? 'selected="selected" ' }}value="{{ day_number_select }}">{{ ('general.date.days.' ~ day_number_select) | trans }}</option>
+                        <option {{ day_number == day_number_select ? 'selected="selected" ' }}value="{{ day_number_select }}">{{ ('general.date.days.' ~ day_number_select)|trans }}</option>
                     {% endfor %}
                 </select>
             </td>
@@ -26,14 +26,14 @@
         </tr>
     </table>
 
-    {% if passingRoutes | length > 0 %}
+    {% if passingRoutes|length > 0 %}
         <br />
         <table>
-            <tr><th colspan="5">{{ location_name | lower | capitalize }} - {{ start_time }} t/m {{ end_time }} ({{ ('general.date.days.' ~ day_number) | trans }})</th></tr>
+            <tr><th colspan="5">{{ location_name|lower|capitalize }} - {{ start_time }} t/m {{ end_time }} ({{ ('general.date.days.' ~ day_number)|trans }})</th></tr>
             <tr><th>Tijd</th><th>Treinnr</th><th>Actie</th><th>Van</th><th>Naar</th></tr>
             {% for trainTable in passingRoutes %}
                 <tr>
-                    <td>{{ trainTable['time'] | displayTime }}</td>
+                    <td>{{ trainTable['time']|displayTime }}</td>
                     <td><a href="{{ path('train_table_search', { 'train_table_year_id': trainTableIndexNumber, 'route_number': trainTable['route_number'] }) }}">{{ trainTable[constant('App\\Repository\\TrainTableRepository::FIELD_CHARACTERISTIC_NAME')] }}{{ trainTable['route_number'] }}</a></td>
                     <td>{{ trainTable['action'] }}</td>
                     <td><span title="{{ trainTable['fl_first_description'] }}">{{ trainTable['fl_first_name'] }}</span></td>

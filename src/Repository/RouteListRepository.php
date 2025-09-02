@@ -20,7 +20,7 @@ class RouteListRepository extends ServiceEntityRepository
 
     public function findForRouteNumber(TrainTableYear $train_table_year, int $route_number): ?RouteListEntity
     {
-        $queryBuilder = $this->getEntityManager()
+        $query_builder = $this->getEntityManager()
             ->createQueryBuilder()
             ->select('r')
             ->from(RouteListEntity::class, 'r')
@@ -30,7 +30,7 @@ class RouteListRepository extends ServiceEntityRepository
             ->setParameter('route_number', $route_number)
             ->setMaxResults(1);
         try {
-            return $queryBuilder->getQuery()->getSingleResult();
+            return $query_builder->getQuery()->getSingleResult();
         } catch (NonUniqueResultException | NoResultException) {
             return null;
         }
@@ -41,7 +41,7 @@ class RouteListRepository extends ServiceEntityRepository
      */
     public function findForOverview(TrainTableYear $train_table_year): array
     {
-        $queryBuilder = $this->getEntityManager()
+        $query_builder = $this->getEntityManager()
             ->createQueryBuilder()
             ->select('r')
             ->from(RouteListEntity::class, 'r')
@@ -49,6 +49,6 @@ class RouteListRepository extends ServiceEntityRepository
             ->setParameter('train_table_year', $train_table_year)
             ->join('r.routes', 'routes')
             ->addOrderBy('r.first_number', 'ASC');
-        return $queryBuilder->getQuery()->getResult();
+        return $query_builder->getQuery()->getResult();
     }
 }

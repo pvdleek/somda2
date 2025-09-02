@@ -15,27 +15,23 @@ class DateHelper implements RuntimeExtensionInterface
     /**
      * @throws \Exception
      */
-    public function getDisplayDate(\DateTime|string $date, bool $includeTime = false, bool $shortDate = false): string
+    public function getDisplayDate(\DateTime|string $date, bool $include_time = false, bool $short_date = false): string
     {
         if (!$date instanceof \DateTime) {
             $date = new \DateTime($date);
         }
 
         $output = '';
-        if (!$shortDate) {
-            $output .= $this->translator->trans('general.date.days.' . ($date->format('N') - 1)) . ' ';
+        if (!$short_date) {
+            $output .= $this->translator->trans('general.date.days.'.($date->format('N') - 1)).' ';
         }
-        $output .= $date->format('j') . ' ';
+        $output .= $date->format('j').' '.$this->translator->trans('general.date.months'.($short_date ? 'Short' : '').'.'.$date->format('n'));
 
-        $output .= $this->translator->trans(
-            'general.date.months' . ($shortDate ? 'Short' : '') . '.' . $date->format('n')
-        );
-
-        if (!$shortDate) {
-            $output .= ' ' . $date->format('Y');
+        if (!$short_date) {
+            $output .= ' '.$date->format('Y');
         }
-        if ($includeTime) {
-            $output .= ' ' . $date->format('H:i:s');
+        if ($include_time) {
+            $output .= ' '.$date->format('H:i:s');
         }
         return \trim($output);
     }

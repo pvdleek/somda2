@@ -45,7 +45,7 @@ class UpdateRouteTrainsCommand extends Command
          * @var TrainTableYear $train_table_year
          */
         $train_table_year = $this->train_table_year_repository->findTrainTableYearByDate(new \DateTime());
-        $check_date = max($train_table_year->start_date, new \DateTime('-' . self::CHECK_DATE_DAYS . ' days'));
+        $check_date = max($train_table_year->start_date, new \DateTime('-'.self::CHECK_DATE_DAYS.' days'));
 
         $route_array = $this->spot_repository->findForRouteTrains($check_date);
         foreach ($route_array as $route_item) {

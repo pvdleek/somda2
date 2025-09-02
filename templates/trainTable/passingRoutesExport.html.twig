@@ -1,11 +1,11 @@
 {% extends('baseExport.html.twig') %}
 
 {% block content %}
-    Doorkomststaat voor {{ trainTableIndex.name }} van {{ location_name }} op {{ ('general.date.days.' ~ (day_number - 1)) | trans | lower }} van {{ start_time }} tot {{ end_time }}
+    Doorkomststaat voor {{ trainTableIndex.name }} van {{ location_name }} op {{ ('general.date.days.' ~ (day_number - 1))|trans|lower }} van {{ start_time }} tot {{ end_time }}
     <br />
     <br />
 
-    {% if passingRoutes | length %}
+    {% if passingRoutes|length %}
         {% include 'trainTable/passingRoutesTable.html.twig' %}
     {% else %}
         Er zijn geen passerende treinen gevonden

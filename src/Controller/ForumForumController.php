@@ -58,9 +58,9 @@ class ForumForumController
         }
 
         return $this->template_helper->render('forum/forum.html.twig', [
-            TemplateHelper::PARAMETER_PAGE_TITLE => 'Forum - ' . $forum->name,
+            TemplateHelper::PARAMETER_PAGE_TITLE => 'Forum - '.$forum->name,
             TemplateHelper::PARAMETER_FORUM => $forum,
-            'userIsModerator' => $this->forum_authorization_helper->userIsModerator($forum, $this->user_helper->getUser()),
+            'user_is_moderator' => $this->forum_authorization_helper->userIsModerator($forum, $this->user_helper->getUser()),
             'discussions' => $this->forum_discussion_repository->findByForum($forum, $this->user_helper->getUser()),
         ]);
     }

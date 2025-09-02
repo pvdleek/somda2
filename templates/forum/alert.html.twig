@@ -20,14 +20,14 @@
                         <td>&nbsp;</td>
                         <td>
                             <a class="somda-button" href="#" id="alert_button" onclick="disableMeAndSubmitForm('alert_button', 'alert_form'); return false;">Meld bericht</a>
-                            <a class="somda-button" href="{{ path('forum_discussion_post', { 'id': post.discussion.id, 'post_id': post.id, 'name': (post.discussion.title | slug)}) }}">Terug naar het bericht</a>
+                            <a class="somda-button" href="{{ path('forum_discussion_post', { 'id': post.discussion.id, 'post_id': post.id, 'name': (post.discussion.title|slug)}) }}">Terug naar het bericht</a>
                         </td>
                     </tr>
                 </table>
             {{ form_end(form) }}
         </div>
         <table align="center">
-            {% include 'forum/post.html.twig' with { 'mayPost': false, 'userIsModerator': false, 'postIsUnread': false } %}
+            {% include 'forum/post.html.twig' with { 'may_post': false, 'user_is_moderator': false, 'post_is_unread': false } %}
         </table>
     </div>
 {% endblock %}

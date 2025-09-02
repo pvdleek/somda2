@@ -30,15 +30,15 @@ class EmailHelper
             ->from($from)
             ->to(new Address($user->email, $user->username))
             ->subject($subject)
-            ->htmlTemplate('emails/' . $template . '.html.twig')
-            ->textTemplate('emails/' . $template . '.text.twig')
+            ->htmlTemplate('emails/'.$template.'.html.twig')
+            ->textTemplate('emails/'.$template.'.text.twig')
             ->context($parameters);
         try {
             $this->mailer->send($message);
             return true;
         } catch (TransportExceptionInterface $exception) {
             $this->logger->critical(
-                'Failed to send email with subject "' . $subject . '" to user with id ' . $user->id
+                'Failed to send email with subject "'.$subject.'" to user with id '.$user->id
             );
             $this->logger->critical($exception->getMessage());
         }

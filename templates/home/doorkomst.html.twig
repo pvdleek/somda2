@@ -1,10 +1,10 @@
 <div class="home-passing-routes-container">
 	<div><label for="location">Locatie</label> <input id="location" maxlength="10" name="location" type="text" value="{{ layoutData[constant('App\\Controller\\HomeController::KEY_PASSING_ROUTES')]['location'] }}" /></div>
-	<div><label for="start_time">Van</label> <input id="start_time" maxlength="5" name="start_time" size="5" type="text" value="{{ layoutData[constant('App\\Controller\\HomeController::KEY_PASSING_ROUTES')]['start_time'] | date('H:i') }}" /></div>
-	<div><label for="end_time">Tot</label> <input id="end_time" maxlength="5" name="end_time" size="5" type="text" value="{{ layoutData[constant('App\\Controller\\HomeController::KEY_PASSING_ROUTES')]['end_time'] | date('H:i') }}" /></div>
+	<div><label for="start_time">Van</label> <input id="start_time" maxlength="5" name="start_time" size="5" type="text" value="{{ layoutData[constant('App\\Controller\\HomeController::KEY_PASSING_ROUTES')]['start_time']|date('H:i') }}" /></div>
+	<div><label for="end_time">Tot</label> <input id="end_time" maxlength="5" name="end_time" size="5" type="text" value="{{ layoutData[constant('App\\Controller\\HomeController::KEY_PASSING_ROUTES')]['end_time']|date('H:i') }}" /></div>
 </div>
 
 <br />
 <div class="panel-buttons">
-	<a class="somda-button" href="#" onclick="document.location='{{ path('passing_routes_search', { 'train_table_year_id': 0, 'day_number': ('now' | date('N')) - 1, 'start_time': 'start', 'end_time': 'end', 'location_name': 'location' }) }}'.replace('/start/', '/' + $('#start_time').val() + '/').replace('/end/', '/' + $('#end_time').val() + '/').replace('/location/', '/' + $('#location').val() + '/'); return false;">Vraag op</a>
+	<a class="somda-button" href="#" onclick="document.location='{{ path('passing_routes_search', { 'train_table_year_id': 0, 'day_number': ('now'|date('N')) - 1, 'start_time': 'start', 'end_time': 'end', 'location_name': 'location' }) }}'.replace('/start/', '/' + $('#start_time').val() + '/').replace('/end/', '/' + $('#end_time').val() + '/').replace('/location/', '/' + $('#location').val() + '/'); return false;">Vraag op</a>
 </div>

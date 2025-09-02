@@ -2,17 +2,17 @@
 	<div class="home-dashboard-container">
 		<div>
 			<strong>Totaal aantal gebruikers</strong>
-			<br />{{ layoutData[constant('App\\Controller\\HomeController::KEY_DASHBOARD')]['activeUsers'] | number_format(0, '', '.') }}
+			<br />{{ layoutData[constant('App\\Controller\\HomeController::KEY_DASHBOARD')]['activeUsers']|number_format(0, '', '.') }}
 			<br />
 			<br /><strong>Totaal pageviews</strong>
-			<br />{{ layoutData[constant('App\\Controller\\HomeController::KEY_DASHBOARD')]['pageViews'] | number_format(0, '', '.') }}
+			<br />{{ layoutData[constant('App\\Controller\\HomeController::KEY_DASHBOARD')]['pageViews']|number_format(0, '', '.') }}
 			<br />
 			<br /><strong>Totaal aantal spots</strong>
-			<br />{{ layoutData[constant('App\\Controller\\HomeController::KEY_DASHBOARD')]['spots'] | number_format(0, '', '.') }}
+			<br />{{ layoutData[constant('App\\Controller\\HomeController::KEY_DASHBOARD')]['spots']|number_format(0, '', '.') }}
 		</div>
 		<div>
 			{% for statistic in layoutData[constant('App\\Controller\\HomeController::KEY_DASHBOARD')]['statistics'] %}
-				<strong>{{ statistic.timestamp | displayDateTime(false, true) }} - {{ statistic.visitors_total }} bezoekers</strong>
+				<strong>{{ statistic.timestamp|displayDateTime(false, true) }} - {{ statistic.visitors_total }} bezoekers</strong>
 				<br />{{ statistic.number_of_spots }} spot(s) &amp; {{ statistic.number_of_posts }} forumbericht(en).
 				<br /><br />
 			{% endfor %}

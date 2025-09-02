@@ -41,7 +41,7 @@ class ForumOverviewHelper
             $unread_discussions = 0;
             if ($this->user_helper->userIsLoggedIn()) {
                 if ((int) $forum['type'] === ForumForum::TYPE_MODERATORS_ONLY
-                    && (bool) $forum['userIsModerator'] !== true
+                    && (bool) $forum['user_is_moderator'] !== true
                 ) {
                     // The user is not allowed to view this category
                     continue;

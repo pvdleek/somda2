@@ -61,7 +61,7 @@ class ForumPostController
             );
         }
 
-        $userIsModerator = $this->forum_authorization_helper->userIsModerator(
+        $user_is_moderator = $this->forum_authorization_helper->userIsModerator(
             $quotedPost->discussion->forum,
             $this->user_helper->getUser()
         );
@@ -69,7 +69,7 @@ class ForumPostController
         $form = $this->form_helper
             ->getFactory()
             ->create(ForumPostForm::class, null, [ForumPostForm::OPTION_QUOTED_POST => $quote ? $quotedPost : null]);
-        if ($userIsModerator) {
+        if ($user_is_moderator) {
             $form->add('postAsModerator', CheckboxType::class, [
                 FormGenerics::KEY_LABEL => 'Plaatsen als moderator',
                 FormGenerics::KEY_MAPPED => false,
@@ -78,7 +78,7 @@ class ForumPostController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $user = $userIsModerator && $form->get('postAsModerator')->getData() ?
+            $user = $user_is_moderator && $form->get('postAsModerator')->getData() ?
                 $this->user_helper->getModeratorUser() : $this->user_helper->getUser();
             $this->form_helper->addPost(
                 $quotedPost->discussion,
@@ -101,7 +101,7 @@ class ForumPostController
         );
 
         return $this->template_helper->render('forum/reply.html.twig', [
-            TemplateHelper::PARAMETER_PAGE_TITLE => 'Forum - ' . $quotedPost->discussion->title,
+            TemplateHelper::PARAMETER_PAGE_TITLE => 'Forum - '.$quotedPost->discussion->title,
             TemplateHelper::PARAMETER_FORM => $form->createView(),
             'post' => $quotedPost,
             'lastPosts' => $lastPosts,
@@ -114,7 +114,7 @@ class ForumPostController
             if ($favorite->alerting === ForumFavorite::ALERTING_ON) {
                 $this->email_helper->sendEmail(
                     $favorite->user,
-                    'Somda - Nieuwe forumreactie op "' . $discussion->title . '"',
+                    'Somda - Nieuwe forumreactie op "'.$discussion->title.'"',
                     'forum-new-reply',
                     [ForumPostForm::FIELD_DISCUSSION => $discussion]
                 );
@@ -134,13 +134,13 @@ class ForumPostController
          * @var ForumPost $post
          */
         $post = $this->form_helper->getDoctrine()->getRepository(ForumPost::class)->find($id);
-        $userIsModerator = $this->forum_authorization_helper->userIsModerator(
+        $user_is_moderator = $this->forum_authorization_helper->userIsModerator(
             $post->discussion->forum,
             $this->user_helper->getUser()
         );
         if (!$this->forum_authorization_helper->mayPost($post->discussion->forum, $this->user_helper->getUser())
             || $post->discussion->locked
-            || ($post->author !== $this->user_helper->getUser() && !$userIsModerator)
+            || ($post->author !== $this->user_helper->getUser() && !$user_is_moderator)
         ) {
             throw new AccessDeniedException(
                 'The user may not post, the discussion is locked or the author is not the user'
@@ -150,7 +150,7 @@ class ForumPostController
         $form = $this->form_helper
             ->getFactory()
             ->create(ForumPostForm::class, null, [ForumPostForm::OPTION_EDITED_POST => $post]);
-        if ($userIsModerator) {
+        if ($user_is_moderator) {
             $form->add(
                 ForumPostForm::FIELD_EDIT_AS_MODERATOR,
                 CheckboxType::class,
@@ -176,7 +176,7 @@ class ForumPostController
         }
 
         return $this->template_helper->render('forum/edit.html.twig', [
-            TemplateHelper::PARAMETER_PAGE_TITLE => 'Forum - ' . $post->discussion->title,
+            TemplateHelper::PARAMETER_PAGE_TITLE => 'Forum - '.$post->discussion->title,
             TemplateHelper::PARAMETER_FORM => $form->createView(),
             'post' => $post,
         ]);

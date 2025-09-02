@@ -15,11 +15,11 @@
                 </tr>
                 {% for user in users %}
                     <tr>
-                        <td>{{ user.id | displayUser(user.username) | raw }}</td>
+                        <td>{{ user.id|displayUser(user.username)|raw }}</td>
                         <td>{{ user.email }}</td>
                         <td>{{ user.name }}</td>
-                        <td>{{ (user.ban_expire_timestamp | date('Y-m-d')) > ('now' | date('Y-m-d')) ? 'Actief' : 'Verlopen' }}</td>
-                        <td>{{ user.ban_expire_timestamp | displayDateTime }}</td>
+                        <td>{{ (user.ban_expire_timestamp|date('Y-m-d')) > ('now'|date('Y-m-d')) ? 'Actief' : 'Verlopen' }}</td>
+                        <td>{{ user.ban_expire_timestamp|displayDateTime }}</td>
                         <td><a href="{{ path('manage_ban', { 'id': user.id }) }}">Bewerk</a></td>
                     </tr>
                 {% endfor %}

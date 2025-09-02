@@ -36,6 +36,6 @@ abstract class TrainCompositionBase
 
     public function getCar(int $car_number): ?string
     {
-        return $this->{'car' . $car_number};
+        return $this->{'car'.$car_number};
     }
 }

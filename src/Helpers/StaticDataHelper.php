@@ -99,7 +99,7 @@ class StaticDataHelper implements RuntimeExtensionInterface
          */
         $user_array = $user_repository->findActiveForStaticData();
         foreach ($user_array as $user) {
-            $this->users['@' . $user['username']] =
+            $this->users['@'.$user['username']] =
                 null !== $user['name'] && \strlen($user['name']) > 0 ? $user['name'] : $user['username'];
         }
 

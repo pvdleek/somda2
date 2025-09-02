@@ -12,11 +12,11 @@
             <tr>
                 <th>&nbsp;</th>
                 <th>E-mail ontvangen</th>
-                <th colspan="2">{{ 'forum.discussion.subject' | trans }}</th>
-                <th>{{ 'forum.number.posts' | trans }}</th>
-                <th>{{ 'forum.author' | trans }}</th>
-                <th>{{ 'forum.number.viewed' | trans }}</th>
-                <th>{{ 'forum.lastPost' | trans }}</th>
+                <th colspan="2">{{ 'forum.discussion.subject'|trans }}</th>
+                <th>{{ 'forum.number.posts'|trans }}</th>
+                <th>{{ 'forum.author'|trans }}</th>
+                <th>{{ 'forum.number.viewed'|trans }}</th>
+                <th>{{ 'forum.lastPost'|trans }}</th>
             </tr>
             {% for favorite in favorites %}
                 <tr id="favorite_row_{{ favorite['id'] }}">
@@ -38,13 +38,13 @@
                         {% endif %}
                     </td>
                     <td>
-                        <a href="{{ path('forum_discussion', { 'id': favorite['id'], 'name': (favorite['title'] | slug) }) }}">{{ favorite['title'] }}</a>
+                        <a href="{{ path('forum_discussion', { 'id': favorite['id'], 'name': (favorite['title']|slug) }) }}">{{ favorite['title'] }}</a>
                         {% if not favorite['discussion_read'] %} <i class="fas fa-comment-dots"></i>{% endif %}
                     </td>
                     <td>{{ favorite['posts'] }}</td>
-                    <td>{{ favorite['author_id'] | displayUser(favorite['author_username']) | raw }}</td>
+                    <td>{{ favorite['author_id']|displayUser(favorite['author_username'])|raw }}</td>
                     <td>{{ favorite['viewed'] }}</td>
-                    <td>{{ favorite['max_post_timestamp'] | displayDateTime(true) }}</td>
+                    <td>{{ favorite['max_post_timestamp']|displayDateTime(true) }}</td>
                 </tr>
             {% else %}
                 <tr><td colspan="8">Je hebt nog geen favoriete discussies</td></tr>
@@ -59,7 +59,7 @@
         <table>
             <tr>
                 <th>&nbsp;</th>
-                <th colspan="2">{{ 'forum.discussion.subject' | trans }}</th>
+                <th colspan="2">{{ 'forum.discussion.subject'|trans }}</th>
                 <th>Bericht</th>
                 <th>Datum, tijd en auteur</th>
             </tr>
@@ -67,9 +67,9 @@
                 <tr id="favorite_post_row_{{ favorite.post.id }}">
                     <td><a href="#" onclick="removePost({{ favorite.post.id }}); return false;"><i class="fas fa-times" title="Verwijder bericht uit je favorieten"></i></a></td>
                     <td><i class="fas fa-comment"></i></td>
-                    <td><a href="{{ path('forum_discussion_post', { 'id': favorite.post.discussion.id, 'name': (favorite.post.discussion.title | slug), 'post_id': favorite.post.id }) }}">{{ favorite.post.discussion.title }}</a></td>
-                    <td>{{ favorite.post | displayForumPost | raw }}</td>
-                    <td>{{ favorite.post.timestamp | date('d-m-Y H:i:s') }}<br />{{ favorite.post.author.id | displayUser(favorite.post.author.username) | raw }}</td>
+                    <td><a href="{{ path('forum_discussion_post', { 'id': favorite.post.discussion.id, 'name': (favorite.post.discussion.title|slug), 'post_id': favorite.post.id }) }}">{{ favorite.post.discussion.title }}</a></td>
+                    <td>{{ favorite.post|displayForumPost|raw }}</td>
+                    <td>{{ favorite.post.timestamp|date('d-m-Y H:i:s') }}<br />{{ favorite.post.author.id|displayUser(favorite.post.author.username)|raw }}</td>
                 </tr>
             {% else %}
                 <tr><td colspan="8">Je hebt nog geen favoriete berichten</td></tr>

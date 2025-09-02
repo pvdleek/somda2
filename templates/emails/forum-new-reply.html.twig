@@ -2,4 +2,4 @@
 <br />
 <br />Op het forum van <a href="{{ url('home') }}">Somda</a> is een reactie geplaatst in de discussie "{{ discussion.title }}".
 <br />
-<br /><a href="{{ url('forum_discussion', { 'id': discussion.id, 'name': (discussion.title | slug) }) }}">Ga direct naar de forumdiscussie</a>.
+<br /><a href="{{ url('forum_discussion', { 'id': discussion.id, 'name': (discussion.title|slug) }) }}">Ga direct naar de forumdiscussie</a>.

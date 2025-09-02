@@ -5,7 +5,7 @@
     <div align="center">
         <table>
             <tr>
-                <th><label for="trainTableIndex">{{ 'general.input.index' | trans }}</label></th>
+                <th><label for="trainTableIndex">{{ 'general.input.index'|trans }}</label></th>
                 <td>
                     <select id="trainTableIndex" name="trainTableIndex">
                         {% for trainTableIndex in trainTableIndices %}
@@ -15,22 +15,22 @@
                 </td>
             </tr>
             <tr>
-                <th><label for="route_number">{{ 'general.input.route' | trans }}</label></th>
+                <th><label for="route_number">{{ 'general.input.route'|trans }}</label></th>
                 <td><input id="route_number" maxlength="8" name="route_number" size="10" type="text" value="{{ route_number }}" /></td>
             </tr>
             <tr>
                 <th>&nbsp;</th>
-                <td><a class="somda-button" href="#" id="searchTrainTable" onclick="searchTrainTable(); return false;" title="{{ 'trainTable.input.button' | trans }}">{{ 'general.button.search' | trans }}</a></td>
+                <td><a class="somda-button" href="#" id="searchTrainTable" onclick="searchTrainTable(); return false;" title="{{ 'trainTable.input.button'|trans }}">{{ 'general.button.search'|trans }}</a></td>
             </tr>
         </table>
         <br />
 
-        {% if trainTableLines | length %}
+        {% if trainTableLines|length %}
             <table>
-                <tr><th colspan="7">{{ 'trainTable.output.title' | trans | format(route_number) }}</th></tr>
+                <tr><th colspan="7">{{ 'trainTable.output.title'|trans|format(route_number) }}</th></tr>
                 <tr>
                     {% for day_number in 0..6 %}
-                        <th>{{ ('general.date.days.' ~ day_number) | trans }}</th>
+                        <th>{{ ('general.date.days.' ~ day_number)|trans }}</th>
                     {% endfor %}
                 </tr>
                 <tr>
@@ -38,8 +38,8 @@
                         <td>
                             {% for routeTrain in routePredictions %}
                                 {% if routeTrain.day_number == day_number %}
-                                    {{ 'trainTable.output.planned.title' | trans }}:
-                                    <span title="{{ 'trainTable.output.planned.base' | trans | format(routeTrain.number_of_spots) }}">{{ routeTrain.train_name_pattern.name }}{% if routeTrain.position.name | length > 0 %} ({{ routeTrain.position.name }}){% endif %}</span><br />
+                                    {{ 'trainTable.output.planned.title'|trans }}:
+                                    <span title="{{ 'trainTable.output.planned.base'|trans|format(routeTrain.number_of_spots) }}">{{ routeTrain.train_name_pattern.name }}{% if routeTrain.position.name|length > 0 %} ({{ routeTrain.position.name }}){% endif %}</span><br />
                                 {% endif %}
                             {% endfor %}
                             <table>
@@ -48,7 +48,7 @@
                                         <tr>
                                             <td><span title="{{ trainTable.location.description }}">{{ trainTable.location.name }}</span></td>
                                             <td>{{ trainTable.action }}</td>
-                                            <td>{{ trainTable.time | displayTime }}</td>
+                                            <td>{{ trainTable.time|displayTime }}</td>
                                         </tr>
                                     {% endif %}
                                 {% endfor %}
@@ -58,7 +58,7 @@
                 </tr>
             </table>
         {% elseif route_number is not null %}
-            <p class="warn">{{ 'trainTable.output.notFound' | trans }}</p>
+            <p class="warn">{{ 'trainTable.output.notFound'|trans }}</p>
         {% endif %}
         <br />
     </div>

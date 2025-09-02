@@ -22,7 +22,7 @@ class SpotBulkEditLocation extends AbstractType
         $builder
             ->add('location', EntityType::class, [
                 FormGenerics::KEY_CHOICE_LABEL => function (Location $location) {
-                    return $location->name . ' - ' . $location->description;
+                    return $location->name.' - '.$location->description;
                 },
                 FormGenerics::KEY_CHOICE_VALUE => 'name',
                 FormGenerics::KEY_CLASS => Location::class,

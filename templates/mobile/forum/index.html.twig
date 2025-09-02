@@ -6,7 +6,7 @@
 
     <table>
         {% for category in categories %}
-            {% if category['forums'] | length > 0 %}
+            {% if category['forums']|length > 0 %}
                 <tr><th colspan="2">{{ category['name'] }}</th></tr>
                 {% for forum in category['forums'] %}
                     <tr><td><a href="{{ path('forum_forum', { 'id': forum['id'], 'name': forum['name'] }) }}">{{ forum['name'] }}</a></td></tr>
