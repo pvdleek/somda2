@@ -18,7 +18,7 @@ class SpotHelper implements RuntimeExtensionInterface
     ) {
     }
 
-    public function getDisplaySpot(Spot $spot, bool $noHtml = false): string
+    public function getDisplaySpot(Spot $spot, bool $no_html = false): string
     {
         if (\is_numeric($spot->route->number)) {
             $translation = 'spot.display.numeric';
@@ -38,7 +38,7 @@ class SpotHelper implements RuntimeExtensionInterface
             $this->translator->trans($translation),
             $this->getDisplayTrain($spot->train),
             $this->getDisplayDate($spot->spot_date),
-            $this->getDisplayLocation($spot->location, $noHtml),
+            $this->getDisplayLocation($spot->location, $no_html),
             $this->getDisplayRoute($spot->route, $spot->position)
         );
     }
@@ -46,32 +46,36 @@ class SpotHelper implements RuntimeExtensionInterface
     private function getDisplayTrain(Train $train): string
     {
         if (null !== $train->name_pattern) {
-            return $train->name_pattern->name . ' ' . $train->number;
+            return $train->name_pattern->name.' '.$train->number;
         }
+        
         return $train->number;
     }
 
-    private function getDisplayDate(\DateTime $dateTime): string
+    private function getDisplayDate(\DateTime $date_time): string
     {
-        if ($dateTime->format(DateGenerics::DATE_FORMAT_DATABASE) === date(DateGenerics::DATE_FORMAT_DATABASE)) {
+        if ($date_time->format(DateGenerics::DATE_FORMAT_DATABASE) === date(DateGenerics::DATE_FORMAT_DATABASE)) {
             return $this->translator->trans('general.date.today');
         }
-        return $dateTime->format(DateGenerics::DATE_FORMAT);
+
+        return $date_time->format(DateGenerics::DATE_FORMAT);
     }
 
-    private function getDisplayLocation(Location $location, bool $noHtml): string
+    private function getDisplayLocation(Location $location, bool $no_html): string
     {
-        if ($noHtml) {
+        if ($no_html) {
             return $location->name;
         }
-        return '<span title="' . $location->description . '">' . $location->name . '</span>';
+
+        return '<span title="'.$location->description.'">'.$location->name.'</span>';
     }
 
     private function getDisplayRoute(Route $route, Position $position): string
     {
         if (\strlen($position->name) > 0) {
-            return $route->number . '(' . $position->name . ')';
+            return $route->number.'('.$position->name.')';
         }
+
         return $route->number;
     }
 }
