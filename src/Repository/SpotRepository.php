@@ -60,7 +60,7 @@ class SpotRepository extends ServiceEntityRepository
             ->join('s.train', 't')
             ->join('s.user', 'u')
             ->join('s.location', 'l')
-            ->leftJoin('t.namePattern', 'np')
+            ->leftJoin('t.name_pattern', 'np')
             ->leftJoin('s.extra', 'e')
             ->addOrderBy('s.timestamp', 'DESC');
 
@@ -277,7 +277,7 @@ class SpotRepository extends ServiceEntityRepository
             ->from(Route::class, 'r')
             ->join('r.spots', 's', Join::WITH, 's.timestamp >= :check_date')
             ->join('s.train', 't')
-            ->join('t.namePattern', 'n')
+            ->join('t.name_pattern', 'n')
             ->join('s.position', 'p')
             ->setParameter('check_date', $check_date)
             ->addGroupBy('r.id')

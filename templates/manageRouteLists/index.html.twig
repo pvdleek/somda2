@@ -4,8 +4,8 @@
     <div class="panel">
         <div class="panel-title">Beheer treinnummerlijst</div>
         <div class="panel-content">
-            <label for="trainTableYear">Selecteer het dienstregelings-jaar</label>
-            <select id="trainTableYear" name="trainTableYear">
+            <label for="train_table_year">Selecteer het dienstregelings-jaar</label>
+            <select id="train_table_year" name="train_table_year">
                 {% for train_table in train_table_years %}
                     <option {% if train_table.id == train_table_year.id %}selected="selected" {% endif %}value="{{ train_table.id }}">{{ train_table.name }}</option>
                 {% endfor %}
@@ -21,7 +21,7 @@
                         <th>Vervoerder</th>
                         <th>Karakteristiek</th>
                         <th>Traject</th>
-                        <th><a href="{{ path('manage_route_list', { 'year_id': trainTableYear.id, 'id': 0 }) }}">Voeg een serie toe</a></th>
+                        <th><a href="{{ path('manage_route_list', { 'year_id': train_table_year.id, 'id': 0 }) }}">Voeg een serie toe</a></th>
                     </tr>
                     {% for route_list in route_lists %}
                         <tr>
@@ -30,7 +30,7 @@
                             <td>{{ route_list.transporter.name }}</td>
                             <td>{{ route_list.characteristic.name }} ({{ route_list.characteristic.description }})</td>
                             <td>{{ route_list.section }}</td>
-                            <td><a href="{{ path('manage_route_list', { 'year_id': trainTableYear.id, 'id': route_list.id }) }}">Bewerk</a></td>
+                            <td><a href="{{ path('manage_route_list', { 'year_id': train_table_year.id, 'id': route_list.id }) }}">Bewerk</a></td>
                         </tr>
                     {% endfor %}
                 </table>
@@ -42,7 +42,7 @@
 {% block javascripts %}
     <script>
         function manageTrainTableYear() {
-            document.location = '{{ path('manage_route_lists_year', { 'id': 9999 }) }}'.replace('/9999/', '/' + $('#trainTableYear').val() + '/');
+            document.location = '{{ path('manage_route_lists_year', { 'id': 9999 }) }}'.replace('/9999/', '/' + $('#train_table_year').val() + '/');
         }
     </script>
 {% endblock %}

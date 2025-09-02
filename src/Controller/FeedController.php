@@ -11,6 +11,9 @@ use App\Repository\TrainTableRepository;
 use App\Repository\TrainTableYearRepository;
 use App\Traits\DateTrait;
 use Doctrine\Persistence\ManagerRegistry;
+use DoctrineExtensions\Query\Mysql\Binary;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -65,7 +68,12 @@ class FeedController
         $location = $this->doctrine->getRepository(Location::class)->findOneBy(['name' => $location_name]);
         if (null === $location) {
             $this->doText($image, 'Het opgegeven station '.$location_name.' is niet bekend in Somda');
-            return new Response(\imagepng($image), 200, ['Content-Type' => 'image/png']);
+
+            $temp_filename = (new Filesystem())->tempnam(\sys_get_temp_dir(), 'image_', '.png');
+            \imagepng($image, $temp_filename);
+            \imagedestroy($image);
+
+            return new BinaryFileResponse($temp_filename, 200, ['Content-Type' => 'image/png']);
         }
 
         if ($limit === 1) {
@@ -91,7 +99,11 @@ class FeedController
             $this->doText($image, $out);
         }
 
-        return new Response(\imagepng($image), 200, ['Content-Type' => 'image/png']);
+        $temp_filename = (new Filesystem())->tempnam(\sys_get_temp_dir(), 'image_', '.png');
+        \imagepng($image, $temp_filename);
+        \imagedestroy($image);
+
+        return new BinaryFileResponse($temp_filename, 200, ['Content-Type' => 'image/png']);
     }
 
     private function getColorAllocation(\GdImage $id, string $color): int

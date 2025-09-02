@@ -29,7 +29,7 @@ class TrainRepository extends ServiceEntityRepository
             ->addSelect('np.name AS name_pattern_name')
             ->from(TrainEntity::class, 't')
             ->join('t.transporter', 'tr')
-            ->leftJoin('t.namePattern', 'np')
+            ->leftJoin('t.name_pattern', 'np')
             ->addOrderBy('tr.name', 'ASC')
             ->addOrderBy('t.number', 'ASC');
         return $queryBuilder->getQuery()->getArrayResult();

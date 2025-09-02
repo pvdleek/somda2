@@ -17,19 +17,22 @@ use App\Repository\TrainTableYearRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Dompdf\Dompdf;
 use Dompdf\Options;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 class TrainTableController
 {
     public function __construct(
         private readonly ManagerRegistry $doctrine,
-        private readonly UserHelper $user_helper,
+        private readonly FlashHelper $flash_helper,
+        private readonly RedirectHelper $redirect_helper,
+        private readonly RoutesDisplayHelper $routes_display_helper,
         private readonly TemplateHelper $template_helper,
         private readonly TrainTableHelper $train_table_helper,
-        private readonly RoutesDisplayHelper $routes_display_helper,
-        private readonly RedirectHelper $redirect_helper,
-        private readonly FlashHelper $flash_helper,
+        private readonly UserHelper $user_helper,
         private readonly TrainTableYearRepository $train_table_year_repository,
     ) {
     }
@@ -125,7 +128,7 @@ class TrainTableController
         string $start_time,
         string $end_time,
         int $spotter_version,
-    ): RedirectResponse {
+    ): BinaryFileResponse {
         $this->user_helper->denyAccessUnlessGranted(RoleGenerics::ROLE_PASSING_ROUTES);
 
         $this->train_table_helper->setTrainTableYear($train_table_year_id);
@@ -150,18 +153,13 @@ class TrainTableController
 
         $dom_pdf = new Dompdf($pdf_options);
         $dom_pdf->loadHtml($html);
-
         $dom_pdf->setPaper('A4', 'landscape');
         $dom_pdf->render();
-        $dom_pdf->stream('doorkomststaat.pdf', ['attachment' => true]);
 
-        return $this->redirect_helper->redirectToRoute('passing_routes_search', [
-            'train_table_year_id' => $train_table_year_id,
-            'location_name' => $location_name,
-            'day_number' => $day_number,
-            'start_time' => $start_time,
-            'end_time' => $end_time,
-        ]);
+        $temp_filename = (new Filesystem())->tempnam(\sys_get_temp_dir(), 'doorkomststaat_', '.pdf');
+        \file_put_contents($temp_filename, $dom_pdf->output());
+
+        return (new BinaryFileResponse($temp_filename, Response::HTTP_OK))->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, 'doorkomststaat.pdf');
     }
 
     public function routeOverviewAction(?int $train_table_year_id = null, ?int $route_list_id = null): Response
@@ -181,12 +179,12 @@ class TrainTableController
 
     public function specialRoutesAction(?int $id = null): Response
     {
-        $specialRoute = null;
+        $special_route = null;
         if (null !== $id) {
-            $specialRoute = $this->doctrine->getRepository(SpecialRoute::class)->find($id);
+            $special_route = $this->doctrine->getRepository(SpecialRoute::class)->find($id);
         }
 
-        if (null === $specialRoute) {
+        if (null === $special_route) {
             $specialRoutes = $this->doctrine
                 ->getRepository(SpecialRoute::class)
                 ->findBy([], ['start_date' => 'DESC']);
@@ -197,8 +195,8 @@ class TrainTableController
         }
 
         return $this->template_helper->render('trainTable/specialRoute.html.twig', [
-            TemplateHelper::PARAMETER_PAGE_TITLE => 'Bijzondere rit ' . $specialRoute->title,
-            'specialRoute' => $specialRoute,
+            TemplateHelper::PARAMETER_PAGE_TITLE => 'Bijzondere rit '.$special_route->title,
+            'specialRoute' => $special_route,
         ]);
     }
 }
