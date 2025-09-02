@@ -29,12 +29,12 @@ class TemplateHelper
     public const PARAMETER_TRAIN_TABLE_INDEX_NUMBER = 'trainTableIndexNumber';
 
     public function __construct(
-        private readonly RequestStack $requestStack,
+        private readonly RequestStack $request_stack,
         private readonly ManagerRegistry $doctrine,
         private readonly LoggerInterface $logger,
         private readonly Environment $twig,
-        private readonly MenuHelper $menuHelper,
-        private readonly UserHelper $userHelper
+        private readonly MenuHelper $menu_helper,
+        private readonly UserHelper $user_helper,
     ) {
     }
 
@@ -60,16 +60,17 @@ class TemplateHelper
      */
     private function getCorrectView(string $view): string
     {
-        if ($this->userHelper->userIsLoggedIn()
-            && $this->userHelper->getPreferenceByKey(UserPreference::KEY_FORCE_DESKTOP)->value === '1'
+        if ($this->user_helper->userIsLoggedIn()
+            && '1' === $this->user_helper->getPreferenceByKey(UserPreference::KEY_FORCE_DESKTOP)->value
         ) {
             return $view;
         }
 
         $detect = new MobileDetect();
-        if ($detect->isMobile() && \file_exists(__DIR__ . '/../../templates/mobile/' . $view)) {
+        if ($detect->isMobile() && \file_exists(__DIR__.'/../../templates/mobile/'.$view)) {
             $view = 'mobile/' . $view;
         }
+
         return $view;
     }
 
@@ -83,19 +84,19 @@ class TemplateHelper
             ['location' => Banner::LOCATION_HEADER, 'active' => true]
         );
         if (\count($banners) > 0) {
-            $headerType = 'banner';
-            $headerContent = $banners[random_int(0, count($banners) - 1)];
+            $header_type = 'banner';
+            $header_content = $banners[\random_int(0, \count($banners) - 1)];
 
             // Create a view for this banner
-            $bannerView = new BannerView();
-            $bannerView->banner = $headerContent;
-            $bannerView->timestamp = new \DateTime();
-            $bannerView->ip_address = \ip2long($this->requestStack->getCurrentRequest()->getClientIp());
-            $this->doctrine->getManager()->persist($bannerView);
+            $banner_view = new BannerView();
+            $banner_view->banner = $header_content;
+            $banner_view->timestamp = new \DateTime();
+            $banner_view->ip_address = \ip2long($this->request_stack->getCurrentRequest()->getClientIp());
+            $this->doctrine->getManager()->persist($banner_view);
             $this->doctrine->getManager()->flush();
         } else {
-            $headerType = 'news';
-            $headerContent = $this->doctrine->getRepository(RailNews::class)->findBy(
+            $header_type = 'news';
+            $header_content = $this->doctrine->getRepository(RailNews::class)->findBy(
                 ['active' => true, 'approved' => true],
                 [RailNewsForm::FIELD_TIMESTAMP => 'DESC'],
                 3
@@ -103,11 +104,11 @@ class TemplateHelper
         }
 
         return \array_merge($viewParameters, [
-            'design_number' => $this->userHelper->getPreferenceByKey(UserPreference::KEY_HOME_DESIGN, true)?->value,
-            'headerType' =>  $headerType,
-            'headerContent' => $headerContent,
-            'menuStructure' => $this->menuHelper->getMenuStructure(),
-            'nrOfOpenForumAlerts' => $this->menuHelper->getNumberOfOpenForumAlerts(),
+            'design_number' => $this->user_helper->getPreferenceByKey(UserPreference::KEY_HOME_DESIGN, true)?->value,
+            'headerType' => $header_type,
+            'headerContent' => $header_content,
+            'menuStructure' => $this->menu_helper->getMenuStructure(),
+            'nrOfOpenForumAlerts' => $this->menu_helper->getNumberOfOpenForumAlerts(),
             'block_help' => $this->getBlockHelp(),
         ]);
     }
@@ -118,7 +119,7 @@ class TemplateHelper
          * @var Block $block
          */
         $block = $this->doctrine->getRepository(Block::class)->findOneBy(
-            ['route' => $this->requestStack->getCurrentRequest()->get('_route')]
+            ['route' => $this->request_stack->getCurrentRequest()->get('_route')]
         );
         if (null !== $block && null !== $block->block_help) {
             return $block->block_help;

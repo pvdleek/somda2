@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Traits;
@@ -16,24 +17,24 @@ trait DateTrait
             $time = \substr($time, 0, 2) . '.' . \substr($time, 2, 2);
         }
 
-        $timePart = \explode('.', $time);
-        $returnTime = (int) $timePart[0] * 60 + (int) $timePart[1] - 120;
-        if ($returnTime < 0) {
-            return $returnTime + 1440;
+        $time_part = \explode('.', $time);
+        $return_time = (int) $time_part[0] * 60 + (int) $time_part[1] - 120;
+        if ($return_time < 0) {
+            return $return_time + 1440;
         }
-        return $returnTime;
+        return $return_time;
     }
 
-    public function timeDatabaseToDisplay(int $databaseTime): string
+    public function timeDatabaseToDisplay(int $database_time): string
     {
         // Convert the given database time (minutes after 2.00) to a display time
-        $databaseTime += 120;
-        if ($databaseTime >= 1440) {
-            $databaseTime -= 1440;
+        $database_time += 120;
+        if ($database_time >= 1440) {
+            $database_time -= 1440;
         }
 
-        $hours = \floor($databaseTime / 60);
-        $minutes = \floor($databaseTime - ($hours * 60));
+        $hours = \floor($database_time / 60);
+        $minutes = \floor($database_time - ($hours * 60));
         return ($hours <= 9 ? '0' : '') . $hours . ':' . ($minutes <= 9 ? '0' : '') . $minutes;
     }
 

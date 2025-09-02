@@ -18,38 +18,38 @@ use Symfony\Component\HttpFoundation\Response;
 class SomdaController
 {
     public function __construct(
-        private readonly UserHelper $userHelper,
-        private readonly FormHelper $formHelper,
-        private readonly TemplateHelper $templateHelper,
-        private readonly EmailHelper $emailHelper,
+        private readonly EmailHelper $email_helper,
+        private readonly FormHelper $form_helper,
+        private readonly TemplateHelper $template_helper,
+        private readonly UserHelper $user_helper,
     ) {
     }
 
     public function aboutAction(): Response
     {
-        return $this->templateHelper->render('somda/about.html.twig', [
+        return $this->template_helper->render('somda/about.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Over Somda',
         ]);
     }
 
     public function advertiseAction(): Response
     {
-        return $this->templateHelper->render('somda/advertise.html.twig', [
+        return $this->template_helper->render('somda/advertise.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Adverteren op Somda',
         ]);
     }
 
     public function disclaimerAction(): Response
     {
-        return $this->templateHelper->render('somda/disclaimer.html.twig', [
+        return $this->template_helper->render('somda/disclaimer.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Somda disclaimer',
         ]);
     }
 
     public function contactAction(Request $request): Response|RedirectResponse
     {
-        $form = $this->formHelper->getFactory()->create(Contact::class);
-        if (!$this->userHelper->userIsLoggedIn()) {
+        $form = $this->form_helper->getFactory()->create(Contact::class);
+        if (!$this->user_helper->userIsLoggedIn()) {
             $form->add(Contact::FIELD_EMAIL, TextType::class, [
                 FormGenerics::KEY_LABEL => 'Jouw e-mailadres',
                 FormGenerics::KEY_REQUIRED => true,
@@ -58,22 +58,22 @@ class SomdaController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->emailHelper->sendEmail(
-                $this->userHelper->getAdministratorUser(),
+            $this->email_helper->sendEmail(
+                $this->user_helper->getAdministratorUser(),
                 '[Somda-feedback] ' . $form->get('subject')->getData(),
                 'contact',
                 [
                     'text' => $form->get('text')->getData(),
-                    'user' => $this->userHelper->getUser(),
+                    'user' => $this->user_helper->getUser(),
                     'emailAddress' => $form->has(Contact::FIELD_EMAIL) ?
                         $form->get(Contact::FIELD_EMAIL)->getData() : null,
                 ]
             );
 
-            return $this->formHelper->finishFormHandling('Je bericht is naar de beheerder verzonden', 'home');
+            return $this->form_helper->finishFormHandling('Je bericht is naar de beheerder verzonden', 'home');
         }
 
-        return $this->templateHelper->render('somda/contact.html.twig', [
+        return $this->template_helper->render('somda/contact.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Contact opnemen',
             TemplateHelper::PARAMETER_FORM => $form->createView(),
         ]);

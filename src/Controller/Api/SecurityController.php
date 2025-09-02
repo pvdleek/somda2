@@ -9,7 +9,6 @@ use App\Generics\RoleGenerics;
 use App\Helpers\UserHelper;
 use Doctrine\Persistence\ManagerRegistry;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
-use Monolog\Level;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Psr\Log\LoggerInterface;
 use OpenApi\Annotations as OA;
@@ -20,8 +19,8 @@ class SecurityController extends AbstractFOSRestController
 {
     public function __construct(
         private readonly ManagerRegistry $doctrine,
-        private readonly UserHelper $userHelper,
         private readonly LoggerInterface $logger,
+        private readonly UserHelper $user_helper,
     ) {
     }
 
@@ -57,8 +56,8 @@ class SecurityController extends AbstractFOSRestController
     public function loginAction(Request $request): Response
     {
         // If we reach this point, the user was successfully logged in, so we look the user up and return it
-        $userInformation = (array) \json_decode($request->getContent(), true);
-        $user = $this->doctrine->getRepository(User::class)->findOneBy(['username' => $userInformation['username']]);
+        $user_information = (array) \json_decode($request->getContent(), true);
+        $user = $this->doctrine->getRepository(User::class)->findOneBy(['username' => $user_information['username']]);
 
         return $this->handleView($this->view(['data' => $user], 200));
     }
@@ -82,7 +81,7 @@ class SecurityController extends AbstractFOSRestController
      */
     public function verifyAction(int $id, string $token): Response
     {
-        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_API_USER);
+        $this->user_helper->denyAccessUnlessGranted(RoleGenerics::ROLE_API_USER);
 
         $user = $this->doctrine->getRepository(User::class)->findOneBy(
             ['id' => $id, 'active' => true, 'api_token' => $token]

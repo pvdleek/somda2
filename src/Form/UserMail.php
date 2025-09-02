@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Form;
 
 use App\Generics\FormGenerics;
@@ -14,17 +16,17 @@ class UserMail extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $senderChoices = [
+        $sender_choices = [
             'Verstuur de e-mail met mijn e-mailadres als afzender' => 'direct',
             'Verstuur de e-mail anoniem' => 'anonymous',
         ];
         if ($options['isModerator']) {
-            $senderChoices['Verstuur de e-mail als moderator'] = 'moderator';
+            $sender_choices['Verstuur de e-mail als moderator'] = 'moderator';
         }
 
         $builder
             ->add('senderOption', ChoiceType::class, [
-                FormGenerics::KEY_CHOICES => $senderChoices,
+                FormGenerics::KEY_CHOICES => $sender_choices,
                 FormGenerics::KEY_DATA => 'direct',
                 FormGenerics::KEY_LABEL => 'Kies de afzender',
                 FormGenerics::KEY_REQUIRED => true,

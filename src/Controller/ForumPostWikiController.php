@@ -15,13 +15,13 @@ class ForumPostWikiController
 {
     public function __construct(
         private readonly ManagerRegistry $doctrine,
-        private readonly UserHelper $userHelper,
+        private readonly UserHelper $user_helper,
     ) {
     }
 
     public function checkAction(int $id, string $operation): JsonResponse
     {
-        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_ADMIN_WIKI);
+        $this->user_helper->denyAccessUnlessGranted(RoleGenerics::ROLE_ADMIN_WIKI);
 
         /**
          * @var ForumPost $post
@@ -31,8 +31,8 @@ class ForumPostWikiController
             throw new AccessDeniedException('This post does not exist');
         }
 
-        $post->wiki_check = $operation === 'ok' ? ForumPost::WIKI_CHECK_OK : ForumPost::WIKI_CHECK_N_A;
-        $post->wiki_checker = $this->userHelper->getUser();
+        $post->wiki_check = 'ok' === $operation ? ForumPost::WIKI_CHECK_OK : ForumPost::WIKI_CHECK_N_A;
+        $post->wiki_checker = $this->user_helper->getUser();
         $this->doctrine->getManager()->flush();
 
         return new JsonResponse();

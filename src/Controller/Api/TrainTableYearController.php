@@ -17,7 +17,7 @@ class TrainTableYearController extends AbstractFOSRestController
 {
     public function __construct(
         private readonly ManagerRegistry $doctrine,
-        private readonly UserHelper $userHelper,
+        private readonly UserHelper $user_helper,
     ) {
     }
 
@@ -33,9 +33,10 @@ class TrainTableYearController extends AbstractFOSRestController
      */
     public function indexAction(): Response
     {
-        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_API_USER);
+        $this->user_helper->denyAccessUnlessGranted(RoleGenerics::ROLE_API_USER);
 
         $train_table_years = $this->doctrine->getRepository(TrainTableYear::class)->findAll();
+
         return $this->handleView($this->view($train_table_years, 200));
     }
 }

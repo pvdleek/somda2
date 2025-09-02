@@ -14,8 +14,8 @@ class ForumOverviewHelper
 
     public function __construct(
         private readonly ManagerRegistry $doctrine,
-        private readonly UserHelper $userHelper,
-        private readonly ForumAuthorizationHelper $forumAuthHelper,
+        private readonly ForumAuthorizationHelper $forum_authorization_helper,
+        private readonly UserHelper $user_helper,
     ) {
     }
 
@@ -27,7 +27,7 @@ class ForumOverviewHelper
         $forum_forum_repository = $this->doctrine->getRepository(ForumForum::class);
 
         $categories = [];
-        $forums = $forum_forum_repository->findAllAndGetArray($this->userHelper->userIsLoggedIn() ? $this->userHelper->getUser()->id : null);
+        $forums = $forum_forum_repository->findAllAndGetArray($this->user_helper->userIsLoggedIn() ? $this->user_helper->getUser()->id : null);
         foreach ($forums as $forum) {
             if (!isset($categories[$forum['categoryId']])) {
                 $categories[$forum['categoryId']] = [
@@ -39,7 +39,7 @@ class ForumOverviewHelper
             }
 
             $unread_discussions = 0;
-            if ($this->userHelper->userIsLoggedIn()) {
+            if ($this->user_helper->userIsLoggedIn()) {
                 if ((int) $forum['type'] === ForumForum::TYPE_MODERATORS_ONLY
                     && (bool) $forum['userIsModerator'] !== true
                 ) {
@@ -48,7 +48,7 @@ class ForumOverviewHelper
                 }
 
                 if ((int) $forum['type'] !== ForumForum::TYPE_ARCHIVE && (int) $forum['type'] !== ForumForum::TYPE_MODERATORS_ONLY) {
-                    $unread_discussions = $forum_forum_repository->getNumberOfUnreadDiscussionsInForum((int) $forum['id'], $this->userHelper->getUser());
+                    $unread_discussions = $forum_forum_repository->getNumberOfUnreadDiscussionsInForum((int) $forum['id'], $this->user_helper->getUser());
                 }
             } elseif ((int) $forum['type'] === ForumForum::TYPE_MODERATORS_ONLY) {
                 // Guest is not allowed to view this category

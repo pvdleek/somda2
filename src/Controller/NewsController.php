@@ -18,8 +18,8 @@ class NewsController
 {
     public function __construct(
         private readonly ManagerRegistry $doctrine,
-        private readonly UserHelper $userHelper,
-        private readonly TemplateHelper $templateHelper,
+        private readonly TemplateHelper $template_helper,
+        private readonly UserHelper $user_helper,
     ) {
     }
 
@@ -34,12 +34,12 @@ class NewsController
                 throw new AccessDeniedException('This news-item does not exist');
             }
 
-            if ($this->userHelper->userIsLoggedIn() && !in_array($this->userHelper->getUser(), $news->getUserReads())) {
-                $news->addUserRead($this->userHelper->getUser());
+            if ($this->user_helper->userIsLoggedIn() && !in_array($this->user_helper->getUser(), $news->getUserReads())) {
+                $news->addUserRead($this->user_helper->getUser());
             }
             $this->doctrine->getManager()->flush();
 
-            return $this->templateHelper->render('news/item.html.twig', [
+            return $this->template_helper->render('news/item.html.twig', [
                 TemplateHelper::PARAMETER_PAGE_TITLE => $news->title,
                 'news' => $news,
             ]);
@@ -49,7 +49,8 @@ class NewsController
          * @var News[] $news
          */
         $news = $this->doctrine->getRepository(News::class)->findBy([], [NewsForm::FIELD_TIMESTAMP => 'DESC']);
-        return $this->templateHelper->render('news/index.html.twig', [
+
+        return $this->template_helper->render('news/index.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Nieuws',
             'news' => $news,
         ]);
@@ -65,7 +66,8 @@ class NewsController
             [RailNewsForm::FIELD_TIMESTAMP => 'DESC'],
             250
         );
-        return $this->templateHelper->render('news/railNews.html.twig', [
+        
+        return $this->template_helper->render('news/railNews.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Spoornieuws',
             'news' => $news,
         ]);

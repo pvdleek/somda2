@@ -13,8 +13,8 @@ class ForumHelper implements RuntimeExtensionInterface
 
     public function __construct(
         private readonly TranslatorInterface $translator,
-        private readonly UserHelper $userHelper,
-        private readonly StaticDataHelper $staticDataHelper,
+        private readonly StaticDataHelper $static_data_helper,
+        private readonly UserHelper $user_helper,
     ) {
     }
 
@@ -39,7 +39,7 @@ class ForumHelper implements RuntimeExtensionInterface
                 ' op ' . $post->edit_timestamp->format('d-m-Y H:i').
                 (\strlen($post->edit_reason ?? '') > 0 ? ', reden: ' . $post->edit_reason : '') . '</span></i>';
         }
-        if ($post->signature_on && strlen($signature = $this->userHelper->getSignatureForUser($post->author)) > 0) {
+        if ($post->signature_on && strlen($signature = $this->user_helper->getSignatureForUser($post->author)) > 0) {
             $text .= '<br /><br /><hr style="margin-left:0; width:15%;" />' . $signature;
         }
 
@@ -136,12 +136,12 @@ class ForumHelper implements RuntimeExtensionInterface
      */
     private function replaceStaticData(string $text): string
     {
-        $locations = $this->staticDataHelper->getLocations();
-        $users = $this->staticDataHelper->getUsers();
-        $routes = $this->staticDataHelper->getRoutes();
+        $locations = $this->static_data_helper->getLocations();
+        $users = $this->static_data_helper->getUsers();
+        $routes = $this->static_data_helper->getRoutes();
 
-        $textChunks = \array_unique(\array_diff(\str_word_count(\strip_tags($text), 2, '@0123456789'), ['nbsp']));
-        foreach ($textChunks as $chunk) {
+        $text_chunks = \array_unique(\array_diff(\str_word_count(\strip_tags($text), 2, '@0123456789'), ['nbsp']));
+        foreach ($text_chunks as $chunk) {
             $word = \trim($chunk);
             if (isset($locations[$word])) {
                 $text = \preg_replace(
@@ -152,7 +152,7 @@ class ForumHelper implements RuntimeExtensionInterface
                 );
             }
         }
-        foreach ($textChunks as $chunk) {
+        foreach ($text_chunks as $chunk) {
             $word = \trim($chunk);
             if (isset($users[$word])) {
                 $text = \preg_replace(

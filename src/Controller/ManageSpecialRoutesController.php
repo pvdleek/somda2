@@ -17,19 +17,19 @@ use Symfony\Component\HttpFoundation\Response;
 class ManageSpecialRoutesController
 {
     public function __construct(
-        private readonly UserHelper $userHelper,
-        private readonly FormHelper $formHelper,
-        private readonly TemplateHelper $templateHelper,
+        private readonly UserHelper $user_helper,
+        private readonly FormHelper $form_helper,
+        private readonly TemplateHelper $template_helper,
     ) {
     }
 
     public function indexAction(): Response
     {
-        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_ADMIN_SPECIAL_ROUTES);
+        $this->user_helper->denyAccessUnlessGranted(RoleGenerics::ROLE_ADMIN_SPECIAL_ROUTES);
 
-        return $this->templateHelper->render('manageSpecialRoutes/index.html.twig', [
+        return $this->template_helper->render('manageSpecialRoutes/index.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Beheer bijzondere ritten',
-            'specialRoutes' => $this->formHelper
+            'specialRoutes' => $this->form_helper
                 ->getDoctrine()
                 ->getRepository(SpecialRoute::class)
                 ->findBy([], ['start_date' => 'DESC']),
@@ -41,28 +41,28 @@ class ManageSpecialRoutesController
      */
     public function editAction(Request $request, int $id): Response|RedirectResponse
     {
-        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_ADMIN_SPECIAL_ROUTES);
+        $this->user_helper->denyAccessUnlessGranted(RoleGenerics::ROLE_ADMIN_SPECIAL_ROUTES);
 
-        $specialRoute = $this->formHelper->getDoctrine()->getRepository(SpecialRoute::class)->find($id);
-        if (null === $specialRoute) {
-            $specialRoute = new SpecialRoute();
-            $specialRoute->start_date = new \DateTime('+1 day');
-            $specialRoute->publication_timestamp = new \DateTime();
+        $special_route = $this->form_helper->getDoctrine()->getRepository(SpecialRoute::class)->find($id);
+        if (null === $special_route) {
+            $special_route = new SpecialRoute();
+            $special_route->start_date = new \DateTime('+1 day');
+            $special_route->publication_timestamp = new \DateTime();
         }
-        $form = $this->formHelper->getFactory()->create(SpecialRouteForm::class, $specialRoute);
+        $form = $this->form_helper->getFactory()->create(SpecialRouteForm::class, $special_route);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            if (null === $specialRoute->id) {
-                $this->formHelper->getDoctrine()->getManager()->persist($specialRoute);
-                return $this->formHelper->finishFormHandling('Rit toegevoegd', 'manage_special_routes');
+            if (null === $special_route->id) {
+                $this->form_helper->getDoctrine()->getManager()->persist($special_route);
+                return $this->form_helper->finishFormHandling('Rit toegevoegd', 'manage_special_routes');
             }
-            return $this->formHelper->finishFormHandling('Rit bijgewerkt', 'manage_special_routes');
+            return $this->form_helper->finishFormHandling('Rit bijgewerkt', 'manage_special_routes');
         }
 
-        return $this->templateHelper->render('manageSpecialRoutes/item.html.twig', [
+        return $this->template_helper->render('manageSpecialRoutes/item.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Beheer bijzondere rit',
-            'specialRoute' => $specialRoute,
+            'specialRoute' => $special_route,
             TemplateHelper::PARAMETER_FORM => $form->createView(),
         ]);
     }

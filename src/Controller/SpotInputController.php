@@ -19,10 +19,10 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 class SpotInputController
 {
     public function __construct(
-        private readonly FormHelper $formHelper,
-        private readonly TemplateHelper $templateHelper,
-        private readonly UserHelper $userHelper,
-        private readonly SpotInputHelper $spotInputHelper,
+        private readonly FormHelper $form_helper,
+        private readonly SpotInputHelper $spot_input_helper,
+        private readonly TemplateHelper $template_helper,
+        private readonly UserHelper $user_helper,
     ) {
     }
 
@@ -31,36 +31,36 @@ class SpotInputController
      */
     public function indexAction(Request $request): Response|RedirectResponse
     {
-        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_SPOTS_NEW);
+        $this->user_helper->denyAccessUnlessGranted(RoleGenerics::ROLE_SPOTS_NEW);
 
-        $form = $this->formHelper->getFactory()->create(
+        $form = $this->form_helper->getFactory()->create(
             SpotBulk::class,
             null,
-            ['defaultLocation' => $this->userHelper->getDefaultLocation()]
+            ['defaultLocation' => $this->user_helper->getDefaultLocation()]
         );
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $spotLines = \array_filter(\preg_split('/$\R?^/m', $form->get('spots')->getData()));
-            $spotIdArray = $this->spotInputHelper->processSpotLines(
-                $spotLines,
-                $this->userHelper->getUser(),
+            $spot_lines = \array_filter(\preg_split('/$\R?^/m', $form->get('spots')->getData()));
+            $spot_id_array = $this->spot_input_helper->processSpotLines(
+                $spot_lines,
+                $this->user_helper->getUser(),
                 $form->get('date')->getData(),
                 $form->get('location')->getData()
             );
 
-            if (\count($spotIdArray) > 0) {
-                return $this->formHelper->finishFormHandling(
+            if (\count($spot_id_array) > 0) {
+                return $this->form_helper->finishFormHandling(
                     'Spot(s) opgeslagen',
                     'spot_input_feedback',
-                    ['id_list' => \implode('/', $spotIdArray)]
+                    ['id_list' => \implode('/', $spot_id_array)]
                 );
             }
 
-            return $this->formHelper->finishFormHandling('Er konden geen spots worden opgeslagen', 'spot_input');
+            return $this->form_helper->finishFormHandling('Er konden geen spots worden opgeslagen', 'spot_input');
         }
 
-        return $this->templateHelper->render('spots/input.html.twig', [
+        return $this->template_helper->render('spots/input.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Spots invoeren',
             TemplateHelper::PARAMETER_FORM => $form->createView(),
         ]);
@@ -68,20 +68,19 @@ class SpotInputController
 
     public function feedbackAction(string $id_list): Response
     {
-        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_SPOTS_NEW);
+        $this->user_helper->denyAccessUnlessGranted(RoleGenerics::ROLE_SPOTS_NEW);
 
-        $idArray = \array_filter(\explode('/', $id_list));
         $spots = [];
-        foreach ($idArray as $id) {
-            $spot = $this->formHelper->getDoctrine()->getRepository(Spot::class)->find($id);
-            if (null === $spot || $spot->user !== $this->userHelper->getUser()) {
+        foreach (\array_filter(\explode('/', $id_list)) as $id) {
+            $spot = $this->form_helper->getDoctrine()->getRepository(Spot::class)->find($id);
+            if (null === $spot || $spot->user !== $this->user_helper->getUser()) {
                 throw new AccessDeniedException('This spot does not exist or does not belong to the user');
             }
 
             $spots[] = $spot;
         }
 
-        return $this->templateHelper->render('spots/feedback.html.twig', [
+        return $this->template_helper->render('spots/feedback.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Jouw ingevoerde spots',
             'spots' => $spots,
         ]);

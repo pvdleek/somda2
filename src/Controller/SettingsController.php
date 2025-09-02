@@ -17,9 +17,9 @@ use Symfony\Component\HttpFoundation\Response;
 class SettingsController
 {
     public function __construct(
-        private readonly FormHelper $formHelper,
-        private readonly UserHelper $userHelper,
-        private readonly TemplateHelper $templateHelper,
+        private readonly FormHelper $form_helper,
+        private readonly UserHelper $user_helper,
+        private readonly TemplateHelper $template_helper,
     ) {
     }
 
@@ -28,26 +28,23 @@ class SettingsController
      */
     public function indexAction(Request $request): Response|RedirectResponse
     {
-        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_USER);
+        $this->user_helper->denyAccessUnlessGranted(RoleGenerics::ROLE_USER);
 
         /**
-         * @var UserPreference[] $allSettings
+         * @var UserPreference[] $all_settings
          */
-        $allSettings = $this->formHelper
-            ->getDoctrine()
-            ->getRepository(UserPreference::class)
-            ->findBy([], ['order' => 'ASC']);
-        $form = $this->formHelper->getFactory()->create(
+        $all_settings = $this->form_helper->getDoctrine()->getRepository(UserPreference::class)->findBy([], ['order' => 'ASC']);
+        $form = $this->form_helper->getFactory()->create(
             UserPreferences::class,
-            $this->userHelper->getUser(),
-            ['userHelper' => $this->userHelper, 'allSettings' => $allSettings]
+            $this->user_helper->getUser(),
+            ['user_helper' => $this->user_helper, 'all_settings' => $all_settings]
         );
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            foreach ($allSettings as $setting) {
+            foreach ($all_settings as $setting) {
                 if ($setting->order > 0) {
-                    $userPreference = $this->userHelper->getPreferenceByKey($setting->key);
+                    $userPreference = $this->user_helper->getPreferenceByKey($setting->key);
                     if (\is_object($form->get($setting->key)->getData())) {
                         $userPreference->value = (string) $form->get($setting->key)->getData()->name;
                     } else {
@@ -56,10 +53,10 @@ class SettingsController
                 }
             }
 
-            return $this->formHelper->finishFormHandling('Je instellingen zijn opgeslagen', 'settings');
+            return $this->form_helper->finishFormHandling('Je instellingen zijn opgeslagen', 'settings');
         }
 
-        return $this->templateHelper->render('settings/index.html.twig', [
+        return $this->template_helper->render('settings/index.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Instellingen',
             TemplateHelper::PARAMETER_FORM => $form->createView(),
         ]);

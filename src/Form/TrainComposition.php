@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Form;
 
 use App\Entity\TrainComposition as TrainCompositionEntity;
@@ -19,15 +21,15 @@ class TrainComposition extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         /**
-         * @var TrainCompositionEntity $trainComposition
+         * @var TrainCompositionEntity $train_composition
          */
-        $trainComposition = $options['data'];
+        $train_composition = $options['data'];
 
         for ($car = 1; $car <= TrainCompositionEntity::NUMBER_OF_CARS; ++$car) {
-            if (null !== $trainComposition->getType()->getCar($car)) {
+            if (null !== $train_composition->getType()->getCar($car)) {
                 $builder->add('car' . $car, TextType::class, [
                     FormGenerics::KEY_ATTRIBUTES => [FormGenerics::KEY_ATTRIBUTES_MAX_LENGTH => 15],
-                    FormGenerics::KEY_LABEL => $trainComposition->getType()->getCar($car),
+                    FormGenerics::KEY_LABEL => $train_composition->getType()->getCar($car),
                     FormGenerics::KEY_REQUIRED => false,
                 ]);
             }

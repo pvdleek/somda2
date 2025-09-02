@@ -14,7 +14,7 @@ class HomeLayoutController
 {
     public function __construct(
         private readonly ManagerRegistry $doctrine,
-        private readonly UserHelper $userHelper,
+        private readonly UserHelper $user_helper,
     ) {
     }
 
@@ -23,9 +23,9 @@ class HomeLayoutController
      */
     public function updateAction(string $layout): JsonResponse
     {
-        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_USER);
+        $this->user_helper->denyAccessUnlessGranted(RoleGenerics::ROLE_USER);
 
-        $userPreference = $this->userHelper->getPreferenceByKey(UserPreference::KEY_HOME_LAYOUT);
+        $userPreference = $this->user_helper->getPreferenceByKey(UserPreference::KEY_HOME_LAYOUT);
         $userPreference->value = $layout;
         $this->doctrine->getManager()->flush();
 

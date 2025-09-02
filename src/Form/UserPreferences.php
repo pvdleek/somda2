@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Form;
 
 use App\Entity\Location;
@@ -32,24 +34,24 @@ class UserPreferences extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         /**
-         * @var UserPreference[] $allSettings
+         * @var UserPreference[] $all_settings
          */
-        $allSettings = $options['allSettings'];
+        $all_settings = $options['all_settings'];
         /**
-         * @var UserHelper $userHelper
+         * @var UserHelper $user_helper
          */
-        $userHelper = $options['userHelper'];
+        $user_helper = $options['user_helper'];
 
-        foreach ($allSettings as $setting) {
+        foreach ($all_settings as $setting) {
             if ($setting->order > 0) {
-                $value = $userHelper->getPreferenceByKey($setting->key)->value;
-                $typePart = explode('|', $setting->type);
-                switch ($typePart[0]) {
+                $value = $user_helper->getPreferenceByKey($setting->key)->value;
+                $type_part = \explode('|', $setting->type);
+                switch ($type_part[0]) {
                     case 'number':
                         $builder->add($setting->key, ChoiceType::class, [
                             FormGenerics::KEY_CHOICES => \array_combine(
-                                \range(1, (int) $typePart[1]),
-                                \range(1, (int) $typePart[1])
+                                \range(1, (int) $type_part[1]),
+                                \range(1, (int) $type_part[1])
                             ),
                             FormGenerics::KEY_DATA => (int) $value,
                             FormGenerics::KEY_LABEL => $setting->description,
@@ -74,17 +76,17 @@ class UserPreferences extends AbstractType
                         ]);
                         break;
                     case 'table':
-                        if ($typePart[1] !== 'location') {
+                        if ($type_part[1] !== 'location') {
                             throw new UnknownUserPreferenceTable(
-                                'Unknown setting table ' . $typePart[1] . ' for key ' . $setting->key
+                                'Unknown setting table '.$type_part[1].' for key '.$setting->key
                             );
                         }
 
                         $builder->add($setting->key, EntityType::class, [
                             FormGenerics::KEY_CHOICE_LABEL => function (Location $location) {
-                                return $location->name . ' - ' . $location->description;
+                                return $location->name.' - '.$location->description;
                             },
-                            FormGenerics::KEY_CHOICE_VALUE => $typePart[2],
+                            FormGenerics::KEY_CHOICE_VALUE => $type_part[2],
                             FormGenerics::KEY_CLASS => Location::class,
                             FormGenerics::KEY_DATA => $this->doctrine->getRepository(Location::class)->findOneBy(
                                 ['name' => $value]
@@ -102,7 +104,7 @@ class UserPreferences extends AbstractType
                         break;
                     default:
                         throw new UnknownUserPreferenceType(
-                            'Unknown setting type ' . $typePart[0] . ' for key ' . $setting->key
+                            'Unknown setting type '.$type_part[0].' for key '.$setting->key
                         );
                 }
             }
@@ -113,8 +115,8 @@ class UserPreferences extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => UserEntity::class,
-            'allSettings' => [],
-            'userHelper' => null,
+            'all_settings' => [],
+            'user_helper' => null,
         ]);
     }
 }

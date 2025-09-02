@@ -28,10 +28,10 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 class SecurityController
 {
     public function __construct(
-        private readonly FormHelper $formHelper,
-        private readonly UserHelper $userHelper,
-        private readonly TemplateHelper $templateHelper,
-        private readonly EmailHelper $emailHelper,
+        private readonly EmailHelper $email_helper,
+        private readonly FormHelper $form_helper,
+        private readonly TemplateHelper $template_helper,
+        private readonly UserHelper $user_helper,
     ) {
     }
 
@@ -40,15 +40,15 @@ class SecurityController
      */
     public function loginAction(AuthenticationUtils $authenticationUtils, ?string $username = null): Response
     {
-        if ($this->userHelper->userIsLoggedIn()) {
-            return $this->formHelper->getRedirectHelper()->redirectToRoute('home');
+        if ($this->user_helper->userIsLoggedIn()) {
+            return $this->form_helper->getRedirectHelper()->redirectToRoute('home');
         }
 
-        return $this->templateHelper->render('security/login.html.twig', [
+        return $this->template_helper->render('security/login.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Inloggen of account maken bij Somda',
             'lastUsername' => null === $username ? $authenticationUtils->getLastUsername() : $username,
             'error' => $authenticationUtils->getLastAuthenticationError(),
-            'register_form' => $this->formHelper->getFactory()->create(UserForm::class, new User())->createView(),
+            'register_form' => $this->form_helper->getFactory()->create(UserForm::class, new User())->createView(),
             'view' => 'login',
         ]);
     }
@@ -59,7 +59,7 @@ class SecurityController
     public function registerAction(Request $request): Response|RedirectResponse
     {
         $user = new User();
-        $form = $this->formHelper->getFactory()->create(UserForm::class, $user);
+        $form = $this->form_helper->getFactory()->create(UserForm::class, $user);
 
         $form->handleRequest($request);
         if ($form->isSubmitted()) {
@@ -75,38 +75,38 @@ class SecurityController
                 );
                 $user->activation_key = \uniqid();
                 $user->register_timestamp = new \DateTime();
-                $this->formHelper->getDoctrine()->getManager()->persist($user);
+                $this->form_helper->getDoctrine()->getManager()->persist($user);
 
                 $userInfo = new UserInfo();
                 $userInfo->user = $user;
-                $this->formHelper->getDoctrine()->getManager()->persist($userInfo);
+                $this->form_helper->getDoctrine()->getManager()->persist($userInfo);
 
                 $user->info = $userInfo;
 
-                $this->formHelper->getDoctrine()->getManager()->flush();
+                $this->form_helper->getDoctrine()->getManager()->flush();
 
-                if ($this->emailHelper->sendEmail(
+                if ($this->email_helper->sendEmail(
                     $user,
                     'Jouw registratie bij Somda',
                     'register',
                     ['user_id' => $user->id, 'activationKey' => $user->activation_key]
                 )) {
-                    $this->formHelper->getFlashHelper()->add(
+                    $this->form_helper->getFlashHelper()->add(
                         FlashHelper::FLASH_TYPE_INFORMATION,
                         'Je registratie is geslaagd! Er is een e-mail gestuurd met daarin een link en een ' .
                         'activatiecode. Je kunt op de link klikken of de code op onderstaand scherm invoeren ' .
                         'om jouw account direct actief te maken.'
                     );
 
-                    return $this->formHelper->getRedirectHelper()->redirectToRoute(
+                    return $this->form_helper->getRedirectHelper()->redirectToRoute(
                         'activate',
                         ['id' => $user->id]
                     );
                 } else {
-                    $this->formHelper->getDoctrine()->getManager()->remove($user);
-                    $this->formHelper->getDoctrine()->getManager()->flush();
+                    $this->form_helper->getDoctrine()->getManager()->remove($user);
+                    $this->form_helper->getDoctrine()->getManager()->flush();
 
-                    $this->formHelper->getFlashHelper()->add(
+                    $this->form_helper->getFlashHelper()->add(
                         FlashHelper::FLASH_TYPE_ERROR,
                         'Het is niet gelukt een e-mail naar het door jou opgegeven e-mailadres te sturen, ' .
                         'controleer het e-mailadres.'
@@ -115,7 +115,7 @@ class SecurityController
             }
         }
 
-        return $this->templateHelper->render('security/login.html.twig', [
+        return $this->template_helper->render('security/login.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Inloggen of account maken bij Somda',
             'lastUsername' => '',
             'error' => null,
@@ -126,7 +126,7 @@ class SecurityController
 
     private function validateUsername(FormInterface $form): void
     {
-        $existingUsername = $this->formHelper->getDoctrine()->getRepository(User::class)->findOneBy(
+        $existingUsername = $this->form_helper->getDoctrine()->getRepository(User::class)->findOneBy(
             [UserForm::FIELD_USERNAME => $form->get(UserForm::FIELD_USERNAME)->getData()]
         );
         if (null !== $existingUsername) {
@@ -144,7 +144,7 @@ class SecurityController
             );
         }
 
-        $existingEmail = $this->formHelper->getDoctrine()->getRepository(User::class)->findOneBy(
+        $existingEmail = $this->form_helper->getDoctrine()->getRepository(User::class)->findOneBy(
             [UserForm::FIELD_EMAIL => $form->get(UserForm::FIELD_EMAIL)->getData()]
         );
         if (null !== $existingEmail) {
@@ -184,12 +184,12 @@ class SecurityController
         /**
          * @var User $user
          */
-        $user = $this->formHelper->getDoctrine()->getRepository(User::class)->find($id);
+        $user = $this->form_helper->getDoctrine()->getRepository(User::class)->find($id);
         if (null === $user) {
             throw new AccessDeniedException('This user does not exist');
         }
 
-        $form = $this->formHelper->getFactory()->create(UserActivate::class, $user);
+        $form = $this->form_helper->getFactory()->create(UserActivate::class, $user);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -197,31 +197,31 @@ class SecurityController
                 /**
                  * @var Group $userGroup
                  */
-                $userGroup = $this->formHelper->getDoctrine()->getRepository(Group::class)->find(4);
+                $userGroup = $this->form_helper->getDoctrine()->getRepository(Group::class)->find(4);
                 $userGroup->addUser($user);
                 
                 $user->activation_key = null;
                 $user->addRole('ROLE_USER')->addGroup($userGroup);
-                $this->formHelper->getDoctrine()->getManager()->flush();
+                $this->form_helper->getDoctrine()->getManager()->flush();
 
-                $this->emailHelper->sendEmail($user, 'Welkom op Somda -- Belangrijke informatie', 'new-account');
+                $this->email_helper->sendEmail($user, 'Welkom op Somda -- Belangrijke informatie', 'new-account');
 
                 // Send the email to the admin account
-                $samePasswordUsers = $this->formHelper->getDoctrine()->getRepository(User::class)->findBy(
+                $samePasswordUsers = $this->form_helper->getDoctrine()->getRepository(User::class)->findBy(
                     ['password' => $user->getPassword()]
                 );
-                $this->emailHelper->sendEmail(
-                    $this->userHelper->getAdministratorUser(),
+                $this->email_helper->sendEmail(
+                    $this->user_helper->getAdministratorUser(),
                     'Nieuwe registratie bij Somda',
                     'new-account-admin',
                     ['user' => $user, 'samePasswordUsers' => $samePasswordUsers]
                 );
 
-                $this->formHelper->getFlashHelper()->add(
+                $this->form_helper->getFlashHelper()->add(
                     FlashHelper::FLASH_TYPE_INFORMATION,
                     'Jouw account is geactiveerd, je kunt na controle door een beheerder inloggen'
                 );
-                return $this->formHelper->getRedirectHelper()->redirectToRoute(
+                return $this->form_helper->getRedirectHelper()->redirectToRoute(
                     'login_with_username',
                     ['username' => $user->getUserIdentifier()]
                 );
@@ -233,7 +233,7 @@ class SecurityController
             $form->get(UserActivate::FIELD_KEY)->setData($key);
         }
 
-        return $this->templateHelper->render('security/activate.html.twig', [
+        return $this->template_helper->render('security/activate.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Account activeren',
             TemplateHelper::PARAMETER_FORM => $form->createView(),
         ]);
@@ -244,21 +244,21 @@ class SecurityController
      */
     public function lostPasswordAction(Request $request): Response|RedirectResponse
     {
-        $form = $this->formHelper->getFactory()->create(UserLostPassword::class);
+        $form = $this->form_helper->getFactory()->create(UserLostPassword::class);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             /**
              * @var User $user
              */
-            $user = $this->formHelper->getDoctrine()->getRepository(User::class)->findOneBy(
+            $user = $this->form_helper->getDoctrine()->getRepository(User::class)->findOneBy(
                 [UserForm::FIELD_EMAIL => $form->get(UserForm::FIELD_EMAIL)->getData()]
             );
             if (null !== $user) {
                 $newPassword = $this->getRandomPassword(12);
                 $user->password = (string)password_hash($newPassword, PASSWORD_DEFAULT);
-                $this->formHelper->getDoctrine()->getManager()->flush();
+                $this->form_helper->getDoctrine()->getManager()->flush();
 
-                $this->emailHelper->sendEmail(
+                $this->email_helper->sendEmail(
                     $user,
                     'Jouw nieuwe wachtwoord voor Somda',
                     'lost-password',
@@ -266,15 +266,15 @@ class SecurityController
                 );
             }
 
-            $this->formHelper->getFlashHelper()->add(
+            $this->form_helper->getFlashHelper()->add(
                 FlashHelper::FLASH_TYPE_INFORMATION,
                 'Er is een e-mail gestuurd met een nieuw wachtwoord'
             );
 
-            return $this->formHelper->getRedirectHelper()->redirectToRoute('lost_password');
+            return $this->form_helper->getRedirectHelper()->redirectToRoute('lost_password');
         }
 
-        return $this->templateHelper->render('security/lostPassword.html.twig', [
+        return $this->template_helper->render('security/lostPassword.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Wachtwoord vergeten',
             TemplateHelper::PARAMETER_FORM => $form->createView(),
         ]);
@@ -295,23 +295,23 @@ class SecurityController
 
     public function changePasswordAction(Request $request): Response|RedirectResponse
     {
-        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_USER);
+        $this->user_helper->denyAccessUnlessGranted(RoleGenerics::ROLE_USER);
 
-        $form = $this->formHelper->getFactory()->create(UserPassword::class);
+        $form = $this->form_helper->getFactory()->create(UserPassword::class);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->userHelper->getUser()->password = \password_hash($form->get('newPassword')->getData(), PASSWORD_DEFAULT);
-            $this->formHelper->getDoctrine()->getManager()->flush();
+            $this->user_helper->getUser()->password = \password_hash($form->get('newPassword')->getData(), PASSWORD_DEFAULT);
+            $this->form_helper->getDoctrine()->getManager()->flush();
 
-            $this->formHelper->getFlashHelper()->add(
+            $this->form_helper->getFlashHelper()->add(
                 FlashHelper::FLASH_TYPE_INFORMATION,
                 'Jouw wachtwoord is gewijzigd'
             );
 
-            return $this->formHelper->getRedirectHelper()->redirectToRoute('home');
+            return $this->form_helper->getRedirectHelper()->redirectToRoute('home');
         }
 
-        return $this->templateHelper->render('security/changePassword.html.twig', [
+        return $this->template_helper->render('security/changePassword.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Wachtwoord wijzigen',
             TemplateHelper::PARAMETER_FORM => $form->createView(),
         ]);

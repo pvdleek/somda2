@@ -15,20 +15,20 @@ class PoiController
 {
     public function __construct(
         private readonly ManagerRegistry $doctrine,
-        private readonly UserHelper $userHelper,
-        private readonly TemplateHelper $templateHelper,
+        private readonly UserHelper $user_helper,
+        private readonly TemplateHelper $template_helper,
     ) {
     }
 
     public function indexAction(): Response
     {
-        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_SPOTS_RECENT);
+        $this->user_helper->denyAccessUnlessGranted(RoleGenerics::ROLE_SPOTS_RECENT);
 
         $pois = $this->doctrine
             ->getRepository(Poi::class)
             ->findBy([], ['category' => 'asc', 'name' => 'asc']);
 
-        return $this->templateHelper->render('poi/index.html.twig', [
+        return $this->template_helper->render('poi/index.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Spotpunten',
             'pois' => $pois,
         ]);
@@ -36,9 +36,9 @@ class PoiController
 
     public function detailAction(int $id): Response
     {
-        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_SPOTS_RECENT);
+        $this->user_helper->denyAccessUnlessGranted(RoleGenerics::ROLE_SPOTS_RECENT);
 
-        return $this->templateHelper->render('poi/details.html.twig', [
+        return $this->template_helper->render('poi/details.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Spotpunten',
             'poi' => $this->doctrine->getRepository(Poi::class)->find($id),
         ]);

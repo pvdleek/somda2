@@ -19,7 +19,7 @@ class ProfileController extends AbstractFOSRestController
 {
     public function __construct(
         private readonly ManagerRegistry $doctrine,
-        private readonly UserHelper $userHelper,
+        private readonly UserHelper $user_helper,
     ) {
     }
 
@@ -36,13 +36,13 @@ class ProfileController extends AbstractFOSRestController
      */
     public function indexAction(): Response
     {
-        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_API_USER);
+        $this->user_helper->denyAccessUnlessGranted(RoleGenerics::ROLE_API_USER);
 
-        if (!$this->userHelper->userIsLoggedIn()) {
+        if (!$this->user_helper->userIsLoggedIn()) {
             throw new AccessDeniedException('The user is not logged in');
         }
 
-        return $this->handleView($this->view(['data' => $this->userHelper->getUser()], 200));
+        return $this->handleView($this->view(['data' => $this->user_helper->getUser()], 200));
     }
 
     /**
@@ -83,43 +83,43 @@ class ProfileController extends AbstractFOSRestController
      */
     public function updateAction(Request $request): Response
     {
-        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_API_USER);
+        $this->user_helper->denyAccessUnlessGranted(RoleGenerics::ROLE_API_USER);
 
-        if (!$this->userHelper->userIsLoggedIn()) {
+        if (!$this->user_helper->userIsLoggedIn()) {
             throw new AccessDeniedException('The user is not logged in');
         }
 
-        $user = $this->userHelper->getUser();
+        $user = $this->user_helper->getUser();
 
-        $userInformation = (array) \json_decode($request->getContent(), true);
-        $user->info->avatar = $userInformation['avatar'];
-        if (isset($userInformation['birthDate'])) {
-            $user->info->birth_date = \DateTime::createFromFormat('Y-m-d', $userInformation['birthDate']);
+        $user_information = (array) \json_decode($request->getContent(), true);
+        $user->info->avatar = $user_information['avatar'];
+        if (isset($user_information['birthDate'])) {
+            $user->info->birth_date = \DateTime::createFromFormat('Y-m-d', $user_information['birthDate']);
         }
-        if (isset($userInformation['city'])) {
-            $user->info->city = $userInformation['city'];
+        if (isset($user_information['city'])) {
+            $user->info->city = $user_information['city'];
         }
-        $user->info->gender = (int) $userInformation['gender'];
-        if (isset($userInformation['mobilePhone'])) {
-            $user->info->mobile_phone = $userInformation['mobilePhone'];
+        $user->info->gender = (int) $user_information['gender'];
+        if (isset($user_information['mobilePhone'])) {
+            $user->info->mobile_phone = $user_information['mobilePhone'];
         }
-        if (isset($userInformation['skype'])) {
-            $user->info->skype = $userInformation['skype'];
+        if (isset($user_information['skype'])) {
+            $user->info->skype = $user_information['skype'];
         }
-        if (isset($userInformation['website'])) {
-            $user->info->website = $userInformation['website'];
+        if (isset($user_information['website'])) {
+            $user->info->website = $user_information['website'];
         }
-        if (isset($userInformation['facebookAccount'])) {
-            $user->info->facebook_account = $userInformation['facebookAccount'];
+        if (isset($user_information['facebookAccount'])) {
+            $user->info->facebook_account = $user_information['facebookAccount'];
         }
-        if (isset($userInformation['flickrAccount'])) {
-            $user->info->flickr_account = $userInformation['flickrAccount'];
+        if (isset($user_information['flickrAccount'])) {
+            $user->info->flickr_account = $user_information['flickrAccount'];
         }
-        if (isset($userInformation['twitterAccount'])) {
-            $user->info->twitter_account = $userInformation['twitterAccount'];
+        if (isset($user_information['twitterAccount'])) {
+            $user->info->twitter_account = $user_information['twitterAccount'];
         }
-        if (isset($userInformation['youtubeAccount'])) {
-            $user->info->youtube_account = $userInformation['youtubeAccount'];
+        if (isset($user_information['youtubeAccount'])) {
+            $user->info->youtube_account = $user_information['youtubeAccount'];
         }
 
         $this->doctrine->getManager()->flush();
@@ -145,23 +145,23 @@ class ProfileController extends AbstractFOSRestController
      */
     public function updatePreferencesAction(Request $request): Response
     {
-        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_API_USER);
+        $this->user_helper->denyAccessUnlessGranted(RoleGenerics::ROLE_API_USER);
 
-        if (!$this->userHelper->userIsLoggedIn()) {
+        if (!$this->user_helper->userIsLoggedIn()) {
             throw new AccessDeniedException('The user is not logged in');
         }
 
-        $user = $this->userHelper->getUser();
+        $user = $this->user_helper->getUser();
 
         $preferences = (array) \json_decode($request->getContent(), true);
         if (isset($preferences['forum_signature'])) {
-            $this->userHelper->getPreferenceByKey(UserPreference::KEY_FORUM_SIGNATURE)->value = $preferences['forum_signature'];
+            $this->user_helper->getPreferenceByKey(UserPreference::KEY_FORUM_SIGNATURE)->value = $preferences['forum_signature'];
         }
         if (isset($preferences['forum_new_to_old'])) {
-            $this->userHelper->getPreferenceByKey(UserPreference::KEY_FORUM_NEW_TO_OLD)->value = $preferences['forum_new_to_old'];
+            $this->user_helper->getPreferenceByKey(UserPreference::KEY_FORUM_NEW_TO_OLD)->value = $preferences['forum_new_to_old'];
         }
         if (isset($preferences['default_spot_place'])) {
-            $this->userHelper->getPreferenceByKey(UserPreference::KEY_DEFAULT_SPOT_LOCATION)->value = $preferences['default_spot_place'];
+            $this->user_helper->getPreferenceByKey(UserPreference::KEY_DEFAULT_SPOT_LOCATION)->value = $preferences['default_spot_place'];
         }
 
         $this->doctrine->getManager()->flush();

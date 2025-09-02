@@ -22,10 +22,10 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 class ForumPostController extends AbstractFOSRestController
 {
     public function __construct(
-        private readonly UserHelper $userHelper,
-        private readonly FormHelper $formHelper,
-        private readonly ForumAuthorizationHelper $forumAuthHelper,
-        private readonly EmailHelper $emailHelper,
+        private readonly EmailHelper $email_helper,
+        private readonly FormHelper $form_helper,
+        private readonly ForumAuthorizationHelper $forum_authorization_helper,
+        private readonly UserHelper $user_helper,
     ) {
     }
 
@@ -46,30 +46,30 @@ class ForumPostController extends AbstractFOSRestController
      */
     public function replyAction(Request $request, int $discussion_id): Response
     {
-        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_API_USER);
+        $this->user_helper->denyAccessUnlessGranted(RoleGenerics::ROLE_API_USER);
 
-        if (!$this->userHelper->userIsLoggedIn()) {
+        if (!$this->user_helper->userIsLoggedIn()) {
             throw new AccessDeniedException('The user is not logged in');
         }
 
         /**
          * @var ForumDiscussion $discussion
          */
-        $discussion = $this->formHelper->getDoctrine()->getRepository(ForumDiscussion::class)->find($discussion_id);
-        if (null === $discussion || !$this->forumAuthHelper->mayPost($discussion->forum, $this->userHelper->getUser())) {
+        $discussion = $this->form_helper->getDoctrine()->getRepository(ForumDiscussion::class)->find($discussion_id);
+        if (null === $discussion || !$this->forum_authorization_helper->mayPost($discussion->forum, $this->user_helper->getUser())) {
             throw new AccessDeniedException('This discussion does not exist or the user may not post');
         }
 
         $postInformation = (array) \json_decode($request->getContent(), true);
-        $post = $this->formHelper->addPost(
+        $post = $this->form_helper->addPost(
             $discussion,
-            $this->userHelper->getUser(),
+            $this->user_helper->getUser(),
             (bool)$postInformation['signature_on'],
             $postInformation['text']
         );
         $this->handleFavoritesForAddedPost($discussion);
 
-        $this->formHelper->getDoctrine()->getManager()->flush();
+        $this->form_helper->getDoctrine()->getManager()->flush();
 
         return $this->handleView($this->view(['data' => $post], 200));
     }
@@ -78,7 +78,7 @@ class ForumPostController extends AbstractFOSRestController
     {
         foreach ($discussion->getFavorites() as $favorite) {
             if ($favorite->alerting === ForumFavorite::ALERTING_ON) {
-                $this->emailHelper->sendEmail(
+                $this->email_helper->sendEmail(
                     $favorite->user,
                     'Somda - Nieuwe forumreactie op "' . $discussion->title . '"',
                     'forum-new-reply',

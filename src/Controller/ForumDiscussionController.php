@@ -26,11 +26,11 @@ class ForumDiscussionController
 {
     public function __construct(
         private readonly SluggerInterface $slugger,
-        private readonly UserHelper $userHelper,
-        private readonly FormHelper $formHelper,
-        private readonly ForumAuthorizationHelper $forumAuthHelper,
-        private readonly ForumDiscussionHelper $discussionHelper,
-        private readonly TemplateHelper $templateHelper,
+        private readonly UserHelper $user_helper,
+        private readonly FormHelper $form_helper,
+        private readonly ForumAuthorizationHelper $forum_authorization_helper,
+        private readonly ForumDiscussionHelper $discussion_helper,
+        private readonly TemplateHelper $template_helper,
     ) {
     }
 
@@ -42,31 +42,31 @@ class ForumDiscussionController
         /**
          * @var ForumDiscussion $discussion
          */
-        $discussion = $this->formHelper->getDoctrine()->getRepository(ForumDiscussion::class)->find($id);
+        $discussion = $this->form_helper->getDoctrine()->getRepository(ForumDiscussion::class)->find($id);
         if (null === $discussion) {
-            return $this->formHelper->getRedirectHelper()->redirectToRoute(RouteGenerics::ROUTE_FORUM);
+            return $this->form_helper->getRedirectHelper()->redirectToRoute(RouteGenerics::ROUTE_FORUM);
         }
 
-        $newToOld = $this->userHelper->userIsLoggedIn() ?
-            (bool)$this->userHelper->getPreferenceByKey(UserPreference::KEY_FORUM_NEW_TO_OLD)->value : false;
+        $newToOld = $this->user_helper->userIsLoggedIn() ?
+            (bool)$this->user_helper->getPreferenceByKey(UserPreference::KEY_FORUM_NEW_TO_OLD)->value : false;
 
-        $this->discussionHelper->setDiscussion($discussion);
-        $posts = $this->discussionHelper->getPosts($newToOld, $page_number, $post_id);
+        $this->discussion_helper->setDiscussion($discussion);
+        $posts = $this->discussion_helper->getPosts($newToOld, $page_number, $post_id);
 
-        return $this->templateHelper->render('forum/discussion.html.twig', [
+        return $this->template_helper->render('forum/discussion.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Forum - ' . $discussion->title,
             'userIsModerator' =>
-                $this->forumAuthHelper->userIsModerator($discussion->forum, $this->userHelper->getUser()),
+                $this->forum_authorization_helper->userIsModerator($discussion->forum, $this->user_helper->getUser()),
             TemplateHelper::PARAMETER_DISCUSSION => $discussion,
-            'numberOfPages' => $this->discussionHelper->getNumberOfPages(),
-            'number_of_posts' => $this->discussionHelper->getNumberOfPosts(),
-            'page_number' => $this->discussionHelper->getPageNumber(),
+            'numberOfPages' => $this->discussion_helper->getNumberOfPages(),
+            'number_of_posts' => $this->discussion_helper->getNumberOfPosts(),
+            'page_number' => $this->discussion_helper->getPageNumber(),
             'newToOld' => $newToOld,
             'posts' => $posts,
-            'mayPost' => $this->forumAuthHelper->mayPost($discussion->forum, $this->userHelper->getUser()),
-            'numberOfReadPosts' => $this->discussionHelper->getNumberOfReadPosts(),
+            'mayPost' => $this->forum_authorization_helper->mayPost($discussion->forum, $this->user_helper->getUser()),
+            'numberOfReadPosts' => $this->discussion_helper->getNumberOfReadPosts(),
             'forumBanner' => $this->getForumBanner($request),
-            'forumJump' => $this->discussionHelper->getForumJump(),
+            'forumJump' => $this->discussion_helper->getForumJump(),
         ]);
     }
 
@@ -75,7 +75,7 @@ class ForumDiscussionController
      */
     private function getForumBanner(Request $request): ?Banner
     {
-        $banners = $this->formHelper->getDoctrine()->getRepository(Banner::class)->findBy(
+        $banners = $this->form_helper->getDoctrine()->getRepository(Banner::class)->findBy(
             ['location' => Banner::LOCATION_FORUM, 'active' => true]
         );
         if (\count($banners) < 1) {
@@ -91,8 +91,8 @@ class ForumDiscussionController
         $banner_view->banner = $forum_banner;
         $banner_view->timestamp = new \DateTime();
         $banner_view->ip_address = (int) \inet_pton($request->getClientIp());
-        $this->formHelper->getDoctrine()->getManager()->persist($banner_view);
-        $this->formHelper->getDoctrine()->getManager()->flush();
+        $this->form_helper->getDoctrine()->getManager()->persist($banner_view);
+        $this->form_helper->getDoctrine()->getManager()->flush();
 
         return $forum_banner;
     }
@@ -102,39 +102,39 @@ class ForumDiscussionController
      */
     public function newAction(Request $request, int $id): Response|RedirectResponse
     {
-        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_USER);
+        $this->user_helper->denyAccessUnlessGranted(RoleGenerics::ROLE_USER);
 
         /**
          * @var ForumForum $forum
          */
-        $forum = $this->formHelper->getDoctrine()->getRepository(ForumForum::class)->find($id);
-        if (null === $forum || !$this->forumAuthHelper->mayPost($forum, $this->userHelper->getUser())) {
-            return $this->formHelper->getRedirectHelper()->redirectToRoute(RouteGenerics::ROUTE_FORUM);
+        $forum = $this->form_helper->getDoctrine()->getRepository(ForumForum::class)->find($id);
+        if (null === $forum || !$this->forum_authorization_helper->mayPost($forum, $this->user_helper->getUser())) {
+            return $this->form_helper->getRedirectHelper()->redirectToRoute(RouteGenerics::ROUTE_FORUM);
         }
 
         $forum_discussion = new ForumDiscussion();
         $forum_discussion->forum = $forum;
-        $forum_discussion->author = $this->userHelper->getUser();
+        $forum_discussion->author = $this->user_helper->getUser();
 
-        $form = $this->formHelper->getFactory()->create(ForumDiscussionForm::class, $forum_discussion);
+        $form = $this->form_helper->getFactory()->create(ForumDiscussionForm::class, $forum_discussion);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->formHelper->addPost(
+            $this->form_helper->addPost(
                 $forum_discussion,
-                $this->userHelper->getUser(),
+                $this->user_helper->getUser(),
                 $form->get('signature_on')->getData(),
                 $form->get('text')->getData()
             );
-            $this->formHelper->getDoctrine()->getManager()->persist($forum_discussion);
-            $this->formHelper->getDoctrine()->getManager()->flush();
+            $this->form_helper->getDoctrine()->getManager()->persist($forum_discussion);
+            $this->form_helper->getDoctrine()->getManager()->flush();
 
-            return $this->formHelper->finishFormHandling('', RouteGenerics::ROUTE_FORUM_DISCUSSION, [
+            return $this->form_helper->finishFormHandling('', RouteGenerics::ROUTE_FORUM_DISCUSSION, [
                 'id' => $forum_discussion->id,
                 'name' => $this->slugger->slug($forum_discussion->title)
             ]);
         }
 
-        return $this->templateHelper->render('forum/newDiscussion.html.twig', [
+        return $this->template_helper->render('forum/newDiscussion.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Forum - ' . $forum->name,
             TemplateHelper::PARAMETER_FORM => $form->createView(),
             TemplateHelper::PARAMETER_FORUM => $forum

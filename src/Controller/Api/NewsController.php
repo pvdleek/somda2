@@ -19,7 +19,7 @@ class NewsController extends AbstractFOSRestController
 {
     public function __construct(
         private readonly ManagerRegistry $doctrine,
-        private readonly UserHelper $userHelper,
+        private readonly UserHelper $user_helper,
     ) {
     }
 
@@ -43,7 +43,7 @@ class NewsController extends AbstractFOSRestController
      */
     public function indexAction(?int $id = null): Response
     {
-        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_API_USER);
+        $this->user_helper->denyAccessUnlessGranted(RoleGenerics::ROLE_API_USER);
 
         if (null !== $id) {
             /**
@@ -54,8 +54,8 @@ class NewsController extends AbstractFOSRestController
                 return $this->handleView($this->view(['error' => 'This news-item does not exist'], 404));
             }
 
-            if ($this->userHelper->userIsLoggedIn() && !in_array($this->userHelper->getUser(), $news->getUserReads())) {
-                $news->addUserRead($this->userHelper->getUser());
+            if ($this->user_helper->userIsLoggedIn() && !in_array($this->user_helper->getUser(), $news->getUserReads())) {
+                $news->addUserRead($this->user_helper->getUser());
             }
             $this->doctrine->getManager()->flush();
 
@@ -66,6 +66,7 @@ class NewsController extends AbstractFOSRestController
          * @var News[] $news
          */
         $news = $this->doctrine->getRepository(News::class)->findBy([], [NewsForm::FIELD_TIMESTAMP => 'DESC']);
+        
         return $this->handleView($this->view(['data' => $news], 200));
     }
 
@@ -87,7 +88,7 @@ class NewsController extends AbstractFOSRestController
      */
     public function railNewsAction(?int $limit = null): Response
     {
-        $this->userHelper->denyAccessUnlessGranted(RoleGenerics::ROLE_API_USER);
+        $this->user_helper->denyAccessUnlessGranted(RoleGenerics::ROLE_API_USER);
 
         $limit = (null === $limit) ? 25 : \min($limit, 100);
 
@@ -99,6 +100,7 @@ class NewsController extends AbstractFOSRestController
             ['timestamp' => 'DESC'],
             $limit
         );
+
         return $this->handleView($this->view(['data' => $news], 200));
     }
 }

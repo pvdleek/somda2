@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Feed;
 
 use App\Entity\Spot;
@@ -39,7 +41,7 @@ class FeedProvider implements FeedProviderInterface
      */
     public function getFeed(Request $request) : FeedInterface
     {
-        $feedType = $request->attributes->get('id');
+        $feed_type = $request->attributes->get('id');
 
         $this->limit = (int) $request->query->get('limit', 10);
         $this->train_filter = $request->query->get('train');
@@ -48,11 +50,11 @@ class FeedProvider implements FeedProviderInterface
         $feed
             ->setDescription('RSS feed van Somda')
             ->setLanguage('nl')
-            ->setTitle($feedType === 'spots' ? 'Somda spots' : 'Somda bijzondere ritten')
+            ->setTitle($feed_type === 'spots' ? 'Somda spots' : 'Somda bijzondere ritten')
             ->setPublicId($this->router->generate('home', [], UrlGeneratorInterface::ABSOLUTE_URL))
             ->setLastModified(new \DateTime());
 
-        $items = $feedType === 'spots' ? $this->getSpotItems() : $this->getSpecialRouteItems();
+        $items = $feed_type === 'spots' ? $this->getSpotItems() : $this->getSpecialRouteItems();
         foreach ($items as $item) {
             $feed->add($item);
         }
