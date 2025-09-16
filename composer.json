@@ -24,7 +24,6 @@
         "gregwar/captcha-bundle": "^2.2",
         "guzzlehttp/guzzle": "^7.8",
         "jms/serializer-bundle": "^5.3",
-        "laminas/laminas-zendframework-bridge": "^1.7",
         "mobiledetect/mobiledetectlib": "^3.74",
         "nelmio/api-doc-bundle": "^4.12",
         "nelmio/security-bundle": "^3.0",
