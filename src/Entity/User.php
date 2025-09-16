@@ -117,7 +117,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @JMS\Exclude()
      */
-    #[ORM\Column(type: 'array', nullable: false, options: ['default' => 'a:0:{}'])]
+    #[ORM\Column(type: 'array', nullable: false, options: ['default' => []])]
     public array $roles = [];
 
     /**
