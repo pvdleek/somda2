@@ -15,8 +15,11 @@ class DateHelper implements RuntimeExtensionInterface
     /**
      * @throws \Exception
      */
-    public function getDisplayDate(\DateTime|string $date, bool $include_time = false, bool $short_date = false): string
+    public function getDisplayDate(\DateTime|string|null $date, bool $include_time = false, bool $short_date = false): string
     {
+        if (null === $date) {
+            return '';
+        }
         if (!$date instanceof \DateTime) {
             $date = new \DateTime($date);
         }
