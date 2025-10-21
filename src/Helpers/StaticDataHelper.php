@@ -132,7 +132,7 @@ class StaticDataHelper implements RuntimeExtensionInterface
 
     private function addSeriesRouteNumber(array $route): void
     {
-        $series_route_number = 100 * \floor($route[TrainTableRepository::FIELD_ROUTE_NUMBER] / 100);
+        $series_route_number = (int) (100 * \floor($route[TrainTableRepository::FIELD_ROUTE_NUMBER] / 100));
         if (!isset($this->routes[$series_route_number])) {
             if (null !== $route[TrainTableRepository::FIELD_SECTION]
                 && \strlen($route[TrainTableRepository::FIELD_SECTION]) > 0
