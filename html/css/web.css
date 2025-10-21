@@ -202,12 +202,7 @@ table.dataTable tr:hover td, table.dataTable tr:hover td a, table.dataTable tr:h
     text-transform: lowercase;
 }
 a.rail-news-title {
-    text-decoration: none;
     line-height: 1.1em;
-    color: var(--main-background-dark-color);
-}
-a.rail-news-title:hover {
-    color: var(--main-text-color);
 }
 
 /************/
