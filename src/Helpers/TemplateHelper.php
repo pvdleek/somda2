@@ -119,7 +119,7 @@ class TemplateHelper
          * @var Block $block
          */
         $block = $this->doctrine->getRepository(Block::class)->findOneBy(
-            ['route' => $this->request_stack->getCurrentRequest()->get('_route')]
+            ['route' => $this->request_stack->getCurrentRequest()->attributes->get('_route')]
         );
         if (null !== $block && null !== $block->block_help) {
             return $block->block_help;
