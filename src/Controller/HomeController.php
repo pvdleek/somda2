@@ -15,7 +15,6 @@ use App\Repository\SpecialRouteRepository;
 use App\Repository\SpotRepository;
 use App\Repository\StatisticRepository;
 use App\Repository\UserRepository;
-use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Response;
 
 class HomeController
@@ -29,7 +28,6 @@ class HomeController
     public const KEY_PASSING_ROUTES = 'passing-routes';
 
     public function __construct(
-        private readonly ManagerRegistry $doctrine,
         private readonly UserHelper $user_helper,
         private readonly TemplateHelper $template_helper,
         private readonly ForumDiscussionRepository $forum_discussion_repository,
