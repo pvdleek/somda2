@@ -32,12 +32,12 @@ class BannerController
             return $this->redirectHelper->redirectToRoute('home');
         }
 
-        $bannerHit = new BannerHit();
-        $bannerHit->banner = $banner;
-        $bannerHit->timestamp = new \DateTime();
-        $bannerHit->ip_address = \ip2long($request->getClientIp());
+        $banner_hit = new BannerHit();
+        $banner_hit->banner = $banner;
+        $banner_hit->timestamp = new \DateTime();
+        $banner_hit->ip_address = \ip2long($request->getClientIp());
 
-        $this->doctrine->getManager()->persist($bannerHit);
+        $this->doctrine->getManager()->persist($banner_hit);
         $this->doctrine->getManager()->flush();
 
         return $this->redirectHelper->redirect($banner->link);

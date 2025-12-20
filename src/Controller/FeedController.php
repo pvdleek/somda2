@@ -11,7 +11,6 @@ use App\Repository\TrainTableRepository;
 use App\Repository\TrainTableYearRepository;
 use App\Traits\DateTrait;
 use Doctrine\Persistence\ManagerRegistry;
-use DoctrineExtensions\Query\Mysql\Binary;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -52,11 +51,11 @@ class FeedController
 
         $limit = (int) $request->query->get('limit', self::DEFAULT_LIMIT);
         $image = \ImageCreate(750, 15 * ($limit + 1));
-        $backgroundColor = $this->getColorAllocation(
+        $background_color = $this->getColorAllocation(
             $image,
             $request->query->get('bg-color', self::DEFAULT_BACKGROUND_COLOR)
         );
-        \ImageFill($image, 0, 0, $backgroundColor);
+        \ImageFill($image, 0, 0, $background_color);
         $this->foreground_color = $this->getColorAllocation(
             $image,
             $request->query->get('fg-color', self::DEFAULT_FOREGROUND_COLOR)
@@ -71,12 +70,11 @@ class FeedController
 
             $temp_filename = (new Filesystem())->tempnam(\sys_get_temp_dir(), 'image_', '.png');
             \imagepng($image, $temp_filename);
-            \imagedestroy($image);
 
             return new BinaryFileResponse($temp_filename, 200, ['Content-Type' => 'image/png']);
         }
 
-        if ($limit === 1) {
+        if (1 === $limit) {
             $this->doText(
                 $image,
                 \sprintf($this->translator->trans('passingRoutes.feedHeader.single'), $location->description)
@@ -101,7 +99,6 @@ class FeedController
 
         $temp_filename = (new Filesystem())->tempnam(\sys_get_temp_dir(), 'image_', '.png');
         \imagepng($image, $temp_filename);
-        \imagedestroy($image);
 
         return new BinaryFileResponse($temp_filename, 200, ['Content-Type' => 'image/png']);
     }
@@ -113,9 +110,13 @@ class FeedController
         }
 
         if (\strlen($color) === 6) {
-            list($red, $green, $blue) = array($color[0].$color[1], $color[2].$color[3], $color[4].$color[5]);
-        } elseif (strlen($color) === 3) {
-            list($red, $green, $blue) = array($color[0].$color[0], $color[1].$color[1], $color[2].$color[2]);
+            $red = (string) $color[0].$color[1];
+            $green = (string) $color[2].$color[3];
+            $blue = (string) $color[4].$color[5];
+        } elseif (\strlen($color) === 3) {
+            $red = (string) $color[0].$color[0];
+            $green = (string) $color[1].$color[1];
+            $blue = (string) $color[2].$color[2];
         } else {
             return ImageColorAllocate($id, 255, 255, 255);
         }
@@ -141,6 +142,6 @@ class FeedController
         );
 
         \ImageString($id, 2, 5, 15 * ($this->line_number - 1), $text, $this->foreground_color);
-        $this->line_number += 1;
+        ++$this->line_number;
     }
 }

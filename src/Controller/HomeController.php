@@ -45,7 +45,7 @@ class HomeController
      */
     public function indexAction(): Response
     {
-        $railNews = $this->rail_news_repository->findBy(['active' => true, 'approved' => true], [RailNewsForm::FIELD_TIMESTAMP => 'DESC'], 5);
+        $rail_news = $this->rail_news_repository->findBy(['active' => true, 'approved' => true], [RailNewsForm::FIELD_TIMESTAMP => 'DESC'], 5);
 
         $layout = $this->user_helper->getPreferenceByKey(UserPreference::KEY_HOME_LAYOUT)->value;
         $layout = \array_filter(\explode(';', $layout));
@@ -61,7 +61,7 @@ class HomeController
         return $this->template_helper->render('home.html.twig', [
             'layout' => $layout,
             'layoutData' => $layout_data,
-            'railNews' => $railNews,
+            'railNews' => $rail_news,
         ]);
     }
 
