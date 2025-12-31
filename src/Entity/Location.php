@@ -8,9 +8,6 @@ use App\Repository\LocationRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use JMS\Serializer\Annotation as JMS;
-use Nelmio\ApiDocBundle\Annotation\Model;
-use OpenApi\Annotations as OA;
 
 #[ORM\Entity(repositoryClass: LocationRepository::class)]
 #[ORM\Table(
@@ -22,70 +19,33 @@ class Location
 {
     public const UNKNOWN_NAME = 'Fout!';
 
-    /**
-     * @JMS\Expose()
-     * @OA\Property(description="Unique identifier", type="integer")
-     */
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(name: 'afkid', type: 'smallint', nullable: false, options: ['unsigned' => true])]
     public ?int $id = null;
 
-    /**
-     * @JMS\Expose()
-     * @OA\Property(description="Abbreviation of the location", maxLength=10, type="string")
-     */
     #[ORM\Column(name: 'afkorting', length: 10, nullable: false, options: ['default' => ''])]
     public string $name = '';
 
-    /**
-     * @JMS\Expose()
-     * @OA\Property(description="Latitude of the location", type="float")
-     */
     #[ORM\Column(precision: 10, scale: 0, nullable: true)]
     public ?float $latitude = null;
 
-    /**
-     * @JMS\Expose()
-     * @OA\Property(description="Longitude of the location", type="float")
-     */
     #[ORM\Column(precision: 10, scale: 0, nullable: true)]
     public ?float $longitude = null;
 
-    /**
-     * @JMS\Expose()
-     * @OA\Property(description="Description of the location", maxLength=100, type="string")
-     */
     #[ORM\Column(length: 100, nullable: false, options: ['default' => ''])]
     public string $description = '';
 
-    /**
-     * @JMS\Expose()
-     * @OA\Property(description="Is the location currently active (allowed to add spots)", type="boolean")
-     */
     #[ORM\Column(nullable: false, options: ['default' => true])]
     public bool $spot_allowed = true;
 
-    /**
-     * @JMS\Expose()
-     * @OA\Property(
-     *     description="The category to which this location belongs",
-     *     ref=@Model(type=LocationCategory::class),
-     * )
-     */
     #[ORM\ManyToOne(targetEntity: LocationCategory::class, inversedBy: 'locations')]
     #[ORM\JoinColumn(name: 'landid', referencedColumnName: 'verk_catid')]
     public LocationCategory $category;
 
-    /**
-     * @JMS\Exclude()
-     */
     #[ORM\OneToMany(targetEntity: TrainTable::class, mappedBy: 'location')]
     private Collection $train_tables;
 
-    /**
-     * @JMS\Exclude()
-     */
     #[ORM\OneToMany(targetEntity: Spot::class, mappedBy: 'location')]
     private Collection $spots;
 

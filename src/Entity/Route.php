@@ -7,9 +7,6 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use JMS\Serializer\Annotation as JMS;
-use Nelmio\ApiDocBundle\Annotation\Model;
-use OpenApi\Annotations as OA;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'somda_trein', uniqueConstraints: [new ORM\UniqueConstraint(name: 'unq_somda_trein__treinnr', columns: ['treinnr'])])]
@@ -20,44 +17,23 @@ class Route
     public const SPECIAL_MEASURING = 'MEET';
     public const SPECIAL_CHECKING = 'SCHOUW';
 
-    /**
-     * @JMS\Expose()
-     * @OA\Property(description="Unique identifier", type="integer")
-     */
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(name: 'treinid', nullable: false, options: ['unsigned' => true])]
     public ?int $id = null;
 
-    /**
-     * @JMS\Expose()
-     * @OA\Property(description="The route-number", maxLength=25, type="string")
-     */
     #[ORM\Column(name: 'treinnr', length: 25, nullable: false, options: ['default' => ''])]
     public string $number = '';
 
-    /**
-     * @JMS\Exclude()
-     */
     #[ORM\OneToMany(targetEntity: TrainTable::class, mappedBy: 'route')]
     private Collection $train_tables;
 
-    /**
-     * @JMS\Expose()
-     * @OA\Property(description="The days on which this route runs", ref=@Model(type=TrainTableFirstLast::class))
-     */
     #[ORM\OneToMany(targetEntity: TrainTableFirstLast::class, mappedBy: 'route')]
     private Collection $train_table_first_lasts;
 
-    /**
-     * @JMS\Exclude()
-     */
     #[ORM\ManyToMany(targetEntity: RouteList::class, mappedBy: 'routes')]
     private Collection $route_lists;
 
-    /**
-     * @JMS\Exclude()
-     */
     #[ORM\OneToMany(targetEntity: Spot::class, mappedBy: 'route')]
     private Collection $spots;
 

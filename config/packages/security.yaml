@@ -12,25 +12,11 @@ security:
       entity:
         class: App\Entity\User
         property: username
-    api_user_provider:
-      memory:
-        users:
-          'nl.somda.somda.app': { password: '$argon2id$v=19$m=65536,t=4,p=1$dByQmurpoaWjbHC9qZmPnQ$J9/ORhsSViSFTZAdsXy0c5nv2AHtlyUZSIrZWlqVFP0', roles: ['ROLE_API_USER'] }
-          'aar.claij.nl': { password: '$argon2id$v=19$m=65536,t=4,p=1$ek13WTRSQjBJRTYzVjdNcg$t7+BabVXHW/AiRrs/2F2h8NzCEMYwGzGyXnECkjmneY', roles: ['ROLE_API_USER'] }
 
   firewalls:
     dev:
       pattern: ^/(_(profiler|wdt)|css|images|js|webfonts)/
       security: false
-    api:
-      http_basic:
-        realm: Secured API
-      json_login:
-        check_path: api_authenticate
-      lazy: true
-      pattern: ^/api/
-      provider: api_user_provider
-      stateless: true
     main:
       lazy: true
       stateless: false

@@ -4,39 +4,16 @@ declare(strict_types=1);
 
 namespace App\Model;
 
-use JMS\Serializer\Annotation as JMS;
-use OpenApi\Annotations as OA;
-
 class SpotFilter
 {
-    /**
-     * @JMS\Expose()
-     * @OA\Property(description="Location abbreviation", type="string")
-     */
     public ?string $location = null;
 
-    /**
-     * @JMS\Expose()
-     * @OA\Property(description="The day-number", enum={1,2,3,4,5,6,7}, type="integer")
-     */
     public int $day_number = 0;
 
-    /**
-     * @JMS\Expose()
-     * @OA\Property(description="ISO-8601 timestamp of the spot (Y-m-dTH:i:sP)", type="string")
-     */
     public ?\DateTime $spot_date = null;
 
-    /**
-     * @JMS\Expose()
-     * @OA\Property(description="The train-number", type="string")
-     */
     public ?string $train_number = null;
 
-    /**
-     * @JMS\Expose()
-     * @OA\Property(description="The route-number", type="string")
-     */
     public ?string $route_number = null;
 
     public function createFromSearchParameters(array $parameters): void

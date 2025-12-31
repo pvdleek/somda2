@@ -1,6 +1,0 @@
-security:
-  providers:
-    api_user_provider:
-      memory:
-        users:
-          'nl.somda.somda.app': { password: '$argon2id$v=19$m=65536,t=4,p=1$FOBDXF3bWMCkTXNx50Ug3Q$43MW9KNb0xCYrPWflUGxTmoD7cCsj1xFJiQJWwXeIjA', roles: 'ROLE_API_USER' }

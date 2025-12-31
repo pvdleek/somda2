@@ -19,9 +19,6 @@ class UserHelper implements RuntimeExtensionInterface
     private const ADMINISTRATOR_UID = 1;
     private const MODERATOR_UID = 2;
 
-    public const KEY_API_USER_ID = 'SomdaUserId';
-    public const KEY_API_TOKEN = 'SomdaApiToken';
-
     /**
      * @var UserInterface|null
      */
@@ -49,17 +46,6 @@ class UserHelper implements RuntimeExtensionInterface
     {
         if (!$this->security->isGranted($role)) {
             throw new AccessDeniedException();
-        }
-    }
-
-    public function setFromApiRequest(int $user_id, string $api_token): void
-    {
-        $user = $this->doctrine->getRepository(User::class)->findOneBy(
-            ['id' => $user_id, 'active' => true, 'api_token' => $api_token]
-        );
-        if (null !== $user) {
-            $this->user = $user;
-            $this->security->login($user, 'form_login', 'main');
         }
     }
 

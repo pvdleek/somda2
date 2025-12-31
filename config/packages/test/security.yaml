@@ -1,6 +1,0 @@
-security:
-  providers:
-    api_user_provider:
-      memory:
-        users:
-          'test.somda': { password: '$argon2id$v=19$m=65536,t=4,p=1$XOQATPyvQ2IqHYWdZXHbqA$SuIikc85AnuMfSbm/Y7AZqqZa53lT9OKyrwqnKEizI4', roles: 'ROLE_API_USER' }

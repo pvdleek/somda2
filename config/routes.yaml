@@ -1,7 +1,3 @@
-api:
-  resource: routes_api.yaml
-  prefix: /api
-
 home:
   path: /
   methods: [GET]

@@ -8,9 +8,6 @@ use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use JMS\Serializer\Annotation as JMS;
-use Nelmio\ApiDocBundle\Annotation\Model;
-use OpenApi\Annotations as OA;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -22,50 +19,25 @@ use Symfony\Component\Validator\Constraints as Assert;
 ])]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
-    public const API_TOKEN_VALIDITY = '+1 year';
-
-    /**
-     * @JMS\Expose()
-     * @OA\Property(description="Unique identifier", type="integer")
-     */
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(name: 'uid')]
     public ?int $id = null;
 
-    /**
-     * @JMS\Expose()
-     * @OA\Property(description="Is the user active", type="boolean")
-     */
     #[ORM\Column(nullable: false, options: ['default' => false])]
     public bool $active = false;
 
-    /**
-     * @JMS\Expose()
-     * @OA\Property(description="Username", maxLength=20, type="string")
-     */
     #[ORM\Column(length: 20, nullable: false, options: ['default' => ''])]
     #[Assert\NotBlank()]
     #[Assert\Length(min: 2, max: 20, minMessage: 'De gebruikersnaam moet minimaal 2 karakters lang zijn', maxMessage: 'De gebruikersnaam mag maximaal 20 karakters lang zijn')]
     public string $username = '';
 
-    /**
-     * @JMS\Expose()
-     * @OA\Property(description="Real name of the user", maxLength=100, type="string")
-     */
     #[ORM\Column(length: 100, nullable: true, options: ['default' => ''])]
     public ?string $name = null;
 
-    /**
-     * @JMS\Exclude()
-     */
     #[ORM\Column(length: 255, nullable: false, options: ['default' => ''])]
     public string $password = '';
 
-    /**
-     * @JMS\Expose()
-     * @OA\Property(description="Email address of the user", maxLength=100, type="string")
-     */
     #[Assert\NotBlank]
     #[Assert\Email(message: 'Dit is geen geldig e-mailadres')]
     #[Assert\Length(
@@ -75,97 +47,42 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 100, nullable: false, options: ['default' => ''])]
     public string $email = '';
 
-    /**
-     * @JMS\Exclude()
-     */
     #[ORM\Column(name: 'actkey', length: 13, nullable: true)]
     public ?string $activation_key = null;
 
-    /**
-     * @JMS\Expose()
-     * @OA\Property(description="ISO-8601 timestamp of the registration of the user (Y-m-dTH:i:sP)", type="string")
-     */
     #[ORM\Column(name: 'regdate', type: 'datetime', nullable: true)]
     public ?\DateTime $register_timestamp = null;
 
-    /**
-     * @JMS\Exclude()
-     */
     #[ORM\Column(type: 'datetime', nullable: true)]
     public ?\DateTime $ban_expire_timestamp = null;
 
-    /**
-     * @JMS\Expose()
-     * @OA\Property(description="ISO-8601 timestamp of the last visit of the user (Y-m-dTH:i:sP)", type="string")
-     */
     #[ORM\Column(type: 'datetime', nullable: true)]
     public ?\DateTime $last_visit = null;
 
-    /**
-     * @JMS\Expose()
-     * @OA\Property(description="Token of the user, if logged in", maxLength=23, type="string")
-     */
-    #[ORM\Column(type: 'string', length: 23, nullable: true)]
-    public ?string $api_token = null;
-
-    /**
-     * @JMS\Exclude()
-     */
-    #[ORM\Column(type: 'datetime', nullable: true)]
-    public ?\DateTime $api_token_expiry_timestamp = null;
-
-    /**
-     * @JMS\Exclude()
-     */
     #[ORM\Column(type: 'array', nullable: false, options: ['default' => []])]
     public array $roles = [];
 
-    /**
-     * @JMS\Expose()
-     */
     #[ORM\OneToOne(targetEntity: UserInfo::class, mappedBy: 'user', cascade: ['persist', 'remove'])]
     public ?UserInfo $info = null;
 
-    /**
-     * @JMS\Exclude()
-     */
     #[ORM\ManyToMany(targetEntity: Group::class, mappedBy: 'users')]
     private Collection $groups;
 
-    /**
-     * @JMS\Exclude()
-     */
     #[ORM\OneToMany(targetEntity: ForumFavorite::class, mappedBy: 'user')]
     private Collection $forum_favorites;
 
-    /**
-     * @JMS\Exclude()
-     */
     #[ORM\OneToMany(targetEntity: ForumPostFavorite::class, mappedBy: 'user')]
     private Collection $forum_post_favorites;
 
-    /**
-     * @JMS\Exclude()
-     */
     #[ORM\ManyToMany(targetEntity: ForumForum::class, mappedBy: 'moderators')]
     private Collection $moderated_forums;
 
-    /**
-     * @JMS\Exclude()
-     */
     #[ORM\OneToMany(targetEntity: Spot::class, mappedBy: 'user')]
     private Collection $spots;
 
-    /**
-     * @JMS\Expose()
-     * @OA\Property(description="The user-settings", ref=@Model(type=UserPreferenceValue::class))
-     */
     #[ORM\OneToMany(targetEntity: UserPreferenceValue::class, mappedBy: 'user', cascade: ['persist', 'remove'])]
     private Collection $preferences;
 
-    /**
-     * @JMS\Exclude()
-     */
     #[ORM\ManyToMany(targetEntity: News::class, mappedBy: 'user_reads')]
     #[ORM\JoinTable(
         name: 'somda_news_read',
@@ -340,18 +257,5 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         foreach ($this->news_reads->toArray() as $news_read) {
             $this->news_reads->removeElement($news_read);
         }
-    }
-
-    /**
-     * @JMS\VirtualProperty(name="signature")
-     */
-    public function getSignature(): string
-    {
-        foreach ($this->getPreferences() as $preference) {
-            if ($preference->preference->key === UserPreference::KEY_FORUM_SIGNATURE) {
-                return $preference->value;
-            }
-        }
-        return '';
     }
 }

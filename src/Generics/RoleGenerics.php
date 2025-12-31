@@ -15,7 +15,6 @@ final class RoleGenerics
     public const ROLE_ADMIN_SPECIAL_ROUTES = 'ROLE_ADMIN_SPECIAL_ROUTES';
     public const ROLE_ADMIN_TRAINTABLE_EDIT = 'ROLE_ADMIN_TRAINTABLE_EDIT';
     public const ROLE_ADMIN_WIKI = 'ROLE_ADMIN_WIKI';
-    public const ROLE_API_USER = 'ROLE_API_USER';
     public const ROLE_PASSING_ROUTES = 'ROLE_PASSING_ROUTES';
     public const ROLE_SPOTS_EDIT = 'ROLE_SPOTS_EDIT';
     public const ROLE_SPOTS_NEW = 'ROLE_SPOTS_NEW';

@@ -1,7 +1,7 @@
 # Somda Codebase Guide
 
 ## Project Overview
-Somda is a Symfony 7.3 web application (PHP 8.2+) for Dutch railway enthusiasts, providing train spotting, forums, news, and route information. It includes a web interface with mobile detection, RSS feeds, and REST API.
+Somda is a Symfony 7.3 web application (PHP 8.2+) for Dutch railway enthusiasts, providing train spotting, forums, news, and route information. It includes a web interface with mobile detection and RSS feeds.
 
 ## Architecture
 
@@ -103,19 +103,13 @@ if ($form->isSubmitted() && $form->isValid()) {
 - Custom validation in form types via `configureOptions()`
 
 ### Routing
-Manual YAML routes (`config/routes.yaml`, `config/routes_api.yaml`):
+Manual YAML routes (`config/routes.yaml`):
 ```yaml
 route_name:
-  path: /pad/{parameter}/
+  path: /path/{parameter}/
   methods: [GET, POST]
   controller: App\Controller\SomeController::actionAction
 ```
-
-### API
-- Prefix: `/api`
-- Auth via headers: `SomdaUserId` + `SomdaApiToken`
-- Uses `FOSRestBundle` and `NelmioApiDocBundle` (Swagger at `/api/doc`)
-- Entities expose API fields with `@JMS\Expose()` and `@OA\Property()`
 
 ## Forum System (Critical Component)
 

@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use JMS\Serializer\Annotation as JMS;
-use OpenApi\Annotations as OA;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity]
@@ -57,46 +55,24 @@ class UserPreference
         self::KEY_MAIL_LAST_MINUTE_SPECIAL_ROUTE,
     ];
 
-    /**
-     * @JMS\Exclude()
-     */
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(name: 'prefid', nullable: false, options: ['unsigned' => true])]
     public ?int $id = null;
 
-    /**
-     * @JMS\Expose()
-     * @OA\Property(description="Unique identifier", maxLength=25, type="string")
-     */
     #[ORM\Column(name: 'sleutel', length: 25, nullable: false, options: ['default' => ''])]
     #[Assert\Choice(choices: self::KEY_VALUES)]
     public string $key = '';
 
-    /**
-     * @JMS\Expose()
-     * @OA\Property(description="Type of the value", maxLength=50, type="string")
-     */
     #[ORM\Column(length: 50, nullable: false, options: ['default' => ''])]
     public string $type = '';
 
-    /**
-     * @JMS\Expose()
-     * @OA\Property(description="Description of the setting", maxLength=90, type="string")
-     */
     #[ORM\Column(length: 90, nullable: false, options: ['default' => ''])]
     public string $description = '';
 
-    /**
-     * @JMS\Expose()
-     * @OA\Property(description="Default value", maxLength=200, type="string")
-     */
     #[ORM\Column(name: 'default_value', length: 200, nullable: false, options: ['default' => ''])]
     public string $default_value = '';
 
-    /**
-     * @JMS\Exclude()
-     */
     #[ORM\Column(name: 'volgorde', type: 'smallint', nullable: false, options: ['default' => 0, 'unsigned' => true])]
     public int $order = 0;
 }
