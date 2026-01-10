@@ -119,7 +119,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function eraseCredentials(): void
     {
-        $this->password = '';
+        // Intentionally left blank
     }
 
     public function getSalt(): ?string
