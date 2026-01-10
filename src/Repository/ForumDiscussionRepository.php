@@ -27,11 +27,19 @@ class ForumDiscussionRepository extends ServiceEntityRepository
      */
     public function findForDashboard(int $limit, ?User $user = null): array
     {
+        $parameters = [
+            'min_date' => \date(
+                DateGenerics::DATE_FORMAT_DATABASE,
+                \mktime(0, 0, 0, (int) \date('m'), (int) \date('d') - 30, (int) \date('Y'))
+            ),
+            'moderator_forum_type' => ForumForum::TYPE_MODERATORS_ONLY,
+        ];
+
         $max_query = '
             SELECT p.discussionid AS disc_id, MAX(p.timestamp) AS max_date_time
             FROM somda_forum_posts p
             JOIN somda_forum_discussion d ON d.discussionid = p.discussionid
-            WHERE p.timestamp > :minDate
+            WHERE p.timestamp > :min_date
             GROUP BY disc_id';
         if (null === $user) {
             $query = '
@@ -45,7 +53,7 @@ class ForumDiscussionRepository extends ServiceEntityRepository
                 JOIN somda_forum_posts p_max ON p_max.discussionid = d.discussionid
                 JOIN somda_forum_posts p_count ON p_count.discussionid = d.discussionid
                 INNER JOIN ('.$max_query.') m ON m.disc_id = d.discussionid
-                WHERE p_max.timestamp = m.max_date_time AND f.type != :moderatorForumType
+                WHERE p_max.timestamp = m.max_date_time AND f.type != :moderator_forum_type
                 GROUP BY id, title, author_id, viewed, m.max_date_time, max_post_timestamp
                 ORDER BY m.max_date_time DESC
                 LIMIT 0, '.$limit;
@@ -61,24 +69,21 @@ class ForumDiscussionRepository extends ServiceEntityRepository
                 JOIN somda_users a ON a.uid = d.authorid
                 JOIN somda_forum_posts p_max ON p_max.discussionid = d.discussionid
                 LEFT JOIN somda_forum_last_read r
-                    ON r.uid = '.(string) $user->id.' AND r.discussionid = d.discussionid
+                    ON r.uid = :user_id AND r.discussionid = d.discussionid
                 JOIN somda_forum_posts p_count ON p_count.discussionid = d.discussionid
                 INNER JOIN ('.$max_query.') m ON m.disc_id = d.discussionid
-                WHERE p_max.timestamp = m.max_date_time AND f.type != :moderatorForumType
+                WHERE p_max.timestamp = m.max_date_time AND f.type != :moderator_forum_type
                 GROUP BY `id`, `title`, `author_id`, `viewed`, m.max_date_time, `discussion_read`, `max_post_timestamp`
                 ORDER BY m.max_date_time DESC
                 LIMIT 0, '.$limit;
+            $parameters['user_id'] = $user->id;
         }
 
         $connection = $this->getEntityManager()->getConnection();
         try {
             $statement = $connection->prepare($query);
-            $statement->bindValue(
-                'minDate',
-                \date(DateGenerics::DATE_FORMAT_DATABASE, \mktime(0, 0, 0, (int) \date('m'), (int) \date('d') - 30, (int) \date('Y')))
-            );
-            $statement->bindValue('moderatorForumType', ForumForum::TYPE_MODERATORS_ONLY);
-            return $statement->executeQuery()->fetchAllAssociative();
+
+            return $statement->executeQuery($parameters)->fetchAllAssociative();
         } catch (DBALDriverException) {
             return [];
         }
@@ -86,7 +91,9 @@ class ForumDiscussionRepository extends ServiceEntityRepository
 
     public function findByForum(ForumForum $forum, ?User $user = null, ?int $limit = null): array
     {
-        $maxQuery = '
+        $parameters = ['forum_id' => $forum->id];
+
+        $max_query = '
             SELECT p.discussionid AS disc_id, MAX(p.timestamp) AS max_date_time
             FROM somda_forum_posts p
             JOIN somda_forum_discussion d ON d.discussionid = p.discussionid
@@ -101,7 +108,7 @@ class ForumDiscussionRepository extends ServiceEntityRepository
                 JOIN somda_users a ON a.uid = d.authorid
                 JOIN somda_forum_posts p_max ON p_max.discussionid = d.discussionid
                 JOIN somda_forum_posts p_count ON p_count.discussionid = d.discussionid
-                INNER JOIN ('.$maxQuery.') m ON m.disc_id = d.discussionid
+                INNER JOIN ('.$max_query.') m ON m.disc_id = d.discussionid
                 WHERE d.forumid = :forum_id AND p_max.timestamp = m.max_date_time
                 GROUP BY id, title, author_id, viewed, m.max_date_time, max_post_timestamp
                 ORDER BY m.max_date_time DESC';
@@ -116,12 +123,13 @@ class ForumDiscussionRepository extends ServiceEntityRepository
                 JOIN somda_users a ON a.uid = d.authorid
                 JOIN somda_forum_posts p_max ON p_max.discussionid = d.discussionid
                 LEFT JOIN somda_forum_last_read r
-                    ON r.uid = '.(string) $user->id.' AND r.discussionid = d.discussionid
+                    ON r.uid = :user_id AND r.discussionid = d.discussionid
                 JOIN somda_forum_posts p_count ON p_count.discussionid = d.discussionid
-                INNER JOIN ('.$maxQuery.') m ON m.disc_id = d.discussionid
+                INNER JOIN ('.$max_query.') m ON m.disc_id = d.discussionid
                 WHERE d.forumid = :forum_id AND p_max.timestamp = m.max_date_time
                 GROUP BY `id`, `title`, `author_id`, `viewed`, m.max_date_time, `discussion_read`, `max_post_timestamp`
                 ORDER BY m.max_date_time DESC';
+            $parameters['user_id'] = $user->id;
         }
         if (null !== $limit) {
             $query .= ' LIMIT 0, '.$limit;
@@ -129,8 +137,8 @@ class ForumDiscussionRepository extends ServiceEntityRepository
         $connection = $this->getEntityManager()->getConnection();
         try {
             $statement = $connection->prepare($query);
-            $statement->bindValue('forum_id', $forum->id);
-            return $statement->executeQuery()->fetchAllAssociative();
+
+            return $statement->executeQuery($parameters)->fetchAllAssociative();
         } catch (DBALDriverException | DBALException) {
             return [];
         }
@@ -138,7 +146,7 @@ class ForumDiscussionRepository extends ServiceEntityRepository
 
     public function findByFavorites(User $user): array
     {
-        $maxQuery = '
+        $max_query = '
             SELECT p.discussionid AS disc_id, MAX(p.timestamp) AS max_date_time
             FROM somda_forum_posts p
             JOIN somda_forum_discussion d ON d.discussionid = p.discussionid
@@ -156,17 +164,17 @@ class ForumDiscussionRepository extends ServiceEntityRepository
             JOIN somda_forum_posts p_max ON p_max.discussionid = d.discussionid
             INNER JOIN somda_forum_favorites f ON f.discussionid = d.discussionid AND f.uid = :user_id
             LEFT JOIN somda_forum_last_read r
-                    ON r.uid = '.(string) $user->id.' AND r.discussionid = d.discussionid
+                    ON r.uid = :user_id AND r.discussionid = d.discussionid
             JOIN somda_forum_posts p_count ON p_count.discussionid = d.discussionid
-            INNER JOIN ('.$maxQuery.') m ON m.disc_id = d.discussionid
+            INNER JOIN ('.$max_query.') m ON m.disc_id = d.discussionid
             WHERE p_max.timestamp = m.max_date_time
             GROUP BY `id`, `title`, `author_id`, `viewed`, m.max_date_time, `discussion_read`, `max_post_timestamp`
             ORDER BY m.max_date_time DESC';
         $connection = $this->getEntityManager()->getConnection();
         try {
             $statement = $connection->prepare($query);
-            $statement->bindValue('user_id', $user->id);
-            return $statement->executeQuery()->fetchAllAssociative();
+
+            return $statement->executeQuery(['user_id' => $user->id])->fetchAllAssociative();
         } catch (DBALDriverException | DBALException) {
             return [];
         }
@@ -174,11 +182,20 @@ class ForumDiscussionRepository extends ServiceEntityRepository
 
     public function findUnread(User $user): array
     {
-        $maxQuery = '
+        $parameters = [
+            'min_date' => \date(
+                DateGenerics::DATE_FORMAT_DATABASE,
+                \mktime(0, 0, 0, (int) \date('m'), (int) \date('d') - 1000, (int) \date('Y'))
+            ),
+            'moderator_forum_type' => ForumForum::TYPE_MODERATORS_ONLY,
+            'user_id' => $user->id,
+        ];
+
+        $max_query = '
             SELECT p.discussionid AS disc_id, MAX(p.timestamp) AS max_date_time
             FROM somda_forum_posts p
             JOIN somda_forum_discussion d ON d.discussionid = p.discussionid
-            WHERE p.timestamp > :minDate
+            WHERE p.timestamp > :min_date
             GROUP BY disc_id';
         $query = '
             SELECT `d`.`discussionid` AS `id`, `d`.`title` AS `title`, `a`.`uid` AS `author_id`,
@@ -191,22 +208,18 @@ class ForumDiscussionRepository extends ServiceEntityRepository
             JOIN somda_users a ON a.uid = d.authorid
             JOIN somda_forum_posts p_max ON p_max.discussionid = d.discussionid
             LEFT JOIN somda_forum_last_read r
-                    ON r.uid = '.(string) $user->id.' AND r.discussionid = d.discussionid
+                    ON r.uid = :user_id AND r.discussionid = d.discussionid
             JOIN somda_forum_posts p_count ON p_count.discussionid = d.discussionid
-            INNER JOIN ('.$maxQuery.') m ON m.disc_id = d.discussionid
-            WHERE p_max.timestamp = m.max_date_time AND f.type != :moderatorForumType AND (`r`.`postid` IS NULL OR `r`.`postid` < p_max.postid)
+            INNER JOIN ('.$max_query.') m ON m.disc_id = d.discussionid
+            WHERE p_max.timestamp = m.max_date_time AND f.type != :moderator_forum_type AND (`r`.`postid` IS NULL OR `r`.`postid` < p_max.postid)
             GROUP BY `id`, `title`, `author_id`, `viewed`, m.max_date_time, `discussion_read`, `max_post_timestamp`
             ORDER BY m.max_date_time DESC';
 
         $connection = $this->getEntityManager()->getConnection();
         try {
             $statement = $connection->prepare($query);
-            $statement->bindValue('minDate', date(
-                DateGenerics::DATE_FORMAT_DATABASE,
-                \mktime(0, 0, 0, (int) \date('m'), (int) \date('d') - 1000, (int) \date('Y'))
-            ));
-            $statement->bindValue('moderatorForumType', ForumForum::TYPE_MODERATORS_ONLY);
-            return $statement->executeQuery()->fetchAllAssociative();
+
+            return $statement->executeQuery($parameters)->fetchAllAssociative();
         } catch (DBALDriverException) {
             return [];
         }
@@ -217,7 +230,15 @@ class ForumDiscussionRepository extends ServiceEntityRepository
      */
     public function findLastDiscussion(): ?array
     {
-        $maxQuery = '
+        $parameters = [
+            'min_date' => \date(
+                DateGenerics::DATE_FORMAT_DATABASE,
+                \mktime(0, 0, 0, (int) \date('m'), (int) \date('d') - 1000, (int) \date('Y'))
+            ),
+            'moderator_forum_type' => ForumForum::TYPE_MODERATORS_ONLY,
+        ];
+
+        $max_query = '
             SELECT p.discussionid AS disc_id, MAX(p.timestamp) AS max_date_time
             FROM somda_forum_posts p
             JOIN somda_forum_discussion d ON d.discussionid = p.discussionid
@@ -229,22 +250,17 @@ class ForumDiscussionRepository extends ServiceEntityRepository
             FROM somda_forum_discussion d
             JOIN somda_forum_forums f ON f.forumid = d.forumid
             JOIN somda_forum_posts p_max ON p_max.discussionid = d.discussionid
-            INNER JOIN ('.$maxQuery.') m ON m.disc_id = d.discussionid
-            WHERE p_max.timestamp = m.max_date_time AND f.type != :moderatorForumType
+            INNER JOIN ('.$max_query.') m ON m.disc_id = d.discussionid
+            WHERE p_max.timestamp = m.max_date_time AND f.type != :moderator_forum_type
             GROUP BY id, title, max_post_timestamp
             ORDER BY m.max_date_time DESC
             LIMIT 1';
 
         $connection = $this->getEntityManager()->getConnection();
         $statement = $connection->prepare($query);
-        $statement->bindValue(
-            'minDate',
-            \date(DateGenerics::DATE_FORMAT_DATABASE, \mktime(0, 0, 0, \date('m'), \date('d') - 5, \date('Y')))
-        );
-        $statement->bindValue('moderatorForumType', ForumForum::TYPE_MODERATORS_ONLY);
-        $lastDiscussion = $statement->executeQuery()->fetchAssociative();
+        $last_discussion = $statement->executeQuery($parameters)->fetchAssociative();
 
-        return $lastDiscussion === false ? null : $lastDiscussion;
+        return $last_discussion === false ? null : $last_discussion;
     }
 
     public function getNumberOfPosts(ForumDiscussionEntity $discussion): int

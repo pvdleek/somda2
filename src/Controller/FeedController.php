@@ -50,12 +50,12 @@ class FeedController
         \header('Content-Type: image/png');
 
         $limit = (int) $request->query->get('limit', self::DEFAULT_LIMIT);
-        $image = \ImageCreate(750, 15 * ($limit + 1));
+        $image = \imagecreate(750, 15 * ($limit + 1));
         $background_color = $this->getColorAllocation(
             $image,
             $request->query->get('bg-color', self::DEFAULT_BACKGROUND_COLOR)
         );
-        \ImageFill($image, 0, 0, $background_color);
+        \imagefill($image, 0, 0, $background_color);
         $this->foreground_color = $this->getColorAllocation(
             $image,
             $request->query->get('fg-color', self::DEFAULT_FOREGROUND_COLOR)
@@ -118,10 +118,10 @@ class FeedController
             $green = (string) $color[1].$color[1];
             $blue = (string) $color[2].$color[2];
         } else {
-            return ImageColorAllocate($id, 255, 255, 255);
+            return imagecolorallocate($id, 255, 255, 255);
         }
 
-        return ImageColorAllocate($id, \hexdec($red), \hexdec($green), \hexdec($blue));
+        return imagecolorallocate($id, \hexdec($red), \hexdec($green), \hexdec($blue));
     }
 
     private function getPassingRoutes(Location $location, ?int $day_number, ?string $start_time): array
@@ -141,7 +141,7 @@ class FeedController
             $text
         );
 
-        \ImageString($id, 2, 5, 15 * ($this->line_number - 1), $text, $this->foreground_color);
+        \imagestring($id, 2, 5, 15 * ($this->line_number - 1), $text, $this->foreground_color);
         ++$this->line_number;
     }
 }

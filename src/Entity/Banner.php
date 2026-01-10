@@ -13,8 +13,8 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Table(name: 'somda_banner')]
 class Banner
 {
-    const LOCATION_HEADER = 'header';
-    const LOCATION_FORUM = 'forum';
+    public const LOCATION_HEADER = 'header';
+    public const LOCATION_FORUM = 'forum';
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
