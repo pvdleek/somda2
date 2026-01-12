@@ -340,14 +340,14 @@ class ForumDiscussionRepository extends ServiceEntityRepository
     public function markAllPostsAsRead(User $user): void
     {
         $query = 'REPLACE INTO `somda_forum_last_read` (`uid`, `discussionid`, `postid`) ' .
-            'SELECT '.(string) $user->id.' AS `uid`, `d`.`discussionid`, `p`.`postid` ' .
+            'SELECT :user_id AS `uid`, `d`.`discussionid`, `p`.`postid` ' .
             'FROM `somda_forum_discussion` `d` ' .
             'LEFT JOIN `somda_forum_posts` `p` ON `p`.`postid` = (SELECT `postid` FROM `somda_forum_posts` ORDER BY `postid` DESC LIMIT 1)';
 
         $connection = $this->getEntityManager()->getConnection();
         try {
             $statement = $connection->prepare($query);
-            $statement->executeStatement();
+            $statement->executeStatement(['user_id' => $user->id]);
         } catch (DBALDriverException | DBALException) {
             return;
         }

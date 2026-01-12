@@ -110,13 +110,13 @@ class FeedController
         }
 
         if (\strlen($color) === 6) {
-            $red = (string) $color[0].$color[1];
-            $green = (string) $color[2].$color[3];
-            $blue = (string) $color[4].$color[5];
+            $red = $color[0].$color[1];
+            $green = $color[2].$color[3];
+            $blue = $color[4].$color[5];
         } elseif (\strlen($color) === 3) {
-            $red = (string) $color[0].$color[0];
-            $green = (string) $color[1].$color[1];
-            $blue = (string) $color[2].$color[2];
+            $red = $color[0].$color[0];
+            $green = $color[1].$color[1];
+            $blue = $color[2].$color[2];
         } else {
             return imagecolorallocate($id, 255, 255, 255);
         }
