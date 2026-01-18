@@ -7,11 +7,9 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
-#[ORM\Table(
-    name: 'ofo_official_footnote',
-    indexes: [new ORM\Index(name: 'idx_ofo__footnote_id', columns: ['ofo_footnote_id'])],
-    uniqueConstraints: [new ORM\UniqueConstraint(name: 'unq_ofo__footnote_id_date', columns: ['ofo_footnote_id', 'ofo_date'])]
-)]
+#[ORM\Table(name: 'ofo_official_footnote')]
+#[ORM\Index(name: 'idx_ofo__footnote_id', columns: ['ofo_footnote_id'])]
+#[ORM\UniqueConstraint(name: 'unq_ofo__footnote_id_date', columns: ['ofo_footnote_id', 'ofo_date'])]
 class OfficialFootnote
 {
     #[ORM\Id]

@@ -7,7 +7,8 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
-#[ORM\Table(name: 'somda_ddar', indexes: ['idx_somda_ddar__matid' => ['matid']])]
+#[ORM\Table(name: 'somda_ddar')]
+#[ORM\Index(name: 'idx_somda_ddar__matid', columns: ['matid'])]
 class Ddar
 {
     #[ORM\Id]

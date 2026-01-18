@@ -10,7 +10,8 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ForumDiscussionRepository::class)]
-#[ORM\Table(name: 'somda_forum_discussion', indexes: [new ORM\Index(name: 'idx_somda_forum_discussion__forumid', columns: ['forumid'])])]
+#[ORM\Table(name: 'somda_forum_discussion')]
+#[ORM\Index(name: 'idx_somda_forum_discussion__forumid', columns: ['forumid'])]
 class ForumDiscussion
 {
     #[ORM\Id]

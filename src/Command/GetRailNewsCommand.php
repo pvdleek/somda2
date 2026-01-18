@@ -53,14 +53,14 @@ class GetRailNewsCommand extends Command
         [self::TITLE_ONLY => true, self::POSITIVE_WORD => ' NS ', self::NEGATIVE_WORD => 'SNS'],
     ];
 
-    private FeedIo $feedIo;
+    private FeedIo $feed_io;
 
     public function __construct(
         private readonly ManagerRegistry $doctrine,
     ) {
         parent::__construct();
 
-        $this->feedIo = new FeedIo(new GuzzleClient(new Client()), new NullLogger());
+        $this->feed_io = new FeedIo(new GuzzleClient(new Client()), new NullLogger());
     }
 
     /**
@@ -77,7 +77,7 @@ class GetRailNewsCommand extends Command
              * @var FeedInterface $items
              */
             try {
-                $items = $this->feedIo->read($feed->url, null, new \DateTime('-1 day'))->getFeed();
+                $items = $this->feed_io->read($feed->url, null, new \DateTime('-1 day'))->getFeed();
             } catch (ReadErrorException) {
                 continue;
             }
@@ -132,10 +132,11 @@ class GetRailNewsCommand extends Command
 
     private function isItemExists(ItemInterface $item): bool
     {
-        $railNewsByTitle = $this->doctrine->getRepository(RailNews::class)->findOneBy(
+        $rail_news_by_title = $this->doctrine->getRepository(RailNews::class)->findOneBy(
             ['title' => $item->getTitle()]
         );
-        return null !== $railNewsByTitle;
+        
+        return null !== $rail_news_by_title;
     }
 
     private function getItemDescription(ItemInterface $item): string
@@ -145,35 +146,33 @@ class GetRailNewsCommand extends Command
         if (\strlen($description) < 1) {
             return $item->getTitle();
         }
+
         return $description;
     }
 
     private function saveItem(RailNewsSource $source, ItemInterface $item, string $description): void
     {
-        /**
-         * @var RailNews $railNews
-         */
-        $railNews = $this->doctrine->getRepository(RailNews::class)->findOneBy(
+        /** @var RailNews|null $rail_news */
+        $rail_news = $this->doctrine->getRepository(RailNews::class)->findOneBy(
             ['url' => $item->getLink()]
         );
+        if (null === $rail_news) {
+            $rail_news = new RailNews();
+            $rail_news->title = $item->getTitle();
+            $rail_news->url = $item->getLink();
+            $rail_news->introduction = \html_entity_decode($description, ENT_NOQUOTES, 'UTF-8');
+            $rail_news->timestamp = $item->getLastModified() ?? new \DateTime();
+            $rail_news->approved = false;
+            $rail_news->active = false;
+            $rail_news->automatic_updates = true;
+            $rail_news->source = $source;
 
-        if (null === $railNews) {
-            $railNews = new RailNews();
-            $railNews->title = $item->getTitle();
-            $railNews->url = $item->getLink();
-            $railNews->introduction = \html_entity_decode($description, ENT_NOQUOTES, 'UTF-8');
-            $railNews->timestamp = $item->getLastModified() ?? new \DateTime();
-            $railNews->approved = false;
-            $railNews->active = false;
-            $railNews->automatic_updates = true;
-            $railNews->source = $source;
-
-            $this->doctrine->getManager()->persist($railNews);
-        } elseif ($railNews->automatic_updates) {
-            $railNews->title = $item->getTitle();
-            $railNews->url = $item->getLink();
-            $railNews->introduction = \html_entity_decode($description, ENT_NOQUOTES, 'UTF-8');
-            $railNews->timestamp = $item->getLastModified() ?? new \DateTime();
+            $this->doctrine->getManager()->persist($rail_news);
+        } elseif ($rail_news->automatic_updates) {
+            $rail_news->title = $item->getTitle();
+            $rail_news->url = $item->getLink();
+            $rail_news->introduction = \html_entity_decode($description, ENT_NOQUOTES, 'UTF-8');
+            $rail_news->timestamp = $item->getLastModified() ?? new \DateTime();
         }
     }
 }

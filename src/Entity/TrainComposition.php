@@ -9,7 +9,8 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
-#[ORM\Table(name: 'somda_mat_sms', indexes: [new ORM\Index(name: 'unq_somda_mat_sms__typeid', columns: ['typeid'])])]
+#[ORM\Table(name: 'somda_mat_sms')]
+#[ORM\Index(name: 'unq_somda_mat_sms__typeid', columns: ['typeid'])]
 class TrainComposition extends TrainCompositionBase
 {
     public const NUMBER_OF_CARS = 13;

@@ -7,7 +7,8 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
-#[ORM\Table(name: 'somda_mat_patterns', uniqueConstraints: [new ORM\UniqueConstraint(name: 'unq_somda_mat_patterns__volgorde', columns: ['volgorde'])])]
+#[ORM\Table(name: 'somda_mat_patterns')]
+#[ORM\UniqueConstraint(name: 'unq_somda_mat_patterns__volgorde', columns: ['volgorde'])]
 class TrainNamePattern
 {
     #[ORM\Id]

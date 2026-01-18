@@ -10,14 +10,10 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: TrainTableRepository::class)]
-#[ORM\Table(
-    name: 'somda_tdr',
-    indexes: [
-        new ORM\Index(name: 'idx_somda_tdr__tijd', columns: ['tijd']),
-        new ORM\Index(name: 'idx_somda_tdr__locatieid', columns: ['locatieid']),
-        new ORM\Index(name: 'idx_somda_tdr__treinid', columns: ['treinid']),
-    ]
-)]
+#[ORM\Table(name: 'somda_tdr')]
+#[ORM\Index(name: 'idx_somda_tdr__tijd', columns: ['tijd'])]
+#[ORM\Index(name: 'idx_somda_tdr__locatieid', columns: ['locatieid'])]
+#[ORM\Index(name: 'idx_somda_tdr__treinid', columns: ['treinid'])]
 class TrainTable
 {
     use DateTrait;

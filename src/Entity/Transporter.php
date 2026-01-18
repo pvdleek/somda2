@@ -9,7 +9,8 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
-#[ORM\Table(name: 'somda_vervoerder', uniqueConstraints: [new ORM\UniqueConstraint(name: 'unq_somda_vervoerder__omschrijving', columns: ['omschrijving'])])]
+#[ORM\Table(name: 'somda_vervoerder')]
+#[ORM\UniqueConstraint(name: 'unq_somda_vervoerder__omschrijving', columns: ['omschrijving'])]
 class Transporter
 {
     #[ORM\Id]

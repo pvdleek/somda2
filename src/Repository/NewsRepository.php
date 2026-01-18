@@ -23,17 +23,18 @@ class NewsRepository extends ServiceEntityRepository
      */
     public function findForDashboard(int $limit, ?User $user = null): array
     {
-        $parameters = [];
+        $connection = $this->getEntityManager()->getConnection();
+
         if (null === $user) {
-            $query = '
+            $statement = $connection->prepare('
                 SELECT `newsid` AS `id`, `title`, `timestamp`, TRUE AS `news_read`
                 FROM somda_news
                 WHERE archief = \'0\'
                 GROUP BY `id`, `title`, `timestamp`, `news_read`
                 ORDER BY `timestamp` DESC
-                LIMIT 0, '.$limit;
+                LIMIT 0, '.$limit);
         } else {
-            $query = '
+            $statement = $connection->prepare('
                 SELECT `n`.`newsid` AS `id`, `n`.`title` AS `title`, `n`.`timestamp` AS `timestamp`,
                     IF(`r`.`uid` IS NULL, FALSE, TRUE) AS `news_read`
                 FROM somda_news n
@@ -41,14 +42,11 @@ class NewsRepository extends ServiceEntityRepository
                 WHERE n.archief = \'0\'
                 GROUP BY `id`, `title`, `timestamp`, `news_read`
                 ORDER BY `timestamp` DESC
-                LIMIT 0, '.$limit;
-            $parameters['user_id'] = $user->id;
+                LIMIT 0, '.$limit);
+            $statement->bindValue('user_id', $user?->id);
         }
-        $connection = $this->getEntityManager()->getConnection();
         try {
-            $statement = $connection->prepare($query);
-            
-            return $statement->executeQuery($parameters)->fetchAllAssociative();
+            return $statement->executeQuery()->fetchAllAssociative();
         } catch (DBALException | DBALDriverException) {
             return [];
         }

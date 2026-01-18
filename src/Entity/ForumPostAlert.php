@@ -10,7 +10,8 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ForumPostAlertRepository::class)]
-#[ORM\Table(name: 'somda_forum_alerts', indexes: [new ORM\Index(name: 'idx_somda_forum_alerts__postid', columns: ['postid'])])]
+#[ORM\Table(name: 'somda_forum_alerts')]
+#[ORM\Index(name: 'idx_somda_forum_alerts__postid', columns: ['postid'])]
 class ForumPostAlert
 {
     #[ORM\Id]

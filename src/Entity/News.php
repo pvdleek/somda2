@@ -30,10 +30,9 @@ class News
     public bool $archived = false;
 
     #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'news_reads')]
-    #[ORM\JoinTable(name: 'somda_news_read', 
-        joinColumns: [new ORM\JoinColumn(name: 'newsid', referencedColumnName: 'newsid')], 
-        inverseJoinColumns: [new ORM\JoinColumn(name: 'uid', referencedColumnName: 'uid')]
-    )]
+    #[ORM\JoinTable(name: 'somda_news_read')]
+    #[ORM\JoinColumn(name: 'newsid', referencedColumnName: 'newsid')]
+    #[ORM\InverseJoinColumn(name: 'uid', referencedColumnName: 'uid')]
     private $user_reads;
 
     /**

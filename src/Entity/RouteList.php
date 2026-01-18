@@ -11,13 +11,9 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: RouteListRepository::class)]
-#[ORM\Table(
-    name: 'somda_tdr_treinnummerlijst',
-    indexes: [
-        new ORM\Index(name: 'idx_somda_tdr_treinnummerlijst__nr_start', columns: ['nr_start']),
-        new ORM\Index(name: 'idx_somda_tdr_treinnummerlijst__nr_eind', columns: ['nr_eind']),
-    ]
-)]
+#[ORM\Table(name: 'somda_tdr_treinnummerlijst')]
+#[ORM\Index(name: 'idx_somda_tdr_treinnummerlijst__nr_start', columns: ['nr_start'])]
+#[ORM\Index(name: 'idx_somda_tdr_treinnummerlijst__nr_eind', columns: ['nr_eind'])]
 class RouteList
 {
     #[ORM\Id]
@@ -48,10 +44,9 @@ class RouteList
     public ?string $section = null;
 
     #[ORM\ManyToMany(targetEntity: Route::class, inversedBy: 'route_lists')]
-    #[ORM\JoinTable(name: 'somda_tdr_trein_treinnummerlijst',
-        joinColumns: [new ORM\JoinColumn(name: 'treinnummerlijst_id', referencedColumnName: 'id')],
-        inverseJoinColumns: [new ORM\JoinColumn(name: 'treinid', referencedColumnName: 'treinid')]
-    )]
+    #[ORM\JoinTable(name: 'somda_tdr_trein_treinnummerlijst')]
+    #[ORM\JoinColumn(name: 'treinnummerlijst_id', referencedColumnName: 'id')]
+    #[ORM\InverseJoinColumn(name: 'treinid', referencedColumnName: 'treinid')]
     private Collection $routes;
 
     public function __construct()

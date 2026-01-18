@@ -10,11 +10,10 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: LocationRepository::class)]
-#[ORM\Table(
-    name: 'somda_verk',
-    uniqueConstraints: [new ORM\UniqueConstraint(name: 'unq_somda_verk__afkorting_landid', columns: ['afkorting', 'landid'])],
-    indexes: [new ORM\Index(name: 'idx_somda_verk__landid', columns: ['landid']), new ORM\Index(name: 'idx_somda_verk__description', columns: ['description'])]
-)]
+#[ORM\Table(name: 'somda_verk')]
+#[ORM\UniqueConstraint(name: 'unq_somda_verk__afkorting_landid', columns: ['afkorting', 'landid'])]
+#[ORM\Index(name: 'idx_somda_verk__landid', columns: ['landid'])]
+#[ORM\Index(name: 'idx_somda_verk__description', columns: ['description'])]
 class Location
 {
     public const UNKNOWN_NAME = 'Fout!';

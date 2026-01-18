@@ -10,10 +10,8 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ForumSearchWordRepository::class)]
-#[ORM\Table(
-    name: 'somda_forum_zoeken_woorden',
-    uniqueConstraints: [new ORM\UniqueConstraint(name: 'unq_somda_forum_zoeken_woorden__woord', columns: ['woord'])]
-)]
+#[ORM\Table(name: 'somda_forum_zoeken_woorden')]
+#[ORM\UniqueConstraint(name: 'unq_somda_forum_zoeken_woorden__woord', columns: ['woord'])]
 class ForumSearchWord
 {
     #[ORM\Id]

@@ -13,10 +13,9 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-#[ORM\Table(name: 'somda_users', indexes: [
-    new ORM\Index(name: 'idx_somda_users__uname', columns: ['username']),
-    new ORM\Index(name: 'idx_somda_users__active', columns: ['active']),
-])]
+#[ORM\Table(name: 'somda_users')]
+#[ORM\Index(name: 'idx_somda_users__uname', columns: ['username'])]
+#[ORM\Index(name: 'idx_somda_users__active', columns: ['active'])]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -59,7 +58,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'datetime', nullable: true)]
     public ?\DateTime $last_visit = null;
 
-    #[ORM\Column(type: 'array', nullable: false, options: ['default' => []])]
+    // TODO: remove this `name` reference after upgrade
+    #[ORM\Column(name: 'roles_new', nullable: false, options: ['default' => []])]
     public array $roles = [];
 
     #[ORM\OneToOne(targetEntity: UserInfo::class, mappedBy: 'user', cascade: ['persist', 'remove'])]
@@ -84,11 +84,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private Collection $preferences;
 
     #[ORM\ManyToMany(targetEntity: News::class, mappedBy: 'user_reads')]
-    #[ORM\JoinTable(
-        name: 'somda_news_read',
-        joinColumns: [new ORM\JoinColumn(name: 'uid', referencedColumnName: 'uid')],
-        inverseJoinColumns: [new ORM\JoinColumn(name: 'newsid', referencedColumnName: 'newsid')]
-    )]
     private Collection $news_reads;
 
     public function __construct()
@@ -129,11 +124,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function getRoles(): array
     {
-        $roleArray = $this->roles;
+        $role_array = $this->roles;
         foreach ($this->getGroups() as $group) {
-            $roleArray = \array_merge($roleArray, $group->roles);
+            $role_array = \array_merge($role_array, $group->roles);
         }
-        return $roleArray;
+
+        return $role_array;
     }
 
     public function hasRole(string $role): bool
@@ -146,12 +142,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         if (!$this->hasRole($role)) {
             $this->roles[] = $role;
         }
+
         return $this;
     }
 
     public function addGroup(Group $group): User
     {
         $this->groups[] = $group;
+
         return $this;
     }
 
@@ -166,6 +164,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function addForumFavorite(ForumFavorite $forum_favorite): User
     {
         $this->forum_favorites[] = $forum_favorite;
+
         return $this;
     }
 
@@ -184,12 +183,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 return true;
             }
         }
+
         return false;
     }
 
     public function addForumPostFavorite(ForumPostFavorite $forum_post_favorite): User
     {
         $this->forum_post_favorites[] = $forum_post_favorite;
+
         return $this;
     }
 
@@ -203,17 +204,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function isPostFavorite(ForumPost $post): bool
     {
-        foreach ($this->getForumPostFavorites() as $postFavorite) {
-            if ($postFavorite->post === $post) {
+        foreach ($this->getForumPostFavorites() as $post_favorite) {
+            if ($post_favorite->post === $post) {
                 return true;
             }
         }
+
         return false;
     }
 
     public function addModeratedForum(ForumForum $forum_forum): User
     {
         $this->moderated_forums[] = $forum_forum;
+
         return $this;
     }
 
@@ -228,6 +231,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function addSpot(Spot $spot): User
     {
         $this->spots[] = $spot;
+
         return $this;
     }
 
@@ -242,6 +246,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function addPreference(UserPreferenceValue $user_preference_value): User
     {
         $this->preferences[] = $user_preference_value;
+
         return $this;
     }
 

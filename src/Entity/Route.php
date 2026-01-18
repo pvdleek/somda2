@@ -9,7 +9,8 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
-#[ORM\Table(name: 'somda_trein', uniqueConstraints: [new ORM\UniqueConstraint(name: 'unq_somda_trein__treinnr', columns: ['treinnr'])])]
+#[ORM\Table(name: 'somda_trein')]
+#[ORM\UniqueConstraint(name: 'unq_somda_trein__treinnr', columns: ['treinnr'])]
 class Route
 {
     public const SPECIAL_NO_SERVICE = 'GDST';

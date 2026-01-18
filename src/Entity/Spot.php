@@ -8,21 +8,19 @@ use App\Repository\SpotRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: SpotRepository::class)]
-#[ORM\Table(name: 'somda_spots', uniqueConstraints: [
-    new ORM\UniqueConstraint(name: 'unq_somda_spots__treinid_posid_locatieid_matid_uid_datum', columns: [
-        'treinid',
-        'posid',
-        'locatieid',
-        'matid',
-        'uid',
-        'datum'
-    ]),
-], indexes: [
-    new ORM\Index(name: 'idx_somda_spots__timestamp', columns: ['timestamp']),
-    new ORM\Index(name: 'idx_somda_spots__matid', columns: ['matid']),
-    new ORM\Index(name: 'idx_somda_spots__datum', columns: ['datum']),
-    new ORM\Index(name: 'idx_somda_spots__uid', columns: ['uid']),
+#[ORM\Table(name: 'somda_spots')]
+#[ORM\UniqueConstraint(name: 'unq_somda_spots__treinid_posid_locatieid_matid_uid_datum', columns: [
+    'treinid',
+    'posid',
+    'locatieid',
+    'matid',
+    'uid',
+    'datum'
 ])]
+#[ORM\Index(name: 'idx_somda_spots__timestamp', columns: ['timestamp'])]
+#[ORM\Index(name: 'idx_somda_spots__matid', columns: ['matid'])]
+#[ORM\Index(name: 'idx_somda_spots__datum', columns: ['datum'])]
+#[ORM\Index(name: 'idx_somda_spots__uid', columns: ['uid'])]
 class Spot
 {
     public const INPUT_FEEDBACK_TRAIN_NEW = 1;

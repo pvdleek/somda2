@@ -11,11 +11,10 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ForumPostRepository::class)]
-#[ORM\Table(name: 'somda_forum_posts', indexes: [
-    new ORM\Index(name: 'idx_somda_forum_posts__timestamp', columns: ['timestamp']),
-    new ORM\Index(name: 'idx_somda_forum_posts__authorid', columns: ['authorid']),
-    new ORM\Index(name: 'idx_somda_forum_posts__discussionid', columns: ['discussionid']),
-])]
+#[ORM\Table(name: 'somda_forum_posts')]
+#[ORM\Index(name: 'idx_somda_forum_posts__timestamp', columns: ['timestamp'])]
+#[ORM\Index(name: 'idx_somda_forum_posts__authorid', columns: ['authorid'])]
+#[ORM\Index(name: 'idx_somda_forum_posts__discussionid', columns: ['discussionid'])]
 class ForumPost
 {
     public const WIKI_CHECK_NOT_CHECKED = 0;

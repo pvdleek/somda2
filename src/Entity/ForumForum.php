@@ -11,7 +11,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ForumForumRepository::class)]
-#[ORM\Table(name: 'somda_forum_forums', indexes: [new ORM\Index(name: 'idx_somda_forum_forums__catid', columns: ['catid'])])]
+#[ORM\Table(name: 'somda_forum_forums')]
+#[ORM\Index(name: 'idx_somda_forum_forums__catid', columns: ['catid'])]
 class ForumForum
 {
     public const TYPE_PUBLIC = 0;
@@ -51,11 +52,9 @@ class ForumForum
     private Collection $discussions;
 
     #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'moderated_forums')]
-    #[ORM\JoinTable(
-        name: 'somda_forum_mods',
-        joinColumns: [new ORM\JoinColumn(name: 'forumid', referencedColumnName: 'forumid')],
-        inverseJoinColumns: [new ORM\JoinColumn(name: 'uid', referencedColumnName: 'uid')]
-    )]
+    #[ORM\JoinTable(name: 'somda_forum_mods')]
+    #[ORM\JoinColumn(name: 'forumid', referencedColumnName: 'forumid')]
+    #[ORM\InverseJoinColumn(name: 'uid', referencedColumnName: 'uid')]
     private Collection $moderators;
 
     public function __construct()

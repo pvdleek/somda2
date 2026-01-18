@@ -10,11 +10,9 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: TrainRepository::class)]
-#[ORM\Table(
-    name: 'somda_mat',
-    uniqueConstraints: [new ORM\UniqueConstraint(name: 'unq_somda_mat__nummer', columns: ['nummer'])],
-    indexes: [new ORM\Index(name: 'idx_somda_mat__vervoerder_id', columns: ['vervoerder_id'])]
-)]
+#[ORM\Table(name: 'somda_mat')]
+#[ORM\UniqueConstraint(name: 'unq_somda_mat__nummer', columns: ['nummer'])]
+#[ORM\Index(name: 'idx_somda_mat__vervoerder_id', columns: ['vervoerder_id'])]
 class Train
 {
     #[ORM\Id]

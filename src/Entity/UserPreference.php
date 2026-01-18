@@ -8,7 +8,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity]
-#[ORM\Table(name: 'somda_prefs', indexes: [new ORM\Index(name: 'idx_somda_prefs__sleutel', columns: ['sleutel'])])]
+#[ORM\Table(name: 'somda_prefs')]
+#[ORM\Index(name: 'idx_somda_prefs__sleutel', columns: ['sleutel'])]
 class UserPreference
 {
     public const KEY_HOME_LAYOUT = 'layout';

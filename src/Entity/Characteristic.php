@@ -7,7 +7,8 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
-#[ORM\Table(name: 'somda_karakteristiek', uniqueConstraints: [new ORM\UniqueConstraint(name: 'unq_somda_karakteristiek__naam', columns: ['naam'])])]
+#[ORM\Table(name: 'somda_karakteristiek')]
+#[ORM\UniqueConstraint(name: 'unq_somda_karakteristiek__naam', columns: ['naam'])]
 class Characteristic
 {
     #[ORM\Id]

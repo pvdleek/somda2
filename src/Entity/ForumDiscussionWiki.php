@@ -7,7 +7,8 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
-#[ORM\Table(name: 'somda_forum_discussion_wiki', indexes: [new ORM\Index(name: 'idx_somda_forum_discussion_wiki__discussionid', columns: ['discussionid'])])]
+#[ORM\Table(name: 'somda_forum_discussion_wiki')]
+#[ORM\Index(name: 'idx_somda_forum_discussion_wiki__discussionid', columns: ['discussionid'])]
 class ForumDiscussionWiki
 {
     #[ORM\Id]

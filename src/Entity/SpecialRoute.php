@@ -40,10 +40,9 @@ class SpecialRoute
     public string $text = '';
 
     #[ORM\ManyToMany(targetEntity: User::class)]
-    #[ORM\JoinTable(name: 'somda_drgl_read', 
-        joinColumns: [new ORM\JoinColumn(name: 'drglid', referencedColumnName: 'drglid')], 
-        inverseJoinColumns: [new ORM\JoinColumn(name: 'uid', referencedColumnName: 'uid')]
-    )]
+    #[ORM\JoinTable(name: 'somda_drgl_read')]
+    #[ORM\JoinColumn(name: 'drglid', referencedColumnName: 'drglid')]
+    #[ORM\InverseJoinColumn(name: 'uid', referencedColumnName: 'uid')]
     private Collection $user_reads;
 
     public function __construct()
