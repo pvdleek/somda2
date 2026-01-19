@@ -46,14 +46,19 @@ class Banner
     public int $max_views = 0;
 
     #[ORM\Column(options: ['default' => 0])]
+    public int $views = 0;
+
+    #[ORM\Column(options: ['default' => 0])]
     public int $max_hits = 0;
 
+    #[ORM\Column(options: ['default' => 0])]
+    public int $hits = 0;
+
     #[ORM\Column(name: 'start_date', type: 'datetime', nullable: true)]
-    public ?\DateTime $start_timestamp;
+    public ?\DateTime $start_timestamp = null;
 
     #[ORM\Column(name: 'end_date', type: 'datetime', nullable: true)]
-    public ?\DateTime $end_timestamp;
-
+    public ?\DateTime $end_timestamp = null;
     #[ORM\OneToMany(targetEntity: BannerHit::class, mappedBy: 'banner')]
     /** @var Collection<int, BannerHit> */
     private Collection $banner_hits;

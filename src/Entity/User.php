@@ -58,8 +58,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'datetime', nullable: true)]
     public ?\DateTime $last_visit = null;
 
-    // TODO: remove this `name` reference after upgrade
-    #[ORM\Column(name: 'roles_new', nullable: false, options: ['default' => []])]
+    /** @var list<string> */
+    #[ORM\Column]
     public array $roles = [];
 
     #[ORM\OneToOne(targetEntity: UserInfo::class, mappedBy: 'user', cascade: ['persist', 'remove'])]

@@ -50,10 +50,10 @@ class UpdateBannerStatisticsCommand extends Command
         $banner_repository = $this->doctrine->getRepository(Banner::class);
         $banners = $banner_repository->findBy(['active' => true]);
         foreach ($banners as $banner) {
-            if (null !== $banner->end_timestamp && $banner->end_timestamp <= new \DateTime() ||
-                $banner->max_hits >= $banner_repository->getNumberOfHits($banner) ||
-                $banner->max_views >= $banner_repository->getNumberOfViews($banner)
-            ) {
+            $banner->views = $banner_repository->getNumberOfViews($banner);
+            $banner->hits = $banner_repository->getNumberOfHits($banner);
+
+            if (null !== $banner->end_timestamp && $banner->end_timestamp <= new \DateTime() || $banner->max_hits >= $banner->hits || $banner->max_views >= $banner->views) {
                 $banner->active = false;
             }
         }

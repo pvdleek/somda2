@@ -20,8 +20,8 @@ class Group
     #[ORM\Column(length: 15, nullable: false, options: ['default' => ''])]
     public string $name = '';
 
-    // TODO: remove this `name` reference after upgrade
-    #[ORM\Column(name: 'roles_new', nullable: false, options: ['default' => []])]
+    /** @var list<string> */
+    #[ORM\Column]
     public array $roles = [];
 
     #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'groups')]

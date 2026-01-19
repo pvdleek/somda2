@@ -13,11 +13,11 @@ class StatisticBlock
     #[ORM\Id]
     #[ORM\ManyToOne(targetEntity: Block::class)]
     #[ORM\JoinColumn(name: 'blokid', referencedColumnName: 'blokid')]
-    public ?Block $block = null;
+    public Block $block;
 
     #[ORM\Id]
-    #[ORM\Column(type: 'date', nullable: true)]
-    public ?\DateTime $date = null;
+    #[ORM\Column(type: 'date', nullable: false)]
+    public \DateTime $date;
 
     #[ORM\Column(name: 'pageviews', nullable: false, options: ['default' => 0, 'unsigned' => true])]
     public int $views = 0;

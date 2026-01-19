@@ -10,7 +10,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: StatisticRepository::class)]
 #[ORM\Table(name: 'somda_stats')]
-#[ORM\UniqueConstraint(name: 'unq_somda_stats__datum', fields: ['datum'])]
+#[ORM\UniqueConstraint(name: 'unq_somda_stats__datum', columns: ['datum'])]
 #[UniqueEntity(fields: ['datum'])]
 class Statistic
 {

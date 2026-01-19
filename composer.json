@@ -11,7 +11,7 @@
         "ext-iconv": "*",
         "ext-intl": "*",
         "ext-json": "*",
-        "amphp/http-client": "^5.3",
+        "amphp/http-client": "^5.3.4",
         "beberlei/doctrineextensions": "^1.5",
         "cocur/slugify": "^4.7.1",
         "debril/rss-atom-bundle": "^5.2",
