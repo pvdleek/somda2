@@ -56,12 +56,18 @@ class MySpotsController
     {
         $this->user_helper->denyAccessUnlessGranted(RoleGenerics::ROLE_SPOTS_EDIT);
 
-        $columns = $request->get('columns');
+        $columns = $request->query->all('columns');
         $spot_filter = $this->getSpotFilterFromRequest($columns);
 
-        $order_array = $request->get('order');
+        $order_array = $request->query->all('order');
+        if (!isset($order_array[0]) || !isset($order_array[0]['column']) || !isset($order_array[0]['dir'])) {
+            return new JsonResponse([]);
+        }
         $spot_order = [];
         foreach ($order_array as $key => $order) {
+            if (!isset($columns[$order['column']][self::COLUMN_DATA])) {
+                continue;
+            }
             $spot_order[$key] = new DataTableOrder(
                 $columns[$order['column']][self::COLUMN_DATA],
                 \strtolower($order['dir']) === 'asc'
@@ -69,7 +75,7 @@ class MySpotsController
         }
 
         $response = [
-            'draw' => $request->get('draw'),
+            'draw' => (int) $request->query->get('draw'),
             'recordsTotal' => $this->spot_repository->countAll($this->user_helper->getUser()),
             'recordsFiltered' => $this->spot_repository->countForMySpots($this->user_helper->getUser(), $spot_filter),
             self::COLUMN_DATA => [],
@@ -78,8 +84,8 @@ class MySpotsController
         $spots = $this->spot_repository->findForMySpots(
             $this->user_helper->getUser(),
             $spot_filter,
-            (int) $request->get('length'),
-            (int) $request->get('start'),
+            (int) $request->query->get('length'),
+            (int) $request->query->get('start'),
             $spot_order
         );
         foreach ($spots as $spot) {

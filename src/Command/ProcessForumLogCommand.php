@@ -36,7 +36,7 @@ class ProcessForumLogCommand extends Command
     {
         $store = new SemaphoreStore();
         $factory = new LockFactory($store);
-        $lock = $factory->createLock(self::getDefaultName());
+        $lock = $factory->createLock(self::getName());
 
         if ($lock->acquire()) {
             /**

@@ -1,6 +1,4 @@
 framework:
-  annotations:
-    enabled: false
   csrf_protection:
     enabled: false
   default_locale: 'nl'
