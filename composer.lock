@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d5ec628b4ac62d80066259b641289323",
+    "content-hash": "8f66b0e15dc858e1a00a88f13254be4b",
     "packages": [
         {
             "name": "amphp/amp",
@@ -1219,130 +1219,6 @@
             "time": "2024-04-12T12:12:48+00:00"
         },
         {
-            "name": "debril/feed-io",
-            "version": "v5.3.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/alexdebril/feed-io.git",
-                "reference": "7c206ea5f07a65e7ccccdcdfbe0803806d54caa5"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/alexdebril/feed-io/zipball/7c206ea5f07a65e7ccccdcdfbe0803806d54caa5",
-                "reference": "7c206ea5f07a65e7ccccdcdfbe0803806d54caa5",
-                "shasum": ""
-            },
-            "require": {
-                "ext-dom": "*",
-                "ext-json": "*",
-                "ext-libxml": "*",
-                "guzzlehttp/guzzle": "~6.2|~7.0",
-                "php": ">=8.0",
-                "psr/log": "~1.0|~2.0|~3.0"
-            },
-            "require-dev": {
-                "friendsofphp/php-cs-fixer": "^3.5",
-                "monolog/monolog": "1.*|2.*",
-                "phpstan/phpstan": "^0.12.81",
-                "phpunit/phpunit": "~9.3.0"
-            },
-            "suggest": {
-                "monolog/monolog": "Allows to handle logs"
-            },
-            "bin": [
-                "bin/feedio"
-            ],
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "FeedIo\\": "src/FeedIo"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Alexandre Debril",
-                    "email": "alex.debril@gmail.com"
-                }
-            ],
-            "description": "PHP library built to consume and serve JSONFeed / RSS / Atom feeds",
-            "homepage": "https://feed-io.net",
-            "keywords": [
-                "atom",
-                "cli",
-                "client",
-                "feed",
-                "jsonfeed",
-                "news",
-                "rss"
-            ],
-            "support": {
-                "issues": "https://github.com/alexdebril/feed-io/issues",
-                "source": "https://github.com/alexdebril/feed-io/tree/v5.3.2"
-            },
-            "abandoned": "php-feed-io/feed-io",
-            "time": "2023-10-24T15:16:47+00:00"
-        },
-        {
-            "name": "debril/rss-atom-bundle",
-            "version": "v5.2.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/alexdebril/rss-atom-bundle.git",
-                "reference": "29e624c428d4284726e5da5e0d245cbc93d1f17a"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/alexdebril/rss-atom-bundle/zipball/29e624c428d4284726e5da5e0d245cbc93d1f17a",
-                "reference": "29e624c428d4284726e5da5e0d245cbc93d1f17a",
-                "shasum": ""
-            },
-            "require": {
-                "debril/feed-io": "~3.0|~4.0|~5.0",
-                "php": ">=7.1",
-                "symfony/config": "~3.4|~4.0|^5.0|^6.0|^7.0",
-                "symfony/dependency-injection": "~3.4|~4.0|^5.0|^6.0|^7.0",
-                "symfony/http-foundation": "~3.4|~4.0|^5.0|^6.0|^7.0",
-                "symfony/http-kernel": "~3.4|~4.0|^5.0|^6.0|^7.0"
-            },
-            "require-dev": {
-                "doctrine/common": "~2.3",
-                "phpunit/phpunit": "~7.0",
-                "symfony/browser-kit": ">3.0",
-                "symfony/finder": ">3.0",
-                "symfony/framework-bundle": "^4.3|^5.0|^6.0|^7.0",
-                "symfony/validator": ">3.0",
-                "symfony/yaml": "^4.0|^5.0|^6.0|^7.0"
-            },
-            "type": "symfony-bundle",
-            "autoload": {
-                "psr-4": {
-                    "Debril\\RssAtomBundle\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "description": "RSS / Atom and JSONFeed support for Symfony",
-            "homepage": "http://debril.org/category/rss-atom-bundle/",
-            "keywords": [
-                "Syndication",
-                "atom",
-                "feed",
-                "jsonfeed",
-                "rss"
-            ],
-            "support": {
-                "issues": "https://github.com/alexdebril/rss-atom-bundle/issues",
-                "source": "https://github.com/alexdebril/rss-atom-bundle/tree/v5.2.0"
-            },
-            "time": "2024-01-30T13:37:00+00:00"
-        },
-        {
             "name": "doctrine/collections",
             "version": "2.6.0",
             "source": {
@@ -2521,16 +2397,16 @@
         },
         {
             "name": "dompdf/php-font-lib",
-            "version": "1.0.1",
+            "version": "1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dompdf/php-font-lib.git",
-                "reference": "6137b7d4232b7f16c882c75e4ca3991dbcf6fe2d"
+                "reference": "a6e9a688a2a80016ac080b97be73d3e10c444c9a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dompdf/php-font-lib/zipball/6137b7d4232b7f16c882c75e4ca3991dbcf6fe2d",
-                "reference": "6137b7d4232b7f16c882c75e4ca3991dbcf6fe2d",
+                "url": "https://api.github.com/repos/dompdf/php-font-lib/zipball/a6e9a688a2a80016ac080b97be73d3e10c444c9a",
+                "reference": "a6e9a688a2a80016ac080b97be73d3e10c444c9a",
                 "shasum": ""
             },
             "require": {
@@ -2538,7 +2414,7 @@
                 "php": "^7.1 || ^8.0"
             },
             "require-dev": {
-                "symfony/phpunit-bridge": "^3 || ^4 || ^5 || ^6"
+                "phpunit/phpunit": "^7.5 || ^8 || ^9 || ^10 || ^11 || ^12"
             },
             "type": "library",
             "autoload": {
@@ -2560,9 +2436,9 @@
             "homepage": "https://github.com/dompdf/php-font-lib",
             "support": {
                 "issues": "https://github.com/dompdf/php-font-lib/issues",
-                "source": "https://github.com/dompdf/php-font-lib/tree/1.0.1"
+                "source": "https://github.com/dompdf/php-font-lib/tree/1.0.2"
             },
-            "time": "2024-12-02T14:37:59+00:00"
+            "time": "2026-01-20T14:10:26+00:00"
         },
         {
             "name": "dompdf/php-svg-lib",
@@ -11762,11 +11638,11 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "2.1.33",
+            "version": "2.1.35",
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/9e800e6bee7d5bd02784d4c6069b48032d16224f",
-                "reference": "9e800e6bee7d5bd02784d4c6069b48032d16224f",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/72f843c7f59d3aac0b7510f5e70913a9b72a8e88",
+                "reference": "72f843c7f59d3aac0b7510f5e70913a9b72a8e88",
                 "shasum": ""
             },
             "require": {
@@ -11811,7 +11687,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-12-05T10:24:31+00:00"
+            "time": "2026-01-20T17:33:48+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",

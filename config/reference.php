@@ -1692,13 +1692,6 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         }>,
  *     },
  * }
- * @psalm-type DebrilRssAtomConfig = array{
- *     private?: bool|Param, // Change cache headers so the RSS feed is not cached by public caches (like reverse-proxies...). // Default: false
- *     force_refresh?: bool|Param, // Do not send 304 status if the feed has not been modified since last hit // Default: false
- *     content_type_json?: scalar|null|Param, // Content-Type header value to use for json feed generation. // Default: "application/json"
- *     content_type_xml?: scalar|null|Param, // Content-Type header value to use for xml feed generation (atom and rss). // Default: "application/xhtml+xml"
- *     date_formats?: list<scalar|null|Param>,
- * }
  * @psalm-type ConfigType = array{
  *     imports?: ImportsConfig,
  *     parameters?: ParametersConfig,
@@ -1713,7 +1706,6 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *     monolog?: MonologConfig,
  *     gregwar_captcha?: GregwarCaptchaConfig,
  *     nelmio_security?: NelmioSecurityConfig,
- *     debril_rss_atom?: DebrilRssAtomConfig,
  *     "when@dev"?: array{
  *         imports?: ImportsConfig,
  *         parameters?: ParametersConfig,
@@ -1730,7 +1722,6 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         maker?: MakerConfig,
  *         gregwar_captcha?: GregwarCaptchaConfig,
  *         nelmio_security?: NelmioSecurityConfig,
- *         debril_rss_atom?: DebrilRssAtomConfig,
  *     },
  *     "when@test"?: array{
  *         imports?: ImportsConfig,
@@ -1746,7 +1737,6 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         monolog?: MonologConfig,
  *         gregwar_captcha?: GregwarCaptchaConfig,
  *         nelmio_security?: NelmioSecurityConfig,
- *         debril_rss_atom?: DebrilRssAtomConfig,
  *     },
  *     ...<string, ExtensionType|array{ // extra keys must follow the when@%env% pattern or match an extension alias
  *         imports?: ImportsConfig,

@@ -5,7 +5,7 @@ Somda
 
 This is the Somda repository. It consists of:
 - A web-application with automatic detection of mobile devices.
-- A RSS feed-provider with several options.
+- An image feed-provider with several options.
 - An API to be used within other web-applications or mobile apps.
 
 ## Installation and configuration

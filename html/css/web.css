@@ -332,9 +332,6 @@ a.rail-news-title {
     grid-template-rows: auto auto auto;
     text-align: center;
 }
-.rss-link {
-    color: orange;
-}
 
 /**************/
 /*** Footer ***/

@@ -1,7 +1,7 @@
 # Somda Codebase Guide
 
 ## Project Overview
-Somda is a Symfony 7.4 web application (PHP 8.2+) for Dutch railway enthusiasts, providing train spotting, forums, news, and route information. It includes a web interface with mobile detection and RSS feeds.
+Somda is a Symfony 7.4 web application (PHP 8.2+) for Dutch railway enthusiasts, providing train spotting, forums, news, and route information. It includes a web interface with mobile detection.
 
 ## Architecture
 
@@ -225,6 +225,5 @@ Cron jobs in `cron.txt`:
 
 ## External Dependencies
 - **NS API**: Railway data (keys in `.env.local`)
-- **RSS/Atom**: `debril/rss-atom-bundle` with custom `FeedProvider`
 - **PDF**: `dompdf/dompdf` for exports
 - **Mobile**: `mobiledetect/mobiledetectlib` for device detection

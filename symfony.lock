@@ -1,17 +1,4 @@
 {
-    "debril/rss-atom-bundle": {
-        "version": "5.2",
-        "recipe": {
-            "repo": "github.com/symfony/recipes-contrib",
-            "branch": "main",
-            "version": "4.0",
-            "ref": "2c23ed747eda9f4c13f5e7eb55fffa1091fdd505"
-        },
-        "files": [
-            "config/packages/rss_atom.yaml",
-            "config/routes/rss_atom.yaml"
-        ]
-    },
     "doctrine/deprecations": {
         "version": "1.1",
         "recipe": {

@@ -2,47 +2,19 @@
 
 {% block content %}
     <div class="panel">
-        <div class="panel-title">RSS feeds en images</div>
+        <div class="panel-title">Afbeelding met doorkomststaat</div>
         <div class="panel-content">
-            <p class="info">Somda levert RSS feeds en images. Hieronder vind je een omschrijving van de mogelijkheden.</p>
+            <p class="info">Somda levert een afbeelding met een doorkomststaat. Hieronder vind je een omschrijving van de mogelijkheden.</p>
 
-            <strong>RSS feed - Dienstregelingen speciale ritten</strong>
-            <br />Om een overzicht te krijgen van eerstkomende dienstregelingen van speciale treinen, lees je RSS op de volgende URL:
-            <br /><a href="{{ path('feed_rss', { 'id': 'special-routes' }) }}">{{ url('feed_rss', { 'id': 'special-routes' }) }}</a>
-            <br />
-            <br />Er is RSS, atom en JSON formaat:
-            <br /><a href="{{ path('feed_atom', { 'id': 'special-routes' }) }}">{{ url('feed_atom', { 'id': 'special-routes' }) }}</a>
-            <br /><a href="{{ path('feed_json', { 'id': 'special-routes' }) }}">{{ url('feed_json', { 'id': 'special-routes' }) }}</a>
-            <br />
-            <br />Het maximaal aantal dienstregelingen wat standaard wordt weergegeven is 10. Wil je een ander aantal, geef dan de optie "limit" mee:
-            <br /><a href="{{ path('feed_rss', { 'id': 'special-routes' }) }}?limit=5">{{ url('feed_rss', { 'id': 'special-routes' }) }}?limit=5</a>
-            <br />
-
-            <br /><strong>RSS feed - Spots</strong>
-            <br />Om een overzicht te krijgen van de laatst gespotte treinen, lees je RSS op de volgende URL:
-            <br /><a href="{{ path('feed_rss', { 'id': 'spots' }) }}">{{ url('feed_rss', { 'id': 'spots' }) }}</a>
-            <br />
-            <br />Er is RSS, atom en JSON formaat:
-            <br /><a href="{{ path('feed_atom', { 'id': 'spots' }) }}">{{ url('feed_atom', { 'id': 'spots' }) }}</a>
-            <br /><a href="{{ path('feed_json', { 'id': 'spots' }) }}">{{ url('feed_json', { 'id': 'spots' }) }}</a>
-            <br />
-            <br />Het maximaal aantal spots wat standaard wordt weergegeven is 10. Wil je een ander aantal, geef dan de optie "limit" mee:
-            <br /><a href="{{ path('feed_rss', { 'id': 'spots' }) }}?limit=5">{{ url('feed_rss', { 'id': 'spots' }) }}?limit=5</a>
-            <br />
-            <br />Standaard wordt al het gespotte materieel weergegeven, je kan hierin een filter aanbrengen door de optie "train" mee te geven:
-            <br /><a href="{{ path('feed_rss', { 'id': 'spots' }) }}?train=9525">{{ url('feed_rss', { 'id': 'spots' }) }}?train=9525</a>
-            <br />Let op: deze functie kan alleen met volledige materieel-nummers overweg. Is het materieel niet gevonden, zie je een lege feed.
-            <br />
-
-            <br /><strong>Image met doorkomststaat</strong>
+            <br /><strong>Afbeelding met doorkomststaat</strong>
             <br />De doorkomststaat levert alle aankomende, passerende en vertrekkende treinen in een station in een bepaalde periode.
             <br />De standaard uitvoer is een PNG-afbeelding met de 10 eerstvolgende treinen. Voor deze standaard uitvoer hoeft alleen een station opgegeven te worden:
             <br /><a href="{{ path('feed_image', { 'location_name': 'ut' }) }}">{{ url('feed_image', { 'location_name': 'ut' }) }}</a>
             <br />
-            <br />Je kan deze image op je site gewoon als plaatje gebruiken, dus: &lt;img src="{{ url('feed_image', { 'location_name': 'ut' }) }}" /&gt;. Dit levert het volgende:
+            <br />Je kan deze afbeelding op je site gewoon als plaatje gebruiken, dus: &lt;img src="{{ url('feed_image', { 'location_name': 'ut' }) }}" /&gt;. Dit levert het volgende:
             <br /><img alt="" src="{{ path('feed_image', { 'location_name': 'ut' }) }}" />
             <br />
-            <br />De URL van de image accepteert achtereenvolgens ook nog het dagnummer en de starttijd:
+            <br />De URL van de afbeelding accepteert achtereenvolgens ook nog het dagnummer en de starttijd:
             <br /><a href="{{ path('feed_image_with_day_number', { 'location_name': 'ut', 'day_number': 3 }) }}">{{ url('feed_image_with_day_number', { 'location_name': 'ut', 'day_number': 3 }) }}</a>
             <br /><a href="{{ path('feed_image_with_start_time', { 'location_name': 'ut', 'day_number': 6, 'start_time': '09:30' }) }}">{{ url('feed_image_with_start_time', { 'location_name': 'ut', 'day_number': 3, 'start_time': '09:30' }) }}</a>
             <br />Geef je geen dagnummer en start-tijd, dan worden vandaag en de huidige tijd gebruikt.

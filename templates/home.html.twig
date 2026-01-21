@@ -21,11 +21,6 @@
                 <div class="home-panel">
                     <div class="panel-title">
                         {{ ('dashboard.panel.' ~ module)|trans }}
-                        {% if module == 'drgl' %}
-                            <a href="{{ path('feed_rss', { 'id': 'specialRoutes' }) }}" rel="noopener" target="_blank"><i class="fas fa-rss rss-link"></i></a>
-                        {% elseif module == 'spots' %}
-                            <a href="{{ path('feed_rss', { 'id': 'spots' }) }}" rel="noopener" target="_blank"><i class="fas fa-rss rss-link"></i></a>
-                        {% endif %}
                         {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
                             <div class="panel-actions">
                                 {% if minimized %}

@@ -14,7 +14,6 @@
         "amphp/http-client": "^5.3.4",
         "beberlei/doctrineextensions": "^1.5",
         "cocur/slugify": "^4.7.1",
-        "debril/rss-atom-bundle": "^5.2",
         "doctrine/doctrine-bundle": "^3.2.2",
         "doctrine/doctrine-migrations-bundle": "^4.0",
         "doctrine/orm": "^3.6.1",
@@ -117,7 +116,7 @@
     },
     "require-dev": {
         "phpmd/phpmd": "^2.15",
-        "phpstan/phpstan": ">=2.1.33",
+        "phpstan/phpstan": ">=2.1.35",
         "phpunit/phpunit": "^9.6.31",
         "symfony/browser-kit": "7.4.*",
         "symfony/css-selector": "7.4.*",

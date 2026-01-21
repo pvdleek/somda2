@@ -13,5 +13,4 @@ return [
     Symfony\Bundle\MakerBundle\MakerBundle::class => ['dev' => true],
     Gregwar\CaptchaBundle\GregwarCaptchaBundle::class => ['all' => true],
     Nelmio\SecurityBundle\NelmioSecurityBundle::class => ['all' => true],
-    Debril\RssAtomBundle\DebrilRssAtomBundle::class => ['all' => true],
 ];

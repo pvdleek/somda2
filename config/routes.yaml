@@ -448,18 +448,6 @@ profile_mail:
 #########
 # Feeds #
 #########
-feed_rss:
-  path: /feeds/rss/{id}/
-  methods: [GET]
-  defaults: { _controller: Debril\RssAtomBundle\Controller\StreamController::indexAction, 'format': 'rss', 'id': 'spots|special-routes' }
-feed_atom:
-  path: /feeds/atom/{id}/
-  methods: [GET]
-  defaults: { _controller: Debril\RssAtomBundle\Controller\StreamController::indexAction, 'format': 'atom', 'id': 'spots|special-routes' }
-feed_json:
-  path: /feeds/json/{id}/
-  methods: [GET]
-  defaults: { _controller: Debril\RssAtomBundle\Controller\StreamController::indexAction, 'format': 'json', 'id': 'spots|special-routes' }
 feed_image:
   path: /feeds/image/{location_name}/
   methods: [GET]
