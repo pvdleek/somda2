@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Form;
 
 use App\Entity\User as UserEntity;
-use App\Generics\ConstraintGenerics;
 use App\Generics\FormGenerics;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -23,12 +22,7 @@ class UserActivate extends AbstractType
             ->add(self::FIELD_KEY, TextType::class, [
                 FormGenerics::KEY_ATTRIBUTES => [FormGenerics::KEY_ATTRIBUTES_MAX_LENGTH => 13],
                 FormGenerics::KEY_CONSTRAINTS => [
-                    new Length([
-                        ConstraintGenerics::MAX => 13,
-                        ConstraintGenerics::MAX_MESSAGE => 'De activatie-sleutel moet exact 13 karakters lang zijn',
-                        ConstraintGenerics::MIN => 13,
-                        ConstraintGenerics::MIN_MESSAGE => 'De activatie-sleutel moet exact 13 karakters lang zijn',
-                    ]),
+                    new Length(max: 13, min: 13, maxMessage: 'De activatie-sleutel moet exact 13 karakters lang zijn', minMessage: 'De activatie-sleutel moet exact 13 karakters lang zijn'),
                 ],
                 FormGenerics::KEY_LABEL => 'Geef de activatie-sleutel die je per e-mail hebt ontvangen',
                 FormGenerics::KEY_MAPPED => false,

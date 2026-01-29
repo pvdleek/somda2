@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Form;
 
-use App\Generics\ConstraintGenerics;
 use App\Generics\FormGenerics;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
@@ -19,19 +18,12 @@ class UserPassword extends AbstractType
     {
         $builder
             ->add('currentPassword', PasswordType::class, [
-                FormGenerics::KEY_CONSTRAINTS => new UserPasswordAssert(
-                    [ConstraintGenerics::MESSAGE => 'Jouw huidige wachtwoord is niet correct']
-                ),
+                FormGenerics::KEY_CONSTRAINTS => new UserPasswordAssert(['message' => 'Jouw huidige wachtwoord is niet correct']),
                 FormGenerics::KEY_LABEL => 'Jouw huidige wachtwoord',
                 FormGenerics::KEY_REQUIRED => true,
             ])
             ->add('newPassword', RepeatedType::class, [
-                FormGenerics::KEY_CONSTRAINTS => [
-                    new Length([
-                        ConstraintGenerics::MIN => 8,
-                        ConstraintGenerics::MIN_MESSAGE => 'Het wachtwoord moet minimaal 8 karakters lang zijn',
-                    ]),
-                ],
+                FormGenerics::KEY_CONSTRAINTS => [new Length(min: 8, minMessage: 'Het wachtwoord moet minimaal 8 karakters lang zijn')],
                 FormGenerics::KEY_FIRST_OPTIONS => [FormGenerics::KEY_LABEL => 'Kies een nieuw wachtwoord'],
                 FormGenerics::KEY_INVALID_MESSAGE => 'De wachtwoorden moeten overeen komen',
                 FormGenerics::KEY_REQUIRED => true,

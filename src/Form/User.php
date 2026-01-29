@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Form;
 
 use App\Entity\User as UserEntity;
-use App\Generics\ConstraintGenerics;
 use App\Generics\FormGenerics;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
@@ -37,17 +36,8 @@ class User extends AbstractType
                     FormGenerics::KEY_PLACEHOLDER => 'Kies een gebruikersnaam',
                 ],
                 FormGenerics::KEY_CONSTRAINTS => [
-                    new Length([
-                        ConstraintGenerics::MAX => 20,
-                        ConstraintGenerics::MAX_MESSAGE => 'De gebruikersnaam mag maximaal 20 karakters lang zijn',
-                        ConstraintGenerics::MIN => 3,
-                        ConstraintGenerics::MIN_MESSAGE => 'De gebruikersnaam moet minimaal 3 karakters lang zijn',
-                    ]),
-                    new Regex([
-                        ConstraintGenerics::PATTERN => '/^[a-z0-9-]+$/i',
-                        ConstraintGenerics::MESSAGE =>
-                            'De gebruikersnaam mag alleen letters, cijfers of een liggend streepje bevatten',
-                    ])
+                    new Length(max: 20, min: 3, minMessage: 'De gebruikersnaam moet minimaal 3 karakters lang zijn', maxMessage: 'De gebruikersnaam mag maximaal 20 karakters lang zijn'),
+                    new Regex(pattern: '/^[a-z0-9-]+$/i', message: 'De gebruikersnaam mag alleen letters, cijfers of een liggend streepje bevatten'),
                 ],
                 FormGenerics::KEY_REQUIRED => true,
             ])
@@ -56,10 +46,7 @@ class User extends AbstractType
                     FormGenerics::KEY_PLACEHOLDER => 'Kies een wachtwoord',
                 ],
                 FormGenerics::KEY_CONSTRAINTS => [
-                    new Length([
-                        ConstraintGenerics::MIN => 8,
-                        ConstraintGenerics::MIN_MESSAGE => 'Het wachtwoord moet minimaal 8 karakters lang zijn',
-                    ]),
+                    new Length(min: 8, minMessage: 'Het wachtwoord moet minimaal 8 karakters lang zijn'),
                 ],
                 FormGenerics::KEY_MAPPED => false,
                 FormGenerics::KEY_REQUIRED => true,

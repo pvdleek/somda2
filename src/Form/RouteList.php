@@ -7,7 +7,6 @@ namespace App\Form;
 use App\Entity\Characteristic;
 use App\Entity\RouteList as RouteListEntity;
 use App\Entity\Transporter;
-use App\Generics\ConstraintGenerics;
 use App\Generics\FormGenerics;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -26,14 +25,8 @@ class RouteList extends AbstractType
         $builder
             ->add('first_number', NumberType::class, [
                 FormGenerics::KEY_CONSTRAINTS => [
-                    new GreaterThan([
-                        ConstraintGenerics::MESSAGE => 'Het startnummer moet minimaal 1 zijn',
-                        ConstraintGenerics::VALUE => 0,
-                    ]),
-                    new LessThan([
-                        ConstraintGenerics::MESSAGE => 'Het startnummer mag maximaal 999999 zijn',
-                        ConstraintGenerics::VALUE => 1000000,
-                    ]),
+                    new GreaterThan(message: 'Het startnummer moet minimaal 1 zijn', value: 0),
+                    new LessThan(message: 'Het startnummer mag maximaal 999999 zijn', value: 1000000),
                 ],
                 FormGenerics::KEY_HTML5 => true,
                 FormGenerics::KEY_LABEL => 'Startnummer',
@@ -42,14 +35,8 @@ class RouteList extends AbstractType
             ])
             ->add('last_number', NumberType::class, [
                 FormGenerics::KEY_CONSTRAINTS => [
-                    new GreaterThan([
-                        ConstraintGenerics::MESSAGE => 'Het eindnummer moet minimaal 1 zijn',
-                        ConstraintGenerics::VALUE => 0,
-                    ]),
-                    new LessThan([
-                        ConstraintGenerics::MESSAGE => 'Het eindnummer mag maximaal 999999 zijn',
-                        ConstraintGenerics::VALUE => 1000000,
-                    ]),
+                    new GreaterThan(message: 'Het eindnummer moet minimaal 1 zijn', value: 0),
+                    new LessThan(message: 'Het eindnummer mag maximaal 999999 zijn', value: 1000000),
                 ],
                 FormGenerics::KEY_HTML5 => true,
                 FormGenerics::KEY_LABEL => 'Eindnummer',
