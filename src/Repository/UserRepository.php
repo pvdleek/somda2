@@ -17,6 +17,9 @@ class UserRepository extends ServiceEntityRepository
         parent::__construct($registry, UserEntity::class);
     }
 
+    /**
+     * @return array<string, string>
+     */
     public function findActiveForStaticData(): array
     {
         $query_builder = $this->getEntityManager()

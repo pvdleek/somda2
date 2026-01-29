@@ -5,11 +5,9 @@ namespace App\Helpers;
 
 use App\Entity\Jargon;
 use App\Entity\Location;
-use App\Entity\TrainTable;
-use App\Entity\TrainTableYear;
+use App\Entity\TrainsForForum;
 use App\Entity\User;
 use App\Repository\TrainTableRepository;
-use App\Repository\TrainTableYearRepository;
 use App\Repository\UserRepository;
 use App\Traits\DateTrait;
 use Doctrine\Persistence\ManagerRegistry;
@@ -74,59 +72,46 @@ class StaticDataHelper implements RuntimeExtensionInterface
         $this->users = [];
         $this->routes = [];
 
-        /**
-         * @var Location[] $location_array
-         */
-        $location_array = $this->doctrine->getRepository(Location::class)->findAll();
-        foreach ($location_array as $location) {
+        /** @var Location $location */
+        foreach ($this->doctrine->getRepository(Location::class)->findAll() as $location) {
             $this->locations[$location->name] = $location->description;
         }
 
-        /**
-         * @var Jargon[] $jargon_array
-         */
-        $jargon_array = $this->doctrine->getRepository(Jargon::class)->findAll();
-        foreach ($jargon_array as $jargon) {
+        /** @var Jargon $jargon */
+        foreach ($this->doctrine->getRepository(Jargon::class)->findAll() as $jargon) {
             $this->locations[$jargon->term] = $jargon->description;
         }
 
-        /**
-         * @var UserRepository $user_repository
-         */
+        /** @var UserRepository $user_repository */
         $user_repository = $this->doctrine->getRepository(User::class);
-        /**
-         * @var User[] $user_array
-         */
-        $user_array = $user_repository->findActiveForStaticData();
-        foreach ($user_array as $user) {
-            $this->users['@'.$user['username']] =
-                null !== $user['name'] && \strlen($user['name']) > 0 ? $user['name'] : $user['username'];
+        foreach ($user_repository->findActiveForStaticData() as $user) {
+            $this->users['@'.$user['username']] = null !== $user['name'] && \strlen($user['name']) > 0 ? $user['name'] : $user['username'];
         }
 
-        /**
-         * @var TrainTableRepository $train_table_repository
-         */
-        $train_table_repository = $this->doctrine->getRepository(TrainTable::class);
-        /**
-         * @var TrainTableYearRepository $train_table_year_repository
-         */
-        $train_table_year_repository = $this->doctrine->getRepository(TrainTableYear::class);
-
-        $route_array = $train_table_repository->findAllTrainTablesForForum($train_table_year_repository->findTrainTableYearByDate(new \DateTime()));
-        $route_translation = $this->translator->trans('trainTable.forum.route');
-        foreach ($route_array as $route) {
-            $this->routes[$route[TrainTableRepository::FIELD_ROUTE_NUMBER]] = sprintf(
-                $route_translation,
-                $route[TrainTableRepository::FIELD_ROUTE_NUMBER],
-                $route[TrainTableRepository::FIELD_CHARACTERISTIC_NAME],
-                $route[TrainTableRepository::FIELD_CHARACTERISTIC_DESCRIPTION],
-                $route[TrainTableRepository::FIELD_TRANSPORTER_NAME],
-                $route['first_location'],
-                $this->timeDatabaseToDisplay($route['first_time']),
-                $route['last_location'],
-                $this->timeDatabaseToDisplay($route['last_time']),
+        /** @var TrainsForForum $train */
+        foreach ($this->doctrine->getRepository(TrainsForForum::class)->findAll() as $train) {
+            $this->routes[$train->train_number] = \sprintf(
+                $this->translator->trans('trainTable.forum.route'),
+                $train->train_number,
+                $train->characteristic_name,
+                $train->characteristic_description,
+                $train->transporter_name,
+                $train->first_location_name,
+                $this->timeDatabaseToDisplay($train->first_location_time),
+                $train->last_location_name,
+                $this->timeDatabaseToDisplay($train->last_location_time),
             );
-            $this->addSeriesRouteNumber($route);
+            $this->addSeriesRouteNumber([
+                TrainTableRepository::FIELD_ROUTE_NUMBER => $train->train_number,
+                TrainTableRepository::FIELD_CHARACTERISTIC_NAME => $train->characteristic_name,
+                TrainTableRepository::FIELD_CHARACTERISTIC_DESCRIPTION => $train->characteristic_description,
+                TrainTableRepository::FIELD_TRANSPORTER_NAME => $train->transporter_name,
+                'first_location' => $train->first_location_name,
+                'first_time' => $train->first_location_time,
+                'last_location' => $train->last_location_name,
+                'last_time' => $train->last_location_time,
+                TrainTableRepository::FIELD_SECTION => $train->section,
+            ]);
         }
     }
 
@@ -137,7 +122,7 @@ class StaticDataHelper implements RuntimeExtensionInterface
             if (null !== $route[TrainTableRepository::FIELD_SECTION]
                 && \strlen($route[TrainTableRepository::FIELD_SECTION]) > 0
             ) {
-                $this->routes[$series_route_number] = sprintf(
+                $this->routes[$series_route_number] = \sprintf(
                     $this->translator->trans('trainTable.forum.seriesWithSection'),
                     $series_route_number,
                     $route[TrainTableRepository::FIELD_CHARACTERISTIC_NAME],
