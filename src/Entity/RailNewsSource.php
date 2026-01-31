@@ -41,9 +41,9 @@ class RailNewsSource
         $this->news = new ArrayCollection();
     }
 
-    public function addFeed(RailNewsSourceFeed $railNewsSourceFeed): RailNewsSource
+    public function addFeed(RailNewsSourceFeed $rail_news_source_feed): RailNewsSource
     {
-        $this->feeds[] = $railNewsSourceFeed;
+        $this->feeds[] = $rail_news_source_feed;
 
         return $this;
     }
@@ -56,9 +56,9 @@ class RailNewsSource
         return $this->feeds->toArray();
     }
 
-    public function addNews(RailNews $railNews): RailNewsSource
+    public function addNews(RailNews $rail_news): RailNewsSource
     {
-        $this->news[] = $railNews;
+        $this->news[] = $rail_news;
 
         return $this;
     }

@@ -22,7 +22,7 @@ class Transporter
     public string $name = '';
 
     #[ORM\Column(name: 'iff_code', nullable: true, options: ['unsigned' => true])]
-    public ?int $iffCode = null;
+    public ?int $iff_code = null;
 
     #[ORM\OneToMany(targetEntity: Train::class, mappedBy: 'transporter')]
     private Collection $trains;
@@ -34,6 +34,11 @@ class Transporter
     {
         $this->trains = new ArrayCollection();
         $this->route_lists = new ArrayCollection();
+    }
+
+    public function getIffCode(): ?int
+    {
+        return $this->iff_code;
     }
 
     public function addTrain(Train $train): Transporter

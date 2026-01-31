@@ -54,22 +54,22 @@ class RailNews
 
     /**
      * This function calculates thumbnail width and height for an image
-     * @param array $currentSizes - an array with 2 values: 0 = width, 1 = height
-     * @param array $maxSizes - an array with 2 values: 0 = width, 1 = height
+     * @param array $current_sizes - an array with 2 values: 0 = width, 1 = height
+     * @param array $max_sizes - an array with 2 values: 0 = width, 1 = height
      * @return array - an array with 2 values: 0 = width, 1 = height
      */
-    private function resizeImage(array $currentSizes, array $maxSizes): array
+    private function resizeImage(array $current_sizes, array $max_sizes): array
     {
-        if (($currentSizes[0] <= $maxSizes[0]) && ($currentSizes[1] <= $maxSizes[1])) {
-            return [$currentSizes[0], $currentSizes[1]];
+        if (($current_sizes[0] <= $max_sizes[0]) && ($current_sizes[1] <= $max_sizes[1])) {
+            return [$current_sizes[0], $current_sizes[1]];
         }
 
-        $xRatio = $maxSizes[0] / $currentSizes[0];
-        if (($xRatio * $currentSizes[1]) < $maxSizes[1]) {
-            return [$maxSizes[0], \ceil($xRatio * $currentSizes[1])];
+        $x_ratio = $max_sizes[0] / $current_sizes[0];
+        if (($x_ratio * $current_sizes[1]) < $max_sizes[1]) {
+            return [$max_sizes[0], \ceil($x_ratio * $current_sizes[1])];
         }
 
-        $yRatio = $maxSizes[1] / $currentSizes[1];
-        return [\ceil($yRatio * $currentSizes[0]), $maxSizes[1]];
+        $y_ratio = $max_sizes[1] / $current_sizes[1];
+        return [\ceil($y_ratio * $current_sizes[0]), $max_sizes[1]];
     }
 }

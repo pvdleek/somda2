@@ -82,10 +82,11 @@ class ForumPost
         $this->favorites = new ArrayCollection();
     }
 
-    public function addAlert(ForumPostAlert $forumPostAlert): ForumPost
+    public function addAlert(ForumPostAlert $forum_post_alert): ForumPost
     {
-        $this->alerts[] = $forumPostAlert;
-        $forumPostAlert->post = $this;
+        $this->alerts[] = $forum_post_alert;
+        $forum_post_alert->post = $this;
+
         return $this;
     }
 
@@ -97,10 +98,11 @@ class ForumPost
         return $this->alerts->toArray();
     }
 
-    public function addLog(ForumPostLog $forumPostLog): ForumPost
+    public function addLog(ForumPostLog $forum_post_log): ForumPost
     {
-        $this->logs[] = $forumPostLog;
-        $forumPostLog->post = $this;
+        $this->logs[] = $forum_post_log;
+        $forum_post_log->post = $this;
+
         return $this;
     }
 
@@ -112,10 +114,11 @@ class ForumPost
         return $this->logs->toArray();
     }
 
-    public function addSearchList(ForumSearchList $forumSearchList): ForumPost
+    public function addSearchList(ForumSearchList $forum_search_list): ForumPost
     {
-        $this->search_lists[] = $forumSearchList;
-        $forumSearchList->post = $this;
+        $this->search_lists[] = $forum_search_list;
+        $forum_search_list->post = $this;
+
         return $this;
     }
 
@@ -127,9 +130,10 @@ class ForumPost
         return $this->search_lists->toArray();
     }
 
-    public function addFavorite(ForumPostFavorite $forumPostFavorite): ForumPost
+    public function addFavorite(ForumPostFavorite $forum_post_favorite): ForumPost
     {
-        $this->favorites[] = $forumPostFavorite;
+        $this->favorites[] = $forum_post_favorite;
+        
         return $this;
     }
 

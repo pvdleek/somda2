@@ -45,9 +45,14 @@ class TrainTable
 
     #[ORM\ManyToOne(targetEntity: RouteOperationDays::class)]
     #[ORM\JoinColumn(name: 'rijdagenid', referencedColumnName: 'rijdagenid')]
-    public ?RouteOperationDays $routeOperationDays = null;
+    public ?RouteOperationDays $route_operation_days = null;
 
     #[ORM\ManyToOne(targetEntity: Location::class, inversedBy: 'train_tables')]
     #[ORM\JoinColumn(name: 'locatieid', referencedColumnName: 'afkid')]
     public ?Location $location = null;
+
+    public function getRouteOperationDays(): ?RouteOperationDays
+    {
+        return $this->route_operation_days;
+    }
 }

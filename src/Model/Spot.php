@@ -35,22 +35,22 @@ class Spot
     public string $location_description;
 
     /**
-     * @param array $queryResult - A result array from the findRecentWithSpotFilter function in the Spot repository
+     * @param array $query_result - A result array from the findRecentWithSpotFilter function in the Spot repository
      */
-    public function __construct(array $queryResult)
+    public function __construct(array $query_result)
     {
-        $this->id = (int) $queryResult['id'];
-        $this->spot_date = $queryResult['spot_date'];
-        $this->spot_time = isset($queryResult['spot_time']) ? $queryResult['spot_time'] : null;
-        $this->route_number = $queryResult['route_number'];
-        $this->position_name = $queryResult['position_name'];
-        $this->train_number = $queryResult['train_number'];
-        $this->name_pattern_name = $queryResult['name_pattern_name'];
-        $this->extra = $queryResult['extra'];
-        $this->spotter_id = (int) $queryResult['spotter_id'];
-        $this->spotter_username = $queryResult['spotter_username'];
-        $this->location_name = $queryResult['location_name'];
-        $this->location_description = $queryResult['location_description'];
+        $this->id = (int) $query_result['id'];
+        $this->spot_date = $query_result['spot_date'];
+        $this->spot_time = isset($query_result['spot_time']) ? $query_result['spot_time'] : null;
+        $this->route_number = $query_result['route_number'];
+        $this->position_name = $query_result['position_name'];
+        $this->train_number = $query_result['train_number'];
+        $this->name_pattern_name = $query_result['name_pattern_name'];
+        $this->extra = $query_result['extra'];
+        $this->spotter_id = (int) $query_result['spotter_id'];
+        $this->spotter_username = $query_result['spotter_username'];
+        $this->location_name = $query_result['location_name'];
+        $this->location_description = $query_result['location_description'];
     }
 
     public function getDisplaySpotTime(): string

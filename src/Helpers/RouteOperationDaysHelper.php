@@ -13,17 +13,17 @@ class RouteOperationDaysHelper implements RuntimeExtensionInterface
     ) {
     }
 
-    public function getDisplay(RouteOperationDays $routeOperationDays, bool $short = false): string
+    public function getDisplay(RouteOperationDays $route_operation_days, bool $short = false): string
     {
-        $daysArray = [];
+        $days_array = [];
         for ($day = 0; $day < 7; ++$day) {
-            if ($routeOperationDays->isRunningOnDay($day)) {
-                $daysArray[] = \strtolower(
+            if ($route_operation_days->isRunningOnDay($day)) {
+                $days_array[] = \strtolower(
                     $this->translator->trans('general.date.days'.($short ? 'Short' : '').'.'.$day)
                 );
             }
         }
 
-        return \ucfirst(\implode(', ', $daysArray));
+        return \ucfirst(\implode(', ', $days_array));
     }
 }

@@ -131,7 +131,7 @@ class MySpotsController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $spot_input = new SpotInput();
-            $spot_input->existingSpotId = $spot->id;
+            $spot_input->existing_spot_id = $spot->id;
             $spot_input->user = $this->user_helper->getUser();
             $spot_input->spot_date = $form->get('spot_date')->getData();
             $spot_input->train_number = $form->get('train')->getData();

@@ -20,7 +20,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class ProcessIFFCommand extends Command
 {
     public function __construct(
-        private readonly OfficialTrainTableHelper $trainTableHelper,
+        private readonly OfficialTrainTableHelper $train_table_helper,
     ) {
         parent::__construct();
     }
@@ -45,22 +45,22 @@ class ProcessIFFCommand extends Command
     {
         // Get the ZIP from the NDOV loket and extract it to the directory
         $this->getZipFile('https://data.ndovloket.nl/ns/ns-latest.zip');
-        $this->trainTableHelper->setDirectory('/tmp');
+        $this->train_table_helper->setDirectory('/tmp');
 
         if ($input->getOption('footnotes') === true) {
-            $this->trainTableHelper->processFootnotes();
+            $this->train_table_helper->processFootnotes();
         }
         if ($input->getOption('companies') === true) {
-            $this->trainTableHelper->processCompanies();
+            $this->train_table_helper->processCompanies();
         }
         if ($input->getOption('characteristics') === true) {
-            $this->trainTableHelper->processCharacteristics();
+            $this->train_table_helper->processCharacteristics();
         }
         if ($input->getOption('stations') === true) {
-            $this->trainTableHelper->processStations();
+            $this->train_table_helper->processStations();
         }
         if ($input->getOption('train-tables') === true) {
-            $this->trainTableHelper->processTrainTables();
+            $this->train_table_helper->processTrainTables();
         }
 
         return 0;

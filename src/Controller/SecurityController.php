@@ -38,7 +38,7 @@ class SecurityController
     /**
      * @throws \Exception
      */
-    public function loginAction(AuthenticationUtils $authenticationUtils, ?string $username = null): Response
+    public function loginAction(AuthenticationUtils $authentication_utils, ?string $username = null): Response
     {
         if ($this->user_helper->userIsLoggedIn()) {
             return $this->form_helper->getRedirectHelper()->redirectToRoute('home');
@@ -46,8 +46,8 @@ class SecurityController
 
         return $this->template_helper->render('security/login.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Inloggen of account maken bij Somda',
-            'lastUsername' => null === $username ? $authenticationUtils->getLastUsername() : $username,
-            'error' => $authenticationUtils->getLastAuthenticationError(),
+            'lastUsername' => null === $username ? $authentication_utils->getLastUsername() : $username,
+            'error' => $authentication_utils->getLastAuthenticationError(),
             'register_form' => $this->form_helper->getFactory()->create(UserForm::class, new User())->createView(),
             'view' => 'login',
         ]);
@@ -77,11 +77,11 @@ class SecurityController
                 $user->register_timestamp = new \DateTime();
                 $this->form_helper->getDoctrine()->getManager()->persist($user);
 
-                $userInfo = new UserInfo();
-                $userInfo->user = $user;
-                $this->form_helper->getDoctrine()->getManager()->persist($userInfo);
+                $user_info = new UserInfo();
+                $user_info->user = $user;
+                $this->form_helper->getDoctrine()->getManager()->persist($user_info);
 
-                $user->info = $userInfo;
+                $user->info = $user_info;
 
                 $this->form_helper->getDoctrine()->getManager()->flush();
 
@@ -126,10 +126,10 @@ class SecurityController
 
     private function validateUsername(FormInterface $form): void
     {
-        $existingUsername = $this->form_helper->getDoctrine()->getRepository(User::class)->findOneBy(
+        $existing_username = $this->form_helper->getDoctrine()->getRepository(User::class)->findOneBy(
             [UserForm::FIELD_USERNAME => $form->get(UserForm::FIELD_USERNAME)->getData()]
         );
-        if (null !== $existingUsername) {
+        if (null !== $existing_username) {
             $form->get(UserForm::FIELD_USERNAME)->addError(
                 new FormError('De gebruikersnaam die je hebt gekozen is al in gebruik, kies een andere gebruikersnaam')
             );
@@ -144,10 +144,10 @@ class SecurityController
             );
         }
 
-        $existingEmail = $this->form_helper->getDoctrine()->getRepository(User::class)->findOneBy(
+        $existing_email = $this->form_helper->getDoctrine()->getRepository(User::class)->findOneBy(
             [UserForm::FIELD_EMAIL => $form->get(UserForm::FIELD_EMAIL)->getData()]
         );
-        if (null !== $existingEmail) {
+        if (null !== $existing_email) {
             $form->get(UserForm::FIELD_EMAIL)->addError(
                 new FormError('Het e-mailadres dat je hebt gekozen is al in gebruik, probeer het opnieuw')
             );
@@ -156,11 +156,11 @@ class SecurityController
 
     public function validatePassword(FormInterface $form): void
     {
-        $plainPassword = (string) $form->get(UserForm::FIELD_PLAIN_PASSWORD)->getData();
+        $plain_password = (string) $form->get(UserForm::FIELD_PLAIN_PASSWORD)->getData();
 
         $username = (string) $form->get(UserForm::FIELD_USERNAME)->getData();
-        if (\stristr($plainPassword, $username) || \stristr($username, $plainPassword)
-            || \stristr(strrev($username), $plainPassword) || \stristr($plainPassword, \strrev($username))
+        if (\stristr($plain_password, $username) || \stristr($username, $plain_password)
+            || \stristr(strrev($username), $plain_password) || \stristr($plain_password, \strrev($username))
         ) {
             $form->get(UserForm::FIELD_PLAIN_PASSWORD)->addError(
                 new FormError('Het wachtwoord dat je hebt gekozen vertoont teveel overeenkomsten ' .
@@ -169,8 +169,8 @@ class SecurityController
         }
 
         $email = (string) $form->get(UserForm::FIELD_EMAIL)->getData();
-        if (\stristr($plainPassword, $email) || \stristr($email, $plainPassword)
-            || \stristr(strrev($email), $plainPassword) || \stristr($plainPassword, \strrev($email))
+        if (\stristr($plain_password, $email) || \stristr($email, $plain_password)
+            || \stristr(strrev($email), $plain_password) || \stristr($plain_password, \strrev($email))
         ) {
             $form->get(UserForm::FIELD_PLAIN_PASSWORD)->addError(
                 new FormError('Het wachtwoord dat je hebt gekozen vertoont teveel overeenkomsten ' .
@@ -182,7 +182,7 @@ class SecurityController
     public function activateAction(Request $request, int $id, ?string $key = null): Response|RedirectResponse
     {
         /**
-         * @var User $user
+         * @var User|null $user
          */
         $user = $this->form_helper->getDoctrine()->getRepository(User::class)->find($id);
         if (null === $user) {
@@ -195,27 +195,19 @@ class SecurityController
         if ($form->isSubmitted() && $form->isValid()) {
             if ($form->get(UserActivate::FIELD_KEY)->getData() === $user->activation_key) {
                 /**
-                 * @var Group $userGroup
+                 * @var Group $user_group
                  */
-                $userGroup = $this->form_helper->getDoctrine()->getRepository(Group::class)->find(4);
-                $userGroup->addUser($user);
+                $user_group = $this->form_helper->getDoctrine()->getRepository(Group::class)->find(4);
+                $user_group->addUser($user);
                 
                 $user->activation_key = null;
-                $user->addRole('ROLE_USER')->addGroup($userGroup);
+                $user->addRole('ROLE_USER')->addGroup($user_group);
                 $this->form_helper->getDoctrine()->getManager()->flush();
 
                 $this->email_helper->sendEmail($user, 'Welkom op Somda -- Belangrijke informatie', 'new-account');
 
                 // Send the email to the admin account
-                $samePasswordUsers = $this->form_helper->getDoctrine()->getRepository(User::class)->findBy(
-                    ['password' => $user->getPassword()]
-                );
-                $this->email_helper->sendEmail(
-                    $this->user_helper->getAdministratorUser(),
-                    'Nieuwe registratie bij Somda',
-                    'new-account-admin',
-                    ['user' => $user, 'samePasswordUsers' => $samePasswordUsers]
-                );
+                $this->email_helper->sendEmail($this->user_helper->getAdministratorUser(), 'Nieuwe registratie bij Somda', 'new-account-admin', ['user' => $user]);
 
                 $this->form_helper->getFlashHelper()->add(
                     FlashHelper::FLASH_TYPE_INFORMATION,
@@ -254,15 +246,15 @@ class SecurityController
                 [UserForm::FIELD_EMAIL => $form->get(UserForm::FIELD_EMAIL)->getData()]
             );
             if (null !== $user) {
-                $newPassword = $this->getRandomPassword(12);
-                $user->password = (string)password_hash($newPassword, PASSWORD_DEFAULT);
+                $new_password = $this->getRandomPassword(12);
+                $user->password = (string)password_hash($new_password, PASSWORD_DEFAULT);
                 $this->form_helper->getDoctrine()->getManager()->flush();
 
                 $this->email_helper->sendEmail(
                     $user,
                     'Jouw nieuwe wachtwoord voor Somda',
                     'lost-password',
-                    ['newPassword' => $newPassword]
+                    ['newPassword' => $new_password]
                 );
             }
 
@@ -285,10 +277,10 @@ class SecurityController
      */
     private function getRandomPassword(int $length): string
     {
-        $keySpace = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $key_space = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $pieces = [];
         for ($i = 0; $i < $length; ++$i) {
-            $pieces []= $keySpace[\random_int(0, \mb_strlen($keySpace, '8bit') - 1)];
+            $pieces []= $key_space[\random_int(0, \mb_strlen($key_space, '8bit') - 1)];
         }
         return \implode('', $pieces);
     }

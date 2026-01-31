@@ -77,7 +77,7 @@ class TemplateHelper
     /**
      * @throws \Exception
      */
-    private function getParameters(array $viewParameters): array
+    private function getParameters(array $view_parameters): array
     {
         // Check if there is an active banner for the header
         $banners = $this->doctrine->getRepository(Banner::class)->findBy(
@@ -103,7 +103,7 @@ class TemplateHelper
             )[\random_int(0, 2)];
         }
 
-        return \array_merge($viewParameters, [
+        return \array_merge($view_parameters, [
             'design_number' => $this->user_helper->getPreferenceByKey(UserPreference::KEY_HOME_DESIGN, true)?->value,
             'headerType' => $header_type,
             'headerContent' => $header_content,

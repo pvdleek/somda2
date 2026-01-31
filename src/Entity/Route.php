@@ -46,9 +46,9 @@ class Route
         $this->spots = new ArrayCollection();
     }
 
-    public function addTrainTable(TrainTable $trainTable): Route
+    public function addTrainTable(TrainTable $train_table): Route
     {
-        $this->train_tables[] = $trainTable;
+        $this->train_tables[] = $train_table;
         
         return $this;
     }
@@ -61,9 +61,9 @@ class Route
         return $this->train_tables->toArray();
     }
 
-    public function addTrainTableFirstLast(TrainTableFirstLast $trainTableFirstLast): Route
+    public function addTrainTableFirstLast(TrainTableFirstLast $train_table_first_last): Route
     {
-        $this->train_table_first_lasts[] = $trainTableFirstLast;
+        $this->train_table_first_lasts[] = $train_table_first_last;
 
         return $this;
     }
@@ -78,13 +78,14 @@ class Route
 
     public function getTrainTableFirstLastByDay(int $train_table_year_id, int $day_number): ?TrainTableFirstLast
     {
-        foreach ($this->getTrainTableFirstLasts() as $trainTableFirstLast) {
-            if ($train_table_year_id === $trainTableFirstLast->train_table_year->id
-                && $day_number === $trainTableFirstLast->day_number
+        foreach ($this->getTrainTableFirstLasts() as $train_table_first_last) {
+            if ($train_table_year_id === $train_table_first_last->train_table_year->id
+                && $day_number === $train_table_first_last->day_number
             ) {
-                return $trainTableFirstLast;
+                return $train_table_first_last;
             }
         }
+        
         return null;
     }
 

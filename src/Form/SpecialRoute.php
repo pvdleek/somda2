@@ -61,12 +61,13 @@ class SpecialRoute extends AbstractType
     {
         $finder = new Finder();
         $finder->files()->in(__DIR__.'/../../html/images/materieel');
-        $imageList = [];
+        $image_list = [];
         foreach ($finder as $file) {
-            $imageList[\strtolower($file->getFilenameWithoutExtension())] = $file->getRelativePathname();
+            $image_list[\strtolower($file->getFilenameWithoutExtension())] = $file->getRelativePathname();
         }
-        \asort($imageList);
-        return $imageList;
+        \asort($image_list);
+        
+        return $image_list;
     }
 
     public function configureOptions(OptionsResolver $resolver): void

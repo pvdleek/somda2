@@ -55,9 +55,9 @@ class OfficialTrainTableHelper
                             throw new \Exception('No validity record found before footnote');
                         }
                         $footnote_id = (int) \substr($line, 1);
-                        $validDays = \str_split(\fgets($handle));
-                        foreach ($validDays as $position => $validDay) {
-                            if ($validDay === '1') {
+                        $valid_days = \str_split(\fgets($handle));
+                        foreach ($valid_days as $position => $valid_day) {
+                            if ($valid_day === '1') {
                                 $date = clone($first_date);
                                 $date->modify('+'.$position.' days');
 
@@ -91,15 +91,15 @@ class OfficialTrainTableHelper
                     case '@': // Validity
                         break;
                     default: // Company
-                        $iffCode = (int) \substr($line, 0, 3);
+                        $iff_code = (int) \substr($line, 0, 3);
                         $description = \trim(\substr($line, 15, 30));
 
                         $transporter = $this->doctrine->getRepository(Transporter::class)->findOneBy(
-                            ['iffCode' => $iffCode]
+                            ['iff_code' => $iff_code]
                         );
                         if (null === $transporter) {
                             $transporter = new Transporter();
-                            $transporter->iffCode = $iffCode;
+                            $transporter->iff_code = $iff_code;
                             $transporter->name = $description;
 
                             $this->doctrine->getManager()->persist($transporter);
@@ -154,15 +154,15 @@ class OfficialTrainTableHelper
                     case '@': // Validity
                         break;
                     default: // Station
-                        $abbreviation = trim(substr($line, 2, 7));
-                        $countryCode = trim(substr($line, 16, 4));
-                        $description = trim(substr($line, 43));
+                        $abbreviation = \trim(\substr($line, 2, 7));
+                        $country_code = \trim(\substr($line, 16, 4));
+                        $description = \trim(\substr($line, 43));
 
-                        $locationCategory = $this->doctrine->getRepository(LocationCategory::class)->findOneBy(
-                            ['code' => $countryCode]
+                        $location_category = $this->doctrine->getRepository(LocationCategory::class)->findOneBy(
+                            ['code' => $country_code]
                         );
-                        if (null === $locationCategory) {
-                            throw new \Exception('Country with code '.$countryCode.' not found');
+                        if (null === $location_category) {
+                            throw new \Exception('Country with code '.$country_code.' not found');
                         }
 
                         $location = $this->doctrine->getRepository(Location::class)->findOneBy(
@@ -172,7 +172,7 @@ class OfficialTrainTableHelper
                             $location = new Location();
                             $location->name = $abbreviation;
                             $location->description = $description;
-                            $location->category = $locationCategory;
+                            $location->category = $location_category;
 
                             $this->doctrine->getManager()->persist($location);
                             $this->doctrine->getManager()->flush();
@@ -198,13 +198,13 @@ class OfficialTrainTableHelper
                     case '#': // Unique identification
                         break;
                     case '%': // Company and route-number
-                        $officialRouteModel = new OfficialRoute();
-                        $officialRouteModel->transporter = $this->getTransporter((int)substr($line, 1, 3));
-                        $officialRouteModel->route = $this->getOrCreateRoute((int)substr($line, 5, 5));
-                        $officialRouteModel->first_stop_number = (int) \substr($line, 18, 3);
-                        $officialRouteModel->last_stop_number = (int) \substr($line, 22, 3);
+                        $official_route_model = new OfficialRoute();
+                        $official_route_model->transporter = $this->getTransporter((int)substr($line, 1, 3));
+                        $official_route_model->route = $this->getOrCreateRoute((int)substr($line, 5, 5));
+                        $official_route_model->first_stop_number = (int) \substr($line, 18, 3);
+                        $official_route_model->last_stop_number = (int) \substr($line, 22, 3);
 
-                        $this->routes[] = $officialRouteModel;
+                        $this->routes[] = $official_route_model;
                         break;
                     case '-': // Footnote
                         $this->footnote = $this->doctrine->getRepository(OfficialFootnote::class)->findOneBy(
@@ -308,14 +308,14 @@ class OfficialTrainTableHelper
     /**
      * @throws \Exception
      */
-    private function getTransporter(int $iffCode): Transporter
+    private function getTransporter(int $iff_code): Transporter
     {
         /**
-         * @var Transporter $transporter
+         * @var Transporter|null $transporter
          */
-        $transporter = $this->doctrine->getRepository(Transporter::class)->findOneBy(['iffCode' => $iffCode]);
+        $transporter = $this->doctrine->getRepository(Transporter::class)->findOneBy(['iff_code' => $iff_code]);
         if (null === $transporter) {
-            throw new \Exception('Transport with code '.$iffCode.' not found');
+            throw new \Exception('Transport with code '.$iff_code.' not found');
         }
         return $transporter;
     }

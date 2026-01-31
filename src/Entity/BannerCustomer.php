@@ -55,9 +55,10 @@ class BannerCustomer
         return $this->banners->toArray();
     }
 
-    public function addCustomerUser(BannerCustomerUser $customerUser): BannerCustomer
+    public function addCustomerUser(BannerCustomerUser $customer_user): BannerCustomer
     {
-        $this->customer_users[] = $customerUser;
+        $this->customer_users[] = $customer_user;
+        
         return $this;
     }
 

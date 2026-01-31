@@ -88,7 +88,7 @@ class TrainTableController
             $start_time = \date('H:i', time() - (60 * 15));
             $end_time = \date('H:i', time() + (60 * 45));
 
-            $passingRoutes = [];
+            $passing_routes = [];
         } else {
             if ($train_table_year_id === 0) {
                 $train_table_year_id = $this->train_table_year_repository->findTrainTableYearByDate(new \DateTime())->id;
@@ -97,7 +97,7 @@ class TrainTableController
             $this->train_table_helper->setTrainTableYear($train_table_year_id);
             $this->train_table_helper->setLocation($location_name);
 
-            $passingRoutes = $this->train_table_helper->getPassingRoutes($day_number, $start_time, $end_time);
+            $passing_routes = $this->train_table_helper->getPassingRoutes($day_number, $start_time, $end_time);
         }
 
         foreach ($this->train_table_helper->getErrorMessages() as $message) {
@@ -114,7 +114,7 @@ class TrainTableController
             TemplateHelper::PARAMETER_DAY_NUMBER => $day_number,
             'start_time' => $start_time,
             'end_time' => $end_time,
-            'passingRoutes' => $passingRoutes,
+            'passingRoutes' => $passing_routes,
         ]);
     }
 
@@ -185,12 +185,12 @@ class TrainTableController
         }
 
         if (null === $special_route) {
-            $specialRoutes = $this->doctrine
+            $special_routes = $this->doctrine
                 ->getRepository(SpecialRoute::class)
                 ->findBy([], ['start_date' => 'DESC']);
             return $this->template_helper->render('trainTable/specialRoutes.html.twig', [
                 TemplateHelper::PARAMETER_PAGE_TITLE => 'Bijzondere ritten',
-                'specialRoutes' => $specialRoutes,
+                'specialRoutes' => $special_routes,
             ]);
         }
 

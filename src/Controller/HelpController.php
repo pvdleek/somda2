@@ -13,7 +13,7 @@ class HelpController
 {
     public function __construct(
         private readonly ManagerRegistry $doctrine,
-        private readonly TemplateHelper $templateHelper,
+        private readonly TemplateHelper $template_helper,
     ) {
     }
 
@@ -24,7 +24,7 @@ class HelpController
             $item = $this->doctrine->getRepository(Help::class)->find(1);
         }
 
-        return $this->templateHelper->render('help/index.html.twig', [
+        return $this->template_helper->render('help/index.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Help',
             'allItems' => $this->doctrine->getRepository(Help::class)->findBy([], ['title' => 'ASC']),
             'item' => $item,

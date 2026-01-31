@@ -50,11 +50,11 @@ class ForumPostController
         $this->user_helper->denyAccessUnlessGranted(RoleGenerics::ROLE_USER);
 
         /**
-         * @var ForumPost $quotedPost
+         * @var ForumPost $quoted_post
          */
-        $quotedPost = $this->form_helper->getDoctrine()->getRepository(ForumPost::class)->find($id);
-        if (!$this->forum_authorization_helper->mayPost($quotedPost->discussion->forum, $this->user_helper->getUser())
-            || null === $quotedPost || $quotedPost->discussion->locked
+        $quoted_post = $this->form_helper->getDoctrine()->getRepository(ForumPost::class)->find($id);
+        if (!$this->forum_authorization_helper->mayPost($quoted_post->discussion->forum, $this->user_helper->getUser())
+            || null === $quoted_post || $quoted_post->discussion->locked
         ) {
             throw new AccessDeniedException(
                 'The quoted post does not exist, the discussion is locked or the user may not view the discussion'
@@ -62,13 +62,13 @@ class ForumPostController
         }
 
         $user_is_moderator = $this->forum_authorization_helper->userIsModerator(
-            $quotedPost->discussion->forum,
+            $quoted_post->discussion->forum,
             $this->user_helper->getUser()
         );
 
         $form = $this->form_helper
             ->getFactory()
-            ->create(ForumPostForm::class, null, [ForumPostForm::OPTION_QUOTED_POST => $quote ? $quotedPost : null]);
+            ->create(ForumPostForm::class, null, [ForumPostForm::OPTION_QUOTED_POST => $quote ? $quoted_post : null]);
         if ($user_is_moderator) {
             $form->add('postAsModerator', CheckboxType::class, [
                 FormGenerics::KEY_LABEL => 'Plaatsen als moderator',
@@ -81,30 +81,30 @@ class ForumPostController
             $user = $user_is_moderator && $form->get('postAsModerator')->getData() ?
                 $this->user_helper->getModeratorUser() : $this->user_helper->getUser();
             $this->form_helper->addPost(
-                $quotedPost->discussion,
+                $quoted_post->discussion,
                 $user,
                 $form->get('signature_on')->getData(),
                 $form->get('text')->getData()
             );
-            $this->handleFavoritesForAddedPost($quotedPost->discussion);
+            $this->handleFavoritesForAddedPost($quoted_post->discussion);
 
             return $this->form_helper->finishFormHandling('', RouteGenerics::ROUTE_FORUM_DISCUSSION, [
-                'id' => $quotedPost->discussion->id,
-                'name' => $this->slugger->slug($quotedPost->discussion->title),
+                'id' => $quoted_post->discussion->id,
+                'name' => $this->slugger->slug($quoted_post->discussion->title),
             ]);
         }
 
-        $lastPosts = $this->form_helper->getDoctrine()->getRepository(ForumPost::class)->findBy(
-            [ForumPostForm::FIELD_DISCUSSION => $quotedPost->discussion],
+        $last_posts = $this->form_helper->getDoctrine()->getRepository(ForumPost::class)->findBy(
+            [ForumPostForm::FIELD_DISCUSSION => $quoted_post->discussion],
             [ForumPostForm::FIELD_TIMESTAMP => 'DESC'],
             10
         );
 
         return $this->template_helper->render('forum/reply.html.twig', [
-            TemplateHelper::PARAMETER_PAGE_TITLE => 'Forum - '.$quotedPost->discussion->title,
+            TemplateHelper::PARAMETER_PAGE_TITLE => 'Forum - '.$quoted_post->discussion->title,
             TemplateHelper::PARAMETER_FORM => $form->createView(),
-            'post' => $quotedPost,
-            'lastPosts' => $lastPosts,
+            'post' => $quoted_post,
+            'lastPosts' => $last_posts,
         ]);
     }
 
@@ -156,8 +156,8 @@ class ForumPostController
                 CheckboxType::class,
                 [FormGenerics::KEY_LABEL => 'Bewerken als moderator']
             );
-            $postNrInDiscussion = $this->forum_discussion_repository->getPostNumberInDiscussion($post->discussion, $post->id);
-            if ($postNrInDiscussion === 0) {
+            $post_nr_in_discussion = $this->forum_discussion_repository->getPostNumberInDiscussion($post->discussion, $post->id);
+            if ($post_nr_in_discussion === 0) {
                 $form->add(ForumPostForm::FIELD_TITLE, TextType::class, [
                     FormGenerics::KEY_DATA => $post->discussion->title,
                     FormGenerics::KEY_LABEL => 'Onderwerp van de discussie',
@@ -205,10 +205,10 @@ class ForumPostController
         $post->signature_on = $form->get('signature_on')->getData();
         $post->text->text = $form->get('text')->getData();
 
-        $postLog = new ForumPostLog();
-        $postLog->action = ForumPostLog::ACTION_POST_EDIT;
-        $this->form_helper->getDoctrine()->getManager()->persist($postLog);
+        $post_log = new ForumPostLog();
+        $post_log->action = ForumPostLog::ACTION_POST_EDIT;
+        $this->form_helper->getDoctrine()->getManager()->persist($post_log);
 
-        $post->addLog($postLog);
+        $post->addLog($post_log);
     }
 }

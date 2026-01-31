@@ -44,11 +44,11 @@ class SettingsController
         if ($form->isSubmitted() && $form->isValid()) {
             foreach ($all_settings as $setting) {
                 if ($setting->order > 0) {
-                    $userPreference = $this->user_helper->getPreferenceByKey($setting->key);
+                    $user_preference = $this->user_helper->getPreferenceByKey($setting->key);
                     if (\is_object($form->get($setting->key)->getData())) {
-                        $userPreference->value = (string) $form->get($setting->key)->getData()->name;
+                        $user_preference->value = (string) $form->get($setting->key)->getData()->name;
                     } else {
-                        $userPreference->value = (string) $form->get($setting->key)->getData() ?? '';
+                        $user_preference->value = (string) $form->get($setting->key)->getData() ?? '';
                     }
                 }
             }

@@ -3,5 +3,3 @@
 <br /><strong>Nieuwe registratie bij <a href="{{ url('home') }}">Somda</a></strong>
 <br />
 <br />{{ user.username }} heeft zich zojuist geregistreerd met e-mailadres {{ user.email }}
-<br />
-<br />Gebruikers met hetzelfde password: {% for samePasswordUser in samePasswordUsers %}{{ samePasswordUser.username }} ({{ samePasswordUser.id }}){% if not loop.last %}, {% endif %}{% endfor %}

@@ -78,7 +78,7 @@ class ProcessForumLogCommand extends Command
 
     private function getCleanWordsFromText(string $text): array
     {
-        $strangeCharacters = [
+        $strange_characters = [
             '^', '$', '&', '(', ')', '<', '>', '`', '\'', '"', '|', ',', '@', '_', '?', '%', '-', '~', '+', '.',
             '[', ']', '{', '}', ':', '\\', '/', '=', '#', '\'', ';', '!', '*'
         ];
@@ -92,7 +92,7 @@ class ProcessForumLogCommand extends Command
         // Remove URL's
         $text = \preg_replace('/\b[a-z0-9]+:\/\/[a-z0-9.\-]+(\/[a-z0-9?.%_\-+=&\/]+)?/', ' ', $text);
         // Normalize and filter strange characters such as ^, $, &
-        $text = \strtolower($this->normalizeText(\str_replace($strangeCharacters, ' ', $text)));
+        $text = \strtolower($this->normalizeText(\str_replace($strange_characters, ' ', $text)));
 
         return \array_unique(\array_filter(\explode(' ', $text), function ($value) {
             return \strlen($value) > 2 && \strlen($value) <= 50;

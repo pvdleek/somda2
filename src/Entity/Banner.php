@@ -77,9 +77,9 @@ class Banner
         $this->banner_views = new ArrayCollection();
     }
 
-    public function addBannerHit(BannerHit $bannerHit): Banner
+    public function addBannerHit(BannerHit $banner_hit): Banner
     {
-        $this->banner_hits[] = $bannerHit;
+        $this->banner_hits[] = $banner_hit;
         return $this;
     }
 
@@ -91,9 +91,9 @@ class Banner
         return $this->banner_hits->toArray();
     }
 
-    public function addBannerView(BannerView $bannerView): Banner
+    public function addBannerView(BannerView $banner_view): Banner
     {
-        $this->banner_views[] = $bannerView;
+        $this->banner_views[] = $banner_view;
         return $this;
     }
 

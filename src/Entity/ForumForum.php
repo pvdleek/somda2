@@ -63,9 +63,10 @@ class ForumForum
         $this->moderators = new ArrayCollection();
     }
 
-    public function addDiscussion(ForumDiscussion $forumDiscussion): ForumForum
+    public function addDiscussion(ForumDiscussion $forum_discussion): ForumForum
     {
-        $this->discussions[] = $forumDiscussion;
+        $this->discussions[] = $forum_discussion;
+        
         return $this;
     }
 

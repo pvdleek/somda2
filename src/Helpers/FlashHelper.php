@@ -13,7 +13,7 @@ class FlashHelper
     public const FLASH_TYPE_ERROR = 'alert';
 
     public function __construct(
-        private readonly RequestStack $requestStack,
+        private readonly RequestStack $request_stack,
     ) {
     }
 
@@ -25,7 +25,7 @@ class FlashHelper
         /**
          * @var Session $session
          */
-        $session = $this->requestStack->getCurrentRequest()->getSession();
+        $session = $this->request_stack->getCurrentRequest()->getSession();
         $session->getFlashBag()->add($type, $message);
     }
 }

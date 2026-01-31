@@ -25,8 +25,8 @@ class HomeLayoutController
     {
         $this->user_helper->denyAccessUnlessGranted(RoleGenerics::ROLE_USER);
 
-        $userPreference = $this->user_helper->getPreferenceByKey(UserPreference::KEY_HOME_LAYOUT);
-        $userPreference->value = $layout;
+        $user_preference = $this->user_helper->getPreferenceByKey(UserPreference::KEY_HOME_LAYOUT);
+        $user_preference->value = $layout;
         $this->doctrine->getManager()->flush();
 
         return new JsonResponse();

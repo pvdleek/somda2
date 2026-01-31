@@ -1,5 +1,3 @@
 Nieuwe registratie bij Somda ({{ url('home') }}">)
 
 {{ user.username }} heeft zich zojuist geregistreerd met e-mailadres {{ user.email }}
-
-Gebruikers met hetzelfde password: {% for samePasswordUser in samePasswordUsers %}{{ samePasswordUser.username }} ({{ samePasswordUser.id }}){% if not loop.last %}, {% endif %}{% endfor %}

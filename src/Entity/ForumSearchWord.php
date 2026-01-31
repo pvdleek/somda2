@@ -30,9 +30,10 @@ class ForumSearchWord
         $this->lists = new ArrayCollection();
     }
 
-    public function addList(ForumSearchList $forumSearchList): ForumSearchWord
+    public function addList(ForumSearchList $forum_search_list): ForumSearchWord
     {
-        $this->lists[] = $forumSearchList;
+        $this->lists[] = $forum_search_list;
+        
         return $this;
     }
 

@@ -48,14 +48,15 @@ class StatisticRepository extends ServiceEntityRepository
      * @return StatisticEntity[]
      * @throws \Exception
      */
-    public function findLastDays(int $numberOfDays): array
+    public function findLastDays(int $number_of_days): array
     {
         $query_builder = $this->getEntityManager()
             ->createQueryBuilder()
             ->select('s')
             ->from(StatisticEntity::class, 's')
             ->orderBy('s.timestamp', 'DESC')
-            ->setMaxResults($numberOfDays);
+            ->setMaxResults($number_of_days);
+
         return $query_builder->getQuery()->getResult();
     }
 
@@ -96,18 +97,19 @@ class StatisticRepository extends ServiceEntityRepository
         }
     }
 
-    public function findBusiest(StatisticBusiest $statisticBusiest): void
+    public function findBusiest(StatisticBusiest $statistic_busiest): void
     {
         $query_builder = $this->getEntityManager()
             ->createQueryBuilder()
             ->select('s.timestamp AS timestamp')
-            ->addSelect('s.'.$this->getBusiestFieldName($statisticBusiest->type).' AS number')
+            ->addSelect('s.'.$this->getBusiestFieldName($statistic_busiest->type).' AS number')
             ->from(StatisticEntity::class, 's')
-            ->orderBy('s.'.$this->getBusiestFieldName($statisticBusiest->type), 'DESC')
+            ->orderBy('s.'.$this->getBusiestFieldName($statistic_busiest->type), 'DESC')
             ->setMaxResults(1);
         $result = $query_builder->getQuery()->getArrayResult()[0];
-        $statisticBusiest->timestamp = $result['timestamp'];
-        $statisticBusiest->number = (int) $result['number'];
+
+        $statistic_busiest->timestamp = $result['timestamp'];
+        $statistic_busiest->number = (int) $result['number'];
     }
 
     private function getBusiestFieldName(int $type): string
@@ -118,6 +120,7 @@ class StatisticRepository extends ServiceEntityRepository
         if ($type === StatisticBusiest::TYPE_SPOTS) {
             return 'number_of_spots';
         }
+        
         return 'number_of_posts';
     }
 }

@@ -13,13 +13,13 @@ class InformationController
 {
     public function __construct(
         private readonly ManagerRegistry $doctrine,
-        private readonly TemplateHelper $templateHelper,
+        private readonly TemplateHelper $template_helper,
     ) {
     }
 
     public function jargonAction(): Response
     {
-        return $this->templateHelper->render('information/jargon.html.twig', [
+        return $this->template_helper->render('information/jargon.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Jargon',
             'jargons' => $this->doctrine->getRepository(Jargon::class)->findBy([], ['term' => 'ASC']),
         ]);
@@ -27,7 +27,7 @@ class InformationController
 
     public function uicAction(): Response
     {
-        return $this->templateHelper->render(
+        return $this->template_helper->render(
             'information/uic.html.twig',
             [TemplateHelper::PARAMETER_PAGE_TITLE => 'UIC berekenen']
         );

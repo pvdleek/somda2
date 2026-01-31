@@ -62,45 +62,46 @@ class TrainController
     {
         $this->user_helper->denyAccessUnlessGranted(RoleGenerics::ROLE_USER);
 
-        $isAdministrator = $this->user_helper->getUser()->hasRole('ROLE_ADMIN_TRAIN_COMPOSITIONS');
+        $is_administrator = $this->user_helper->getUser()->hasRole('ROLE_ADMIN_TRAIN_COMPOSITIONS');
 
-        if ($id === 0 && null !== $type_id && $isAdministrator) {
-            $trainCompositionType = $this->form_helper
+        if (0 === $id && null !== $type_id && $is_administrator) {
+            $train_compositionType = $this->form_helper
                 ->getDoctrine()
                 ->getRepository(TrainCompositionType::class)
                 ->find($type_id);
-            if (null === $trainCompositionType) {
+            if (null === $train_compositionType) {
                 throw new AccessDeniedException('This trainCompositionType does not exist');
             }
 
-            $trainComposition = new TrainComposition();
-            $trainComposition->type = $trainCompositionType;
+            $train_composition = new TrainComposition();
+            $train_composition->type = $train_compositionType;
 
-            $this->form_helper->getDoctrine()->getManager()->persist($trainComposition);
+            $this->form_helper->getDoctrine()->getManager()->persist($train_composition);
         } else {
             /**
-             * @var TrainComposition $trainComposition
+             * @var TrainComposition|null $train_composition
              */
-            $trainComposition = $this->form_helper->getDoctrine()->getRepository(TrainComposition::class)->find($id);
-            if (null === $trainComposition) {
+            $train_composition = $this->form_helper->getDoctrine()->getRepository(TrainComposition::class)->find($id);
+            if (null === $train_composition) {
                 throw new AccessDeniedException('This trainComposition does not exist');
             }
         }
 
-        if ($isAdministrator) {
-            return $this->editAsManager($request, $trainComposition);
+        if ($is_administrator) {
+            return $this->editAsManager($request, $train_composition);
         }
-        return $this->editAsUser($request, $trainComposition);
+
+        return $this->editAsUser($request, $train_composition);
     }
 
     /**
      * @throws \Exception
      */
-    private function editAsManager(Request $request, TrainComposition $trainComposition): Response|RedirectResponse
+    private function editAsManager(Request $request, TrainComposition $train_composition): Response|RedirectResponse
     {
         $form = $this->form_helper->getFactory()->create(
             TrainCompositionForm::class,
-            $trainComposition,
+            $train_composition,
             [TrainCompositionForm::OPTION_MANAGEMENT_ROLE => true]
         );
         $form->handleRequest($request);
@@ -108,47 +109,47 @@ class TrainController
             return $this->form_helper->finishFormHandling(
                 'Materieelsamenstelling bijgewerkt',
                 RouteGenerics::TRAIN_COMPOSITIONS_TYPE,
-                ['type_id' => $trainComposition->getType()->id]
+                ['type_id' => $train_composition->getType()->id]
             );
         }
 
         return $this->template_helper->render('train/edit.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Bewerk trein-samenstelling',
-            'trainComposition' => $trainComposition,
+            'trainComposition' => $train_composition,
             TemplateHelper::PARAMETER_FORM => $form->createView(),
         ]);
     }
 
-    private function editAsUser(Request $request, TrainComposition $trainComposition): Response|RedirectResponse
+    private function editAsUser(Request $request, TrainComposition $train_composition): Response|RedirectResponse
     {
-        $trainProposition = $this->form_helper
+        $train_proposition = $this->form_helper
             ->getDoctrine()
             ->getRepository(TrainCompositionProposition::class)
-            ->findOneBy(['composition' => $trainComposition, 'user' => $this->user_helper->getUser()]);
-        if (null === $trainProposition) {
-            $trainProposition = new TrainCompositionProposition();
-            $trainProposition->setFromTrainComposition($trainComposition);
-            $trainProposition->user = $this->user_helper->getUser();
+            ->findOneBy(['composition' => $train_composition, 'user' => $this->user_helper->getUser()]);
+        if (null === $train_proposition) {
+            $train_proposition = new TrainCompositionProposition();
+            $train_proposition->setFromTrainComposition($train_composition);
+            $train_proposition->user = $this->user_helper->getUser();
         }
 
-        $trainProposition->timestamp = new \DateTime();
+        $train_proposition->timestamp = new \DateTime();
 
-        $form = $this->form_helper->getFactory()->create(TrainCompositionForm::class, $trainProposition);
+        $form = $this->form_helper->getFactory()->create(TrainCompositionForm::class, $train_proposition);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->form_helper->getDoctrine()->getManager()->persist($trainProposition);
-            $trainComposition->addProposition($trainProposition);
+            $this->form_helper->getDoctrine()->getManager()->persist($train_proposition);
+            $train_composition->addProposition($train_proposition);
 
             return $this->form_helper->finishFormHandling(
                 'Je voorstel is ingediend. Na goedkeuring door 1 van de beheerders wordt het overzicht aangepast',
                 RouteGenerics::TRAIN_COMPOSITIONS_TYPE,
-                ['type_id' => $trainComposition->getType()->id]
+                ['type_id' => $train_composition->getType()->id]
             );
         }
 
         return $this->template_helper->render('train/edit.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Bewerk trein-samenstelling',
-            'trainComposition' => $trainComposition,
+            'trainComposition' => $train_composition,
             TemplateHelper::PARAMETER_FORM => $form->createView(),
         ]);
     }
@@ -156,7 +157,7 @@ class TrainController
     public function checkAction(int $train_id, int $user_id, int $approved): JsonResponse
     {
         /**
-         * @var TrainComposition $train_composition
+         * @var TrainComposition|null $train_composition
          */
         $train_composition = $this->form_helper->getDoctrine()->getRepository(TrainComposition::class)->find($train_id);
         if (null === $train_composition) {
@@ -169,7 +170,7 @@ class TrainController
         }
 
         /**
-         * @var TrainCompositionProposition $train_proposition
+         * @var TrainCompositionProposition|null $train_proposition
          */
         $train_proposition = $this->form_helper
             ->getDoctrine()

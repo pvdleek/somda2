@@ -45,12 +45,13 @@ class ForumPostAlert
     }
 
     /**
-     * @param ForumPostAlertNote $forumPostAlertNote
+     * @param ForumPostAlertNote $forum_post_alert_note
      * @return ForumPostAlert
      */
-    public function addNote(ForumPostAlertNote $forumPostAlertNote): ForumPostAlert
+    public function addNote(ForumPostAlertNote $forum_post_alert_note): ForumPostAlert
     {
-        $this->notes[] = $forumPostAlertNote;
+        $this->notes[] = $forum_post_alert_note;
+
         return $this;
     }
 

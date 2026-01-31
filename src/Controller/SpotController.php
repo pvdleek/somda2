@@ -34,8 +34,8 @@ class SpotController
      */
     public function redirectToTrainTableAction(string $route_number, string $date): RedirectResponse
     {
-        $checkDate = new \DateTime($date);
-        $train_table_year = $this->train_table_year_repository->findTrainTableYearByDate($checkDate);
+        $check_date = new \DateTime($date);
+        $train_table_year = $this->train_table_year_repository->findTrainTableYearByDate($check_date);
 
         return $this->redirect_helper->redirectToRoute(
             'train_table_search',

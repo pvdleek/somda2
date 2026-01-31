@@ -173,8 +173,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function isForumFavorite(ForumDiscussion $discussion): bool
     {
-        foreach ($this->getForumFavorites() as $forumFavorite) {
-            if ($forumFavorite->discussion === $discussion) {
+        foreach ($this->getForumFavorites() as $forum_favorite) {
+            if ($forum_favorite->discussion === $discussion) {
                 return true;
             }
         }

@@ -83,9 +83,9 @@ class ForumModerateController
         $form = $this->form_helper->getFactory()->create(ForumDiscussionCombine::class, $new_discussion);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $oldestPost = $this->movePostsAndGetOldest($discussion1, $discussion2, $new_discussion);
+            $oldest_post = $this->movePostsAndGetOldest($discussion1, $discussion2, $new_discussion);
 
-            $new_discussion->author = $oldestPost->author;
+            $new_discussion->author = $oldest_post->author;
             $new_discussion->title = $form->get('title')->getData();
             $new_discussion->viewed = (int) $discussion1->viewed + (int) $discussion2->viewed;
             $this->form_helper->getDoctrine()->getManager()->persist($new_discussion);

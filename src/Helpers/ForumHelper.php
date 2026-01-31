@@ -55,25 +55,25 @@ class ForumHelper implements RuntimeExtensionInterface
         $text = $this->replaceSmileys($text);
 
         // Replace %quote% and %unquote% with their correct HTML tags
-        $numberOfQuote = 0;
-        $numberOfUnquote = 0;
+        $number_of_quote = 0;
+        $number_of_unquote = 0;
         while (\stripos($text, '%quote%') !== false) {
             $text = \preg_replace('[%quote%]', '<blockquote><strong>Quote'.'</strong><hr />', $text, 1);
-            ++$numberOfQuote;
+            ++$number_of_quote;
         }
         while (\stripos($text, '%unquote%') !== false) {
             $text = \preg_replace('[%unquote%]', '<hr /></blockquote> ', $text, 1);
-            ++$numberOfUnquote;
+            ++$number_of_unquote;
         }
 
         // Place extra quotes if necessary
-        $doQuotes = $numberOfUnquote - $numberOfQuote;
-        for ($doQuote = 0; $doQuote < $doQuotes; ++$doQuote) {
+        $do_quotes = $number_of_unquote - $number_of_quote;
+        for ($do_quote = 0; $do_quote < $do_quotes; ++$do_quote) {
             $text = '<blockquote><strong>Quote'.'</strong><hr />'.$text;
         }
         // Place extra unquotes if necessary
-        $doQuotes = $numberOfQuote - $numberOfUnquote;
-        for ($doUnquote = 0; $doUnquote < $doQuotes; ++$doUnquote) {
+        $do_quotes = $number_of_quote - $number_of_unquote;
+        for ($do_unquote = 0; $do_unquote < $do_quotes; ++$do_unquote) {
             $text .= ' <hr /></blockquote>';
         }
 
@@ -110,10 +110,10 @@ class ForumHelper implements RuntimeExtensionInterface
     private function replaceSmileys(string $text): string
     {
         // Replace smileys with percent-codes (%xx%)
-        for ($smileyNumber = 1; $smileyNumber <= 18; ++$smileyNumber) {
+        for ($smiley_number = 1; $smiley_number <= 18; ++$smiley_number) {
             $text = \str_replace(
-                '%'.\sprintf('%2d', $smileyNumber).'%',
-                '<img alt="" src="/images/smileys/'.\sprintf('%2d', $smileyNumber).'.png" />',
+                '%'.\sprintf('%2d', $smiley_number).'%',
+                '<img alt="" src="/images/smileys/'.\sprintf('%2d', $smiley_number).'.png" />',
                 $text
             );
         }
@@ -124,8 +124,8 @@ class ForumHelper implements RuntimeExtensionInterface
             ' :-P' => '11', ' :$' => '12', ' :-$' => '12', ' :(' => '14', ' :-(' => '14', ' :o' => '16', ' :-o' => '16',
             ' :O' => '16', ' :-O' => '16', ' ;)' => '17', ' ;-)' => '17',
         ];
-        foreach ($smileys as $smileyCode => $smileyNumber) {
-            $text = \str_replace($smileyCode, '<img alt="" src="/images/smileys/'.$smileyNumber.'.png" />', $text);
+        foreach ($smileys as $smiley_code => $smiley_number) {
+            $text = \str_replace($smiley_code, '<img alt="" src="/images/smileys/'.$smiley_number.'.png" />', $text);
         }
 
         return $text;

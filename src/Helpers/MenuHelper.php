@@ -29,15 +29,15 @@ class MenuHelper implements RuntimeExtensionInterface
     public function getMenuStructure(): array
     {
         $blocks = $this->block_repository->getMenuStructure();
-        $allowedBlocks = [];
+        $allowed_blocks = [];
 
         foreach ($blocks as $block) {
             if (\strlen($block['route']) > 0 && $this->isAuthorizedForBlock($block)) {
-                $allowedBlocks[] = $block;
+                $allowed_blocks[] = $block;
             }
         }
 
-        return $allowedBlocks;
+        return $allowed_blocks;
     }
 
     private function isAuthorizedForBlock(array $block): bool

@@ -23,18 +23,18 @@ class ForumSearchResult
     public \DateTime $post_timestamp;
 
     /**
-     * @param array $queryResult - A result array from the searchByWords function in the ForumSearchWord repository
+     * @param array $query_result - A result array from the searchByWords function in the ForumSearchWord repository
      */
-    public function __construct(array $queryResult)
+    public function __construct(array $query_result)
     {
-        $this->title_match = $queryResult['title_match'];
-        $this->discussion_id = (int) $queryResult['discussion_id'];
-        $this->discussion_title = $queryResult['discussion_title'];
-        $this->discussion_locked = (bool)$queryResult['discussion_locked'];
-        $this->author_id = (int) $queryResult['author_id'];
-        $this->author_username = $queryResult['author_username'];
-        $this->post_id = (int) $queryResult['post_id'];
-        $this->post_timestamp = $queryResult['post_timestamp'];
+        $this->title_match = $query_result['title_match'];
+        $this->discussion_id = (int) $query_result['discussion_id'];
+        $this->discussion_title = $query_result['discussion_title'];
+        $this->discussion_locked = (bool)$query_result['discussion_locked'];
+        $this->author_id = (int) $query_result['author_id'];
+        $this->author_username = $query_result['author_username'];
+        $this->post_id = (int) $query_result['post_id'];
+        $this->post_timestamp = $query_result['post_timestamp'];
     }
 
     /**

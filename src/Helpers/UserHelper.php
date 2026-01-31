@@ -121,13 +121,14 @@ class UserHelper implements RuntimeExtensionInterface
     public function getDefaultLocation(): ?Location
     {
         $location = null;
-        $defaultLocation = $this->getPreferenceByKey(UserPreference::KEY_DEFAULT_SPOT_LOCATION);
-        if (\strlen($defaultLocation->value) > 0) {
+        $default_location = $this->getPreferenceByKey(UserPreference::KEY_DEFAULT_SPOT_LOCATION);
+        if (\strlen($default_location->value) > 0) {
             /**
              * @var Location $location
              */
-            $location = $this->doctrine->getRepository(Location::class)->findOneBy(['name' => $defaultLocation->value]);
+            $location = $this->doctrine->getRepository(Location::class)->findOneBy(['name' => $default_location->value]);
         }
+        
         return $location;
     }
 }

@@ -8,7 +8,7 @@ use App\Entity\User;
 
 class SpotInput
 {
-    public ?int $existingSpotId = null;
+    public ?int $existing_spot_id = null;
 
     public User $user;
 

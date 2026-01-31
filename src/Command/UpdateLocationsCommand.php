@@ -42,9 +42,9 @@ class UpdateLocationsCommand extends Command
         \curl_close($curl);
 
         /**
-         * @var LocationCategory $notValidCategory
+         * @var LocationCategory $not_valid_category
          */
-        $notValidCategory = $this->doctrine->getRepository(LocationCategory::class)->find(LocationCategory::NO_LONGER_VALID_ID);
+        $not_valid_category = $this->doctrine->getRepository(LocationCategory::class)->find(LocationCategory::NO_LONGER_VALID_ID);
 
         foreach ($result['payload'] as $station) {
             $category = $this->doctrine->getRepository(LocationCategory::class)->findOneBy(
@@ -72,7 +72,7 @@ class UpdateLocationsCommand extends Command
             $location->description = $station['namen']['lang'];
 
             if (isset($station['eindDatum']) && new \DateTime($station['eindDatum']) < new \DateTime()) {
-                $location->category = $notValidCategory;
+                $location->category = $not_valid_category;
             } else {
                 $location->category = $category;
             }

@@ -16,23 +16,23 @@ use Symfony\Component\HttpFoundation\Response;
 class ForumSearchController
 {
     public function __construct(
-        private readonly FormHelper $formHelper,
-        private readonly TemplateHelper $templateHelper,
-        private readonly ForumSearchHelper $forumSearchHelper,
+        private readonly FormHelper $form_helper,
+        private readonly TemplateHelper $template_helper,
+        private readonly ForumSearchHelper $forum_search_helper,
     ) {
     }
 
     public function indexAction(Request $request): Response
     {
-        $form = $this->formHelper->getFactory()->create(ForumSearch::class);
+        $form = $this->form_helper->getFactory()->create(ForumSearch::class);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $results = $this->forumSearchHelper->getSearchResults(
+            $results = $this->forum_search_helper->getSearchResults(
                 $form->get('method')->getData(),
-                $this->forumSearchHelper->getSearchWords($form->get('words')->getData())
+                $this->forum_search_helper->getSearchWords($form->get('words')->getData())
             );
 
-            return $this->templateHelper->render('forum/search.html.twig', [
+            return $this->template_helper->render('forum/search.html.twig', [
                 TemplateHelper::PARAMETER_PAGE_TITLE => 'Zoeken in het forum',
                 TemplateHelper::PARAMETER_FORM => $form->createView(),
                 'results' => \array_slice($results, 0, ForumSearchHelper::MAX_RESULTS),
@@ -40,7 +40,7 @@ class ForumSearchController
             ]);
         }
 
-        return $this->templateHelper->render('forum/search.html.twig', [
+        return $this->template_helper->render('forum/search.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Zoeken in het forum',
             TemplateHelper::PARAMETER_FORM => $form->createView(),
         ]);
@@ -48,10 +48,10 @@ class ForumSearchController
 
     public function noteworthyStuffAction(): RedirectResponse
     {
-        $forum = $this->formHelper->getDoctrine()->getRepository(ForumForum::class)->find(
+        $forum = $this->form_helper->getDoctrine()->getRepository(ForumForum::class)->find(
             $_ENV['NOTEWORTHY_STUFF_FORUM_ID']
         );
-        return $this->formHelper->getRedirectHelper()->redirectToRoute(
+        return $this->form_helper->getRedirectHelper()->redirectToRoute(
             'forum_forum',
             ['id' => $forum->id, 'name' => $forum->name]
         );

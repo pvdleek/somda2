@@ -46,11 +46,11 @@ class ForumSearchWordRepository extends ServiceEntityRepository
             ->setParameter('word_id_list', $word_id_list)
             ->addOrderBy('l.title', 'DESC')
             ->addOrderBy('p.timestamp', 'DESC');
-        $queryResults = $query_builder->getQuery()->getArrayResult();
+        $query_results = $query_builder->getQuery()->getArrayResult();
 
         $results = [];
-        foreach ($queryResults as $queryResult) {
-            $results[] = new ForumSearchResult($queryResult);
+        foreach ($query_results as $query_result) {
+            $results[] = new ForumSearchResult($query_result);
         }
         return $results;
     }

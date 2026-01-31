@@ -24,7 +24,7 @@ class SpotRepository extends ServiceEntityRepository
     private const FIELD_SPOT_DATE = 'spot_date';
     private const FIELD_LOCATION = 'location';
 
-    private static array $orderColumn = [
+    private static array $order_column = [
         self::FIELD_SPOT_DATE => 's.spot_date',
         self::FIELD_LOCATION => 'l.name',
         'train' => 't.number',
@@ -233,7 +233,7 @@ class SpotRepository extends ServiceEntityRepository
 
         if (\count($order_array) > 0) {
             foreach ($order_array as $order) {
-                $query_builder->addOrderBy(self::$orderColumn[$order->column], $order->ascending ? 'ASC' : 'DESC');
+                $query_builder->addOrderBy(self::$order_column[$order->column], $order->ascending ? 'ASC' : 'DESC');
             }
         }
 

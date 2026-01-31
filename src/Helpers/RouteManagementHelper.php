@@ -33,7 +33,7 @@ class RouteManagementHelper
     /**
      * @var TrainTable[]
      */
-    private array $trainTableLines;
+    private array $train_table_lines;
 
     public function __construct(
         private readonly ManagerRegistry $doctrine,
@@ -59,13 +59,13 @@ class RouteManagementHelper
      */
     public function getTrainTableLines(): array
     {
-        return $this->trainTableLines;
+        return $this->train_table_lines;
     }
 
     public function setRouteListFromId(int $route_list_id): void
     {
         /**
-         * @var RouteList $route_list
+         * @var RouteList|null $route_list
          */
         $route_list = $this->route_list_repository->find($route_list_id);
         if (null === $route_list) {
@@ -79,7 +79,7 @@ class RouteManagementHelper
         $route = null;
         if (null !== $route_id && $route_id > 0) {
             /**
-             * @var Route $route
+             * @var Route|null $route
              */
             $route = $this->doctrine->getRepository(Route::class)->find($route_id);
             if (null === $route) {
@@ -103,7 +103,7 @@ class RouteManagementHelper
                 $this->route_list = $route_list;
             }
 
-            $this->trainTableLines = $this->train_table_repository->findBy(
+            $this->train_table_lines = $this->train_table_repository->findBy(
                 ['train_table_year' => $this->route_list->train_table_year, 'route' => $this->route],
                 ['order' => 'ASC']
             );
@@ -117,8 +117,8 @@ class RouteManagementHelper
             $this->doctrine->getManager()->persist($this->route);
         }
 
-        if (!isset($this->trainTableLines)) {
-            $this->trainTableLines = $this->train_table_repository->findBy(
+        if (!isset($this->train_table_lines)) {
+            $this->train_table_lines = $this->train_table_repository->findBy(
                 ['train_table_year' => $this->route_list->train_table_year, 'route' => $this->route],
                 ['order' => 'ASC']
             );
@@ -152,17 +152,19 @@ class RouteManagementHelper
         }
 
         $this->removeExistingTrainTablesFromRoute($this->route_list->train_table_year, $this->route);
-        $routeDayArray = $this->getUniqueRouteDayArray($this->getRouteDayArray($submitted_fields));
-        return $this->saveRouteDay($routeDayArray, $this->route_list->train_table_year, $this->route);
+        $route_day_array = $this->getUniqueRouteDayArray($this->getRouteDayArray($submitted_fields));
+
+        return $this->saveRouteDay($route_day_array, $this->route_list->train_table_year, $this->route);
     }
 
     private function getRouteDayArray(array $submitted_fields): array
     {
         $route_day_array = [];
         foreach ($submitted_fields as $key => $value) {
-            $keyPart = \explode('_', $key);
-            $route_day_array[(int) $keyPart[1]][(int) $keyPart[2]][$keyPart[0]] = $value;
+            $key_part = \explode('_', $key);
+            $route_day_array[(int) $key_part[1]][(int) $key_part[2]][$key_part[0]] = $value;
         }
+
         return $route_day_array;
     }
 
@@ -204,14 +206,14 @@ class RouteManagementHelper
 
     private function removeExistingTrainTablesFromRoute(TrainTableYear $train_table_year, Route $route): void
     {
-        foreach ($route->getTrainTables() as $trainTable) {
-            if ($train_table_year === $trainTable->train_table_year) {
-                $this->doctrine->getManager()->remove($trainTable);
+        foreach ($route->getTrainTables() as $train_table) {
+            if ($train_table_year === $train_table->train_table_year) {
+                $this->doctrine->getManager()->remove($train_table);
             }
         }
-        foreach ($route->getTrainTableFirstLasts() as $trainTableFirstLast) {
-            if ($train_table_year === $trainTableFirstLast->train_table_year) {
-                $this->doctrine->getManager()->remove($trainTableFirstLast);
+        foreach ($route->getTrainTableFirstLasts() as $train_table_first_last) {
+            if ($train_table_year === $train_table_first_last->train_table_year) {
+                $this->doctrine->getManager()->remove($train_table_first_last);
             }
         }
 
@@ -231,7 +233,7 @@ class RouteManagementHelper
                 $train_table->time = $this->timeDisplayToDatabase($route_day_line[self::ROUTE_LINE_KEY_TIME]);
                 $train_table->train_table_year = $train_table_year;
                 $train_table->route = $route;
-                $train_table->routeOperationDays = $route_day[self::ROUTE_KEY_ROUTE_OPERATION_DAYS];
+                $train_table->route_operation_days = $route_day[self::ROUTE_KEY_ROUTE_OPERATION_DAYS];
                 $train_table->location = $this->findLocation($route_day_line[self::ROUTE_LINE_KEY_LOCATION], $ok_flag);
 
                 $this->doctrine->getManager()->persist($train_table);
@@ -240,19 +242,19 @@ class RouteManagementHelper
 
             for ($day_number = 1; $day_number <= 7; ++$day_number) {
                 if ($route_day[self::ROUTE_KEY_ROUTE_OPERATION_DAYS]->isRunningOnDay($day_number - 1)) {
-                    $lastLine = end($route_day[self::ROUTE_KEY_LINES]);
-                    $firstLine = reset($route_day[self::ROUTE_KEY_LINES]);
+                    $last_line = \end($route_day[self::ROUTE_KEY_LINES]);
+                    $first_line = \reset($route_day[self::ROUTE_KEY_LINES]);
 
                     $train_table_first_last = new TrainTableFirstLast();
                     $train_table_first_last->train_table_year = $train_table_year;
                     $train_table_first_last->route = $route;
                     $train_table_first_last->day_number = $day_number;
-                    $train_table_first_last->first_location = $this->findLocation($firstLine[self::ROUTE_LINE_KEY_LOCATION], $ok_flag);
-                    $train_table_first_last->first_action = $firstLine[self::ROUTE_LINE_KEY_ACTION];
-                    $train_table_first_last->first_time = $this->timeDisplayToDatabase($firstLine[self::ROUTE_LINE_KEY_TIME]);
-                    $train_table_first_last->last_location = $this->findLocation($lastLine[self::ROUTE_LINE_KEY_LOCATION], $ok_flag);
-                    $train_table_first_last->last_action = $lastLine[self::ROUTE_LINE_KEY_ACTION];
-                    $train_table_first_last->last_time = $this->timeDisplayToDatabase($lastLine[self::ROUTE_LINE_KEY_TIME]);
+                    $train_table_first_last->first_location = $this->findLocation($first_line[self::ROUTE_LINE_KEY_LOCATION], $ok_flag);
+                    $train_table_first_last->first_action = $first_line[self::ROUTE_LINE_KEY_ACTION];
+                    $train_table_first_last->first_time = $this->timeDisplayToDatabase($first_line[self::ROUTE_LINE_KEY_TIME]);
+                    $train_table_first_last->last_location = $this->findLocation($last_line[self::ROUTE_LINE_KEY_LOCATION], $ok_flag);
+                    $train_table_first_last->last_action = $last_line[self::ROUTE_LINE_KEY_ACTION];
+                    $train_table_first_last->last_time = $this->timeDisplayToDatabase($last_line[self::ROUTE_LINE_KEY_TIME]);
 
                     $this->doctrine->getManager()->persist($train_table_first_last);
                 }
@@ -267,13 +269,14 @@ class RouteManagementHelper
     private function findLocation(string $location_name, bool &$ok_flag): Location
     {
         /**
-         * @var Location $location
+         * @var Location|null $location
          */
         $location = $this->location_repository->findOneBy(['name' => $location_name]);
         if (null === $location) {
             $location = $this->location_repository->findOneBy(['name' => Location::UNKNOWN_NAME]);
             $ok_flag = false;
         }
+        
         return $location;
     }
 }

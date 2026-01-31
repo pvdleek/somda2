@@ -36,7 +36,7 @@ class UpdateStatisticsCommand extends Command
     {
         $today = new \DateTime();
         $yesterday = new \DateTime('-1 day');
-        $weekAgo = new \DateTime('-7 days');
+        $week_ago = new \DateTime('-7 days');
 
         // Re-create the statistics for the last 24 hours
         $query = 'REPLACE INTO `somda_stats` (`datum`, `pageviews`, `pageviews_home`, `pageviews_func`)
@@ -68,14 +68,14 @@ class UpdateStatisticsCommand extends Command
             (SELECT COUNT(*) FROM `somda_spots` `sp` WHERE `sp`.`datum` = `s`.`datum` AND `sp`.`datum` > :'.self::DATE_PERIOD_WEEK_AGO.')
             WHERE `s`.`datum` > :'.self::DATE_PERIOD_WEEK_AGO;
         $statement = $this->connection->prepare($query);
-        $statement->bindValue(self::DATE_PERIOD_WEEK_AGO, $weekAgo->format(DateGenerics::DATE_FORMAT_DATABASE));
+        $statement->bindValue(self::DATE_PERIOD_WEEK_AGO, $week_ago->format(DateGenerics::DATE_FORMAT_DATABASE));
         $statement->executeStatement();
         $query = 'UPDATE `somda_stats` `s` SET `posts` =
             (SELECT COUNT(*) FROM `somda_forum_posts` `f`
             WHERE DATE(`f`.`timestamp`) = `s`.`datum` AND `f`.`timestamp` > :'.self::DATE_PERIOD_WEEK_AGO.')
             WHERE `s`.`datum` > :'.self::DATE_PERIOD_WEEK_AGO;
         $statement = $this->connection->prepare($query);
-        $statement->bindValue(self::DATE_PERIOD_WEEK_AGO, $weekAgo->format(DateGenerics::DATE_FORMAT_DATABASE));
+        $statement->bindValue(self::DATE_PERIOD_WEEK_AGO, $week_ago->format(DateGenerics::DATE_FORMAT_DATABASE));
         $statement->executeStatement();
 
         // Update for the block-visits
@@ -96,7 +96,7 @@ class UpdateStatisticsCommand extends Command
 
         $query = 'DELETE FROM `somda_logging` WHERE `datumtijd` <= :'.self::DATE_PERIOD_WEEK_AGO.'';
         $statement = $this->connection->prepare($query);
-        $statement->bindValue(self::DATE_PERIOD_WEEK_AGO, $weekAgo->format(DateGenerics::DATE_FORMAT_DATABASE));
+        $statement->bindValue(self::DATE_PERIOD_WEEK_AGO, $week_ago->format(DateGenerics::DATE_FORMAT_DATABASE));
         $statement->executeStatement();
 
         return 0;

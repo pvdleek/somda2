@@ -24,7 +24,7 @@ class ForumPostRepository extends ServiceEntityRepository
      */
     public function findByFavorites(User $user): array
     {
-        $maxQuery = '
+        $max_query = '
             SELECT p.discussionid AS disc_id, MAX(p.timestamp) AS max_date_time
             FROM somda_forum_posts p
             INNER JOIN fpf_forum_post_favorite f ON f.postid = p.postid AND f.uid = :user_id
@@ -40,7 +40,7 @@ class ForumPostRepository extends ServiceEntityRepository
             JOIN somda_users a ON a.uid = p.authorid
             JOIN somda_forum_posts p_max ON p_max.discussionid = d.discussionid
             INNER JOIN fpf_forum_post_favorite f ON f.postid = p.postid AND f.uid = :user_id
-            INNER JOIN ('.$maxQuery.') m ON m.disc_id = d.discussionid
+            INNER JOIN ('.$max_query.') m ON m.disc_id = d.discussionid
             WHERE p_max.timestamp = m.max_date_time
             GROUP BY `id`, `disc_id`, `title`, `author_id`, `author_username`, `locked`, `max_post_timestamp`
             ORDER BY m.max_date_time DESC';

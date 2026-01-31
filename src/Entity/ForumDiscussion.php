@@ -52,9 +52,10 @@ class ForumDiscussion
         $this->favorites = new ArrayCollection();
     }
 
-    public function addPost(ForumPost $forumPost): ForumDiscussion
+    public function addPost(ForumPost $forum_post): ForumDiscussion
     {
-        $this->posts[] = $forumPost;
+        $this->posts[] = $forum_post;
+
         return $this;
     }
 
@@ -66,9 +67,10 @@ class ForumDiscussion
         return $this->posts->toArray();
     }
 
-    public function addWiki(ForumDiscussionWiki $forumDiscussionWiki): ForumDiscussion
+    public function addWiki(ForumDiscussionWiki $forum_discussion_wiki): ForumDiscussion
     {
-        $this->wikis[] = $forumDiscussionWiki;
+        $this->wikis[] = $forum_discussion_wiki;
+
         return $this;
     }
 
@@ -80,9 +82,10 @@ class ForumDiscussion
         return $this->wikis->toArray();
     }
 
-    public function addFavorite(ForumFavorite $forumFavorite): ForumDiscussion
+    public function addFavorite(ForumFavorite $forum_favorite): ForumDiscussion
     {
-        $this->favorites[] = $forumFavorite;
+        $this->favorites[] = $forum_favorite;
+        
         return $this;
     }
 

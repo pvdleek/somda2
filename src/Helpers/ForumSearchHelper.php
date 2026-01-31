@@ -31,17 +31,17 @@ class ForumSearchHelper implements RuntimeExtensionInterface
     }
 
     /**
-     * @param ForumSearchWord[] $searchWords
+     * @param ForumSearchWord[] $search_words
      * @return ForumSearchResult[]
      */
-    public function getSearchResults(string $search_method, array $searchWords): array
+    public function getSearchResults(string $search_method, array $search_words): array
     {
         if ($search_method === ForumSearch::METHOD_SOME) {
-            return $this->forum_search_word_repository->searchByWords($searchWords);
+            return $this->forum_search_word_repository->searchByWords($search_words);
         }
 
         $results = null;
-        foreach ($searchWords as $word) {
+        foreach ($search_words as $word) {
             $result = $this->forum_search_word_repository->searchByWords([$word]);
             if (null === $results) {
                 $results = $result;

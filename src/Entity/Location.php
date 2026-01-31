@@ -57,9 +57,10 @@ class Location
         $this->spots = new ArrayCollection();
     }
 
-    public function addTrainTable(TrainTable $trainTable): Location
+    public function addTrainTable(TrainTable $train_table): Location
     {
-        $this->train_tables[] = $trainTable;
+        $this->train_tables[] = $train_table;
+        
         return $this;
     }
 

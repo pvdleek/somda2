@@ -16,8 +16,8 @@ class FormHelper
     public function __construct(
         private readonly ManagerRegistry $doctrine,
         private readonly FormFactoryInterface $factory,
-        private readonly FlashHelper $flashHelper,
-        private readonly RedirectHelper $redirectHelper,
+        private readonly FlashHelper $flash_helper,
+        private readonly RedirectHelper $redirect_helper,
     ) {
     }
 
@@ -42,7 +42,7 @@ class FormHelper
      */
     public function getFlashHelper(): FlashHelper
     {
-        return $this->flashHelper;
+        return $this->flash_helper;
     }
 
     /**
@@ -50,7 +50,7 @@ class FormHelper
      */
     public function getRedirectHelper(): RedirectHelper
     {
-        return $this->redirectHelper;
+        return $this->redirect_helper;
     }
 
     public function finishFormHandling(string $flash_message, string $route, array $route_parameters = []): RedirectResponse
@@ -58,10 +58,10 @@ class FormHelper
         $this->doctrine->getManager()->flush();
 
         if (\strlen($flash_message) > 0) {
-            $this->flashHelper->add(FlashHelper::FLASH_TYPE_INFORMATION, $flash_message);
+            $this->flash_helper->add(FlashHelper::FLASH_TYPE_INFORMATION, $flash_message);
         }
 
-        return $this->redirectHelper->redirectToRoute($route, $route_parameters);
+        return $this->redirect_helper->redirectToRoute($route, $route_parameters);
     }
 
     /**
@@ -76,17 +76,17 @@ class FormHelper
         $post->signature_on = $signature_on;
         $this->doctrine->getManager()->persist($post);
 
-        $postText = new ForumPostText();
-        $postText->post = $post;
-        $postText->text = $text;
-        $this->doctrine->getManager()->persist($postText);
+        $post_text = new ForumPostText();
+        $post_text->post = $post;
+        $post_text->text = $text;
+        $this->doctrine->getManager()->persist($post_text);
 
-        $postLog = new ForumPostLog();
-        $postLog->action = ForumPostLog::ACTION_POST_NEW;
-        $this->doctrine->getManager()->persist($postLog);
+        $post_log = new ForumPostLog();
+        $post_log->action = ForumPostLog::ACTION_POST_NEW;
+        $this->doctrine->getManager()->persist($post_log);
 
-        $post->addLog($postLog);
-        $post->text = $postText;
+        $post->addLog($post_log);
+        $post->text = $post_text;
         $discussion->addPost($post);
 
         return $post;

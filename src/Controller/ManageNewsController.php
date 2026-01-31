@@ -87,8 +87,8 @@ class ManageNewsController
 
         $ids = \array_filter(\explode(',', \array_keys($request->request->all())[0]));
         foreach ($ids as $id) {
-            $railNews = $this->rail_news_repository->find($id);
-            $railNews->approved = true;
+            $rail_news = $this->rail_news_repository->find($id);
+            $rail_news->approved = true;
         }
 
         return new JsonResponse();
@@ -98,21 +98,21 @@ class ManageNewsController
     {
         $this->user_helper->denyAccessUnlessGranted(RoleGenerics::ROLE_ADMIN_RAIL_NEWS);
 
-        $railNews = $this->rail_news_repository->find($id);
-        if (null === $railNews) {
+        $rail_news = $this->rail_news_repository->find($id);
+        if (null === $rail_news) {
             throw new AccessDeniedException('This rail-news item does not exist');
         }
-        $form = $this->form_helper->getFactory()->create(RailNewsForm::class, $railNews);
+        $form = $this->form_helper->getFactory()->create(RailNewsForm::class, $rail_news);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $railNews->approved = true;
+            $rail_news->approved = true;
             return $this->form_helper->finishFormHandling('Bericht bijgewerkt', RouteGenerics::ROUTE_MANAGE_RAIL_NEWS);
         }
 
         return $this->template_helper->render('manageNews/railNewsItem.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Beheer spoornieuws bericht',
-            'railNews' => $railNews,
+            'railNews' => $rail_news,
             TemplateHelper::PARAMETER_FORM => $form->createView(),
         ]);
     }

@@ -79,12 +79,13 @@ class UserInfo extends AbstractType
     {
         $finder = new Finder();
         $finder->files()->in(__DIR__.'/../../html/images/avatar');
-        $avatarList = [];
+        $avatar_list = [];
         foreach ($finder as $file) {
-            $avatarList[\strtolower($file->getFilenameWithoutExtension())] = $file->getRelativePathname();
+            $avatar_list[\strtolower($file->getFilenameWithoutExtension())] = $file->getRelativePathname();
         }
-        \asort($avatarList);
-        return $avatarList;
+        \asort($avatar_list);
+        
+        return $avatar_list;
     }
 
     public function configureOptions(OptionsResolver $resolver): void

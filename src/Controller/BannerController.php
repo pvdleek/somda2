@@ -15,7 +15,7 @@ class BannerController
 {
     public function __construct(
         private readonly ManagerRegistry $doctrine,
-        private readonly RedirectHelper $redirectHelper,
+        private readonly RedirectHelper $redirect_helper,
     ) {
     }
 
@@ -25,11 +25,11 @@ class BannerController
     public function clickOutAction(Request $request, int $id): RedirectResponse
     {
         /**
-         * @var Banner $banner
+         * @var Banner|null $banner
          */
         $banner = $this->doctrine->getRepository(Banner::class)->find($id);
         if (null === $banner) {
-            return $this->redirectHelper->redirectToRoute('home');
+            return $this->redirect_helper->redirectToRoute('home');
         }
 
         $banner_hit = new BannerHit();
@@ -40,6 +40,6 @@ class BannerController
         $this->doctrine->getManager()->persist($banner_hit);
         $this->doctrine->getManager()->flush();
 
-        return $this->redirectHelper->redirect($banner->link);
+        return $this->redirect_helper->redirect($banner->link);
     }
 }

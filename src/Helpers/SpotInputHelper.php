@@ -64,15 +64,15 @@ class SpotInputHelper
 
         $spot_id_array = [];
 
-        foreach ($spot_lines as $lineNumber => $spotLine) {
-            $spot_input = $this->createSpotInputModelFromLine($base_location, $spotLine);
+        foreach ($spot_lines as $line_number => $spot_line) {
+            $spot_input = $this->createSpotInputModelFromLine($base_location, $spot_line);
             $spot_input->spot_date = $spot_date;
             $spot_input->user = $user;
 
             if (null !== $spot_id = $this->processSpotInput($spot_input)) {
                 $spot_id_array[] = $spot_id;
             } else {
-                $this->flash_helper->add('error', 'Spot op regel '.($lineNumber + 1).' is al ingevoerd!');
+                $this->flash_helper->add('error', 'Spot op regel '.($line_number + 1).' is al ingevoerd!');
             }
         }
 
@@ -96,7 +96,7 @@ class SpotInputHelper
             return null;
         }
 
-        if (null === $spot_input->existingSpotId) {
+        if (null === $spot_input->existing_spot_id) {
             // Search for an existing spot
             $existing_spot = $this->doctrine->getRepository(Spot::class)->findOneBy([
                 'spot_date' => $spot_input->spot_date,
@@ -114,7 +114,7 @@ class SpotInputHelper
             $spot->user = $spot_input->user;
         } else {
             // Update the existing spot
-            $spot = $this->doctrine->getRepository(Spot::class)->find($spot_input->existingSpotId);
+            $spot = $this->doctrine->getRepository(Spot::class)->find($spot_input->existing_spot_id);
             if (null === $spot) {
                 return null;
             }
@@ -166,20 +166,20 @@ class SpotInputHelper
         $spot_input->route_number = $this->getNextLineItem($spot_part, $spot_input);
 
         if (count($spot_part) > 0) {
-            $nextPart = $this->getNextLineItem($spot_part, $spot_input);
+            $next_part = $this->getNextLineItem($spot_part, $spot_input);
 
-            if (\in_array(\strtoupper($nextPart), $this->position_array, true)) {
+            if (\in_array(\strtoupper($next_part), $this->position_array, true)) {
                 // The argument is a position
-                $spot_input->position_id = \array_search(\strtoupper($nextPart), $this->position_array);
-                $nextPart = \trim(\array_shift($spot_part));
+                $spot_input->position_id = \array_search(\strtoupper($next_part), $this->position_array);
+                $next_part = \trim(\array_shift($spot_part));
             }
 
-            if (null !== $nextPart && $this->isLineItemLocation($nextPart, $spot_input)) {
-                $nextPart = \trim(\array_shift($spot_part));
+            if (null !== $next_part && $this->isLineItemLocation($next_part, $spot_input)) {
+                $next_part = \trim(\array_shift($spot_part));
             }
 
             // The rest of the parts form the extra information
-            $spot_input->extra = $nextPart.' '.\implode(' ', $spot_part);
+            $spot_input->extra = $next_part.' '.\implode(' ', $spot_part);
         }
 
         return $spot_input;
@@ -214,7 +214,7 @@ class SpotInputHelper
     private function getTrainFromSpotInput(SpotInput $spot_input): Train
     {
         /**
-         * @var Train $train
+         * @var Train|null $train
          */
         $train = $this->doctrine->getRepository(Train::class)->findOneBy(['number' => $spot_input->train_number]);
         if (null !== $train) {
@@ -243,7 +243,7 @@ class SpotInputHelper
     private function getRouteFromSpotInput(SpotInput $spot_input): Route
     {
         /**
-         * @var Route $route
+         * @var Route|null $route
          */
         $route = $this->doctrine->getRepository(Route::class)->findOneBy(['number' => $spot_input->route_number]);
         if (null === $route) {

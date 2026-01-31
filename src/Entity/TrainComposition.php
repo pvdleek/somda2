@@ -73,7 +73,7 @@ class TrainComposition extends TrainCompositionBase
     public ?string $extra = null;
 
     #[ORM\Column(name: 'index_regel', nullable: false, options: ['default' => false])]
-    public bool $indexLine = false;
+    public bool $index_line = false;
 
     #[ORM\OneToMany(targetEntity: TrainCompositionProposition::class, mappedBy: 'composition', cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $propositions;
@@ -97,6 +97,11 @@ class TrainComposition extends TrainCompositionBase
     public function getType(): TrainCompositionType
     {
         return $this->type;
+    }
+
+    public function isIndexLine(): bool
+    {
+        return $this->index_line;
     }
 
     public function addProposition(TrainCompositionProposition $proposition): TrainComposition
