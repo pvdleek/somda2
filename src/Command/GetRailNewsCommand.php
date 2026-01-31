@@ -59,18 +59,23 @@ class GetRailNewsCommand extends Command
     {
         $context = \stream_context_create(['ssl' => ['verify_peer' => false, 'verify_peer_name' => false]]);
         \libxml_set_streams_context($context);
+        \libxml_use_internal_errors(true);
 
         /**
          * @var RailNewsSourceFeed[] $feeds
          */
         $feeds = $this->doctrine->getRepository(RailNewsSourceFeed::class)->findAll();
         foreach ($feeds as $feed) {
-            try {
-                $rss = \simplexml_load_file($feed->url);
-            } catch (\Exception $e) {
-                $output->writeln('  Could not load feed: '.$e->getMessage());
+            $rss = \simplexml_load_file($feed->url);
+            $errors = \libxml_get_errors();
+            if (false === $rss || !empty($errors)) {
+                foreach (\libxml_get_errors() as $error) {
+                    $output->writeln('  Could not load feed: '.$error->message);
+                }
                 continue;
             }
+            \libxml_clear_errors();
+
             foreach ($rss->channel->item as $item) {
                 if (!$feed->filter_results || $this->isArticleMatch($item)) {
                     $this->saveItem($feed->source, $item, $this->getItemDescription($item));
