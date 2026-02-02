@@ -49,5 +49,5 @@
 {% endblock %}
 
 {% block stylesheets %}
-    <link rel="stylesheet" href="{{ asset('css/forum.css') }}" />
+    <link href="{{ asset('css/forum.min.css') }}?version={{ 'css/forum.min.css'|fileTimestamp }}" rel="stylesheet" type="text/css" />
 {% endblock %}
