@@ -74,7 +74,7 @@ class SpotRepository extends ServiceEntityRepository
                     'tt.train_table_year = :train_table_year AND tt.route = s.route AND tt.location = s.location'
                 )
                 ->leftJoin(
-                    'tt.routeOperationDays',
+                    'tt.route_operation_days',
                     'rd',
                     Join::WITH,
                     'BIT_AND(rd.id, POWER(2, s.day_number)) = POWER(2, s.day_number)'

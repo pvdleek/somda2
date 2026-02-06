@@ -63,8 +63,8 @@ class TrainTableRepository extends ServiceEntityRepository
             ->setParameter('start_time', $start_time)
             ->andWhere('t.time <= :end_time')
             ->setParameter('end_time', $end_time)
-            ->join('t.routeOperationDays', 'routeOperationDays')
-            ->andWhere('routeOperationDays.'.$this->getDayName($day_number - 1).' = TRUE')
+            ->join('t.route_operation_days', 'route_operation_days')
+            ->andWhere('route_operation_days.'.$this->getDayName($day_number - 1).' = TRUE')
             ->join('t.route', 'route')
             ->join('route.train_table_first_lasts', 'train_table_first_lasts')
             ->andWhere('train_table_first_lasts.day_number = :day_number')
@@ -122,7 +122,7 @@ class TrainTableRepository extends ServiceEntityRepository
             ->setParameter('route', $route)
             ->andWhere('t.location = :location')
             ->setParameter('location', $location)
-            ->join('t.routeOperationDays', 'o')
+            ->join('t.route_operation_days', 'o')
             ->andWhere('o.'.$this->getDayName($day_number - 1) .' = TRUE');
         try {
             return (int) $query_builder->getQuery()->getSingleScalarResult() > 0;
