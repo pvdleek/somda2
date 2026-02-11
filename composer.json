@@ -112,14 +112,14 @@
     "require-dev": {
         "phpmd/phpmd": "^2.5",
         "phpstan/phpdoc-parser": "^1.33",
-        "phpstan/phpstan": ">=2.1.38",
+        "phpstan/phpstan": ">=2.1.39",
         "phpunit/phpunit": "^9.6.34",
         "symfony/browser-kit": "8.0.*",
         "symfony/css-selector": "8.0.*",
         "symfony/debug-bundle": "8.0.*",
-        "symfony/maker-bundle": "^1.65.1",
+        "symfony/maker-bundle": "^1.66.0",
         "symfony/phpunit-bridge": "^6.4.26",
         "symfony/web-profiler-bundle": "8.0.*",
-        "vimeo/psalm": "^6.15.0"
+        "vimeo/psalm": "^6.15.1"
     }
 }
