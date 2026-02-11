@@ -30,9 +30,7 @@ class SettingsController
     {
         $this->user_helper->denyAccessUnlessGranted(RoleGenerics::ROLE_USER);
 
-        /**
-         * @var UserPreference[] $all_settings
-         */
+        /** @var UserPreference[] $all_settings */
         $all_settings = $this->form_helper->getDoctrine()->getRepository(UserPreference::class)->findBy([], ['order' => 'ASC']);
         $form = $this->form_helper->getFactory()->create(
             UserPreferences::class,
@@ -48,7 +46,7 @@ class SettingsController
                     if (\is_object($form->get($setting->key)->getData())) {
                         $user_preference->value = (string) $form->get($setting->key)->getData()->name;
                     } else {
-                        $user_preference->value = (string) $form->get($setting->key)->getData() ?? '';
+                        $user_preference->value = (string) ($form->get($setting->key)->getData() ?? '');
                     }
                 }
             }

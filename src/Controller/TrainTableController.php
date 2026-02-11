@@ -7,7 +7,6 @@ namespace App\Controller;
 use App\Entity\SpecialRoute;
 use App\Entity\TrainTableYear;
 use App\Generics\RoleGenerics;
-use App\Helpers\RedirectHelper;
 use App\Helpers\TrainTableHelper;
 use App\Helpers\FlashHelper;
 use App\Helpers\RoutesDisplayHelper;
@@ -19,7 +18,6 @@ use Dompdf\Dompdf;
 use Dompdf\Options;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
@@ -28,7 +26,6 @@ class TrainTableController
     public function __construct(
         private readonly ManagerRegistry $doctrine,
         private readonly FlashHelper $flash_helper,
-        private readonly RedirectHelper $redirect_helper,
         private readonly RoutesDisplayHelper $routes_display_helper,
         private readonly TemplateHelper $template_helper,
         private readonly TrainTableHelper $train_table_helper,
@@ -85,8 +82,8 @@ class TrainTableController
             $train_table_year_id = $this->train_table_year_repository->findTrainTableYearByDate(new \DateTime())->id;
 
             $day_number = \date('N');
-            $start_time = \date('H:i', time() - (60 * 15));
-            $end_time = \date('H:i', time() + (60 * 45));
+            $start_time = \date('H:i', \time() - (60 * 15));
+            $end_time = \date('H:i', \time() + (60 * 45));
 
             $passing_routes = [];
         } else {
@@ -106,8 +103,7 @@ class TrainTableController
 
         return $this->template_helper->render('trainTable/passingRoutes.html.twig', [
             TemplateHelper::PARAMETER_PAGE_TITLE => 'Doorkomststaat',
-            TemplateHelper::PARAMETER_TRAIN_TABLE_INDICES =>
-                $this->doctrine->getRepository(TrainTableYear::class)->findAll(),
+            TemplateHelper::PARAMETER_TRAIN_TABLE_INDICES => $this->doctrine->getRepository(TrainTableYear::class)->findAll(),
             TemplateHelper::PARAMETER_TRAIN_TABLE_INDEX_NUMBER => $train_table_year_id,
             TemplateHelper::PARAMETER_TRAIN_TABLE_INDEX => $this->train_table_helper->getTrainTableYear(),
             'location_name' => $location_name,

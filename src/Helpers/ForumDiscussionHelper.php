@@ -62,9 +62,7 @@ class ForumDiscussionHelper
         $this->discussion->viewed = (int) $this->discussion->viewed + 1;
         $this->doctrine->getManager()->flush();
 
-        /**
-         * @var ForumPost[] $posts
-         */
+        /** @var ForumPost[] $posts */
         $posts = $this->forum_post_repository->findBy(
             [ForumPostForm::FIELD_DISCUSSION => $this->discussion],
             [ForumPostForm::FIELD_TIMESTAMP => $new_to_old ? 'DESC' : 'ASC'],
@@ -91,9 +89,7 @@ class ForumDiscussionHelper
         $this->discussion->viewed = (int) $this->discussion->viewed + 1;
         $this->doctrine->getManager()->flush();
 
-        /**
-         * @var ForumPost[] $posts
-         */
+        /** @var ForumPost[] $posts */
         $posts = $this->forum_post_repository->findBy(
             [ForumPostForm::FIELD_DISCUSSION => $this->discussion],
             [ForumPostForm::FIELD_TIMESTAMP => $new_to_old ? 'DESC' : 'ASC']

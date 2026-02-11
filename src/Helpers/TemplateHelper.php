@@ -115,9 +115,7 @@ class TemplateHelper
 
     private function getBlockHelp(): ?BlockHelp
     {
-        /**
-         * @var Block $block
-         */
+        /** @var Block|null $block */
         $block = $this->doctrine->getRepository(Block::class)->findOneBy(
             ['route' => $this->request_stack->getCurrentRequest()->attributes->get('_route')]
         );

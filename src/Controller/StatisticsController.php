@@ -8,13 +8,11 @@ use App\Helpers\TemplateHelper;
 use App\Model\StatisticBusiest;
 use App\Model\StatisticSummary;
 use App\Repository\StatisticRepository;
-use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Response;
 
 class StatisticsController
 {
     public function __construct(
-        private readonly ManagerRegistry $doctrine,
         private readonly TemplateHelper $template_helper,
         private readonly StatisticRepository $statistic_repository,
     ) {

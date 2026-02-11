@@ -15,7 +15,6 @@ use App\Generics\RouteGenerics;
 use App\Helpers\EmailHelper;
 use App\Helpers\FormHelper;
 use App\Helpers\ForumAuthorizationHelper;
-use App\Helpers\ForumHelper;
 use App\Helpers\TemplateHelper;
 use App\Helpers\UserHelper;
 use App\Repository\ForumDiscussionRepository;
@@ -35,7 +34,6 @@ class ForumPostController
         private readonly EmailHelper $email_helper,
         private readonly FormHelper $form_helper,
         private readonly ForumAuthorizationHelper $forum_authorization_helper,
-        private readonly ForumHelper $forum_helper,
         private readonly TemplateHelper $template_helper,
         private readonly UserHelper $user_helper,
         private readonly ForumDiscussionRepository $forum_discussion_repository,
@@ -49,9 +47,7 @@ class ForumPostController
     {
         $this->user_helper->denyAccessUnlessGranted(RoleGenerics::ROLE_USER);
 
-        /**
-         * @var ForumPost $quoted_post
-         */
+        /** @var ForumPost|null $quoted_post */
         $quoted_post = $this->form_helper->getDoctrine()->getRepository(ForumPost::class)->find($id);
         if (!$this->forum_authorization_helper->mayPost($quoted_post->discussion->forum, $this->user_helper->getUser())
             || null === $quoted_post || $quoted_post->discussion->locked
@@ -130,9 +126,7 @@ class ForumPostController
     {
         $this->user_helper->denyAccessUnlessGranted(RoleGenerics::ROLE_USER);
 
-        /**
-         * @var ForumPost $post
-         */
+        /** @var ForumPost $post */
         $post = $this->form_helper->getDoctrine()->getRepository(ForumPost::class)->find($id);
         $user_is_moderator = $this->forum_authorization_helper->userIsModerator(
             $post->discussion->forum,

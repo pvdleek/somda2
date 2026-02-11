@@ -26,9 +26,7 @@ class NewsController
     public function indexAction(?int $id = null): Response
     {
         if (null !== $id) {
-            /**
-             * @var News $news
-             */
+            /** @var News|null $news */
             $news = $this->doctrine->getRepository(News::class)->find($id);
             if (null === $news) {
                 throw new AccessDeniedException('This news-item does not exist');
@@ -45,9 +43,7 @@ class NewsController
             ]);
         }
 
-        /**
-         * @var News[] $news
-         */
+        /** @var News[] $news */
         $news = $this->doctrine->getRepository(News::class)->findBy([], [NewsForm::FIELD_TIMESTAMP => 'DESC']);
 
         return $this->template_helper->render('news/index.html.twig', [
@@ -58,9 +54,7 @@ class NewsController
 
     public function railNewsAction(): Response
     {
-        /**
-         * @var RailNews[] $news
-         */
+        /** @var RailNews[] $news */
         $news = $this->doctrine->getRepository(RailNews::class)->findBy(
             ['active' => true, 'approved' => true],
             [RailNewsForm::FIELD_TIMESTAMP => 'DESC'],

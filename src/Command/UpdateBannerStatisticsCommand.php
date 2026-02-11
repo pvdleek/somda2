@@ -31,9 +31,7 @@ class UpdateBannerStatisticsCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        /**
-         * @var Banner[] $banners
-         */
+        /** @var Banner[] $banners */
 
         // Activate banners that should start
         $banners = $this->doctrine->getRepository(Banner::class)->findBy(['active' => false]);
@@ -44,9 +42,7 @@ class UpdateBannerStatisticsCommand extends Command
         }
 
         // De-activate banners that should stop
-        /**
-         * @var BannerRepository $banner_repository
-         */
+        /** @var BannerRepository $banner_repository */
         $banner_repository = $this->doctrine->getRepository(Banner::class);
         $banners = $banner_repository->findBy(['active' => true]);
         foreach ($banners as $banner) {

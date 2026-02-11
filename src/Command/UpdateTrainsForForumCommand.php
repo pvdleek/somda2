@@ -35,9 +35,7 @@ class UpdateTrainsForForumCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        /**
-         * @var TrainTableYear $train_table_year
-         */
+        /** @var TrainTableYear $train_table_year */
         $train_table_year = $this->train_table_year_repository->findTrainTableYearByDate(new \DateTime());
 
         // First we remove all current trainsForForum entries

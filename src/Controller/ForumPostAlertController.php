@@ -53,9 +53,7 @@ class ForumPostAlertController
     {
         $this->user_helper->denyAccessUnlessGranted(RoleGenerics::ROLE_USER);
 
-        /**
-         * @var ForumPost $post
-         */
+        /** @var ForumPost $post */
         $post = $this->form_helper->getDoctrine()->getRepository(ForumPost::class)->find($id);
         $form = $this->form_helper->getFactory()->create(ForumPostAlertForm::class);
         $form->handleRequest($request);
@@ -107,9 +105,7 @@ class ForumPostAlertController
     {
         $this->user_helper->denyAccessUnlessGranted(RoleGenerics::ROLE_ADMIN);
 
-        /**
-         * @var ForumPost $post
-         */
+        /** @var ForumPost $post */
         $post = $this->form_helper->getDoctrine()->getRepository(ForumPost::class)->find($id);
 
         $form = $this->form_helper->getFactory()->create(ForumPostAlertNoteForm::class);
@@ -179,9 +175,7 @@ class ForumPostAlertController
     {
         $this->user_helper->denyAccessUnlessGranted(RoleGenerics::ROLE_ADMIN);
 
-        /**
-         * @var ForumPost $post
-         */
+        /** @var ForumPost $post */
         $post = $this->form_helper->getDoctrine()->getRepository(ForumPost::class)->find($id);
         foreach ($post->getAlerts() as $alert) {
             $alert->closed = true;

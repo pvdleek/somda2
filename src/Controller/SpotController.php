@@ -12,14 +12,12 @@ use App\Helpers\UserHelper;
 use App\Model\SpotFilter;
 use App\Repository\SpotRepository;
 use App\Repository\TrainTableYearRepository;
-use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 class SpotController
 {
     public function __construct(
-        private readonly ManagerRegistry $doctrine,
         private readonly UserHelper $user_helper,
         private readonly TemplateHelper $template_helper,
         private readonly RedirectHelper $redirect_helper,

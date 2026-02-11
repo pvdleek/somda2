@@ -39,9 +39,7 @@ class ForumDiscussionController
      */
     public function indexAction(Request $request, int $id, ?int $page_number = null, ?int $post_id = null): Response|RedirectResponse
     {
-        /**
-         * @var ForumDiscussion $discussion
-         */
+        /** @var ForumDiscussion|null $discussion */
         $discussion = $this->form_helper->getDoctrine()->getRepository(ForumDiscussion::class)->find($id);
         if (null === $discussion) {
             return $this->form_helper->getRedirectHelper()->redirectToRoute(RouteGenerics::ROUTE_FORUM);
@@ -81,9 +79,7 @@ class ForumDiscussionController
         if (\count($banners) < 1) {
             return null;
         }
-        /**
-         * @var Banner $forum_banner
-         */
+        /** @var Banner $forum_banner */
         $forum_banner = $banners[\random_int(0, \count($banners) - 1)];
 
         // Create a view for this banner
@@ -104,9 +100,7 @@ class ForumDiscussionController
     {
         $this->user_helper->denyAccessUnlessGranted(RoleGenerics::ROLE_USER);
 
-        /**
-         * @var ForumForum $forum
-         */
+        /** @var ForumForum|null $forum */
         $forum = $this->form_helper->getDoctrine()->getRepository(ForumForum::class)->find($id);
         if (null === $forum || !$this->forum_authorization_helper->mayPost($forum, $this->user_helper->getUser())) {
             return $this->form_helper->getRedirectHelper()->redirectToRoute(RouteGenerics::ROUTE_FORUM);

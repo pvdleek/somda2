@@ -37,17 +37,13 @@ class SpotInputHelper
     private function initialize(\DateTime $spot_date): void
     {
         if (!$this->initialized) {
-            /**
-             * @var PositionRepository $position_repository
-             */
+            /** @var PositionRepository $position_repository */
             $position_repository = $this->doctrine->getRepository(Position::class);
             $this->position_array = $position_repository->getAllAsArray();
 
             $this->train_name_patterns = $this->doctrine->getRepository(TrainNamePattern::class)->findBy([], ['order' => 'ASC']);
 
-            /**
-             * @var TrainTableYearRepository $train_table_year_repository
-             */
+            /** @var TrainTableYearRepository $train_table_year_repository */
             $train_table_year_repository = $this->doctrine->getRepository(TrainTableYear::class);
             $this->train_table_year = $train_table_year_repository->findTrainTableYearByDate($spot_date);
 
@@ -86,9 +82,7 @@ class SpotInputHelper
         $train = $this->getTrainFromSpotInput($spot_input);
         $route = $this->getRouteFromSpotInput($spot_input);
 
-        /**
-         * @var Position $position
-         */
+        /** @var Position $position */
         $position = $this->doctrine->getRepository(Position::class)->find($spot_input->position_id);
 
         if (null === $spot_input->location) {
@@ -174,7 +168,7 @@ class SpotInputHelper
                 $next_part = \trim(\array_shift($spot_part));
             }
 
-            if (null !== $next_part && $this->isLineItemLocation($next_part, $spot_input)) {
+            if (\strlen($next_part) > 0 && $this->isLineItemLocation($next_part, $spot_input)) {
                 $next_part = \trim(\array_shift($spot_part));
             }
 
@@ -197,9 +191,7 @@ class SpotInputHelper
     private function isLineItemLocation(string $item, SpotInput $spot_input): bool
     {
         if (\substr($item, 0, 1) === '|' && \substr($item, -1) === '|') {
-            /**
-             * @var Location $location
-             */
+            /** @var Location $location */
             $location = $this->doctrine->getRepository(Location::class)->findOneBy(
                 ['name' => \substr($item, 1, \strlen($item) - 2)]
             );
@@ -213,9 +205,7 @@ class SpotInputHelper
 
     private function getTrainFromSpotInput(SpotInput $spot_input): Train
     {
-        /**
-         * @var Train|null $train
-         */
+        /** @var Train|null $train */
         $train = $this->doctrine->getRepository(Train::class)->findOneBy(['number' => $spot_input->train_number]);
         if (null !== $train) {
             return $train;
@@ -232,8 +222,7 @@ class SpotInputHelper
             }
         }
 
-        $spot_input->feedback_flag += null === $train->name_pattern
-            ? Spot::INPUT_FEEDBACK_TRAIN_NEW_NO_PATTERN : Spot::INPUT_FEEDBACK_TRAIN_NEW;
+        $spot_input->feedback_flag += null === $train->name_pattern ? Spot::INPUT_FEEDBACK_TRAIN_NEW_NO_PATTERN : Spot::INPUT_FEEDBACK_TRAIN_NEW;
 
         $this->doctrine->getManager()->persist($train);
 
@@ -242,9 +231,7 @@ class SpotInputHelper
 
     private function getRouteFromSpotInput(SpotInput $spot_input): Route
     {
-        /**
-         * @var Route|null $route
-         */
+        /** @var Route|null $route */
         $route = $this->doctrine->getRepository(Route::class)->findOneBy(['number' => $spot_input->route_number]);
         if (null === $route) {
             $route = new Route();
@@ -259,7 +246,7 @@ class SpotInputHelper
 
         if (\is_numeric($route->number)) {
             if (\count($route->getTrainTables()) > 0
-                && null === $route->getTrainTableFirstLastByDay($this->train_table_year->id, $spot_input->spot_date->format('N'))
+                && null === $route->getTrainTableFirstLastByDay($this->train_table_year->id, (int) $spot_input->spot_date->format('N'))
             ) {
                 $spot_input->feedback_flag += Spot::INPUT_FEEDBACK_ROUTE_NOT_ON_DAY;
                 return $route;
@@ -269,7 +256,7 @@ class SpotInputHelper
                 $this->train_table_year,
                 $route,
                 $spot_input->location,
-                $spot_input->spot_date->format('N')
+                (int) $spot_input->spot_date->format('N')
             );
             if (!$train_table_exists) {
                 $spot_input->feedback_flag += Spot::INPUT_FEEDBACK_ROUTE_NOT_ON_LOCATION;

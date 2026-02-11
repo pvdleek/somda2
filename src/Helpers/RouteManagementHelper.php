@@ -30,9 +30,7 @@ class RouteManagementHelper
 
     private ?Route $route = null;
 
-    /**
-     * @var TrainTable[]
-     */
+    /** @var TrainTable[] */
     private array $train_table_lines;
 
     public function __construct(
@@ -64,9 +62,7 @@ class RouteManagementHelper
 
     public function setRouteListFromId(int $route_list_id): void
     {
-        /**
-         * @var RouteList|null $route_list
-         */
+        /** @var RouteList|null $route_list */
         $route_list = $this->route_list_repository->find($route_list_id);
         if (null === $route_list) {
             throw new AccessDeniedException('This routeList does not exist');
@@ -77,12 +73,9 @@ class RouteManagementHelper
     public function setRouteFromId(int $route_id): void
     {
         $route = null;
-        if (null !== $route_id && $route_id > 0) {
-            /**
-             * @var Route|null $route
-             */
-            $route = $this->doctrine->getRepository(Route::class)->find($route_id);
-            if (null === $route) {
+        if ($route_id > 0) {
+            /** @var Route|null $route */
+            if (null === ($route = $this->doctrine->getRepository(Route::class)->find($route_id))) {
                 throw new AccessDeniedException('This route does not exist');
             }
         }
@@ -268,9 +261,7 @@ class RouteManagementHelper
 
     private function findLocation(string $location_name, bool &$ok_flag): Location
     {
-        /**
-         * @var Location|null $location
-         */
+        /** @var Location|null $location */
         $location = $this->location_repository->findOneBy(['name' => $location_name]);
         if (null === $location) {
             $location = $this->location_repository->findOneBy(['name' => Location::UNKNOWN_NAME]);

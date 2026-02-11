@@ -28,13 +28,9 @@ class LinkTrainsToNamingPatternCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        /**
-         * @var TrainNamePattern[] $patterns
-         */
+        /** @var TrainNamePattern[] $patterns */
         $patterns = $this->doctrine->getRepository(TrainNamePattern::class)->findBy([], ['order' => 'ASC']);
-        /**
-         * @var Train[] $trains
-         */
+        /** @var Train[] $trains */
         $trains = $this->doctrine->getRepository(Train::class)->findAll();
 
         foreach ($trains as $train) {

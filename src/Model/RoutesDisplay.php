@@ -12,15 +12,11 @@ class RoutesDisplay
 {
     public ?TrainTableYear $train_table_year = null;
 
-    /**
-     * @var RouteList[]
-     */
+    /** @var RouteList[] */
     public array $route_lists = [];
 
     public ?RouteList $selected_route_list = null;
 
-    /**
-     * @var Route[]
-     */
+    /** @var Route[] */
     public array $routes = [];
 }

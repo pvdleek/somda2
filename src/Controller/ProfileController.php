@@ -72,9 +72,7 @@ class ProfileController
     {
         $this->user_helper->denyAccessUnlessGranted(RoleGenerics::ROLE_USER);
 
-        /**
-         * @var User $user
-         */
+        /** @var User|null $user */
         $user = $this->doctrine->getRepository(User::class)->find($id);
         if (null === $user) {
             throw new AccessDeniedException('This user does not exist');

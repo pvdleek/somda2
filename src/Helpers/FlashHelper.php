@@ -22,9 +22,7 @@ class FlashHelper
         if (!\in_array($type, [self::FLASH_TYPE_INFORMATION, self::FLASH_TYPE_WARNING, self::FLASH_TYPE_ERROR])) {
             $type = self::FLASH_TYPE_ERROR;
         }
-        /**
-         * @var Session $session
-         */
+        /** @var Session $session */
         $session = $this->request_stack->getCurrentRequest()->getSession();
         $session->getFlashBag()->add($type, $message);
     }

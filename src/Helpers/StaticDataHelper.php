@@ -85,7 +85,7 @@ class StaticDataHelper implements RuntimeExtensionInterface
         /** @var UserRepository $user_repository */
         $user_repository = $this->doctrine->getRepository(User::class);
         foreach ($user_repository->findActiveForStaticData() as $user) {
-            $this->users['@'.$user['username']] = null !== $user['name'] && \strlen($user['name']) > 0 ? $user['name'] : $user['username'];
+            $this->users['@'.$user['username']] = \strlen($user['name']) > 0 ? $user['name'] : $user['username'];
         }
 
         /** @var TrainsForForum $train */

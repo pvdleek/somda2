@@ -61,9 +61,7 @@ class FeedController
             $request->query->get('fg-color', self::DEFAULT_FOREGROUND_COLOR)
         );
 
-        /**
-         * @var Location $location
-         */
+        /** @var Location|null $location */
         $location = $this->doctrine->getRepository(Location::class)->findOneBy(['name' => $location_name]);
         if (null === $location) {
             $this->doText($image, 'Het opgegeven station '.$location_name.' is niet bekend in Somda');

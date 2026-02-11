@@ -78,9 +78,7 @@ class TrainController
 
             $this->form_helper->getDoctrine()->getManager()->persist($train_composition);
         } else {
-            /**
-             * @var TrainComposition|null $train_composition
-             */
+            /** @var TrainComposition|null $train_composition */
             $train_composition = $this->form_helper->getDoctrine()->getRepository(TrainComposition::class)->find($id);
             if (null === $train_composition) {
                 throw new AccessDeniedException('This trainComposition does not exist');
@@ -156,22 +154,17 @@ class TrainController
 
     public function checkAction(int $train_id, int $user_id, int $approved): JsonResponse
     {
-        /**
-         * @var TrainComposition|null $train_composition
-         */
+        /** @var TrainComposition|null $train_composition */
         $train_composition = $this->form_helper->getDoctrine()->getRepository(TrainComposition::class)->find($train_id);
         if (null === $train_composition) {
             throw new AccessDeniedException('This trainComposition does not exist');
         }
 
-        $user = $this->form_helper->getDoctrine()->getRepository(User::class)->find($user_id);
-        if (null === $user) {
+        if (null === ($user = $this->form_helper->getDoctrine()->getRepository(User::class)->find($user_id))) {
             throw new AccessDeniedException('This user does not exist');
         }
 
-        /**
-         * @var TrainCompositionProposition|null $train_proposition
-         */
+        /** @var TrainCompositionProposition|null $train_proposition */
         $train_proposition = $this->form_helper
             ->getDoctrine()
             ->getRepository(TrainCompositionProposition::class)

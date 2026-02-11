@@ -181,9 +181,7 @@ class SecurityController
 
     public function activateAction(Request $request, int $id, ?string $key = null): Response|RedirectResponse
     {
-        /**
-         * @var User|null $user
-         */
+        /** @var User|null $user */
         $user = $this->form_helper->getDoctrine()->getRepository(User::class)->find($id);
         if (null === $user) {
             throw new AccessDeniedException('This user does not exist');
@@ -194,9 +192,7 @@ class SecurityController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             if ($form->get(UserActivate::FIELD_KEY)->getData() === $user->activation_key) {
-                /**
-                 * @var Group $user_group
-                 */
+                /** @var Group $user_group */
                 $user_group = $this->form_helper->getDoctrine()->getRepository(Group::class)->find(4);
                 $user_group->addUser($user);
                 
@@ -239,9 +235,7 @@ class SecurityController
         $form = $this->form_helper->getFactory()->create(UserLostPassword::class);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            /**
-             * @var User $user
-             */
+            /** @var User|null $user */
             $user = $this->form_helper->getDoctrine()->getRepository(User::class)->findOneBy(
                 [UserForm::FIELD_EMAIL => $form->get(UserForm::FIELD_EMAIL)->getData()]
             );

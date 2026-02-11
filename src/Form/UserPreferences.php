@@ -12,6 +12,7 @@ use App\Exception\UnknownUserPreferenceType;
 use App\Generics\FormGenerics;
 use App\Helpers\UserHelper;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -33,13 +34,9 @@ class UserPreferences extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        /**
-         * @var UserPreference[] $all_settings
-         */
+        /** @var UserPreference[] $all_settings */
         $all_settings = $options['all_settings'];
-        /**
-         * @var UserHelper $user_helper
-         */
+        /** @var UserHelper $user_helper */
         $user_helper = $options['user_helper'];
 
         foreach ($all_settings as $setting) {
@@ -77,13 +74,11 @@ class UserPreferences extends AbstractType
                         break;
                     case 'table':
                         if ($type_part[1] !== 'location') {
-                            throw new UnknownUserPreferenceTable(
-                                'Unknown setting table '.$type_part[1].' for key '.$setting->key
-                            );
+                            throw new UnknownUserPreferenceTable('Unknown setting table '.$type_part[1].' for key '.$setting->key);
                         }
 
                         $builder->add($setting->key, EntityType::class, [
-                            FormGenerics::KEY_CHOICE_LABEL => function (Location $location) {
+                            FormGenerics::KEY_CHOICE_LABEL => function (Location $location): string {
                                 return $location->name.' - '.$location->description;
                             },
                             FormGenerics::KEY_CHOICE_VALUE => $type_part[2],
@@ -93,7 +88,7 @@ class UserPreferences extends AbstractType
                             ),
                             FormGenerics::KEY_LABEL => $setting->description,
                             FormGenerics::KEY_MAPPED => false,
-                            FormGenerics::KEY_QUERY_BUILDER => function (EntityRepository $repository) {
+                            FormGenerics::KEY_QUERY_BUILDER => function (EntityRepository $repository): QueryBuilder {
                                 return $repository
                                     ->createQueryBuilder('l')
                                     ->andWhere('l.spot_allowed = TRUE')
@@ -103,9 +98,7 @@ class UserPreferences extends AbstractType
                         ]);
                         break;
                     default:
-                        throw new UnknownUserPreferenceType(
-                            'Unknown setting type '.$type_part[0].' for key '.$setting->key
-                        );
+                        throw new UnknownUserPreferenceType('Unknown setting type '.$type_part[0].' for key '.$setting->key);
                 }
             }
         }

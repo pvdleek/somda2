@@ -91,9 +91,7 @@ class ManageRouteListsController
     private function getOrCreateRouteList(int $year_id, int $id): RouteList
     {
         if ($id > 0) {
-            /**
-             * @var RouteList $route_list
-             */
+            /** @var RouteList|null $route_list */
             $route_list = $this->form_helper->getDoctrine()->getRepository(RouteList::class)->find($id);
             if (null === $route_list) {
                 throw new AccessDeniedException('This route_list does not exist');
@@ -102,8 +100,7 @@ class ManageRouteListsController
             return $route_list;
         }
 
-        $train_table_year = $this->train_table_year_repository->find($year_id);
-        if (null === $train_table_year) {
+        if (null === ($train_table_year = $this->train_table_year_repository->find($year_id))) {
             throw new AccessDeniedException('This train_table_year does not exist');
         }
 

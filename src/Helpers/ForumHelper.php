@@ -3,7 +3,6 @@
 namespace App\Helpers;
 
 use App\Entity\ForumPost;
-use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Extension\RuntimeExtensionInterface;
 
 class ForumHelper implements RuntimeExtensionInterface
@@ -12,7 +11,6 @@ class ForumHelper implements RuntimeExtensionInterface
     private const REPLACE_WORD_END = ')\b(.*)/m';
 
     public function __construct(
-        private readonly TranslatorInterface $translator,
         private readonly StaticDataHelper $static_data_helper,
         private readonly UserHelper $user_helper,
     ) {

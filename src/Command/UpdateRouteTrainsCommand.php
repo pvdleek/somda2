@@ -41,25 +41,17 @@ class UpdateRouteTrainsCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        /**
-         * @var TrainTableYear $train_table_year
-         */
+        /** @var TrainTableYear $train_table_year */
         $train_table_year = $this->train_table_year_repository->findTrainTableYearByDate(new \DateTime());
         $check_date = max($train_table_year->start_date, new \DateTime('-'.self::CHECK_DATE_DAYS.' days'));
 
         $route_array = $this->spot_repository->findForRouteTrains($check_date);
         foreach ($route_array as $route_item) {
-            /**
-             * @var Route $route
-             */
+            /** @var Route $route */
             $route = $this->doctrine->getRepository(Route::class)->find($route_item['route_id']);
-            /**
-             * @var TrainNamePattern $pattern
-             */
+            /** @var TrainNamePattern $pattern */
             $pattern = $this->doctrine->getRepository(TrainNamePattern::class)->find($route_item['pattern_id']);
-            /**
-             * @var Position $position
-             */
+            /** @var Position $position */
             $position = $this->doctrine->getRepository(Position::class)->find($route_item['position_id']);
 
             $route_train = $this->doctrine->getRepository(RouteTrain::class)->findOneBy([

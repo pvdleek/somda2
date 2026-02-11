@@ -61,9 +61,7 @@ class GetRailNewsCommand extends Command
         \libxml_set_streams_context($context);
         \libxml_use_internal_errors(true);
 
-        /**
-         * @var RailNewsSourceFeed[] $feeds
-         */
+        /** @var RailNewsSourceFeed[] $feeds */
         $feeds = $this->doctrine->getRepository(RailNewsSourceFeed::class)->findAll();
         foreach ($feeds as $feed) {
             $rss = \simplexml_load_file($feed->url);

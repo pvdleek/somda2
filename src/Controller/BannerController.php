@@ -24,9 +24,7 @@ class BannerController
      */
     public function clickOutAction(Request $request, int $id): RedirectResponse
     {
-        /**
-         * @var Banner|null $banner
-         */
+        /** @var Banner|null $banner */
         $banner = $this->doctrine->getRepository(Banner::class)->find($id);
         if (null === $banner) {
             return $this->redirect_helper->redirectToRoute('home');

@@ -17,24 +17,16 @@ class TrainTableHelper
 {
     use DateTrait;
 
-    /**
-     * @var TrainTableYear|null
-     */
+    /** @var TrainTableYear|null */
     private ?TrainTableYear $train_table_year = null;
 
-    /**
-     * @var Route|null
-     */
+    /** @var Route|null */
     private ?Route $route = null;
 
-    /**
-     * @var Location|null
-     */
+    /** @var Location|null */
     private ?Location $location = null;
 
-    /**
-     * @var string[]
-     */
+    /** @var string[] */
     private array $error_messages = [];
 
     public function __construct(

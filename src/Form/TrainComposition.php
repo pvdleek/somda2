@@ -20,9 +20,7 @@ class TrainComposition extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        /**
-         * @var TrainCompositionEntity $train_composition
-         */
+        /** @var TrainCompositionEntity $train_composition */
         $train_composition = $options['data'];
 
         for ($car = 1; $car <= TrainCompositionEntity::NUMBER_OF_CARS; ++$car) {

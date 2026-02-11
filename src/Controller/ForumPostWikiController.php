@@ -23,9 +23,7 @@ class ForumPostWikiController
     {
         $this->user_helper->denyAccessUnlessGranted(RoleGenerics::ROLE_ADMIN_WIKI);
 
-        /**
-         * @var ForumPost $post
-         */
+        /** @var ForumPost|null $post */
         $post = $this->doctrine->getRepository(ForumPost::class)->find($id);
         if (null === $post) {
             throw new AccessDeniedException('This post does not exist');

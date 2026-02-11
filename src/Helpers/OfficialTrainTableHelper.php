@@ -18,9 +18,7 @@ class OfficialTrainTableHelper
 
     private int $current_stop_number = 0;
 
-    /**
-     * @var OfficialRoute[]
-     */
+    /** @var OfficialRoute[] */
     private array $routes = [];
 
     private ?OfficialFootnote $footnote = null;
@@ -310,9 +308,7 @@ class OfficialTrainTableHelper
      */
     private function getTransporter(int $iff_code): Transporter
     {
-        /**
-         * @var Transporter|null $transporter
-         */
+        /** @var Transporter|null $transporter */
         $transporter = $this->doctrine->getRepository(Transporter::class)->findOneBy(['iff_code' => $iff_code]);
         if (null === $transporter) {
             throw new \Exception('Transport with code '.$iff_code.' not found');

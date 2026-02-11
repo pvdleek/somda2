@@ -108,9 +108,7 @@ class ForumModerateController
     }
 
     private function movePostsAndGetOldest(ForumDiscussion $discussion1, ForumDiscussion $discussion2, ForumDiscussion $new_discussion): ForumPost {
-        /**
-         * @var ForumPost|null $oldest_post
-         */
+        /** @var ForumPost|null $oldest_post */
         $oldest_post = null;
         foreach ($discussion1->getPosts() as $post) {
             if (null === $oldest_post || $post->timestamp < $oldest_post->timestamp) {
@@ -174,9 +172,7 @@ class ForumModerateController
 
     private function getDiscussion(int $id): ForumDiscussion
     {
-        /**
-         * @var ForumDiscussion $discussion
-         */
+        /** @var ForumDiscussion|null $discussion */
         $discussion = $this->form_helper->getDoctrine()->getRepository(ForumDiscussion::class)->find($id);
         if (null === $discussion || !$this->forum_authorization_helper->userIsModerator($discussion->forum, $this->user_helper->getUser())) {
             throw new AccessDeniedException('The discussion does not exist of the user cannot moderate it');

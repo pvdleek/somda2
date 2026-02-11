@@ -19,9 +19,7 @@ class UserHelper implements RuntimeExtensionInterface
     private const ADMINISTRATOR_UID = 1;
     private const MODERATOR_UID = 2;
 
-    /**
-     * @var UserInterface|null
-     */
+    /** @var UserInterface|null */
     private ?UserInterface $user = null;
 
     public function __construct(
@@ -69,9 +67,7 @@ class UserHelper implements RuntimeExtensionInterface
      */
     public function getPreferenceByKey(string $key, bool $no_default = false): ?UserPreferenceValue
     {
-        /**
-         * @var UserPreference $user_preference
-         */
+        /** @var UserPreference|null $user_preference */
         $user_preference = $this->doctrine->getRepository(UserPreference::class)->findOneBy(['key' => $key]);
         if (null === $user_preference) {
             throw new UnknownUserPreferenceKey('Preference with key "'.$key.'" does not exist');
@@ -123,9 +119,7 @@ class UserHelper implements RuntimeExtensionInterface
         $location = null;
         $default_location = $this->getPreferenceByKey(UserPreference::KEY_DEFAULT_SPOT_LOCATION);
         if (\strlen($default_location->value) > 0) {
-            /**
-             * @var Location $location
-             */
+            /** @var Location $location */
             $location = $this->doctrine->getRepository(Location::class)->findOneBy(['name' => $default_location->value]);
         }
         

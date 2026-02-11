@@ -9,7 +9,6 @@ use App\Entity\Location;
 use App\Helpers\TemplateHelper;
 use App\Helpers\UserHelper;
 use App\Repository\LocationRepository;
-use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -21,7 +20,6 @@ class LocationController
     public const SEARCH_METHOD_DESCRIPTION = 'omschrijving';
 
     public function __construct(
-        private readonly ManagerRegistry $doctrine,
         private readonly UserHelper $user_helper,
         private readonly TemplateHelper $template_helper,
         private readonly LocationRepository $location_repository,
@@ -62,9 +60,7 @@ class LocationController
 
     public function jsonAction(string $search): JsonResponse
     {
-        /**
-         * @var Location[] $locations
-         */
+        /** @var Location[] $locations */
         $locations = $this->location_repository->findByName($search);
         if (\count($locations) < 1) {
             $locations = $this->location_repository->findByName('%'.$search.'%');
@@ -72,7 +68,7 @@ class LocationController
                 $locations = $this->location_repository->findByDescription('%'.$search.'%');
             }
         }
-        $locations = array_slice($locations, 0, 20);
+        $locations = \array_slice($locations, 0, 20);
 
         $json = [];
         foreach ($locations as $location) {

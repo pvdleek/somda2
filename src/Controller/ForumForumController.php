@@ -49,9 +49,7 @@ class ForumForumController
 
     public function forumAction(int $id): Response|RedirectResponse
     {
-        /**
-         * @var ForumForum $forum
-         */
+        /** @var ForumForum|null $forum */
         $forum = $this->doctrine->getRepository(ForumForum::class)->find($id);
         if (null === $forum) {
             return $this->redirect_helper->redirectToRoute(RouteGenerics::ROUTE_FORUM);

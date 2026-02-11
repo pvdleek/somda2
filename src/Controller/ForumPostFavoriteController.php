@@ -127,9 +127,7 @@ class ForumPostFavoriteController
             return new JsonResponse();
         }
 
-        /**
-         * @var ForumPostFavorite $favorite
-         */
+        /** @var ForumPostFavorite|null $favorite */
         $favorite = $this->doctrine->getRepository(ForumPostFavorite::class)->findOneBy(
             ['post' => $post, 'user' => $this->user_helper->getUser()]
         );
@@ -150,9 +148,7 @@ class ForumPostFavoriteController
             return null;
         }
 
-        /**
-         * @var ForumFavorite $favorite
-         */
+        /** @var ForumFavorite|null $favorite */
         $favorite = $this->doctrine->getRepository(ForumFavorite::class)->findOneBy(
             ['discussion' => $discussion, 'user' => $this->user_helper->getUser()]
         );

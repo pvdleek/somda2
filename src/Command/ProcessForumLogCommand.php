@@ -39,9 +39,7 @@ class ProcessForumLogCommand extends Command
         $lock = $factory->createLock(self::getName());
 
         if ($lock->acquire()) {
-            /**
-             * @var ForumPostLog[] $forum_logs
-             */
+            /** @var ForumPostLog[] $forum_logs */
             $forum_logs = $this->doctrine->getRepository(ForumPostLog::class)->findBy([], ['id' => 'DESC']);
             foreach ($forum_logs as $forum_log) {
                 $this->removeAllWordsForPost($forum_log->post);

@@ -14,16 +14,13 @@ class ForumOverviewHelper
 
     public function __construct(
         private readonly ManagerRegistry $doctrine,
-        private readonly ForumAuthorizationHelper $forum_authorization_helper,
         private readonly UserHelper $user_helper,
     ) {
     }
 
     public function getCategoryArray(): array
     {
-        /**
-         * @var ForumForumRepository $forum_forum_repository
-         */
+        /** @var ForumForumRepository $forum_forum_repository */
         $forum_forum_repository = $this->doctrine->getRepository(ForumForum::class);
 
         $categories = [];

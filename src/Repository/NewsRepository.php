@@ -43,7 +43,7 @@ class NewsRepository extends ServiceEntityRepository
                 GROUP BY `id`, `title`, `timestamp`, `news_read`
                 ORDER BY `timestamp` DESC
                 LIMIT 0, '.$limit);
-            $statement->bindValue('user_id', $user?->id);
+            $statement->bindValue('user_id', $user->id);
         }
         try {
             return $statement->executeQuery()->fetchAllAssociative();

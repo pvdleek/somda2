@@ -35,9 +35,7 @@ class CleanupUsersCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        /**
-         * @var User[] $users
-         */
+        /** @var User[] $users */
         $users = $this->user_repository->findNonActivated();
         foreach ($users as $user) {
             $number_of_posts = $this->doctrine->getRepository(ForumPost::class)->findBy(['author' => $user]);
