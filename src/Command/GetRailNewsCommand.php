@@ -64,12 +64,21 @@ class GetRailNewsCommand extends Command
         /** @var RailNewsSourceFeed[] $feeds */
         $feeds = $this->doctrine->getRepository(RailNewsSourceFeed::class)->findAll();
         foreach ($feeds as $feed) {
-            $rss = \simplexml_load_file($feed->url);
+            $local_filename = \tempnam(\sys_get_temp_dir(), 'news_feed_'.$feed->id.'_');
+            try {
+                \copy($feed->url, $local_filename);
+            } catch (\Exception $exception) {
+                $output->writeln('  Could not load feed: '.$exception->getMessage());
+                continue;
+            }
+
+            $rss = \simplexml_load_file($local_filename);
             $errors = \libxml_get_errors();
             if (false === $rss || !empty($errors)) {
                 foreach (\libxml_get_errors() as $error) {
                     $output->writeln('  Could not load feed: '.$error->message);
                 }
+                \unlink($local_filename);
                 continue;
             }
             \libxml_clear_errors();
@@ -80,6 +89,8 @@ class GetRailNewsCommand extends Command
                 }
             }
             $this->doctrine->getManager()->flush();
+
+            \unlink($local_filename);
         }
 
         return 0;
