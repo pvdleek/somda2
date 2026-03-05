@@ -65,10 +65,8 @@ class GetRailNewsCommand extends Command
         $feeds = $this->doctrine->getRepository(RailNewsSourceFeed::class)->findAll();
         foreach ($feeds as $feed) {
             $local_filename = \tempnam(\sys_get_temp_dir(), 'news_feed_'.$feed->id.'_');
-            try {
-                \copy($feed->url, $local_filename);
-            } catch (\Exception $exception) {
-                $output->writeln('  Could not load feed: '.$exception->getMessage());
+            if (false === \copy($feed->url, $local_filename)) {
+                $output->writeln('  Failed to copy feed');
                 continue;
             }
 
