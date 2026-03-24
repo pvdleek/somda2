@@ -49,8 +49,9 @@ class ForumPostController
 
         /** @var ForumPost|null $quoted_post */
         $quoted_post = $this->form_helper->getDoctrine()->getRepository(ForumPost::class)->find($id);
-        if (!$this->forum_authorization_helper->mayPost($quoted_post->discussion->forum, $this->user_helper->getUser())
-            || null === $quoted_post || $quoted_post->discussion->locked
+        if (null === $quoted_post
+            || !$this->forum_authorization_helper->mayPost($quoted_post->discussion->forum, $this->user_helper->getUser())
+            || $quoted_post->discussion->locked
         ) {
             throw new AccessDeniedException(
                 'The quoted post does not exist, the discussion is locked or the user may not view the discussion'
@@ -126,8 +127,11 @@ class ForumPostController
     {
         $this->user_helper->denyAccessUnlessGranted(RoleGenerics::ROLE_USER);
 
-        /** @var ForumPost $post */
+        /** @var ForumPost|null $post */
         $post = $this->form_helper->getDoctrine()->getRepository(ForumPost::class)->find($id);
+        if (null === $post) {
+            throw new AccessDeniedException('The post does not exist');
+        }
         $user_is_moderator = $this->forum_authorization_helper->userIsModerator(
             $post->discussion->forum,
             $this->user_helper->getUser()

@@ -45,6 +45,9 @@ class ProfileController
             $user = $this->user_helper->getUser();
         } else {
             $user = $this->doctrine->getRepository(User::class)->find($id);
+            if (null === $user) {
+                throw new AccessDeniedException('This user does not exist');
+            }
         }
 
         $form = null;

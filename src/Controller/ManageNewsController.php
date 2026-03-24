@@ -88,8 +88,12 @@ class ManageNewsController
         $ids = \array_filter(\explode(',', \array_keys($request->request->all())[0]));
         foreach ($ids as $id) {
             $rail_news = $this->rail_news_repository->find($id);
-            $rail_news->approved = true;
+            if (null === $rail_news) {
+                continue;
+            }
+            $rail_news->approved = false;
         }
+        $this->rail_news_repository->getEntityManager()->flush();
 
         return new JsonResponse();
     }
