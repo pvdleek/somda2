@@ -63,9 +63,9 @@ class ForumDiscussionHelper
         $this->doctrine->getManager()->flush();
 
         /** @var ForumPost[] $posts */
-        $posts = $this->forum_post_repository->findBy(
-            [ForumPostForm::FIELD_DISCUSSION => $this->discussion],
-            [ForumPostForm::FIELD_TIMESTAMP => $new_to_old ? 'DESC' : 'ASC'],
+        $posts = $this->forum_post_repository->findByDiscussionWithRelations(
+            $this->discussion,
+            $new_to_old ? 'DESC' : 'ASC',
             ForumGenerics::MAX_POSTS_PER_PAGE,
             ($this->page_number - 1) * ForumGenerics::MAX_POSTS_PER_PAGE
         );

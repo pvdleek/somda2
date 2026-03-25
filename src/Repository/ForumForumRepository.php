@@ -43,6 +43,43 @@ class ForumForumRepository extends ServiceEntityRepository
         }
     }
 
+    /**
+     * Returns unread discussion counts keyed by forum ID in a single query.
+     * @param int[] $forum_ids
+     * @return array<int, int>
+     */
+    public function getUnreadDiscussionCountsByForum(array $forum_ids, User $user): array
+    {
+        if (empty($forum_ids)) {
+            return [];
+        }
+        $ids_sql = \implode(',', \array_map('intval', $forum_ids));
+        $max_query = "
+            SELECT p.discussionid AS disc_id, MAX(p.timestamp) AS max_date_time
+            FROM somda_forum_posts p
+            JOIN somda_forum_discussion d ON d.discussionid = p.discussionid
+            WHERE d.forumid IN ({$ids_sql})
+            GROUP BY disc_id";
+        $query = "
+            SELECT d.forumid, SUM(IF(IFNULL(r.postid, 0) < p_max.postid, 1, 0)) AS unread_count
+            FROM somda_forum_discussion d
+            JOIN somda_forum_posts p_max ON p_max.discussionid = d.discussionid
+            LEFT JOIN somda_forum_last_read r ON r.uid = :user_id AND r.discussionid = d.discussionid
+            INNER JOIN ({$max_query}) m ON m.disc_id = d.discussionid
+            WHERE d.forumid IN ({$ids_sql}) AND p_max.timestamp = m.max_date_time
+            GROUP BY d.forumid";
+        $connection = $this->getEntityManager()->getConnection();
+        try {
+            $statement = $connection->prepare($query);
+            $statement->bindValue('user_id', $user->id, ParameterType::INTEGER);
+            $rows = $statement->executeQuery()->fetchAllAssociative();
+
+            return \array_column($rows, 'unread_count', 'forumid');
+        } catch (DBALException | DBALDriverException | ErrorException) {
+            return [];
+        }
+    }
+
     public function getNumberOfUnreadDiscussionsInForum(int $forum_id, User $user): int
     {
         $max_query = '

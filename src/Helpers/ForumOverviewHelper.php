@@ -24,7 +24,22 @@ class ForumOverviewHelper
         $forum_forum_repository = $this->doctrine->getRepository(ForumForum::class);
 
         $categories = [];
-        $forums = $forum_forum_repository->findAllAndGetArray($this->user_helper->userIsLoggedIn() ? $this->user_helper->getUser()->id : null);
+        $user = $this->user_helper->userIsLoggedIn() ? $this->user_helper->getUser() : null;
+        $forums = $forum_forum_repository->findAllAndGetArray($user?->id);
+
+        $unread_counts_by_forum = [];
+        if (null !== $user) {
+            $eligible_forum_ids = [];
+            foreach ($forums as $forum) {
+                if ((int) $forum['type'] !== ForumForum::TYPE_ARCHIVE && (int) $forum['type'] !== ForumForum::TYPE_MODERATORS_ONLY) {
+                    $eligible_forum_ids[] = (int) $forum['id'];
+                }
+            }
+            if (!empty($eligible_forum_ids)) {
+                $unread_counts_by_forum = $forum_forum_repository->getUnreadDiscussionCountsByForum($eligible_forum_ids, $user);
+            }
+        }
+
         foreach ($forums as $forum) {
             if (!isset($categories[$forum['categoryId']])) {
                 $categories[$forum['categoryId']] = [
@@ -35,20 +50,13 @@ class ForumOverviewHelper
                 ];
             }
 
-            $unread_discussions = 0;
-            if ($this->user_helper->userIsLoggedIn()) {
+            if (null !== $user) {
                 if ((int) $forum['type'] === ForumForum::TYPE_MODERATORS_ONLY
                     && (bool) $forum['user_is_moderator'] !== true
                 ) {
-                    // The user is not allowed to view this category
                     continue;
                 }
-
-                if ((int) $forum['type'] !== ForumForum::TYPE_ARCHIVE && (int) $forum['type'] !== ForumForum::TYPE_MODERATORS_ONLY) {
-                    $unread_discussions = $forum_forum_repository->getNumberOfUnreadDiscussionsInForum((int) $forum['id'], $this->user_helper->getUser());
-                }
             } elseif ((int) $forum['type'] === ForumForum::TYPE_MODERATORS_ONLY) {
-                // Guest is not allowed to view this category
                 continue;
             }
 
@@ -59,7 +67,7 @@ class ForumOverviewHelper
                 'description' => $forum['description'],
                 'order' => $forum['order'],
                 'number_of_discussions' => $forum['number_of_discussions'],
-                'number_of_unread_discussions' => $unread_discussions,
+                'number_of_unread_discussions' => (int) ($unread_counts_by_forum[(int) $forum['id']] ?? 0),
             ];
         }
         return $categories;

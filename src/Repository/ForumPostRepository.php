@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
+use App\Entity\ForumDiscussion;
 use App\Entity\ForumPost as ForumPostEntity;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -16,6 +17,32 @@ class ForumPostRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, ForumPostEntity::class);
+    }
+
+    /**
+     * Fetch a paginated page of posts with author, text and editor eagerly loaded,
+     * avoiding N+1 queries when rendering discussion pages.
+     *
+     * @return ForumPostEntity[]
+     */
+    public function findByDiscussionWithRelations(
+        ForumDiscussion $discussion,
+        string $order_direction,
+        int $limit,
+        int $offset
+    ): array {
+        return $this->createQueryBuilder('p')
+            ->addSelect('author', 'postText', 'editor')
+            ->join('p.author', 'author')
+            ->join('p.text', 'postText')
+            ->leftJoin('p.editor', 'editor')
+            ->where('p.discussion = :discussion')
+            ->setParameter('discussion', $discussion)
+            ->addOrderBy('p.timestamp', $order_direction)
+            ->setMaxResults($limit)
+            ->setFirstResult($offset)
+            ->getQuery()
+            ->getResult();
     }
 
     /**

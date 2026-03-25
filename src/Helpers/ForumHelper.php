@@ -149,11 +149,7 @@ class ForumHelper implements RuntimeExtensionInterface
                     \strtolower(\htmlspecialchars($locations[$word])).'">\\2<!-- s\\2 --></span>\\3',
                     $text
                 );
-            }
-        }
-        foreach ($text_chunks as $chunk) {
-            $word = \trim($chunk);
-            if (isset($users[$word])) {
+            } elseif (isset($users[$word])) {
                 $text = \preg_replace(
                     self::REPLACE_WORD_START.$word.self::REPLACE_WORD_END,
                     '\\1<!-- s\\2 --><span class="tooltip" title="Somda gebruiker ' .
