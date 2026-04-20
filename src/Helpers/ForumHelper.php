@@ -7,9 +7,6 @@ use Twig\Extension\RuntimeExtensionInterface;
 
 class ForumHelper implements RuntimeExtensionInterface
 {
-    private const REPLACE_WORD_START = '/(.*)\b(';
-    private const REPLACE_WORD_END = ')\b(.*)/m';
-
     public function __construct(
         private readonly StaticDataHelper $static_data_helper,
         private readonly UserHelper $user_helper,
@@ -143,29 +140,41 @@ class ForumHelper implements RuntimeExtensionInterface
         foreach ($text_chunks as $chunk) {
             $word = \trim($chunk);
             if (isset($locations[$word])) {
-                $text = \preg_replace(
-                    self::REPLACE_WORD_START.$word.self::REPLACE_WORD_END,
-                    '\\1<!-- s\\2 --><span class="tooltip" title="' .
-                    \strtolower(\htmlspecialchars($locations[$word])).'">\\2<!-- s\\2 --></span>\\3',
-                    $text
+                $text = $this->replaceWordInTextNodes(
+                    $text,
+                    $word,
+                    '<!-- s'.$word.' --><span class="tooltip" title="' .
+                        \strtolower(\htmlspecialchars($locations[$word])).'">'.$word.'<!-- s'.$word.' --></span>'
                 );
             } elseif (isset($users[$word])) {
-                $text = \preg_replace(
-                    self::REPLACE_WORD_START.$word.self::REPLACE_WORD_END,
-                    '\\1<!-- s\\2 --><span class="tooltip" title="Somda gebruiker ' .
-                        \htmlspecialchars($users[$word]).'">'.\substr($word, 1).'<!-- \\2 --></span>\\3',
-                    $text
+                $text = $this->replaceWordInTextNodes(
+                    $text,
+                    $word,
+                    '<!-- s'.$word.' --><span class="tooltip" title="Somda gebruiker ' .
+                        \htmlspecialchars($users[$word]).'">'.\substr($word, 1).'<!-- '.$word.' --></span>'
                 );
             } elseif (isset($routes[$word])) {
-                $text = \preg_replace(
-                    self::REPLACE_WORD_START.$word.self::REPLACE_WORD_END,
-                    '\\1<!-- s\\2 --><span class="tooltip" title="'.\htmlspecialchars($routes[$word]) .
-                        '">\\2<!-- s\\2 --></span>\\3',
-                    $text
+                $text = $this->replaceWordInTextNodes(
+                    $text,
+                    $word,
+                    '<!-- s'.$word.' --><span class="tooltip" title="'.\htmlspecialchars($routes[$word]) .
+                        '">'.$word.'<!-- s'.$word.' --></span>'
                 );
             }
         }
 
         return $text;
+    }
+
+    private function replaceWordInTextNodes(string $text, string $word, string $replacement): string
+    {
+        $parts = \preg_split('/(<[^>]*>|<!--.*?-->)/s', $text, -1, PREG_SPLIT_DELIM_CAPTURE);
+        foreach ($parts as $i => &$part) {
+            if ($i % 2 === 0) {
+                $part = \preg_replace('/\b'.\preg_quote($word, '/').'\b/', $replacement, $part);
+            }
+        }
+        unset($part);
+        return \implode('', $parts);
     }
 }
