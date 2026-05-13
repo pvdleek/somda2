@@ -24,6 +24,9 @@ class ForumAuthorizationHelper
         if (!$this->mayView($forum, $user) || $forum->type === ForumForum::TYPE_ARCHIVE) {
             return false;
         }
+        if (null !== $user && !$user->active) {
+            return false;
+        }
         if (\in_array($forum->type, [ForumForum::TYPE_PUBLIC, ForumForum::TYPE_LOGGED_IN])) {
             return null !== $user;
         }

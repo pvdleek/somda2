@@ -32,6 +32,9 @@ class SpotInputController
     public function indexAction(Request $request): Response|RedirectResponse
     {
         $this->user_helper->denyAccessUnlessGranted(RoleGenerics::ROLE_SPOTS_NEW);
+        if (!$this->user_helper->getUser()?->active) {
+            throw new AccessDeniedException();
+        }
 
         $form = $this->form_helper->getFactory()->create(
             SpotBulk::class,
