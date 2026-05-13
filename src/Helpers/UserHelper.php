@@ -108,6 +108,7 @@ class UserHelper implements RuntimeExtensionInterface
                 return $preference->value;
             }
         }
+
         return '';
     }
 

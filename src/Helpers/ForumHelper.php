@@ -35,7 +35,7 @@ class ForumHelper implements RuntimeExtensionInterface
                 (\strlen($post->edit_reason ?? '') > 0 ? ', reden: '.$post->edit_reason : '').'</span></i>';
         }
         $signature = $this->user_helper->getSignatureForUser($post->author);
-        if ($post->signature_on && strlen($signature ?? '') > 0) {
+        if ($post->signature_on && \strlen($signature) > 0) {
             $text .= '<br /><br /><hr style="margin-left:0; width:15%;" />'.$signature;
         }
 

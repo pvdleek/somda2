@@ -18,7 +18,7 @@ class UserRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return array<array{username: string, name: string}>
+     * @return array<array{username: string, name: string|null}>
      */
     public function findActiveForStaticData(): array
     {

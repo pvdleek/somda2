@@ -14,6 +14,7 @@ use App\Helpers\TemplateHelper;
 use App\Helpers\UserHelper;
 use App\Repository\NewsRepository;
 use App\Repository\RailNewsRepository;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,6 +24,7 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 class ManageNewsController
 {
     public function __construct(
+        private readonly ManagerRegistry $doctrine,
         private readonly UserHelper $user_helper,
         private readonly FormHelper $form_helper,
         private readonly TemplateHelper $template_helper,
@@ -93,7 +95,7 @@ class ManageNewsController
             }
             $rail_news->approved = false;
         }
-        $this->rail_news_repository->getEntityManager()->flush();
+        $this->doctrine->getManager()->flush();
 
         return new JsonResponse();
     }
