@@ -55,7 +55,7 @@
         "symfony/yaml": "8.0.*",
         "twig/extra-bundle": "^3.24.0",
         "twig/string-extra": "^3.24.0",
-        "twig/twig": "^3.26.0"
+        "twig/twig": "^3.27.0"
     },
     "config": {
         "allow-plugins": {
