@@ -65,6 +65,10 @@ class HomeController
         ]);
     }
 
+    /**
+     * @param array<string> $layout
+     * @param array<string, mixed> $layout_data
+     */
     private function loadDataForDashboard(array $layout, array &$layout_data): void
     {
         if (\in_array(self::KEY_DASHBOARD, $layout) || \in_array(self::KEY_DASHBOARD_MINIMIZED, $layout)) {
@@ -76,6 +80,10 @@ class HomeController
         }
     }
 
+    /**
+     * @param array<string> $layout
+     * @param array<string, mixed> $layout_data
+     */
     private function loadDataForSpecialRoutes(array $layout, array &$layout_data): void
     {
         if (\in_array('drgl', $layout) || \in_array('drgl-min', $layout)) {
@@ -84,6 +92,8 @@ class HomeController
     }
 
     /**
+     * @param array<string> $layout
+     * @param array<string, mixed> $layout_data
      * @throws \Exception
      */
     private function loadDataForForum(array $layout, array &$layout_data): void
@@ -96,6 +106,8 @@ class HomeController
     }
 
     /**
+     * @param array<string> $layout
+     * @param array<string, mixed> $layout_data
      * @throws \Exception
      */
     private function loadDataForNews(array $layout, array &$layout_data): void
@@ -116,6 +128,8 @@ class HomeController
     }
 
     /**
+     * @param array<string> $layout
+     * @param array<string, mixed> $layout_data
      * @throws \Exception
      */
     private function loadDataForSpots(array $layout, array &$layout_data): void
@@ -128,6 +142,8 @@ class HomeController
     }
 
     /**
+     * @param array<string> $layout
+     * @param array<string, mixed> $layout_data
      * @throws \Exception
      */
     private function loadDataForPassingRoutes(array $layout, array &$layout_data): void

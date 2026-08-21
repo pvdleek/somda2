@@ -74,6 +74,9 @@ class Spot
         $this->timestamp = new \DateTime();
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function toArray(): array
     {
         return [

@@ -34,6 +34,7 @@ class Train
     #[ORM\JoinColumn(name: 'pattern_id', referencedColumnName: 'id')]
     public ?TrainNamePattern $name_pattern = null;
 
+    /** @var Collection<int, Spot> */
     #[ORM\OneToMany(targetEntity: Spot::class, mappedBy: 'train')]
     private Collection $spots;
 

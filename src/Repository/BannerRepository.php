@@ -4,23 +4,26 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
-use App\Entity\Banner as BannerEntity;
+use App\Entity\Banner;
 use App\Entity\BannerHit;
 use App\Entity\BannerView;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
+/**
+ * @extends ServiceEntityRepository<Banner>
+ */
 class BannerRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, BannerEntity::class);
+        parent::__construct($registry, Banner::class);
     }
 
     /**
      * @return int
      */
-    public function getNumberOfHits(BannerEntity $banner): int
+    public function getNumberOfHits(Banner $banner): int
     {
         $query_builder = $this->getEntityManager()
             ->createQueryBuilder()
@@ -39,7 +42,7 @@ class BannerRepository extends ServiceEntityRepository
     /**
      * @return int
      */
-    public function getNumberOfViews(BannerEntity $banner): int
+    public function getNumberOfViews(Banner $banner): int
     {
         $query_builder = $this->getEntityManager()
             ->createQueryBuilder()

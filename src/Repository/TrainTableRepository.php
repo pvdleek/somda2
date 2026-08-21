@@ -6,7 +6,7 @@ namespace App\Repository;
 
 use App\Entity\Location;
 use App\Entity\Route;
-use App\Entity\TrainTable as TrainTableEntity;
+use App\Entity\TrainTable;
 use App\Entity\TrainTableFirstLast;
 use App\Entity\TrainTableYear;
 use App\Traits\DateTrait;
@@ -16,6 +16,9 @@ use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Persistence\ManagerRegistry;
 
+/**
+ * @extends ServiceEntityRepository<TrainTable>
+ */
 class TrainTableRepository extends ServiceEntityRepository
 {
     use DateTrait;
@@ -30,9 +33,12 @@ class TrainTableRepository extends ServiceEntityRepository
 
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, TrainTableEntity::class);
+        parent::__construct($registry, TrainTable::class);
     }
 
+    /**
+     * @return array<int, array<string, mixed>>
+     */
     public function findPassingRoutes(
         TrainTableYear $train_table_year,
         Location $location,
@@ -54,7 +60,7 @@ class TrainTableRepository extends ServiceEntityRepository
             ->addSelect('transporter.name AS '.self::FIELD_TRANSPORTER_NAME)
             ->addSelect('characteristic.name AS '.self::FIELD_CHARACTERISTIC_NAME)
             ->addSelect('characteristic.description AS '.self::FIELD_CHARACTERISTIC_DESCRIPTION)
-            ->from(TrainTableEntity::class, 't')
+            ->from(TrainTable::class, 't')
             ->andWhere('t.train_table_year = :'.self::PARAMETER_TRAIN_TABLE_YEAR)
             ->setParameter(self::PARAMETER_TRAIN_TABLE_YEAR, $train_table_year)
             ->andWhere('t.location = :location')
@@ -77,9 +83,13 @@ class TrainTableRepository extends ServiceEntityRepository
             ->join('route_lists.transporter', 'transporter')
             ->join('route_lists.characteristic', 'characteristic')
             ->addOrderBy('t.time', 'ASC');
+
         return $query_builder->getQuery()->getArrayResult();
     }
 
+    /**
+     * @return array<int, array<string, mixed>>
+     */
     public function findAllTrainTablesForForum(TrainTableYear $train_table_year): array
     {
         $query_builder = $this->getEntityManager()
@@ -103,6 +113,7 @@ class TrainTableRepository extends ServiceEntityRepository
             ->andWhere('fl.train_table_year = :'.self::PARAMETER_TRAIN_TABLE_YEAR)
             ->addGroupBy('r.number')
             ->setParameter(self::PARAMETER_TRAIN_TABLE_YEAR, $train_table_year);
+
         return $query_builder->getQuery()->getArrayResult();
     }
 
@@ -115,7 +126,7 @@ class TrainTableRepository extends ServiceEntityRepository
         $query_builder = $this->getEntityManager()
             ->createQueryBuilder()
             ->select('COUNT(t.id)')
-            ->from(TrainTableEntity::class, 't')
+            ->from(TrainTable::class, 't')
             ->andWhere('t.train_table_year = :'.self::PARAMETER_TRAIN_TABLE_YEAR)
             ->setParameter(self::PARAMETER_TRAIN_TABLE_YEAR, $train_table_year)
             ->andWhere('t.route = :route')
@@ -124,6 +135,7 @@ class TrainTableRepository extends ServiceEntityRepository
             ->setParameter('location', $location)
             ->join('t.route_operation_days', 'o')
             ->andWhere('o.'.$this->getDayName($day_number - 1) .' = TRUE');
+
         try {
             return (int) $query_builder->getQuery()->getSingleScalarResult() > 0;
         } catch (NonUniqueResultException | NoResultException) {

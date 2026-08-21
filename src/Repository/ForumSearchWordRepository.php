@@ -4,20 +4,23 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
-use App\Entity\ForumSearchWord as ForumSearchWordEntity;
+use App\Entity\ForumSearchWord;
 use App\Model\ForumSearchResult;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
+/**
+ * @extends ServiceEntityRepository<ForumSearchWord>
+ */
 class ForumSearchWordRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, ForumSearchWordEntity::class);
+        parent::__construct($registry, ForumSearchWord::class);
     }
 
     /**
-     * @param ForumSearchWordEntity[] $words
+     * @param ForumSearchWord[] $words
      * @return ForumSearchResult[]
      */
     public function searchByWords(array $words): array
@@ -37,7 +40,7 @@ class ForumSearchWordRepository extends ServiceEntityRepository
             ->addSelect('u.username AS author_username')
             ->addSelect('p.id AS post_id')
             ->addSelect('p.timestamp AS post_timestamp')
-            ->from(ForumSearchWordEntity::class, 'w')
+            ->from(ForumSearchWord::class, 'w')
             ->join('w.lists', 'l')
             ->join('l.post', 'p')
             ->join('p.author', 'u')

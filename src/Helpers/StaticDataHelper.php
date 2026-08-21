@@ -19,10 +19,13 @@ class StaticDataHelper implements RuntimeExtensionInterface
 {
     use DateTrait;
 
+    /** @var array<string, string>|null */
     private ?array $locations = null;
 
+    /** @var array<string, string>|null */
     private ?array $users = null;
 
+    /** @var array<int|string, string>|null */
     private ?array $routes = null;
 
     public function __construct(
@@ -32,6 +35,7 @@ class StaticDataHelper implements RuntimeExtensionInterface
     }
 
     /**
+     * @return array<string, string>
      * @throws \Exception
      */
     public function getLocations(): array
@@ -43,6 +47,7 @@ class StaticDataHelper implements RuntimeExtensionInterface
     }
 
     /**
+     * @return array<string, string>
      * @throws \Exception
      */
     public function getUsers(): array
@@ -54,6 +59,7 @@ class StaticDataHelper implements RuntimeExtensionInterface
     }
 
     /**
+     * @return array<int|string, string>
      * @throws \Exception
      */
     public function getRoutes(): array
@@ -116,6 +122,9 @@ class StaticDataHelper implements RuntimeExtensionInterface
         }
     }
 
+    /**
+     * @param array<string, mixed> $route
+     */
     private function addSeriesRouteNumber(array $route): void
     {
         $series_route_number = (int) (100 * \floor($route[TrainTableRepository::FIELD_ROUTE_NUMBER] / 100));

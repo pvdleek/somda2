@@ -6,6 +6,7 @@ namespace App\Entity;
 
 use App\Repository\NewsRepository;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: NewsRepository::class)]
@@ -29,11 +30,12 @@ class News
     #[ORM\Column(name: 'archief', nullable: false, options: ['default' => false])]
     public bool $archived = false;
 
+    /** @var Collection<int, User> */
     #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'news_reads')]
     #[ORM\JoinTable(name: 'somda_news_read')]
     #[ORM\JoinColumn(name: 'newsid', referencedColumnName: 'newsid')]
     #[ORM\InverseJoinColumn(name: 'uid', referencedColumnName: 'uid')]
-    private $user_reads;
+    private Collection $user_reads;
 
     /**
      *

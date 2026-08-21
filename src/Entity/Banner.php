@@ -59,12 +59,13 @@ class Banner
 
     #[ORM\Column(name: 'end_date', type: 'datetime', nullable: true)]
     public ?\DateTime $end_timestamp = null;
-    #[ORM\OneToMany(targetEntity: BannerHit::class, mappedBy: 'banner')]
+
     /** @var Collection<int, BannerHit> */
+    #[ORM\OneToMany(targetEntity: BannerHit::class, mappedBy: 'banner')]
     private Collection $banner_hits;
 
-    #[ORM\OneToMany(targetEntity: BannerView::class, mappedBy: 'banner')]
     /** @var Collection<int, BannerView> */
+    #[ORM\OneToMany(targetEntity: BannerView::class, mappedBy: 'banner')]
     private Collection $banner_views;
 
     #[ORM\ManyToOne(targetEntity: BannerCustomer::class, inversedBy: 'banners')]

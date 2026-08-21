@@ -24,9 +24,11 @@ class Transporter
     #[ORM\Column(name: 'iff_code', nullable: true, options: ['unsigned' => true])]
     public ?int $iff_code = null;
 
+    /** @var Collection<int, Train> */
     #[ORM\OneToMany(targetEntity: Train::class, mappedBy: 'transporter')]
     private Collection $trains;
 
+    /** @var Collection<int, RouteList> */
     #[ORM\OneToMany(targetEntity: RouteList::class, mappedBy: 'transporter')]
     private Collection $route_lists;
 

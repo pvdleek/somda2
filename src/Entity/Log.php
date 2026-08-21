@@ -25,6 +25,7 @@ class Log
     #[ORM\Column(length: 255, nullable: false, options: ['default' => ''])]
     public string $route = '';
 
+    /** @var array<string, mixed> */
     #[ORM\Column(nullable: false)]
     public array $route_parameters = [];
 

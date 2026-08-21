@@ -62,15 +62,19 @@ class ForumPost
     #[ORM\JoinColumn(name: 'wiki_uid', referencedColumnName: 'uid')]
     public ?User $wiki_checker = null;
 
+    /** @var Collection<int, ForumPostAlert> */
     #[ORM\OneToMany(targetEntity: ForumPostAlert::class, mappedBy: 'post')]
     private Collection $alerts;
 
+    /** @var Collection<int, ForumPostLog> */
     #[ORM\OneToMany(targetEntity: ForumPostLog::class, mappedBy: 'post')]
     private Collection $logs;
 
+    /** @var Collection<int, ForumSearchList> */
     #[ORM\OneToMany(targetEntity: ForumSearchList::class, mappedBy: 'post')]
     private Collection $search_lists;
 
+    /** @var Collection<int, ForumPostFavorite> */
     #[ORM\OneToMany(targetEntity: ForumPostFavorite::class, mappedBy: 'post')]
     private Collection $favorites;
 

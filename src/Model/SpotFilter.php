@@ -16,6 +16,9 @@ class SpotFilter
 
     public ?string $route_number = null;
 
+    /**
+     * @param array<int, string> $parameters
+     */
     public function createFromSearchParameters(array $parameters): void
     {
         $this->location = \strlen($parameters[0]) > 0 ? $parameters[0] : null;

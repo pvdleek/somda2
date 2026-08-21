@@ -74,6 +74,9 @@ class ProcessForumLogCommand extends Command
         $this->doctrine->getManager()->flush();
     }
 
+    /**
+     * @return array<string>
+     */
     private function getCleanWordsFromText(string $text): array
     {
         $strange_characters = [
@@ -127,6 +130,9 @@ class ProcessForumLogCommand extends Command
         return $forum_search_word;
     }
 
+    /**
+     * @param array<string> $words
+     */
     private function processWords(array $words, ForumPost $post, bool $title = false): void
     {
         foreach ($words as $word) {

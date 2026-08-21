@@ -45,7 +45,7 @@ class FeedController
         ]);
     }
 
-    public function imageAction(Request $request, string $location_name, ?int $day_number = null, ?string $start_time = null)
+    public function imageAction(Request $request, string $location_name, ?int $day_number = null, ?string $start_time = null): BinaryFileResponse
     {
         \header('Content-Type: image/png');
 
@@ -122,6 +122,9 @@ class FeedController
         return imagecolorallocate($id, \hexdec($red), \hexdec($green), \hexdec($blue));
     }
 
+    /**
+     * @return array<int, array<string, mixed>>
+     */
     private function getPassingRoutes(Location $location, ?int $day_number, ?string $start_time): array
     {
         $train_table_year_id = $this->train_table_year_repository->findTrainTableYearByDate(new \DateTime())->id;

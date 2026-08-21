@@ -5,25 +5,28 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\Entity\ForumDiscussion;
-use App\Entity\ForumPost as ForumPostEntity;
+use App\Entity\ForumPost;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\DBAL\Exception as DBALException;
 use Doctrine\DBAL\Driver\Exception as DBALDriverException;
 use Doctrine\Persistence\ManagerRegistry;
 
+/**
+ * @extends ServiceEntityRepository<ForumPost>
+ */
 class ForumPostRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, ForumPostEntity::class);
+        parent::__construct($registry, ForumPost::class);
     }
 
     /**
      * Fetch a paginated page of posts with author, text and editor eagerly loaded,
      * avoiding N+1 queries when rendering discussion pages.
      *
-     * @return ForumPostEntity[]
+     * @return ForumPost[]
      */
     public function findByDiscussionWithRelations(
         ForumDiscussion $discussion,
@@ -47,7 +50,7 @@ class ForumPostRepository extends ServiceEntityRepository
 
     /**
      * @param User $user
-     * @return array
+     * @return array<int, array<string, mixed>>
      */
     public function findByFavorites(User $user): array
     {

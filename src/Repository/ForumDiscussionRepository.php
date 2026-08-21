@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
-use App\Entity\ForumDiscussion as ForumDiscussionEntity;
+use App\Entity\ForumDiscussion;
 use App\Entity\ForumForum;
 use App\Entity\ForumPost;
 use App\Entity\User;
@@ -15,14 +15,18 @@ use Doctrine\DBAL\Exception as DBALException;
 use Doctrine\DBAL\Driver\Exception as DBALDriverException;
 use Doctrine\Persistence\ManagerRegistry;
 
+/**
+ * @extends ServiceEntityRepository<ForumDiscussion>
+ */
 class ForumDiscussionRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, ForumDiscussionEntity::class);
+        parent::__construct($registry, ForumDiscussion::class);
     }
 
     /**
+     * @return array<int, array<string, mixed>>
      * @throws \Exception
      */
     public function findForDashboard(int $limit, ?User $user = null): array
@@ -84,6 +88,9 @@ class ForumDiscussionRepository extends ServiceEntityRepository
         }
     }
 
+    /**
+     * @return array<int, array<string, mixed>>
+     */
     public function findByForum(ForumForum $forum, ?User $user = null, ?int $limit = null): array
     {
         $connection = $this->getEntityManager()->getConnection();
@@ -135,6 +142,9 @@ class ForumDiscussionRepository extends ServiceEntityRepository
         }
     }
 
+    /**
+     * @return array<int, array<string, mixed>>
+     */
     public function findByFavorites(User $user): array
     {
         $max_query = '
@@ -172,6 +182,9 @@ class ForumDiscussionRepository extends ServiceEntityRepository
         }
     }
 
+    /**
+     * @return array<int, array<string, mixed>>
+     */
     public function findUnread(User $user): array
     {
         $max_query = '
@@ -215,6 +228,7 @@ class ForumDiscussionRepository extends ServiceEntityRepository
     }
 
     /**
+     * @return array<string, mixed>|null
      * @throws \Exception|DBALDriverException
      */
     public function findLastDiscussion(): ?array
@@ -249,7 +263,7 @@ class ForumDiscussionRepository extends ServiceEntityRepository
         return $last_discussion === false ? null : $last_discussion;
     }
 
-    public function getNumberOfPosts(ForumDiscussionEntity $discussion): int
+    public function getNumberOfPosts(ForumDiscussion $discussion): int
     {
         $query_builder = $this->getEntityManager()
             ->createQueryBuilder()
@@ -265,7 +279,7 @@ class ForumDiscussionRepository extends ServiceEntityRepository
         }
     }
 
-    public function getPostNumberInDiscussion(ForumDiscussionEntity $discussion, int $post_id): int
+    public function getPostNumberInDiscussion(ForumDiscussion $discussion, int $post_id): int
     {
         $query = '
             SELECT COUNT(*) AS position
@@ -282,7 +296,7 @@ class ForumDiscussionRepository extends ServiceEntityRepository
         return (int) $statement->executeQuery()->fetchOne();
     }
 
-    public function getNumberOfReadPosts(ForumDiscussionEntity $discussion, User $user): int
+    public function getNumberOfReadPosts(ForumDiscussion $discussion, User $user): int
     {
        $query = 'SELECT COUNT(`p`.`postid`) AS `number`
             FROM `somda_forum_posts` `p`
@@ -302,7 +316,7 @@ class ForumDiscussionRepository extends ServiceEntityRepository
     /**
      * @param ForumPost[] $posts
      */
-    public function markPostsAsRead(User $user, ForumDiscussionEntity $discussion, array $posts): void
+    public function markPostsAsRead(User $user, ForumDiscussion $discussion, array $posts): void
     {
         $max_post_id = \array_reduce($posts, static fn(int $max, ForumPost $post) => \max($max, $post->id ?? 0), 0);
         $query = 'REPLACE INTO `somda_forum_last_read` (`uid`, `discussionid`, `postid`) VALUES (:user_id, :discussion_id, :max_post_id)';

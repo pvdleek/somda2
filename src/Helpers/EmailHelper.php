@@ -17,6 +17,9 @@ class EmailHelper
     ) {
     }
 
+    /**
+     * @param array<string, mixed> $parameters
+     */
     public function sendEmail(User $user, string $subject, string $template, array $parameters = []): bool
     {
         if (isset($parameters['from'])) {

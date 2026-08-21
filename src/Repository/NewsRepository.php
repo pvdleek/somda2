@@ -4,18 +4,21 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
-use App\Entity\News as NewsEntity;
+use App\Entity\News;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\DBAL\Exception as DBALException;
 use Doctrine\DBAL\Driver\Exception as DBALDriverException;
 use Doctrine\Persistence\ManagerRegistry;
 
+/**
+ * @extends ServiceEntityRepository<News>
+ */
 class NewsRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, NewsEntity::class);
+        parent::__construct($registry, News::class);
     }
 
     /**

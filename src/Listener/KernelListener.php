@@ -28,6 +28,7 @@ class KernelListener implements EventSubscriberInterface
 
     private ?string $route;
 
+    /** @var array<string, mixed>|null */
     private ?array $route_parameters;
 
     public function __construct(

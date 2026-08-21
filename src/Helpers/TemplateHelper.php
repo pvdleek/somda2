@@ -38,6 +38,9 @@ class TemplateHelper
     ) {
     }
 
+    /**
+     * @param array<string, mixed> $parameters
+     */
     public function render(string $view, array $parameters = [], ?Response $response = null): Response
     {
         try {
@@ -75,6 +78,8 @@ class TemplateHelper
     }
 
     /**
+     * @param array<string, mixed> $view_parameters
+     * @return array<string, mixed>
      * @throws \Exception
      */
     private function getParameters(array $view_parameters): array

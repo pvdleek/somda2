@@ -37,6 +37,7 @@ class Block
     #[ORM\JoinColumn(name: 'parent_block', referencedColumnName: 'blokid')]
     public ?Block $parent = null;
 
+    /** @var Collection<int, Block> */
     #[ORM\OneToMany(targetEntity: Block::class, mappedBy: 'parent')]
     private Collection $children;
 

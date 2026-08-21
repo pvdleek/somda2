@@ -39,6 +39,7 @@ class SpecialRoute
     #[ORM\Column(type: 'text', nullable: false, options: ['default' => ''])]
     public string $text = '';
 
+    /** @var Collection<int, User> */
     #[ORM\ManyToMany(targetEntity: User::class)]
     #[ORM\JoinTable(name: 'somda_drgl_read')]
     #[ORM\JoinColumn(name: 'drglid', referencedColumnName: 'drglid')]

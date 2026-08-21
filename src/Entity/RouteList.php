@@ -43,6 +43,7 @@ class RouteList
     #[ORM\Column(name: 'traject', type: 'string', length: 75, nullable: true)]
     public ?string $section = null;
 
+    /** @var Collection<int, Route> */
     #[ORM\ManyToMany(targetEntity: Route::class, inversedBy: 'route_lists')]
     #[ORM\JoinTable(name: 'somda_tdr_trein_treinnummerlijst')]
     #[ORM\JoinColumn(name: 'treinnummerlijst_id', referencedColumnName: 'id')]

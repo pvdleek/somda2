@@ -26,6 +26,9 @@ class MenuHelper implements RuntimeExtensionInterface
         return 0;
     }
 
+    /**
+     * @return array<int, array<string, mixed>>
+     */
     public function getMenuStructure(): array
     {
         $blocks = $this->block_repository->getMenuStructure();
@@ -40,6 +43,9 @@ class MenuHelper implements RuntimeExtensionInterface
         return $allowed_blocks;
     }
 
+    /**
+     * @param array<string, mixed> $block
+     */
     private function isAuthorizedForBlock(array $block): bool
     {
         if (null === $block['role'] || $this->authorization_helper->isGranted(RoleGenerics::ROLE_ADMIN)) {

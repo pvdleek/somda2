@@ -53,6 +53,9 @@ class FormHelper
         return $this->redirect_helper;
     }
 
+    /**
+     * @param array<string, mixed> $route_parameters
+     */
     public function finishFormHandling(string $flash_message, string $route, array $route_parameters = []): RedirectResponse
     {
         $this->doctrine->getManager()->flush();

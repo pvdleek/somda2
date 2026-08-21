@@ -20,6 +20,7 @@ class PoiCategory
     #[ORM\Column(name: 'naam', length: 15, nullable: false, options: ['default' => ''])]
     public string $name = '';
 
+    /** @var Collection<int, Poi> */
     #[ORM\OneToMany(targetEntity: Poi::class, mappedBy: 'category')]
     private Collection $pois;
 

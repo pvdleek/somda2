@@ -29,9 +29,11 @@ class RailNewsSource
     #[ORM\Column(name: 'snb_description', type: 'string', length: 100, nullable: false, options: ['default' => ''])]
     public string $description = '';
 
+    /** @var Collection<int, RailNewsSourceFeed> */
     #[ORM\OneToMany(targetEntity: RailNewsSourceFeed::class, mappedBy: 'source')]
     private Collection $feeds;
 
+    /** @var Collection<int, RailNews> */
     #[ORM\OneToMany(targetEntity: RailNews::class, mappedBy: 'source')]
     private Collection $news;
 

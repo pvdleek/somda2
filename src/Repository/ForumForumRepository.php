@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
-use App\Entity\ForumForum as ForumForumEntity;
+use App\Entity\ForumForum;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\DBAL\Exception as DBALException;
@@ -13,13 +13,19 @@ use Doctrine\DBAL\ParameterType;
 use Doctrine\Persistence\ManagerRegistry;
 use ErrorException;
 
+/**
+ * @extends ServiceEntityRepository<ForumForum>
+ */
 class ForumForumRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, ForumForumEntity::class);
+        parent::__construct($registry, ForumForum::class);
     }
 
+    /**
+     * @return array<int, array<string, mixed>>
+     */
     public function findAllAndGetArray(?int $user_id = null): array
     {
         $query = '

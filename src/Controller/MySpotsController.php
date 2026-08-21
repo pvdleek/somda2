@@ -95,6 +95,9 @@ class MySpotsController
         return new JsonResponse($response);
     }
 
+    /**
+     * @param array<int, array<string, mixed>> $columns
+     */
     private function getSpotFilterFromRequest(array $columns): SpotFilter
     {
         $spot_filter = new SpotFilter();

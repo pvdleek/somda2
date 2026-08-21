@@ -4,15 +4,18 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
-use App\Entity\ForumPostAlert as ForumPostAlertEntity;
+use App\Entity\ForumPostAlert;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
+/**
+ * @extends ServiceEntityRepository<ForumPostAlert>
+ */
 class ForumPostAlertRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, ForumPostAlertEntity::class);
+        parent::__construct($registry, ForumPostAlert::class);
     }
 
     /**
@@ -23,7 +26,7 @@ class ForumPostAlertRepository extends ServiceEntityRepository
         $query_builder = $this->getEntityManager()
             ->createQueryBuilder()
             ->select('COUNT(a.id)')
-            ->from(ForumPostAlertEntity::class, 'a')
+            ->from(ForumPostAlert::class, 'a')
             ->andWhere('a.closed = FALSE')
             ->setMaxResults(1);
         try {
@@ -34,7 +37,7 @@ class ForumPostAlertRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return ForumPostAlertEntity[]
+     * @return ForumPostAlert[]
      */
     public function findForOverview(): array
     {
@@ -48,7 +51,7 @@ class ForumPostAlertRepository extends ServiceEntityRepository
             ->addSelect('p.id AS post_id')
             ->addSelect('COUNT(DISTINCT(f.id)) AS number_of_alerts')
             ->addSelect('COUNT(DISTINCT(n.id)) AS number_of_notes')
-            ->from(ForumPostAlertEntity::class, 'f')
+            ->from(ForumPostAlert::class, 'f')
             ->join('f.sender', 'u')
             ->join('f.post', 'p')
             ->join('p.discussion', 'd')

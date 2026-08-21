@@ -57,6 +57,9 @@ class SpecialRoute extends AbstractType
     }
 
 
+    /**
+     * @return array<string, string>
+     */
     private function getImages(): array
     {
         $finder = new Finder();

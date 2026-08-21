@@ -54,9 +54,9 @@ class RailNews
 
     /**
      * This function calculates thumbnail width and height for an image
-     * @param array $current_sizes - an array with 2 values: 0 = width, 1 = height
-     * @param array $max_sizes - an array with 2 values: 0 = width, 1 = height
-     * @return array - an array with 2 values: 0 = width, 1 = height
+     * @param array{0: int, 1: int} $current_sizes - an array with 2 values: 0 = width, 1 = height
+     * @param array{0: int, 1: int} $max_sizes - an array with 2 values: 0 = width, 1 = height
+     * @return array{0: int|float, 1: int|float} - an array with 2 values: 0 = width, 1 = height
      */
     private function resizeImage(array $current_sizes, array $max_sizes): array
     {

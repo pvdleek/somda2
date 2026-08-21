@@ -36,6 +36,7 @@ class ForumPostAlert
     #[ORM\Column(type: 'text', nullable: true)]
     public ?string $comment = null;
 
+    /** @var Collection<int, ForumPostAlertNote> */
     #[ORM\OneToMany(targetEntity: ForumPostAlertNote::class, mappedBy: 'alert')]
     private Collection $notes;
 

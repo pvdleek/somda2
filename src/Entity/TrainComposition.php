@@ -75,6 +75,7 @@ class TrainComposition extends TrainCompositionBase
     #[ORM\Column(name: 'index_regel', nullable: false, options: ['default' => false])]
     public bool $index_line = false;
 
+    /** @var Collection<int, TrainCompositionProposition> */
     #[ORM\OneToMany(targetEntity: TrainCompositionProposition::class, mappedBy: 'composition', cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $propositions;
 

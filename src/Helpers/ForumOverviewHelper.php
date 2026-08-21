@@ -18,6 +18,9 @@ class ForumOverviewHelper
     ) {
     }
 
+    /**
+     * @return array<int|string, array<string, mixed>>
+     */
     public function getCategoryArray(): array
     {
         /** @var ForumForumRepository $forum_forum_repository */

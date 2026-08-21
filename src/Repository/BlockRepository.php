@@ -4,19 +4,22 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
-use App\Entity\Block as BlockEntity;
+use App\Entity\Block;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
+/**
+ * @extends ServiceEntityRepository<Block>
+ */
 class BlockRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, BlockEntity::class);
+        parent::__construct($registry, Block::class);
     }
 
     /**
-     * @return array
+     * @return array<int, array<string, mixed>>
      */
     public function getMenuStructure(): array
     {
@@ -24,7 +27,7 @@ class BlockRepository extends ServiceEntityRepository
             ->createQueryBuilder()
             ->select('b.id AS id, b.name AS name, b.route AS route, b.role AS role')
             ->addSelect('parent.id AS parent_id, parent.name AS parent_name')
-            ->from(BlockEntity::class, 'b')
+            ->from(Block::class, 'b')
             ->join('b.parent', 'parent')
             ->andWhere('parent.id > 0')
             ->addOrderBy('parent.menu_order', 'ASC')

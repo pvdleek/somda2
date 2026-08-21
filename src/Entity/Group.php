@@ -24,6 +24,7 @@ class Group
     #[ORM\Column]
     public array $roles = [];
 
+    /** @var Collection<int, User> */
     #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'groups')]
     #[ORM\JoinTable(name: 'somda_users_groups')]
     #[ORM\JoinColumn(name: 'groupid', referencedColumnName: 'groupid')]

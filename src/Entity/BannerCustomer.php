@@ -29,10 +29,12 @@ class BannerCustomer
     #[ORM\Column(nullable: true, options: ['unsigned' => true])]
     public ?int $max_days = null;
 
-    #[ORM\OneToMany(mappedBy: 'customer', targetEntity: 'App\Entity\Banner')]
+    /** @var Collection<int, Banner> */
+    #[ORM\OneToMany(mappedBy: 'customer', targetEntity: Banner::class)]
     private Collection $banners;
 
-    #[ORM\OneToMany(mappedBy: 'customer', targetEntity: 'App\Entity\BannerCustomerUser')]
+    /** @var Collection<int, BannerCustomerUser> */
+    #[ORM\OneToMany(mappedBy: 'customer', targetEntity: BannerCustomerUser::class)]
     private Collection $customer_users;
 
     public function __construct()

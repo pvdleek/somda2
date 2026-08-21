@@ -23,6 +23,7 @@ class ForumCategory
     #[ORM\Column(name: 'volgorde', type: 'smallint', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     public int $order = 1;
 
+    /** @var Collection<int, ForumForum> */
     #[ORM\OneToMany(targetEntity: ForumForum::class, mappedBy: 'category')]
     private Collection $forums;
 

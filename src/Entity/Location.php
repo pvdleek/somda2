@@ -42,9 +42,11 @@ class Location
     #[ORM\JoinColumn(name: 'landid', referencedColumnName: 'verk_catid')]
     public LocationCategory $category;
 
+    /** @var Collection<int, TrainTable> */
     #[ORM\OneToMany(targetEntity: TrainTable::class, mappedBy: 'location')]
     private Collection $train_tables;
 
+    /** @var Collection<int, Spot> */
     #[ORM\OneToMany(targetEntity: Spot::class, mappedBy: 'location')]
     private Collection $spots;
 

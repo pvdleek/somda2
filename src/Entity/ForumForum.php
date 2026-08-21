@@ -48,9 +48,11 @@ class ForumForum
     #[Assert\Choice(choices: self::TYPE_VALUES)]
     public int $type = self::TYPE_LOGGED_IN;
 
+    /** @var Collection<int, ForumDiscussion> */
     #[ORM\OneToMany(targetEntity: ForumDiscussion::class, mappedBy: 'forum')]
     private Collection $discussions;
 
+    /** @var Collection<int, User> */
     #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'moderated_forums')]
     #[ORM\JoinTable(name: 'somda_forum_mods')]
     #[ORM\JoinColumn(name: 'forumid', referencedColumnName: 'forumid')]

@@ -35,7 +35,7 @@ class Spot
     public string $location_description;
 
     /**
-     * @param array $query_result - A result array from the findRecentWithSpotFilter function in the Spot repository
+     * @param array<string, mixed> $query_result - A result array from the findRecentWithSpotFilter function in the Spot repository
      */
     public function __construct(array $query_result)
     {

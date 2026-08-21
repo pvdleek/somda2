@@ -36,12 +36,15 @@ class ForumDiscussion
     #[ORM\JoinColumn(name: 'authorid', referencedColumnName: 'uid')]
     public ?User $author = null;
 
+    /** @var Collection<int, ForumPost> */
     #[ORM\OneToMany(mappedBy: 'discussion', targetEntity: ForumPost::class)]
     private Collection $posts;
 
+    /** @var Collection<int, ForumDiscussionWiki> */
     #[ORM\OneToMany(mappedBy: 'discussion', targetEntity: ForumDiscussionWiki::class)]
     private Collection $wikis;
 
+    /** @var Collection<int, ForumFavorite> */
     #[ORM\OneToMany(mappedBy: 'discussion', targetEntity: ForumFavorite::class)]
     private Collection $favorites;
 

@@ -26,15 +26,19 @@ class Route
     #[ORM\Column(name: 'treinnr', length: 25, nullable: false, options: ['default' => ''])]
     public string $number = '';
 
+    /** @var Collection<int, TrainTable> */
     #[ORM\OneToMany(targetEntity: TrainTable::class, mappedBy: 'route')]
     private Collection $train_tables;
 
+    /** @var Collection<int, TrainTableFirstLast> */
     #[ORM\OneToMany(targetEntity: TrainTableFirstLast::class, mappedBy: 'route')]
     private Collection $train_table_first_lasts;
 
+    /** @var Collection<int, RouteList> */
     #[ORM\ManyToMany(targetEntity: RouteList::class, mappedBy: 'routes')]
     private Collection $route_lists;
 
+    /** @var Collection<int, Spot> */
     #[ORM\OneToMany(targetEntity: Spot::class, mappedBy: 'route')]
     private Collection $spots;
 

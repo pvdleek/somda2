@@ -4,19 +4,22 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
-use App\Entity\SpecialRoute as SpecialRouteEntity;
+use App\Entity\SpecialRoute;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
+/**
+ * @extends ServiceEntityRepository<SpecialRoute>
+ */
 class SpecialRouteRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, SpecialRouteEntity::class);
+        parent::__construct($registry, SpecialRoute::class);
     }
 
     /**
-     * @return SpecialRouteEntity[]
+     * @return SpecialRoute[]
      * @throws \Exception
      */
     public function findForDashboard(): array
@@ -26,7 +29,7 @@ class SpecialRouteRepository extends ServiceEntityRepository
         $query_builder = $this->getEntityManager()
             ->createQueryBuilder()
             ->select('s')
-            ->from(SpecialRouteEntity::class, 's')
+            ->from(SpecialRoute::class, 's')
             ->andWhere('s.public = TRUE')
             ->andWhere('(s.start_date >= :today AND s.end_date IS NULL) OR s.end_date >= :today')
             ->setParameter('today', $today)
@@ -35,7 +38,7 @@ class SpecialRouteRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return SpecialRouteEntity[]
+     * @return SpecialRoute[]
      * @throws \Exception
      */
     public function findForFeed(int $limit): array
@@ -43,7 +46,7 @@ class SpecialRouteRepository extends ServiceEntityRepository
         $query_builder = $this->getEntityManager()
             ->createQueryBuilder()
             ->select('s')
-            ->from(SpecialRouteEntity::class, 's')
+            ->from(SpecialRoute::class, 's')
             ->andWhere('s.public = TRUE')
             ->andWhere('(s.start_date >= :today AND s.end_date IS NULL) OR s.end_date >= :today')
             ->setParameter('today', new \DateTime())

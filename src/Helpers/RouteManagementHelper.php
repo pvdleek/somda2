@@ -5,6 +5,7 @@ namespace App\Helpers;
 use App\Entity\Location;
 use App\Entity\Route;
 use App\Entity\RouteList;
+use App\Entity\RouteOperationDays;
 use App\Entity\TrainTable;
 use App\Entity\TrainTableFirstLast;
 use App\Entity\TrainTableYear;
@@ -134,6 +135,9 @@ class RouteManagementHelper
         return $new_route;
     }
 
+    /**
+     * @param array<string, mixed> $submitted_fields
+     */
     public function handlePost(int $route_id, array $submitted_fields): bool
     {
         if ($route_id === 0) {
@@ -150,6 +154,10 @@ class RouteManagementHelper
         return $this->saveRouteDay($route_day_array, $this->route_list->train_table_year, $this->route);
     }
 
+    /**
+     * @param array<string, mixed> $submitted_fields
+     * @return array<int, array<int, array<string, mixed>>>
+     */
     private function getRouteDayArray(array $submitted_fields): array
     {
         $route_day_array = [];
@@ -161,6 +169,10 @@ class RouteManagementHelper
         return $route_day_array;
     }
 
+    /**
+     * @param array<int, array<int, array<string, mixed>>> $route_day_array
+     * @return array<int, array{routeOperationDays: ?RouteOperationDays, lines: array<int, array<string, mixed>>}>
+     */
     private function getUniqueRouteDayArray(array $route_day_array): array
     {
         $result_array = [];
@@ -188,6 +200,9 @@ class RouteManagementHelper
         return $result_array;
     }
 
+    /**
+     * @return array<string, bool>
+     */
     private function getEmptyDaysArray(): array
     {
         $result = [];
@@ -213,6 +228,9 @@ class RouteManagementHelper
         $this->doctrine->getManager()->flush();
     }
 
+    /**
+     * @param array<int, array{routeOperationDays: ?RouteOperationDays, lines: array<int, array<string, mixed>>}> $route_day_array
+     */
     private function saveRouteDay(array $route_day_array, TrainTableYear $train_table_year, Route $route): bool
     {
         $ok_flag = true;

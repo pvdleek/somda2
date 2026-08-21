@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\Entity\Route;
-use App\Entity\Spot as SpotEntity;
+use App\Entity\Spot;
 use App\Entity\TrainTableYear;
 use App\Entity\User;
 use App\Generics\DateGenerics;
@@ -19,11 +19,15 @@ use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
+/**
+ * @extends ServiceEntityRepository<Spot>
+ */
 class SpotRepository extends ServiceEntityRepository
 {
     private const FIELD_SPOT_DATE = 'spot_date';
     private const FIELD_LOCATION = 'location';
 
+    /** @var array<string, string> */
     private static array $order_column = [
         self::FIELD_SPOT_DATE => 's.spot_date',
         self::FIELD_LOCATION => 'l.name',
@@ -35,7 +39,7 @@ class SpotRepository extends ServiceEntityRepository
 
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, SpotEntity::class);
+        parent::__construct($registry, Spot::class);
     }
 
     private function getBaseQueryBuilder(?TrainTableYear $train_table_year = null): QueryBuilder
@@ -54,7 +58,7 @@ class SpotRepository extends ServiceEntityRepository
             ->addSelect('l.name AS location_name')
             ->addSelect('l.description AS location_description')
 
-            ->from(SpotEntity::class, 's')
+            ->from(Spot::class, 's')
             ->join('s.route', 'r')
             ->join('s.position', 'p')
             ->join('s.train', 't')
@@ -87,6 +91,7 @@ class SpotRepository extends ServiceEntityRepository
     }
 
     /**
+     * @param array<int, string> $id_array
      * @return SpotModel[]
      */
     public function findByIdsAndUserForDisplay(array $id_array, User $user): array
@@ -100,14 +105,15 @@ class SpotRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return SpotEntity[]
+     * @param array<int, string> $id_array
+     * @return Spot[]
      */
     public function findByIdsAndUser(array $id_array, User $user): array
     {
         $query_builder = $this->getEntityManager()
             ->createQueryBuilder()
             ->select('s')
-            ->from(SpotEntity::class, 's')
+            ->from(Spot::class, 's')
             ->andWhere('s.id IN (:idArray)')
             ->setParameter('idArray', $id_array)
             ->andWhere('s.user = :user')
@@ -120,7 +126,7 @@ class SpotRepository extends ServiceEntityRepository
         $query_builder = $this->getEntityManager()
             ->createQueryBuilder()
             ->select('COUNT(s.id)')
-            ->from(SpotEntity::class, 's');
+            ->from(Spot::class, 's');
         if (null !== $user) {
             $query_builder->andWhere('s.user = :user')->setParameter('user', $user);
         }
@@ -132,7 +138,7 @@ class SpotRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return SpotEntity[]
+     * @return Spot[]
      * @throws \Exception
      */
     public function findWithSpotFilter(int $max_months, SpotFilter $spot_filter): array
@@ -140,7 +146,7 @@ class SpotRepository extends ServiceEntityRepository
         $query_builder = $this->getEntityManager()
             ->createQueryBuilder()
             ->select('s')
-            ->from(SpotEntity::class, 's')
+            ->from(Spot::class, 's')
             ->join('s.train', 't')
             ->join('s.route', 'r')
             ->join('s.location', 'l')
@@ -204,7 +210,7 @@ class SpotRepository extends ServiceEntityRepository
 
     /**
      * @param DataTableOrder[] $order_array
-     * @return SpotEntity[]
+     * @return Spot[]
      */
     public function findForMySpots(
         User $user,
@@ -216,7 +222,7 @@ class SpotRepository extends ServiceEntityRepository
         $query_builder = $this->getEntityManager()
             ->createQueryBuilder()
             ->select('s')
-            ->from(SpotEntity::class, 's')
+            ->from(Spot::class, 's')
             ->join('s.location', 'l')
             ->join('s.train', 't')
             ->join('s.route', 'r')
@@ -245,7 +251,7 @@ class SpotRepository extends ServiceEntityRepository
         $query_builder = $this->getEntityManager()
             ->createQueryBuilder()
             ->select('COUNT(s.id)')
-            ->from(SpotEntity::class, 's')
+            ->from(Spot::class, 's')
             ->join('s.location', 'l')
             ->join('s.train', 't')
             ->join('s.route', 'r')
@@ -265,6 +271,9 @@ class SpotRepository extends ServiceEntityRepository
         }
     }
 
+    /**
+     * @return array<int, array<string, mixed>>
+     */
     public function findForRouteTrains(\DateTime $check_date): array
     {
         $query_builder = $this->getEntityManager()

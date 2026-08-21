@@ -4,17 +4,20 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
-use App\Entity\User as UserEntity;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
 use Doctrine\Persistence\ManagerRegistry;
 
+/**
+ * @extends ServiceEntityRepository<User>
+ */
 class UserRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, UserEntity::class);
+        parent::__construct($registry, User::class);
     }
 
     /**
@@ -26,7 +29,7 @@ class UserRepository extends ServiceEntityRepository
             ->createQueryBuilder()
             ->select('u.username')
             ->addSelect('u.name')
-            ->from(UserEntity::class, 'u')
+            ->from(User::class, 'u')
             ->andWhere('u.active = TRUE');
         return $query_builder->getQuery()->getResult();
     }
@@ -36,7 +39,7 @@ class UserRepository extends ServiceEntityRepository
         $query_builder = $this->getEntityManager()
             ->createQueryBuilder()
             ->select('COUNT(u.id)')
-            ->from(UserEntity::class, 'u')
+            ->from(User::class, 'u')
             ->andWhere('u.active = TRUE');
         try {
             return (int) $query_builder->getQuery()->getSingleScalarResult();
@@ -53,7 +56,7 @@ class UserRepository extends ServiceEntityRepository
         $query_builder = $this->getEntityManager()
             ->createQueryBuilder()
             ->select('COUNT(u.id)')
-            ->from(UserEntity::class, 'u')
+            ->from(User::class, 'u')
             ->andWhere('u.active = TRUE')
             ->join('u.info', 'i')
             ->andWhere('i.birth_date = :today')
@@ -66,27 +69,27 @@ class UserRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return UserEntity[]
+     * @return User[]
      */
     public function findBanned(): array
     {
         $query_builder = $this->getEntityManager()
             ->createQueryBuilder()
             ->select('u')
-            ->from(UserEntity::class, 'u')
+            ->from(User::class, 'u')
             ->andWhere('u.ban_expire_timestamp IS NOT NULL');
         return $query_builder->getQuery()->getResult();
     }
 
     /**
-     * @return UserEntity[]
+     * @return User[]
      */
     public function findNonActivated(): array
     {
         $query_builder = $this->getEntityManager()
             ->createQueryBuilder()
             ->select('u')
-            ->from(UserEntity::class, 'u')
+            ->from(User::class, 'u')
             ->andWhere('u.active = FALSE')
             ->andWhere('u.activation_key IS NOT NULL')
             ->andWhere('u.register_timestamp >= :minimumDate')

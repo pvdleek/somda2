@@ -129,6 +129,9 @@ class TrainTableHelper
         );
     }
 
+    /**
+     * @return array<int, array<string, mixed>>
+     */
     public function getPassingRoutes(?int $day_number = null, ?string $start_time = null, ?string $end_time = null): array
     {
         $this->clearErrorMessages();

@@ -65,24 +65,31 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToOne(targetEntity: UserInfo::class, mappedBy: 'user', cascade: ['persist', 'remove'])]
     public ?UserInfo $info = null;
 
+    /** @var Collection<int, Group> */
     #[ORM\ManyToMany(targetEntity: Group::class, mappedBy: 'users')]
     private Collection $groups;
 
+    /** @var Collection<int, ForumFavorite> */
     #[ORM\OneToMany(targetEntity: ForumFavorite::class, mappedBy: 'user')]
     private Collection $forum_favorites;
 
+    /** @var Collection<int, ForumPostFavorite> */
     #[ORM\OneToMany(targetEntity: ForumPostFavorite::class, mappedBy: 'user')]
     private Collection $forum_post_favorites;
 
+    /** @var Collection<int, ForumForum> */
     #[ORM\ManyToMany(targetEntity: ForumForum::class, mappedBy: 'moderators')]
     private Collection $moderated_forums;
 
+    /** @var Collection<int, Spot> */
     #[ORM\OneToMany(targetEntity: Spot::class, mappedBy: 'user')]
     private Collection $spots;
 
+    /** @var Collection<int, UserPreferenceValue> */
     #[ORM\OneToMany(targetEntity: UserPreferenceValue::class, mappedBy: 'user', cascade: ['persist', 'remove'])]
     private Collection $preferences;
 
+    /** @var Collection<int, News> */
     #[ORM\ManyToMany(targetEntity: News::class, mappedBy: 'user_reads')]
     private Collection $news_reads;
 

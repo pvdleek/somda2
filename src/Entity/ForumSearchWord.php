@@ -22,6 +22,7 @@ class ForumSearchWord
     #[ORM\Column(name: 'woord', length: 50, nullable: false, options: ['default' => ''])]
     public string $word = '';
 
+    /** @var Collection<int, ForumSearchList> */
     #[ORM\OneToMany(targetEntity: ForumSearchList::class, mappedBy: 'word')]
     private Collection $lists;
 

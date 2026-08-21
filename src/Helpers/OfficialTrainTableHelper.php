@@ -270,7 +270,10 @@ class OfficialTrainTableHelper
         }
     }
 
-    private function scrollToNextIdentificationLine($handle)
+    /**
+     * @param resource $handle
+     */
+    private function scrollToNextIdentificationLine($handle): void
     {
         while (($line = \fgets($handle)) !== false) {
             if (\substr($line, 0, 1) === '#') {

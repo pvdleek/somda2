@@ -25,6 +25,7 @@ class LocationCategory
     #[ORM\Column(length: 20, nullable: false, options: ['default' => ''])]
     public string $name = '';
 
+    /** @var Collection<int, Location> */
     #[ORM\OneToMany(targetEntity: Location::class, mappedBy: 'category')]
     private Collection $locations;
 

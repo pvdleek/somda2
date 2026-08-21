@@ -75,6 +75,9 @@ class UserInfo extends AbstractType
             ]);
     }
 
+    /**
+     * @return array<string, string>
+     */
     private function getAvatars(): array
     {
         $finder = new Finder();

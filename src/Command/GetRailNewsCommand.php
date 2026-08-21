@@ -25,6 +25,7 @@ class GetRailNewsCommand extends Command
     private const POSITIVE_WORD = 'positiveWord';
     private const NEGATIVE_WORD = 'negativeWord';
 
+    /** @var array<int, array<string, bool|string>> */
     private static array $word_matches = [
         [self::TITLE_ONLY => false, self::POSITIVE_WORD => ' spoor ', self::NEGATIVE_WORD => 'opgespoord'],
         [self::TITLE_ONLY => false, self::POSITIVE_WORD => ' rail ', self::NEGATIVE_WORD => 'vangrail'],
@@ -118,6 +119,9 @@ class GetRailNewsCommand extends Command
         return false;
     }
 
+    /**
+     * @param array<string, bool|string> $word_match
+     */
     private function isWordMatch(array $word_match, \SimpleXMLElement $item): bool
     {
         if (null === $item->title || null === $item->description) {

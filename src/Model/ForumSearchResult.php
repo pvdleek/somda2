@@ -23,7 +23,7 @@ class ForumSearchResult
     public \DateTime $post_timestamp;
 
     /**
-     * @param array $query_result - A result array from the searchByWords function in the ForumSearchWord repository
+     * @param array<string, mixed> $query_result - A result array from the searchByWords function in the ForumSearchWord repository
      */
     public function __construct(array $query_result)
     {

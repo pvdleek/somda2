@@ -21,6 +21,9 @@ class RedirectHelper
         return new RedirectResponse($url, $status);
     }
 
+    /**
+     * @param array<string, mixed> $parameters
+     */
     public function redirectToRoute(string $route, array $parameters = []): RedirectResponse
     {
         return $this->redirect(

@@ -21,8 +21,10 @@ class SpotInputHelper
 {
     private ?TrainTableYear $train_table_year = null;
 
+    /** @var array<int, string> */
     private array $position_array = [];
 
+    /** @var TrainNamePattern[] */
     private array $train_name_patterns = [];
 
     private bool $initialized = false;
@@ -52,6 +54,7 @@ class SpotInputHelper
     }
 
     /**
+     * @param array<int, string> $spot_lines
      * @return int[]
      */
     public function processSpotLines(array $spot_lines, User $user, \DateTime $spot_date, Location $base_location): array
@@ -179,6 +182,9 @@ class SpotInputHelper
         return $spot_input;
     }
 
+    /**
+     * @param array<int, string> $spot_part
+     */
     private function getNextLineItem(array &$spot_part, SpotInput $spot_input): string
     {
         $item = \trim(\array_shift($spot_part));
