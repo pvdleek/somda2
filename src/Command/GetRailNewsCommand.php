@@ -67,7 +67,11 @@ class GetRailNewsCommand extends Command
         foreach ($feeds as $feed) {
             $local_filename = \tempnam(\sys_get_temp_dir(), 'news_feed_'.$feed->id.'_');
             if (false === \copy($feed->url, $local_filename)) {
-                $output->writeln('  Failed to copy feed');
+                $output->writeln(\sprintf('  Failed to copy feed %d', $feed->id));
+                continue;
+            }
+            if (false === $this->isXMLFileValid($local_filename)) {
+                $output->writeln(\sprintf('  Contents of feed %d are not valid', $feed->id));
                 continue;
             }
 
@@ -75,7 +79,7 @@ class GetRailNewsCommand extends Command
             $errors = \libxml_get_errors();
             if (false === $rss || !empty($errors)) {
                 foreach (\libxml_get_errors() as $error) {
-                    $output->writeln('  Could not load feed: '.$error->message);
+                    $output->writeln(\sprintf('  Could not load feed %d: %s', $feed->id, $error->message));
                 }
                 \unlink($local_filename);
                 continue;
@@ -169,5 +173,24 @@ class GetRailNewsCommand extends Command
             $rail_news->introduction = \html_entity_decode($description, ENT_NOQUOTES, 'UTF-8');
             $rail_news->timestamp = isset($item->pubDate) ? new \DateTime($item->pubDate->__toString()) : new \DateTime();
         }
+    }
+
+    private function isXMLFileValid(string $xml_filename): bool
+    {
+        $xml_content = \file_get_contents($xml_filename);
+
+        if ('' === \trim($xml_content)) {
+            return false;
+        }
+
+        \libxml_use_internal_errors(true);
+
+        $doc = new \DOMDocument('1.0', 'utf-8');
+        $doc->loadXML($xml_content);
+
+        $errors = \libxml_get_errors();
+        \libxml_clear_errors();
+
+        return empty($errors);
     }
 }
