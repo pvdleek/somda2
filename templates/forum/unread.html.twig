@@ -5,7 +5,7 @@
         <div class="panel-title">Ongelezen forumberichten</div>
         <div class="panel-content">
             <a class="somda-button" href="{{ path('forum') }}">Naar het forum-overzicht</a>
-            <a class="somda-button" href="{{ path('forum_unread_mark_read') }}">Markeer alle forumberichten als gelezen</a>
+            <a class="ask-confirmation somda-button" href="{{ path('forum_unread_mark_read') }}">Markeer alle forumberichten als gelezen</a>
 
             <table>
                 <tr>
@@ -38,4 +38,12 @@
             </table>
         </div>
     </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript">
+        $('.ask-confirmation').on('click', function () {
+            return confirm('Weet je het zeker?');
+        });
+    </script>
 {% endblock %}
