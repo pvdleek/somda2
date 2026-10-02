@@ -12,9 +12,9 @@
         "ext-intl": "*",
         "ext-json": "*",
         "beberlei/doctrineextensions": "^1.5",
-        "doctrine/doctrine-bundle": "^3.3.1",
+        "doctrine/doctrine-bundle": "^3.3.2",
         "doctrine/doctrine-migrations-bundle": "^4.0.1",
-        "doctrine/orm": "^3.6.8",
+        "doctrine/orm": "^3.7.3",
         "dompdf/dompdf": "^3.1.6",
         "gregwar/captcha-bundle": "^2.5",
         "mobiledetect/mobiledetectlib": "^4.11.0",
@@ -35,7 +35,7 @@
         "symfony/lock": "8.1.*",
         "symfony/mailer": "8.1.*",
         "symfony/mime": "8.1.*",
-        "symfony/monolog-bundle": "^4.0.2",
+        "symfony/monolog-bundle": "^4.1.0",
         "symfony/notifier": "8.1.*",
         "symfony/process": "8.1.*",
         "symfony/property-access": "8.1.*",
@@ -53,9 +53,9 @@
         "symfony/validator": "8.1.*",
         "symfony/web-link": "8.1.*",
         "symfony/yaml": "8.1.*",
-        "twig/extra-bundle": "^3.24.0",
+        "twig/extra-bundle": "^3.29.0",
         "twig/string-extra": "^3.24.0",
-        "twig/twig": "^3.28.0"
+        "twig/twig": "^3.30.0"
     },
     "config": {
         "allow-plugins": {
@@ -111,14 +111,14 @@
     },
     "require-dev": {
         "phpstan/phpdoc-parser": "^1.33",
-        "phpstan/phpstan": ">=2.2.9",
-        "phpunit/phpunit": "^9.6.36",
+        "phpstan/phpstan": ">=2.2.16",
+        "phpunit/phpunit": "^9.6.37",
         "symfony/browser-kit": "8.1.*",
         "symfony/css-selector": "8.1.*",
         "symfony/debug-bundle": "8.1.*",
-        "symfony/maker-bundle": "^1.67.0",
-        "symfony/phpunit-bridge": "^6.4.44",
+        "symfony/maker-bundle": "^1.68.0",
+        "symfony/phpunit-bridge": "^6.4.45",
         "symfony/web-profiler-bundle": "8.1.*",
-        "vimeo/psalm": "^6.16.1"
+        "vimeo/psalm": "^6.19.1"
     }
 }
