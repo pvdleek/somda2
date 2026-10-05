@@ -2,7 +2,7 @@
 
 {% block content %}
     <a class="somda-button" href="{{ path('forum') }}">Naar het forumoverzicht</a>
-    <a class="somda-button" href="{{ path('forum_unread_mark_read') }}">Markeer alle forumberichten als gelezen</a>
+    <a class="ask-confirmation somda-button" href="{{ path('forum_unread_mark_read') }}">Markeer alle forumberichten als gelezen</a>
 
     <table class="forum-overview">
         <tr><th>Forumdiscussie</th></tr>
@@ -24,4 +24,12 @@
             </tr>
         {% endfor %}
     </table>
+{% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript">
+        $('.ask-confirmation').on('click', function () {
+            return confirm('Weet je het zeker?');
+        });
+    </script>
 {% endblock %}
