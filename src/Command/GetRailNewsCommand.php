@@ -66,12 +66,14 @@ class GetRailNewsCommand extends Command
         $feeds = $this->doctrine->getRepository(RailNewsSourceFeed::class)->findAll();
         foreach ($feeds as $feed) {
             $local_filename = \tempnam(\sys_get_temp_dir(), 'news_feed_'.$feed->id.'_');
-            if (false === \copy($feed->url, $local_filename)) {
+            if (false === \copy($feed->url, $local_filename, $context)) {
                 $output->writeln(\sprintf('  Failed to copy feed %d', $feed->id));
+                \unlink($local_filename);
                 continue;
             }
             if (false === $this->isXMLFileValid($local_filename)) {
                 $output->writeln(\sprintf('  Contents of feed %d are not valid', $feed->id));
+                \unlink($local_filename);
                 continue;
             }
 
