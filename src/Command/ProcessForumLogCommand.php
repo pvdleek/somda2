@@ -41,28 +41,54 @@ class ProcessForumLogCommand extends Command
         if ($lock->acquire()) {
             /** @var ForumPostLog[] $forum_logs */
             $forum_logs = $this->doctrine->getRepository(ForumPostLog::class)->findBy([], ['id' => 'DESC']);
-            foreach ($forum_logs as $forum_log) {
-                $this->removeAllWordsForPost($forum_log->post);
+            $forum_log_ids = \array_map(fn (ForumPostLog $forum_log) => $forum_log->id, $forum_logs);
+            $this->doctrine->getManager()->clear();
 
-                $words = $this->getCleanWordsFromText($forum_log->post->text->text);
-                $post_number_in_discussion = $this->forum_discussion_repository->getPostNumberInDiscussion($forum_log->post->discussion, $forum_log->post->id);
-                if (0 === $post_number_in_discussion) {
-                    // This is the first post in the discussion, we need to include the title
-                    $title_words = $this->getCleanWordsFromText($forum_log->post->discussion->title);
-                    $this->processWords($title_words, $forum_log->post, true);
-                    $this->doctrine->getManager()->flush();
-
-                    $words = \array_diff($words, $title_words);
+            foreach ($forum_log_ids as $forum_log_id) {
+                try {
+                    $this->processForumLog($forum_log_id);
+                } catch (\Throwable $exception) {
+                    // Log and continue with the next entry, the failed entry stays in the log for the next run
+                    $output->writeln(\sprintf(
+                        '<error>Failed to process forum-log %d: %s</error>',
+                        $forum_log_id,
+                        $exception->getMessage()
+                    ));
+                    $this->doctrine->resetManager();
                 }
-                $this->processWords($words, $forum_log->post);
-
-                $this->doctrine->getManager()->remove($forum_log);
-                $this->doctrine->getManager()->flush();
+                $this->doctrine->getManager()->clear();
             }
             $lock->release();
         }
 
         return 0;
+    }
+
+    private function processForumLog(int $forum_log_id): void
+    {
+        /** @var ForumPostLog|null $forum_log */
+        $forum_log = $this->doctrine->getRepository(ForumPostLog::class)->find($forum_log_id);
+        if (null === $forum_log) {
+            return;
+        }
+
+        $this->removeAllWordsForPost($forum_log->post);
+
+        /** @var array<int, bool> $processed_word_ids */
+        $processed_word_ids = [];
+        $words = $this->getCleanWordsFromText($forum_log->post->text->text);
+        $post_number_in_discussion = $this->forum_discussion_repository->getPostNumberInDiscussion($forum_log->post->discussion, $forum_log->post->id);
+        if (0 === $post_number_in_discussion) {
+            // This is the first post in the discussion, we need to include the title
+            $title_words = $this->getCleanWordsFromText($forum_log->post->discussion->title);
+            $this->processWords($title_words, $forum_log->post, $processed_word_ids, true);
+
+            $words = \array_diff($words, $title_words);
+        }
+        $this->processWords($words, $forum_log->post, $processed_word_ids);
+
+        $this->doctrine->getManager()->remove($forum_log);
+        $this->doctrine->getManager()->flush();
     }
 
     private function removeAllWordsForPost(ForumPost $post): void
@@ -84,7 +110,7 @@ class ProcessForumLogCommand extends Command
             '[', ']', '{', '}', ':', '\\', '/', '=', '#', '\'', ';', '!', '*'
         ];
 
-        $text = \strip_tags(\strtolower($text));
+        $text = \strip_tags(\mb_strtolower($text));
         // Replace line-endings by spaces
         $text = \str_replace(['<br>', '<br />'], ' ', $text);
         $text = \preg_replace('/[\n\r]/is', ' ', $text);
@@ -93,7 +119,7 @@ class ProcessForumLogCommand extends Command
         // Remove URL's
         $text = \preg_replace('/\b[a-z0-9]+:\/\/[a-z0-9.\-]+(\/[a-z0-9?.%_\-+=&\/]+)?/', ' ', $text);
         // Normalize and filter strange characters such as ^, $, &
-        $text = \strtolower($this->normalizeText(\str_replace($strange_characters, ' ', $text)));
+        $text = \mb_strtolower($this->normalizeText(\str_replace($strange_characters, ' ', $text)));
 
         return \array_unique(\array_filter(\explode(' ', $text), function ($value) {
             return \strlen($value) > 2 && \strlen($value) <= 50;
@@ -125,6 +151,8 @@ class ProcessForumLogCommand extends Command
             $forum_search_word->word = $word;
 
             $this->doctrine->getManager()->persist($forum_search_word);
+            // Flush immediately, so the word gets an id and will be found by the next lookup
+            $this->doctrine->getManager()->flush();
         }
 
         return $forum_search_word;
@@ -132,12 +160,21 @@ class ProcessForumLogCommand extends Command
 
     /**
      * @param array<string> $words
+     * @param array<int, bool> $processed_word_ids
      */
-    private function processWords(array $words, ForumPost $post, bool $title = false): void
+    private function processWords(array $words, ForumPost $post, array &$processed_word_ids, bool $title = false): void
     {
         foreach ($words as $word) {
+            $forum_search_word = $this->getSearchWord($word);
+            // Different strings can resolve to the same word because of the case- and accent-insensitive
+            // database collation, prevent linking the same word twice to the post
+            if (isset($processed_word_ids[\spl_object_id($forum_search_word)])) {
+                continue;
+            }
+            $processed_word_ids[\spl_object_id($forum_search_word)] = true;
+
             $forum_search_list = new ForumSearchList();
-            $forum_search_list->word = $this->getSearchWord($word);
+            $forum_search_list->word = $forum_search_word;
             $forum_search_list->post = $post;
             $forum_search_list->title = $title;
 
