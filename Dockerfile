@@ -1,8 +1,17 @@
-FROM pvdleek/server-configuration:base_image
+FROM php:8.5.12-fpm-alpine3.24
+
+COPY --from=mlocati/php-extension-installer:2 /usr/bin/install-php-extensions /usr/local/bin/
+
+RUN apk add --no-cache tzdata \
+    && install-php-extensions \
+        gd intl opcache pdo_mysql zip
+RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
+
+COPY docker/php.ini $PHP_INI_DIR/conf.d/zz-somda.ini
+COPY docker/php-fpm.conf /usr/local/etc/php-fpm.d/zz-somda.conf
 
 WORKDIR /var/www
 
-RUN apk add --no-cache tzdata
 ENV TZ=Europe/Amsterdam
 ENV COMPOSER_ALLOW_SUPERUSER=1
 
