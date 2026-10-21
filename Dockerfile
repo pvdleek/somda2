@@ -4,7 +4,7 @@ COPY --from=mlocati/php-extension-installer:2 /usr/bin/install-php-extensions /u
 
 RUN apk add --no-cache tzdata \
     && install-php-extensions \
-        gd intl opcache pdo_mysql zip
+        gd intl opcache pdo_mysql sysvsem zip
 RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 
 COPY docker/php.ini $PHP_INI_DIR/conf.d/zz-somda.ini
