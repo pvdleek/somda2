@@ -30,9 +30,8 @@ class ForumAuthorizationHelperTest extends TestCase
     public function testMayViewPublicForumWithUser(): void
     {
         $forum = $this->createForum(ForumForum::TYPE_PUBLIC);
-        $user = $this->createMock(User::class);
 
-        $result = $this->forum_authorization_helper->mayView($forum, $user);
+        $result = $this->forum_authorization_helper->mayView($forum, new User());
 
         $this->assertTrue($result);
     }
@@ -49,9 +48,8 @@ class ForumAuthorizationHelperTest extends TestCase
     public function testMayViewLoggedInForumWithUser(): void
     {
         $forum = $this->createForum(ForumForum::TYPE_LOGGED_IN);
-        $user = $this->createMock(User::class);
 
-        $result = $this->forum_authorization_helper->mayView($forum, $user);
+        $result = $this->forum_authorization_helper->mayView($forum, new User());
 
         $this->assertTrue($result);
     }
@@ -59,16 +57,15 @@ class ForumAuthorizationHelperTest extends TestCase
     public function testMayViewArchiveForumWithUser(): void
     {
         $forum = $this->createForum(ForumForum::TYPE_ARCHIVE);
-        $user = $this->createMock(User::class);
 
-        $result = $this->forum_authorization_helper->mayView($forum, $user);
+        $result = $this->forum_authorization_helper->mayView($forum, new User());
 
         $this->assertTrue($result);
     }
 
     public function testMayViewModeratorsOnlyForumWithModerator(): void
     {
-        $user = $this->createMock(User::class);
+        $user = new User();
         $forum = $this->createForum(ForumForum::TYPE_MODERATORS_ONLY, [$user]);
 
         $result = $this->forum_authorization_helper->mayView($forum, $user);
@@ -78,11 +75,8 @@ class ForumAuthorizationHelperTest extends TestCase
 
     public function testMayViewModeratorsOnlyForumWithAdmin(): void
     {
-        $user = $this->createMock(User::class);
-        $user->expects($this->once())
-            ->method('hasRole')
-            ->with(RoleGenerics::ROLE_ADMIN)
-            ->willReturn(true);
+        $user = new User();
+        $user->addRole(RoleGenerics::ROLE_ADMIN);
 
         $forum = $this->createForum(ForumForum::TYPE_MODERATORS_ONLY);
 
@@ -93,18 +87,28 @@ class ForumAuthorizationHelperTest extends TestCase
 
     public function testMayViewModeratorsOnlyForumWithNormalUser(): void
     {
-        $user = $this->createMock(User::class);
         $forum = $this->createForum(ForumForum::TYPE_MODERATORS_ONLY);
 
-        $result = $this->forum_authorization_helper->mayView($forum, $user);
+        $result = $this->forum_authorization_helper->mayView($forum, new User());
 
         $this->assertFalse($result);
     }
 
-    public function testMayPostPublicForumWithUser(): void
+    public function testMayPostPublicForumWithInactiveUser(): void
     {
         $forum = $this->createForum(ForumForum::TYPE_PUBLIC);
-        $user = $this->createMock(User::class);
+        $user = new User();
+        $user->active = false;
+
+        $result = $this->forum_authorization_helper->mayPost($forum, $user);
+
+        $this->assertFalse($result);
+    }
+    public function testMayPostPublicForumWithActiveUser(): void
+    {
+        $forum = $this->createForum(ForumForum::TYPE_PUBLIC);
+        $user = new User();
+        $user->active = true;
 
         $result = $this->forum_authorization_helper->mayPost($forum, $user);
 
@@ -123,17 +127,28 @@ class ForumAuthorizationHelperTest extends TestCase
     public function testMayPostArchiveForum(): void
     {
         $forum = $this->createForum(ForumForum::TYPE_ARCHIVE);
-        $user = $this->createMock(User::class);
+
+        $result = $this->forum_authorization_helper->mayPost($forum, new User());
+
+        $this->assertFalse($result);
+    }
+
+    public function testMayPostLoggedInForumWithInactiveUser(): void
+    {
+        $forum = $this->createForum(ForumForum::TYPE_LOGGED_IN);
+        $user = new User();
+        $user->active = false;
 
         $result = $this->forum_authorization_helper->mayPost($forum, $user);
 
         $this->assertFalse($result);
     }
 
-    public function testMayPostLoggedInForumWithUser(): void
+    public function testMayPostLoggedInForumWithActiveUser(): void
     {
         $forum = $this->createForum(ForumForum::TYPE_LOGGED_IN);
-        $user = $this->createMock(User::class);
+        $user = new User();
+        $user->active = true;
 
         $result = $this->forum_authorization_helper->mayPost($forum, $user);
 
@@ -142,11 +157,9 @@ class ForumAuthorizationHelperTest extends TestCase
 
     public function testMayPostModeratorsOnlyWithModerator(): void
     {
-        $user = $this->createMock(User::class);
-        $user->expects($this->once())
-            ->method('hasRole')
-            ->with(RoleGenerics::ROLE_ADMIN)
-            ->willReturn(false);
+        $user = new User();
+        $user->active = true;
+        $user->addRole(RoleGenerics::ROLE_ADMIN);
 
         $forum = $this->createForum(ForumForum::TYPE_MODERATORS_ONLY, [$user]);
 
@@ -157,10 +170,8 @@ class ForumAuthorizationHelperTest extends TestCase
 
     public function testUserIsModeratorReturnsTrueForModerator(): void
     {
-        $user = $this->createMock(User::class);
-        $user->method('hasRole')
-            ->with(RoleGenerics::ROLE_ADMIN)
-            ->willReturn(false);
+        $user = new User();
+        $user->addRole(RoleGenerics::ROLE_ADMIN);
 
         $forum = $this->createForum(ForumForum::TYPE_PUBLIC, [$user]);
 
@@ -171,11 +182,8 @@ class ForumAuthorizationHelperTest extends TestCase
 
     public function testUserIsModeratorReturnsTrueForAdmin(): void
     {
-        $user = $this->createMock(User::class);
-        $user->expects($this->once())
-            ->method('hasRole')
-            ->with(RoleGenerics::ROLE_ADMIN)
-            ->willReturn(true);
+        $user = new User();
+        $user->addRole(RoleGenerics::ROLE_ADMIN);
 
         $forum = $this->createForum(ForumForum::TYPE_PUBLIC);
 
@@ -186,11 +194,7 @@ class ForumAuthorizationHelperTest extends TestCase
 
     public function testUserIsModeratorReturnsFalseForNormalUser(): void
     {
-        $user = $this->createMock(User::class);
-        $user->expects($this->once())
-            ->method('hasRole')
-            ->with(RoleGenerics::ROLE_ADMIN)
-            ->willReturn(false);
+        $user = new User();
 
         $forum = $this->createForum(ForumForum::TYPE_PUBLIC);
 
