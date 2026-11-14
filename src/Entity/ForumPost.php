@@ -15,6 +15,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Index(name: 'idx_somda_forum_posts__timestamp', columns: ['timestamp'])]
 #[ORM\Index(name: 'idx_somda_forum_posts__authorid', columns: ['authorid'])]
 #[ORM\Index(name: 'idx_somda_forum_posts__discussionid', columns: ['discussionid'])]
+#[ORM\Index(name: 'idx_somda_forum_posts__discussionid_timestamp', columns: ['discussionid', 'timestamp'])]
 class ForumPost
 {
     public const WIKI_CHECK_NOT_CHECKED = 0;

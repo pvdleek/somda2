@@ -9,6 +9,8 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: RailNewsRepository::class)]
 #[ORM\Table(name: 'somda_sns_spoor_nieuws')]
+#[ORM\Index(name: 'idx_sns_spoor_nieuws__actief_gekeurd_timestamp', columns: ['sns_actief', 'sns_gekeurd', 'sns_timestamp'])]
+#[ORM\Index(name: 'idx_sns_spoor_nieuws__url', columns: ['sns_url'])]
 class RailNews
 {
     #[ORM\Id]
