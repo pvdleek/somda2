@@ -15,6 +15,7 @@ use App\Repository\RouteOperationDaysRepository;
 use App\Repository\TrainTableRepository;
 use App\Traits\DateTrait;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class RouteManagementHelper
@@ -26,6 +27,12 @@ class RouteManagementHelper
     private const ROUTE_LINE_KEY_LOCATION = 'location';
     private const ROUTE_LINE_KEY_ACTION = 'action';
     private const ROUTE_LINE_KEY_TIME = 'time';
+
+    /**
+     * All train-table fields are submitted as one JSON-encoded field, because a large train-table can contain
+     * more than 1000 separate fields (7 days * stops * 3 fields), which would exceed PHP's max_input_vars
+     */
+    public const SUBMITTED_FIELD_DATA = 'train_table_data';
 
     private ?RouteList $route_list = null;
 
@@ -140,6 +147,8 @@ class RouteManagementHelper
      */
     public function handlePost(int $route_id, array $submitted_fields): bool
     {
+        $route_day_array = $this->getRouteDayArray($this->getTrainTableFields($submitted_fields));
+
         if ($route_id === 0) {
             if (!\in_array($this->route_list, $this->route->getRouteLists())) {
                 $this->route->addRouteList($this->route_list);
@@ -149,21 +158,62 @@ class RouteManagementHelper
         }
 
         $this->removeExistingTrainTablesFromRoute($this->route_list->train_table_year, $this->route);
-        $route_day_array = $this->getUniqueRouteDayArray($this->getRouteDayArray($submitted_fields));
+        $route_day_array = $this->getUniqueRouteDayArray($route_day_array);
 
         return $this->saveRouteDay($route_day_array, $this->route_list->train_table_year, $this->route);
     }
 
     /**
      * @param array<string, mixed> $submitted_fields
-     * @return array<int, array<int, array<string, mixed>>>
+     * @return array<string, mixed>
+     */
+    private function getTrainTableFields(array $submitted_fields): array
+    {
+        if (!isset($submitted_fields[self::SUBMITTED_FIELD_DATA]) || !\is_string($submitted_fields[self::SUBMITTED_FIELD_DATA])) {
+            // Fallback for a submit of the individual fields
+            return $submitted_fields;
+        }
+
+        try {
+            $fields = \json_decode($submitted_fields[self::SUBMITTED_FIELD_DATA], true, 512, \JSON_THROW_ON_ERROR);
+        } catch (\JsonException $exception) {
+            throw new BadRequestHttpException('The submitted train-table data is invalid', $exception);
+        }
+        if (!\is_array($fields)) {
+            throw new BadRequestHttpException('The submitted train-table data is invalid');
+        }
+
+        return $fields;
+    }
+
+    /**
+     * @param array<string, mixed> $submitted_fields
+     * @return array<int, array<int, array<string, string>>>
      */
     private function getRouteDayArray(array $submitted_fields): array
     {
         $route_day_array = [];
         foreach ($submitted_fields as $key => $value) {
-            $key_part = \explode('_', $key);
-            $route_day_array[(int) $key_part[1]][(int) $key_part[2]][$key_part[0]] = $value;
+            if (!\is_string($value)
+                || !\preg_match('/^(location|action|time)_([1-7])_(\d+)$/', (string) $key, $key_part)
+            ) {
+                continue;
+            }
+            $route_day_array[(int) $key_part[2]][(int) $key_part[3]][$key_part[1]] = $value;
+        }
+
+        // Only keep the complete lines, so an incomplete submit cannot result in an invalid train-table
+        foreach ($route_day_array as $day_number => $lines) {
+            foreach ($lines as $line_number => $line) {
+                if (!isset($line[self::ROUTE_LINE_KEY_LOCATION], $line[self::ROUTE_LINE_KEY_ACTION], $line[self::ROUTE_LINE_KEY_TIME])
+                    || !\in_array($line[self::ROUTE_LINE_KEY_ACTION], TrainTable::ACTION_VALUES, true)
+                ) {
+                    unset($route_day_array[$day_number][$line_number]);
+                }
+            }
+            if (\count($route_day_array[$day_number]) === 0) {
+                unset($route_day_array[$day_number]);
+            }
         }
 
         return $route_day_array;

@@ -5,6 +5,7 @@
         <div class="panel-title">Beheer dienstregeling van trein {{ route.number }}</div>
         <div class="panel-content panel-no-background">
             <form id="train_table_form" method="post">
+                <input id="train_table_data" name="{{ constant('App\\Helpers\\RouteManagementHelper::SUBMITTED_FIELD_DATA') }}" type="hidden" value="" />
                 <table>
                     <tr>
                         <th colspan="6">Dienstregeling van trein {{ route.number }} beheren</th>
@@ -244,6 +245,21 @@
 
         $(document).ready(function() {
             initialize();
+
+            // Submit all fields as one JSON-field, a large train-table can exceed the max_input_vars of PHP
+            $('#train_table_form').on('submit', function () {
+                const data = {};
+                $(this).find('input[name], select[name]').each(function () {
+                    if (/^(location|action|time)_[1-7]_\d+$/.test($(this).attr('name'))) {
+                        data[$(this).attr('name')] = $(this).val();
+                        $(this).prop('disabled', true);
+                    }
+                });
+                $('#train_table_data').val(JSON.stringify(data));
+            });
+            $(window).on('pageshow', function () {
+                $('#train_table_form').find('input:disabled, select:disabled').prop('disabled', false);
+            });
 
             $('.copy-day').on('change', function () {
                 const day_number_source = $(this).attr('id').substr(9);
